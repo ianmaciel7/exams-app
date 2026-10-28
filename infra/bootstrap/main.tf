@@ -14,11 +14,19 @@ provider "google" {
   billing_project       = var.project_id
 }
 
-# Creates the project that holds Firebase and the remote state of infra/prod.
+# Manages the project that holds Firebase and the remote state of infra/prod.
 # This stack keeps local state on purpose: it is applied once, before the bucket exists.
+# With adopt_existing_project = true the project is imported instead of created, which
+# keeps a project ID that already exists (project IDs can never be reused once taken).
+import {
+  for_each = var.adopt_existing_project ? toset([var.project_id]) : toset([])
+  to       = google_project.this
+  id       = each.key
+}
+
 resource "google_project" "this" {
   project_id      = var.project_id
-  name            = var.project_id
+  name            = var.project_name
   billing_account = var.billing_account
   org_id          = var.org_id
   folder_id       = var.folder_id

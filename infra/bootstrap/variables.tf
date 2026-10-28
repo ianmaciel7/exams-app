@@ -3,6 +3,18 @@ variable "project_id" {
   type        = string
 }
 
+variable "project_name" {
+  description = "Display name of the project. It can be edited at any time, unlike the project ID."
+  type        = string
+  default     = "Exams App - Production"
+}
+
+variable "adopt_existing_project" {
+  description = "Import the project instead of creating it. Set to true when project_id already exists."
+  type        = bool
+  default     = false
+}
+
 variable "billing_account" {
   description = "Billing account ID (XXXXXX-XXXXXX-XXXXXX) linked to the project."
   type        = string
