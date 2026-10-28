@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 4,
+  "instructions": {
+    "path": "AGENTS.md"
+  },
+  "integrations": {
+    "enabled": [
+      "codex",
+      "claude",
+      "antigravity"
+    ],
+    "options": {
+      "cursorAutoApprove": true,
+      "antigravityGlobalSync": true,
+      "claudeScope": "project",
+      "copilotCliPath": ".mcp.json"
+    }
+  },
+  "syncMode": "source-only",
+  "mcp": {
+    "servers": {
+      "serena": {
+        "transport": "stdio",
+        "enabled": true,
+        "description": "Project-local semantic symbol analysis",
+        "command": "node",
+        "args": [
+          ".agents/scripts/serena-stdio-guard.mjs",
+          "serena",
+          "start-mcp-server",
+          "--project-from-cwd",
+          "--context=codex"
+        ]
+      },
+      "next-devtools": {
+        "transport": "stdio",
+        "enabled": true,
+        "description": "Next.js runtime diagnostics and route inspection",
+        "command": "pnpm",
+        "args": [
+          "exec",
+          "next-devtools-mcp"
+        ]
+      },
+      "playwright": {
+        "transport": "stdio",
+        "enabled": true,
+        "description": "Browser automation for verifying UI changes",
+        "command": "pnpm",
+        "args": [
+          "dlx",
+          "@playwright/mcp@0.0.83"
+        ]
+      },
+      "firebase": {
+        "transport": "stdio",
+        "enabled": true,
+        "description": "Firebase project, security rules, and emulator tooling",
+        "command": "pnpm",
+        "args": [
+          "dlx",
+          "firebase-tools@15.34.1",
+          "mcp"
+        ]
+      }
+    }
+  },
+  "workspace": {
+    "vscode": {
+      "hideGenerated": true,
+      "hiddenPaths": [
+        "**/.codex",
+        "**/.claude",
+        "**/.gemini",
+        "**/.cursor",
+        "**/.antigravity",
+        "**/.agents/mcp_config.json",
+        "**/.windsurf",
+        "**/.opencode",
+        "**/.junie",
+        "**/.mcp.json",
+        "**/opencode.json",
+        "**/.agents/generated",
+        "**/.grok",
+        "**/.amp",
+        "**/.factory",
+        "**/.kilo",
+        "**/kilo.jsonc",
+        "**/.devin",
+        "**/.zed"
+      ]
+    }
+  },
+  "lastSync": null,
+  "lastSyncSourceHash": null,
+  "activeProfile": null
+}
