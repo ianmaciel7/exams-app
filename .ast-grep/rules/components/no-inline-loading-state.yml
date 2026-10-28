@@ -1,0 +1,26 @@
+id: no-inline-loading-state
+language: tsx
+files:
+  - src/app/**/*.tsx
+  - src/components/**/*.tsx
+ignores:
+  - "**/*.test.tsx"
+  - "**/*.stories.tsx"
+  - src/components/ui/extensions/loading-state.tsx
+  - src/components/ui/extensions/global-loading-indicator.tsx
+severity: error
+message: Mark pending regions with <LoadingState boundary="..." />, not a hand-written data-slot="loading-state" element.
+note: |
+  The app has one visible spinner (GlobalLoadingIndicator in the root layout).
+  `globals.css` reveals it while any `LoadingState` marker is in the DOM, so
+  loading.tsx files, Suspense fallbacks and client guards must not render their
+  own spinner or hand-roll the marker.
+rule:
+  kind: jsx_attribute
+  all:
+    - has:
+        kind: property_identifier
+        regex: '^data-slot$'
+    - has:
+        kind: string
+        regex: 'loading-state'

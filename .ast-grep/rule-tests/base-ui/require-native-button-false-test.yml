@@ -1,0 +1,7 @@
+id: require-native-button-false
+valid:
+  - <TabsTrigger nativeButton={false} render={<Link href="/a" />} value="a" />
+  - <PopoverTrigger render={<Button variant="outline" />}>Open</PopoverTrigger>
+invalid:
+  - <TabsTrigger render={<Link href="/a" />} value="a" />
+  - <CollapsibleTrigger render={<div className="row" />}>Details</CollapsibleTrigger>

@@ -1,0 +1,14 @@
+id: single-locale-cookie-writer
+snapshots:
+  document.cookie = "NEXT_LOCALE=en";:
+    labels:
+    - source: document.cookie = "NEXT_LOCALE=en"
+      style: primary
+      start: 0
+      end: 34
+  "document.cookie = `${localeCookie}=${locale}; Path=/`;":
+    labels:
+    - source: document.cookie = `${localeCookie}=${locale}; Path=/`
+      style: primary
+      start: 0
+      end: 53

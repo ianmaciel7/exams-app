@@ -1,0 +1,11 @@
+id: no-raw-button-element
+valid:
+  - |
+    const a = <Button type="button" onClick={save}>Save</Button>;
+  - |
+    const b = <Link className={buttonVariants()} href="/">Home</Link>;
+invalid:
+  - |
+    const a = <button type="button" onClick={save}>Save</button>;
+  - |
+    const b = <button className={buttonVariants()} />;

@@ -1,0 +1,5 @@
+language js
+
+`export default function $_({children}: {children: ReactNode}) { $_ }` as $layout where {
+  register_diagnostic(span=$layout, message="Use Next.js's generated LayoutProps helper with the route literal instead of typing layout children with ReactNode.", severity="error")
+}

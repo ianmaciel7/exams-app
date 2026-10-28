@@ -1,0 +1,8 @@
+id: menu-item-on-click
+valid:
+  - <DropdownMenuItem onClick={openDialog}>Open</DropdownMenuItem>
+  - <CommandItem onSelect={choose}>Pick</CommandItem>
+invalid:
+  - <DropdownMenuItem onSelect={openDialog}>Open</DropdownMenuItem>
+  - <ContextMenuCheckboxItem onSelect={toggle} />
+  - <Menu.Item onSelect={openDialog}>Open</Menu.Item>
