@@ -1,0 +1,73 @@
+{
+  "Metadata": {
+    "title": "Exams App",
+    "description": "Plantilla Next.js + shadcn/ui con Biome, React Compiler e i18n"
+  },
+  "App": {
+    "signIn": "Iniciar sesión",
+    "notFoundTitle": "404",
+    "notFoundMessage": "Página no encontrada",
+    "backHome": "Volver al inicio",
+    "errorTitle": "¡Algo salió mal!",
+    "errorMessage": "Ocurrió un error inesperado al cargar esta página.",
+    "tryAgain": "Intentar de nuevo",
+    "loading": "Cargando…"
+  },
+  "Theme": {
+    "toggle": "Alternar tema",
+    "light": "Claro",
+    "dark": "Oscuro",
+    "system": "Sistema"
+  },
+  "Auth": {
+    "loading": "Cargando…",
+    "configurationError": "La autenticación de Firebase no está configurada. Revisa la configuración de la aplicación.",
+    "profileTitle": "Perfil de usuario",
+    "emailLabel": "Correo electrónico",
+    "emailRequired": "Introduce tu correo electrónico.",
+    "emailInvalid": "Introduce un correo válido, como nombre@ejemplo.com.",
+    "displayNameLabel": "Nombre",
+    "notSet": "No establecido",
+    "signOut": "Cerrar sesión",
+    "backToHome": "Volver al inicio",
+    "personalInfoTitle": "Información personal",
+    "personalInfoDescription": "Personaliza cómo apareces en la aplicación.",
+    "profilePhotoTitle": "Foto de perfil",
+    "profilePhotoChange": "Cambiar foto",
+    "profilePhotoInvalid": "Elige una imagen de hasta 2 MB.",
+    "languageLabel": "Idioma",
+    "themeLabel": "Tema",
+    "languageOptions": {
+      "en": "English",
+      "pt-BR": "Português (Brasil)",
+      "es": "Español"
+    },
+    "themeOptions": {
+      "light": "Claro",
+      "dark": "Oscuro",
+      "system": "Sistema"
+    },
+    "saveProfile": "Guardar perfil",
+    "savingProfile": "Guardando perfil…",
+    "profileSaved": "Perfil guardado",
+    "emailVerificationSent": "Revisa tu nuevo correo para confirmar el cambio.",
+    "profileSaveError": "No se pudo guardar el perfil. Inténtalo de nuevo.",
+    "profileLoadError": "No se pudo cargar el perfil. Vuelva a intentarlo.",
+    "signingOut": "Cerrando sesión…"
+  },
+  "Home": {
+    "stack": "Next.js + shadcn/ui + Firebase",
+    "title": "Tu próximo proyecto empieza aquí.",
+    "description": "Empieza tu proyecto con Next.js, shadcn/ui y Firebase. Inicia sesión o crea una cuenta para continuar.",
+    "welcome": "Hola, {name}.",
+    "friend": "dev",
+    "signedInDescription": "Has iniciado sesión. Sigue construyendo con Next.js, shadcn/ui y Firebase o gestiona tu perfil.",
+    "manageAccount": "Mi perfil",
+    "signIn": "Iniciar sesión",
+    "getStarted": "Crear cuenta",
+    "loading": "Cargando…",
+    "source": "GitHub",
+    "signingOut": "Cerrando sesión…",
+    "signOutError": "No se pudo cerrar la sesión. Inténtalo de nuevo."
+  }
+}
