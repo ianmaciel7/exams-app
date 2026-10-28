@@ -81,6 +81,6 @@ jobs:
           pnpm dlx firebase-tools@15.34.1 apphosting:rollouts:create
           "$FIREBASE_APP_HOSTING_BACKEND_ID"
           --project "$FIREBASE_PROJECT_ID"
-          --git_branch "$FIREBASE_RELEASE_BRANCH"
-          --git_commit "$GITHUB_SHA"
+          --git-commit "$GITHUB_SHA"
+          --force
           --non-interactive
