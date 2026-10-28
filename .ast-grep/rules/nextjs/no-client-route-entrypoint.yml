@@ -1,0 +1,13 @@
+id: no-client-route-entrypoint
+language: tsx
+files:
+  - src/app/**/page.tsx
+  - src/app/**/layout.tsx
+  - src/app/**/template.tsx
+severity: error
+message: Keep page, layout and template files as Server Components; move client behavior into private _components modules.
+note: |
+  This is the repository's architectural rule, not a universal Next.js rule.
+  Only route entrypoints are restricted; Client Components remain supported.
+rule:
+  pattern: '"use client";'

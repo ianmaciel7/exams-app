@@ -1,0 +1,14 @@
+id: review-redundant-state-effect
+valid:
+  - |
+    const derived = computeValue(state);
+  - |
+    useEffect(() => {
+      window.addEventListener("resize", onResize);
+      return () => window.removeEventListener("resize", onResize);
+    }, []);
+invalid:
+  - |
+    useEffect(() => {
+      setPreview(URL.createObjectURL(file));
+    }, [file]);

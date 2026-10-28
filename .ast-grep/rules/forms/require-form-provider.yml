@@ -1,0 +1,35 @@
+id: require-form-provider
+language: tsx
+files:
+  - src/app/**/_components/*-form.tsx
+  - src/app/**/_components/*-form-client.tsx
+  - src/app/**/_components/*-form-server.tsx
+  - src/components/**/*-form.tsx
+  - src/components/**/*-form-client.tsx
+  - src/components/**/*-form-server.tsx
+ignores:
+  - "**/*.test.tsx"
+  - "**/*.stories.tsx"
+  - src/components/ui/*.tsx
+severity: error
+message: Composite form orchestrator components must wrap form fields in a FormProvider to avoid prop drilling.
+note: |
+  Following form architecture in CODING_STANDARDS.md and .agents/rules/forms.md#form-architecture-and-context-standards,
+  multi-field or orchestrator form components (*-form.tsx) using React Hook Form must wrap
+  their contents in <FormProvider {...form}> or shadcn <Form {...form}>. Child fields (*-fields.tsx, *-field.tsx)
+  must consume form methods (register, control, errors) via useFormContext() rather than receiving them
+  via prop drilling.
+  Example:
+    <FormProvider {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        ...
+      </form>
+    </FormProvider>
+rule:
+  pattern: <form $$$PROPS>$$$CHILDREN</form>
+  not:
+    inside:
+      stopBy: end
+      any:
+        - pattern: <FormProvider $$$P>$$$C</FormProvider>
+        - pattern: <Form $$$P>$$$C</Form>

@@ -1,12 +1,24 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
+node_modules
 /.pnp
-.pnp.js
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
 
 # testing
 /coverage
+/playwright-report/
+/test-results/
+/reports/
+/graphify-out/*
+!/graphify-out/graph.json
+!/graphify-out/GRAPH_REPORT.md
+!/graphify-out/manifest.json
 
 # next.js
 /.next/
@@ -23,10 +35,17 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.pnpm-debug.log*
+firebase-debug.log*
+firestore-debug.log*
+database-debug.log*
+pubsub-debug.log*
 
-# local env files
-.env*.local
-.env
+# env files (can opt-in for committing if needed)
+.env*
+!.env.example
+
+.firebase/
 
 # vercel
 .vercel
@@ -34,3 +53,37 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# agents & local tool state
+.agents/local.json
+.agents/generated/
+.agents/agents.json.*.bak
+.agents/plugin-data/
+.agents/mcp_config.json
+.claude/
+CLAUDE.md
+.codex/
+.gemini/
+.mcp.json
+.vscode/mcp.json
+.cursor/
+.antigravity/
+.windsurf/
+.opencode/
+opencode.json
+.junie/mcp/
+.grok/config.toml
+.factory/mcp.json
+.devin/mcp_config.json
+.claude/skills
+.junie/skills
+.kilo/skills
+
+# local analysis state
+.fallow/
+
+# mutation testing
+/.stryker-tmp/
+
+# worktrees
+.worktrees/

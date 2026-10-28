@@ -1,0 +1,18 @@
+pnpm exec lint-staged
+
+# On Windows, pre-commit builds its Python virtual environments under a cache
+# path that can exceed the path-length limit (WinError 206) when Python comes
+# from the Microsoft Store. Use a short cache unless one is already configured.
+case "$(uname -s)" in
+  MINGW* | MSYS* | CYGWIN*)
+    export VIRTUALENV_OVERRIDE_APP_DATA="${VIRTUALENV_OVERRIDE_APP_DATA:-$HOME/.virtualenv-cache}"
+    ;;
+esac
+
+# pre-commit (Python) is a host tool, not a pnpm dependency. Skip with a clear
+# message instead of failing opaquely when it is not installed; see TOOLING.md.
+if command -v pre-commit >/dev/null 2>&1; then
+  pre-commit run --hook-stage pre-commit
+else
+  echo "husky: 'pre-commit' not found; skipping repository-integrity hooks (see TOOLING.md)." >&2
+fi

@@ -1,0 +1,54 @@
+id: no-module-support-in-hooks-ts
+valid:
+  - |
+    import { getAvatarSource, MAX_AVATAR_SIZE } from "../_lib/avatar";
+    export function useAvatar() {
+      const source = getAvatarSource(null, null, 0);
+      function onChange(file) { return file.size < MAX_AVATAR_SIZE; }
+      return { source, onChange };
+    }
+  - |
+    export const useAvatar = () => { const limit = 10; return limit; };
+  - |
+    const useAvatar = function () { return null; };
+    export { useAvatar };
+  - |
+    export async function useAvatar() { return null; }
+  - |
+    type Avatar = { url: string };
+    interface Options { enabled: boolean }
+    export function useAvatar() {
+      useEffect(() => { const cleanup = () => {}; return cleanup; }, []);
+      return () => null;
+    }
+invalid:
+  - |
+    function getAvatarSource(preview) { return preview; }
+    export function useAvatar() { return getAvatarSource(null); }
+  - |
+    export function getAvatarSource(preview) { return preview; }
+  - |
+    const getAvatarSource = (preview) => preview;
+  - |
+    export const getAvatarSource = function (preview) { return preview; };
+  - |
+    const MAX_AVATAR_SIZE = 2000;
+    export function useAvatar() { return MAX_AVATAR_SIZE; }
+  - |
+    export const TYPES = new Set(["image/png"]);
+  - |
+    export const ProfileSessionContext = createContext(null);
+  - |
+    const { limit } = options;
+  - |
+    let limit = 10;
+  - |
+    var limit = 10;
+  - |
+    const useAvatar = () => null, helper = () => null;
+  - |
+    const useAvatar = { limit: 10 };
+  - |
+    export default function () { return null; }
+  - |
+    export default () => null;
