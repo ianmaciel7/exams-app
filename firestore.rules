@@ -1,0 +1,38 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Legacy usage records are inaccessible to browser clients.
+    // Current events are emitted by Cloud Functions to Cloud Logging.
+    match /usageLogs/{logId} {
+      allow read, write: if false;
+    }
+
+    // The `role` custom claim is set only by the setUserRole Cloud Function.
+    function isAdmin() {
+      return request.auth != null && request.auth.token.role == 'admin';
+    }
+
+    match /users/{uid} {
+      function isOwner() {
+        return request.auth != null && request.auth.uid == uid;
+      }
+
+      function hasValidPreferences() {
+        return request.resource.data.keys().hasOnly(['locale', 'theme'])
+          && (!('locale' in request.resource.data)
+            || request.resource.data.locale in ['en', 'pt-BR', 'es'])
+          && (!('theme' in request.resource.data)
+            || request.resource.data.theme in ['light', 'dark', 'system']);
+      }
+
+      allow read: if isOwner() || isAdmin();
+      allow create: if isOwner() && hasValidPreferences();
+      allow update: if isOwner()
+        && request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['locale', 'theme'])
+        && hasValidPreferences();
+      allow delete: if isOwner();
+    }
+  }
+}
