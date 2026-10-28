@@ -349,8 +349,10 @@ not yet on a hosted runner; check the first scheduled run.
   `.github/dependabot-mirror/` holds a Dockerfile and a `requirements.txt` that
   receive those bumps. Copy a Playwright image bump into `ci.yml` and
   `visual-baselines.yml` by hand. Gitleaks and actionlint versions stay manual.
-- Deployment is intentionally absent; add provider-specific CD in the derived
-  project.
+- Firebase CD runs `pnpm verify:fast` before a stable tag deploys Functions,
+  security rules, and an App Hosting rollout. Configure its protected inputs as
+  described in [Firebase continuous delivery](docs/firebase-cd.md); local and
+  CI emulator suites remain isolated from production.
 - On Windows, set `PYTHONUTF8=1` when running Semgrep locally, or it can exit
   with code 2 on an output encoding error.
 
