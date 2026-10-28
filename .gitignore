@@ -40,6 +40,7 @@ firebase-debug.log*
 firestore-debug.log*
 database-debug.log*
 pubsub-debug.log*
+gha-creds-*.json
 
 # env files (can opt-in for committing if needed)
 .env*

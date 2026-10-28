@@ -16,6 +16,7 @@ language, as defined in `.agents/rules/language.md#language-policy`.
 | [Testing](../TESTING.md) | Test layers, required Firebase Emulator E2E, CI limitations | Vitest, Playwright, Firebase, Stryker, workflows |
 | [Contributing](../CONTRIBUTING.md) | Branch, commit, and PR conventions | Commitlint, hooks, CI |
 | [Security](../SECURITY.md) | Reporting policy and accepted dependency risk | Audit configuration and security workflow |
+| [Firebase continuous delivery](firebase-cd.md) | Production release configuration and prerequisites | `firebase-cd.yml`, GitHub Environment, Firebase project |
 | [Glossary](../GLOSSARY.md) | Agreed product vocabulary; currently pending | Adopted product terminology |
 | [Entity-relationship diagram](../DER.md) | Pending product model and existing technical Firebase stores | Current SDK modules, Security Rules, and adopted domain constraints |
 | [Agent instructions](../AGENTS.md) | Repository-wide contributor guidance | Current guides and agent configuration |
