@@ -1,0 +1,46 @@
+{
+  "kind": "identitytoolkit#DownloadAccountResponse",
+  "users": [
+    {
+      "localId": "o5nZMWgC07yX1touRN8z3STBcyO9",
+      "lastLoginAt": "1793052577415",
+      "emailVerified": false,
+      "email": "admin@example.test",
+      "salt": "fakeSaltIVX0WyS9MnTGikiORBf5",
+      "passwordHash": "fakeHash:salt=fakeSaltIVX0WyS9MnTGikiORBf5:password=Test-password-123",
+      "passwordUpdatedAt": 1793052577409,
+      "validSince": "1793052577",
+      "createdAt": "1793052577409",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "admin@example.test",
+          "federatedId": "admin@example.test",
+          "rawId": "admin@example.test"
+        }
+      ],
+      "lastRefreshAt": "2026-10-26T22:09:37.416Z",
+      "customAttributes": "{\"role\":\"admin\"}"
+    },
+    {
+      "localId": "wW1V8UsHxx7Wlqlokk9yzi9ccm5I",
+      "lastLoginAt": "1793052577385",
+      "emailVerified": false,
+      "email": "user@example.test",
+      "salt": "fakeSalt04xtuqw7xP2i7AkiLdYQ",
+      "passwordHash": "fakeHash:salt=fakeSalt04xtuqw7xP2i7AkiLdYQ:password=Test-password-123",
+      "passwordUpdatedAt": 1793052577385,
+      "validSince": "1793052577",
+      "createdAt": "1793052577385",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "user@example.test",
+          "federatedId": "user@example.test",
+          "rawId": "user@example.test"
+        }
+      ],
+      "lastRefreshAt": "2026-10-26T22:09:37.389Z"
+    }
+  ]
+}
