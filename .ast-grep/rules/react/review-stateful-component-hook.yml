@@ -1,0 +1,55 @@
+id: review-stateful-component-hook
+language: tsx
+files:
+  - src/app/**/*.tsx
+  - src/components/**/*.tsx
+  - src/hooks/**/*.tsx
+  - src/i18n/**/*.tsx
+  - src/lib/**/*.tsx
+ignores:
+  - src/components/ai-elements/**
+  - src/components/ui/*.tsx
+  - "**/*.test.tsx"
+  - "**/*.stories.tsx"
+severity: warning
+message: Consider extracting this component's related state and Effects into a component-specific custom Hook (for example, useProfileController); other Hooks can remain in the component or be composed by that Hook.
+note: |
+  This heuristic flags a component that combines useState and useEffect. It is
+  a review prompt: React does not require one custom Hook per component, and
+  extraction should clarify cohesive stateful behavior.
+rule:
+  any:
+    - all:
+        - pattern: function $COMPONENT($$$PARAMS) { $$$BODY }
+        - has:
+            any:
+              - kind: jsx_element
+              - kind: jsx_self_closing_element
+            stopBy: end
+        - has:
+            any:
+              - pattern: useState($$$)
+              - pattern: React.useState($$$)
+            stopBy: end
+        - has:
+            any:
+              - pattern: useEffect($$$)
+              - pattern: React.useEffect($$$)
+            stopBy: end
+    - all:
+        - pattern: const $COMPONENT = ($$$PARAMS) => { $$$BODY }
+        - has:
+            any:
+              - kind: jsx_element
+              - kind: jsx_self_closing_element
+            stopBy: end
+        - has:
+            any:
+              - pattern: useState($$$)
+              - pattern: React.useState($$$)
+            stopBy: end
+        - has:
+            any:
+              - pattern: useEffect($$$)
+              - pattern: React.useEffect($$$)
+            stopBy: end

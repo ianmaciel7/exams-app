@@ -1,0 +1,41 @@
+id: require-field-data-invalid
+language: tsx
+files:
+  - src/app/**/*.tsx
+  - src/components/**/*.tsx
+ignores:
+  - "**/*.test.tsx"
+  - "**/*.stories.tsx"
+  - src/components/ui/*.tsx
+severity: error
+message: When a Controller consumes fieldState, the child <Field> component must bind data-invalid.
+note: |
+  Following the form architecture in CODING_STANDARDS.md, form fields rendered via
+  React Hook Form Controller with fieldState must bind data-invalid (e.g. data-invalid={!!fieldState.error})
+  to the root <Field> container for proper styling and accessibility.
+  Example:
+    <Controller
+      name="email"
+      control={form.control}
+      render={({ field, fieldState }) => (
+        <Field data-invalid={!!fieldState.error}>
+          ...
+        </Field>
+      )}
+    />
+rule:
+  pattern: <Field $$$PROPS>$$$CHILDREN</Field>
+  inside:
+    stopBy: end
+    kind: arrow_function
+    has:
+      field: parameters
+      regex: 'fieldState'
+  not:
+    matches: field-with-data-invalid
+
+utils:
+  field-with-data-invalid:
+    any:
+      - pattern: <Field $$$BEFORE data-invalid={$$$VAL} $$$AFTER>$$$CHILDREN</Field>
+      - pattern: <Field $$$BEFORE data-invalid $$$AFTER>$$$CHILDREN</Field>

@@ -1,0 +1,19 @@
+id: review-route-special-files-logic
+language: tsx
+files:
+  - src/app/**/page.tsx
+  - src/app/**/layout.tsx
+  - src/app/**/template.tsx
+ignores:
+  - "**/*.test.tsx"
+severity: error
+message: Route entrypoints must not call React, Next.js or application hooks; move client behavior into private components or hooks.
+note: |
+  This is a project policy requiring thin route entrypoints, not a restriction
+  imposed by Next.js on every page or layout.
+  Prefer server-side data loading and framework generators in route files.
+rule:
+  kind: call_expression
+  has:
+    field: function
+    regex: '(^|\.)use[A-Z]'

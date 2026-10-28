@@ -1,0 +1,8 @@
+id: no-direct-auth-current-user
+valid:
+  - 'const user = getSessionUser();'
+  - 'const user = getActiveUser(expected);'
+  - 'const name = profile.currentUser;'
+invalid:
+  - 'const user = getFirebaseUI().get().auth.currentUser;'
+  - 'const user = auth.currentUser;'

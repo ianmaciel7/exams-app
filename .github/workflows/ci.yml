@@ -1,0 +1,305 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    # `edited` re-runs the title check after a title fix; the other jobs of a
+    # superseded run are cancelled by the concurrency group.
+    types: [opened, synchronize, reopened, edited]
+  workflow_dispatch:
+    inputs:
+      production_url:
+        description: Public HTTPS deployment origin for an optional read-only smoke check
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  # Pull requests share a group per ref so a new run supersedes the old one.
+  # Every other event gets its own group, so GitHub never drops a pending
+  # run for a push to main.
+  group: ci-${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.ref || github.sha }}
+  # Only superseded pull-request runs are cancelled; every push to main keeps
+  # its own validation result.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  HUSKY: "0"
+
+jobs:
+  static:
+    name: Static checks and unit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          # Fallow's hotspot analysis (analyze:fallow) reads commit history.
+          fetch-depth: 0
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm verify:static
+      - name: Biome 2.6 plugin pilot
+        run: |
+          set -euo pipefail
+          find src/app src/components/ui/extensions -type f -name '*.tsx' ! -name '*.test.tsx' -print0 | xargs -0 -r pnpm dlx @biomejs/biome@2.6.2 lint --config-path biome.preview.json
+          pnpm dlx @biomejs/biome@2.6.2 lint --config-path biome.preview.json .biome/plugins/fixtures/valid
+          if pnpm dlx @biomejs/biome@2.6.2 lint --config-path biome.preview.json .biome/plugins/fixtures/invalid > biome-preview-output.txt 2>&1; then
+            echo "The invalid component filename unexpectedly passed." >&2
+            exit 1
+          fi
+          if ! grep -q 'does not match filename' biome-preview-output.txt; then
+            cat biome-preview-output.txt
+            echo "The failure was unrelated to the filename plugin." >&2
+            exit 1
+          fi
+          echo "Biome filename plugin pilot passed valid and invalid fixtures."
+      - name: Coverage summary
+        if: ${{ !cancelled() && hashFiles('coverage/coverage-summary.json') != '' }}
+        run: |
+          {
+            echo "### Unit test coverage"
+            echo
+            echo "| Metric | Covered |"
+            echo "| --- | --- |"
+            jq -r '.total | to_entries[] | select(.key | IN("statements","branches","functions","lines")) | "| \(.key) | \(.value.pct)% (\(.value.covered)/\(.value.total)) |"' coverage/coverage-summary.json
+          } >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: ${{ !cancelled() }}
+        with:
+          name: coverage
+          path: coverage/
+          retention-days: 7
+          if-no-files-found: ignore
+
+  build:
+    name: Browser tests, builds and size
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # Vitest Playwright uses the matching headless-shell binary.
+      # Install only that browser; avoid slow apt packages from --with-deps.
+      - run: pnpm exec playwright install --only-shell chromium
+      # Vitest Browser Mode, Next.js production build with size budgets, and
+      # the Ladle production build.
+      - run: pnpm verify:build
+
+  e2e:
+    name: End-to-end, accessibility and visual
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    # The visual baselines are generated in this same image, so keep it in sync
+    # with the @playwright/test version in package.json.
+    container:
+      image: mcr.microsoft.com/playwright:v1.64.1-noble@sha256:7852dc5a7d72f5fe458a597d690f6c42fbc8e9e26ddfa95f8e6ef552558d9bbf
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm verify:e2e
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
+          if-no-files-found: ignore
+
+  auth-emulator:
+    name: Firebase Auth and profile emulator E2E
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CI: "true"
+      NEXT_PUBLIC_FIREBASE_API_KEY: emulator-only
+      NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: demo-test.firebaseapp.com
+      NEXT_PUBLIC_FIREBASE_PROJECT_ID: demo-test
+      NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: demo-test.appspot.com
+      NEXT_PUBLIC_FIREBASE_APP_ID: emulator-only
+      NEXT_PUBLIC_FIREBASE_GOOGLE_ENABLED: "true"
+      FIREBASE_AUTH_EMULATOR_HOST: 127.0.0.1:9099
+      NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_HOST: 127.0.0.1:9099
+      FIRESTORE_EMULATOR_HOST: 127.0.0.1:8080
+      NEXT_PUBLIC_FIRESTORE_EMULATOR_HOST: 127.0.0.1:8080
+      NEXT_PUBLIC_FIREBASE_FUNCTIONS_EMULATOR_HOST: 127.0.0.1:5001
+      GCLOUD_PROJECT: demo-test
+      TEST_USER_PASSWORD: Test-password-123
+      PLAYWRIGHT_AUTH_EMULATOR: "true"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: pnpm
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          distribution: temurin
+          java-version: "21"
+      - run: pnpm install --frozen-lockfile
+      # ProtectedGuardClient and profile saves await the recordUsage callable;
+      # starting only Auth and Firestore leaves the protected page blocked.
+      - name: Install Cloud Functions dependencies
+        run: npm ci --prefix functions --ignore-scripts
+      - run: pnpm exec playwright install chromium
+      - name: Firebase emulator E2E
+        run: pnpm dlx firebase-tools@15.34.1 emulators:exec --project demo-test --only auth,firestore,functions "pnpm exec playwright test --project=auth-emulator"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: ${{ !cancelled() }}
+        with:
+          name: auth-emulator-playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
+          if-no-files-found: ignore
+
+  pr-title:
+    name: Pull request title
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # The title is untrusted input: pass it through the environment, never
+      # interpolate it into the script. Squash merges use it as the commit
+      # message, so it must satisfy the same Conventional Commits rules.
+      - name: Validate Conventional Commit title
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: echo "$PR_TITLE" | pnpm exec commitlint
+
+  security:
+    name: Security
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GITLEAKS_VERSION: 8.30.1
+      GITLEAKS_SHA256: 551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb
+      ACTIONLINT_VERSION: 1.7.12
+      ACTIONLINT_SHA256: 8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          # Gitleaks scans the whole commit history.
+          fetch-depth: 0
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: pnpm
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.13"
+      - name: Install Semgrep, zizmor and pre-commit
+        run: pip install -r .github/dependabot-mirror/ci-python/requirements.txt
+      - name: Install Gitleaks and actionlint
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/bin"
+          curl -sSfL -o "$RUNNER_TEMP/gitleaks.tar.gz" \
+            "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          echo "${GITLEAKS_SHA256}  $RUNNER_TEMP/gitleaks.tar.gz" | sha256sum --check
+          tar -xzf "$RUNNER_TEMP/gitleaks.tar.gz" -C "$RUNNER_TEMP/bin" gitleaks
+          curl -sSfL -o "$RUNNER_TEMP/actionlint.tar.gz" \
+            "https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/actionlint_${ACTIONLINT_VERSION}_linux_amd64.tar.gz"
+          echo "${ACTIONLINT_SHA256}  $RUNNER_TEMP/actionlint.tar.gz" | sha256sum --check
+          tar -xzf "$RUNNER_TEMP/actionlint.tar.gz" -C "$RUNNER_TEMP/bin" actionlint
+          echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
+      - run: pnpm install --frozen-lockfile
+      - name: Semgrep rule tests
+        run: pnpm check:security:rules
+      - name: Semgrep
+        run: pnpm check:security
+      - name: Gitleaks
+        run: pnpm check:secrets
+      - name: Workflow lint (actionlint and zizmor)
+        run: pnpm check:workflows
+        env:
+          # Lets zizmor run its online audits with the default read-only token.
+          GH_TOKEN: ${{ github.token }}
+      - name: Dependency audit
+        run: pnpm audit
+      - name: Cloud Functions dependency audit
+        run: pnpm audit:functions
+      # Locally the Git hook skips these checks when pre-commit is missing, so
+      # CI is where they are always enforced.
+      - name: Repository integrity (pre-commit)
+        run: pre-commit run --all-files
+
+  production-smoke:
+    name: Public production smoke (manual URL only)
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.production_url != '' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+      - name: Check deployed HTML response languages
+        env:
+          PRODUCTION_URL: ${{ inputs.production_url }}
+        run: node scripts/checks/check-production-smoke.mjs
+
+  # Single required status check for branch protection: fails when any job
+  # failed, was cancelled, or was skipped unexpectedly.
+  ci-result:
+    name: CI result
+    if: ${{ always() }}
+    needs: [static, build, e2e, auth-emulator, security, pr-title, production-smoke]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check job results
+        env:
+          NEEDS: ${{ toJSON(needs) }}
+        run: |
+          {
+            echo "### CI result"
+            echo
+            echo "| Job | Result |"
+            echo "| --- | --- |"
+            echo "$NEEDS" | jq -r 'to_entries[] | "| \(.key) | \(.value.result) |"'
+          } >> "$GITHUB_STEP_SUMMARY"
+          # pr-title is skipped on pushes/manual runs. Production smoke is
+          # skipped unless a manual HTTPS target is supplied.
+          echo "$NEEDS" | jq -e 'to_entries | all(.value.result == "success" or ((.key == "pr-title" or .key == "production-smoke") and .value.result == "skipped"))' > /dev/null

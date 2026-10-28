@@ -1,0 +1,34 @@
+id: review-redundant-state-effect
+language: tsx
+files:
+  - src/app/**/*.tsx
+  - src/app/**/*.ts
+  - src/components/**/*.tsx
+  - src/components/**/*.ts
+  - src/hooks/**/*.tsx
+  - src/hooks/**/*.ts
+ignores:
+  - src/components/ai-elements/**
+  - src/components/ui/*.tsx
+  - "**/*.test.ts"
+  - "**/*.test.tsx"
+  - "**/*.stories.tsx"
+severity: warning
+message: Review whether this Effect sets state from other state/props; calculate derived state during rendering instead.
+note: |
+  Per React best practices ("You Might Not Need an Effect"), updating state based on props or other state
+  causes extra cascading render passes and state synchronization bugs.
+  Calculate derived state directly during render, or update atomic state directly in event handlers.
+  See https://react.dev/learn/you-might-not-need-an-effect
+rule:
+  any:
+    - all:
+        - pattern: useEffect($$$)
+        - has:
+            regex: set[A-Z]\w*\(
+    - all:
+        - pattern: React.useEffect($$$)
+        - has:
+            regex: set[A-Z]\w*\(
+
+

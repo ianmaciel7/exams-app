@@ -1,0 +1,26 @@
+id: no-manual-memoization-ts
+language: typescript
+files:
+  - src/app/**/*.ts
+  - src/hooks/**/*.ts
+  - src/i18n/**/*.ts
+  - src/lib/**/*.ts
+ignores:
+  - "**/*.test.ts"
+  - "**/*.stories.ts"
+severity: warning
+message: React Compiler is enabled; manual memoization is usually redundant. Keep it only when it is intentional.
+note: |
+  React Compiler memoizes automatically, but React still documents useMemo,
+  useCallback and memo as escape hatches (for example to keep an Effect
+  dependency stable). This is guidance, not a correctness rule: keep the call
+  when it has a reason and state that reason in a comment.
+  See CODING_STANDARDS.md.
+rule:
+  any:
+    - pattern: useMemo($$$)
+    - pattern: useCallback($$$)
+    - pattern: memo($$$)
+    - pattern: React.useMemo($$$)
+    - pattern: React.useCallback($$$)
+    - pattern: React.memo($$$)

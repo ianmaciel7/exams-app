@@ -1,0 +1,22 @@
+{
+  "$schema": "https://raw.githubusercontent.com/fallow-rs/fallow/main/schema.json",
+  "entry": [
+    "src/components/**/*.{ts,tsx}",
+    "src/hooks/**/*.{ts,tsx}",
+    "src/lib/**/*.{ts,tsx}",
+    "src/i18n/**/*.ts",
+    "src/app/**/_hooks/**/*.{ts,tsx}",
+    "src/app/**/_lib/**/*.{ts,tsx}"
+  ],
+  "ignorePatterns": [".ladle/**", ".biome/**"],
+  "health": {
+    "ignore": [
+      "src/components/ai-elements/**",
+      "src/components/firebase/**",
+      "src/components/ui/**/*.tsx",
+      "scripts/emulator/seed.mjs",
+      "scripts/emulator/clear.mjs",
+      "**/*.stories.tsx"
+    ]
+  }
+}

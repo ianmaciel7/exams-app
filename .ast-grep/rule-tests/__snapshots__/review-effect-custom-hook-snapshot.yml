@@ -1,0 +1,14 @@
+id: review-effect-custom-hook
+snapshots:
+  "React.useEffect(() => {}, []);":
+    labels:
+    - source: React.useEffect(() => {}, [])
+      style: primary
+      start: 0
+      end: 29
+  "const Component = () => { useEffect(() => {}, []); return <div />; };":
+    labels:
+    - source: useEffect(() => {}, [])
+      style: primary
+      start: 26
+      end: 49

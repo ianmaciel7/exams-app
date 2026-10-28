@@ -1,0 +1,28 @@
+id: no-hardcoded-ui-attribute
+language: tsx
+files:
+  - src/app/**/*.tsx
+  - src/components/**/*.tsx
+ignores:
+  - "**/*.test.tsx"
+  - "**/*.stories.tsx"
+  - src/components/ui/*.tsx
+  - src/components/ai-elements/**
+severity: warning
+message: User-visible attribute has a hardcoded string; read it from the next-intl message catalog.
+note: |
+  Biome's noJsxLiterals runs with ignoreProps, so text in attributes such as
+  aria-label or placeholder is not checked there. CODING_STANDARDS.md requires
+  user-facing text to come from src/messages. This is a warning because some
+  values are not user-facing (for example a brand name) and need judgment;
+  suppress with `// ast-grep-ignore: no-hardcoded-ui-attribute` and say why.
+  Empty values such as `alt=""` (decorative images) are allowed.
+rule:
+  kind: jsx_attribute
+  has:
+    kind: property_identifier
+    regex: ^(aria-label|aria-description|title|placeholder|alt)$
+  all:
+    - has:
+        kind: string
+        regex: '[A-Za-z]'

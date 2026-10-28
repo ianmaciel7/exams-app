@@ -1,0 +1,11 @@
+id: require-form-provider
+snapshots:
+  "function BadForm() {\n  return (\n    <form onSubmit={handleSubmit(onSubmit)}>\n      <Field />\n    </form>\n  );\n}\n":
+    labels:
+    - source: |-
+        <form onSubmit={handleSubmit(onSubmit)}>
+              <Field />
+            </form>
+      style: primary
+      start: 36
+      end: 104

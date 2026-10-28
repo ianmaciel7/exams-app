@@ -1,0 +1,122 @@
+id: require-component-props
+snapshots:
+  "interface MyComponentProps { title: string; }":
+    labels:
+    - source: "interface MyComponentProps { title: string; }"
+      style: primary
+      start: 0
+      end: 45
+    - source: MyComponentProps
+      style: secondary
+      start: 10
+      end: 26
+  "interface PanelProps extends NotComponentProps<\"div\"> { title: string; }":
+    labels:
+    - source: "interface PanelProps extends NotComponentProps<\"div\"> { title: string; }"
+      style: primary
+      start: 0
+      end: 72
+    - source: PanelProps
+      style: secondary
+      start: 10
+      end: 20
+  "interface PanelProps extends Wrapper<ComponentProps<\"div\">> { title: string; }":
+    labels:
+    - source: "interface PanelProps extends Wrapper<ComponentProps<\"div\">> { title: string; }"
+      style: primary
+      start: 0
+      end: 78
+    - source: PanelProps
+      style: secondary
+      start: 10
+      end: 20
+  "type MyComponentProps = { customProp: string };":
+    labels:
+    - source: "type MyComponentProps = { customProp: string };"
+      style: primary
+      start: 0
+      end: 47
+    - source: MyComponentProps
+      style: secondary
+      start: 5
+      end: 21
+  "type PanelProps = ComponentProps<\"div\"> | { title: string };":
+    labels:
+    - source: "type PanelProps = ComponentProps<\"div\"> | { title: string };"
+      style: primary
+      start: 0
+      end: 60
+    - source: PanelProps
+      style: secondary
+      start: 5
+      end: 15
+  type PanelProps = NotComponentProps<"div">;:
+    labels:
+    - source: type PanelProps = NotComponentProps<"div">;
+      style: primary
+      start: 0
+      end: 43
+    - source: PanelProps
+      style: secondary
+      start: 5
+      end: 15
+  "type PanelProps = Omit<Wrapper<ComponentProps<\"div\">>, \"id\">;":
+    labels:
+    - source: type PanelProps = Omit<Wrapper<ComponentProps<"div">>, "id">;
+      style: primary
+      start: 0
+      end: 61
+    - source: PanelProps
+      style: secondary
+      start: 5
+      end: 15
+  "type PanelProps = Omit<{ forwarded: ComponentProps<\"div\"> }, \"id\">;":
+    labels:
+    - source: "type PanelProps = Omit<{ forwarded: ComponentProps<\"div\"> }, \"id\">;"
+      style: primary
+      start: 0
+      end: 67
+    - source: PanelProps
+      style: secondary
+      start: 5
+      end: 15
+  type PanelProps = Wrapper<ComponentProps<"div">>;:
+    labels:
+    - source: type PanelProps = Wrapper<ComponentProps<"div">>;
+      style: primary
+      start: 0
+      end: 49
+    - source: PanelProps
+      style: secondary
+      start: 5
+      end: 15
+  "type PanelProps = { forwarded: ComponentProps<\"div\"> } & { title: string };":
+    labels:
+    - source: "type PanelProps = { forwarded: ComponentProps<\"div\"> } & { title: string };"
+      style: primary
+      start: 0
+      end: 75
+    - source: PanelProps
+      style: secondary
+      start: 5
+      end: 15
+  "type PanelProps = { forwarded: ComponentProps<\"div\"> };":
+    labels:
+    - source: "type PanelProps = { forwarded: ComponentProps<\"div\"> };"
+      style: primary
+      start: 0
+      end: 55
+    - source: PanelProps
+      style: secondary
+      start: 5
+      end: 15
+  "type ProfilePreferenceFieldsProps = { profile: ProfileClientState };":
+    labels:
+    - source: "type ProfilePreferenceFieldsProps = { profile: ProfileClientState };"
+      style: primary
+      start: 0
+      end: 68
+    - source: ProfilePreferenceFieldsProps
+      style: secondary
+      start: 5
+      end: 33

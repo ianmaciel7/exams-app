@@ -1,0 +1,222 @@
+id: no-module-support-in-hooks-ts
+snapshots:
+  "const MAX_AVATAR_SIZE = 2000;\nexport function useAvatar() { return MAX_AVATAR_SIZE; }\n":
+    labels:
+    - source: MAX_AVATAR_SIZE = 2000
+      style: primary
+      start: 6
+      end: 28
+    - source: |
+        const MAX_AVATAR_SIZE = 2000;
+        export function useAvatar() { return MAX_AVATAR_SIZE; }
+      style: secondary
+      start: 0
+      end: 86
+    - source: const MAX_AVATAR_SIZE = 2000;
+      style: secondary
+      start: 0
+      end: 29
+  "const getAvatarSource = (preview) => preview;\n":
+    labels:
+    - source: getAvatarSource = (preview) => preview
+      style: primary
+      start: 6
+      end: 44
+    - source: |
+        const getAvatarSource = (preview) => preview;
+      style: secondary
+      start: 0
+      end: 46
+    - source: const getAvatarSource = (preview) => preview;
+      style: secondary
+      start: 0
+      end: 45
+  "const useAvatar = () => null, helper = () => null;\n":
+    labels:
+    - source: helper = () => null
+      style: primary
+      start: 30
+      end: 49
+    - source: |
+        const useAvatar = () => null, helper = () => null;
+      style: secondary
+      start: 0
+      end: 51
+    - source: const useAvatar = () => null, helper = () => null;
+      style: secondary
+      start: 0
+      end: 50
+  "const useAvatar = { limit: 10 };\n":
+    labels:
+    - source: "useAvatar = { limit: 10 }"
+      style: primary
+      start: 6
+      end: 31
+    - source: |
+        const useAvatar = { limit: 10 };
+      style: secondary
+      start: 0
+      end: 33
+    - source: "const useAvatar = { limit: 10 };"
+      style: secondary
+      start: 0
+      end: 32
+  "const { limit } = options;\n":
+    labels:
+    - source: "{ limit } = options"
+      style: primary
+      start: 6
+      end: 25
+    - source: |
+        const { limit } = options;
+      style: secondary
+      start: 0
+      end: 27
+    - source: const { limit } = options;
+      style: secondary
+      start: 0
+      end: 26
+  "export const ProfileSessionContext = createContext(null);\n":
+    labels:
+    - source: ProfileSessionContext = createContext(null)
+      style: primary
+      start: 13
+      end: 56
+    - source: |
+        export const ProfileSessionContext = createContext(null);
+      style: secondary
+      start: 0
+      end: 58
+    - source: export const ProfileSessionContext = createContext(null);
+      style: secondary
+      start: 0
+      end: 57
+    - source: const ProfileSessionContext = createContext(null);
+      style: secondary
+      start: 7
+      end: 57
+  "export const TYPES = new Set([\"image/png\"]);\n":
+    labels:
+    - source: TYPES = new Set(["image/png"])
+      style: primary
+      start: 13
+      end: 43
+    - source: |
+        export const TYPES = new Set(["image/png"]);
+      style: secondary
+      start: 0
+      end: 45
+    - source: export const TYPES = new Set(["image/png"]);
+      style: secondary
+      start: 0
+      end: 44
+    - source: const TYPES = new Set(["image/png"]);
+      style: secondary
+      start: 7
+      end: 44
+  "export const getAvatarSource = function (preview) { return preview; };\n":
+    labels:
+    - source: getAvatarSource = function (preview) { return preview; }
+      style: primary
+      start: 13
+      end: 69
+    - source: |
+        export const getAvatarSource = function (preview) { return preview; };
+      style: secondary
+      start: 0
+      end: 71
+    - source: export const getAvatarSource = function (preview) { return preview; };
+      style: secondary
+      start: 0
+      end: 70
+    - source: const getAvatarSource = function (preview) { return preview; };
+      style: secondary
+      start: 7
+      end: 70
+  "export default () => null;\n":
+    labels:
+    - source: () => null
+      style: primary
+      start: 15
+      end: 25
+    - source: |
+        export default () => null;
+      style: secondary
+      start: 0
+      end: 27
+    - source: export default () => null;
+      style: secondary
+      start: 0
+      end: 26
+  "export default function () { return null; }\n":
+    labels:
+    - source: function () { return null; }
+      style: primary
+      start: 15
+      end: 43
+    - source: |
+        export default function () { return null; }
+      style: secondary
+      start: 0
+      end: 44
+    - source: export default function () { return null; }
+      style: secondary
+      start: 0
+      end: 43
+  "export function getAvatarSource(preview) { return preview; }\n":
+    labels:
+    - source: function getAvatarSource(preview) { return preview; }
+      style: primary
+      start: 7
+      end: 60
+    - source: |
+        export function getAvatarSource(preview) { return preview; }
+      style: secondary
+      start: 0
+      end: 61
+    - source: export function getAvatarSource(preview) { return preview; }
+      style: secondary
+      start: 0
+      end: 60
+  "function getAvatarSource(preview) { return preview; }\nexport function useAvatar() { return getAvatarSource(null); }\n":
+    labels:
+    - source: function getAvatarSource(preview) { return preview; }
+      style: primary
+      start: 0
+      end: 53
+    - source: |
+        function getAvatarSource(preview) { return preview; }
+        export function useAvatar() { return getAvatarSource(null); }
+      style: secondary
+      start: 0
+      end: 116
+  "let limit = 10;\n":
+    labels:
+    - source: limit = 10
+      style: primary
+      start: 4
+      end: 14
+    - source: |
+        let limit = 10;
+      style: secondary
+      start: 0
+      end: 16
+    - source: let limit = 10;
+      style: secondary
+      start: 0
+      end: 15
+  "var limit = 10;\n":
+    labels:
+    - source: limit = 10
+      style: primary
+      start: 4
+      end: 14
+    - source: |
+        var limit = 10;
+      style: secondary
+      start: 0
+      end: 16
+    - source: var limit = 10;
+      style: secondary
+      start: 0
+      end: 15

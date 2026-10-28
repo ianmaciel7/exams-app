@@ -1,0 +1,22 @@
+id: no-direct-auth-current-user
+snapshots:
+  const user = auth.currentUser;:
+    labels:
+    - source: auth.currentUser
+      style: primary
+      start: 13
+      end: 29
+    - source: auth
+      style: secondary
+      start: 13
+      end: 17
+  const user = getFirebaseUI().get().auth.currentUser;:
+    labels:
+    - source: getFirebaseUI().get().auth.currentUser
+      style: primary
+      start: 13
+      end: 51
+    - source: getFirebaseUI().get().auth
+      style: secondary
+      start: 13
+      end: 39

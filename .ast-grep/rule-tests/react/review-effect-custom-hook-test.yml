@@ -1,0 +1,6 @@
+id: review-effect-custom-hook
+valid:
+  - const value = getValue();
+invalid:
+  - const Component = () => { useEffect(() => {}, []); return <div />; };
+  - React.useEffect(() => {}, []);

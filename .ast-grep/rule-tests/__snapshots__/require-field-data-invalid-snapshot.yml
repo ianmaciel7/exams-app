@@ -1,0 +1,26 @@
+id: require-field-data-invalid
+snapshots:
+  "<Controller\n  control={form.control}\n  name=\"email\"\n  render={({ field, fieldState }) => (\n    <Field>\n      <FieldLabel htmlFor=\"email\">Email</FieldLabel>\n      <Input {...field} id=\"email\" />\n    </Field>\n  )}\n/>\n":
+    labels:
+    - source: |-
+        <Field>
+              <FieldLabel htmlFor="email">Email</FieldLabel>
+              <Input {...field} id="email" />
+            </Field>
+      style: primary
+      start: 95
+      end: 206
+    - source: ({ field, fieldState })
+      style: secondary
+      start: 62
+      end: 85
+    - source: |-
+        ({ field, fieldState }) => (
+            <Field>
+              <FieldLabel htmlFor="email">Email</FieldLabel>
+              <Input {...field} id="email" />
+            </Field>
+          )
+      style: secondary
+      start: 62
+      end: 210
