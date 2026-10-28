@@ -1,0 +1,7 @@
+project_id      = "your-new-project-id"
+billing_account = "XXXXXX-XXXXXX-XXXXXX"
+# org_id        = "123456789012"
+# folder_id     = "123456789012"
+region          = "us-central1"
+project_name           = "Exams App - Production"
+# adopt_existing_project = true   # import a project that already exists
