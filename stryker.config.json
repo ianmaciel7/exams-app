@@ -1,0 +1,31 @@
+{
+  "$schema": "https://unpkg.com/@stryker-mutator/core@10.0.0/schema/stryker-schema.json",
+  "testRunner": "command",
+  "mutate": ["src/i18n/routing.ts", "src/hooks/use-mobile.ts"],
+  "concurrency": 2,
+  "thresholds": {
+    "high": 85,
+    "low": 75,
+    "break": 75
+  },
+  "reporters": ["clear-text", "progress"],
+  "ignorePatterns": [
+    ".agents",
+    ".claude",
+    ".codex",
+    ".cursor",
+    ".gemini",
+    ".serena",
+    ".next",
+    ".husky",
+    "reports",
+    "coverage",
+    "docs",
+    "playwright-report",
+    "test-results"
+  ],
+  "commandRunner": {
+    "command": "node node_modules/vitest/vitest.mjs run --config vitest.mutation.config.mts"
+  },
+  "coverageAnalysis": "off"
+}
