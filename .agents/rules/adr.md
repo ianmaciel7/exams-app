@@ -11,6 +11,23 @@ description: "Read when creating, superseding, or referencing architecture decis
 
 Read when creating, superseding, or referencing architecture decision records.
 
+## When an ADR is required
+
+Write the ADR in the same change as the work, before opening the pull request.
+Do not leave it for a later step or wait to be asked. An ADR is required when a
+change introduces or replaces an architectural, tooling, or infrastructure
+choice: a new top-level directory or tool, a new cloud resource model, a new
+security boundary, or a decision that supersedes an earlier record.
+
+- Before opening a pull request, check whether the change needs a record and
+  run `pnpm check:adr`. The guard fails when an indexed area such as `infra/`
+  exists without a record, when an ADR is missing from `docs/adr/README.md`, and
+  when numbers have gaps.
+- Add a row to `decisionAreas` in `scripts/checks/check-adr.mjs`, with a test in
+  `scripts/checks/check-adr.test.mjs`, when a new top-level area needs one.
+- Keep concrete project, billing, organization, and account identifiers out of
+  ADRs and every other tracked file.
+
 ## ADR Naming and Immutability
 
 Apply this rule when creating an Architecture Decision Record in `docs/adr/`.

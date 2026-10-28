@@ -25,6 +25,11 @@
     "src/messages"
   ],
   "words": [
+    "apphosting",
+    "Eventarc",
+    "RTDB",
+    "tfstate",
+    "tfvars",
     "actionlint",
     "antipatterns",
     "appspot",

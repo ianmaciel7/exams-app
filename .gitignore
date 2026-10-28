@@ -88,3 +88,26 @@ opencode.json
 
 # worktrees
 .worktrees/
+
+# Terraform: state, plans and variable files hold billing, organization and resource data.
+# Only *.tfvars.example may be committed.
+**/.terraform/
+**/*.tfstate
+**/*.tfstate.*
+**/*.tfplan
+**/tfplan
+**/*.tfvars
+**/*.tfvars.json
+!**/*.tfvars.example
+**/backend.hcl
+**/override.tf
+**/override.tf.json
+**/*_override.tf
+**/crash.log
+**/crash.*.log
+**/.terraform.tfstate.lock.info
+
+# Service account keys and credential files
+*-credentials.json
+*service-account*.json
+application_default_credentials.json
