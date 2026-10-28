@@ -19,6 +19,7 @@ original date. Read current operational details in the
 | [0008](0008-install-firebase-ui-registry.md) | Accepted | Dynamic cross-platform installer and locally owned source model for `@firebase` registry |
 | [0009](0009-integrate-firebase-authentication.md) | Accepted | Browser Firebase Authentication, Electron redirect OAuth, native usage logging, role custom claims, and emulators |
 | [0010](0010-configure-agent-ecosystem.md) | Accepted | Multi-agent orchestration, four MCP servers, fifteen locked skills, domain rule architecture, `PRODUCT.md`, Graphify graph, tool-usage evaluations, repository guards, and Firebase security rules ownership |
+| [0011](0011-configure-firebase-cd.md) | Accepted | Tag-driven Firebase production delivery, App Hosting, OIDC federation, `us-central1`, and budget alerts |
 
 ## Current operational clarifications
 
