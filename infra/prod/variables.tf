@@ -46,6 +46,7 @@ variable "deploy_roles" {
     "roles/firebaseapphosting.admin",
     "roles/firebasedatabase.admin",
     "roles/firebaserules.admin",
+    "roles/run.admin",
     "roles/serviceusage.serviceUsageConsumer",
     "roles/storage.objectAdmin",
   ]
