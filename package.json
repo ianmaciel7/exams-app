@@ -118,7 +118,7 @@
   "devDependencies": {
     "@ast-grep/cli": "0.51.0",
     "@axe-core/playwright": "4.14.0",
-    "@biomejs/biome": "2.5.15",
+    "@biomejs/biome": "2.6.2",
     "@commitlint/cli": "21.2.4",
     "@commitlint/config-conventional": "21.2.4",
     "@cspell/dict-pt-br": "2.4.4",
