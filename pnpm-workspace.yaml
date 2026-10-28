@@ -1,0 +1,41 @@
+allowBuilds:
+  "@firebase/util": false
+  protobufjs: false
+  "@ast-grep/cli": true
+  sharp: false
+  unrs-resolver: false
+  "@parcel/watcher": false
+  "@swc/core": false
+  esbuild: true
+  msw: false
+overrides:
+  # Firestore pins 1.9.16; 1.13.6 fixes GHSA-m9gg-hp2v-232j and GHSA-f596-whhp-79r4.
+  "@grpc/grpc-js": "^1.13.6"
+  "@modelcontextprotocol/sdk": ">=1.31.0"
+  linkify-it: ">=5.0.2"
+  markdown-it: ">=15.0.2"
+  qs: ">=6.16.0"
+  smol-toml: ">=1.9.0"
+  katex: ">=0.18.2"
+  zod@<4.6.6: ^4.6.6
+auditConfig:
+  ignoreGhsas:
+    # braces <=3.0.3 (stack exhaustion DoS on deeply nested patterns) has no
+    # patched release. It is reached only through developer tools (shadcn CLI,
+    # Ladle, markdownlint) that expand fixed, trusted glob patterns.
+    # The maintainer declined to fix it (micromatch/braces#84, closed 2026-10-08)
+    # and disputes the advisory, so no patched release is expected. Remove this
+    # entry when the advisory is withdrawn or the dependency chain drops braces.
+    # TEMPLATE-ONLY RISK ACCEPTANCE: derived projects MUST re-check `pnpm why
+    # braces` and their production dependency graph before keeping this ignore.
+    # Do not silently accept this exception for a different application.
+    - GHSA-vfj7-8cjw-p6xm
+    # deepmerge >=4.2.0 <=4.3.1 (mergeObject() prototype poisoning, low severity)
+    # has no patched release. It is reached only through the shadcn CLI
+    # (shadcn > @shadcn/registry), which merges fixed registry configuration at
+    # development time; the application never imports it. Recheck `pnpm why
+    # deepmerge` after dependency updates. Remove this entry when a patched
+    # release exists or the chain drops deepmerge.
+    # TEMPLATE-ONLY RISK ACCEPTANCE: derived projects MUST re-check `pnpm why
+    # deepmerge` before keeping this ignore.
+    - GHSA-gcqx-w48m-w2h4
