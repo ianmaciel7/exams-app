@@ -1,0 +1,20 @@
+id: no-manual-memoization-ts
+snapshots:
+  "const onClick = React.useCallback(() => run(), []);":
+    labels:
+    - source: React.useCallback(() => run(), [])
+      style: primary
+      start: 16
+      end: 50
+  "const value = useMemo(() => compute(input), [input]);":
+    labels:
+    - source: useMemo(() => compute(input), [input])
+      style: primary
+      start: 14
+      end: 52
+  "export const Row = React.memo(function Row() { return null; });":
+    labels:
+    - source: React.memo(function Row() { return null; })
+      style: primary
+      start: 19
+      end: 62

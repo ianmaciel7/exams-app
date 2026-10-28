@@ -1,0 +1,19 @@
+id: require-session-check-in-server-action
+valid:
+  - |
+    export async function updateName(formData: FormData) {
+      "use server";
+      const session = await verifySession();
+      return session.uid;
+    }
+  - |
+    export async function promote(formData: FormData) {
+      "use server";
+      await verifyRole("admin");
+    }
+invalid:
+  - |
+    export async function updateName(formData: FormData) {
+      "use server";
+      return formData.get("name");
+    }

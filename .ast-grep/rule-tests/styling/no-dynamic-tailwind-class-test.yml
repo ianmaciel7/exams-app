@@ -1,0 +1,10 @@
+id: no-dynamic-tailwind-class
+valid:
+  - const a = <div className="bg-red-500" />;
+  - const a = <div className={cn("p-2", active && "bg-red-500")} />;
+  - 'const a = <div className={{ red: "bg-red-500" }[color]} />;'
+  - const id = `item-${id}`;
+  - const a = <div className={`${base} p-2`} />;
+invalid:
+  - const a = <div className={`bg-${color}-500`} />;
+  - const a = cn(`text-${size}`, "p-2");

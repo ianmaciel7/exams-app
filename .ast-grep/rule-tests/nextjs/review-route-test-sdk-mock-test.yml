@@ -1,0 +1,7 @@
+id: review-route-test-sdk-mock
+valid:
+  - 'vi.mock("next/navigation", () => ({ useRouter: () => ({ push: vi.fn() }) }));'
+  - 'vi.mock("@/components/firebase/sign-in-auth-screen", () => ({ SignInAuthScreen: () => null }));'
+invalid:
+  - 'vi.mock("firebase/auth", () => ({ onAuthStateChanged: vi.fn() }));'
+  - 'vi.mock("@/lib/firebase/client", () => ({ getFirebaseUI: vi.fn() }));'

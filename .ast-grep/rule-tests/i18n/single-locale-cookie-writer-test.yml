@@ -1,0 +1,8 @@
+id: single-locale-cookie-writer
+valid:
+  - 'syncSavedLocale(savedLocale, activeLocale, router.refresh);'
+  - 'const cookies = document.cookie;'
+  - 'store.cookie = "a=b";'
+invalid:
+  - 'document.cookie = `${localeCookie}=${locale}; Path=/`;'
+  - 'document.cookie = "NEXT_LOCALE=en";'
