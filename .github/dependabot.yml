@@ -1,0 +1,64 @@
+version: 2
+
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    cooldown:
+      default-days: 3
+      semver-major-days: 30
+      semver-minor-days: 7
+      semver-patch-days: 3
+    commit-message:
+      prefix: "chore(deps)"
+    groups:
+      dev-dependencies:
+        dependency-type: development
+        update-types: [minor, patch]
+      production-dependencies:
+        dependency-type: production
+        update-types: [minor, patch]
+
+  # Actions pinned by full commit SHA keep their trailing "# vX.Y.Z" comment;
+  # Dependabot updates both the SHA and the comment.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 3
+    cooldown:
+      default-days: 7
+    commit-message:
+      prefix: "ci(deps)"
+    groups:
+      github-actions:
+        patterns: ["*"]
+
+  # Dependabot does not scan workflow `container:` images; it reads this mirror
+  # Dockerfile instead. Keep it identical to the image in ci.yml and
+  # visual-baselines.yml and copy bumps into both workflows by hand.
+  - package-ecosystem: docker
+    directory: /.github/dependabot-mirror/playwright
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 2
+    cooldown:
+      default-days: 7
+    commit-message:
+      prefix: "ci(deps)"
+
+  # Pins for the pip-installed CI tools (semgrep, zizmor, pre-commit).
+  - package-ecosystem: pip
+    directory: /.github/dependabot-mirror/ci-python
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 3
+    cooldown:
+      default-days: 7
+    commit-message:
+      prefix: "ci(deps)"
+    groups:
+      ci-python-tools:
+        patterns: ["*"]

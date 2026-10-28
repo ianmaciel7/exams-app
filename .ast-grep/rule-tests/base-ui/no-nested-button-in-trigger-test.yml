@@ -1,0 +1,7 @@
+id: no-nested-button-in-trigger
+valid:
+  - <DialogTrigger render={<Button variant="outline" />}>Open</DialogTrigger>
+  - <TooltipTrigger><span>Help</span></TooltipTrigger>
+invalid:
+  - <DialogTrigger><Button>Open</Button></DialogTrigger>
+  - <TooltipTrigger><Button size="icon" /></TooltipTrigger>

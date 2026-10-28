@@ -1,0 +1,6 @@
+id: no-inline-loading-state
+valid:
+  - 'const a = <LoadingState boundary="root-route" />;'
+  - 'const a = <div data-slot="home-hero" />;'
+invalid:
+  - 'const a = <div data-slot="loading-state" data-loading-boundary="x" />;'

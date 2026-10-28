@@ -1,0 +1,122 @@
+rules:
+  - id: no-process-env-in-client-components
+    message: >-
+      Client Components are bundled for the browser. `process.env.$NAME` is
+      either undefined there or, when it is inlined, exposed to every visitor.
+      Read the value in a Server Component and pass it down as a prop, or
+      rename a deliberately public variable with the `NEXT_PUBLIC_` prefix.
+    languages: [typescript]
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: process.env.$NAME
+          - pattern: process.env["$NAME"]
+          - pattern: const { ..., $NAME, ... } = process.env
+      - pattern-not: process.env.NODE_ENV
+      - metavariable-regex:
+          metavariable: $NAME
+          regex: ^(?!NEXT_PUBLIC_|NODE_ENV$)
+      - pattern-inside: |
+          "use client";
+          ...
+
+  - id: no-dynamic-code-execution
+    message: >-
+      `eval` and `new Function` execute strings as code and enable code
+      injection. Use a data format such as JSON or a lookup table instead.
+    languages: [typescript]
+    severity: ERROR
+    pattern-either:
+      - pattern: eval(...)
+      - pattern: window.eval(...)
+      - pattern: new Function(...)
+      - pattern: setTimeout("...", ...)
+      - pattern: setInterval("...", ...)
+
+  - id: no-unsafe-html-sinks
+    message: >-
+      Writing a string to `innerHTML`, `outerHTML` or `document.write` bypasses
+      React's escaping and enables cross-site scripting. Render JSX instead.
+    languages: [typescript]
+    severity: ERROR
+    pattern-either:
+      - pattern: $EL.innerHTML = $X
+      - pattern: $EL.outerHTML = $X
+      - pattern: $EL.insertAdjacentHTML(...)
+      - pattern: document.write(...)
+      - pattern: document.writeln(...)
+
+  - id: no-dangerously-set-inner-html
+    message: >-
+      `dangerouslySetInnerHTML` injects raw HTML. Prefer JSX. If it is
+      unavoidable, sanitize the value and add an inline
+      `// nosemgrep: no-dangerously-set-inner-html` with the reason.
+    languages: [typescript]
+    severity: ERROR
+    paths:
+      # Vendored shadcn/ui and AI Elements components are reviewed on update.
+      exclude: ["**/components/ui/", "**/components/ai-elements/"]
+    pattern: <$EL ... dangerouslySetInnerHTML={...} />
+
+  - id: no-secret-in-public-env
+    message: >-
+      `NEXT_PUBLIC_` variables are inlined into the browser bundle. Never put a
+      secret, token or password in one. Public client keys (for example a
+      Firebase web `API_KEY`) are not secrets and are deliberately not flagged.
+    languages: [typescript]
+    severity: ERROR
+    patterns:
+      - pattern: process.env.$NAME
+      - metavariable-regex:
+          metavariable: $NAME
+          regex: (?i)^NEXT_PUBLIC_.*(SECRET|PASS(WORD|KEY|PHRASE)|PRIVATE|TOKEN)
+
+  - id: no-server-only-in-client-components
+    message: >-
+      A Client Component must not import `server-only`; the build would fail or
+      server code would reach the browser. Move the import to a Server Component.
+    languages: [typescript]
+    severity: ERROR
+    patterns:
+      - pattern: import "server-only"
+      - pattern-inside: |
+          "use client";
+          ...
+
+  - id: no-server-api-in-client-components
+    message: >-
+      `next/headers` only works on the server. Importing it in a Client
+      Component breaks the build; read cookies or headers in a Server Component
+      or Server Action and pass the value down as a prop.
+    languages: [typescript]
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: import {...} from "next/headers"
+          - pattern: import "next/headers"
+      - pattern-inside: |
+          "use client";
+          ...
+
+  - id: session-cookie-must-be-http-only
+    message: >-
+      A session or authentication cookie must set `httpOnly: true` so scripts
+      cannot read it, and `secure: true` so it is never sent over plain HTTP.
+      See the Next.js authentication guide ("Session Management").
+    languages: [typescript]
+    severity: ERROR
+    patterns:
+      - pattern: $STORE.set($NAME, $VALUE, $OPTS)
+      - metavariable-regex:
+          metavariable: $NAME
+          regex: ^["'`](?i:.*(session|token|auth|sid).*)["'`]$
+      - pattern-not: "$STORE.set($NAME, $VALUE, { ..., httpOnly: true, ..., secure: true, ... })"
+      - pattern-not: "$STORE.set($NAME, $VALUE, { ..., secure: true, ..., httpOnly: true, ... })"
+
+  - id: no-ignored-build-errors
+    message: >-
+      `typescript.ignoreBuildErrors` ships code that does not type-check.
+      Fix the type errors instead of silencing the build.
+    languages: [typescript]
+    severity: ERROR
+    pattern: "{ ..., ignoreBuildErrors: true, ... }"

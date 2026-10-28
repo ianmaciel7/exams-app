@@ -1,0 +1,5 @@
+language js
+
+`export default async function $_({params}: {params: $_}) { $_ }` as $page where {
+  register_diagnostic(span=$page, message="Use Next.js's generated PageProps helper with the route literal instead of declaring page params manually.", severity="error")
+}

@@ -1,0 +1,27 @@
+pnpm check:staged
+
+# Gitleaks is a host tool. Scan staged changes for secrets before creating a commit.
+# A missing gitleaks blocks the commit: secret scanning must never be skipped silently.
+if command -v gitleaks >/dev/null 2>&1; then
+  gitleaks protect --staged --no-banner --redact
+else
+  echo "husky: 'gitleaks' not found; refusing to commit without secret scanning (install it, see TOOLING.md)." >&2
+  exit 1
+fi
+
+# On Windows, pre-commit builds its Python virtual environments under a cache
+# path that can exceed the path-length limit (WinError 206) when Python comes
+# from the Microsoft Store. Use a short cache unless one is already configured.
+case "$(uname -s)" in
+  MINGW* | MSYS* | CYGWIN*)
+    export VIRTUALENV_OVERRIDE_APP_DATA="${VIRTUALENV_OVERRIDE_APP_DATA:-$HOME/.virtualenv-cache}"
+    ;;
+esac
+
+# pre-commit (Python) is a host tool, not a pnpm dependency. Skip with a clear
+# message instead of failing opaquely when it is not installed; see TOOLING.md.
+if command -v pre-commit >/dev/null 2>&1; then
+  pre-commit run --hook-stage pre-commit
+else
+  echo "husky: 'pre-commit' not found; skipping repository-integrity hooks (see TOOLING.md)." >&2
+fi

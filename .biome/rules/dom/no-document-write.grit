@@ -1,0 +1,12 @@
+language js
+
+or {
+  `document.write($args)` as $call,
+  `document.writeln($args)` as $call,
+  `window.document.write($args)` as $call,
+  `window.document.writeln($args)` as $call,
+  `globalThis.document.write($args)` as $call,
+  `globalThis.document.writeln($args)` as $call
+} where {
+  register_diagnostic(span=$call, message="Avoid using deprecated and unsafe DOM API 'document.write()' or 'document.writeln()'. Render JSX or use modern DOM APIs instead.", severity="error")
+}
