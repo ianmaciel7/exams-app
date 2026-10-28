@@ -50,3 +50,9 @@ variable "deploy_roles" {
     "roles/storage.objectAdmin",
   ]
 }
+
+variable "workload_identity_pool_id" {
+  description = "Workload Identity pool ID. Deleted pool IDs stay reserved for about 30 days, so change it after deleting the pool."
+  type        = string
+  default     = "github-actions-v2"
+}

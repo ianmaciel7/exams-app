@@ -255,7 +255,7 @@ resource "google_service_account_iam_member" "deploy_acts_as_compute" {
 
 resource "google_iam_workload_identity_pool" "github" {
   project                   = var.project_id
-  workload_identity_pool_id = "github-actions"
+  workload_identity_pool_id = var.workload_identity_pool_id
   display_name              = "GitHub Actions"
 
   depends_on = [google_project_service.apis]
