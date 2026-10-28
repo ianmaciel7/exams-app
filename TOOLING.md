@@ -389,6 +389,12 @@ these regressions specifically guard the observed failures.
 
 ## Known limitations
 
+- **`apphosting.yaml` carries one Gitleaks exemption.** The Firebase Web API key
+  is public browser configuration that ships in the client bundle, but Gitleaks'
+  `gcp-api-key` rule flags it. The single line carries an inline
+  `# gitleaks:allow` marker with its reason. Do not widen it: no allowlist file,
+  and no marker for any other value. The values come from the Terraform output
+  `firebase_web_config`.
 - **Firebase registry source has targeted tooling exclusions.** Biome (so
   `lint-staged` does not rewrite the full generated set), CSpell, jscpd, coverage,
   Fallow health, and React Doctor skip `src/components/firebase`; Knip ignores its

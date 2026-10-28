@@ -25,6 +25,10 @@ security boundary, or a decision that supersedes an earlier record.
   when numbers have gaps.
 - Add a row to `decisionAreas` in `scripts/checks/check-adr.mjs`, with a test in
   `scripts/checks/check-adr.test.mjs`, when a new top-level area needs one.
+- The only tracked home for production Firebase Web configuration is
+  `apphosting.yaml`: public `NEXT_PUBLIC_*` values that already ship in the client
+  bundle. Keep billing, organization, and account identifiers and every credential
+  out of it.
 - Keep concrete project, billing, organization, and account identifiers out of
   ADRs and every other tracked file.
 
