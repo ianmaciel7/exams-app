@@ -1,0 +1,9 @@
+id: no-manual-memoization-ts
+valid:
+  - const value = compute(input);
+  - const [state, setState] = React.useState(0);
+  - useEffect(() => {}, []);
+invalid:
+  - const value = useMemo(() => compute(input), [input]);
+  - const onClick = React.useCallback(() => run(), []);
+  - export const Row = React.memo(function Row() { return null; });

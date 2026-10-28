@@ -1,0 +1,31 @@
+id: require-form-provider
+valid:
+  - |
+    function MyForm() {
+      return (
+        <FormProvider {...methods}>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Field />
+          </form>
+        </FormProvider>
+      );
+    }
+  - |
+    function SimpleForm() {
+      return (
+        <Form {...form}>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Field />
+          </form>
+        </Form>
+      );
+    }
+invalid:
+  - |
+    function BadForm() {
+      return (
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Field />
+        </form>
+      );
+    }

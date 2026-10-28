@@ -1,0 +1,63 @@
+id: no-module-support-in-hooks-ts
+language: typescript
+files:
+  - src/app/**/_hooks/**/*.ts
+  - src/hooks/**/*.ts
+ignores:
+  - src/hooks/use-mobile.ts
+  - "**/*.test.ts"
+  - "**/*.spec.ts"
+  - "**/*.stories.ts"
+severity: error
+message: Move module-level helper functions and values from hook modules to the route's _lib folder.
+note: |
+  Project policy: private hook modules contain hook implementations, imports,
+  exports and types. Module-level support functions, constants and contexts
+  belong in _lib. The hook itself may be a useX function declaration or a useX
+  variable initialized directly with an arrow/function expression. Local
+  variables, handlers and lifecycle callbacks inside hooks remain valid.
+  This check does not infer purity or prove that a useX function uses hooks.
+rule:
+  any:
+    - all:
+        - any:
+            - kind: function_declaration
+            - kind: generator_function_declaration
+            - kind: function_expression
+            - kind: arrow_function
+        - not:
+            has:
+              field: name
+              regex: '^use[A-Z]'
+        - any:
+            - inside:
+                kind: program
+            - inside:
+                kind: export_statement
+                inside:
+                  kind: program
+    - all:
+        - kind: variable_declarator
+        - not:
+            all:
+              - has:
+                  field: name
+                  kind: identifier
+                  regex: '^use[A-Z]'
+              - has:
+                  field: value
+                  any:
+                    - kind: arrow_function
+                    - kind: function_expression
+        - inside:
+            all:
+              - any:
+                  - kind: lexical_declaration
+                  - kind: variable_declaration
+              - any:
+                  - inside:
+                      kind: program
+                  - inside:
+                      kind: export_statement
+                      inside:
+                        kind: program

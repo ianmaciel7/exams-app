@@ -1,0 +1,13 @@
+id: no-route-jsx-event-handlers
+language: tsx
+files:
+  - src/app/**/page.tsx
+  - src/app/**/layout.tsx
+  - src/app/**/template.tsx
+severity: error
+message: Interactive JSX event handlers belong in Client Components under _components, not route entrypoints.
+rule:
+  kind: jsx_attribute
+  has:
+    kind: property_identifier
+    regex: '^on[A-Z]'

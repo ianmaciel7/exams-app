@@ -1,0 +1,22 @@
+id: no-client-route-entrypoint
+valid:
+  - |
+    import { Form } from "./_components/form-client";
+    export default function Page() {
+      return <Form />;
+    }
+  - |
+    export default function Layout({ children }) {
+      return <main>{children}</main>;
+    }
+invalid:
+  - |
+    "use client";
+    export default function Page() {
+      return <button />;
+    }
+  - |
+    "use client";
+    export default function Template({ children }) {
+      return <div>{children}</div>;
+    }
