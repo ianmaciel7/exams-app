@@ -128,26 +128,13 @@ resource "google_firebase_database_instance" "default" {
   ]
 }
 
-resource "google_storage_bucket" "app" {
+# The firebase CLI deploys Storage rules to the default bucket, so use it instead of a custom one.
+resource "google_firebase_storage_default_bucket" "default" {
   provider = google-beta
   project  = var.project_id
-  name     = "${var.project_id}-storage"
   location = var.region
 
-  uniform_bucket_level_access = true
-  public_access_prevention    = "enforced"
-
-  lifecycle {
-    prevent_destroy = true
-  }
-
-  depends_on = [google_project_service.apis]
-}
-
-resource "google_firebase_storage_bucket" "app" {
-  provider  = google-beta
-  project   = var.project_id
-  bucket_id = google_storage_bucket.app.name
+  depends_on = [google_firebase_project.this]
 }
 
 # --- App Hosting ------------------------------------------------------------

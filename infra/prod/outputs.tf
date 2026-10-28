@@ -4,7 +4,7 @@ output "firebase_web_config" {
     NEXT_PUBLIC_FIREBASE_API_KEY        = data.google_firebase_web_app_config.web.api_key
     NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN    = data.google_firebase_web_app_config.web.auth_domain
     NEXT_PUBLIC_FIREBASE_PROJECT_ID     = var.project_id
-    NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET = google_storage_bucket.app.name
+    NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET = google_firebase_storage_default_bucket.default.bucket[0].bucket_id
     NEXT_PUBLIC_FIREBASE_DATABASE_URL   = google_firebase_database_instance.default.database_url
     NEXT_PUBLIC_FIREBASE_APP_ID         = google_firebase_web_app.web.app_id
   }
