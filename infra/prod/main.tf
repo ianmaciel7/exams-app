@@ -253,6 +253,13 @@ resource "google_service_account_iam_member" "deploy_acts_as_compute" {
   member             = google_service_account.github_deploy.member
 }
 
+# Firebase Functions deploys also act as the App Engine default account.
+resource "google_service_account_iam_member" "deploy_acts_as_appspot" {
+  service_account_id = "projects/${var.project_id}/serviceAccounts/${var.project_id}@appspot.gserviceaccount.com"
+  role               = "roles/iam.serviceAccountUser"
+  member             = google_service_account.github_deploy.member
+}
+
 resource "google_iam_workload_identity_pool" "github" {
   project                   = var.project_id
   workload_identity_pool_id = var.workload_identity_pool_id
