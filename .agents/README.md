@@ -58,6 +58,16 @@ Generated tool configuration and local state must remain untracked. The
 selected integrations and sync mode determine the materialized outputs; use
 `agents status` instead of assuming every supported output exists.
 
+## Agent-neutral by default
+
+Several coding agents share this repository (Codex, Claude, and Antigravity are
+enabled in `agents.json`). Put every rule, skill, MCP server, and instruction in
+the neutral sources above: `AGENTS.md`, `.agents/rules/`, `.agents/skills/`, and
+`.agents/agents.json`. Do not create or edit tool-specific files such as
+`.claude/`, `CLAUDE.md`, `.cursor/`, or `.gemini/`. They are generated or
+machine-local, and `.gitignore` keeps them out of Git. A tool-specific need is
+expressed through `agents.json` options, not by hand-editing its output.
+
 The [Next.js maintenance rule](rules/cache.md) connects the version-matched
 installed docs in `node_modules/next/dist/docs/` to the topic rules.
 Use that reference for App Router, Cache Components, and framework diagnostic
