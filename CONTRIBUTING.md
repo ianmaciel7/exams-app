@@ -56,7 +56,10 @@ For a documentation-only change, run `pnpm check:markdown` and
 `pnpm check:spelling`, verify relative links and script names, and follow the
 full validation guidance in [TESTING.md](TESTING.md). Accepted ADRs describe
 decisions at their original date; preserve them and use a new ADR when a
-decision changes. Keep current operational details in the root guides.
+decision changes. Write the ADR in the same change as the work that introduces
+an architectural, tooling, or infrastructure choice, before opening the pull
+request, and run `pnpm check:adr`. Keep current operational details in the root
+guides, and never put project, billing, or account identifiers in tracked files.
 
 Run the checks in [TESTING.md](TESTING.md), keep changes focused, title the
 pull request as a Conventional Commit (CI validates it and squash merges use

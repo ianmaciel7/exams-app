@@ -19,6 +19,7 @@ configuration and repository documentation.
 ├── docs/
 │   ├── adr/                 # Accepted architecture decisions
 │   └── agents/              # Instructions for automated contributors
+├── infra/                   # Terraform for the Google Cloud and Firebase project (bootstrap, prod)
 ├── public/                  # Static assets served by Next.js
 ├── scripts/                 # Operational and developer tooling scripts (e.g. emulator seed/clear)
 ├── src/
