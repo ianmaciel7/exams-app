@@ -128,26 +128,13 @@ resource "google_firebase_database_instance" "default" {
   ]
 }
 
-resource "google_storage_bucket" "app" {
+# The firebase CLI deploys Storage rules to the default bucket, so use it instead of a custom one.
+resource "google_firebase_storage_default_bucket" "default" {
   provider = google-beta
   project  = var.project_id
-  name     = "${var.project_id}-storage"
   location = var.region
 
-  uniform_bucket_level_access = true
-  public_access_prevention    = "enforced"
-
-  lifecycle {
-    prevent_destroy = true
-  }
-
-  depends_on = [google_project_service.apis]
-}
-
-resource "google_firebase_storage_bucket" "app" {
-  provider  = google-beta
-  project   = var.project_id
-  bucket_id = google_storage_bucket.app.name
+  depends_on = [google_firebase_project.this]
 }
 
 # --- App Hosting ------------------------------------------------------------
@@ -249,6 +236,13 @@ resource "google_project_iam_member" "github_deploy" {
 # The Functions runtime account must be impersonable by the deployer (iam.serviceAccounts.ActAs).
 resource "google_service_account_iam_member" "deploy_acts_as_compute" {
   service_account_id = "projects/${var.project_id}/serviceAccounts/${data.google_project.this.number}-compute@developer.gserviceaccount.com"
+  role               = "roles/iam.serviceAccountUser"
+  member             = google_service_account.github_deploy.member
+}
+
+# Firebase Functions deploys also act as the App Engine default account.
+resource "google_service_account_iam_member" "deploy_acts_as_appspot" {
+  service_account_id = "projects/${var.project_id}/serviceAccounts/${var.project_id}@appspot.gserviceaccount.com"
   role               = "roles/iam.serviceAccountUser"
   member             = google_service_account.github_deploy.member
 }
