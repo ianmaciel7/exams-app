@@ -1,0 +1,39 @@
+# Firebase Web SDK configuration for the production App Hosting backend.
+# These values are public browser configuration (they ship in the client bundle), not credentials.
+# Regenerate them from the Terraform output `firebase_web_config` (see infra/README.md).
+env:
+  - variable: NEXT_PUBLIC_FIREBASE_API_KEY
+    value: "AIzaSyDpuq9aUKLI1EjKj8afSGxOgP8oSSwUWqQ" # gitleaks:allow (public Firebase Web API key, shipped in the client bundle)
+    availability:
+      - BUILD
+      - RUNTIME
+  - variable: NEXT_PUBLIC_FIREBASE_APP_ID
+    value: "1:472609280568:web:942dac9f826f8772058ccd"
+    availability:
+      - BUILD
+      - RUNTIME
+  - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+    value: "exams-app-prod.firebaseapp.com"
+    availability:
+      - BUILD
+      - RUNTIME
+  - variable: NEXT_PUBLIC_FIREBASE_DATABASE_URL
+    value: "https://exams-app-prod-default-rtdb.firebaseio.com"
+    availability:
+      - BUILD
+      - RUNTIME
+  - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+    value: "exams-app-prod"
+    availability:
+      - BUILD
+      - RUNTIME
+  - variable: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+    value: "exams-app-prod-storage"
+    availability:
+      - BUILD
+      - RUNTIME
+  - variable: NEXT_PUBLIC_FIREBASE_GOOGLE_ENABLED
+    value: "false"
+    availability:
+      - BUILD
+      - RUNTIME

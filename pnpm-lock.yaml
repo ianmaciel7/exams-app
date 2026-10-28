@@ -168,6 +168,7 @@ overrides:
   linkify-it: '>=5.0.2'
   markdown-it: '>=15.0.2'
   qs: '>=6.16.0'
+  re2js: '>=2.8.7'
   smol-toml: '>=1.9.0'
   katex: '>=0.18.2'
   zod@<4.6.6: ^4.6.6
@@ -7616,10 +7617,6 @@ packages:
   raw-body@3.0.2:
     resolution: {integrity: sha512-K5zQjDllxWkf7Z5xJdV0/B0WTNqx6vxG70zJE4N0kBs4LovmEYWJzQGxC9bS9RAKu3bgM40lrd5zoLJ12MQ5BA==}
     engines: {node: '>= 0.10'}
-
-  re2js@2.8.6:
-    resolution: {integrity: sha512-xLgQil4kIUCrAzVk9fRSkxkFNwmygLFjVxXrLc65aE1F0+Zsb8rxumFBy4XKyvgMCTL6kilDq3EZ0piE2dP/Dg==}
-    engines: {node: '>=18.0.0'}
 
   re2js@2.8.8:
     resolution: {integrity: sha512-E2FVgqD2mzJ+ZmMSHLnkOvZ7PiZ4FgMdfVCA3YsJWs9gtyoaKmUMxyVPCXS1yK209/mz3XkdT7kr3OlMWW2Fww==}
@@ -15304,7 +15301,7 @@ snapshots:
       micromark-extension-gfm-table: 2.1.2
       micromark-extension-math: 3.1.0
       micromark-util-types: 2.0.3
-      re2js: 2.8.6
+      re2js: 2.8.8
       string-width: 8.3.0
     transitivePeerDependencies:
       - supports-color
@@ -16527,8 +16524,6 @@ snapshots:
       http-errors: 2.0.1
       iconv-lite: 0.7.3
       unpipe: 1.0.0
-
-  re2js@2.8.6: {}
 
   re2js@2.8.8: {}
 
