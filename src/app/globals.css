@@ -139,7 +139,7 @@
     cursor: pointer;
   }
   html {
-    @apply font-sans;
+    @apply bg-background font-sans;
   }
 }
 
