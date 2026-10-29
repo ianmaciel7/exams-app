@@ -81,6 +81,24 @@ jobs:
           project_id: ${{ vars.FIREBASE_PROJECT_ID }}
           service_account: ${{ vars.GOOGLE_SERVICE_ACCOUNT }}
           workload_identity_provider: ${{ vars.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
+      # The sign-in allowlist is not in the repository (ADR 0017). Functions read it as
+      # params from this file, which only exists on the runner. Stop before deploying when a
+      # list is missing: an empty list would refuse every user.
+      - name: Write the sign-in allowlist for Functions
+        shell: bash
+        env:
+          ALLOWED_USER_EMAILS: ${{ secrets.ALLOWED_USER_EMAILS }}
+          ADMIN_USER_EMAILS: ${{ secrets.ADMIN_USER_EMAILS }}
+        run: |
+          set -euo pipefail
+          for secret_name in ALLOWED_USER_EMAILS ADMIN_USER_EMAILS; do
+            if [[ -z "${!secret_name:-}" ]]; then
+              echo "Missing production environment secret: $secret_name" >&2
+              exit 1
+            fi
+          done
+          printf 'ALLOWED_USER_EMAILS=%s\nADMIN_USER_EMAILS=%s\n' \
+            "$ALLOWED_USER_EMAILS" "$ADMIN_USER_EMAILS" > "functions/.env.$FIREBASE_PROJECT_ID"
       - name: Deploy Functions and Firebase security rules
         run: >-
           pnpm dlx firebase-tools@15.34.1 deploy
@@ -94,7 +112,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for service in recordusage setuserrole; do
+          for service in recordusage setuserrole restrictsignup restrictsignin; do
             gcloud run services update "$service" \
               --project "$FIREBASE_PROJECT_ID" \
               --region us-central1 \

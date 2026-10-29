@@ -49,3 +49,11 @@ Refuse every address that is not on an allowlist, with two Auth blocking functio
   `ALLOWED_USER_EMAILS` and `ADMIN_USER_EMAILS` secrets, which is not part of this change.
 - Changing the lists means updating `terraform.tfvars`, applying, and releasing again.
 - Existing sessions keep working until their token expires.
+
+## Delivery
+
+The release workflow writes the two lists from the `production` environment secrets into
+`functions/.env.<project id>` on the runner before `firebase deploy`, and fails when a
+secret is missing. The blocking functions (`restrictsignup`, `restrictsignin`) join the
+services whose Cloud Run invoker check is turned off, as in ADR 0016, because Identity
+Platform calls them directly.
