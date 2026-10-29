@@ -26,9 +26,14 @@ async function verifyIdToken(authIdToken: string) {
     // demoted role stops working as soon as its refresh tokens are revoked.
     const claims = await getAdminAuth().verifyIdToken(authIdToken, true);
     return { role: readUserRole(claims), userId: claims.uid };
-  } catch {
+  } catch (cause) {
     // A malformed or revoked bearer token is an unverifiable session, not a
-    // server fault.
+    // server fault. Log the reason, never the token, so a server-side
+    // misconfiguration is not mistaken for an expired session.
+    console.error("Firebase ID token verification failed", {
+      code: (cause as { code?: string }).code,
+      message: cause instanceof Error ? cause.message : String(cause),
+    });
     return { role: readUserRole({}), userId: null };
   }
 }
