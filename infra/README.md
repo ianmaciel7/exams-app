@@ -41,7 +41,7 @@ then apply again so the repository link and backend can finish.
 
 ## 3. After apply
 
-- Copy `github_actions_variables` into the repository variables used by `.github/workflows/firebase-cd.yml`.
+- The `production` environment variables used by `.github/workflows/firebase-cd.yml` are managed here (see [ADR 0014](../docs/adr/0014-manage-release-environment.md)); applying needs `GITHUB_TOKEN` or a logged in `gh` CLI.
 - Copy `firebase_web_config` into `apphosting.yaml` (public values, not secrets).
 - Update `.firebaserc` with the new project ID.
 - Email and password sign-in and the authorized domains are managed here (`google_identity_platform_config`);
