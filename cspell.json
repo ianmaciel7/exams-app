@@ -27,6 +27,8 @@
   "words": [
     "cloudfunctions",
     "recordusage",
+    "restrictsignin",
+    "restrictsignup",
     "setuserrole",
     "firebaseapphosting",
     "serviceusage",

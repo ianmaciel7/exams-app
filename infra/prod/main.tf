@@ -320,6 +320,29 @@ resource "github_actions_environment_variable" "release" {
   value         = each.value
 }
 
+# --- Sign-in allowlist -------------------------------------------------------------
+
+# The release workflow writes these secrets into the Functions parameters file at deploy time
+# (ADR 0017). They are secrets, not variables, so the addresses stay masked in workflow logs.
+# Terraform skips an empty list because GitHub rejects empty secrets.
+resource "github_actions_environment_secret" "allowed_user_emails" {
+  count = length(nonsensitive(var.allowed_user_emails)) > 0 ? 1 : 0
+
+  repository      = var.github_repo
+  environment     = github_repository_environment.production.environment
+  secret_name     = "ALLOWED_USER_EMAILS"
+  plaintext_value = join(",", var.allowed_user_emails)
+}
+
+resource "github_actions_environment_secret" "admin_user_emails" {
+  count = length(nonsensitive(var.admin_user_emails)) > 0 ? 1 : 0
+
+  repository      = var.github_repo
+  environment     = github_repository_environment.production.environment
+  secret_name     = "ADMIN_USER_EMAILS"
+  plaintext_value = join(",", var.admin_user_emails)
+}
+
 # --- GitHub Actions deploy identity (Workload Identity Federation) -----------
 
 resource "google_service_account" "github_deploy" {

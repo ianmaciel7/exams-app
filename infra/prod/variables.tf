@@ -54,6 +54,20 @@ variable "deploy_roles" {
   ]
 }
 
+variable "allowed_user_emails" {
+  description = "Email addresses allowed to use the app as regular users. Set in terraform.tfvars; never commit them."
+  type        = list(string)
+  default     = []
+  sensitive   = true
+}
+
+variable "admin_user_emails" {
+  description = "Email addresses allowed to use the app that also get the admin role. Set in terraform.tfvars; never commit them."
+  type        = list(string)
+  default     = []
+  sensitive   = true
+}
+
 variable "workload_identity_pool_id" {
   description = "Workload Identity pool ID. Deleted pool IDs stay reserved for about 30 days, so change it after deleting the pool."
   type        = string

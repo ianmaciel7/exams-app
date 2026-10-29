@@ -7,7 +7,7 @@
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log",
-    "test": "node --test usage-logs.test.cjs user-roles.test.cjs"
+    "test": "node --test usage-logs.test.cjs user-roles.test.cjs access-policy.test.cjs"
   },
   "engines": {
     "node": "22"

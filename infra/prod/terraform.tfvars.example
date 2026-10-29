@@ -3,3 +3,5 @@ github_owner = "ianmaciel7"
 github_repo  = "exams-app"
 owner_members               = ["user:owner@example.com"]
 firebase_developer_members = ["user:developer@example.com"]
+allowed_user_emails        = ["user@example.com"]
+admin_user_emails          = ["admin@example.com"]

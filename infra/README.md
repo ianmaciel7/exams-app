@@ -62,3 +62,18 @@ firebase_developer_members = ["user:developer@example.com"]
 ```
 
 Bindings are additive. To narrow a user who already has extra roles, remove them in the console as an Owner.
+
+## Sign-in allowlist
+
+Only the addresses in the untracked `terraform.tfvars` can sign up or sign in (see
+[ADR 0017](../docs/adr/0017-restrict-sign-in-to-an-email-allowlist.md)). Admin addresses are allowed implicitly and
+get the `admin` role:
+
+```hcl
+allowed_user_emails = ["user@example.com"]
+admin_user_emails   = ["admin@example.com"]
+```
+
+Terraform stores them as the `ALLOWED_USER_EMAILS` and `ADMIN_USER_EMAILS` secrets of the `production` GitHub
+environment. The release workflow must write them to `functions/.env.<project id>` before `firebase deploy`, or the
+Functions refuse everyone. Apply Terraform before the first release that ships the blocking functions.
