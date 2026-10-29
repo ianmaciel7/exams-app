@@ -51,7 +51,7 @@ jobs:
           # the app shows is the version that was released.
           package_version="$(jq -r .version package.json)"
           app_hosting_tag="$(yq -r '.env[] | select(.variable == "NEXT_PUBLIC_GIT_TAG") | .value' apphosting.yaml)"
-          if [[ "$RELEASE_TAG" != "v$package_version" || "$RELEASE_TAG" != "$app_hosting_tag" ]]; then
+          if [[ "$RELEASE_TAG" != "v$package_version" ]] || [[ "$RELEASE_TAG" != "$app_hosting_tag" ]]; then
             echo "Release $RELEASE_TAG does not match package.json (v$package_version) and apphosting.yaml ($app_hosting_tag)." >&2
             exit 1
           fi
