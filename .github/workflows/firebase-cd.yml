@@ -99,12 +99,15 @@ jobs:
           done
           printf 'ALLOWED_USER_EMAILS=%s\nADMIN_USER_EMAILS=%s\n' \
             "$ALLOWED_USER_EMAILS" "$ADMIN_USER_EMAILS" > "functions/.env.$FIREBASE_PROJECT_ID"
+      # `--force` lets the CLI set the artifact cleanup policy that a non-interactive deploy
+      # of a new region would otherwise fail on.
       - name: Deploy Functions and Firebase security rules
         run: >-
           pnpm dlx firebase-tools@15.34.1 deploy
           --project "$FIREBASE_PROJECT_ID"
           --only functions,firestore,database,storage
           --non-interactive
+          --force
       # Browsers call callable Functions directly, and the CORS preflight carries no
       # credentials. The organization policy blocks `allUsers`, so turn the Cloud Run
       # invoker check off instead (ADR 0016). Handlers still verify the Firebase ID token.
@@ -112,10 +115,13 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for service in recordusage setuserrole restrictsignup restrictsignin; do
+          # Blocking functions default to us-east1; the callables run in us-central1.
+          for entry in recordusage:us-central1 setuserrole:us-central1 restrictsignup:us-east1 restrictsignin:us-east1; do
+            service="${entry%%:*}"
+            region="${entry##*:}"
             gcloud run services update "$service" \
               --project "$FIREBASE_PROJECT_ID" \
-              --region us-central1 \
+              --region "$region" \
               --no-invoker-iam-check \
               --quiet
           done
