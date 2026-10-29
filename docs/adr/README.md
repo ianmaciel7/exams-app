@@ -25,6 +25,7 @@ original date. Read current operational details in the
 | [0014](0014-manage-release-environment.md) | Accepted | Terraform-managed GitHub production environment and release variables, sourced from the infrastructure that owns each value |
 | [0015](0015-publish-releases-to-deploy.md) | Accepted | Production deploys when a GitHub Release is published; the release tag must equal the package version and the App Hosting version variable |
 | [0016](0016-disable-invoker-iam-check-for-callable-functions.md) | Accepted | The CD turns off the Cloud Run invoker IAM check on callable Functions so browsers can call them; handlers verify the Firebase ID token |
+| [0017](0017-restrict-sign-in-to-an-email-allowlist.md) | Accepted | Auth blocking functions refuse addresses outside an untracked allowlist; admin addresses get the admin role |
 
 ## Current operational clarifications
 

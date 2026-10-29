@@ -62,6 +62,7 @@ rubric, manual review, and failure follow-up.
 | Accessibility | `tests/a11y.spec.ts`, titled `@a11y` | Playwright and axe-core | `pnpm test:a11y` | Automated WCAG 2.0, 2.1, and 2.2 A/AA scans (`wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`, `wcag22aa`) across desktop (`1280x800`) and mobile (`390x844`) viewports in light and dark mode. |
 | Visual regression | `tests/visual.spec.ts`, titled `@visual` | Playwright screenshots (CI only) | `pnpm test:visual` | Layout and theme changes in rendered pages. |
 | Firebase Auth and profile | `tests/firebase-auth.spec.ts` | Playwright with Firebase Auth, Firestore and Functions emulators | CI `auth-emulator` job | Sign-in, registration, recovery, profile, and authenticated axe checks, including the `recordUsage` callable guard. Not included in ordinary `verify:e2e`. |
+| Sign-in allowlist | `functions/access-policy.test.cjs` | `node:test` | `pnpm test:logging` | Allowed and refused addresses, role claim, verified-email rule, fail-closed empty list, and the open emulator. The auth-emulator E2E runs with no list, so it exercises only the open path. |
 | Mutation | `stryker.config.json` | Stryker | `pnpm test:mutation` | Command-runner mutation testing. Manual CI run until a hosted-run success is confirmed; see [TOOLING.md](TOOLING.md#known-limitations). |
 
 Choose the lightest layer that can fail for the right reason. Keep a behavior
