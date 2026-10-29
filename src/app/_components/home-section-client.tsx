@@ -3,7 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { ComponentProps } from "react";
+import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
+import { GitTag } from "@/components/ui/extensions/git-tag";
 import { LabeledSpinner } from "@/components/ui/extensions/labeled-spinner";
 import { routes } from "@/lib/navigation";
 import { cn } from "@/lib/utils";
@@ -89,6 +91,15 @@ function HomeSectionClient({ className, ...props }: HomeSectionClientProps) {
           </HomeHeroActions>
         </HomeHero>
       </div>
+      <GitTag>
+        {(tag) =>
+          tag ? (
+            <Badge className="mb-6 font-mono text-xs" variant="secondary">
+              {tag}
+            </Badge>
+          ) : null
+        }
+      </GitTag>
     </main>
   );
 }
