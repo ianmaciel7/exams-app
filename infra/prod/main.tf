@@ -247,6 +247,13 @@ resource "google_service_account_iam_member" "deploy_acts_as_appspot" {
   member             = google_service_account.github_deploy.member
 }
 
+# App Hosting rollouts start a build that runs as the backend service account.
+resource "google_service_account_iam_member" "deploy_acts_as_app_hosting" {
+  service_account_id = google_service_account.app_hosting.name
+  role               = "roles/iam.serviceAccountUser"
+  member             = google_service_account.github_deploy.member
+}
+
 resource "google_iam_workload_identity_pool" "github" {
   project                   = var.project_id
   workload_identity_pool_id = var.workload_identity_pool_id

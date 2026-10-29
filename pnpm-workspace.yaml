@@ -18,6 +18,9 @@ overrides:
   # GHSA-gg6h-894w-4m9c: quadratic-time lookbehind matching; fixed in 2.8.7.
   # Reached only through markdownlint-cli2 (markdownlint > re2js).
   re2js: ">=2.8.7"
+  # GHSA-3f7j-7jwc-fxfj: Windows command injection in services(); fixed in 5.33.16.
+  # Reached only through the shadcn CLI (shadcn > @dotenvx/dotenvx > systeminformation).
+  systeminformation: ">=5.33.16"
   smol-toml: ">=1.9.0"
   katex: ">=0.18.2"
   zod@<4.6.6: ^4.6.6

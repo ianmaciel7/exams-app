@@ -42,10 +42,13 @@ variable "deploy_roles" {
   type        = list(string)
   default = [
     "roles/cloudfunctions.admin",
+    "roles/developerconnect.viewer",
+    "roles/developerconnect.readTokenAccessor",
     "roles/firebase.viewer",
     "roles/firebaseapphosting.admin",
     "roles/firebasedatabase.admin",
     "roles/firebaserules.admin",
+    "roles/run.admin",
     "roles/serviceusage.serviceUsageConsumer",
     "roles/storage.objectAdmin",
   ]
