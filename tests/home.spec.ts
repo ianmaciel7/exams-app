@@ -1,6 +1,15 @@
 import { expect, test } from "@playwright/test";
-import project from "../package.json";
-import { localeCookie, locales } from "../src/i18n/routing";
+import { defaultLocale, localeCookie, locales } from "../src/i18n/routing";
+import en from "../src/messages/en.json";
+import es from "../src/messages/es.json";
+import ptBR from "../src/messages/pt-BR.json";
+
+// The document title is the localized Metadata.title, not the package name.
+const titles: Record<(typeof locales)[number], string> = {
+  en: en.Metadata.title,
+  es: es.Metadata.title,
+  "pt-BR": ptBR.Metadata.title,
+};
 
 test.describe("home page smoke tests", () => {
   test("serves a usable page with document metadata", async ({ page }) => {
@@ -8,7 +17,7 @@ test.describe("home page smoke tests", () => {
     expect(response?.ok()).toBe(true);
     await expect(page.locator("main")).toBeVisible();
     await expect(page.getByRole("heading", { level: 1 }).first()).toBeVisible();
-    await expect(page).toHaveTitle(project.name);
+    await expect(page).toHaveTitle(titles[defaultLocale]);
   });
 
   test("protects links that open a new tab", async ({ page }) => {
@@ -36,7 +45,7 @@ test.describe("home page smoke tests", () => {
       expect(response?.ok()).toBe(true);
       await expect(page.locator("main")).toBeVisible();
       await expect(page.locator("html")).toHaveAttribute("lang", locale);
-      await expect(page).toHaveTitle(project.name);
+      await expect(page).toHaveTitle(titles[locale]);
       // Verify the original server HTML, not a client-side attribute patch.
       const initialResponse = await context.request.get("/");
       expect(initialResponse.ok()).toBe(true);
