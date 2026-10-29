@@ -25,19 +25,12 @@ function HomeSectionClient({ className, ...props }: HomeSectionClientProps) {
   const { t, session, title, description } = useHomeSectionClient();
   const user = session.user;
 
-  if (session.isLoading) {
-    return (
-      <main
-        {...props}
-        className={cn(
-          "flex min-h-svh flex-1 items-center justify-center bg-background p-6 text-foreground",
-          className,
-        )}
-      >
-        <LabeledSpinner label={t("loading")} />
-      </main>
-    );
-  }
+  if (session.isLoading)
+    return renderHomeSectionClientLoading({
+      ...props,
+      className,
+      label: t("loading"),
+    });
 
   return (
     <main
@@ -100,6 +93,24 @@ function HomeSectionClient({ className, ...props }: HomeSectionClientProps) {
           ) : null
         }
       </GitTag>
+    </main>
+  );
+}
+
+function renderHomeSectionClientLoading({
+  className,
+  label,
+  ...props
+}: HomeSectionClientProps & { label: string }) {
+  return (
+    <main
+      {...props}
+      className={cn(
+        "flex min-h-svh flex-1 items-center justify-center bg-background p-6 text-foreground",
+        className,
+      )}
+    >
+      <LabeledSpinner label={label} />
     </main>
   );
 }
