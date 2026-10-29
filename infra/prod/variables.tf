@@ -108,3 +108,9 @@ variable "release_branch" {
   type        = string
   default     = "main"
 }
+
+variable "blocking_functions_region" {
+  description = "Region of the Auth blocking functions. Firebase deploys them to us-east1."
+  type        = string
+  default     = "us-east1"
+}
