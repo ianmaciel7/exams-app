@@ -49,6 +49,8 @@ fix(auth): handle expired sessions
 ## Releases and tags
 
 Releases and git tags follow [Semantic Versioning (SemVer)](https://semver.org/).
+A production deploy starts when a GitHub Release is published, not when a tag is
+pushed; see [Firebase continuous delivery](docs/firebase-cd.md#release-procedure).
 
 ## Before opening a pull request
 
