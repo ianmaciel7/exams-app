@@ -26,6 +26,7 @@ original date. Read current operational details in the
 | [0015](0015-publish-releases-to-deploy.md) | Accepted | Production deploys when a GitHub Release is published; the release tag must equal the package version and the App Hosting version variable |
 | [0016](0016-disable-invoker-iam-check-for-callable-functions.md) | Accepted | The CD turns off the Cloud Run invoker IAM check on callable Functions so browsers can call them; handlers verify the Firebase ID token |
 | [0017](0017-restrict-sign-in-to-an-email-allowlist.md) | Accepted | Auth blocking functions refuse addresses outside an untracked allowlist; admin addresses get the admin role |
+| [0018](0018-cover-blocking-functions-in-the-release-deploy.md) | Accepted | The release deploy disables the invoker check on the blocking functions in their own region and passes `--force` for the artifact cleanup policy |
 
 ## Current operational clarifications
 
