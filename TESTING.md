@@ -298,7 +298,9 @@ The standalone `auth-emulator` job starts Auth, Firestore, and Functions in
 an isolated `demo-test` project. It installs the Functions dependencies
 from `functions/package-lock.json` with `npm ci --prefix functions` (the
 separate, upstream Firebase Functions package). Browser Firebase SDK endpoints are explicit public
-development configuration, not server secrets. The tests must establish a
+development configuration, not server secrets. The suite runs against `next dev`, which compiles a route on its first request, so a
+`beforeAll` hook requests every route once before the tests; without it the first test to
+reach a route intermittently exceeded the 30 s budget on 2 vCPU runners. The tests must establish a
 ready authenticated profile before inspecting form fields, theme, locale, or
 accessibility. A successful redirect or URL match alone does not prove the
 profile rendered. Match selectors to the current visible and accessible

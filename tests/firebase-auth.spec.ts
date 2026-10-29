@@ -40,6 +40,24 @@ if (!password) {
   );
 }
 
+// The suite runs against `next dev`, which compiles each route on its first request. On a
+// 2 vCPU runner that first compile can take longer than the 30 s test budget, so the first
+// test to reach a route times out intermittently. Compile every route once up front.
+const warmedRoutes = [
+  "/",
+  "/sign-in",
+  "/register",
+  "/forgot-password",
+  "/profile",
+];
+
+test.beforeAll(async ({ request }) => {
+  test.setTimeout(180_000);
+  for (const route of warmedRoutes) {
+    await request.get(route, { failOnStatusCode: false, timeout: 120_000 });
+  }
+});
+
 test("registration and persisted authentication redirect", async ({ page }) => {
   const email = `register-${crypto.randomUUID()}@example.test`;
   await page.goto("/sign-in");
