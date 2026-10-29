@@ -36,7 +36,10 @@ describe("home session", () => {
     mocks.subscribe.mockReturnValue(mocks.unsubscribe);
     mocks.getUI.mockReturnValue({ get: () => ({ auth: {} }) });
   });
-  afterEach(cleanup);
+  afterEach(() => {
+    cleanup();
+    vi.unstubAllEnvs();
+  });
   it("waits for authentication before offering registration", () => {
     renderHome();
     expect(screen.queryByRole("link", { name: en.Home.getStarted })).toBeNull();
@@ -54,6 +57,14 @@ describe("home session", () => {
     ).toBe("/sign-in");
     expect(screen.queryByRole("status")).toBeNull();
     expect(screen.getByRole("presentation")).toBeDefined();
+  });
+  it("shows the public build tag after authentication resolves", () => {
+    vi.stubEnv("NEXT_PUBLIC_GIT_TAG", "v1.2.3");
+
+    renderHome();
+    act(() => mocks.subscribe.mock.calls[0][1](null));
+
+    expect(screen.getByText("v1.2.3").dataset.variant).toBe("secondary");
   });
   it("personalizes the home and returns to visitor actions after sign out", () => {
     const { unmount } = renderHome();

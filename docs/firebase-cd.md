@@ -16,6 +16,7 @@ variables there; do not commit their concrete values to the repository:
 | --- | --- |
 | `FIREBASE_PROJECT_ID` | Firebase production project identifier. |
 | `FIREBASE_APP_HOSTING_BACKEND_ID` | App Hosting backend that serves the Next.js application. |
+| `FIREBASE_APP_HOSTING_LOCATION` | App Hosting backend location, used to configure the release build. |
 | `FIREBASE_RELEASE_BRANCH` | Branch whose reachable commits are eligible for release. |
 | `GOOGLE_SERVICE_ACCOUNT` | Deployment service-account email. |
 | `GOOGLE_WORKLOAD_IDENTITY_PROVIDER` | Full Google Cloud Workload Identity Provider resource name. |
@@ -37,7 +38,8 @@ Before the first release, configure the production Firebase project with:
 4. Permissions required to deploy Firebase Functions and security rules,
    including Cloud Functions Admin and Service Account User where applicable.
 5. Runtime secrets in Secret Manager or App Hosting configuration.
-6. A monthly US$10 budget with alerts at 50%, 90%, and 100%.
+6. Permission to update the App Hosting backend (`firebaseapphosting.backends.update`) and create rollouts.
+7. A monthly US$10 budget with alerts at 50%, 90%, and 100%.
 
 The deployment service account needs only deployment permissions. Personal
 administrator access is for setup and troubleshooting, not normal releases.
@@ -47,4 +49,7 @@ administrator access is for setup and troubleshooting, not normal releases.
 Create and push a stable tag from a commit already merged into the configured
 release branch. For the first release, use `v0.1.0`. The workflow validates the
 tag, runs `pnpm verify:fast`, deploys Functions and rules, then requests an App
-Hosting rollout for that exact commit.
+Hosting rollout for that exact commit. Before that rollout, it updates the
+backend override `NEXT_PUBLIC_GIT_TAG` with the triggering tag and makes it
+available during the App Hosting build. Next.js embeds this public variable in
+the browser bundle at build time.

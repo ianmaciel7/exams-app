@@ -3,7 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { ComponentProps } from "react";
+import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
+import { GitTag } from "@/components/ui/extensions/git-tag";
 import { LabeledSpinner } from "@/components/ui/extensions/labeled-spinner";
 import { routes } from "@/lib/navigation";
 import { cn } from "@/lib/utils";
@@ -23,19 +25,12 @@ function HomeSectionClient({ className, ...props }: HomeSectionClientProps) {
   const { t, session, title, description } = useHomeSectionClient();
   const user = session.user;
 
-  if (session.isLoading) {
-    return (
-      <main
-        {...props}
-        className={cn(
-          "flex min-h-svh flex-1 items-center justify-center bg-background p-6 text-foreground",
-          className,
-        )}
-      >
-        <LabeledSpinner label={t("loading")} />
-      </main>
-    );
-  }
+  if (session.isLoading)
+    return renderHomeSectionClientLoading({
+      ...props,
+      className,
+      label: t("loading"),
+    });
 
   return (
     <main
@@ -89,6 +84,33 @@ function HomeSectionClient({ className, ...props }: HomeSectionClientProps) {
           </HomeHeroActions>
         </HomeHero>
       </div>
+      <GitTag>
+        {(tag) =>
+          tag ? (
+            <Badge className="mb-6 font-mono text-xs" variant="secondary">
+              {tag}
+            </Badge>
+          ) : null
+        }
+      </GitTag>
+    </main>
+  );
+}
+
+function renderHomeSectionClientLoading({
+  className,
+  label,
+  ...props
+}: HomeSectionClientProps & { label: string }) {
+  return (
+    <main
+      {...props}
+      className={cn(
+        "flex min-h-svh flex-1 items-center justify-center bg-background p-6 text-foreground",
+        className,
+      )}
+    >
+      <LabeledSpinner label={label} />
     </main>
   );
 }

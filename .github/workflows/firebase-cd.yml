@@ -22,6 +22,7 @@ jobs:
     environment: production
     env:
       FIREBASE_APP_HOSTING_BACKEND_ID: ${{ vars.FIREBASE_APP_HOSTING_BACKEND_ID }}
+      FIREBASE_APP_HOSTING_LOCATION: ${{ vars.FIREBASE_APP_HOSTING_LOCATION }}
       FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
       FIREBASE_RELEASE_BRANCH: ${{ vars.FIREBASE_RELEASE_BRANCH }}
       GOOGLE_SERVICE_ACCOUNT: ${{ vars.GOOGLE_SERVICE_ACCOUNT }}
@@ -47,6 +48,7 @@ jobs:
 
           for variable_name in \
             FIREBASE_APP_HOSTING_BACKEND_ID \
+            FIREBASE_APP_HOSTING_LOCATION \
             FIREBASE_PROJECT_ID \
             FIREBASE_RELEASE_BRANCH \
             GOOGLE_SERVICE_ACCOUNT \
@@ -66,10 +68,50 @@ jobs:
       - id: auth
         uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3.0.0
         with:
+          token_format: access_token
           create_credentials_file: true
           project_id: ${{ vars.FIREBASE_PROJECT_ID }}
           service_account: ${{ vars.GOOGLE_SERVICE_ACCOUNT }}
           workload_identity_provider: ${{ vars.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
+      - name: Set the release tag for the App Hosting build
+        env:
+          GOOGLE_ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          backend_name="projects/$FIREBASE_PROJECT_ID/locations/$FIREBASE_APP_HOSTING_LOCATION/backends/$FIREBASE_APP_HOSTING_BACKEND_ID"
+          backend_url="https://firebaseapphosting.googleapis.com/v1/$backend_name"
+          backend_file="$(mktemp)"
+          curl --fail-with-body --silent --show-error \
+            --header "Authorization: Bearer $GOOGLE_ACCESS_TOKEN" \
+            "$backend_url" > "$backend_file"
+
+          override_env="$(jq -c --arg tag "$GITHUB_REF_NAME" '
+            (.overrideEnv // [] | map(select(.variable != "NEXT_PUBLIC_GIT_TAG"))) +
+            [{variable: "NEXT_PUBLIC_GIT_TAG", value: $tag, availability: ["BUILD"]}]
+          ' "$backend_file")"
+          payload="$(jq -cn --argjson override_env "$override_env" '{overrideEnv: $override_env}')"
+          operation="$(curl --fail-with-body --silent --show-error \
+            --request PATCH \
+            --header "Authorization: Bearer $GOOGLE_ACCESS_TOKEN" \
+            --header "Content-Type: application/json" \
+            --data "$payload" \
+            "$backend_url?updateMask=override_env")"
+          operation_name="$(jq -r '.name' <<< "$operation")"
+
+          for _ in {1..60}; do
+            status="$(curl --fail-with-body --silent --show-error \
+              --header "Authorization: Bearer $GOOGLE_ACCESS_TOKEN" \
+              "https://firebaseapphosting.googleapis.com/v1/$operation_name")"
+            if [[ "$(jq -r '.done // false' <<< "$status")" == "true" ]]; then
+              jq --exit-status 'has("error") | not' <<< "$status" > /dev/null
+              exit 0
+            fi
+            sleep 2
+          done
+
+          echo "Timed out while configuring NEXT_PUBLIC_GIT_TAG for App Hosting." >&2
+          exit 1
       - name: Deploy Functions and Firebase security rules
         run: >-
           pnpm dlx firebase-tools@15.34.1 deploy
