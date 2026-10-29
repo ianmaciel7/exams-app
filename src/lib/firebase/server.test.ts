@@ -49,10 +49,16 @@ describe("getFirebaseServerSession", () => {
   it("treats revoked or malformed tokens as unauthenticated", async () => {
     setHeaders({ "x-firebase-auth-bridge": "1", authorization: "Bearer t" });
     mocks.verifyIdToken.mockRejectedValue(new Error("auth/id-token-revoked"));
+    const logged = vi.spyOn(console, "error").mockImplementation(() => {});
     expect(await getFirebaseServerSession()).toEqual({
       isBridgeActive: true,
       role: "user",
       userId: null,
     });
+    expect(logged).toHaveBeenCalledWith(
+      "Firebase ID token verification failed",
+      expect.objectContaining({ message: "auth/id-token-revoked" }),
+    );
+    logged.mockRestore();
   });
 });
