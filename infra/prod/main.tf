@@ -287,7 +287,6 @@ resource "google_identity_platform_config" "default" {
 locals {
   github_environment_variables = {
     FIREBASE_APP_HOSTING_BACKEND_ID   = google_firebase_app_hosting_backend.app.backend_id
-    FIREBASE_APP_HOSTING_LOCATION     = google_firebase_app_hosting_backend.app.location
     FIREBASE_PROJECT_ID               = var.project_id
     FIREBASE_RELEASE_BRANCH           = var.release_branch
     GOOGLE_SERVICE_ACCOUNT            = google_service_account.github_deploy.email
