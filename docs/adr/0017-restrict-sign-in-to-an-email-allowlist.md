@@ -57,3 +57,11 @@ The release workflow writes the two lists from the `production` environment secr
 secret is missing. The blocking functions (`restrictsignup`, `restrictsignin`) join the
 services whose Cloud Run invoker check is turned off, as in ADR 0016, because Identity
 Platform calls them directly.
+
+## Deploy findings
+
+Blocking functions deploy to `us-east1`, not the region of the callable functions. The
+Firebase CLI tries to make a new function public and fails under the organization policy,
+so the first deploy that creates them reports an error even though the services exist.
+Later deploys only update them and succeed. The invoker step names each service's region.
+The deploy passes `--force` so the CLI sets up the image cleanup policy of the new region.
