@@ -104,6 +104,7 @@ jobs:
           pnpm dlx firebase-tools@15.34.1 deploy
           --project "$FIREBASE_PROJECT_ID"
           --only functions,firestore,database,storage
+          --force
           --non-interactive
       # Browsers call callable Functions directly, and the CORS preflight carries no
       # credentials. The organization policy blocks `allUsers`, so turn the Cloud Run
@@ -112,10 +113,11 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for service in recordusage setuserrole restrictsignup restrictsignin; do
-            gcloud run services update "$service" \
+          for target in recordusage:us-central1 setuserrole:us-central1 \
+            restrictsignup:us-east1 restrictsignin:us-east1; do
+            gcloud run services update "${target%%:*}" \
               --project "$FIREBASE_PROJECT_ID" \
-              --region us-central1 \
+              --region "${target##*:}" \
               --no-invoker-iam-check \
               --quiet
           done
