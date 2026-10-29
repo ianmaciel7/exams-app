@@ -82,3 +82,9 @@ variable "firebase_developer_roles" {
     "roles/serviceusage.serviceUsageConsumer",
   ]
 }
+
+variable "extra_authorized_domains" {
+  description = "Extra domains allowed for Firebase Authentication, such as a custom domain."
+  type        = list(string)
+  default     = []
+}
