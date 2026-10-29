@@ -33,7 +33,7 @@ env:
       - BUILD
       - RUNTIME
   - variable: NEXT_PUBLIC_FIREBASE_GOOGLE_ENABLED
-    value: "false"
+    value: "true"
     availability:
       - BUILD
       - RUNTIME
