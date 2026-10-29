@@ -25,6 +25,9 @@
     "src/messages"
   ],
   "words": [
+    "cloudfunctions",
+    "firebaseapphosting",
+    "serviceusage",
     "apphosting",
     "Eventarc",
     "RTDB",

@@ -59,3 +59,26 @@ variable "workload_identity_pool_id" {
   type        = string
   default     = "github-actions-v2"
 }
+
+variable "owner_members" {
+  description = "IAM members with the Owner role, for example [\"user:admin@example.com\"]. Set in terraform.tfvars."
+  type        = list(string)
+  default     = []
+}
+
+variable "firebase_developer_members" {
+  description = "IAM members that manage Firebase without being Owner. Set in terraform.tfvars."
+  type        = list(string)
+  default     = []
+}
+
+variable "firebase_developer_roles" {
+  description = "Project roles granted to firebase_developer_members."
+  type        = list(string)
+  default = [
+    "roles/cloudfunctions.developer",
+    "roles/firebase.admin",
+    "roles/firebaseapphosting.admin",
+    "roles/serviceusage.serviceUsageConsumer",
+  ]
+}

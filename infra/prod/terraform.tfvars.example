@@ -1,3 +1,5 @@
 project_id   = "your-new-project-id"
 github_owner = "ianmaciel7"
 github_repo  = "exams-app"
+owner_members               = ["user:owner@example.com"]
+firebase_developer_members = ["user:developer@example.com"]

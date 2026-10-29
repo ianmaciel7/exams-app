@@ -46,3 +46,15 @@ then apply again so the repository link and backend can finish.
 - Update `.firebaserc` with the new project ID.
 - Enable the sign-in providers in the Firebase console (Google needs an OAuth client).
 - Rules, indexes and Functions are still deployed by the CD workflow, not by Terraform.
+
+## Team access
+
+Human access is managed here (see [ADR 0013](../docs/adr/0013-configure-team-access.md)). Set the members in
+the untracked `terraform.tfvars`:
+
+```hcl
+owner_members               = ["user:owner@example.com"]
+firebase_developer_members = ["user:developer@example.com"]
+```
+
+Bindings are additive. To narrow a user who already has extra roles, remove them in the console as an Owner.
