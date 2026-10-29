@@ -44,7 +44,11 @@ then apply again so the repository link and backend can finish.
 - Copy `github_actions_variables` into the repository variables used by `.github/workflows/firebase-cd.yml`.
 - Copy `firebase_web_config` into `apphosting.yaml` (public values, not secrets).
 - Update `.firebaserc` with the new project ID.
-- Enable the sign-in providers in the Firebase console (Google needs an OAuth client).
+- Email and password sign-in and the authorized domains are managed here (`google_identity_platform_config`);
+  add custom domains through `extra_authorized_domains`.
+- Enable the Google provider once in the Firebase console (Authentication > Sign-in method). It needs an OAuth
+  client secret that Terraform cannot create, and the console keeps that secret out of the state and the repository.
+  Then set `NEXT_PUBLIC_FIREBASE_GOOGLE_ENABLED` to `"true"` in `apphosting.yaml` and publish a new release.
 - Rules, indexes and Functions are still deployed by the CD workflow, not by Terraform.
 
 ## Team access

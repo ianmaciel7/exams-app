@@ -239,6 +239,34 @@ resource "google_project_iam_member" "firebase_developers" {
   member  = each.value.member
 }
 
+# --- Authentication ---------------------------------------------------------
+
+# Email and password sign-in and the domains allowed to start OAuth popups. The Google
+# provider needs an OAuth client secret that Terraform cannot create, so it is enabled once
+# in the Firebase console (Authentication > Sign-in method) and kept out of this state.
+resource "google_identity_platform_config" "default" {
+  project = var.project_id
+
+  sign_in {
+    email {
+      enabled           = true
+      password_required = true
+    }
+  }
+
+  authorized_domains = sort(distinct(concat(
+    [
+      "localhost",
+      "${var.project_id}.firebaseapp.com",
+      "${var.project_id}.web.app",
+      trimprefix(google_firebase_app_hosting_backend.app.uri, "https://"),
+    ],
+    var.extra_authorized_domains,
+  )))
+
+  depends_on = [google_firebase_project.this]
+}
+
 # --- GitHub Actions deploy identity (Workload Identity Federation) -----------
 
 resource "google_service_account" "github_deploy" {
