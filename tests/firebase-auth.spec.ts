@@ -296,3 +296,64 @@ test("@a11y authenticated profile has no detected WCAG A/AA violations", async (
     .analyze();
   expect(results.violations).toEqual([]);
 });
+
+// The profile card once rendered at a fixed 384 px on every screen, and its edge vanished into
+// the page background in both themes. Geometry and computed styles catch both without
+// platform-specific screenshot baselines.
+const profileViewports = [
+  { width: 390, height: 844, minRatio: 0.85, maxWidth: 390 },
+  { width: 768, height: 1024, minRatio: 0.55, maxWidth: 448 },
+  { width: 1440, height: 900, minRatio: 0.3, maxWidth: 512 },
+];
+
+for (const colorScheme of ["light", "dark"] as const) {
+  for (const viewport of profileViewports) {
+    test(`profile card scales and stays visible at ${viewport.width}px in ${colorScheme} mode`, async ({
+      page,
+      request,
+    }) => {
+      await page.setViewportSize({
+        width: viewport.width,
+        height: viewport.height,
+      });
+      await page.emulateMedia({ colorScheme });
+      const email = `layout-${crypto.randomUUID()}@example.test`;
+      const created = await request.post(
+        `${emulator}/identitytoolkit.googleapis.com/v1/accounts:signUp?key=emulator-only`,
+        { data: { email, password, returnSecureToken: true } },
+      );
+      expect(created.ok()).toBeTruthy();
+      await page.goto("/sign-in");
+      await page.getByLabel("Email Address").fill(email);
+      await page.locator("#password").fill(password);
+      await page.getByRole("button", { name: "Sign In", exact: true }).click();
+      await expect(page).toHaveURL("/");
+      await page.goto("/profile");
+
+      const card = page.locator('[data-slot="card"]').first();
+      await expect(card).toBeVisible();
+      const box = await card.boundingBox();
+      if (!box) throw new Error("The profile card has no bounding box");
+      expect(box.width).toBeLessThanOrEqual(viewport.maxWidth);
+      expect(box.width / viewport.width).toBeGreaterThanOrEqual(
+        viewport.minRatio,
+      );
+      expect(box.x).toBeGreaterThanOrEqual(0);
+      expect(box.x + box.width).toBeLessThanOrEqual(viewport.width);
+
+      const edge = await card.evaluate((element) => {
+        const style = getComputedStyle(element);
+        return {
+          cardBackground: style.backgroundColor,
+          pageBackground: getComputedStyle(document.body).backgroundColor,
+          shadow: style.boxShadow,
+        };
+      });
+      // Either the fill differs from the page, or the edge is drawn with a ring or shadow.
+      expect(
+        edge.cardBackground !== edge.pageBackground ||
+          (edge.shadow !== "none" && edge.shadow !== ""),
+      ).toBe(true);
+    });
+  }
+}
