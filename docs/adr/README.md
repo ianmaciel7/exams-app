@@ -22,6 +22,7 @@ original date. Read current operational details in the
 | [0011](0011-configure-firebase-cd.md) | Accepted; manual provisioning superseded by 0012 | Tag-driven Firebase production delivery, App Hosting, OIDC federation, `us-central1`, and budget alerts |
 | [0012](0012-configure-terraform-infrastructure.md) | Accepted | Terraform stacks for the project, Firebase, App Hosting and federation; permanent project IDs; manual apply; state and variables kept out of Git |
 | [0013](0013-configure-team-access.md) | Accepted | Terraform-managed human access: Owner tier, Firebase developer tier, members from untracked variables, additive bindings |
+| [0014](0014-manage-release-environment.md) | Accepted | Terraform-managed GitHub production environment and release variables, sourced from the infrastructure that owns each value |
 
 ## Current operational clarifications
 

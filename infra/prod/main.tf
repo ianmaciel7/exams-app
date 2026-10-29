@@ -10,6 +10,10 @@ terraform {
       source  = "hashicorp/google-beta"
       version = "~> 7.0"
     }
+    github = {
+      source  = "integrations/github"
+      version = "~> 6.0"
+    }
     time = {
       source  = "hashicorp/time"
       version = "~> 0.12"
@@ -34,6 +38,11 @@ provider "google-beta" {
   region                = var.region
   user_project_override = true
   billing_project       = var.project_id
+}
+
+# Authenticates with GITHUB_TOKEN or, when it is unset, with the token of the logged in `gh` CLI.
+provider "github" {
+  owner = var.github_owner
 }
 
 data "google_project" "this" {
@@ -252,6 +261,10 @@ resource "google_identity_platform_config" "default" {
       enabled           = true
       password_required = true
     }
+
+    phone_number {
+      enabled = false
+    }
   }
 
   authorized_domains = sort(distinct(concat(
@@ -265,6 +278,47 @@ resource "google_identity_platform_config" "default" {
   )))
 
   depends_on = [google_firebase_project.this]
+}
+
+# --- GitHub release environment ---------------------------------------------------
+
+# The release workflow reads these as `vars.*`. Managing them here keeps the environment in
+# step with the infrastructure instead of copying the outputs by hand. None is a secret.
+locals {
+  github_environment_variables = {
+    FIREBASE_APP_HOSTING_BACKEND_ID   = google_firebase_app_hosting_backend.app.backend_id
+    FIREBASE_APP_HOSTING_LOCATION     = google_firebase_app_hosting_backend.app.location
+    FIREBASE_PROJECT_ID               = var.project_id
+    FIREBASE_RELEASE_BRANCH           = var.release_branch
+    GOOGLE_SERVICE_ACCOUNT            = google_service_account.github_deploy.email
+    GOOGLE_WORKLOAD_IDENTITY_PROVIDER = google_iam_workload_identity_pool_provider.github.name
+  }
+}
+
+# Adopt the environment and variables that were created by hand.
+import {
+  to = github_repository_environment.production
+  id = "${var.github_repo}:production"
+}
+
+import {
+  for_each = toset(keys(local.github_environment_variables))
+  to       = github_actions_environment_variable.release[each.key]
+  id       = "${var.github_repo}:production:${each.key}"
+}
+
+resource "github_repository_environment" "production" {
+  repository  = var.github_repo
+  environment = "production"
+}
+
+resource "github_actions_environment_variable" "release" {
+  for_each = local.github_environment_variables
+
+  repository    = var.github_repo
+  environment   = github_repository_environment.production.environment
+  variable_name = each.key
+  value         = each.value
 }
 
 # --- GitHub Actions deploy identity (Workload Identity Federation) -----------

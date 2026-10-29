@@ -88,3 +88,9 @@ variable "extra_authorized_domains" {
   type        = list(string)
   default     = []
 }
+
+variable "release_branch" {
+  description = "Branch that production release tags must be reachable from."
+  type        = string
+  default     = "main"
+}
