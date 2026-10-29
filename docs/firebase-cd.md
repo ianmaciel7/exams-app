@@ -54,6 +54,7 @@ administrator access is for setup and troubleshooting, not normal releases.
    (`vX.Y.Z`) targeting the merged commit, write the notes, and publish it.
 
 The workflow validates the tag against `package.json` and `apphosting.yaml`, runs
-`pnpm verify:fast`, deploys Functions and rules, then requests an App Hosting rollout
-for that exact commit. Next.js embeds `NEXT_PUBLIC_GIT_TAG` in the browser bundle at
+`pnpm verify:fast`, deploys Functions and rules, turns off the Cloud Run invoker check
+on the callable Functions so browsers can call them ([ADR 0016](adr/0016-disable-invoker-iam-check-for-callable-functions.md)),
+then requests an App Hosting rollout for that exact commit. Next.js embeds `NEXT_PUBLIC_GIT_TAG` in the browser bundle at
 build time, so the app shows the version that was released.

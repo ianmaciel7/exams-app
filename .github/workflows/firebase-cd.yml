@@ -87,6 +87,20 @@ jobs:
           --project "$FIREBASE_PROJECT_ID"
           --only functions,firestore,database,storage
           --non-interactive
+      # Browsers call callable Functions directly, and the CORS preflight carries no
+      # credentials. The organization policy blocks `allUsers`, so turn the Cloud Run
+      # invoker check off instead (ADR 0016). Handlers still verify the Firebase ID token.
+      - name: Allow browsers to invoke callable Functions
+        shell: bash
+        run: |
+          set -euo pipefail
+          for service in recordusage setuserrole; do
+            gcloud run services update "$service" \
+              --project "$FIREBASE_PROJECT_ID" \
+              --region us-central1 \
+              --no-invoker-iam-check \
+              --quiet
+          done
       - name: Create App Hosting rollout for the release commit
         run: >-
           pnpm dlx firebase-tools@15.34.1 apphosting:rollouts:create

@@ -9,6 +9,11 @@ allowBuilds:
   esbuild: true
   msw: false
 overrides:
+  # GHSA-qr28-fpjm-wq7f: quadratic-time replacement of percent-encoded runs; fixed in 0.5.1.
+  decode-uri-component: ">=0.5.1"
+  # GHSA-8g5g-mxqh-grgj: server.fs.deny bypassed with queries; fixed in 6.4.5.
+  # Reached only through @ladle/react, which depends on vite 6.
+  "@ladle/react>vite": "6.4.5"
   # Firestore pins 1.9.16; 1.13.6 fixes GHSA-m9gg-hp2v-232j and GHSA-f596-whhp-79r4.
   "@grpc/grpc-js": "^1.13.6"
   "@modelcontextprotocol/sdk": ">=1.31.0"
