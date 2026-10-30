@@ -263,7 +263,6 @@ test("saving the profile language keeps the unprefixed route and translates afte
   await expect(page).toHaveURL(`${authTestOrigin}/profile`);
 });
 
-
 test("guest deep link returns to the protected page after sign-in", async ({
   page,
   request,
@@ -276,7 +275,11 @@ test("guest deep link returns to the protected page after sign-in", async ({
   expect(created.ok()).toBe(true);
 
   await page.goto("/profile?tab=security");
-  await expect(page).toHaveURL((url) => url.pathname === "/sign-in" && url.searchParams.get("next") === "/profile?tab=security");
+  await expect(page).toHaveURL(
+    (url) =>
+      url.pathname === "/sign-in" &&
+      url.searchParams.get("next") === "/profile?tab=security",
+  );
   expect(new URL(page.url()).searchParams.get("next")).toBe(
     "/profile?tab=security",
   );
@@ -407,9 +410,17 @@ test("Firestore user preferences are private to their owner", async ({
 
   const strangerWrite = await request.patch(documentUrl, {
     headers: { Authorization: `Bearer ${stranger.idToken}` },
-    data: { fields: { locale: { stringValue: "en" }, theme: { stringValue: "light" } } },
+    data: {
+      fields: {
+        locale: { stringValue: "en" },
+        theme: { stringValue: "light" },
+      },
+    },
   });
-  expect(strangerWrite.status(), "other accounts must not write preferences").toBe(403);
+  expect(
+    strangerWrite.status(),
+    "other accounts must not write preferences",
+  ).toBe(403);
 
   const strangerRead = await request.get(documentUrl, {
     headers: { Authorization: `Bearer ${stranger.idToken}` },
@@ -419,7 +430,9 @@ test("Firestore user preferences are private to their owner", async ({
   );
 
   const guestRead = await request.get(documentUrl);
-  expect(guestRead.status(), "unauthenticated clients must be denied").toBe(403);
+  expect(guestRead.status(), "unauthenticated clients must be denied").toBe(
+    403,
+  );
 });
 
 const accessibilityTags = [
