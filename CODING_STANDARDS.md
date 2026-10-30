@@ -821,6 +821,32 @@ Owned source (`src/`, `scripts/`, `functions/`, `tests/`) follows one style:
 - Use `type` aliases, not `interface`. Props are named `<ComponentName>Props`.
 - Only module-level constants use `SCREAMING_CASE`.
 - Message files (`en`, `es`, `pt-BR`) keep an identical key set.
+- Keep short, straightforward calls on one line. Use an expanded trailing-object
+  call when any of these conditions applies:
+
+  - The final object is invocation policy or options, distinct from the operation's
+    domain input, even when it currently has one property (for example, Firestore's
+    `merge` option).
+  - The object has multiple properties, contains a nested value, callback, or
+    collection, or will be read or modified as a distinct configuration block.
+  - The complete call exceeds Biome's configured line width; accept its automatic
+    wrapping rather than selecting line breaks by hand.
+
+  Keep compact scalar or domain-input arguments on the opening line, and begin the
+  first property of the final object on the next line to express intentional
+  expansion. With the default `expand: "auto"`, Biome preserves that object layout.
+  SDK/provider mutations commonly use this form:
+
+  ```ts
+  await setDoc(doc(getFirebaseFirestore(), "users", uid), preferences, {
+    merge: true,
+  });
+  ```
+
+  Do not expand a simple data object solely for visual symmetry. Biome is the
+  mechanical safeguard for the resulting wrapping, two-space indentation, and
+  trailing commas; selecting a semantically distinct configuration block remains a
+  review-time judgement.
 
 Documented exceptions, not to be renamed:
 
