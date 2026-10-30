@@ -2,32 +2,36 @@ import { cleanup, render, screen } from "@testing-library/react";
 import { NextIntlClientProvider } from "next-intl";
 import { afterEach, describe, expect, it } from "vitest";
 import en from "@/messages/en.json";
-import { RouteLoading } from "./route-loading";
+import { LoadingPrimitive } from "./loading-primitive";
 
-describe("RouteLoading", () => {
+describe("LoadingPrimitive", () => {
   afterEach(cleanup);
 
   it("renders loading indicator with default localized label and forwards props", () => {
     render(
       <NextIntlClientProvider locale="en" messages={en}>
-        <RouteLoading data-testid="route-loading" className="custom-loading" />
+        <LoadingPrimitive
+          data-testid="loading-primitive"
+          className="custom-loading"
+        />
       </NextIntlClientProvider>,
     );
 
     const status = screen.getByRole("status");
     expect(status.textContent).toBe(en.App.loading);
     expect(status.className).toContain("custom-loading");
-    expect(status.getAttribute("data-testid")).toBe("route-loading");
+    expect(status.getAttribute("data-testid")).toBe("loading-primitive");
   });
 
-  it("allows custom label override", () => {
+  it("allows custom label override via children", () => {
+    const customLabel = "Please wait...";
     render(
       <NextIntlClientProvider locale="en" messages={en}>
-        <RouteLoading label="Please wait..." />
+        <LoadingPrimitive>{customLabel}</LoadingPrimitive>
       </NextIntlClientProvider>,
     );
 
     const status = screen.getByRole("status");
-    expect(status.textContent).toBe("Please wait...");
+    expect(status.textContent).toBe(customLabel);
   });
 });

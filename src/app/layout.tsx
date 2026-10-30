@@ -46,7 +46,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <IntlDocumentServer className={fontClassName}>
         <Suspense
           fallback={
-            <div className="flex min-h-svh items-center justify-center">
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-background p-6">
               <Spinner
                 className="size-8 text-muted-foreground"
                 aria-hidden="true"

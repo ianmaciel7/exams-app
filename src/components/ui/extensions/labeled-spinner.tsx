@@ -1,13 +1,10 @@
-import type { ComponentProps, ReactNode } from "react";
+import type { ComponentProps } from "react";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 
-type LabeledSpinnerProps = ComponentProps<"span"> & {
-  label?: ReactNode;
-};
+type LabeledSpinnerProps = ComponentProps<"span">;
 
 function LabeledSpinner({
-  label,
   children,
   className,
   ...props
@@ -29,7 +26,7 @@ function LabeledSpinner({
         aria-label={undefined}
         className="shrink-0 motion-reduce:animate-none"
       />
-      {(children ?? label) ? <span>{children ?? label}</span> : null}
+      {children ? <span>{children}</span> : null}
     </span>
   );
 }
