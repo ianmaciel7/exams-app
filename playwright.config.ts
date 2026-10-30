@@ -27,6 +27,8 @@ export default defineConfig({
   testIgnore: authEmulator ? undefined : "**/firebase-auth.spec.ts",
   fullyParallel: !authEmulator,
   forbidOnly: Boolean(process.env.CI),
+  // A retry passing does not erase the original failure.
+  failOnFlakyTests: Boolean(process.env.CI),
   retries: process.env.CI ? 2 : 0,
   // Hosted runners have 2 vCPUs; more workers only add flakiness.
   workers: authEmulator ? 1 : process.env.CI ? 2 : undefined,
