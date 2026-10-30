@@ -10,7 +10,7 @@ vi.mock("@/lib/firebase/client", () => ({
   getFirebaseUI: () => ({ get: () => ({ auth: mocks.auth }) }),
 }));
 
-import { signOutUser } from "./auth";
+import { getPendingSignOut, signOutUser } from "./auth";
 
 describe("signOutUser", () => {
   beforeEach(() => vi.clearAllMocks());
@@ -19,6 +19,18 @@ describe("signOutUser", () => {
     mocks.signOut.mockResolvedValue(undefined);
     await signOutUser();
     expect(mocks.signOut).toHaveBeenCalledWith(mocks.auth);
+  });
+
+  it("does not release the sign-out barrier until persistence settles", async () => {
+    const deferred = Promise.withResolvers<void>();
+    mocks.signOut.mockReturnValue(deferred.promise);
+
+    const signOutPromise = signOutUser();
+    expect(getPendingSignOut()).toBe(signOutPromise);
+
+    deferred.resolve();
+    await signOutPromise;
+    await vi.waitFor(() => expect(getPendingSignOut()).toBeNull());
   });
 
   it("propagates sign-out failures", async () => {
