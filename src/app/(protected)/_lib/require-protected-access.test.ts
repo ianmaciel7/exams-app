@@ -18,12 +18,9 @@ vi.mock("@/lib/navigation", () => ({
   redirectToSignIn: mocks.redirectToSignIn,
 }));
 
-import {
-  requireProtectedAccess,
-  requireRole,
-} from "./require-protected-access";
+import { requireRole, verifySession } from "./require-protected-access";
 
-describe("requireProtectedAccess", () => {
+describe("verifySession", () => {
   beforeEach(() => vi.clearAllMocks());
 
   it("allows first-load fallback when the worker bridge is inactive", async () => {
@@ -32,7 +29,7 @@ describe("requireProtectedAccess", () => {
       role: "user",
       userId: null,
     });
-    await expect(requireProtectedAccess()).resolves.toBeUndefined();
+    await expect(verifySession()).resolves.toBeUndefined();
     expect(mocks.redirectToSignIn).not.toHaveBeenCalled();
   });
 
@@ -42,7 +39,7 @@ describe("requireProtectedAccess", () => {
       role: "user",
       userId: null,
     });
-    await expect(requireProtectedAccess()).rejects.toThrow("SIGN_IN");
+    await expect(verifySession()).rejects.toThrow("SIGN_IN");
   });
 
   it("allows verified sessions when the worker bridge is active", async () => {
@@ -51,7 +48,7 @@ describe("requireProtectedAccess", () => {
       role: "user",
       userId: "u1",
     });
-    await expect(requireProtectedAccess()).resolves.toBeUndefined();
+    await expect(verifySession()).resolves.toBeUndefined();
     expect(mocks.redirectToSignIn).not.toHaveBeenCalled();
   });
 });
