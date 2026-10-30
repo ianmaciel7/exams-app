@@ -30,6 +30,7 @@ from the previous rules still require verification against installed packages.
 | [data.md](data.md) | changing persistence modules, DTOs, schemas, data placement, or dependency injection |
 | [auth.md](auth.md) | changing identity, session cookies/tokens, protected access, or post-auth navigation |
 | [rendering.md](rendering.md) | changing Suspense, loading/error boundaries, transitions, hydration, or component identity |
+| [mobile.md](mobile.md) | changing touch targets, form-field text, autofill, motion, or mobile layout behavior |
 | [dom.md](dom.md) | changing HTML/SVG semantics, refs, portals, imperative browser integration, or Fragment refs |
 | [compiler.md](compiler.md) | changing Compiler configuration, directives, optimization, or eligibility diagnostics |
 | [shadcn.md](shadcn.md) | maintaining copied shadcn/Base UI source, adapting primitives, or updating UI registry output |
@@ -42,7 +43,7 @@ from the previous rules still require verification against installed packages.
 
 - UI styles, icons, chat, and Base UI differences: [installed shadcn skill](../skills/shadcn/SKILL.md).
 - Locale and routing architecture: [ARCHITECTURE.md](../../ARCHITECTURE.md#internationalization).
-- Accessibility and responsive behavior: [DESIGN.md](../../DESIGN.md) and [TESTING.md](../../TESTING.md).
+- Accessibility and responsive behavior: [mobile rule](mobile.md), [DESIGN.md](../../DESIGN.md), and [TESTING.md](../../TESTING.md).
 - Diagnostics and verification: [TOOLING.md](../../TOOLING.md), [TESTING.md](../../TESTING.md), and [project-verify](../skills/project-verify/SKILL.md).
 
 ## Documentation coverage
