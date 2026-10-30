@@ -114,7 +114,11 @@ test("password recovery sends an emulator reset code and displays failures", asy
   await page.goto("/sign-in");
   await page.getByRole("button", { name: "Forgot Password?" }).click();
   await expect(page).toHaveURL(/\/forgot-password$/);
-  await page.getByLabel("Email Address").fill(email);
+  // Next.js can retain an offscreen previous route during transitions.
+  // Target the form the user can actually interact with, not hidden inputs.
+  const emailField = page.getByLabel("Email Address").filter({ visible: true });
+  await expect(emailField).toBeVisible();
+  await emailField.fill(email);
   await page.route("**/accounts:sendOobCode?*", (route) =>
     route.abort("failed"),
   );
