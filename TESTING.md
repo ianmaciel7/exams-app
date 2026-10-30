@@ -67,6 +67,7 @@ rather than only mocked calls or navigation.
 | Cross-account preference isolation | `tests/firebase-auth.spec.ts` | Owner can read/write; a different user cannot read/write; anonymous access is denied |
 | Password recovery | `tests/firebase-auth.spec.ts` | Emulator issues a recovery code and the UI handles network failure |
 | Google sign-in | `tests/firebase-auth.spec.ts` | Emulated popup/redirect flows complete; production OAuth is a separate risk |
+| Google popup cancellation and retry | `tests/firebase-auth.spec.ts` | Closing an unauthenticated popup returns to usable sign-in and permits a second attempt |
 | Responsive, visual, and a11y | `tests/*.spec.ts` | Assert defined layouts and detectable issues; these are not substitutes for a completed journey |
 
 The `auth-emulator` GitHub Actions job is a required CI gate and executes these
@@ -81,6 +82,60 @@ scenario for each newly confirmed user-facing defect. Prefer independent
 acceptance criteria from product requirements and bug reports over deriving
 expected results exclusively from the current code. Do not update snapshots,
 relax assertions, or introduce `test.skip` to hide a defect.
+
+## Stateful user journeys and model-based acceptance
+
+When adding or changing a user-facing asynchronous or multi-step feature, first
+model its **observable states, events, transitions, and recovery guarantees**.
+This is a risk-based contract, not a claim that every theoretical input sequence
+can be exhaustively tested. Do not derive the expected behavior solely from the
+current implementation.
+
+1. Identify the user's goal and its independently expected outcome.
+2. List the reachable states (for example, idle, in progress, completed,
+   cancelled, failed, and recovered), including where the UI can become stuck.
+3. Enumerate meaningful events (submit, close, cancel, retry, navigate, reload,
+   duplicate action, network loss, authorization failure, session change).
+4. Build a state-transition matrix for the feature. Select critical
+   transitions and pairs of transitions using likelihood, user impact, and
+   regression history; justify exceptions instead of inventing cases.
+5. Test success **and** applicable interruption, cancellation, failure and
+   recovery paths in a browser or appropriate integration layer.
+6. Assert the final user-visible state, ability to retry, and independent
+   persistence or authorization outcomes. A click, a mock invocation, a
+   screenshot or a generic visible page is not an acceptance oracle.
+7. Keep the model and regression scenario with the owning suite. When an
+   external dependency cannot be reproduced, record the limitation and retain
+   a deterministic contract/integration test for the application-owned part.
+8. Treat unexpected skips, unfinished transitions, and required tests that
+   fail on the CI emulator as a **blocked release**, not green coverage.
+   Do not repair a failing test by deleting it, skipping it, relaxing the
+   requirement, or increasing timeouts without diagnosis.
+
+### OAuth popup transition contract
+
+The current example is `/sign-in` with Google OAuth. Its minimum model is:
+
+| Initial state | Event | Expected observable state | Verification |
+| --- | --- | --- | --- |
+| Idle | Open Google popup | Authentication pending; window appears | Playwright popup event |
+| Pending | Authenticate in popup | Signed-in destination shown | Emulator-backed browser E2E |
+| Pending | Close popup without authenticating | Sign-in is usable again; no indefinite spinner | Emulator-backed browser E2E |
+| Recovered after cancellation | Try Google again | A second popup can open, then cancel cleanly | Emulator-backed browser E2E |
+| Pending | Popup blocked, provider error or network failure | Recoverable error and usable controls | Add targeted tests when failure can be simulated reliably |
+
+The required cancellation/retry regression lives in
+`tests/firebase-auth.spec.ts`. The `auth-emulator` CI job runs it through
+`pnpm exec playwright test --project=auth-emulator`. Failing this acceptance
+test is evidence of a defect or an unresolved test-environment issue; it must
+not be ignored. Firebase's emulator does **not** prove production-provider
+compatibility, so real Google OAuth needs separate, safe verification.
+
+**Enforcement:** `pnpm test:auth` locally and the required
+`auth-emulator` CI job execute the behavioral regression. The model and this
+policy guide test creation; no static analyzer can establish all relevant
+human-experience transitions automatically. Reviewers must compare the
+transition matrix with the feature's requirements and actual UX.
 
 ## Test layers
 
