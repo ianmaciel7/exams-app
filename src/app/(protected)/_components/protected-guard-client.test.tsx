@@ -8,11 +8,12 @@ const mocks = vi.hoisted(() => ({
   getUI: vi.fn(),
   recordUsage: vi.fn(),
   currentUser: null as unknown,
+  pathname: "/profile",
 }));
 
 vi.mock("next/navigation", () => ({
   useRouter: () => mocks.router,
-  usePathname: () => "/profile",
+  usePathname: () => mocks.pathname,
 }));
 
 vi.mock("next-intl", () => ({
@@ -32,6 +33,7 @@ vi.mock("@/lib/firebase/usage", () => ({ recordUsage: mocks.recordUsage }));
 describe("ProtectedGuardClient", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mocks.pathname = "/profile";
     mocks.recordUsage.mockResolvedValue(undefined);
     mocks.getUI.mockReturnValue({
       get: () => ({
@@ -178,5 +180,60 @@ describe("ProtectedGuardClient", () => {
     );
     expect(screen.getByRole("alert").textContent).toBe("configurationError");
     log.mockRestore();
+  });
+
+  it("shows configuration error when subscription onError callback fires", async () => {
+    let errorCallback: ((error: Error) => void) | undefined;
+    mocks.subscribe.mockImplementation((_auth, _onNext, onError) => {
+      errorCallback = onError;
+      return () => {};
+    });
+    const log = vi.spyOn(console, "error").mockImplementation(() => {});
+    render(
+      <ProtectedGuardClient>
+        <div>{"Protected Content"}</div>
+      </ProtectedGuardClient>,
+    );
+    await act(async () => {
+      errorCallback?.(new Error("Firebase network disconnect"));
+    });
+    expect(screen.getByRole("alert").textContent).toBe("configurationError");
+    log.mockRestore();
+  });
+
+  it("records screen views across navigation while keeping content visible without loading flashes", async () => {
+    mocks.currentUser = { uid: "user-123" };
+    const { rerender } = render(
+      <ProtectedGuardClient>
+        <div>{"Protected Content"}</div>
+      </ProtectedGuardClient>,
+    );
+
+    await waitFor(() =>
+      expect(screen.getByText("Protected Content")).toBeTruthy(),
+    );
+    expect(mocks.recordUsage).toHaveBeenCalledWith({
+      type: "screen_view",
+      name: "/profile",
+    });
+
+    // Simulate route navigation to /profile/security
+    mocks.pathname = "/profile/security";
+    rerender(
+      <ProtectedGuardClient>
+        <div>{"Protected Content"}</div>
+      </ProtectedGuardClient>,
+    );
+
+    // Verify content is still visible (no loading indicator)
+    expect(screen.queryByRole("status")).toBeNull();
+    expect(screen.getByText("Protected Content")).toBeTruthy();
+
+    await waitFor(() =>
+      expect(mocks.recordUsage).toHaveBeenCalledWith({
+        type: "screen_view",
+        name: "/profile/security",
+      }),
+    );
   });
 });
