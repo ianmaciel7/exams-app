@@ -119,8 +119,8 @@ original date. Read current operational details in the
     Suite UI at `http://127.0.0.1:4000`.
   - In-code default fallback values are removed; environment configuration is
     strictly driven by `.env`.
-  - The home page (`src/app/page.tsx`) renders `HomeSectionClient`
-    (`src/app/_components/home-section-client.tsx`), which observes the session and shows a
+  - The home page (`src/app/page.tsx`) renders `HomeClient`
+    (`src/app/_components/home-client.tsx`), which observes the session and shows a
     loading state, then "Manage account" (to `/profile`) with `HomeSignOutButtonClient` for
     authenticated users, or "Sign in" and "Get started" links for visitors. This supersedes
     the single `auth-nav-button-client.tsx` control described in ADR 0009.

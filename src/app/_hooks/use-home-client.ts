@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useHomeSession } from "./use-home-session";
 
-export function useHomeSectionClient() {
+export function useHomeClient() {
   const t = useTranslations("Home");
   const session = useHomeSession();
 

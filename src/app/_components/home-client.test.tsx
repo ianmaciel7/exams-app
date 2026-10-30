@@ -8,7 +8,7 @@ import {
 import { NextIntlClientProvider } from "next-intl";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import en from "@/messages/en.json";
-import { HomeSectionClient } from "./home-section-client";
+import { HomeClient } from "./home-client";
 
 const mocks = vi.hoisted(() => ({
   subscribe: vi.fn(),
@@ -25,7 +25,7 @@ vi.mock("@/lib/firebase/client", () => ({ getFirebaseUI: mocks.getUI }));
 function renderHome() {
   return render(
     <NextIntlClientProvider locale="en" messages={en}>
-      <HomeSectionClient />
+      <HomeClient />
     </NextIntlClientProvider>,
   );
 }
