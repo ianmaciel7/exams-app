@@ -1,7 +1,7 @@
 import "server-only";
 
 import type { PropsWithChildren } from "react";
-import { requireProtectedAccess } from "../_lib/require-protected-access";
+import { verifySession } from "../_lib/require-protected-access";
 import { ProtectedGuardClient } from "./protected-guard-client";
 
 type ProtectedSessionServerProps = PropsWithChildren;
@@ -9,7 +9,7 @@ type ProtectedSessionServerProps = PropsWithChildren;
 async function ProtectedSessionServer({
   children,
 }: ProtectedSessionServerProps) {
-  await requireProtectedAccess();
+  await verifySession();
 
   return <ProtectedGuardClient>{children}</ProtectedGuardClient>;
 }

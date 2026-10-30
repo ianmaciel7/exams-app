@@ -9,7 +9,7 @@ import { hasRole, type UserRole } from "@/lib/role";
  * Redirects only when the worker bridge vouched for the request but the token
  * did not verify; otherwise the client guard remains the first-load fallback.
  */
-export async function requireProtectedAccess() {
+export async function verifySession() {
   const session = await getFirebaseServerSession();
   if (session.isBridgeActive && !session.userId) redirectToSignIn();
 }

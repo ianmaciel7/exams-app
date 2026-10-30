@@ -48,8 +48,8 @@ and does not transfer maintenance ownership to vendors. Application-owned extens
   presentation that declares `"use client"`. Owned component exports and
   props types must match their complete filename stem, including `Client`
   or `Server`. The checker no longer defines a legacy semantic suffix
-  exception. For example, `HomeSectionClient` uses
-  `HomeSectionClientProps` in `home-section-client.tsx`.
+  exception. For example, `HomeClient` uses
+  `HomeClientProps` in `home-client.tsx`.
 - Integrations own application data, persistence, authentication, navigation or
   platform access, directly or through focused hooks/helpers. Examples include
   Firebase, browser storage, object URLs, theme persistence and external fetches.
@@ -81,15 +81,25 @@ stem and component identifiers:
 - **Term-for-term matching**: The kebab-case filename stem and PascalCase component identifiers are tokenized into semantic terms (e.g., `home-section-client` -> `["home", "section", "client"]`). Every term present in the filename stem must exist in the component name, and no extraneous terms may appear.
 - **No missing terms**: Declaring a component that drops terms from the filename (such as declaring `HomeSection` in `home-section-client.tsx`, which omits `Client`) triggers an error: `missing term(s): "client"`.
 - **No unexpected terms**: Declaring a component with terms absent from the filename (such as `HomeViewClient` or `HomeSectionViewClient` in `home-section-client.tsx`) triggers an error: `unexpected term(s): "view"`.
-- **Reference implementation (`HomeSectionClient`)**: `src/app/_components/home-section-client.tsx` enforces exact 1:1 term parity:
-  - Component declaration and named export: `HomeSectionClient`
-  - Prop type declaration: `HomeSectionClientProps` (`HomeSectionProps` is rejected)
-  - Hook coordination: `useHomeSectionClient` in `src/app/_hooks/use-home-section-client.ts` (`useHomeSection` is rejected)
+- **Reference implementation (`HomeClient`)**: `src/app/_components/home-client.tsx` enforces exact 1:1 term parity:
+  - Component declaration and named export: `HomeClient`
+  - Prop type declaration: `HomeClientProps` (`HomeProps` is rejected)
+  - Hook coordination: `useHomeClient` in `src/app/_hooks/use-home-client.ts` (`useHome` is rejected)
+  - Companion UI component: `src/app/_components/home.tsx` exports `Home` and its compound presentation parts (`HomeContent`, `HomeLogo`, `HomeHeading`, `HomeFooter`). `HomeClient` coordinates state/hooks and composes `Home`.
 - **Profile example:** `profile-form-client.tsx` exports
   `ProfileFormClient`, with compound parts sharing the same root. This
   naming contract enforces exact filename-stem parity while preserving integration
   versus presentation placement. See
   [ADR 0005](../../docs/adr/0005-document-project-standards.md).
+
+## UI companion components for integration boundaries (Client and Server)
+
+Every Client (`*-client.tsx` / `*Client`) or Server (`*-server.tsx` / `*Server`) integration component must be paired with an equivalent UI presentation component (without integration suffixes, e.g. `Home` in `home.tsx` for `HomeClient` in `home-client.tsx`).
+
+- The companion UI component owns markup, HTML elements, styled layout containers, and presentation compound parts (`Home`, `HomeContent`, `HomeLogo`, `HomeHeading`, `HomeFooter`).
+- Integration components must not declare presentation parts with `Client` or `Server` suffixes (such as `HomeClientLogo` or `HomeClientHeading`).
+- The integration component coordinates hooks, browser/server data, and passes slots by composing the companion UI component.
+- `pnpm check:components` enforces that `HomeClient` composes `Home`.
 
 Simple presentation hooks such as `useId`, `useTranslations`, and React Hook
 Form's `useFormContext` and `useWatch` may be called directly in a field.
