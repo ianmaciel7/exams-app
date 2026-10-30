@@ -34,7 +34,6 @@ describe("signOutUser", () => {
     await vi.waitFor(() => expect(getPendingSignOut()).toBeNull());
   });
 
-
   it("waits for the worker to acknowledge logout before completing", async () => {
     let acknowledge = () => {};
     class FakeMessageChannel {
