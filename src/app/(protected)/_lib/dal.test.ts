@@ -18,7 +18,7 @@ vi.mock("@/lib/navigation", () => ({
   redirectToSignIn: mocks.redirectToSignIn,
 }));
 
-import { requireRole, verifySession } from "./require-protected-access";
+import { verifyRole, verifySession } from "./dal";
 
 describe("verifySession", () => {
   beforeEach(() => vi.clearAllMocks());
@@ -53,7 +53,7 @@ describe("verifySession", () => {
   });
 });
 
-describe("requireRole", () => {
+describe("verifyRole", () => {
   beforeEach(() => vi.clearAllMocks());
 
   it("sends callers without a verified session to sign-in, even if the bridge is off", async () => {
@@ -62,7 +62,7 @@ describe("requireRole", () => {
       role: "user",
       userId: null,
     });
-    await expect(requireRole("user")).rejects.toThrow("SIGN_IN");
+    await expect(verifyRole("user")).rejects.toThrow("SIGN_IN");
   });
 
   it("answers an insufficient role as not found", async () => {
@@ -71,7 +71,7 @@ describe("requireRole", () => {
       role: "user",
       userId: "u1",
     });
-    await expect(requireRole("admin")).rejects.toThrow("NOT_FOUND");
+    await expect(verifyRole("admin")).rejects.toThrow("NOT_FOUND");
   });
 
   it("returns the verified identity when the role suffices", async () => {
@@ -80,7 +80,7 @@ describe("requireRole", () => {
       role: "admin",
       userId: "a1",
     });
-    await expect(requireRole("user")).resolves.toEqual({
+    await expect(verifyRole("user")).resolves.toEqual({
       role: "admin",
       userId: "a1",
     });

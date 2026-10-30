@@ -1206,7 +1206,7 @@ describe("lib and route _lib module placement", () => {
       "src/lib/firebase/client.ts",
       "src/lib/firebase/server.ts",
       "src/lib/firebase/usage.ts",
-      "src/app/(protected)/_lib/require-protected-access.ts",
+      "src/app/(protected)/_lib/dal.ts",
       "src/app/(protected)/profile/_lib/data.ts",
     ]) {
       assert.deepEqual(inspectLibPlacement(validPath), []);
