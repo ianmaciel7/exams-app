@@ -33,7 +33,9 @@ function ProfileSectionClient(props: ProfileSectionClientProps) {
         <ProfileCard {...props}>
           <ProfileFormClient key={userId}>
             <ProfileCardHeader>
-              <ProfileCardTitle>{t("personalInfoTitle")}</ProfileCardTitle>
+              <ProfileCardTitle role="heading" aria-level={1}>
+                {t("personalInfoTitle")}
+              </ProfileCardTitle>
               <ProfileCardDescription>
                 {t("personalInfoDescription")}
               </ProfileCardDescription>

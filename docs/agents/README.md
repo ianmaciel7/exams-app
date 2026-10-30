@@ -15,5 +15,6 @@ belong to `TOOLING.md`; test strategy belongs to `TESTING.md`.
 | [react-review.md](react-review.md) | Review React implementation and lifecycle behavior |
 | [react-versions.md](react-versions.md) | Check installed versions, verified release scope, and remaining compatibility limits |
 | [research.md](research.md) | Use memory, research external sources, or promote findings |
+| [quality-standards.md](quality-standards.md) | Audit or extend quality checks against the agreed external standards |
 | [coverage.md](coverage.md) | Locate official topics, local owners, and conditional references |
 | [rules.md](rules.md) | Maintain rule scope and client loading |

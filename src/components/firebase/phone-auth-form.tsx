@@ -152,7 +152,7 @@ function PhoneNumberForm(props: PhoneNumberFormProps) {
               <FieldLabel htmlFor="phoneNumber">{getTranslation(ui, "labels", "phoneNumber")}</FieldLabel>
               <div className="flex items-center gap-2">
                 <CountrySelector ref={countrySelector} />
-                <Input {...field} id="phoneNumber" type="tel" aria-invalid={!!fieldState.error} />
+                <Input {...field} id="phoneNumber" type="tel" autoComplete="tel-national" aria-invalid={!!fieldState.error} />
               </div>
               {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
             </Field>

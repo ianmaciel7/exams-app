@@ -50,6 +50,7 @@
     "emulator:export": "firebase emulators:export --project demo-test ./emulator-data --force",
     "emulator:clear": "node scripts/emulator/clear.mjs",
     "test:a11y": "playwright test --grep @a11y",
+    "test:mobile": "playwright test --project=mobile",
     "test:visual": "playwright test --grep @visual",
     "test:mutation": "stryker run",
     "analyze:react": "react-doctor --no-score --no-telemetry --no-supply-chain",
@@ -67,6 +68,7 @@
     "check:components": "node --test scripts/checks/check-component-conventions.test.mjs scripts/checks/check-component-composition.test.mjs && node scripts/checks/check-component-conventions.mjs",
     "check:english": "node --test scripts/checks/check-english.test.mjs && node scripts/checks/check-english.mjs",
     "check:responsiveness": "node --test scripts/checks/check-responsiveness.test.mjs && node scripts/checks/check-responsiveness.mjs",
+    "check:lighthouse": "node --test scripts/checks/check-lighthouse.test.mjs && node scripts/checks/check-lighthouse.mjs",
     "eval:tool-usage": "node scripts/evals/run-tool-usage-evals.mjs",
     "doctor": "react-doctor --no-score --no-telemetry --no-supply-chain"
   },

@@ -108,6 +108,7 @@ for the task. Do not read every rule for every change.
 - Custom hooks: `hooks.md`; state changes: `state.md`; external lifecycle work: `effects.md`.
 - Forms: `forms.md`; persistence: `data.md`; protected access/session: `auth.md`.
 - Routes, metadata, viewport, navigation: `routes.md`; runtime graphs: `boundaries.md`.
+- Touch targets, form-field text, autofill, motion, mobile layout: `mobile.md`.
 - Streaming and invalidation: `cache.md`; images and fonts: `assets.md`.
 - React correctness: `react.md`; rendering: `rendering.md`; browser integration: `dom.md`.
 - Compiler changes: `compiler.md`; external lookups: `research.md`.
