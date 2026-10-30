@@ -46,9 +46,16 @@ describe("getFirebaseServerSession", () => {
     expect(mocks.connection).toHaveBeenCalledOnce();
   });
 
-  it("treats revoked or malformed tokens as unauthenticated", async () => {
+  it.each([
+    "auth/id-token-revoked",
+    "auth/id-token-expired",
+    "auth/argument-error",
+    "auth/user-disabled",
+  ])("treats a %s token as unauthenticated", async (code) => {
     setHeaders({ "x-firebase-auth-bridge": "1", authorization: "Bearer t" });
-    mocks.verifyIdToken.mockRejectedValue(new Error("auth/id-token-revoked"));
+    mocks.verifyIdToken.mockRejectedValue(
+      Object.assign(new Error(code), { code }),
+    );
     const logged = vi.spyOn(console, "error").mockImplementation(() => {});
     expect(await getFirebaseServerSession()).toEqual({
       isBridgeActive: true,
@@ -57,8 +64,22 @@ describe("getFirebaseServerSession", () => {
     });
     expect(logged).toHaveBeenCalledWith(
       "Firebase ID token verification failed",
-      expect.objectContaining({ message: "auth/id-token-revoked" }),
+      expect.objectContaining({ code }),
     );
     logged.mockRestore();
   });
+
+  it.each([
+    "app/invalid-credential",
+    "app/network-error",
+    "auth/internal-error",
+  ])(
+    "surfaces a %s server fault instead of a sign-in redirect",
+    async (code) => {
+      setHeaders({ "x-firebase-auth-bridge": "1", authorization: "Bearer t" });
+      const fault = Object.assign(new Error(code), { code });
+      mocks.verifyIdToken.mockRejectedValue(fault);
+      await expect(getFirebaseServerSession()).rejects.toBe(fault);
+    },
+  );
 });
