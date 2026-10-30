@@ -12,7 +12,6 @@ function observeAuthSession(onChange: (uid: string | null) => void) {
   }
 }
 
-
 /** Registers the Firebase worker that forwards refreshed ID tokens to SSR requests. */
 export function useFirebaseAuthSessionBridgeClient() {
   useEffect(() => {
