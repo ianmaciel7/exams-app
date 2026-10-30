@@ -166,6 +166,38 @@ test("Google popup signs in with the emulator", async ({ page }) => {
   await expect(page).toHaveURL("/");
 });
 
+test("Google popup cancellation restores sign-in and supports retry", async ({
+  page,
+}) => {
+  await page.goto("/sign-in");
+  const googleButton = page.getByRole("button", {
+    name: "Sign in with Google",
+  });
+  const emailField = page.getByLabel("Email Address");
+
+  await expect(googleButton).toBeEnabled();
+
+  // Cancel the first attempt instead of completing the happy path.
+  const firstPopupPromise = page.waitForEvent("popup");
+  await googleButton.click();
+  const firstPopup = await firstPopupPromise;
+  await firstPopup.close();
+
+  // A dismissed OAuth popup must not strand the form in a pending state.
+  await expect(googleButton).toBeEnabled({ timeout: 15_000 });
+  await expect(emailField).toBeEditable();
+  await expect(page).toHaveURL(`${authTestOrigin}/sign-in`);
+
+  // Recoverability is not established until the next attempt also works.
+  const secondPopupPromise = page.waitForEvent("popup");
+  await googleButton.click();
+  const secondPopup = await secondPopupPromise;
+  await secondPopup.close();
+
+  await expect(googleButton).toBeEnabled({ timeout: 15_000 });
+  await expect(emailField).toBeEditable();
+});
+
 test("Google redirect signs in when the browser identifies as Electron", async ({
   browser,
 }) => {
