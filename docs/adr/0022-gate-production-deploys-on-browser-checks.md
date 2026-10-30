@@ -1,4 +1,4 @@
-# ADR 0021: Gate production deploys on browser checks
+# ADR 0022: Gate production deploys on browser checks
 
 - **Status**: Accepted
 - **Date**: 2026-10-30

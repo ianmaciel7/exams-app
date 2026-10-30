@@ -24,6 +24,7 @@ const mocks = vi.hoisted(() => ({
   setTheme: vi.fn(),
   toastAdd: vi.fn(),
   currentUser: null as unknown,
+  locale: "en",
 }));
 
 vi.mock("next/navigation", () => ({
@@ -55,7 +56,7 @@ vi.mock("next-intl", () => ({
   hasLocale: (locales: readonly string[], value: unknown) =>
     typeof value === "string" && locales.includes(value),
   useTranslations: () => translate,
-  useLocale: () => "en",
+  useLocale: () => mocks.locale,
 }));
 
 vi.mock("next-themes", () => ({
@@ -109,6 +110,7 @@ vi.mock("@/components/ui/toast", () => ({
 describe("ProfileSectionClient", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mocks.locale = "en";
     mocks.getUI.mockReturnValue({
       get: () => ({
         auth: {
@@ -313,12 +315,24 @@ describe("ProfileSectionClient", () => {
 
   it("applies saved preferences from the user's document", async () => {
     mocks.currentUser = { uid: "user-123" };
+    mocks.locale = "es";
     mocks.readPreferences.mockResolvedValue({ locale: "es", theme: "dark" });
 
     render(<ProfileSectionClient />);
 
     await waitFor(() => expect(mocks.setTheme).toHaveBeenCalledWith("dark"));
     expect(mocks.readPreferences).toHaveBeenCalledWith("user-123");
+  });
+
+  it("synchronizes a saved Portuguese locale before revealing the profile", async () => {
+    mocks.currentUser = { uid: "user-123" };
+    mocks.readPreferences.mockResolvedValue({ locale: "pt-BR" });
+
+    const { container } = render(<ProfileSectionClient />);
+
+    await waitFor(() => expect(mocks.router.refresh).toHaveBeenCalledOnce());
+    expect(document.cookie).toContain("NEXT_LOCALE=pt-BR");
+    expect(container.querySelector('[data-slot="card"]')).toBeNull();
   });
 
   it("saves a changed theme preference and shows success toast", async () => {

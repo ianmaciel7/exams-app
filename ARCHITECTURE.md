@@ -93,20 +93,23 @@ commands and implementation conventions.
 
 ## Internationalization
 
-The internationalization architecture is 100% cookie-driven (`NEXT_LOCALE`)
-without `middleware.ts` and without a `[locale]` folder segment in the App
-Router. The application serves `src/app/page.tsx` directly at `/`; there are no
-localized URL route prefixes or proxy scripts. This is an explicit maintainer
-requirement recorded in [ADR 0004](docs/adr/0004-configure-internationalization.md).
+The internationalization architecture is cookie-preferred (`NEXT_LOCALE`) with
+an `Accept-Language` fallback. It has neither `middleware.ts` nor a `[locale]`
+folder segment in the App Router. The application serves `src/app/page.tsx`
+directly at `/`; there are no localized URL route prefixes or proxy scripts.
+This is an explicit maintainer requirement recorded in
+[ADR 0004](docs/adr/0004-configure-internationalization.md) and
+[ADR 0021](docs/adr/0021-resolve-locale-from-browser-preferences.md).
 An internally rewritten locale segment also
 violates this requirement; keeping only the browser URL unprefixed is insufficient.
 
 `src/i18n/routing.ts` defines `en`, `pt-BR`, and `es`, defaulting to `en`, and
 exports `localeCookie = "NEXT_LOCALE"` along with the `isLocale` type guard.
 `src/i18n/routing.test.ts` verifies this guard with property-based testing
-(`fast-check`). `src/i18n/request.ts` reads the cookie (or explicit request
-locale) and imports `src/messages/${locale}.json`, cleanly falling back to `en`
-if an invalid locale is received.
+(`fast-check`). `src/i18n/request.ts` prefers an explicit request locale, then
+the cookie, then the browser's `Accept-Language` header before importing
+`src/messages/${locale}.json`; it cleanly falls back to `en` if no supported
+locale is received.
 
 Message catalogs (`src/messages/*.json`) adhere to a structural testing
 contract in `src/messages/messages.test.ts`, which validates key parity across
