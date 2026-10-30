@@ -276,7 +276,7 @@ test("guest deep link returns to the protected page after sign-in", async ({
   expect(created.ok()).toBe(true);
 
   await page.goto("/profile?tab=security");
-  await expect(page).toHaveURL(/\\/sign-in\\?next=/);
+  await expect(page).toHaveURL((url) => url.pathname === "/sign-in" && url.searchParams.get("next") === "/profile?tab=security");
   expect(new URL(page.url()).searchParams.get("next")).toBe(
     "/profile?tab=security",
   );
@@ -285,7 +285,7 @@ test("guest deep link returns to the protected page after sign-in", async ({
   await page.locator("#password").fill(password);
   await page.getByRole("button", { name: "Sign In", exact: true }).click();
 
-  await expect(page).toHaveURL(/\\/profile\\?tab=security$/);
+  await expect(page).toHaveURL(`${authTestOrigin}/profile?tab=security`);
   await expect(page.getByLabel("Email", { exact: true })).toHaveValue(email);
 });
 
@@ -311,7 +311,7 @@ test("profile changes survive reload, sign-out and a new sign-in", async ({
   await page.getByRole("button", { name: "Sign In", exact: true }).click();
   await expect(page).toHaveURL("/");
   await page.getByRole("link", { name: "My profile" }).click();
-  await expect(page).toHaveURL(/\\/profile$/);
+  await expect(page).toHaveURL(`${authTestOrigin}/profile`);
 
   await page.getByLabel("Name", { exact: true }).fill(displayName);
   await page.getByLabel("Theme", { exact: true }).click();
@@ -346,7 +346,9 @@ test("profile changes survive reload, sign-out and a new sign-in", async ({
 
   await page.getByRole("link", { name: "Back to Home" }).click();
   await page.getByRole("button", { name: "Sign Out" }).click();
-  await expect(page.getByRole("link", { name: "Sign in", exact: true })).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "Sign in", exact: true }),
+  ).toBeVisible();
 
   await page.goto("/sign-in");
   await page.getByLabel("Email Address").fill(email);
