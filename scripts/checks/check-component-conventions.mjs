@@ -1033,6 +1033,7 @@ function checkComponentHook(component, source, report) {
     "useId",
     "useFormContext",
     "useWatch",
+    "useRender",
   ]);
   const orchestrationHooks = hooks.filter(
     (hook) => !presentationHooks.has(hook.name),

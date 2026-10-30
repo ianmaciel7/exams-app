@@ -5,8 +5,8 @@ import Link from "next/link";
 import type { ComponentProps } from "react";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
-import { GitTag } from "@/components/ui/extensions/git-tag";
 import { LoadingPrimitive } from "@/components/ui/extensions/loading-primitive";
+import { Version } from "@/components/ui/extensions/version";
 import { routes } from "@/lib/navigation";
 import { cn } from "@/lib/utils";
 import { useHomeSectionClient } from "../_hooks/use-home-section-client";
@@ -80,9 +80,11 @@ function HomeSectionClient({ className, ...props }: HomeSectionClientProps) {
           </HomeHeroActions>
         </HomeHero>
       </div>
-      <Badge className="mb-6 font-mono text-xs" variant="secondary">
-        <GitTag />
-      </Badge>
+      <Version
+        render={
+          <Badge className="mb-6 font-mono text-xs" variant="secondary" />
+        }
+      />
     </main>
   );
 }
