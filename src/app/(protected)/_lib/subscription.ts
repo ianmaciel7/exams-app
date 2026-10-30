@@ -33,7 +33,7 @@ function notifySessionTransition(
  * Observes Firebase Auth session state for protected routes.
  * Emits authenticated state changes and handles unauthenticated state transitions.
  */
-export function subscribeToProtectedAccess({
+export function subscribeToProtectedSession({
   onUnauthenticated,
   onAuthenticated,
   onError,

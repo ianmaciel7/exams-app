@@ -1,13 +1,13 @@
 import type { User } from "firebase/auth";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { subscribeToSession } from "@/lib/session";
-import { subscribeToProtectedAccess } from "./protected-access-subscription";
+import { subscribeToProtectedSession } from "./subscription";
 
 vi.mock("@/lib/session", () => ({
   subscribeToSession: vi.fn(),
 }));
 
-describe("subscribeToProtectedAccess", () => {
+describe("subscribeToProtectedSession", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -22,7 +22,7 @@ describe("subscribeToProtectedAccess", () => {
     const onAuthenticated = vi.fn();
     const onUnauthenticated = vi.fn();
 
-    subscribeToProtectedAccess({ onAuthenticated, onUnauthenticated });
+    subscribeToProtectedSession({ onAuthenticated, onUnauthenticated });
 
     authCallback?.({ uid: "user-abc" } as User);
 
@@ -40,7 +40,7 @@ describe("subscribeToProtectedAccess", () => {
     const onAuthenticated = vi.fn();
     const onUnauthenticated = vi.fn();
 
-    subscribeToProtectedAccess({ onAuthenticated, onUnauthenticated });
+    subscribeToProtectedSession({ onAuthenticated, onUnauthenticated });
 
     authCallback?.({ uid: "user-abc" } as User);
     authCallback?.({ uid: "user-abc" } as User);
@@ -58,7 +58,7 @@ describe("subscribeToProtectedAccess", () => {
     const onAuthenticated = vi.fn();
     const onUnauthenticated = vi.fn();
 
-    subscribeToProtectedAccess({ onAuthenticated, onUnauthenticated });
+    subscribeToProtectedSession({ onAuthenticated, onUnauthenticated });
 
     authCallback?.(null);
 
@@ -76,7 +76,7 @@ describe("subscribeToProtectedAccess", () => {
     const onAuthenticated = vi.fn();
     const onUnauthenticated = vi.fn();
 
-    subscribeToProtectedAccess({ onAuthenticated, onUnauthenticated });
+    subscribeToProtectedSession({ onAuthenticated, onUnauthenticated });
 
     authCallback?.(null);
     authCallback?.(null);
@@ -95,7 +95,11 @@ describe("subscribeToProtectedAccess", () => {
     const onUnauthenticated = vi.fn();
     const onError = vi.fn();
 
-    subscribeToProtectedAccess({ onAuthenticated, onUnauthenticated, onError });
+    subscribeToProtectedSession({
+      onAuthenticated,
+      onUnauthenticated,
+      onError,
+    });
 
     const testError = new Error("Auth service failure");
     errorCallback?.(testError);
@@ -114,7 +118,7 @@ describe("subscribeToProtectedAccess", () => {
     const onAuthenticated = vi.fn();
     const onUnauthenticated = vi.fn();
 
-    const unsubscribe = subscribeToProtectedAccess({
+    const unsubscribe = subscribeToProtectedSession({
       onAuthenticated,
       onUnauthenticated,
     });

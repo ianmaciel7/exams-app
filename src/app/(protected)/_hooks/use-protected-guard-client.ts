@@ -3,7 +3,7 @@ import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { recordUsage } from "@/lib/firebase/usage";
 import { getSignInUrl } from "@/lib/navigation";
-import { subscribeToProtectedAccess } from "../_lib/protected-access-subscription";
+import { subscribeToProtectedSession } from "../_lib/subscription";
 
 export function useProtectedGuardClient() {
   const t = useTranslations("Auth");
@@ -15,7 +15,7 @@ export function useProtectedGuardClient() {
   useEffect(() => {
     setError(null);
     try {
-      return subscribeToProtectedAccess({
+      return subscribeToProtectedSession({
         onUnauthenticated: () => {
           setActiveUserId(null);
           const destination = window.location.pathname + window.location.search;
