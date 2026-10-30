@@ -1,5 +1,5 @@
-import { RouteLoading } from "@/components/ui/extensions/route-loading";
+import { LoadingPrimitive } from "@/components/ui/extensions/loading-primitive";
 
 export default function Loading() {
-  return <RouteLoading />;
+  return <LoadingPrimitive />;
 }
