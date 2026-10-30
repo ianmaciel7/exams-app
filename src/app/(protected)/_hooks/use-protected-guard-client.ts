@@ -22,6 +22,7 @@ export function useProtectedGuardClient() {
           router.replace(getSignInUrl(destination));
         },
         onAuthenticated: (userId) => {
+          setError(null);
           setActiveUserId(userId);
         },
         onError: (cause) => {
