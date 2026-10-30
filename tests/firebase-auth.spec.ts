@@ -33,6 +33,17 @@ if (!project) {
   );
 }
 
+
+const firestoreEmulatorHost =
+  process.env.FIRESTORE_EMULATOR_HOST ||
+  process.env.NEXT_PUBLIC_FIRESTORE_EMULATOR_HOST ||
+  "127.0.0.1:8080";
+const firestoreEmulatorOrigin = new URL(
+  firestoreEmulatorHost.includes("://")
+    ? firestoreEmulatorHost
+    : `http://${firestoreEmulatorHost}`,
+).origin;
+
 const password = process.env.TEST_USER_PASSWORD;
 if (!password) {
   throw new Error(
@@ -250,6 +261,152 @@ test("saving the profile language keeps the unprefixed route and translates afte
     page.getByText(esMessages.Auth.personalInfoTitle, { exact: true }),
   ).toBeVisible();
   await expect(page).toHaveURL(`${authTestOrigin}/profile`);
+});
+
+
+test("guest deep link returns to the protected page after sign-in", async ({
+  page,
+  request,
+}) => {
+  const email = `return-${crypto.randomUUID()}@example.test`;
+  const created = await request.post(
+    `${emulator}/identitytoolkit.googleapis.com/v1/accounts:signUp?key=emulator-only`,
+    { data: { email, password, returnSecureToken: true } },
+  );
+  expect(created.ok()).toBe(true);
+
+  await page.goto("/profile?tab=security");
+  await expect(page).toHaveURL(/\\/sign-in\\?next=/);
+  expect(new URL(page.url()).searchParams.get("next")).toBe(
+    "/profile?tab=security",
+  );
+
+  await page.getByLabel("Email Address").fill(email);
+  await page.locator("#password").fill(password);
+  await page.getByRole("button", { name: "Sign In", exact: true }).click();
+
+  await expect(page).toHaveURL(/\\/profile\\?tab=security$/);
+  await expect(page.getByLabel("Email", { exact: true })).toHaveValue(email);
+});
+
+test("profile changes survive reload, sign-out and a new sign-in", async ({
+  page,
+  request,
+}) => {
+  const email = `persist-${crypto.randomUUID()}@example.test`;
+  const displayName = "Regression Journey User";
+  const created = await request.post(
+    `${emulator}/identitytoolkit.googleapis.com/v1/accounts:signUp?key=emulator-only`,
+    { data: { email, password, returnSecureToken: true } },
+  );
+  expect(created.ok()).toBe(true);
+  const account = (await created.json()) as {
+    idToken: string;
+    localId: string;
+  };
+
+  await page.goto("/sign-in");
+  await page.getByLabel("Email Address").fill(email);
+  await page.locator("#password").fill(password);
+  await page.getByRole("button", { name: "Sign In", exact: true }).click();
+  await expect(page).toHaveURL("/");
+  await page.getByRole("link", { name: "My profile" }).click();
+  await expect(page).toHaveURL(/\\/profile$/);
+
+  await page.getByLabel("Name", { exact: true }).fill(displayName);
+  await page.getByLabel("Theme", { exact: true }).click();
+  await page.getByRole("option", { name: "Dark", exact: true }).click();
+  await page.getByRole("button", { name: "Save profile", exact: true }).click();
+
+  // The backend is an independent oracle: a toast or mocked callback is not
+  // sufficient evidence that Firestore persisted the user's preferences.
+  const documentUrl =
+    `${firestoreEmulatorOrigin}/v1/projects/${project}/databases/(default)/documents/users/${account.localId}`;
+  await expect
+    .poll(
+      async () => {
+        const response = await request.get(documentUrl, {
+          headers: { Authorization: `Bearer ${account.idToken}` },
+        });
+        if (!response.ok()) return null;
+        const body = (await response.json()) as {
+          fields?: { theme?: { stringValue?: string } };
+        };
+        return body.fields?.theme?.stringValue ?? null;
+      },
+      { message: "theme must be persisted in Firestore", timeout: 15_000 },
+    )
+    .toBe("dark");
+
+  await page.reload();
+  await expect(page.getByLabel("Name", { exact: true })).toHaveValue(
+    displayName,
+  );
+  await expect(page.getByLabel("Theme", { exact: true })).toContainText("Dark");
+
+  await page.getByRole("link", { name: "Back to Home" }).click();
+  await page.getByRole("button", { name: "Sign Out" }).click();
+  await expect(page.getByRole("link", { name: "Sign in", exact: true })).toBeVisible();
+
+  await page.goto("/sign-in");
+  await page.getByLabel("Email Address").fill(email);
+  await page.locator("#password").fill(password);
+  await page.getByRole("button", { name: "Sign In", exact: true }).click();
+  await page.getByRole("link", { name: "My profile" }).click();
+  await expect(page.getByLabel("Name", { exact: true })).toHaveValue(
+    displayName,
+  );
+  await expect(page.getByLabel("Theme", { exact: true })).toContainText("Dark");
+});
+
+test("Firestore user preferences are private to their owner", async ({
+  request,
+}) => {
+  const createAccount = async (prefix: string) => {
+    const response = await request.post(
+      `${emulator}/identitytoolkit.googleapis.com/v1/accounts:signUp?key=emulator-only`,
+      {
+        data: {
+          email: `${prefix}-${crypto.randomUUID()}@example.test`,
+          password,
+          returnSecureToken: true,
+        },
+      },
+    );
+    expect(response.ok()).toBe(true);
+    return (await response.json()) as { idToken: string; localId: string };
+  };
+
+  const owner = await createAccount("owner");
+  const stranger = await createAccount("stranger");
+  const documentUrl =
+    `${firestoreEmulatorOrigin}/v1/projects/${project}/databases/(default)/documents/users/${owner.localId}`;
+
+  const written = await request.patch(documentUrl, {
+    headers: { Authorization: `Bearer ${owner.idToken}` },
+    data: {
+      fields: {
+        locale: { stringValue: "en" },
+        theme: { stringValue: "dark" },
+      },
+    },
+  });
+  expect(written.ok(), "owner must be able to save preferences").toBe(true);
+
+  const ownerRead = await request.get(documentUrl, {
+    headers: { Authorization: `Bearer ${owner.idToken}` },
+  });
+  expect(ownerRead.ok(), "owner must be able to read preferences").toBe(true);
+
+  const strangerRead = await request.get(documentUrl, {
+    headers: { Authorization: `Bearer ${stranger.idToken}` },
+  });
+  expect(strangerRead.status(), "other accounts must not read preferences").toBe(
+    403,
+  );
+
+  const guestRead = await request.get(documentUrl);
+  expect(guestRead.status(), "unauthenticated clients must be denied").toBe(403);
 });
 
 const accessibilityTags = [
