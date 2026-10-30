@@ -1,7 +1,7 @@
 "use client";
 
 import type { User } from "firebase/auth";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getPendingSignOut } from "@/lib/auth";
 import { subscribeToSession } from "@/lib/session";
 
@@ -17,14 +17,15 @@ export function useHomeSession() {
     isLoading: true,
     user: null,
   });
+  const revisionRef = useRef(0);
+
   useEffect(() => {
-    let active = true;
-    let revision = 0;
+    const lifetime = new AbortController();
 
     try {
       const unsubscribe = subscribeToSession(
         (user) => {
-          const current = ++revision;
+          const current = ++revisionRef.current;
           const next: HomeSession = {
             isError: false,
             isLoading: false,
@@ -36,7 +37,9 @@ export function useHomeSession() {
           // sign-out. A rapid navigation could otherwise restore stale auth.
           if (pending) {
             const finish = () => {
-              if (active && revision === current) setSession(next);
+              if (!lifetime.signal.aborted && revisionRef.current === current) {
+                setSession(next);
+              }
             };
             void pending.then(finish, finish);
           } else {
@@ -44,14 +47,14 @@ export function useHomeSession() {
           }
         },
         () => {
-          revision++;
-          if (active) {
+          revisionRef.current++;
+          if (!lifetime.signal.aborted) {
             setSession({ isError: true, isLoading: false, user: null });
           }
         },
       );
       return () => {
-        active = false;
+        lifetime.abort();
         unsubscribe();
       };
     } catch {
