@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { getTranslation } from "@firebase-oss/ui-core";
-import { useUI, PolicyContext, type PolicyURL } from "@firebase-oss/ui-react";
+import { useUI, PolicyContext } from "@firebase-oss/ui-react";
 import { useContext } from "react";
 
 export function Policies() {
@@ -16,29 +16,28 @@ export function Policies() {
   const parts = termsAndPrivacyText.split(/(\{tos\}|\{privacy\})/);
 
   const className = cn("hover:underline font-semibold");
-  const renderLink = (key: number, url: PolicyURL, label: string) =>
-    onNavigate ? (
-      <button key={key} type="button" className={className} onClick={() => onNavigate(url)}>
-        {label}
-      </button>
-    ) : (
-      <a key={key} target="_blank" rel="noopener noreferrer" className={className} href={url.toString()}>
-        {label}
-      </a>
-    );
+  const policyLinks = new Map([
+    ["{tos}", { url: termsOfServiceUrl, label: getTranslation(ui, "labels", "termsOfService") }],
+    ["{privacy}", { url: privacyPolicyUrl, label: getTranslation(ui, "labels", "privacyPolicy") }],
+  ]);
 
   return (
     <div className="text-text-muted text-center text-xs">
       {parts.map((part: string, index: number) => {
-        if (part === "{tos}") {
-          return renderLink(index, termsOfServiceUrl, getTranslation(ui, "labels", "termsOfService"));
+        const link = policyLinks.get(part);
+        if (!link) {
+          return <span key={index}>{part}</span>;
         }
 
-        if (part === "{privacy}") {
-          return renderLink(index, privacyPolicyUrl, getTranslation(ui, "labels", "privacyPolicy"));
-        }
-
-        return <span key={index}>{part}</span>;
+        return onNavigate ? (
+          <button key={index} type="button" className={className} onClick={() => onNavigate(link.url)}>
+            {link.label}
+          </button>
+        ) : (
+          <a key={index} target="_blank" rel="noopener noreferrer" className={className} href={link.url.toString()}>
+            {link.label}
+          </a>
+        );
       })}
     </div>
   );

@@ -449,7 +449,7 @@ const PromptInputActionAddAttachments = ({
 }: PromptInputActionAddAttachmentsProps) => {
   const attachments = usePromptInputAttachments();
 
-  const handleSelect = useCallback(
+  const handleClick = useCallback(
     (
       e: Parameters<
         NonNullable<PromptInputActionAddAttachmentsProps["onClick"]>
@@ -465,7 +465,7 @@ const PromptInputActionAddAttachments = ({
   );
 
   return (
-    <DropdownMenuItem {...props} onClick={handleSelect}>
+    <DropdownMenuItem {...props} onClick={handleClick}>
       <ImageIcon className="mr-2 size-4" /> {label}
     </DropdownMenuItem>
   );
@@ -484,7 +484,7 @@ const PromptInputActionAddScreenshot = ({
 }: PromptInputActionAddScreenshotProps) => {
   const attachments = usePromptInputAttachments();
 
-  const handleSelect = useCallback(
+  const handleClick = useCallback(
     async (
       event: Parameters<
         NonNullable<PromptInputActionAddScreenshotProps["onClick"]>
@@ -514,7 +514,7 @@ const PromptInputActionAddScreenshot = ({
   );
 
   return (
-    <DropdownMenuItem {...props} onClick={handleSelect}>
+    <DropdownMenuItem {...props} onClick={handleClick}>
       <Monitor className="mr-2 size-4" />
       {label}
     </DropdownMenuItem>
