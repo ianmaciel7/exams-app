@@ -2,6 +2,17 @@ import { useEffect } from "react";
 import { getFirebaseConfig } from "@/lib/firebase/config";
 import { subscribeToSession } from "@/lib/session";
 
+function observeAuthSession(onChange: (uid: string | null) => void) {
+  try {
+    return subscribeToSession((user) => onChange(user?.uid ?? null));
+  } catch (error) {
+    // The auth provider owns the user-visible configuration error.
+    console.error("Firebase session worker subscription failed", error);
+    return () => {};
+  }
+}
+
+
 /** Registers the Firebase worker that forwards refreshed ID tokens to SSR requests. */
 export function useFirebaseAuthSessionBridgeClient() {
   useEffect(() => {
@@ -36,19 +47,10 @@ export function useFirebaseAuthSessionBridgeClient() {
         console.error("Firebase session worker registration failed", error);
       });
 
-    const unsubscribe = (() => {
-      try {
-        return subscribeToSession((user) => {
-          session.uid = user?.uid ?? null;
-          postSession(navigator.serviceWorker.controller);
-        });
-      } catch (error) {
-        // Missing Firebase configuration is reported by the auth provider.
-        // The optional server-session bridge must not crash the app.
-        console.error("Firebase session worker subscription failed", error);
-        return () => {};
-      }
-    })();
+    const unsubscribe = observeAuthSession((uid) => {
+      session.uid = uid;
+      postSession(navigator.serviceWorker.controller);
+    });
     const onControllerChange = () =>
       postConfig(navigator.serviceWorker.controller);
     navigator.serviceWorker.addEventListener(
