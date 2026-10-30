@@ -71,7 +71,7 @@ outside pnpm and are only needed for the commands noted next to them:
 | Node.js `^22.22.1 \|\| ^24.5.0` | Everything (`engines` in `package.json`) | `node --version` |
 | Git | Biome VCS integration, hooks, Fallow hotspots | `git --version` |
 | `gh` | `setup:github` and GitHub issue tracking | `gh --version` |
-| Playwright browsers | `test:browser`, `test:e2e`, `test:a11y`, `test:visual` | `pnpm exec playwright install chromium` |
+| Playwright browsers | `test:browser`, `test:e2e`, `test:a11y`, `test:mobile`, `test:visual`, `check:lighthouse` | `pnpm exec playwright install chromium` |
 | pre-commit | Repository-integrity checks in the Git hook | `pre-commit --version` |
 | Semgrep | `check:security` | `semgrep --version` |
 | Gitleaks | `check:secrets` | `gitleaks version` |
@@ -126,6 +126,7 @@ project skills are tracked in `.agents/skills/` and `skills-lock.json`.
 | `pnpm test:e2e` | Functional Playwright specs (excludes `@a11y` and `@visual`). |
 | `pnpm test:auth` | Run Playwright's `auth-emulator` project with Firebase Auth, Firestore, and Functions via `firebase emulators:exec`; install the separate Functions dependencies first. |
 | `pnpm test:a11y` | Axe accessibility scans. |
+| `pnpm test:mobile` | Playwright `mobile` project (Pixel 7 emulation): viewport, touch targets, field font size, autofill, reflow, text spacing, reduced motion, and axe on public routes. |
 | `pnpm test:visual` | Compare screenshots with baselines. Never rewrites them. Skipped locally; runs in CI (or with `PLAYWRIGHT_VISUAL=1`). |
 | `pnpm test:visual:update` | Rewrite baselines. Run it through the **Update visual baselines** workflow, not on your machine. |
 | `pnpm test:mutation` | Stryker on selected logic (manual dispatch only in hosted CI until verified; see limitations). |
@@ -157,6 +158,7 @@ project skills are tracked in `.agents/skills/` and `skills-lock.json`.
 | `pnpm analyze:size` | Production build, then Size Limit budgets. |
 | `pnpm analyze:bundle` | Next.js bundle analyzer. |
 | `pnpm analyze:lighthouse` | Lighthouse report against a running server. |
+| `pnpm check:lighthouse` | Test the budget evaluator, then run Lighthouse's mobile profile on `/` and `/sign-in` (starting `pnpm start` when nothing serves port 3000) and fail below the budgets in `scripts/checks/check-lighthouse.mjs`. Needs a production build; CI and Firebase CD run it after `pnpm verify:e2e`. |
 | `pnpm analyze:lighthouse:ci` | Same, headless with `--no-sandbox` and an `.html` report path; used by the scheduled workflow. |
 
 ### Verification entry points

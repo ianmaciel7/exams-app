@@ -59,6 +59,9 @@ rubric, manual review, and failure follow-up.
 | Property-based | Inside unit tests, with `fast-check` | Vitest `unit` | `pnpm test` | Pure logic with a large input space, such as `isLocale`. |
 | Browser component | `src/**/*.browser.test.tsx` | Vitest `browser` project, Chromium | `pnpm test:browser` | Behavior that needs a real browser: responsive breakpoints, container queries (`@container`), focus, real events. |
 | End-to-end / Responsiveness | `tests/*.spec.ts`, `tests/responsive.spec.ts` | Playwright | `pnpm test:e2e` | User journeys and responsive layout against a production build. `tests/responsive.spec.ts` covers multi-viewport matrix (320px, 390px, 768px, 1280px), horizontal overflow prevention (`scrollWidth <= clientWidth`), and WCAG 2.2 SC 2.5.8 touch target compliance. |
+| Mobile device | `tests/mobile.spec.ts` | Playwright `mobile` project (Pixel 7: `isMobile`, `hasTouch`, coarse pointer) | `pnpm test:mobile` | Real mobile emulation of `/`, `/sign-in`, `/register`, and `/forgot-password`: meta viewport and manifest, axe WCAG A/AA, one `h1`, no horizontal scroll in portrait and landscape, WCAG 1.4.12 text spacing, 44x44px touch targets (Apple HIG, WCAG 2.5.5), form fields of at least 16px so iOS does not zoom, autofill tokens (WCAG 1.3.5), and `prefers-reduced-motion`. |
+| Platform best practices | `tests/best-practices.spec.ts` | Playwright | `pnpm test:e2e` | Security headers from the Next.js `headers` guide, no `X-Powered-By`, the web app manifest, `lang`, charset, and meta description. |
+| Lighthouse mobile budgets | `scripts/checks/check-lighthouse.mjs` | Lighthouse (default mobile profile) | `pnpm check:lighthouse` | Fails `/` or `/sign-in` below accessibility 95, best practices 90, SEO 90, performance 40 (a regression floor), or CLS above 0.1. Reports go to `reports/lighthouse/`. |
 | Accessibility | `tests/a11y.spec.ts`, titled `@a11y` | Playwright and axe-core | `pnpm test:a11y` | Automated WCAG 2.0, 2.1, and 2.2 A/AA scans (`wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`, `wcag22aa`) across desktop (`1280x800`) and mobile (`390x844`) viewports in light and dark mode. |
 | Visual regression | `tests/visual.spec.ts`, titled `@visual` | Playwright screenshots (CI only) | `pnpm test:visual` | Layout and theme changes in rendered pages. |
 | Firebase Auth and profile | `tests/firebase-auth.spec.ts` | Playwright with Firebase Auth, Firestore and Functions emulators | CI `auth-emulator` job | Sign-in, registration, recovery, profile, and authenticated axe checks, including the `recordUsage` callable guard. Not included in ordinary `verify:e2e`. |
@@ -255,7 +258,7 @@ Cover the variants and states a reviewer needs to see, not every prop.
 | --- | --- | --- |
 | `static` | Biome 2.5, isolated Biome 2.6 plugin pilot, typecheck, coverage, architecture, Knip, jscpd, ast-grep, route/component/responsiveness guards, CSpell, markdownlint, Fallow, React Doctor | `pnpm verify:static` plus CI-only pilot |
 | `build` | Vitest Browser Mode, production build with size budgets, Ladle production build | `pnpm verify:build` |
-| `e2e` | Playwright functional, accessibility, and visual specs in the pinned Playwright container | `pnpm verify:e2e` |
+| `e2e` | Playwright functional, desktop and mobile (Pixel 7) projects, accessibility, and visual specs, then the Lighthouse mobile budgets, in the pinned Playwright container with a placeholder Firebase web config so the auth forms render | `pnpm verify:e2e && pnpm check:lighthouse` |
 | `auth-emulator` | Local demo Firebase Auth, Firestore, and Functions; auth/profile Playwright E2E and authenticated axe checks | `pnpm test:auth` after `npm ci --prefix functions --ignore-scripts` (with emulator environment variables) |
 | `security` | Semgrep rule tests and scan (`--error`), Gitleaks, actionlint, zizmor, `pnpm audit`, pre-commit | `pnpm verify:security` |
 | `pr-title` | Conventional Commit PR title (pull requests only) | `echo "feat: title" \| pnpm exec commitlint` |
@@ -352,8 +355,9 @@ not yet on a hosted runner; check the first scheduled run.
   `.github/dependabot-mirror/` holds a Dockerfile and a `requirements.txt` that
   receive those bumps. Copy a Playwright image bump into `ci.yml` and
   `visual-baselines.yml` by hand. Gitleaks and actionlint versions stay manual.
-- Firebase CD runs `pnpm verify:fast` before a stable tag deploys Functions,
-  security rules, and an App Hosting rollout. Configure its protected inputs as
+- Firebase CD runs the `browser-checks` job (`pnpm verify:e2e` and
+  `pnpm check:lighthouse`) and then `pnpm verify:fast` before a stable tag
+  deploys Functions, security rules, and an App Hosting rollout. Configure its protected inputs as
   described in [Firebase continuous delivery](docs/firebase-cd.md); local and
   CI emulator suites remain isolated from production.
 - On Windows, set `PYTHONUTF8=1` when running Semgrep locally, or it can exit

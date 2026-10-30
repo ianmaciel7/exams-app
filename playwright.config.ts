@@ -47,12 +47,22 @@ export default defineConfig({
     screenshot: "only-on-failure",
     trace: "on-first-retry",
   },
-  projects: [
-    {
-      name: authEmulator ? "auth-emulator" : "chromium",
-      use: { ...devices["Desktop Chrome"] },
-    },
-  ],
+  projects: authEmulator
+    ? [{ name: "auth-emulator", use: { ...devices["Desktop Chrome"] } }]
+    : [
+        {
+          name: "chromium",
+          testIgnore: ["**/firebase-auth.spec.ts", "**/mobile.spec.ts"],
+          use: { ...devices["Desktop Chrome"] },
+        },
+        {
+          // Real mobile emulation (isMobile, hasTouch, coarse pointer), not a
+          // narrow desktop window. Pixel 7 runs on the Chromium binary.
+          name: "mobile",
+          testMatch: "**/mobile.spec.ts",
+          use: { ...devices["Pixel 7"] },
+        },
+      ],
   webServer: authEmulator
     ? {
         command: `pnpm dev --hostname ${authTestHost} --port 3100`,

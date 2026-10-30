@@ -53,8 +53,11 @@ administrator access is for setup and troubleshooting, not normal releases.
 3. On the Releases page of the repository, create a release for the new tag
    (`vX.Y.Z`) targeting the merged commit, write the notes, and publish it.
 
-The workflow validates the tag against `package.json` and `apphosting.yaml`, runs
-`pnpm verify:fast`, deploys Functions and rules, turns off the Cloud Run invoker check
+A `browser-checks` job first runs `pnpm verify:e2e` (desktop and Pixel 7 mobile
+projects, axe, visual) and `pnpm check:lighthouse` on the release commit in the
+pinned Playwright container; the deploy job needs it, so a failure stops the
+release before anything reaches production. The deploy job then validates the tag
+against `package.json` and `apphosting.yaml`, runs `pnpm verify:fast`, deploys Functions and rules, turns off the Cloud Run invoker check
 on the callable Functions so browsers can call them ([ADR 0016](adr/0016-disable-invoker-iam-check-for-callable-functions.md)),
 then requests an App Hosting rollout for that exact commit. Next.js embeds `NEXT_PUBLIC_GIT_TAG` in the browser bundle at
 build time, so the app shows the version that was released.
