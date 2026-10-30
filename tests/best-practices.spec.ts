@@ -37,3 +37,12 @@ test("describes the page for search and link previews", async ({ page }) => {
   );
   await expect(page.locator("meta[charset], meta[charSet]")).toHaveCount(1);
 });
+
+test("applies the Base UI portal setup to the document", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator("body")).toHaveCSS("position", "relative");
+  await expect(page.locator('body > [data-slot="app-root"]')).toHaveCSS(
+    "isolation",
+    "isolate",
+  );
+});
