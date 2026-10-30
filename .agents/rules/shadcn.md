@@ -31,6 +31,9 @@ context; it does not replace or duplicate the upstream rule examples.
   - **`ToggleGroup` & `Accordion`**: Uses a boolean `multiple` prop rather than `type="single" | "multiple"`.
   - **`Slider`**: Uses a scalar `value: number` rather than an array `value: number[]`.
   - **Toast**: Use the installed Base UI toast (`@/components/ui/toast`), not `sonner`.
+  - **Menu items**: Activate through `onClick`; Radix `onSelect` never fires. Use `closeOnClick={false}` to keep the menu open.
+  - **State selectors**: Base UI never sets Radix `data-state`. Use presence attributes such as `data-open`, `data-closed`, `data-checked`, `data-pressed`, `data-active` (Tabs), `data-panel-open` (Collapsible trigger), and Base UI CSS variables such as `--transform-origin`, not `--radix-*`.
+  - **Enforcement**: The `.ast-grep/rules/base-ui/` rules check these differences in owned components (`src/components/**`, including `ui/extensions`, and `src/app/**/_components/**`) through `pnpm check:structure`. Shadcn copies in `src/components/ui/*.tsx` are excluded; put customized UI in `src/components/ui/extensions/` instead of editing them. See the [custom rule registry](../../TOOLING.md#custom-rule-registry).
 - **Default Presets**: Recognized CLI presets include `nova`, `vega`, `maia`, `lyra`, `mira`, `luma`, `sera`, and `rhea`.
 - When a lookup fails, report it and use accessible official documentation or
   the installed source. Do not claim an unavailable CLI or network check passed.

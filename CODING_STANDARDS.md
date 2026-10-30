@@ -361,7 +361,9 @@ use the CLI workflow in [TOOLING.md](TOOLING.md#shadcnui-cli-workflow). Base UI
 uses `render` and presence state attributes; Radix `asChild` and
 `data-state` examples do not establish the local API. For navigation, apply
 `buttonVariants` to a real anchor or Link instead of rendering an anchor
-through Base UI Button, which supplies button semantics.
+through Base UI Button, which supplies button semantics. The
+`.ast-grep/rules/base-ui/` rules enforce these Base UI contracts in owned
+components; see the [custom rule registry](TOOLING.md#custom-rule-registry).
 
 Keep Select items inside `SelectGroup`, menu items in the corresponding group,
 and Tabs triggers inside `TabsList`. Dialog, Sheet, and Drawer need an
