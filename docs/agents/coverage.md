@@ -41,7 +41,7 @@ root index. These counts describe document inventory, including section indexes.
 | Metadata, viewport, OG images, robots, sitemap, manifests | [routes](../../.agents/rules/routes.md), installed file-convention/API reference | Individual APIs consulted before use |
 | Proxy, redirects, rewrites | [routes](../../.agents/rules/routes.md), [Security](../../SECURITY.md) | No Proxy implementation claimed or required |
 | Authentication, data security, CSP, environment variables | [auth](../../.agents/rules/auth.md), [Security](../../SECURITY.md), [Tooling](../../TOOLING.md) | Preserve actual access and environment boundaries |
-| Internationalization | [Architecture](../../ARCHITECTURE.md#internationalization), [Coding standards](../../CODING_STANDARDS.md#internationalization) | Existing cookie-only locale decision |
+| Internationalization | [Architecture](../../ARCHITECTURE.md#internationalization), [Coding standards](../../CODING_STANDARDS.md#internationalization) | Cookie-preferred locale selection with browser fallback |
 | Testing, accessibility, responsive behavior | [Testing](../../TESTING.md), [Design](../../DESIGN.md) | Existing owners; automatic checks have documented limits |
 | Analytics, instrumentation, OpenTelemetry, debugging | [Architecture](../../ARCHITECTURE.md), [Tooling](../../TOOLING.md), [Testing](../../TESTING.md) | Actual instrumentation exists; other integrations conditional |
 | Building, deployment, self-hosting, static export, production | [README](../../README.md), [Tooling](../../TOOLING.md), [Security](../../SECURITY.md) | Consult installed deployment guides before changes |

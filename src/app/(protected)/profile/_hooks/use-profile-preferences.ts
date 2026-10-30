@@ -1,9 +1,11 @@
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "@/i18n/navigation";
 import type { Locale } from "@/lib/locale";
 import type { ThemePreference } from "@/lib/theme";
 import { readProfile } from "../_lib/data";
 import type { ProfileValues } from "../_lib/definitions";
+import { syncSavedLocale } from "../_lib/locale-sync";
 
 type PreferencesState = {
   error: string | null;
@@ -18,6 +20,7 @@ export function useProfilePreferences(
   setTheme: (theme: ThemePreference) => void,
 ) {
   const t = useTranslations("Auth");
+  const router = useRouter();
   const savedValuesRef = useRef<ProfileValues | null>(null);
 
   const [preferences, setPreferences] = useState<PreferencesState | null>(null);
@@ -33,7 +36,12 @@ export function useProfilePreferences(
 
     void readProfile(uid, activeLocale, () => active)
       .then((result) => {
-        if (!active || !result) return;
+        if (
+          !active ||
+          !result ||
+          syncSavedLocale(result.values.locale, activeLocale, router.refresh)
+        )
+          return;
         savedValuesRef.current = result.values;
         setPreferences({
           error: null,
@@ -57,7 +65,7 @@ export function useProfilePreferences(
     return () => {
       active = false;
     };
-  }, [uid, activeLocale, setTheme, t]);
+  }, [uid, activeLocale, router, setTheme, t]);
 
   return { current, defaultValues, preferencesReady, savedValuesRef };
 }
