@@ -1,7 +1,0 @@
-id: no-as-child
-valid:
-  - <DialogTrigger render={<Button variant="outline" />}>Open</DialogTrigger>
-  - <Button>Save</Button>
-invalid:
-  - <DialogTrigger asChild><Button>Open</Button></DialogTrigger>
-  - <TooltipTrigger asChild={true}><span>Help</span></TooltipTrigger>

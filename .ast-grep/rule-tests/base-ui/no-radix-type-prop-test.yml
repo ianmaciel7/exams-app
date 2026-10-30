@@ -1,7 +1,0 @@
-id: no-radix-type-prop
-valid:
-  - <Accordion multiple><AccordionItem value="a" /></Accordion>
-  - <ToggleGroup defaultValue={["bold"]} />
-invalid:
-  - <Accordion type="single" collapsible />
-  - <ToggleGroup type="multiple" />

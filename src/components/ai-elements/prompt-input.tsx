@@ -444,6 +444,7 @@ type PromptInputActionAddAttachmentsProps = ComponentProps<
 
 const PromptInputActionAddAttachments = ({
   label = "Add photos or files",
+  onClick,
   ...props
 }: PromptInputActionAddAttachmentsProps) => {
   const attachments = usePromptInputAttachments();
@@ -454,10 +455,13 @@ const PromptInputActionAddAttachments = ({
         NonNullable<PromptInputActionAddAttachmentsProps["onClick"]>
       >[0],
     ) => {
-      e.preventDefault();
+      onClick?.(e);
+      if (e.defaultPrevented) {
+        return;
+      }
       attachments.openFileDialog();
     },
-    [attachments],
+    [onClick, attachments],
   );
 
   return (
