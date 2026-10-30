@@ -28,6 +28,7 @@ original date. Read current operational details in the
 | [0017](0017-restrict-sign-in-to-an-email-allowlist.md) | Accepted | Auth blocking functions refuse addresses outside an untracked allowlist; admin addresses get the admin role |
 | [0018](0018-cover-blocking-functions-in-the-release-deploy.md) | Accepted | The release deploy disables the invoker check on the blocking functions in their own region and passes `--force` for the artifact cleanup policy |
 | [0019](0019-register-blocking-functions-in-terraform.md) | Accepted | Terraform registers the Auth blocking function triggers in the Identity Platform config |
+| [0020](0020-grant-app-hosting-firebase-auth-viewer.md) | Accepted | The App Hosting runtime account holds the read-only Firebase Auth viewer role so revocation-aware token verification works |
 
 ## Current operational clarifications
 

@@ -31,6 +31,7 @@
     "restrictsignup",
     "setuserrole",
     "firebaseapphosting",
+    "firebaseauth",
     "serviceusage",
     "apphosting",
     "Eventarc",

@@ -129,8 +129,8 @@ project skills are tracked in `.agents/skills/` and `skills-lock.json`.
 | `pnpm test:visual` | Compare screenshots with baselines. Never rewrites them. Skipped locally; runs in CI (or with `PLAYWRIGHT_VISUAL=1`). |
 | `pnpm test:visual:update` | Rewrite baselines. Run it through the **Update visual baselines** workflow, not on your machine. |
 | `pnpm test:mutation` | Stryker on selected logic (manual dispatch only in hosted CI until verified; see limitations). |
-| `pnpm emulator` | Start local Firebase Emulator Suite importing `./emulator-data` and exporting on exit. |
-| `pnpm emulator:export` | Export running emulator state to `./emulator-data` (`firebase emulators:export ./emulator-data --force`). |
+| `pnpm emulator` | Start the isolated `demo-test` Firebase Emulator Suite, importing `./emulator-data` and exporting on exit. |
+| `pnpm emulator:export` | Export running `demo-test` emulator state to `./emulator-data` (`firebase emulators:export --project demo-test ./emulator-data --force`). |
 | `pnpm emulator:clear` | Clear all accounts from the Firebase Auth Emulator (`node scripts/emulator/clear.mjs`). |
 | `pnpm ladle` / `pnpm ladle:build` | Serve or build the component workbench (`reports/ladle`). |
 | `pnpm check:architecture` | dependency-cruiser. |
@@ -145,6 +145,8 @@ project skills are tracked in `.agents/skills/` and `skills-lock.json`.
 | `pnpm check:docs` | Validate owned Markdown links and heading anchors, historical ADR source mappings, and the installed skill inventory; includes regression tests and runs in fast/static verification. |
 | `pnpm check:adr` | Validate the decision-record index, numbering, headings, and that `infra/` has a Terraform ADR; includes regression tests and runs in fast/static verification. |
 | `pnpm check:release` | Validate that the package version and the App Hosting release tag agree; includes regression tests and runs in fast/static verification. |
+| `pnpm check:app-hosting-auth-iam` | Validate that the App Hosting runtime account retains its least-privilege Firebase Auth Viewer binding, required by revocation-aware Firebase Admin token verification. Includes valid and invalid Terraform fixtures and runs in fast/static verification. |
+| `pnpm check:emulator-snapshot` | Validate `demo-test` emulator commands, exported directories, and fictional Auth seed identities; includes valid and invalid fixtures and runs in fast/static verification. |
 | `pnpm check:spelling` / `pnpm check:markdown` | CSpell / markdownlint. |
 | `pnpm check:security` / `pnpm check:security:rules` | Semgrep scan of `src` (fails on findings) / tests of the Semgrep rules. Run inside a Git work tree. |
 | `pnpm check:secrets` / `pnpm audit` | Gitleaks / dependency audit. |
@@ -578,9 +580,9 @@ implement them in `functions/`, never in `src/lib/firebase/client.ts`. See
 interactive local development, run `pnpm dev` with the emulator variables in `.env`.
 The operational commands for the Firebase Emulator Suite are:
 
-- `pnpm emulator`: starts the local Emulator Suite with `--import=./emulator-data --export-on-exit`. The Emulator Suite UI is
+- `pnpm emulator`: starts the isolated `demo-test` Emulator Suite with `--import=./emulator-data --export-on-exit`. The Emulator Suite UI is
   accessible at `http://127.0.0.1:4000`.
-- `pnpm emulator:export` (`firebase emulators:export ./emulator-data --force`): saves current emulator state into `./emulator-data`.
+- `pnpm emulator:export` (`firebase emulators:export --project demo-test ./emulator-data --force`): saves current emulator state into `./emulator-data`.
 - `pnpm emulator:clear` (`node scripts/emulator/clear.mjs`): clears all accounts in the emulator.
 
 See [Firebase setup](https://firebase.google.com/docs/auth/web/start) and

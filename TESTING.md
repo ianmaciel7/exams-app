@@ -487,6 +487,10 @@ requirements and coverage thresholds intact while reporting those limitations.
 
 ## React rules and lifecycle verification
 
+Protected-route lifecycle tests must verify that a repeated Firebase Auth session
+emission records screen usage at most once per user and does not replace visible
+content with a loading or telemetry-error state.
+
 The native React configuration suite lives in
 `.biome/rules/react/native-rules.test.ts`. It verifies blocking diagnostics for
 hook order/dependencies, nested component identity, direct prop assignment,
@@ -541,6 +545,8 @@ Next.js build and a deployed Cloud Logging smoke test remain separate checks; mo
 prove provider ingestion or IAM configuration. Native SWC loading failures can
 prevent Next.js type generation and leave `LayoutProps` unresolved in TypeScript;
 report the environment failure rather than treating those checks as passed.
+
+`pnpm check:app-hosting-auth-iam` statically validates the Terraform binding that permits the App Hosting runtime account to read Firebase Auth users for revocation-aware token verification. Its Node test fixtures cover the intended Viewer binding and reject both a missing binding and the broader Admin role. The check runs in `verify:fast` and `verify:static`; after an infrastructure apply, validate an authenticated protected route against the deployed service.
 
 ## Review finding regressions
 

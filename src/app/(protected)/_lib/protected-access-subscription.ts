@@ -6,7 +6,6 @@ type AccessSubscriptionOptions = {
   onReset: () => void;
   onUnauthenticated: () => void;
   onReady: () => void;
-  onError: () => void;
 };
 
 export function subscribeToProtectedAccess({
@@ -14,26 +13,22 @@ export function subscribeToProtectedAccess({
   onReset,
   onUnauthenticated,
   onReady,
-  onError,
 }: AccessSubscriptionOptions) {
   let active = true;
-  let revision = 0;
+  let activeUserId: string | null = null;
   const unsubscribe = subscribeToSession((user) => {
     if (!active) return;
-    const currentRevision = ++revision;
-    onReset();
     if (!user) {
+      activeUserId = null;
+      onReset();
       onUnauthenticated();
       return;
     }
-    void recordUsage({ type: "screen_view", name: pathname }).then(
-      () => {
-        if (active && revision === currentRevision) onReady();
-      },
-      () => {
-        if (active && revision === currentRevision) onError();
-      },
-    );
+    if (activeUserId === user.uid) return;
+    activeUserId = user.uid;
+    onReset();
+    onReady();
+    void recordUsage({ type: "screen_view", name: pathname }).catch(() => {});
   });
   return () => {
     active = false;
