@@ -18,6 +18,19 @@ function readBearerToken(requestHeaders: Headers) {
     : undefined;
 }
 
+// Codes `verifyIdToken` uses when the token itself is the problem.
+const TOKEN_REJECTION_CODES = new Set([
+  "auth/argument-error",
+  "auth/id-token-expired",
+  "auth/id-token-revoked",
+  "auth/user-disabled",
+]);
+
+function isTokenRejection(error: unknown) {
+  const code = (error as { code?: unknown } | null)?.code;
+  return typeof code === "string" && TOKEN_REJECTION_CODES.has(code);
+}
+
 async function verifyIdToken(authIdToken: string) {
   // Dynamic rendering errors must not be interpreted as invalid user tokens.
   await connection();
@@ -26,14 +39,18 @@ async function verifyIdToken(authIdToken: string) {
     // demoted role stops working as soon as its refresh tokens are revoked.
     const claims = await getAdminAuth().verifyIdToken(authIdToken, true);
     return { role: readUserRole(claims), userId: claims.uid };
-  } catch (cause) {
-    // A malformed or revoked bearer token is an unverifiable session, not a
-    // server fault. Log the reason, never the token, so a server-side
-    // misconfiguration is not mistaken for an expired session.
+  } catch (error) {
+    // Log the reason, never the token, so a server-side misconfiguration is
+    // not mistaken for an expired session.
     console.error("Firebase ID token verification failed", {
-      code: (cause as { code?: string }).code,
-      message: cause instanceof Error ? cause.message : String(cause),
+      code: (error as { code?: string }).code,
+      message: error instanceof Error ? error.message : String(error),
     });
+    // Only a bad token is an unverifiable session. Expired credentials or an
+    // unreachable Auth backend are server faults: reporting them as
+    // "unauthenticated" redirects to sign-in, where the still-signed-in client
+    // bounces back, looping forever.
+    if (!isTokenRejection(error)) throw error;
     return { role: readUserRole({}), userId: null };
   }
 }

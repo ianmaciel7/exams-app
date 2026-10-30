@@ -573,6 +573,20 @@ Historical audit reports are not included in this checkout. Use the current
 suite output and CI run as revision-specific evidence rather than importing
 old report counts or unresolved-status claims.
 
+## Failure-path mocks regressions
+
+A mocked dependency must fail the way the real one does. Mocking an SDK
+rejection with a bare `new Error("auth/...")` lets code that swallows every
+error pass, because the test never carries the `code` the real SDK sets. Give
+failure mocks the real error shape and cover both outcomes of any
+classification: the expected rejection and an unexpected fault.
+`src/lib/firebase/server.test.ts` does this for token verification: invalid
+tokens map to "unauthenticated" and infrastructure faults (`app/*`,
+`auth/internal-error`) must propagate, because reporting them as
+unauthenticated makes the server redirect to sign-in while the signed-in
+client bounces back, looping forever. This is a review-time judgement, not a
+mechanical lint.
+
 ## Documentation integrity regressions
 
 `pnpm check:docs` runs dependency-free Node regression tests and the current
