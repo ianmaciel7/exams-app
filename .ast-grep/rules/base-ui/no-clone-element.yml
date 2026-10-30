@@ -1,0 +1,21 @@
+id: no-clone-element
+language: tsx
+files:
+  - src/components/**/*.tsx
+  - src/app/**/_components/**/*.tsx
+ignores:
+  - "**/*.test.tsx"
+  - "**/*.stories.tsx"
+  - src/components/ui/*.tsx
+severity: error
+message: Compose elements with a render prop (useRender and mergeProps) instead of cloneElement.
+note: |
+  cloneElement silently overwrites the child's props, refs and handlers. Base UI
+  composes through render: accept useRender.ComponentProps<"tag">, merge your
+  defaults with mergeProps, and return useRender({ defaultTagName, render, props })
+  (https://base-ui.com/react/utils/use-render). For a variant element, return
+  the JSX directly from a small helper.
+rule:
+  any:
+    - pattern: cloneElement($$$ARGS)
+    - pattern: React.cloneElement($$$ARGS)

@@ -365,6 +365,17 @@ through Base UI Button, which supplies button semantics. The
 `.ast-grep/rules/base-ui/` rules enforce these Base UI contracts in owned
 components; see the [custom rule registry](TOOLING.md#custom-rule-registry).
 
+Build a component that accepts `render` with `useRender` and `mergeProps`, as
+`src/components/ui/badge.tsx` does: type the public props as
+`useRender.ComponentProps<"tag">`, merge local defaults with
+`mergeProps<"tag">(defaults, props)`, and return `useRender({ defaultTagName,
+render, props })`. Do not use `cloneElement`, `asChild` or a Radix `Slot`. In a
+`render` function, spread the received props so Base UI keeps its ref,
+handlers and ARIA. Prefer Base UI `data-*` attributes for state styling, and
+use the `className={(state) => ...}` form only when a selector cannot express
+the state. The [shadcn agent rule](.agents/rules/shadcn.md#establish-project-context)
+lists the `mergeProps` merge order and the animation attributes.
+
 Keep Select items inside `SelectGroup`, menu items in the corresponding group,
 and Tabs triggers inside `TabsList`. Dialog, Sheet, and Drawer need an
 accessible title; avatars need a fallback. An icon-only action needs a localized
