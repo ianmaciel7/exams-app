@@ -125,5 +125,4 @@ describe("Firebase auth service worker", () => {
       "Bearer user-one-token",
     );
   });
-
 });
