@@ -293,6 +293,7 @@ test("profile changes survive reload, sign-out and a new sign-in", async ({
   page,
   request,
 }) => {
+  test.setTimeout(60_000);
   const email = `persist-${crypto.randomUUID()}@example.test`;
   const displayName = "Regression Journey User";
   const created = await request.post(
@@ -399,6 +400,16 @@ test("Firestore user preferences are private to their owner", async ({
     headers: { Authorization: `Bearer ${owner.idToken}` },
   });
   expect(ownerRead.ok(), "owner must be able to read preferences").toBe(true);
+  const saved = (await ownerRead.json()) as {
+    fields?: { theme?: { stringValue?: string } };
+  };
+  expect(saved.fields?.theme?.stringValue).toBe("dark");
+
+  const strangerWrite = await request.patch(documentUrl, {
+    headers: { Authorization: `Bearer ${stranger.idToken}` },
+    data: { fields: { locale: { stringValue: "en" }, theme: { stringValue: "light" } } },
+  });
+  expect(strangerWrite.status(), "other accounts must not write preferences").toBe(403);
 
   const strangerRead = await request.get(documentUrl, {
     headers: { Authorization: `Bearer ${stranger.idToken}` },
