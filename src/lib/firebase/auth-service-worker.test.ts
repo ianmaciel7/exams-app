@@ -53,10 +53,19 @@ function createWorker(getIdToken: () => Promise<string>) {
     });
     if (!response) throw new Error("Worker did not intercept navigation");
     await response;
-    return { request, forwarded: fetchRequest.mock.calls[0]?.[0] };
+    return { request, forwarded: fetchRequest.mock.lastCall?.[0] };
   }
 
-  return { navigate, fetchRequest };
+  function notifySession(uid: string | null) {
+    const acknowledge = vi.fn();
+    handlers.get("message")?.({
+      data: { type: "firebase-auth-session", uid },
+      ports: [{ postMessage: acknowledge }],
+    });
+    return acknowledge;
+  }
+
+  return { navigate, fetchRequest, notifySession };
 }
 
 describe("Firebase auth service worker", () => {
@@ -89,4 +98,32 @@ describe("Firebase auth service worker", () => {
     expect(forwarded?.headers.has("Authorization")).toBe(false);
     expect(forwarded?.headers.has("x-firebase-auth-bridge")).toBe(false);
   });
+  it("does not forward stale credentials after an explicit sign-out", async () => {
+    const getToken = vi.fn().mockResolvedValue("stale-token");
+    const { navigate, notifySession } = createWorker(getToken);
+    const acknowledge = notifySession(null);
+    expect(acknowledge).toHaveBeenCalledWith({
+      type: "firebase-auth-session-ack",
+    });
+    const { request, forwarded } = await navigate();
+    expect(forwarded).toBe(request);
+    expect(forwarded?.headers.has("Authorization")).toBe(false);
+    expect(getToken).not.toHaveBeenCalled();
+  });
+
+  it("never forwards another user's token after account switching", async () => {
+    const getToken = vi.fn().mockResolvedValue("user-one-token");
+    const { navigate, notifySession } = createWorker(getToken);
+
+    notifySession("u2");
+    const { forwarded: staleRequest } = await navigate();
+    expect(staleRequest?.headers.has("Authorization")).toBe(false);
+
+    notifySession("u1");
+    const { forwarded: matchingRequest } = await navigate();
+    expect(matchingRequest?.headers.get("Authorization")).toBe(
+      "Bearer user-one-token",
+    );
+  });
+
 });
