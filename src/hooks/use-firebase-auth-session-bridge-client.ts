@@ -36,10 +36,19 @@ export function useFirebaseAuthSessionBridgeClient() {
         console.error("Firebase session worker registration failed", error);
       });
 
-    const unsubscribe = subscribeToSession((user) => {
-      session.uid = user?.uid ?? null;
-      postSession(navigator.serviceWorker.controller);
-    });
+    const unsubscribe = (() => {
+      try {
+        return subscribeToSession((user) => {
+          session.uid = user?.uid ?? null;
+          postSession(navigator.serviceWorker.controller);
+        });
+      } catch (error) {
+        // Missing Firebase configuration is reported by the auth provider.
+        // The optional server-session bridge must not crash the app.
+        console.error("Firebase session worker subscription failed", error);
+        return () => {};
+      }
+    })();
     const onControllerChange = () =>
       postConfig(navigator.serviceWorker.controller);
     navigator.serviceWorker.addEventListener(
