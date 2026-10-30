@@ -51,6 +51,37 @@ are `scripts/evals/run-tool-usage-evals.test.mjs`; run them with
 runner or cases. The test suite verifies the general
 rubric, manual review, and failure follow-up.
 
+## Acceptance journeys and independent verification
+
+A green unit-test suite or coverage percentage does not prove that a user can
+finish a workflow. Critical journeys are tested against the running application
+with the Firebase Auth, Firestore, and Functions emulators. Their assertions
+must verify **observable outcomes** and, where applicable, persisted records
+rather than only mocked calls or navigation.
+
+| Journey / security boundary | Executable evidence | Required outcome |
+| --- | --- | --- |
+| Registration and persisted login | `tests/firebase-auth.spec.ts` | Register in the browser and retain an authenticated session |
+| Guest protected deep link to sign-in | `tests/firebase-auth.spec.ts` | Preserve the requested protected path and query after login |
+| Profile preferences and identity | `tests/firebase-auth.spec.ts` | Save via the browser, read Firestore independently, reload, sign out and sign in again |
+| Cross-account preference isolation | `tests/firebase-auth.spec.ts` | Owner can read/write; a different user cannot read/write; anonymous access is denied |
+| Password recovery | `tests/firebase-auth.spec.ts` | Emulator issues a recovery code and the UI handles network failure |
+| Google sign-in | `tests/firebase-auth.spec.ts` | Emulated popup/redirect flows complete; production OAuth is a separate risk |
+| Responsive, visual, and a11y | `tests/*.spec.ts` | Assert defined layouts and detectable issues; these are not substitutes for a completed journey |
+
+The `auth-emulator` GitHub Actions job is a required CI gate and executes these
+journeys with actual emulator services. The ordinary mobile and responsive suites
+may skip authentication-only controls when Firebase configuration is unavailable;
+those skips must not be interpreted as proof of functional authentication.
+Investigate skipped test counts and emulator-job failures before merging.
+
+These tests deliberately do not claim production OAuth compatibility, a complete
+screen-reader audit, all browsers, or 100% defect detection. Add one regression
+scenario for each newly confirmed user-facing defect. Prefer independent
+acceptance criteria from product requirements and bug reports over deriving
+expected results exclusively from the current code. Do not update snapshots,
+relax assertions, or introduce `test.skip` to hide a defect.
+
 ## Test layers
 
 | Layer | Location and name | Runner | Command | Use for |
