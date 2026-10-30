@@ -1,11 +1,11 @@
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "@/i18n/navigation";
-import { localeCookie } from "@/i18n/routing";
 import type { Locale } from "@/lib/locale";
 import type { ThemePreference } from "@/lib/theme";
 import { readProfile } from "../_lib/data";
 import type { ProfileValues } from "../_lib/definitions";
+import { syncSavedLocale } from "../_lib/locale-sync";
 
 type PreferencesState = {
   error: string | null;
@@ -13,18 +13,6 @@ type PreferencesState = {
   uid: string;
   values: ProfileValues | null;
 };
-
-function syncSavedLocale(
-  savedLocale: Locale,
-  activeLocale: Locale,
-  refresh: () => void,
-) {
-  if (savedLocale === activeLocale) return false;
-  // biome-ignore lint/suspicious/noDocumentCookie: Synchronize the persisted preference with cookie-only locale routing.
-  document.cookie = `${localeCookie}=${savedLocale}; Path=/; Max-Age=31536000; SameSite=Lax`;
-  refresh();
-  return true;
-}
 
 export function useProfilePreferences(
   uid: string | undefined,
