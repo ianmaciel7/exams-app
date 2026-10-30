@@ -246,9 +246,9 @@
     "semantic_hash": ""
   },
   "src/app/(protected)/_components/protected-guard-client.tsx": {
-    "mtime": 1793395524.1853316,
-    "seen": 1793398216.8267872,
-    "ast_hash": "37eae66ad54154f12e48c6ee9275124b",
+    "mtime": 1793400151.401238,
+    "seen": 1793400468.4084206,
+    "ast_hash": "a51a505b59d116fe30ed8807555f8ba1",
     "semantic_hash": ""
   },
   "src/app/(protected)/_components/protected-session-server.tsx": {
@@ -258,9 +258,9 @@
     "semantic_hash": ""
   },
   "src/app/(protected)/_hooks/use-protected-guard-client.ts": {
-    "mtime": 1793399136.717491,
-    "seen": 1793399399.795528,
-    "ast_hash": "14267702acebfbb9dc824384d883c11d",
+    "mtime": 1793400152.6142633,
+    "seen": 1793400468.4084241,
+    "ast_hash": "5f2c06eb5cc86be0a643db5223055bee",
     "semantic_hash": ""
   },
   "src/app/(protected)/layout.test.tsx": {
@@ -1698,9 +1698,9 @@
     "semantic_hash": "989d6237db62fc7428a476704d5788f1"
   },
   "src/lib/firebase/server.ts": {
-    "mtime": 1793398361.0603828,
-    "seen": 1793398454.5209086,
-    "ast_hash": "b92eb373ae59b7b8ffcfaff28eabd0dd",
+    "mtime": 1793399685.512609,
+    "seen": 1793400468.4088786,
+    "ast_hash": "b15b932b7241ab1625e58a8b38a5411e",
     "semantic_hash": ""
   },
   "src/lib/locale.ts": {
@@ -2352,9 +2352,9 @@
     "semantic_hash": ""
   },
   "docs/adr/README.md": {
-    "mtime": 1793398363.1060069,
-    "seen": 1793398454.5816572,
-    "ast_hash": "173bab1e5aa73d7065f023592cd3971d",
+    "mtime": 1793399689.9802268,
+    "seen": 1793400468.4093835,
+    "ast_hash": "506da10bf21e3ffba37ee2b561bc56a4",
     "semantic_hash": ""
   },
   "docs/agents/domain.md": {
@@ -2502,9 +2502,9 @@
     "semantic_hash": ""
   },
   "src/lib/firebase/server.test.ts": {
-    "mtime": 1793379268.4425876,
-    "seen": 1793398216.8273678,
-    "ast_hash": "62316ea25ff87d98b67e8fda767fc1c6",
+    "mtime": 1793399686.542155,
+    "seen": 1793400468.4088774,
+    "ast_hash": "9a3ad398487ca8e7bfe24ce1045da4c5",
     "semantic_hash": ""
   },
   "src/app/(protected)/profile/_components/profile-guard.tsx": {
@@ -3180,9 +3180,9 @@
     "semantic_hash": ""
   },
   ".agents/rules/auth.md": {
-    "mtime": 1793379268.3142698,
-    "seen": 1793398216.8274736,
-    "ast_hash": "6fcc8b7beea1881998b475504997cddb",
+    "mtime": 1793399689.0571146,
+    "seen": 1793400468.4089332,
+    "ast_hash": "eec1eb77732696ba1e95ef5a62b207ac",
     "semantic_hash": ""
   },
   ".agents/rules/boundaries.md": {
@@ -4512,9 +4512,9 @@
     "semantic_hash": ""
   },
   "docs/auth.md": {
-    "mtime": 1793398366.8471324,
-    "seen": 1793398454.5835516,
-    "ast_hash": "77dd1054bc1df2dcdc03fac4a2017b57",
+    "mtime": 1793399688.688896,
+    "seen": 1793400468.409403,
+    "ast_hash": "47d514669034553e450d2626a9962e9e",
     "semantic_hash": ""
   },
   "docs/firebase-cd.md": {
@@ -4551,6 +4551,12 @@
     "mtime": 1793398785.4561605,
     "seen": 1793399399.7955391,
     "ast_hash": "0bd49977e199c3f869c653a9e9990ec3",
+    "semantic_hash": ""
+  },
+  "docs/adr/0023-keep-service-worker-firebase-session.md": {
+    "mtime": 1793399689.59561,
+    "seen": 1793400468.4093819,
+    "ast_hash": "b4c6dcc46420c7b4184d6188b386326d",
     "semantic_hash": ""
   }
 }
