@@ -70,6 +70,11 @@ rather than only mocked calls or navigation.
 | Google popup cancellation and retry | `tests/firebase-auth.spec.ts` | Closing an unauthenticated popup returns to usable sign-in and permits a second attempt |
 | Responsive, visual, and a11y | `tests/*.spec.ts` | Assert defined layouts and detectable issues; these are not substitutes for a completed journey |
 
+Playwright uses `failOnFlakyTests` in CI: a test that fails before passing on
+retry must fail the job. Investigate traces and classify the root cause rather
+than treating retries as proof of reliability. The official Playwright option
+is supported by the installed version and preserves failure artifacts.
+
 The `auth-emulator` GitHub Actions job is a required CI gate and executes these
 journeys with actual emulator services. The ordinary mobile and responsive suites
 may skip authentication-only controls when Firebase configuration is unavailable;
