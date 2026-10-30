@@ -208,3 +208,17 @@
     --primary-foreground: var(--color-black);
   }
 }
+
+/* Honors the OS "reduce motion" setting (WCAG 2.3.3). Spinners keep turning
+   because they are the only progress feedback. Unlayered, so it outranks
+   every Tailwind layer without !important. */
+@media (prefers-reduced-motion: reduce) {
+  *:not(.animate-spin),
+  *:not(.animate-spin)::before,
+  *:not(.animate-spin)::after {
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+    transition-duration: 0.01ms;
+    scroll-behavior: auto;
+  }
+}

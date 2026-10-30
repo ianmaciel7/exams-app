@@ -25,6 +25,8 @@
     "src/messages"
   ],
   "words": [
+    "nosniff",
+    "SAMEORIGIN",
     "cloudfunctions",
     "recordusage",
     "restrictsignin",
