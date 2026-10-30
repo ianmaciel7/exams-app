@@ -1,37 +1,56 @@
-import { recordUsage } from "@/lib/firebase/usage";
+import type { User } from "firebase/auth";
 import { subscribeToSession } from "@/lib/session";
 
 type AccessSubscriptionOptions = {
-  pathname: string;
-  onReset: () => void;
   onUnauthenticated: () => void;
-  onReady: () => void;
+  onAuthenticated: (userId: string) => void;
+  onError?: (error: Error) => void;
 };
 
+type SessionHandlerState = {
+  active: boolean;
+  lastUserId?: string | null;
+};
+
+function notifySessionTransition(
+  user: User | null,
+  state: SessionHandlerState,
+  onAuthenticated: (userId: string) => void,
+  onUnauthenticated: () => void,
+) {
+  if (!state.active) return;
+  const nextUserId = user ? user.uid : null;
+  if (nextUserId === state.lastUserId) return;
+  state.lastUserId = nextUserId;
+  if (nextUserId) {
+    onAuthenticated(nextUserId);
+    return;
+  }
+  onUnauthenticated();
+}
+
+/**
+ * Observes Firebase Auth session state for protected routes.
+ * Emits authenticated state changes and handles unauthenticated state transitions.
+ */
 export function subscribeToProtectedAccess({
-  pathname,
-  onReset,
   onUnauthenticated,
-  onReady,
+  onAuthenticated,
+  onError,
 }: AccessSubscriptionOptions) {
-  let active = true;
-  let activeUserId: string | null = null;
-  const unsubscribe = subscribeToSession((user) => {
-    if (!active) return;
-    if (!user) {
-      activeUserId = null;
-      onReset();
-      onUnauthenticated();
-      return;
-    }
-    if (activeUserId === user.uid) return;
-    activeUserId = user.uid;
-    onReset();
-    onReady();
-    void recordUsage({ type: "screen_view", name: pathname }).catch(() => {});
-  });
+  const state: SessionHandlerState = { active: true };
+
+  const unsubscribe = subscribeToSession(
+    (user) => {
+      notifySessionTransition(user, state, onAuthenticated, onUnauthenticated);
+    },
+    (error) => {
+      if (state.active) onError?.(error);
+    },
+  );
+
   return () => {
-    active = false;
+    state.active = false;
     unsubscribe();
   };
 }
