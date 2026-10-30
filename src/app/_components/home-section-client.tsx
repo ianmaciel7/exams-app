@@ -110,7 +110,7 @@ function renderHomeSectionClientLoading({
         className,
       )}
     >
-      <LabeledSpinner label={label} />
+      <LabeledSpinner>{label}</LabeledSpinner>
     </main>
   );
 }
