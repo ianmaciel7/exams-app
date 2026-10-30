@@ -59,8 +59,8 @@ async function verifyIdToken(authIdToken: string) {
  * Reads only a worker-injected, refreshed ID token. An absent worker is not an
  * unauthenticated verdict: the existing browser guard remains the first-load
  * fallback until the worker controls the tab. Authorization that must not
- * depend on that fallback belongs in `requireRole` under
- * `src/app/(protected)/_lib/require-protected-access.ts`.
+ * depend on that fallback belongs in `verifyRole` under
+ * `src/app/(protected)/_lib/dal.ts`.
  */
 export async function getFirebaseServerSession(): Promise<FirebaseServerSession> {
   const requestHeaders = await headers();

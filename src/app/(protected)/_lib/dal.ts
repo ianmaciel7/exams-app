@@ -20,7 +20,7 @@ export async function verifySession() {
  * revoked token) the caller is sent to sign-in, and an insufficient role is
  * answered as not found so privileged routes are not disclosed.
  */
-export async function requireRole(required: UserRole) {
+export async function verifyRole(required: UserRole) {
   const session = await getFirebaseServerSession();
   if (!session.userId) redirectToSignIn();
   if (!hasRole(session.role, required)) notFound();

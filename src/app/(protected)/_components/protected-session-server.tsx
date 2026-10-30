@@ -1,7 +1,7 @@
 import "server-only";
 
 import type { PropsWithChildren } from "react";
-import { verifySession } from "../_lib/require-protected-access";
+import { verifySession } from "../_lib/dal";
 import { ProtectedGuardClient } from "./protected-guard-client";
 
 type ProtectedSessionServerProps = PropsWithChildren;

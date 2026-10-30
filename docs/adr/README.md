@@ -138,7 +138,7 @@ original date. Read current operational details in the
     Firestore storage is retired and denied to browser clients).
   - Role-based authorization uses a `role` custom claim (`user` or `admin` in `src/lib/role.ts`),
     verified on the server via `firebase-admin` (`verifyIdToken(token, true)`) with the fail-closed
-    `requireRole` boundary (`src/app/(protected)/_lib/require-protected-access.ts`) and managed via
+    `verifyRole` boundary (`src/app/(protected)/_lib/dal.ts`) and managed via
     the `setUserRole` callable Cloud Function.
   - Client-side route groups provide UI navigation guarding and UX routing, not zero-trust
     server authorization.
