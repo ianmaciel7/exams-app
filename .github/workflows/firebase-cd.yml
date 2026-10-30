@@ -7,7 +7,6 @@ on:
 
 permissions:
   contents: read
-  id-token: write
 
 concurrency:
   group: firebase-production
@@ -22,8 +21,6 @@ jobs:
     if: ${{ !github.event.release.prerelease }}
     runs-on: ubuntu-latest
     timeout-minutes: 25
-    permissions:
-      contents: read
     container:
       image: mcr.microsoft.com/playwright:v1.64.1-noble@sha256:7852dc5a7d72f5fe458a597d690f6c42fbc8e9e26ddfa95f8e6ef552558d9bbf
     env:
@@ -65,6 +62,10 @@ jobs:
     # Draft releases never fire `published`; prereleases are skipped here.
     if: ${{ !github.event.release.prerelease }}
     runs-on: ubuntu-latest
+    # Only the deploy exchanges an OIDC token for Google credentials.
+    permissions:
+      contents: read
+      id-token: write
     timeout-minutes: 30
     environment: production
     env:
