@@ -1,0 +1,31 @@
+id: require-popup-title
+language: tsx
+files:
+  - src/components/**/*.tsx
+  - src/app/**/_components/**/*.tsx
+ignores:
+  - "**/*.test.tsx"
+  - "**/*.stories.tsx"
+  - src/components/ui/*.tsx
+severity: error
+message: Dialog, AlertDialog, Sheet and Drawer content needs a Title so the popup has an accessible name.
+note: |
+  Base UI labels the popup with its Title part (aria-labelledby). Without it
+  screen readers announce an unnamed dialog (WCAG 4.1.2). Visually hide it with
+  className="sr-only" when the design has no visible heading.
+rule:
+  kind: jsx_element
+  has:
+    field: open_tag
+    has:
+      field: name
+      regex: ^(Dialog|AlertDialog|Sheet|Drawer)Content$
+  not:
+    has:
+      stopBy: end
+      any:
+        - kind: jsx_opening_element
+        - kind: jsx_self_closing_element
+      has:
+        field: name
+        regex: ^(Dialog|AlertDialog|Sheet|Drawer)Title$

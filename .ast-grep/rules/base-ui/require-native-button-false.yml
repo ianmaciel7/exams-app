@@ -1,0 +1,45 @@
+id: require-native-button-false
+language: tsx
+files:
+  - src/components/**/*.tsx
+  - src/app/**/_components/**/*.tsx
+ignores:
+  - "**/*.test.tsx"
+  - "**/*.stories.tsx"
+  - src/components/ui/*.tsx
+severity: error
+message: Set nativeButton={false} when render replaces a Base UI button part with a non-button element.
+note: |
+  Base UI button parts (Button, triggers, Close, Tab, Toggle) apply native
+  button defaults such as type="button". When render produces an <a>, <span>
+  or <div>, nativeButton={false} makes Base UI add role and keyboard support
+  instead (https://base-ui.com/react/components/button).
+  Example:
+    <TabsTrigger nativeButton={false} render={<Link href="/overview" />} value="overview" />
+rule:
+  any:
+    - kind: jsx_opening_element
+    - kind: jsx_self_closing_element
+  all:
+    - has:
+        field: name
+        regex: (Button|Trigger|Close|Tab|Toggle)$
+    - has:
+        kind: jsx_attribute
+        all:
+          - has:
+              kind: property_identifier
+              regex: ^render$
+          - has:
+              kind: jsx_expression
+              regex: ^\{\s*<(a|Link|span|div|li|label|p|img|section|article)[\s/>]
+    - not:
+        has:
+          kind: jsx_attribute
+          has:
+            kind: property_identifier
+            regex: ^nativeButton$
+    - not:
+        has:
+          field: name
+          regex: ^Button$

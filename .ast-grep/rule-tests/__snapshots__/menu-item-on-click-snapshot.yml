@@ -1,0 +1,56 @@
+id: menu-item-on-click
+snapshots:
+  "<ContextMenuCheckboxItem onSelect={toggle} />":
+    labels:
+    - source: onSelect={toggle}
+      style: primary
+      start: 25
+      end: 42
+    - source: ContextMenuCheckboxItem
+      style: secondary
+      start: 1
+      end: 24
+    - source: <ContextMenuCheckboxItem onSelect={toggle} />
+      style: secondary
+      start: 0
+      end: 45
+    - source: onSelect
+      style: secondary
+      start: 25
+      end: 33
+  "<DropdownMenuItem onSelect={openDialog}>Open</DropdownMenuItem>":
+    labels:
+    - source: onSelect={openDialog}
+      style: primary
+      start: 18
+      end: 39
+    - source: DropdownMenuItem
+      style: secondary
+      start: 1
+      end: 17
+    - source: <DropdownMenuItem onSelect={openDialog}>
+      style: secondary
+      start: 0
+      end: 40
+    - source: onSelect
+      style: secondary
+      start: 18
+      end: 26
+  "<Menu.Item onSelect={openDialog}>Open</Menu.Item>":
+    labels:
+    - source: onSelect={openDialog}
+      style: primary
+      start: 11
+      end: 32
+    - source: Menu.Item
+      style: secondary
+      start: 1
+      end: 10
+    - source: <Menu.Item onSelect={openDialog}>
+      style: secondary
+      start: 0
+      end: 33
+    - source: onSelect
+      style: secondary
+      start: 11
+      end: 19

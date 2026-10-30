@@ -218,6 +218,7 @@ const StackTraceHeader = memo(
       <Collapsible onOpenChange={setIsOpen} open={isOpen}>
         <CollapsibleTrigger
           {...props}
+          nativeButton={false}
           render={
             <div
               className={cn(
@@ -407,7 +408,7 @@ const StackTraceContent = memo(
         <CollapsibleContent
           className={cn(
             "overflow-auto border-t bg-muted/30",
-            "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:animate-out data-[state=open]:animate-in",
+            "data-closed:fade-out-0 data-open:fade-in-0 data-closed:animate-out data-open:animate-in",
             className,
           )}
           style={{ maxHeight }}

@@ -1,0 +1,7 @@
+id: no-button-render-link
+valid:
+  - <Link href="/" className={buttonVariants()}>Home</Link>
+  - <Button render={<Card />}>Open</Button>
+invalid:
+  - <Button render={<Link href="/" />}>Home</Button>
+  - <Button variant="ghost" render={<a href="/docs" />}>Docs</Button>

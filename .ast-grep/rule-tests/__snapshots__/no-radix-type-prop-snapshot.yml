@@ -1,0 +1,38 @@
+id: no-radix-type-prop
+snapshots:
+  <Accordion type="single" collapsible />:
+    labels:
+    - source: type="single"
+      style: primary
+      start: 11
+      end: 24
+    - source: Accordion
+      style: secondary
+      start: 1
+      end: 10
+    - source: <Accordion type="single" collapsible />
+      style: secondary
+      start: 0
+      end: 39
+    - source: type
+      style: secondary
+      start: 11
+      end: 15
+  <ToggleGroup type="multiple" />:
+    labels:
+    - source: type="multiple"
+      style: primary
+      start: 13
+      end: 28
+    - source: ToggleGroup
+      style: secondary
+      start: 1
+      end: 12
+    - source: <ToggleGroup type="multiple" />
+      style: secondary
+      start: 0
+      end: 31
+    - source: type
+      style: secondary
+      start: 13
+      end: 17

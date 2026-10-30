@@ -1,0 +1,20 @@
+id: no-radix-state-selector
+snapshots:
+  "const c = \"data-[state=on]:bg-muted\";":
+    labels:
+    - source: data-[state=on]:bg-muted
+      style: primary
+      start: 11
+      end: 35
+  "const c = \"data-[state=open]:animate-in\";":
+    labels:
+    - source: data-[state=open]:animate-in
+      style: primary
+      start: 11
+      end: 39
+  const c = "origin-(--radix-popover-content-transform-origin)";:
+    labels:
+    - source: origin-(--radix-popover-content-transform-origin)
+      style: primary
+      start: 11
+      end: 60
