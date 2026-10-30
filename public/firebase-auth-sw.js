@@ -46,10 +46,13 @@ async function getFreshIdToken() {
     return null;
   }
   const token = await getIdToken(user, true);
-  return pageUserId === null ||
+  if (
+    pageUserId === null ||
     (pageUserId !== undefined && user.uid !== pageUserId)
-    ? null
-    : token;
+  ) {
+    return null;
+  }
+  return token;
 }
 
 self.addEventListener("message", (event) => {
