@@ -12,7 +12,7 @@ Issues and specs for this repo live as GitHub issues. Use the `gh` CLI for all o
 - **Close**: `gh issue close <number> --comment "..."`
 
 Infer the repo from `git remote -v`; `gh` does this automatically when run inside
-a clone. Without a clone, pass `--repo ianmaciel7/shadcn-firebase-template` explicitly.
+a clone. Without a clone, pass `--repo ianmaciel7/exams-app` explicitly.
 For multiline issue content, use `--body-file <path>` to preserve the exact
 text and avoid shell interpolation. Change the explicit repository when
 adapting these instructions to a derived project.

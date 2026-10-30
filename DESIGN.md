@@ -1,6 +1,6 @@
 ---
 version: alpha
-name: shadcn-firebase-template-design
+name: exams-app-design
 description: Neutral grayscale shadcn/ui (base-nova) theme with Geist typography, a 0.625rem base radius, class-based dark mode, and light/dark token sets defined in src/app/globals.css.
 
 colors:

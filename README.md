@@ -1,4 +1,4 @@
-# shadcn-firebase-template
+# exams-app
 
 This is a [Next.js](https://nextjs.org) template using the App Router,
 TypeScript, Tailwind CSS, shadcn/ui, Biome, and `next-intl`.
