@@ -33,7 +33,6 @@ if (!project) {
   );
 }
 
-
 const firestoreEmulatorHost =
   process.env.FIRESTORE_EMULATOR_HOST ||
   process.env.NEXT_PUBLIC_FIRESTORE_EMULATOR_HOST ||
@@ -324,8 +323,7 @@ test("profile changes survive reload, sign-out and a new sign-in", async ({
 
   // The backend is an independent oracle: a toast or mocked callback is not
   // sufficient evidence that Firestore persisted the user's preferences.
-  const documentUrl =
-    `${firestoreEmulatorOrigin}/v1/projects/${project}/databases/(default)/documents/users/${account.localId}`;
+  const documentUrl = `${firestoreEmulatorOrigin}/v1/projects/${project}/databases/(default)/documents/users/${account.localId}`;
   await expect
     .poll(
       async () => {
@@ -385,8 +383,7 @@ test("Firestore user preferences are private to their owner", async ({
 
   const owner = await createAccount("owner");
   const stranger = await createAccount("stranger");
-  const documentUrl =
-    `${firestoreEmulatorOrigin}/v1/projects/${project}/databases/(default)/documents/users/${owner.localId}`;
+  const documentUrl = `${firestoreEmulatorOrigin}/v1/projects/${project}/databases/(default)/documents/users/${owner.localId}`;
 
   const written = await request.patch(documentUrl, {
     headers: { Authorization: `Bearer ${owner.idToken}` },
@@ -425,9 +422,10 @@ test("Firestore user preferences are private to their owner", async ({
   const strangerRead = await request.get(documentUrl, {
     headers: { Authorization: `Bearer ${stranger.idToken}` },
   });
-  expect(strangerRead.status(), "other accounts must not read preferences").toBe(
-    403,
-  );
+  expect(
+    strangerRead.status(),
+    "other accounts must not read preferences",
+  ).toBe(403);
 
   const guestRead = await request.get(documentUrl);
   expect(guestRead.status(), "unauthenticated clients must be denied").toBe(
