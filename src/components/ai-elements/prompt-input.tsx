@@ -444,24 +444,28 @@ type PromptInputActionAddAttachmentsProps = ComponentProps<
 
 const PromptInputActionAddAttachments = ({
   label = "Add photos or files",
+  onClick,
   ...props
 }: PromptInputActionAddAttachmentsProps) => {
   const attachments = usePromptInputAttachments();
 
-  const handleSelect = useCallback(
+  const handleClick = useCallback(
     (
       e: Parameters<
-        NonNullable<PromptInputActionAddAttachmentsProps["onSelect"]>
+        NonNullable<PromptInputActionAddAttachmentsProps["onClick"]>
       >[0],
     ) => {
-      e.preventDefault();
+      onClick?.(e);
+      if (e.defaultPrevented) {
+        return;
+      }
       attachments.openFileDialog();
     },
-    [attachments],
+    [onClick, attachments],
   );
 
   return (
-    <DropdownMenuItem {...props} onSelect={handleSelect}>
+    <DropdownMenuItem {...props} onClick={handleClick}>
       <ImageIcon className="mr-2 size-4" /> {label}
     </DropdownMenuItem>
   );
@@ -475,18 +479,18 @@ type PromptInputActionAddScreenshotProps = ComponentProps<
 
 const PromptInputActionAddScreenshot = ({
   label = "Take screenshot",
-  onSelect,
+  onClick,
   ...props
 }: PromptInputActionAddScreenshotProps) => {
   const attachments = usePromptInputAttachments();
 
-  const handleSelect = useCallback(
+  const handleClick = useCallback(
     async (
       event: Parameters<
-        NonNullable<PromptInputActionAddScreenshotProps["onSelect"]>
+        NonNullable<PromptInputActionAddScreenshotProps["onClick"]>
       >[0],
     ) => {
-      onSelect?.(event);
+      onClick?.(event);
       if (event.defaultPrevented) {
         return;
       }
@@ -506,11 +510,11 @@ const PromptInputActionAddScreenshot = ({
         throw error;
       }
     },
-    [onSelect, attachments],
+    [onClick, attachments],
   );
 
   return (
-    <DropdownMenuItem {...props} onSelect={handleSelect}>
+    <DropdownMenuItem {...props} onClick={handleClick}>
       <Monitor className="mr-2 size-4" />
       {label}
     </DropdownMenuItem>

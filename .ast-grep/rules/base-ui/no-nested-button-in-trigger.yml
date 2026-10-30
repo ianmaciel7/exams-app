@@ -1,0 +1,36 @@
+id: no-nested-button-in-trigger
+language: tsx
+files:
+  - src/components/**/*.tsx
+  - src/app/**/_components/**/*.tsx
+ignores:
+  - "**/*.test.tsx"
+  - "**/*.stories.tsx"
+  - src/components/ui/*.tsx
+severity: error
+message: A Base UI trigger already renders a button; compose Button through render instead of nesting it.
+note: |
+  <DialogTrigger><Button /></DialogTrigger> produces a button inside a button,
+  which is invalid HTML and breaks focus. Base UI composes with render.
+  Example:
+    <TooltipTrigger render={<Button size="icon" aria-label={label} />}>...</TooltipTrigger>
+rule:
+  kind: jsx_element
+  has:
+    field: open_tag
+    has:
+      field: name
+      regex: (Trigger|Close)$
+  all:
+    - has:
+        any:
+          - kind: jsx_self_closing_element
+            has:
+              field: name
+              regex: ^Button$
+          - kind: jsx_element
+            has:
+              field: open_tag
+              has:
+                field: name
+                regex: ^Button$

@@ -1,0 +1,34 @@
+id: no-button-render-link
+language: tsx
+files:
+  - src/components/**/*.tsx
+  - src/app/**/_components/**/*.tsx
+ignores:
+  - "**/*.test.tsx"
+  - "**/*.stories.tsx"
+  - src/components/ui/*.tsx
+severity: error
+message: Style a real Link or anchor with buttonVariants instead of rendering it through Button.
+note: |
+  Base UI Button supplies button semantics (role and keyboard handling), so a
+  navigation link rendered through it is announced as a button. See
+  CODING_STANDARDS.md and ADR 0002.
+  Example:
+    <Link href="/sign-in" className={buttonVariants({ variant: "outline" })}>Sign in</Link>
+rule:
+  any:
+    - kind: jsx_opening_element
+    - kind: jsx_self_closing_element
+  all:
+    - has:
+        field: name
+        regex: ^Button$
+    - has:
+        kind: jsx_attribute
+        all:
+          - has:
+              kind: property_identifier
+              regex: ^render$
+          - has:
+              kind: jsx_expression
+              regex: ^\{\s*<(a|Link)[\s/>]

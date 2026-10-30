@@ -1,0 +1,8 @@
+id: no-base-ui-primitive-import
+valid:
+  - import { Dialog } from "@/components/ui/dialog";
+  - import { useRender } from "@base-ui/react/use-render";
+  - import { mergeProps } from "@base-ui/react/merge-props";
+invalid:
+  - import { Dialog } from "@base-ui/react/dialog";
+  - import { Combobox } from "@base-ui/react";

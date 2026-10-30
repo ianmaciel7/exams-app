@@ -1,0 +1,11 @@
+id: no-clone-element
+valid:
+  - |
+    function Tag({ render, ...props }: useRender.ComponentProps<"span">) {
+      return useRender({ defaultTagName: "span", render, props: mergeProps<"span">({ className: "tag" }, props) });
+    }
+invalid:
+  - |
+    const link = cloneElement(Handler, { key: index, children: label });
+  - |
+    const active = React.cloneElement(child, { className: "active" });

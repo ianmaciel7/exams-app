@@ -1,0 +1,25 @@
+id: no-radix-primitive-import
+language: tsx
+files:
+  - src/components/**/*.tsx
+  - src/app/**/_components/**/*.tsx
+ignores:
+  - "**/*.test.tsx"
+  - "**/*.stories.tsx"
+  - src/components/ui/*.tsx
+severity: error
+message: Use the Base UI wrappers in @/components/ui instead of Radix UI primitives or Sonner.
+note: |
+  The design system is shadcn base-nova on Base UI (components.json). Mixing
+  Radix primitives or Sonner duplicates focus, portal and dismissal logic.
+  Standalone Radix hooks (@radix-ui/react-use-*) carry no UI and stay allowed.
+  Toasts come from @/components/ui/toast.
+rule:
+  kind: import_statement
+  has:
+    field: source
+    regex: ^.(radix-ui|@radix-ui/react-|sonner)
+  not:
+    has:
+      field: source
+      regex: ^.@radix-ui/react-use-

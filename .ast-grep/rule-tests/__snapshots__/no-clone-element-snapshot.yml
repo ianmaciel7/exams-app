@@ -1,0 +1,14 @@
+id: no-clone-element
+snapshots:
+  "const active = React.cloneElement(child, { className: \"active\" });\n":
+    labels:
+    - source: "React.cloneElement(child, { className: \"active\" })"
+      style: primary
+      start: 15
+      end: 65
+  "const link = cloneElement(Handler, { key: index, children: label });\n":
+    labels:
+    - source: "cloneElement(Handler, { key: index, children: label })"
+      style: primary
+      start: 13
+      end: 67

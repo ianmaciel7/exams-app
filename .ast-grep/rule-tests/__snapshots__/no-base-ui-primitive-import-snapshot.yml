@@ -1,0 +1,22 @@
+id: no-base-ui-primitive-import
+snapshots:
+  "import { Combobox } from \"@base-ui/react\";":
+    labels:
+    - source: import { Combobox } from "@base-ui/react";
+      style: primary
+      start: 0
+      end: 42
+    - source: "\"@base-ui/react\""
+      style: secondary
+      start: 25
+      end: 41
+  "import { Dialog } from \"@base-ui/react/dialog\";":
+    labels:
+    - source: import { Dialog } from "@base-ui/react/dialog";
+      style: primary
+      start: 0
+      end: 47
+    - source: "\"@base-ui/react/dialog\""
+      style: secondary
+      start: 23
+      end: 46

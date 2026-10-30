@@ -1,0 +1,9 @@
+id: no-radix-state-selector
+valid:
+  - const c = "data-open:animate-in data-closed:animate-out data-pressed:bg-muted";
+  - const c = "origin-(--transform-origin) w-(--anchor-width)";
+  - const c = "data-[state=collapsed]:hidden";
+invalid:
+  - const c = "data-[state=open]:animate-in";
+  - const c = "data-[state=on]:bg-muted";
+  - const c = "origin-(--radix-popover-content-transform-origin)";

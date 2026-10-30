@@ -1,0 +1,32 @@
+id: no-radix-primitive-import
+snapshots:
+  import * as DialogPrimitive from "@radix-ui/react-dialog";:
+    labels:
+    - source: import * as DialogPrimitive from "@radix-ui/react-dialog";
+      style: primary
+      start: 0
+      end: 58
+    - source: "\"@radix-ui/react-dialog\""
+      style: secondary
+      start: 33
+      end: 57
+  "import { Slot } from \"radix-ui\";":
+    labels:
+    - source: import { Slot } from "radix-ui";
+      style: primary
+      start: 0
+      end: 32
+    - source: "\"radix-ui\""
+      style: secondary
+      start: 21
+      end: 31
+  "import { toast } from \"sonner\";":
+    labels:
+    - source: import { toast } from "sonner";
+      style: primary
+      start: 0
+      end: 31
+    - source: "\"sonner\""
+      style: secondary
+      start: 22
+      end: 30

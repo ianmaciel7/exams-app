@@ -1,0 +1,21 @@
+id: no-radix-state-selector
+language: tsx
+files:
+  - src/components/**/*.tsx
+  - src/app/**/_components/**/*.tsx
+ignores:
+  - "**/*.test.tsx"
+  - "**/*.stories.tsx"
+  - src/components/ui/*.tsx
+severity: error
+message: Base UI does not set Radix data-state values or --radix-* variables; use the Base UI state attributes.
+note: |
+  Base UI exposes state as presence attributes and its own CSS variables:
+  data-open, data-closed, data-checked, data-unchecked, data-pressed,
+  data-disabled, data-highlighted, data-starting-style, data-ending-style,
+  --transform-origin, --anchor-width and --available-height. A selector such as
+  data-[state=open] never matches. Check the component's API reference.
+  A custom data-state you set yourself should use a project-specific name.
+rule:
+  kind: string_fragment
+  regex: data-\[state=(open|closed|on|off|checked|unchecked|indeterminate|active|inactive|delayed-open|instant-open|visible|hidden)\]|--radix-
