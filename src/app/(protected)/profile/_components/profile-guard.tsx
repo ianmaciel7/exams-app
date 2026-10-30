@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl";
 import type { ComponentProps, ReactNode } from "react";
-import { LabeledSpinner } from "@/components/ui/extensions/labeled-spinner";
+import { LoadingPrimitive } from "@/components/ui/extensions/loading-primitive";
 import type { ProfileStatus } from "../_hooks/use-profile-status";
 import { ProfileCard, ProfileCardContent } from "./profile-card";
 
@@ -17,9 +17,7 @@ function ProfileGuard({ status, children, ...props }: ProfileGuardProps) {
   if (status.isLoading) {
     return (
       <div {...props}>
-        <LabeledSpinner className="w-full text-sm text-muted-foreground">
-          {t("loading")}
-        </LabeledSpinner>
+        <LoadingPrimitive>{t("loading")}</LoadingPrimitive>
       </div>
     );
   }
