@@ -31,6 +31,7 @@ original date. Read current operational details in the
 | [0020](0020-grant-app-hosting-firebase-auth-viewer.md) | Accepted | The App Hosting runtime account holds the read-only Firebase Auth viewer role so revocation-aware token verification works |
 | [0021](0021-resolve-locale-from-browser-preferences.md) | Accepted; supersedes part of 0004 | Explicit and cookie locale selection with `Accept-Language` fallback, while retaining unprefixed routes and no Proxy |
 | [0022](0022-gate-production-deploys-on-browser-checks.md) | Accepted | Firebase CD deploys only after desktop and mobile Playwright suites, axe, visual checks, and Lighthouse mobile budgets pass on the release commit |
+| [0023](0023-keep-service-worker-firebase-session.md) | Accepted | The Firebase Auth service worker stays the server session bridge, without session cookies, `FirebaseServerApp`, or Proxy authentication |
 
 ## Current operational clarifications
 

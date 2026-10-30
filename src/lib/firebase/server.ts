@@ -2,6 +2,7 @@ import "server-only";
 
 import { headers } from "next/headers";
 import { connection } from "next/server";
+import { cache } from "react";
 import { readUserRole, type UserRole } from "@/lib/role";
 import { getAdminAuth } from "./admin";
 
@@ -61,15 +62,20 @@ async function verifyIdToken(authIdToken: string) {
  * fallback until the worker controls the tab. Authorization that must not
  * depend on that fallback belongs in `verifyRole` under
  * `src/app/(protected)/_lib/dal.ts`.
+ *
+ * `cache` shares one revocation-aware verification across a render pass. It has
+ * no effect in Server Functions and Route Handlers, which verify on every call.
  */
-export async function getFirebaseServerSession(): Promise<FirebaseServerSession> {
-  const requestHeaders = await headers();
-  const isBridgeActive = requestHeaders.get("x-firebase-auth-bridge") === "1";
-  const authIdToken = readBearerToken(requestHeaders);
+export const getFirebaseServerSession = cache(
+  async (): Promise<FirebaseServerSession> => {
+    const requestHeaders = await headers();
+    const isBridgeActive = requestHeaders.get("x-firebase-auth-bridge") === "1";
+    const authIdToken = readBearerToken(requestHeaders);
 
-  if (!isBridgeActive || !authIdToken) {
-    return { isBridgeActive, role: readUserRole({}), userId: null };
-  }
+    if (!isBridgeActive || !authIdToken) {
+      return { isBridgeActive, role: readUserRole({}), userId: null };
+    }
 
-  return { isBridgeActive, ...(await verifyIdToken(authIdToken)) };
-}
+    return { isBridgeActive, ...(await verifyIdToken(authIdToken)) };
+  },
+);

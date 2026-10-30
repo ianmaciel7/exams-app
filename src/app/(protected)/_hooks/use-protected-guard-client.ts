@@ -10,10 +10,15 @@ export function useProtectedGuardClient() {
   const router = useRouter();
   const pathname = usePathname();
   const [activeUserId, setActiveUserId] = useState<string | null>(null);
-  const [error, setError] = useState<"configurationError" | null>(null);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
-    setError(null);
+    const fail = (cause: unknown) => {
+      console.error(cause);
+      setActiveUserId(null);
+      setIsError(true);
+    };
+
     try {
       return subscribeToProtectedSession({
         onUnauthenticated: () => {
@@ -22,18 +27,13 @@ export function useProtectedGuardClient() {
           router.replace(getSignInUrl(destination));
         },
         onAuthenticated: (userId) => {
-          setError(null);
+          setIsError(false);
           setActiveUserId(userId);
         },
-        onError: (cause) => {
-          console.error(cause);
-          setActiveUserId(null);
-          setError("configurationError");
-        },
+        onError: fail,
       });
     } catch (cause) {
-      console.error(cause);
-      setError("configurationError");
+      fail(cause);
     }
   }, [router]);
 
@@ -43,9 +43,9 @@ export function useProtectedGuardClient() {
   }, [activeUserId, pathname]);
 
   return {
-    errorMessage: error ? t(error) : "",
-    isError: error !== null,
-    isLoading: activeUserId === null && error === null,
-    t,
+    errorMessage: t("configurationError"),
+    isError,
+    isLoading: activeUserId === null && !isError,
+    loadingMessage: t("loading"),
   };
 }
