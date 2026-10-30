@@ -25,5 +25,12 @@ active Firebase session, and `return-url.ts` owns safe post-auth navigation.
 - Preserve safe post-auth navigation through `return-url.ts`.
 - Follow [SECURITY.md](../../SECURITY.md) and the actual Firebase rules and token-verification implementation.
 
+## Token verification failures
+
+- Map only token rejections (`auth/argument-error`, `auth/id-token-expired`, `auth/id-token-revoked`, `auth/user-disabled`) to "unauthenticated".
+- Let server faults (expired Admin credentials, network, `auth/internal-error`) propagate to the error boundary. A catch-all that returns "unauthenticated" redirects to sign-in, and the still-signed-in client navigates back to `next`, looping forever.
+- Log the failure code and message, never the token.
+- Test failure paths with mocks that carry the real SDK `code`; see [TESTING.md](../../TESTING.md#failure-path-mocks-regressions).
+
 See [data.md](data.md) for persistence taxonomy and [boundaries.md](boundaries.md)
 for runtime imports and serialization.
