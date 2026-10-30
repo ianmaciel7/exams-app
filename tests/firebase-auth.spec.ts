@@ -158,16 +158,25 @@ test("navigation and translated screens", async ({ page, context }) => {
 });
 
 test("Google popup signs in with the emulator", async ({ page }) => {
+  // The emulator serves the OAuth account picker from a separate page. Give
+  // that first page its own startup budget on constrained CI runners, while
+  // still requiring the first attempt to complete successfully.
+  test.setTimeout(60_000);
   await page.goto("/sign-in");
   const popupPromise = page.waitForEvent("popup");
   await page.getByRole("button", { name: "Sign in with Google" }).click();
   const popup = await popupPromise;
-  await popup.getByRole("button", { name: /add new account/i }).click();
-  await popup
-    .getByLabel(/email/i)
-    .fill(`google-${crypto.randomUUID()}@example.test`);
+  await popup.waitForLoadState("domcontentloaded");
+  const addAccount = popup.getByRole("button", { name: /add new account/i });
+  await expect(addAccount).toBeEnabled();
+  await addAccount.click();
+  const email = popup.getByLabel(/email/i);
+  await expect(email).toBeVisible();
+  await email.fill(`google-${crypto.randomUUID()}@example.test`);
+  const popupClosed = popup.waitForEvent("close");
   await popup.getByRole("button", { name: /sign in/i }).click();
-  await expect(page).toHaveURL("/");
+  await popupClosed;
+  await expect(page).toHaveURL("/", { timeout: 30_000 });
 });
 
 test("Google popup cancellation restores sign-in and supports retry", async ({
@@ -546,6 +555,7 @@ for (const colorScheme of ["light", "dark"] as const) {
       await page.getByRole("button", { name: "Sign In", exact: true }).click();
       await expect(page).toHaveURL("/");
       await page.goto("/profile");
+      await expect(page.getByLabel("Language", { exact: true })).toBeVisible();
 
       const card = page.locator('[data-slot="card"]').first();
       await expect(card).toBeVisible();

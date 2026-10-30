@@ -32,7 +32,9 @@ describe("subscribeToWorkerSession", () => {
   });
 
   it("does not let optional worker setup override auth configuration errors", () => {
-    const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
+    const consoleError = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
     mocks.subscribeToSession.mockImplementation(() => {
       throw new Error("missing Firebase configuration");
     });
