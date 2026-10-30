@@ -31,6 +31,14 @@ active Firebase session, and `return-url.ts` owns safe post-auth navigation.
 - Let server faults (expired Admin credentials, network, `auth/internal-error`) propagate to the error boundary. A catch-all that returns "unauthenticated" redirects to sign-in, and the still-signed-in client navigates back to `next`, looping forever.
 - Log the failure code and message, never the token.
 - Test failure paths with mocks that carry the real SDK `code`; see [TESTING.md](../../TESTING.md#failure-path-mocks-regressions).
+- When `verifyIdToken(token, true)` runs in Firebase App Hosting, provision the backend runtime account with `roles/firebaseauth.viewer` in `infra/prod/main.tf`. The `check:app-hosting-auth-iam` guard prevents the required least-privilege binding from being removed.
 
 See [data.md](data.md) for persistence taxonomy and [boundaries.md](boundaries.md)
 for runtime imports and serialization.
+
+## Local emulator identities
+
+Use the isolated `demo-test` Firebase project for local emulator work. Auth seed
+accounts must use fictional `@example.test` addresses, display names, and include
+at least one `google.com` identity for interactive provider testing. The
+`pnpm check:emulator-snapshot` safeguard enforces this contract.

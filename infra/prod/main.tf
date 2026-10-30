@@ -162,6 +162,13 @@ resource "google_project_iam_member" "app_hosting_runner" {
   member  = google_service_account.app_hosting.member
 }
 
+# Revocation-aware Admin SDK token verification reads the Firebase Auth user record.
+resource "google_project_iam_member" "app_hosting_firebase_auth_viewer" {
+  project = var.project_id
+  role    = "roles/firebaseauth.viewer"
+  member  = google_service_account.app_hosting.member
+}
+
 # Cloud Build runs as the default compute account in new projects and needs this role
 # to build Functions and App Hosting backends.
 resource "google_project_iam_member" "compute_cloudbuild" {
@@ -221,7 +228,10 @@ resource "google_firebase_app_hosting_backend" "app" {
     root_directory = "/"
   }
 
-  depends_on = [google_project_iam_member.app_hosting_runner]
+  depends_on = [
+    google_project_iam_member.app_hosting_runner,
+    google_project_iam_member.app_hosting_firebase_auth_viewer,
+  ]
 }
 
 # --- Team access -----------------------------------------------------------------

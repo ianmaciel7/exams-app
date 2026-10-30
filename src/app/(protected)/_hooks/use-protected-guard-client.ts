@@ -27,7 +27,6 @@ export function useProtectedGuardClient() {
           router.replace(getSignInUrl(destination));
         },
         onReady: () => setReadyPath(pathname),
-        onError: () => setError("usageLogError"),
       });
     } catch (cause) {
       console.error(cause);

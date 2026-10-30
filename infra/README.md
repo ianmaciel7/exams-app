@@ -50,6 +50,7 @@ then apply again so the repository link and backend can finish.
   client secret that Terraform cannot create, and the console keeps that secret out of the state and the repository.
   Then set `NEXT_PUBLIC_FIREBASE_GOOGLE_ENABLED` to `"true"` in `apphosting.yaml` and publish a new release.
 - Rules, indexes and Functions are still deployed by the CD workflow, not by Terraform.
+- The App Hosting runtime account receives `roles/firebaseauth.viewer`, which is required for the server's revocation-aware Firebase Admin ID-token verification. Run `pnpm check:app-hosting-auth-iam` before applying infrastructure changes; after an apply, validate an authenticated protected route in the deployed application.
 
 ## Team access
 

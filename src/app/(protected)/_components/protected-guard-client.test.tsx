@@ -94,7 +94,7 @@ describe("ProtectedGuardClient", () => {
     });
   });
 
-  it("blocks content when access logging fails", async () => {
+  it("keeps content visible when access logging fails", () => {
     mocks.currentUser = { uid: "user-123" };
     mocks.recordUsage.mockRejectedValue(new Error("offline"));
     render(
@@ -102,8 +102,8 @@ describe("ProtectedGuardClient", () => {
         <div>{"Protected Content"}</div>
       </ProtectedGuardClient>,
     );
-    await waitFor(() => expect(screen.getByRole("alert")).toBeTruthy());
-    expect(screen.queryByText("Protected Content")).toBeNull();
+    expect(screen.queryByRole("alert")).toBeNull();
+    expect(screen.getByText("Protected Content")).toBeTruthy();
   });
 
   it("ignores a logging acknowledgment after sign-out", async () => {
@@ -128,28 +128,15 @@ describe("ProtectedGuardClient", () => {
     expect(mocks.router.replace).toHaveBeenCalled();
   });
 
-  it("recovers from a committed logging error on a new session", async () => {
-    let acknowledge: (() => void) | undefined;
+  it("records one screen view for repeated emissions of the same user", async () => {
     mocks.currentUser = { uid: "user-123" };
-    mocks.recordUsage
-      .mockRejectedValueOnce(new Error("offline"))
-      .mockReturnValueOnce(
-        new Promise<void>((resolve) => {
-          acknowledge = resolve;
-        }),
-      );
     render(<ProtectedGuardClient>{"Protected Content"}</ProtectedGuardClient>);
-    await screen.findByRole("alert");
-
+    const onAuthChange = mocks.subscribe.mock.calls[0][1];
     await act(async () => {
-      mocks.subscribe.mock.calls[0][1]({ uid: "user-456" });
+      onAuthChange({ uid: "user-123" });
+      onAuthChange({ uid: "user-123" });
     });
-    expect(screen.queryByRole("alert")).toBeNull();
-    expect(screen.getByRole("status")).toBeTruthy();
-    expect(screen.queryByText("Protected Content")).toBeNull();
-
-    await act(async () => acknowledge?.());
-    expect(screen.getByText("Protected Content")).toBeTruthy();
+    expect(mocks.recordUsage).toHaveBeenCalledTimes(1);
   });
 
   it("ignores an obsolete logging failure after a newer session succeeds", async () => {
