@@ -40,6 +40,6 @@ env:
   # Release version shown in the app. Keep it equal to package.json: the release workflow
   # rejects a release whose tag differs, and `pnpm check:release` guards it.
   - variable: NEXT_PUBLIC_GIT_TAG
-    value: "v0.1.7"
+    value: "v0.1.8"
     availability:
       - BUILD
