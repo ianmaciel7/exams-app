@@ -124,7 +124,7 @@ project skills are tracked in `.agents/skills/` and `skills-lock.json`.
 | `pnpm test:logging` | Run logging and diagnostic test suite. |
 | `pnpm test:browser` | `browser` Vitest project in Chromium. |
 | `pnpm test:e2e` | Functional Playwright specs (excludes `@a11y` and `@visual`). |
-| `pnpm test:auth` | Run Playwright's `auth-emulator` project with Firebase Auth, Firestore, and Functions via `firebase emulators:exec`; install the separate Functions dependencies first. |
+| `pnpm test:auth` | Required emulator-backed Playwright acceptance journeys (including Google popup cancellation/retry, session recovery, and Firestore ownership) using Firebase Auth, Firestore, and Functions via `firebase emulators:exec`; install separate Functions dependencies first. The CI `auth-emulator` job runs the same suite. |
 | `pnpm test:a11y` | Axe accessibility scans. |
 | `pnpm test:mobile` | Playwright `mobile` project (Pixel 7 emulation): viewport, touch targets, field font size, autofill, reflow, text spacing, reduced motion, and axe on public routes. |
 | `pnpm test:visual` | Compare screenshots with baselines. Never rewrites them. Skipped locally; runs in CI (or with `PLAYWRIGHT_VISUAL=1`). |
