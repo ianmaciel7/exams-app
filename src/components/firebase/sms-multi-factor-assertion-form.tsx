@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import { type UserCredential, type MultiFactorInfo } from "firebase/auth";
 
-import { FirebaseUIError, getTranslation } from "@firebase-oss/ui-core";
+import { getTranslation } from "@firebase-oss/ui-core";
 import {
   useMultiFactorPhoneAuthVerifyFormSchema,
   useRecaptchaVerifier,
@@ -18,6 +18,7 @@ import { Field, FieldLabel, FieldDescription, FieldError } from "@/components/ui
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
+import { getAuthErrorMessage } from "./auth-error-message";
 
 type PhoneMultiFactorInfo = MultiFactorInfo & {
   phoneNumber?: string;
@@ -41,8 +42,7 @@ function SmsMultiFactorAssertionPhoneForm(props: SmsMultiFactorAssertionPhoneFor
       const verificationId = await action({ hint: props.hint, recaptchaVerifier: recaptchaVerifier! });
       props.onSubmit(verificationId);
     } catch (error) {
-      const message = error instanceof FirebaseUIError ? error.message : String(error);
-      setError(message);
+      setError(getAuthErrorMessage(error, ui));
     }
   };
 
@@ -64,7 +64,7 @@ function SmsMultiFactorAssertionPhoneForm(props: SmsMultiFactorAssertionPhoneFor
           getTranslation(ui, "labels", "sendCode")
         )}
       </Button>
-      {error && <div className="text-sm text-red-600">{error}</div>}
+      {error && <div role="alert" className="text-sm text-destructive">{error}</div>}
     </div>
   );
 }
@@ -96,8 +96,7 @@ function SmsMultiFactorAssertionVerifyForm(props: SmsMultiFactorAssertionVerifyF
       });
       props.onSuccess(credential);
     } catch (error) {
-      const message = error instanceof FirebaseUIError ? error.message : String(error);
-      form.setError("root", { message });
+      form.setError("root", { message: getAuthErrorMessage(error, ui) });
     }
   };
 

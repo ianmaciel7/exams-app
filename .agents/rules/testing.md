@@ -22,3 +22,9 @@ The executable safeguard is the relevant behavioral regression in
 `tests/firebase-auth.spec.ts`, exercised by the required `auth-emulator`
 CI job. Do not skip, weaken, or replace a failing acceptance scenario with
 an assertion about implementation details merely to make CI green.
+
+Read [ui-state.md](ui-state.md) for cross-cutting feedback and accessible
+presentation guidance. `pnpm check:ui-state` runs in `verify:fast`,
+`verify:static`, and the CI `static` job. It catches only direct raw exception
+coercion in JSX, form error, and toast sinks; it does not establish complete
+interaction coverage or accessibility conformance.

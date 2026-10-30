@@ -7,7 +7,7 @@ Run the checks relevant to a change before opening a pull request. See
 
 | Command | Use it for |
 | --- | --- |
-| `pnpm verify:fast` | Code changes: Biome CI, typecheck, unit tests, logging regressions, ast-grep structural rules, route-entrypoint guard, owned-component naming/boundary guard, and responsiveness guard (`check:responsiveness`). Browser suites run separately. |
+| `pnpm verify:fast` | Code changes: Biome CI, typecheck, unit tests, logging regressions, ast-grep structural rules, route-entrypoint guard, owned-component naming/boundary guard, UI feedback guard (`check:ui-state`), and responsiveness guard (`check:responsiveness`). Browser suites run separately. |
 | `pnpm verify:full` | Before a pull request: `verify:static` (adds coverage thresholds, architecture, unused code, duplication, ast-grep structural checks, route/component/responsiveness guards, spelling, Markdown, complexity, React diagnostics) plus `verify:build` (browser tests, production build with size budgets, Ladle build). |
 | `pnpm verify:e2e` | Changes that affect pages or visual output: functional, accessibility, and visual Playwright specs. |
 | `pnpm verify:security` | Dependency or configuration changes: Semgrep rule tests and scan, Gitleaks, workflow lint, `pnpm audit`, and the separate Functions lockfile audit. Needs the host tools in [TOOLING.md](TOOLING.md#host-prerequisites). |
@@ -25,6 +25,13 @@ versioned entrypoints. Accepted ADRs preserve their historical text.
 regressions, and structural ast-grep checks, including migrated route rules for
 client directives, hooks, and JSX event handlers. Browser, end-to-end, visual,
 and mutation suites run separately.
+
+`pnpm check:ui-state` runs positive and negative AST fixtures, then scans
+application TypeScript and TSX for direct `String(error|cause|err)` coercion
+that reaches JSX, React Hook Form error sinks, or toast payloads. It runs in
+`verify:fast` and `verify:static`, so the CI `static` job enforces the same
+contract. This narrow syntax guard does not replace behavioral tests, error
+classification review, or accessibility checks.
 
 For a manual smoke test, run `pnpm dev` and verify the affected route in a
 browser, including its loading, error, and localized states where applicable.

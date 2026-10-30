@@ -15,7 +15,6 @@ import { useRef } from "react";
 import { useForm, FormProvider, Controller } from "react-hook-form";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import {
-  FirebaseUIError,
   formatPhoneNumber,
   getTranslation,
   type PhoneAuthNumberFormSchema,
@@ -29,6 +28,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { Policies } from "@/components/firebase/policies";
 import { CountrySelector, type CountrySelectorRef } from "@/components/firebase/country-selector";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
+import { getAuthErrorMessage } from "./auth-error-message";
 
 type VerifyPhoneNumberFormProps = {
   verificationId: string;
@@ -56,8 +56,7 @@ function VerifyPhoneNumberForm(props: VerifyPhoneNumberFormProps) {
         props.onSuccess(credential);
       }
     } catch (error) {
-      const message = error instanceof FirebaseUIError ? error.message : String(error);
-      form.setError("root", { message });
+      form.setError("root", { message: getAuthErrorMessage(error, ui) });
     }
   }
 
@@ -130,8 +129,7 @@ function PhoneNumberForm(props: PhoneNumberFormProps) {
       const verificationId = await action({ phoneNumber: formatted, recaptchaVerifier: recaptchaVerifier! });
       props.onSubmit(verificationId);
     } catch (error) {
-      const message = error instanceof FirebaseUIError ? error.message : String(error);
-      form.setError("root", { message });
+      form.setError("root", { message: getAuthErrorMessage(error, ui) });
     }
   }
 

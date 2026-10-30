@@ -30,6 +30,7 @@ from the previous rules still require verification against installed packages.
 | [data.md](data.md) | changing persistence modules, DTOs, schemas, data placement, or dependency injection |
 | [auth.md](auth.md) | changing identity, session cookies/tokens, protected access, or post-auth navigation |
 | [testing.md](testing.md) | testing or changing stateful journeys, cancellation, errors, retries, or recovery |
+| [ui-state.md](ui-state.md) | changing user-visible pending, success, error, empty, cancellation, retry, or recovery behavior |
 | [rendering.md](rendering.md) | changing Suspense, loading/error boundaries, transitions, hydration, or component identity |
 | [mobile.md](mobile.md) | changing touch targets, form-field text, autofill, motion, or mobile layout behavior |
 | [dom.md](dom.md) | changing HTML/SVG semantics, refs, portals, imperative browser integration, or Fragment refs |

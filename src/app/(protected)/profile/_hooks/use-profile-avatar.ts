@@ -1,6 +1,5 @@
 import { useTranslations } from "next-intl";
 import { type ChangeEvent, useEffect, useRef, useState } from "react";
-import { toast } from "@/components/ui/toast";
 
 import { ACCEPTED_AVATAR_TYPES, MAX_AVATAR_SIZE } from "../_lib/avatar";
 
@@ -11,6 +10,7 @@ export function useProfileAvatar(
   const t = useTranslations("Auth");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     if (!file) {
@@ -30,12 +30,13 @@ export function useProfileAvatar(
       !ACCEPTED_AVATAR_TYPES.has(selected.type) ||
       selected.size > MAX_AVATAR_SIZE
     ) {
-      toast.add({ title: t("profilePhotoInvalid"), type: "error" });
+      setErrorMessage(t("profilePhotoInvalid"));
       if (fileInputRef.current) fileInputRef.current.value = "";
       return;
     }
+    setErrorMessage(null);
     onChange(selected);
   }
 
-  return { avatarPreview, fileInputRef, handleAvatarChange };
+  return { avatarPreview, errorMessage, fileInputRef, handleAvatarChange };
 }

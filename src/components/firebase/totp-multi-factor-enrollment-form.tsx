@@ -4,7 +4,6 @@ import { useState } from "react";
 import { TotpMultiFactorGenerator, type TotpSecret } from "firebase/auth";
 import {
   enrollWithMultiFactorAssertion,
-  FirebaseUIError,
   generateTotpQrCode,
   generateTotpSecret,
   getTranslation,
@@ -22,6 +21,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
+import { getAuthErrorMessage } from "./auth-error-message";
 
 type TotpMultiFactorSecretGenerationFormProps = {
   onSubmit: (secret: TotpSecret, displayName: string) => void;
@@ -44,8 +44,7 @@ function TotpMultiFactorSecretGenerationForm(props: TotpMultiFactorSecretGenerat
       const secret = await generateTotpSecret(ui);
       props.onSubmit(secret, values.displayName);
     } catch (error) {
-      const message = error instanceof FirebaseUIError ? error.message : String(error);
-      form.setError("root", { message });
+      form.setError("root", { message: getAuthErrorMessage(error, ui) });
     }
   };
 
@@ -100,8 +99,7 @@ export function MultiFactorEnrollmentVerifyTotpForm(props: MultiFactorEnrollment
       await enrollWithMultiFactorAssertion(ui, assertion, props.displayName);
       props.onSuccess();
     } catch (error) {
-      const message = error instanceof FirebaseUIError ? error.message : String(error);
-      form.setError("root", { message });
+      form.setError("root", { message: getAuthErrorMessage(error, ui) });
     }
   };
 

@@ -12,12 +12,13 @@ import {
 } from "@firebase-oss/ui-react";
 import { useForm, FormProvider, Controller } from "react-hook-form";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import { FirebaseUIError, getTranslation } from "@firebase-oss/ui-core";
+import { getTranslation } from "@firebase-oss/ui-core";
 
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Policies } from "./policies";
+import { getAuthErrorMessage } from "./auth-error-message";
 
 export type { SignUpAuthFormProps };
 
@@ -44,8 +45,7 @@ export function SignUpAuthForm(props: SignUpAuthFormProps) {
         props.onSignUp?.(credential);
       }
     } catch (error) {
-      const message = error instanceof FirebaseUIError ? error.message : String(error);
-      form.setError("root", { message });
+      form.setError("root", { message: getAuthErrorMessage(error, ui) });
     }
   }
 

@@ -2,7 +2,7 @@
 
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import type { EmailLinkAuthFormSchema } from "@firebase-oss/ui-core";
-import { FirebaseUIError, getTranslation } from "@firebase-oss/ui-core";
+import { getTranslation } from "@firebase-oss/ui-core";
 import {
   useEmailLinkAuthFormAction,
   useEmailLinkAuthFormCompleteSignIn,
@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { getAuthErrorMessage } from "./auth-error-message";
 
 export type { EmailLinkAuthFormProps };
 
@@ -45,8 +46,7 @@ export function EmailLinkAuthForm(props: EmailLinkAuthFormProps) {
       setEmailSent(true);
       onEmailSent?.();
     } catch (error) {
-      const message = error instanceof FirebaseUIError ? error.message : String(error);
-      form.setError("root", { message });
+      form.setError("root", { message: getAuthErrorMessage(error, ui) });
     }
   }
 

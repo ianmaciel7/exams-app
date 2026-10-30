@@ -293,7 +293,7 @@ describe("ProfileSectionClient", () => {
     });
   });
 
-  it("shows error toast when invalid avatar is chosen", async () => {
+  it("shows an associated inline error when an invalid avatar is chosen", async () => {
     mocks.currentUser = { uid: "user-123", email: "user@example.com" };
     render(<ProfileSectionClient />);
 
@@ -307,10 +307,24 @@ describe("ProfileSectionClient", () => {
       },
     );
 
-    expect(mocks.toastAdd).toHaveBeenCalledWith({
-      title: "profilePhotoInvalid",
-      type: "error",
-    });
+    const error = screen.getByRole("alert");
+    expect(error.textContent).toBe("profilePhotoInvalid");
+    expect(
+      screen
+        .getByLabelText("profilePhotoChange", { selector: "input" })
+        .getAttribute("aria-describedby"),
+    ).toBe(error.getAttribute("id"));
+    expect(mocks.toastAdd).not.toHaveBeenCalled();
+
+    fireEvent.change(
+      screen.getByLabelText("profilePhotoChange", { selector: "input" }),
+      {
+        target: {
+          files: [new File(["avatar"], "avatar.png", { type: "image/png" })],
+        },
+      },
+    );
+    await waitFor(() => expect(screen.queryByRole("alert")).toBeNull());
   });
 
   it("applies saved preferences from the user's document", async () => {
@@ -484,18 +498,17 @@ describe("ProfileSectionClient", () => {
       fireEvent.change(input, { target: { files: [file] } });
       fireEvent.click(screen.getByRole("button", { name: "saveProfile" }));
       await waitFor(() =>
-        expect(mocks.toastAdd).toHaveBeenCalledWith({
-          title: "profileSaveError",
-          type: "error",
-        }),
+        expect(screen.getByRole("alert").textContent).toBe("profileSaveError"),
       );
+      expect(mocks.toastAdd).not.toHaveBeenCalled();
       const save = await screen.findByRole("button", { name: "saveProfile" });
       fireEvent.click(save);
       await waitFor(() => expect(mocks.updateProfile).toHaveBeenCalled());
+      await waitFor(() => expect(screen.queryByRole("alert")).toBeNull());
       expect(mocks.uploadBytes).toHaveBeenCalledTimes(2);
       await screen.findByRole("button", { name: "saveProfile" });
       fireEvent.click(screen.getByRole("button", { name: "saveProfile" }));
-      await waitFor(() => expect(mocks.toastAdd).toHaveBeenCalledTimes(3));
+      await waitFor(() => expect(mocks.toastAdd).toHaveBeenCalledTimes(2));
       expect(mocks.uploadBytes).toHaveBeenCalledTimes(2);
       expect(input.value).toBe("");
     } finally {

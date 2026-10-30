@@ -4,7 +4,6 @@ import { useRef, useState } from "react";
 import { multiFactor, PhoneAuthProvider, PhoneMultiFactorGenerator } from "firebase/auth";
 import {
   enrollWithMultiFactorAssertion,
-  FirebaseUIError,
   formatPhoneNumber,
   getTranslation,
   verifyPhoneNumber,
@@ -24,6 +23,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
+import { getAuthErrorMessage } from "./auth-error-message";
 
 type MultiFactorEnrollmentPhoneNumberFormProps = {
   onSubmit: (verificationId: string, displayName?: string) => void;
@@ -52,8 +52,7 @@ function MultiFactorEnrollmentPhoneNumberForm(props: MultiFactorEnrollmentPhoneN
       const confirmationResult = await verifyPhoneNumber(ui, formatted, recaptchaVerifier!, mfaUser);
       props.onSubmit(confirmationResult, values.displayName);
     } catch (error) {
-      const message = error instanceof FirebaseUIError ? error.message : String(error);
-      form.setError("root", { message });
+      form.setError("root", { message: getAuthErrorMessage(error, ui) });
     }
   };
 
@@ -131,8 +130,7 @@ export function MultiFactorEnrollmentVerifyPhoneNumberForm(props: MultiFactorEnr
       await enrollWithMultiFactorAssertion(ui, assertion, props.displayName);
       props.onSuccess();
     } catch (error) {
-      const message = error instanceof FirebaseUIError ? error.message : String(error);
-      form.setError("root", { message });
+      form.setError("root", { message: getAuthErrorMessage(error, ui) });
     }
   };
 
