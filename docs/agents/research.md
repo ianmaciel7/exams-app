@@ -10,7 +10,7 @@ Apply this rule before and during external research queries, including web searc
 
 Serena memory operations are scoped to the active project workspace. Before invoking any memory or symbol tools, ensure the project is active:
 
-- Call `activate_project(project="shadcn-firebase-template")` if not already activated in the current session.
+- Call `activate_project(project="exams-app")` if not already activated in the current session.
 - Once activated, use Serena's dedicated memory MCP tools:
   - `list_memories`: List existing project memories.
   - `read_memory`: Retrieve the full content of a specified memory.
