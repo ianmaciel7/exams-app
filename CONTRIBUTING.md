@@ -78,6 +78,12 @@ protection settings and their availability are described in
 [ADR 0007](docs/adr/0007-configure-ci.md#main-branch-merge-policy); repository
 settings must be configured separately to enforce this policy.
 
+The repository deletes the head branch when a pull request merges
+(`delete_branch_on_merge`) and allows auto-merge. Prefer
+`gh pr merge <number> --squash --auto` once the checks are green, so no merged
+branch is left on the remote. A branch whose pull request closed without
+merging is deleted by hand.
+
 ## shadcn/ui documentation and source changes
 
 Use [the shadcn/ui rules](.agents/rules/shadcn.md#shadcnui-maintenance) to identify the correct
