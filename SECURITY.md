@@ -157,7 +157,9 @@ production. Read the nonce with `getNonce()` from `src/lib/csp-nonce.ts` in a
 Server Component and pass it to any library that renders inline `<script>` or
 `<style>` tags; Base UI receives it through `CspProviderServer`. Never add
 `'unsafe-eval'` or `'unsafe-inline'` for production styles or scripts; add the
-narrowest origin to the matching directive instead.
+narrowest origin to the matching directive instead. `worker-src` also allows
+`https://www.gstatic.com/firebasejs/`, where the auth service worker imports
+the Firebase SDK from; Chromium checks those imports against the page policy.
 
 ## React rendering and input boundaries
 
