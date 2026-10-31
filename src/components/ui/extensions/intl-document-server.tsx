@@ -1,16 +1,13 @@
 import "server-only";
 import { getLocale, getTranslations } from "next-intl/server";
-import { GlobalLoadingIndicator } from "./global-loading-indicator";
 import type { ComponentProps } from "react";
+import { GlobalLoadingIndicator } from "./global-loading-indicator";
 
 async function IntlDocumentServer({
   className,
   children,
 }: Pick<ComponentProps<"html">, "className" | "children">) {
-  const [locale, t] = await Promise.all([
-    getLocale(),
-    getTranslations("App"),
-  ]);
+  const [locale, t] = await Promise.all([getLocale(), getTranslations("App")]);
   return (
     <html lang={locale} className={className} suppressHydrationWarning>
       {/* Base UI setup: a relative body lets dialog backdrops cover the iOS 26+

@@ -14,7 +14,6 @@ function GlobalLoadingIndicator({
   label,
   ...props
 }: GlobalLoadingIndicatorProps) {
-
   return (
     <div {...props} data-slot="global-loading-indicator">
       <LoadingOverlay>
