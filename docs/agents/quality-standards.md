@@ -112,7 +112,7 @@ limitations are documented in [TESTING.md](../../TESTING.md).
 | Standard | Status | Coverage |
 | --- | --- | --- |
 | [OWASP Cheat Sheets](https://cheatsheetseries.owasp.org/) | Automated (headers) | `best-practices.spec.ts` checks the `next.config.ts` headers. |
-| [Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CSP) | Partial | `frame-ancestors`, `base-uri`, and `object-src` only; a nonce policy needs the Firebase Auth origins. |
+| [Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CSP) | Automated | `src/proxy.ts` sets a per-request nonce policy with `'strict-dynamic'` ([ADR 0023](../adr/0023-enforce-a-nonce-based-content-security-policy.md)); `best-practices.spec.ts` checks the nonce on every script and no violations on public routes. `style-src-attr` still allows inline `style` attributes. |
 | [OWASP ASVS](https://asvs.owasp.org/) | Partial | Semgrep, Gitleaks, zizmor, and `pnpm audit`; no level-by-level checklist. |
 | [WebAuthn Level 3](https://www.w3.org/TR/webauthn-3/) | Gap | No passkeys. |
 | [OWASP MASVS](https://mas.owasp.org/MASVS/) | Not applicable | Native mobile apps only. |

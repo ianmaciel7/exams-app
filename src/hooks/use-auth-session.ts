@@ -1,13 +1,8 @@
-import type { User } from "firebase/auth";
 import { useEffect, useRef, useState } from "react";
-import { getPendingSignOut } from "@/lib/auth";
-import { subscribeToSession } from "@/lib/session";
+import { loadAuth, loadSession } from "@/lib/firebase-loaders";
+import { type AuthSession, watchSession } from "@/lib/watch-auth-session";
 
-/** A settled session with no user is a signed-out visitor, never a failure. */
-export type AuthSession =
-  | { isError: false; isLoading: true; user: null }
-  | { isError: false; isLoading: false; user: User | null }
-  | { isError: true; isLoading: false; user: null };
+export type { AuthSession };
 
 /** The Firebase session of one client surface; pass the user down, do not subscribe again. */
 export function useAuthSession() {
@@ -28,32 +23,23 @@ export function useAuthSession() {
       }
     };
 
-    try {
-      const unsubscribe = subscribeToSession((user) => {
-        const current = ++revisionRef.current;
-        const next: AuthSession = { isError: false, isLoading: false, user };
-        const pending = user ? null : getPendingSignOut();
-
-        // Avoid exposing the signed-out state while Firebase is still persisting
-        // sign-out. A rapid navigation could otherwise restore stale auth.
-        if (pending) {
-          const finish = () => {
-            if (!lifetime.signal.aborted && revisionRef.current === current) {
-              setSession(next);
-            }
-          };
-          void pending.then(finish, finish);
-        } else {
-          setSession(next);
-        }
-      }, fail);
-      return () => {
-        lifetime.abort();
-        unsubscribe();
-      };
-    } catch (cause) {
-      fail(cause);
-    }
+    let unsubscribe: (() => void) | undefined;
+    // Firebase loads on demand so the server-rendered home hero stays the LCP.
+    Promise.all([loadSession(), loadAuth()])
+      .then((modules) => {
+        if (lifetime.signal.aborted) return;
+        unsubscribe = watchSession(modules, {
+          fail,
+          revision: revisionRef,
+          setSession,
+          signal: lifetime.signal,
+        });
+      })
+      .catch(fail);
+    return () => {
+      lifetime.abort();
+      unsubscribe?.();
+    };
   }, []);
 
   return session;

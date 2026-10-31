@@ -1,4 +1,4 @@
-# ADR 0024: Separate the bridge navigation check from session verification
+# ADR 0025: Separate the bridge navigation check from session verification
 
 - **Status**: Accepted
 - **Date**: 2026-10-30
@@ -19,7 +19,7 @@ return path. Usage telemetry lived in the guard. The layout check redirected a
 rejected token with a return path to `/profile`, and a client that still held a
 session would be sent straight back.
 
-[ADR 0023](0023-keep-service-worker-firebase-session.md) keeps the service worker
+[ADR 0024](0024-keep-service-worker-firebase-session.md) keeps the service worker
 and is unchanged by this decision.
 
 ## Decision
@@ -40,7 +40,7 @@ The `Client` suffix is a repository naming rule, not a Next.js convention.
 
 - Nothing can mistake the tolerant check for authentication, but a future
   server-rendered protected page cannot render on a first load without the worker.
-  [ADR 0023](0023-keep-service-worker-firebase-session.md) already names this as
+  [ADR 0024](0024-keep-service-worker-firebase-session.md) already names this as
   the trigger to revisit the session mechanism.
 - `verifySession()` and `verifyRole()` have no production caller yet, because no
   protected route reads server data. Their contract is covered by unit tests.

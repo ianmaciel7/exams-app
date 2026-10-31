@@ -1,4 +1,4 @@
-# ADR 0023: Keep the service-worker Firebase session
+# ADR 0024: Keep the service-worker Firebase session
 
 - **Status**: Accepted
 - **Date**: 2026-10-30

@@ -37,12 +37,19 @@ function emit(user: { uid: string } | null) {
   act(() => mocks.subscribe.mock.calls[0][1](user));
 }
 
-function renderGate() {
-  return render(
+/** Firebase loads on demand; wait for it so the gate has subscribed. */
+async function settle() {
+  await act(() => vi.dynamicImportSettled());
+}
+
+async function renderGate() {
+  const rendered = render(
     <AuthGateClient>
       <ProtectedContent />
     </AuthGateClient>,
   );
+  await settle();
+  return rendered;
 }
 
 describe("AuthGateClient", () => {
@@ -58,16 +65,16 @@ describe("AuthGateClient", () => {
     window.history.replaceState(null, "", "/");
   });
 
-  it("renders a loading indicator before auth resolves", () => {
-    renderGate();
+  it("renders a loading indicator before auth resolves", async () => {
+    await renderGate();
     expect(screen.getByRole("status").textContent).toBe("loading");
     expect(screen.queryByText(/Protected Content/)).toBeNull();
     expect(mocks.router.replace).not.toHaveBeenCalled();
   });
 
-  it("redirects once with the return destination, including the query", () => {
+  it("redirects once with the return destination, including the query", async () => {
     window.history.replaceState(null, "", "/profile?tab=security");
-    renderGate();
+    await renderGate();
     emit(null);
     emit(null);
     expect(mocks.router.replace).toHaveBeenCalledOnce();
@@ -78,14 +85,14 @@ describe("AuthGateClient", () => {
     expect(screen.getByRole("status")).toBeTruthy();
   });
 
-  it("provides the authenticated user to its subtree", () => {
-    renderGate();
+  it("provides the authenticated user to its subtree", async () => {
+    await renderGate();
     emit({ uid: "user-123" });
     expect(screen.getByText("Protected Content user-123")).toBeTruthy();
   });
 
-  it("hides protected content as soon as the session ends", () => {
-    renderGate();
+  it("hides protected content as soon as the session ends", async () => {
+    await renderGate();
     emit({ uid: "user-123" });
     emit(null);
     expect(screen.queryByText(/Protected Content/)).toBeNull();
@@ -93,7 +100,7 @@ describe("AuthGateClient", () => {
   });
 
   it("does not redirect until a pending sign-out has settled", async () => {
-    renderGate();
+    await renderGate();
     emit({ uid: "user-123" });
     const deferred = Promise.withResolvers<void>();
     mocks.pendingSignOut = deferred.promise;
@@ -106,7 +113,7 @@ describe("AuthGateClient", () => {
     expect(mocks.router.replace).toHaveBeenCalledOnce();
   });
 
-  it("remounts the subtree when the account changes", () => {
+  it("remounts the subtree when the account changes", async () => {
     function RetainedState() {
       const { uid } = useAuthenticatedUser();
       const [initialUid] = useState(uid);
@@ -117,20 +124,21 @@ describe("AuthGateClient", () => {
         <RetainedState />
       </AuthGateClient>,
     );
+    await settle();
     emit({ uid: "user-a" });
     emit({ uid: "user-b" });
     expect(screen.getByText("user-b")).toBeTruthy();
     expect(screen.queryByText("user-a")).toBeNull();
   });
 
-  it("offers recovery when Firebase cannot initialize", () => {
+  it("offers recovery when Firebase cannot initialize", async () => {
     mocks.getUI.mockImplementation(() => {
       throw new Error("missing config");
     });
     const log = vi.spyOn(console, "error").mockImplementation(() => {});
     const reload = vi.fn();
     vi.stubGlobal("location", { ...window.location, reload });
-    renderGate();
+    await renderGate();
     expect(screen.getByRole("alert").textContent).toBe("configurationError");
     expect(screen.queryByRole("status")).toBeNull();
     expect(mocks.router.replace).not.toHaveBeenCalled();
@@ -140,16 +148,16 @@ describe("AuthGateClient", () => {
     log.mockRestore();
   });
 
-  it("does not treat a subscription failure as a signed-out visitor", () => {
+  it("does not treat a subscription failure as a signed-out visitor", async () => {
     const log = vi.spyOn(console, "error").mockImplementation(() => {});
-    renderGate();
+    await renderGate();
     act(() => mocks.subscribe.mock.calls[0][2](new Error("network")));
     expect(screen.getByRole("alert").textContent).toBe("configurationError");
     expect(mocks.router.replace).not.toHaveBeenCalled();
     log.mockRestore();
   });
 
-  it("leaves no active subscription behind under Strict Mode", () => {
+  it("leaves no active subscription behind under Strict Mode", async () => {
     const { unmount } = render(
       <StrictMode>
         <AuthGateClient>
@@ -157,6 +165,8 @@ describe("AuthGateClient", () => {
         </AuthGateClient>
       </StrictMode>,
     );
+    await settle();
+    expect(mocks.subscribe).toHaveBeenCalled();
     unmount();
     expect(mocks.unsubscribe).toHaveBeenCalledTimes(
       mocks.subscribe.mock.calls.length,

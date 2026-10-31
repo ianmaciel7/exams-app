@@ -978,6 +978,18 @@ describe("component integration naming", () => {
       ),
       "",
     );
+    modules.set(
+      "src/components/ui/extensions/use-lazy-account.ts",
+      'export async function load() { const { load } = await import("@/lib/account"); return load(); }',
+    );
+    assert.match(
+      messages(
+        '"use client"; import { load } from "./use-lazy-account";',
+        "account",
+        modules,
+      ),
+      /-client.tsx/,
+    );
     assert.equal(
       messages(
         '"use client"; import { pure } from "./pure-hook";',
