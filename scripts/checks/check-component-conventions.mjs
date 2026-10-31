@@ -337,9 +337,7 @@ function runtimeDependencySpecifier(statement) {
 
 function browserNavigationImport(statement, specifier) {
   if (
-    !["next/navigation", "@/i18n/navigation", "next-intl/navigation"].includes(
-      specifier,
-    ) ||
+    !["next/navigation", "next-intl/navigation"].includes(specifier) ||
     !ts.isImportDeclaration(statement)
   )
     return false;

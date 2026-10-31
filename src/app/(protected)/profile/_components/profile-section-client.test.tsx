@@ -32,20 +32,6 @@ vi.mock("next/navigation", () => ({
   useRouter: () => mocks.router,
 }));
 
-vi.mock("@/i18n/navigation", () => ({
-  Link: ({
-    href,
-    children,
-    ...props
-  }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
-    <a href={href} {...props}>
-      {children}
-    </a>
-  ),
-  usePathname: () => "/profile",
-  useRouter: () => mocks.router,
-}));
-
 vi.mock("@/lib/firebase/usage", () => ({
   withUsageGuard: async (_event: unknown, operation: () => Promise<unknown>) =>
     operation(),
@@ -262,9 +248,13 @@ describe("ProfileSectionClient", () => {
       <ProfileSectionClient data-testid="loading-profile" />,
     );
 
-    const status = await screen.findByRole("status");
-    expect(status.closest('[data-slot="loading-overlay"]')).toBeTruthy();
-    expect(status.parentElement?.className).toContain("h-svh");
+    await vi.waitFor(() =>
+      expect(
+        container.querySelector(
+          '[data-loading-boundary="profile-preferences"]',
+        ),
+      ).not.toBeNull(),
+    );
     expect(screen.getByTestId("loading-profile")).toBeTruthy();
     expect(container.querySelector('[data-slot="card"]')).toBeNull();
   });

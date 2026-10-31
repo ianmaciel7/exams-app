@@ -1,7 +1,7 @@
 "use client";
 
 import type { PropsWithChildren } from "react";
-import { LoadingPrimitive } from "@/components/ui/extensions/loading-primitive";
+import { LoadingState } from "@/components/ui/extensions/loading-state";
 import { useAuthGateClient } from "../_hooks/use-auth-gate-client";
 import { AuthenticatedUserContext } from "../_lib/authenticated-user";
 import { AuthGate, AuthGateError } from "./auth-gate";
@@ -14,7 +14,7 @@ type AuthGateClientProps = PropsWithChildren;
  * remounts that subtree, so no state survives an account switch.
  */
 function AuthGateClient({ children }: AuthGateClientProps) {
-  const { errorMessage, isError, loadingMessage, onRetry, retryLabel, user } =
+  const { errorMessage, isError, onRetry, retryLabel, user } =
     useAuthGateClient();
 
   if (isError)
@@ -28,7 +28,7 @@ function AuthGateClient({ children }: AuthGateClientProps) {
       </AuthGate>
     );
 
-  if (!user) return <LoadingPrimitive>{loadingMessage}</LoadingPrimitive>;
+  if (!user) return <LoadingState boundary="protected-auth" />;
 
   return (
     <AuthGate>

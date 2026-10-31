@@ -22,6 +22,7 @@ active Firebase session, and `return-url.ts` owns safe post-auth navigation.
 - Keep `dal.ts` as the boundary for sensitive/protected data access.
 - Validate remotely supplied arguments and caller permissions on every Server Function and handler.
 - Keep credentials and private resources on the server; context and optimistic UI grant no access.
+- Never commit cloud credentials, private tokens, or API keys into tracked files (such as `.vscode/launch.json` or tool scripts). Launch configurations must reference Git-ignored local files via `envFile`. Staged files are guarded by Gitleaks in the pre-commit hook.
 - Preserve safe post-auth navigation through `return-url.ts`.
 - Follow [SECURITY.md](../../SECURITY.md) and the actual Firebase rules and token-verification implementation.
 - Call `verifyRole` or `verifySession` inside every Server Function and Route Handler, and check resource ownership; the auth gate, the layout check, and React `cache` do not cover them. The service worker forwards tokens only on navigation and RSC requests, so extend it with any new endpoint type.
@@ -39,9 +40,17 @@ active Firebase session, and `return-url.ts` owns safe post-auth navigation.
 - Log the failure code and message, never the token.
 - Test failure paths with mocks that carry the real SDK `code`; see [TESTING.md](../../TESTING.md#failure-path-mocks-regressions).
 - When `verifyIdToken(token, true)` runs in Firebase App Hosting, provision the backend runtime account with `roles/firebaseauth.viewer` in `infra/prod/main.tf`. The `check:app-hosting-auth-iam` guard prevents the required least-privilege binding from being removed.
+- In local development against a cloud Firebase project without Auth emulators, `verifyIdToken(token, true)` calls Google's Identity Toolkit API using Application Default Credentials (ADC). Google Cloud requires a quota project (`GOOGLE_CLOUD_QUOTA_PROJECT=<project-id>`), and the account authenticated via `gcloud auth application-default login` must have IAM authorization on that project (such as `roles/serviceusage.serviceUsageConsumer` or Editor/Owner). If missing, Firebase Admin Auth throws `auth/internal-error` with status 403.
 
 See [data.md](data.md) for persistence taxonomy and [boundaries.md](boundaries.md)
 for runtime imports and serialization.
+
+## Development environment separation
+
+- Keep emulator hosts out of `.env.local`. Next.js automatically loads `.env.local` for `next dev`; placing emulator endpoints there causes offline development to fail with connection errors whenever emulators are not running.
+- Use `.env.local` for default cloud development with `GOOGLE_CLOUD_QUOTA_PROJECT`.
+- Use `.env.emulator.local` strictly for emulator-backed development (`pnpm dev:emulator` and VS Code emulator profiles).
+- Use `.env.production.local` for production testing (`pnpm dev:prod`) to explicitly clear emulator hosts.
 
 ## Local emulator identities
 

@@ -1,0 +1,22 @@
+id: no-raw-button-element
+snapshots:
+  "const a = <button type=\"button\" onClick={save}>Save</button>;\n":
+    labels:
+    - source: <button type="button" onClick={save}>
+      style: primary
+      start: 10
+      end: 47
+    - source: button
+      style: secondary
+      start: 11
+      end: 17
+  "const b = <button className={buttonVariants()} />;\n":
+    labels:
+    - source: <button className={buttonVariants()} />
+      style: primary
+      start: 10
+      end: 49
+    - source: button
+      style: secondary
+      start: 11
+      end: 17

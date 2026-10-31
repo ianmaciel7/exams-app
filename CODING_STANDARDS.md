@@ -537,6 +537,11 @@ imports and re-exports are checked; this is not a complete transitive graph
 analysis. Keep the current unprefixed locale URLs and use the existing safe
 return-URL validator for user-controlled redirect destinations.
 
+Import `Link` from `next/link` and router hooks from `next/navigation`
+directly. Do not add a re-export shim such as `@/i18n/navigation`: the locale
+lives in a cookie, not in the path, so a wrapper changes nothing and splits the
+import path. Biome `noRestrictedImports` rejects `@/i18n/navigation`.
+
 Centralize application route paths and sign-in redirects in
 `src/lib/navigation.ts`. Owned modules reference `routes` (`home`, `signIn`,
 `register`, `forgotPassword`, `profile`) instead of string literals such as
@@ -590,6 +595,21 @@ installed reference. Image allowlists, script strategy, CSP, telemetry,
 instrumentation, remote cache handlers, and hosting adapters are separate
 configuration decisions. Do not enable experimental flags, run codemods, or
 install upstream agent skills simply because a guide mentions them.
+
+### Security headers, CSP, and request nonce ownership
+
+- Isolate HTTP header management from Content Security Policy logic:
+  - `src/lib/headers.ts` is the single source of truth for HTTP header names
+    (`nonceHeader`, `cspHeader`), the baseline `securityHeaders` array for
+    `next.config.ts`, and the async `getNonce()` helper.
+  - `src/lib/csp.ts` contains pure CSP policy generation functions
+    (`buildContentSecurityPolicy`, `createNonce`) and does not import `next/headers`.
+  - `src/proxy.ts` imports header constants from `@/lib/headers` and policy
+    builders from `@/lib/csp`, injecting `x-nonce` and `Content-Security-Policy`
+    into the request and response.
+  - Server Components that need the per-request nonce (such as
+    `CspProviderServer` or `ThemeProviderServer`) import `getNonce` from
+    `@/lib/headers`.
 
 ### Owned function complexity and hook responsibility trees
 
@@ -760,7 +780,7 @@ optimistic-state, or experimental Suspense feature.
 
 Place shared application components in `src/components/ui/extensions/` and
 route-private components in `src/app/**/_components/`. For example,
-`LabeledSpinner` belongs in `ui/extensions` because both
+`LoadingState` belongs in `ui/extensions` because both
 route components and Firebase UI consume it. Do not create parallel application
 component folders such as `src/components/loading/`.
 
@@ -772,7 +792,7 @@ policy, not a Next.js requirement.
 
 Placement does not classify runtime. `IntlProvider` in `intl-provider-server.tsx` is an async Server
 Component using server-only translation APIs; `ThemeProvider` in `theme-provider-client.tsx` declares
-`"use client"`; `LabeledSpinner` has no directive and can be used in either
+`"use client"`; `LoadingState` has no directive and can be used in either
 rendering graph. Keep those boundaries even when the files share a directory.
 The existing direct server-import guard complements placement checks; Next.js
 validates the complete module graph.
@@ -796,7 +816,7 @@ review those implementations. `ProfileFormClient` persists through `useProfileSu
 so it remains in `profile-form-client.tsx`. `ProfileEmailField` uses only form
 context and translations, so it lives in `profile-email-field.tsx` while keeping
 `"use client"`. `ProfileAvatarFieldClient` accesses browser object URLs through its
-hook and keeps `profile-avatar-field-client.tsx`. `LabeledSpinner` remains
+hook and keeps `profile-avatar-field-client.tsx`. `LoadingState` remains
 without a suffix and compatible with either graph.
 
 Owned component exports, props types, and component-named orchestration hooks
@@ -900,3 +920,11 @@ instead of `ReactDOM.hydrate`, explicit refs instead of `findDOMNode`,
 `root.unmount()` instead of `unmountComponentAtNode`, and JSX instead of
 `createFactory`. Do not describe a still-available legacy API as removed or
 mechanically rewrite valid boundaries.
+
+## Development tooling and secret isolation
+
+- **VS Code launch configurations (`.vscode/launch.json`)**:
+  - Never commit credentials, private tokens, or API keys directly inside `"env"` blocks.
+  - Configurations must load environment variables through `"envFile": "${workspaceFolder}/.env.*"` targeting Git-ignored environment files.
+  - This rule is enforced mechanically by `pnpm check:secret-guard` and the `.husky/pre-commit` hook.
+  - Emulator launch configurations should automate starting background emulator dependencies using `"preLaunchTask"` paired with background problem matchers in `.vscode/tasks.json`.

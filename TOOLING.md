@@ -47,7 +47,7 @@ repository. It is not a catalog of every runtime library; `package.json` and
 | Spelling | CSpell | 10.4.0 | Checks spelling in code, JSON, and Markdown. | `cspell.json` |
 | Markdown | markdownlint-cli2 | 0.23.3 | Lints repository Markdown. | `.markdownlint-cli2.jsonc` |
 | Static security | Semgrep Community Edition | Host tool (CI pins 1.181.0) | Runs the project's security rules on `src` with `--error` so findings fail the run; `check:security:rules` tests them against an annotated fixture. | `.semgrep/rules.yml`, `.semgrep/rules.tsx`, `package.json` |
-| Secret scanning | Gitleaks | Host tool (CI pins 8.30.1) | Scans the Git history for secrets with `gitleaks git --redact`. `detect` is deprecated upstream. | `package.json` (`check:secrets`) |
+| Secret scanning | Gitleaks | Host tool (CI pins 8.30.1) | Scans staged files during pre-commit with `gitleaks protect --staged` and repository history with `gitleaks git --redact`. `detect` is deprecated upstream. | `package.json` (`check:secrets`, `check:secrets:staged`), `.husky/pre-commit` |
 | Root dependency audit | `pnpm audit` | Included with pnpm | Reports known vulnerable dependencies in the root dependency graph. | `pnpm-workspace.yaml` (`auditConfig`) |
 | Sign-in allowlist | Firebase Auth blocking functions (`beforeUserCreated`, `beforeUserSignedIn`) | Identity Platform (enabled) | Refuses addresses outside `ALLOWED_USER_EMAILS` and `ADMIN_USER_EMAILS` and sets the `role` claim. Fails closed in production and stays open in the emulator while no list is set. `pnpm test:logging` runs its tests. | `functions/access-policy.cjs`, `functions/index.js`, [ADR 0017](docs/adr/0017-restrict-sign-in-to-an-email-allowlist.md) |
 | Functions dependency audit | `npm audit` through `pnpm audit:functions` | Included with npm | Reports known vulnerable dependencies in the independent backend graph. | `functions/package-lock.json`, `functions/package.json` (`overrides`) |
@@ -75,7 +75,7 @@ outside pnpm and are only needed for the commands noted next to them:
 | Playwright browsers | `test:browser`, `test:e2e`, `test:a11y`, `test:mobile`, `test:visual`, `check:lighthouse` | `pnpm exec playwright install chromium` |
 | pre-commit | Repository-integrity checks in the Git hook | `pre-commit --version` |
 | Semgrep | `check:security` | `semgrep --version` |
-| Gitleaks | `check:secrets` | `gitleaks version` |
+| Gitleaks | `check:secrets`, `check:secrets:staged`, pre-commit | `gitleaks version` |
 | actionlint, zizmor | `check:workflows` | `actionlint -version`, `zizmor --version` |
 | Graphify | On-demand codebase graph | `graphify --version` |
 
@@ -116,7 +116,7 @@ project skills are tracked in `.agents/skills/` and `skills-lock.json`.
 
 | Command | Purpose |
 | --- | --- |
-| `pnpm dev` / `pnpm build` / `pnpm start` | Develop, build, and serve the Next.js application. |
+| `pnpm dev` / `pnpm dev:prod` / `pnpm dev:emulator` / `pnpm build` / `pnpm start` | Develop (production or emulators), build, and serve the Next.js application. |
 | `pnpm setup:github` | Configure repository settings and branch protection rulesets via GitHub CLI. |
 | `pnpm lint` / `pnpm lint:ci` / `pnpm format` | Biome check, CI check, and formatting. |
 | `pnpm typecheck` | Generate route types and run `tsc --noEmit -p tsconfig.build.json`. |
@@ -152,16 +152,19 @@ project skills are tracked in `.agents/skills/` and `skills-lock.json`.
 | `pnpm check:emulator-snapshot` | Validate `demo-test` emulator commands, exported directories, and fictional Auth seed identities; includes valid and invalid fixtures and runs in fast/static verification. |
 | `pnpm check:spelling` / `pnpm check:markdown` | CSpell / markdownlint. |
 | `pnpm check:security` / `pnpm check:security:rules` | Semgrep scan of `src` (fails on findings) / tests of the Semgrep rules. Run inside a Git work tree. |
-| `pnpm check:secrets` / `pnpm audit` | Gitleaks / dependency audit. |
+| `pnpm check:secrets` / `pnpm check:secrets:staged` | Gitleaks repository history audit / staged pre-commit scanner. |
+| `pnpm check:package-scripts` | Reject package scripts that alias another script's command and `pnpm <script>` calls (in scripts or `.github/workflows`) to scripts that do not exist; includes valid and invalid fixtures. |
+| `pnpm check:repo` | Repository guards shared by `verify:fast` and `verify:static`: structure, routes, components, responsiveness, English, docs, ADR, release, App Hosting IAM, emulator snapshot, secret guard, and package scripts. |
+| `pnpm check:secret-guard` | Validate that `.husky/pre-commit` wires in Gitleaks and `.vscode/launch.json` has no hardcoded secrets without exemptions; includes regression tests. |
+| `pnpm audit` | Root dependency audit. |
 | `pnpm audit:functions` | Audit the independent npm lockfile in `functions/`, including optional backend dependencies. |
 | `pnpm check:workflows` | actionlint and zizmor on `.github/workflows`. |
 | `pnpm analyze:health` | Unit tests with coverage, then Fallow complexity and CRAP. |
 | `pnpm analyze:react` | React Doctor. |
 | `pnpm analyze:size` | Production build, then Size Limit budgets. |
 | `pnpm analyze:bundle` | Next.js bundle analyzer. |
-| `pnpm analyze:lighthouse` | Lighthouse report against a running server. |
+| `pnpm analyze:lighthouse` | Report-only Lighthouse run (headless, `--no-sandbox`) against a server on port 3000, written to `reports/lighthouse/report.html`; used by the scheduled workflow. |
 | `pnpm check:lighthouse` | Test the budget evaluator, then run Lighthouse's mobile profile on `/` and `/sign-in` (starting `pnpm start` when nothing serves port 3000) and fail below the budgets in `scripts/checks/check-lighthouse.mjs`. Needs a production build; CI and Firebase CD run it after `pnpm verify:e2e`. |
-| `pnpm analyze:lighthouse:ci` | Same, headless with `--no-sandbox` and an `.html` report path; used by the scheduled workflow. |
 
 ### Verification entry points
 
@@ -245,7 +248,9 @@ valid and invalid tests, before registering a new custom rule.
 | `thin-route-entrypoints` | TypeScript AST (`scripts/checks/check-route-files.mjs`) | error | App Router entrypoints (page.tsx, layout.tsx, template.tsx) | Next.js allows arbitrary state and branch logic inside route files. This enforces thin entrypoints where client state, effects, and mutation logic are extracted into semantic `_components` or `_hooks` modules. |
 | `responsiveness-contracts` | TypeScript AST (`scripts/checks/check-responsiveness.mjs`) | error | Root layout, App Router routes, and owned components (`src/app/**`, `src/components/**`) | Next.js and TypeScript allow arbitrary viewport configs, rigid pixel widths, and tiny interactive controls. This enforces WCAG 1.4.4 viewport scalability, WCAG 1.4.10 reflow at 320px, and WCAG 2.2 SC 2.5.8 touch target minimums (24x24px). Tests live in `scripts/checks/check-responsiveness.test.mjs`. |
 | `owned-component-composition` | TypeScript AST (`scripts/checks/check-component-composition.mjs`) | error | All owned component modules, Server and Client, through `pnpm check:components` | TypeScript permits dropping inherited props and constructing static compound APIs; this enforces our separate-named-export and adapter-forwarding contract. Checks matching direct JSX roots, remaining props and extracted children/className. Tests live in `scripts/checks/check-component-composition.test.mjs`. [Coverage and limits](CODING_STANDARDS.md#composition-guard-coverage). |
+| `no-protected-descendant-sign-in-redirect-ts` / `-tsx` | ast-grep (`.ast-grep/rules/nextjs/`) | error | `src/app/(protected)/**` `.ts` and `.tsx`, excluding the gate hook `_hooks/use-auth-gate-client.ts`, the server session check in `_lib/`, and test files | Rejects `router.replace`/`router.push` to `routes.signIn` or `getSignInUrl(...)`, `redirect(...)` to sign-in, and `redirectToSignIn(...)` below the protected guard. Firebase notifies auth observers in subscription order, so a descendant redirect runs after the guard and drops the `?next=` destination. Behavior is also covered by `auth-gate-client.test.tsx` and `profile-section-client.test.tsx`. |
 | `no-module-support-in-hooks-ts` / `-tsx` | ast-grep | error | `src/app/**/_hooks/**/*.ts` and `.tsx`, excluding test/spec/story files | Rejects top-level support functions, constants and contexts; extract them to the route's `_lib/`. Direct `useX` hook declarations, imports, types and hook-local callbacks/values remain valid. Native YAML fixtures and `.ast-grep/rules/react/hook-module-scope.test.ts` verify matches and real path exclusions. This is a project contract, not a React requirement or purity analysis. |
+| `components/no-inline-loading-state` | ast-grep (`.ast-grep/rules/components/`) | error | `src/app/**` and `src/components/**` `.tsx`, excluding tests, stories, `loading-state.tsx` and `global-loading-indicator.tsx` | Keeps one visible spinner: boundaries render `<LoadingState boundary="..." />` and never hand-write the `data-slot="loading-state"` marker or their own spinner. Class and attribute strings are opaque to TypeScript and Biome. |
 | `base-ui/no-radix-primitive-import` | ast-grep (`.ast-grep/rules/base-ui/`) | error | `src/components/**` and `src/app/**/_components/**` `.tsx`, including `ui/extensions`, excluding shadcn copies in `src/components/ui/*.tsx` and test/story files | Rejects Radix UI primitives and Sonner so overlays and toasts keep one focus, portal and dismissal owner. Standalone `@radix-ui/react-use-*` hooks stay allowed. No dependency rule distinguishes primitives from hooks. |
 | `base-ui/no-base-ui-primitive-import` | ast-grep (`.ast-grep/rules/base-ui/`) | error | `src/components/**` and `src/app/**/_components/**` `.tsx`, including `ui/extensions`, excluding shadcn copies in `src/components/ui/*.tsx` and test/story files | Owned components compose the `@/components/ui` wrappers instead of raw `@base-ui/react` parts; only `use-render` and `merge-props` may be imported. A path-level dependency-cruiser rule cannot express the utility allowlist with fixtures. |
 | `base-ui/no-radix-state-selector` | ast-grep (`.ast-grep/rules/base-ui/`) | error | `src/components/**` and `src/app/**/_components/**` `.tsx`, including `ui/extensions`, excluding shadcn copies in `src/components/ui/*.tsx` and test/story files | Rejects Tailwind selectors for Radix `data-state` values and `--radix-*` variables, which never match Base UI; use `data-open`, `data-closed`, `data-panel-open`, `data-active`, `data-pressed` and the Base UI CSS variables. Class strings are opaque to TypeScript and Biome. |
@@ -254,6 +259,8 @@ valid and invalid tests, before registering a new custom rule.
 | `base-ui/require-native-button-false` | ast-grep (`.ast-grep/rules/base-ui/`) | error | `src/components/**` and `src/app/**/_components/**` `.tsx`, including `ui/extensions`, excluding shadcn copies in `src/components/ui/*.tsx` and test/story files | Requires `nativeButton={false}` when `render` replaces a Base UI button part (trigger, Close, Tab, Toggle) with a non-button element, so Base UI adds role and keyboard support ([Base UI Button](https://base-ui.com/react/components/button)). |
 | `base-ui/no-nested-button-in-trigger` | ast-grep (`.ast-grep/rules/base-ui/`) | error | `src/components/**` and `src/app/**/_components/**` `.tsx`, including `ui/extensions`, excluding shadcn copies in `src/components/ui/*.tsx` and test/story files | Rejects a `Button` nested inside a trigger or Close part, which renders a button in a button; compose through `render`. HTML nesting is not checked by TypeScript. |
 | `base-ui/no-clone-element` | ast-grep (`.ast-grep/rules/base-ui/`) | error | `src/components/**` and `src/app/**/_components/**` `.tsx`, including `ui/extensions`, excluding shadcn copies in `src/components/ui/*.tsx` and test/story files | Rejects `cloneElement`, which silently overwrites a child's props, refs and handlers; compose with `render`, `useRender` and `mergeProps` ([Base UI useRender](https://base-ui.com/react/utils/use-render)). React keeps `cloneElement` as a legacy API without a lint rule. |
+| `base-ui/no-onclick-on-value-control` | ast-grep (`.ast-grep/rules/base-ui/`) | error | `src/components/**` and `src/app/**/_components/**` `.tsx`, including `ui/extensions`, excluding shadcn copies in `src/components/ui/*.tsx` and test/story files | Rejects `onClick` on Switch, Checkbox, Toggle, ToggleGroup, RadioGroup, Slider, Select and Tabs; value changes go through `onCheckedChange`, `onValueChange` or `onPressedChange`, which also cover keyboard, reset and `eventDetails` ([Base UI forms](https://base-ui.com/react/handbook/forms)). |
+| `base-ui/no-raw-button-element` | ast-grep (`.ast-grep/rules/base-ui/`) | error | `src/components/**` and `src/app/**/_components/**` `.tsx`, including `ui/extensions`, excluding shadcn copies in `src/components/ui/*.tsx` and test/story files, plus `src/components/ai-elements/**` (unused registry copies) and `src/components/firebase/policies.tsx` | Rejects a raw `<button>`; use the shadcn `Button` so touch target, focus ring and pending semantics stay uniform, and a `Link` with `buttonVariants` for navigation (ADR 0002). |
 | `owned-component-family` | TypeScript AST (`scripts/checks/check-component-conventions.mjs`) | error | All owned component modules, Server and Client | Root-prefixed family names, filename/export matching, local function declarations, and exact filename-to-component term parity (`checkStemComponentTermParity`, e.g. `HomeClient` in `src/app/_components/home-client.tsx`) are repository conventions that TypeScript and Next.js allow alternatives to. Preserves the existing direct client-boundary checks, with type-only imports excluded. The complete RSC graph remains a Next.js build responsibility. |
 | `owned-component-behavior` | TypeScript AST (`scripts/checks/check-component-conventions.mjs`) | error | Owned component functions | Enforces imported application orchestration hooks and declarative rendering. Native presentation hooks (`useId`, `useTranslations`, `useFormatter`, `useFormContext`, `useWatch`) may be called directly in any supported combination; this restriction is a local convention, not a React rule. See [agent rules](.agents/rules/components.md). |
 | `no-raw-exception-feedback` | TypeScript AST (`scripts/checks/check-ui-state.mjs`) | error | JSX expressions, `setError` arguments, and toast `add` payloads in application TS/TSX | Rejects direct `String(error)`, `String(cause)`, and `String(err)` coercion when they reach user feedback. Normalize known domain errors or provide localized recovery copy for unexpected failures. Positive/negative fixtures live in `scripts/checks/check-ui-state.test.mjs`; see [UI state guidance](.agents/rules/ui-state.md). This syntax guard cannot infer every user-facing sink or prove a normalized message is safe. |
@@ -470,6 +477,7 @@ these regressions specifically guard the observed failures.
   does not cover `ui/extensions/`; the experimental `.biome/` folder is
   excluded from health analysis but tested separately.
 - **React Doctor reports are advisory.** The currently observed React Compiler, repeated JSX, and public Firebase API key naming findings require code-level triage. They are not evidence that CI has enforced or fixed them.
+- **Google Cloud ADC requires a quota project for local token revocation verification.** In local development without Auth emulators, `verifyIdToken(token, true)` checks revocation by making an RPC call to `identitytoolkit.googleapis.com`. When authenticating with Application Default Credentials (ADC) from `gcloud auth application-default login`, Google Cloud rejects calls without a quota project. Setting `GOOGLE_CLOUD_QUOTA_PROJECT=<project-id>` in `.env.local` or `.env.production.local` resolves the 403 `PERMISSION_DENIED` error, provided the authenticated user account has IAM permissions (such as `roles/serviceusage.serviceUsageConsumer` or Editor/Owner) on that GCP project.
 - **Firebase Emulator setup regression resolved (2026-10-23).** Run
   [39970721905](https://github.com/ianmaciel7/shadcn-firebase-template/actions/runs/39970721905)
   failed profile journeys and showed Google popup flakiness because the
@@ -573,16 +581,15 @@ protected data or actions. The `(public)` group is organization only. Unit tests
 must mock Firebase or use the Auth Emulator; CI must not need production keys.
 Real provider configuration, OAuth popup behavior, email delivery, and MFA need
 verification against a configured Firebase project or emulator as appropriate.
-For local emulator development, define both `FIREBASE_AUTH_EMULATOR_HOST` (for Next.js rewrites and tooling) and `NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_HOST` (for browser Firebase Auth). For browser Firestore, use `NEXT_PUBLIC_FIRESTORE_EMULATOR_HOST`; keep server-only `FIRESTORE_EMULATOR_HOST` out of the Next.js `env` option. No server-only endpoint is injected into the browser bundle.
+For local emulator development, define emulator hosts in `.env.emulator.local` and launch Next.js via `pnpm dev:emulator` (or the VS Code "Next.js: Dev (Emulators)" configuration). Both `FIREBASE_AUTH_EMULATOR_HOST` (for Next.js rewrites and tooling) and `NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_HOST` (for browser Firebase Auth) are set there, alongside `NEXT_PUBLIC_FIRESTORE_EMULATOR_HOST`. Keep server-only `FIRESTORE_EMULATOR_HOST` out of the Next.js `env` option so no server-only endpoint is injected into the browser bundle.
 
-For local emulator development, define `FIREBASE_AUTH_EMULATOR_HOST` (for example,
-`localhost:9099`) in `.env` with a local project ID. For Electron redirect OAuth,
+Keep emulator host endpoints out of `.env.local`: Next.js automatically loads `.env.local` for `next dev`, so embedding emulator host variables there causes standard local development against cloud services to fail with connection errors whenever emulators are stopped. Use `.env.production.local` with `pnpm dev:prod` to explicitly clear emulator endpoints and run directly against cloud production. For Electron redirect OAuth,
 Next proxies the Auth Emulator handler and Auth REST endpoints through the app origin
 in development; the variable remains the actual emulator endpoint, not the Next.js
 port. Keep the app and configured emulator on a consistent loopback hostname (for
 example, `localhost`, not a mixture of `localhost` and `127.0.0.1`). Auth emulator
 use is limited to development. In-code default fallback values are removed; environment
-configuration in `.env` is required. For production, omit emulator variables and
+configuration via dedicated environment files is required. For production, omit emulator variables and
 configure the real Web app values at build time. Browser code that uses Realtime Database or callable Cloud
 Functions must use `NEXT_PUBLIC_FIREBASE_DATABASE_EMULATOR_HOST` and
 `NEXT_PUBLIC_FIREBASE_FUNCTIONS_EMULATOR_HOST`, respectively. Configure

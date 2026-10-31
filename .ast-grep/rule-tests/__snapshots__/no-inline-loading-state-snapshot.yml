@@ -1,0 +1,16 @@
+id: no-inline-loading-state
+snapshots:
+  const a = <div data-slot="loading-state" data-loading-boundary="x" />;:
+    labels:
+    - source: data-slot="loading-state"
+      style: primary
+      start: 15
+      end: 40
+    - source: data-slot
+      style: secondary
+      start: 15
+      end: 24
+    - source: "\"loading-state\""
+      style: secondary
+      start: 25
+      end: 40

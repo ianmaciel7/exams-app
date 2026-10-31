@@ -231,10 +231,6 @@
   pointer-events: none;
 }
 
-body:has([data-slot="global-loading-indicator"]) [data-slot="loading-state"] {
-  visibility: hidden;
-}
-
 body:has(
     [data-slot="loading-state"]:not(
         [hidden],

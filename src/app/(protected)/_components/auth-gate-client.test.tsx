@@ -67,7 +67,9 @@ describe("AuthGateClient", () => {
 
   it("renders a loading indicator before auth resolves", async () => {
     await renderGate();
-    expect(screen.getByRole("status").textContent).toBe("loading");
+    expect(
+      document.querySelector('[data-loading-boundary="protected-auth"]'),
+    ).not.toBeNull();
     expect(screen.queryByText(/Protected Content/)).toBeNull();
     expect(mocks.router.replace).not.toHaveBeenCalled();
   });
@@ -82,7 +84,9 @@ describe("AuthGateClient", () => {
       `/sign-in?next=${encodeURIComponent("/profile?tab=security")}`,
     );
     expect(screen.queryByText(/Protected Content/)).toBeNull();
-    expect(screen.getByRole("status")).toBeTruthy();
+    expect(
+      document.querySelector('[data-loading-boundary="protected-auth"]'),
+    ).not.toBeNull();
   });
 
   it("provides the authenticated user to its subtree", async () => {
@@ -140,7 +144,9 @@ describe("AuthGateClient", () => {
     vi.stubGlobal("location", { ...window.location, reload });
     await renderGate();
     expect(screen.getByRole("alert").textContent).toBe("configurationError");
-    expect(screen.queryByRole("status")).toBeNull();
+    expect(
+      document.querySelector('[data-loading-boundary="protected-auth"]'),
+    ).toBeNull();
     expect(mocks.router.replace).not.toHaveBeenCalled();
     fireEvent.click(screen.getByRole("button", { name: "tryAgain" }));
     expect(reload).toHaveBeenCalledOnce();

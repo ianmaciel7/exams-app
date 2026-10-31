@@ -33,7 +33,7 @@ configuration and repository documentation.
 │   │   └── _components/     # Route-private components and auth providers
 │   ├── components/          # Reusable application and UI components
 │   ├── hooks/               # Reusable React hooks
-│   ├── i18n/                # Locale routing, navigation, and request config
+│   ├── i18n/                # Locale routing and request config
 │   ├── lib/                 # Framework-independent utilities
 │   ├── messages/            # Locale message catalogs
 │   └── types/               # Shared TypeScript declarations
@@ -75,7 +75,7 @@ files, and `public/` remain at the repository root, as required by the Next.js
 
 ## Authentication navigation
 
-When an unauthenticated user requests a protected route, the client auth gate redirects to `/sign-in?next=<encoded-path-and-query>`. Once authenticated, the public authentication provider sends the user to that destination, or the home page if no valid destination was supplied. The return URL validator accepts only application-relative paths and rejects external URLs and authentication-screen loops; query strings are preserved. Route protection in the UI is not a substitute for Firebase Security Rules or authorization at the data source.
+When an unauthenticated user requests a protected route, the client auth gate redirects to `/sign-in?next=<encoded-path-and-query>`. Only `AuthGateClient` (`src/app/(protected)/_hooks/use-auth-gate-client.ts`) and the server session check in `src/app/(protected)/_lib/` send a signed-out visitor to sign-in. Pages and hooks inside `(protected)` read the session from context via `useAuthenticatedUser` and do not subscribe or redirect: Firebase notifies observers in subscription order, so a descendant redirect would drop the `?next=` destination. The ast-grep rules `no-protected-descendant-sign-in-redirect-ts` and `-tsx` enforce this. Once authenticated, the public authentication provider sends the user to that destination, or the home page if no valid destination was supplied. The return URL validator accepts only application-relative paths and rejects external URLs and authentication-screen loops; query strings are preserved. Route protection in the UI is not a substitute for Firebase Security Rules or authorization at the data source.
 
 ## Test boundaries
 
@@ -118,9 +118,9 @@ locale is received.
 
 Message catalogs (`src/messages/*.json`) adhere to a structural testing
 contract in `src/messages/messages.test.ts`, which validates key parity across
-`en.json`, `pt-BR.json`, and `es.json`, forbids empty messages, and ensures ICU
-placeholders match the reference catalog. Global message type safety is enforced
-by augmenting the `IntlMessages` interface in `src/types/global.d.ts`. Spelling
+`en.json`, `pt-BR.json`, and `es.json`, forbids empty messages, rejects keys that no application code
+references, and ensures ICU placeholders match the reference catalog. Message keys and locales are type-checked
+by augmenting next-intl's `AppConfig` in `src/types/global.d.ts`. Spelling
 validation integrates `@cspell/dict-pt-br`.
 
 The root layout (`src/app/layout.tsx`) remains synchronous and
@@ -170,6 +170,10 @@ the existing public Auth Emulator host, so it shares the local emulator session.
 The authentication modules intentionally remain flat under `src/lib`:
 `auth.ts`, `session.ts`, and `return-url.ts`; consumers should import them as
 `@/lib/auth`, `@/lib/session`, and `@/lib/return-url`.
+The security and HTTP header modules also remain flat under `src/lib`:
+`headers.ts` (canonical header names, baseline security headers, and `getNonce`)
+and `csp.ts` (pure Content Security Policy directive builder); consumers should
+import them as `@/lib/headers` and `@/lib/csp`.
 Firebase Web SDK initialization lives in `src/lib/firebase/client.ts`. The
 profile route's `useProfilePreferences` and `useProfileSubmit` hooks coordinate
 the load and save workflows; `readProfile`, `readUserPreferences`,
@@ -293,7 +297,7 @@ and stable/experimental boundaries.
 
 Place shared application components in `src/components/ui/extensions/` and
 route-private components in `src/app/**/_components/`. For example,
-`LabeledSpinner` belongs in `ui/extensions` because both
+`LoadingState` belongs in `ui/extensions` because both
 route components and Firebase UI consume it. Do not create parallel application
 component folders such as `src/components/loading/`.
 

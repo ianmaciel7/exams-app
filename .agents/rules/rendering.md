@@ -26,6 +26,17 @@ Do not replace Error Boundaries with Suspense, Activity, or animation wrappers.
 The detailed reference includes lazy loading, preserved-tab state, and visual
 transition examples; these are optional capabilities, not mandatory UI features.
 
+## Loading boundaries
+
+The app has one visible loading UI, `GlobalLoadingIndicator`, mounted once in
+the root document. Every `loading.tsx`, Suspense fallback, and client guard that
+waits renders `<LoadingState boundary="..." />` from `ui/extensions`, an empty
+marker that makes `globals.css` reveal the indicator. Do not add a spinner,
+overlay, or text to a boundary. For content with a known shape (such as the home
+actions), use `Skeleton` blocks that share the final size constant so nothing
+shifts. `ast-grep` rule `components/no-inline-loading-state` blocks hand-written
+markers.
+
 ## Identity, composition, and Error Boundaries
 
 Use `key` to identify siblings and intentional reset boundaries, `children` for
