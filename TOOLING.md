@@ -469,6 +469,7 @@ these regressions specifically guard the observed failures.
   does not cover `ui/extensions/`; the experimental `.biome/` folder is
   excluded from health analysis but tested separately.
 - **React Doctor reports are advisory.** The currently observed React Compiler, repeated JSX, and public Firebase API key naming findings require code-level triage. They are not evidence that CI has enforced or fixed them.
+- **Google Cloud ADC requires a quota project for local token revocation verification.** In local development without Auth emulators, `verifyIdToken(token, true)` checks revocation by making an RPC call to `identitytoolkit.googleapis.com`. When authenticating with Application Default Credentials (ADC) from `gcloud auth application-default login`, Google Cloud rejects calls without a quota project. Setting `GOOGLE_CLOUD_QUOTA_PROJECT=<project-id>` in `.env.local` or `.env.production.local` resolves the 403 `PERMISSION_DENIED` error, provided the authenticated user account has IAM permissions (such as `roles/serviceusage.serviceUsageConsumer` or Editor/Owner) on that GCP project.
 - **Firebase Emulator setup regression resolved (2026-10-23).** Run
   [39970721905](https://github.com/ianmaciel7/shadcn-firebase-template/actions/runs/39970721905)
   failed profile journeys and showed Google popup flakiness because the
@@ -572,16 +573,15 @@ protected data or actions. The `(public)` group is organization only. Unit tests
 must mock Firebase or use the Auth Emulator; CI must not need production keys.
 Real provider configuration, OAuth popup behavior, email delivery, and MFA need
 verification against a configured Firebase project or emulator as appropriate.
-For local emulator development, define both `FIREBASE_AUTH_EMULATOR_HOST` (for Next.js rewrites and tooling) and `NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_HOST` (for browser Firebase Auth). For browser Firestore, use `NEXT_PUBLIC_FIRESTORE_EMULATOR_HOST`; keep server-only `FIRESTORE_EMULATOR_HOST` out of the Next.js `env` option. No server-only endpoint is injected into the browser bundle.
+For local emulator development, define emulator hosts in `.env.emulator.local` and launch Next.js via `pnpm dev:emulator` (or the VS Code "Next.js: Dev (Emulators)" configuration). Both `FIREBASE_AUTH_EMULATOR_HOST` (for Next.js rewrites and tooling) and `NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_HOST` (for browser Firebase Auth) are set there, alongside `NEXT_PUBLIC_FIRESTORE_EMULATOR_HOST`. Keep server-only `FIRESTORE_EMULATOR_HOST` out of the Next.js `env` option so no server-only endpoint is injected into the browser bundle.
 
-For local emulator development, define `FIREBASE_AUTH_EMULATOR_HOST` (for example,
-`localhost:9099`) in `.env` with a local project ID. For Electron redirect OAuth,
+Keep emulator host endpoints out of `.env.local`: Next.js automatically loads `.env.local` for `next dev`, so embedding emulator host variables there causes standard local development against cloud services to fail with connection errors whenever emulators are stopped. Use `.env.production.local` with `pnpm dev:prod` to explicitly clear emulator endpoints and run directly against cloud production. For Electron redirect OAuth,
 Next proxies the Auth Emulator handler and Auth REST endpoints through the app origin
 in development; the variable remains the actual emulator endpoint, not the Next.js
 port. Keep the app and configured emulator on a consistent loopback hostname (for
 example, `localhost`, not a mixture of `localhost` and `127.0.0.1`). Auth emulator
 use is limited to development. In-code default fallback values are removed; environment
-configuration in `.env` is required. For production, omit emulator variables and
+configuration via dedicated environment files is required. For production, omit emulator variables and
 configure the real Web app values at build time. Browser code that uses Realtime Database or callable Cloud
 Functions must use `NEXT_PUBLIC_FIREBASE_DATABASE_EMULATOR_HOST` and
 `NEXT_PUBLIC_FIREBASE_FUNCTIONS_EMULATOR_HOST`, respectively. Configure

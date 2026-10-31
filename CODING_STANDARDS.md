@@ -885,3 +885,11 @@ instead of `ReactDOM.hydrate`, explicit refs instead of `findDOMNode`,
 `root.unmount()` instead of `unmountComponentAtNode`, and JSX instead of
 `createFactory`. Do not describe a still-available legacy API as removed or
 mechanically rewrite valid boundaries.
+
+## Development tooling and secret isolation
+
+- **VS Code launch configurations (`.vscode/launch.json`)**:
+  - Never commit credentials, private tokens, or API keys directly inside `"env"` blocks.
+  - Configurations must load environment variables through `"envFile": "${workspaceFolder}/.env.*"` targeting Git-ignored environment files.
+  - This rule is enforced mechanically by `pnpm check:secret-guard` and the `.husky/pre-commit` hook.
+  - Emulator launch configurations should automate starting background emulator dependencies using `"preLaunchTask"` paired with background problem matchers in `.vscode/tasks.json`.
