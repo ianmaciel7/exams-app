@@ -40,18 +40,23 @@ relevant inventory and command entry. Prefer the installed or configured tool
 whose stated purpose covers the task; do not recreate its checks, scripts, or
 external lookups ad hoc.
 
-- For library, framework, SDK, API, CLI, or cloud-service documentation, use
-  the native Context7 plugin (`resolve-library-id`, then `query-docs`) when it
-  is available. Otherwise use the installed `context7-cli` skill. Use web
-  research only to complement Context7 or for material outside its corpus.
-- Use the configured MCP server or project skill when one is applicable before
-  reaching for shell commands. For example: Next.js DevTools for runtime
-  diagnostics, Playwright for browser verification (CUA only when it is the
-  available browser fallback), Serena or Graphify for symbol-aware code
-  navigation, and the project `project-verify` skill for scoped validation.
-- Treat the `Purpose` and `Source of truth` columns in `TOOLING.md` as the
-  decision guide. If a listed tool is unavailable, say so clearly and use the
-  smallest safe fallback; never claim that its check or lookup ran.
+- **Serena MCP (Symbolic exploration, refactoring & memory)**:
+  - Prerequisite: Ensure the project is active (`activate_project(project="exams-app")`).
+  - Check local memory first (`list_memories`, `read_memory("core")`) before initiating external research or rediscovering known quirks.
+  - For code inspection and editing, prefer semantic tools (`find_symbol`, `get_symbols_overview`, `replace_symbol_body`, `rename_symbol`, `safe_delete_symbol`) over whole-file reads and ad hoc string replacements.
+  - Batch independent tool calls in a single turn to eliminate unnecessary round-trips.
+- **Graphify MCP (Knowledge graph & codebase relationships)**:
+  - For architectural overview, community detection, dependencies, or impact analysis, use `query_graph`, `get_node`, `get_neighbors`, and `shortest_path`.
+  - Always provide `project_path="."` (or absolute workspace path) when querying the Graphify MCP server so it locates `graphify-out/graph.json`. Do not resort to broad terminal grep or directory traversals when the graph covers the query.
+- **Context7 MCP (Upstream documentation & APIs)**:
+  - For library, framework, SDK, API, CLI, or cloud-service documentation, use the native Context7 plugin (`resolve-library-id`, then `query-docs`) when it is available. Otherwise use the installed `context7-cli` skill.
+  - Query a single scoped concept per `query-docs` call; never combine distinct concepts in one query.
+  - Use web research only to complement Context7 or for material outside its corpus.
+  - Cache non-trivial, reusable research into Serena memory under `research/<topic>` with retrieval date, source, and version bounds.
+- **Playwright MCP (Browser verification)**:
+  - Use Playwright tools (`browser_navigate`, `browser_snapshot`, `browser_console_messages`, `browser_take_screenshot`) for browser verification, DOM state checking, and visual inspection.
+- **Verification & Scoped Checks**:
+  - Use the project `project-verify` skill for scoped validation. Treat the `Purpose` and `Source of truth` columns in `TOOLING.md` as the decision guide. If a listed tool is unavailable, say so clearly and use the smallest safe fallback; never claim that its check or lookup ran.
 
 ## MCP & Skills workflow
 
@@ -63,10 +68,12 @@ external lookups ad hoc.
 
 ## Workflow
 
-1. Plan briefly.
-2. Implement minimal viable change.
-3. Validate (lint/tests/build/smoke as needed).
-4. Report results and residual risks.
+1. **Pre-flight & Memory Check**: Check Serena memory (`list_memories`, `read_memory("core")`) and codebase graph (Graphify) before starting research or modifications.
+2. **Plan briefly**: Formulate an action plan and select appropriate tools.
+3. **Implement minimal viable change**: Use semantic tools for symbol edits and targeted file changes.
+4. **Validate**: Run relevant verification tiers (`project-verify`, `verify:fast`, `verify:static`, `verify:e2e`, or auth emulator).
+5. **Persist Knowledge**: Cache newly discovered library quirks or research in Serena memory (`write_memory`), and promote stabilized conventions to canonical docs via `/save` (`project-save`).
+6. **Report results and residual risks**.
 
 ## Project documentation
 
