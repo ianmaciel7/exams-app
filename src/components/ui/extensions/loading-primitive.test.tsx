@@ -21,6 +21,11 @@ describe("LoadingPrimitive", () => {
     expect(status.textContent).toBe(en.App.loading);
     expect(status.className).toContain("custom-loading");
     expect(status.getAttribute("data-testid")).toBe("loading-primitive");
+    const overlay = status.closest('[data-slot="loading-overlay"]');
+    expect(overlay?.className).toContain("fixed");
+    expect(overlay?.className).toContain("inset-0");
+    expect(status.parentElement?.className).toContain("h-svh");
+    expect(status.parentElement?.className).toContain("top-0");
   });
 
   it("allows custom label override via children", () => {

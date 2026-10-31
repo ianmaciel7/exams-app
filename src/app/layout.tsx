@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import { FirebaseAuthSessionBridgeClient } from "@/components/ui/extensions/firebase-auth-session-bridge-client";
 import { IntlDocumentServer } from "@/components/ui/extensions/intl-document-server";
 import { IntlProviderServer } from "@/components/ui/extensions/intl-provider-server";
+import { LoadingOverlay } from "@/components/ui/extensions/loading-overlay";
 import { ThemeProviderClient } from "@/components/ui/extensions/theme-provider-client";
 import { Spinner } from "@/components/ui/spinner";
 import { Toaster } from "@/components/ui/toast";
@@ -46,12 +47,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <IntlDocumentServer className={fontClassName}>
         <Suspense
           fallback={
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-background p-6">
+            <LoadingOverlay>
               <Spinner
-                className="size-8 text-muted-foreground"
+                className="size-4 text-muted-foreground"
                 aria-hidden="true"
               />
-            </div>
+            </LoadingOverlay>
           }
         >
           <IntlProviderServer>
