@@ -761,6 +761,15 @@ describe("owned component conventions", () => {
     );
   });
 
+  it("accepts the Base UI Form wrapper as the profile form root", () => {
+    expectValid(
+      compoundForm(
+        "function ProfileForm() { return <FormProvider><Form>{children}</Form></FormProvider>; } export { ProfileForm };",
+      ),
+      "src/app/(protected)/profile/_components/profile-form.tsx",
+    );
+  });
+
   it("keeps FieldGroup in ProfileFormContent rather than ProfileForm", () => {
     const form = "src/app/(protected)/profile/_components/profile-form.tsx";
     const content =
