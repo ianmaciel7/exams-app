@@ -97,7 +97,9 @@ export async function installLoadingProbe(page: Page) {
           if (!icon) throw new Error("Labeled loading indicator has no icon");
           const iconBox = icon.getBoundingClientRect();
           const overlay = element.closest('[data-slot="loading-overlay"]');
-          const center = overlay?.firstElementChild?.getBoundingClientRect() ?? new DOMRect();
+          const center =
+            overlay?.firstElementChild?.getBoundingClientRect() ??
+            new DOMRect();
           return {
             origin: element.closest('[data-slot="global-loading-indicator"]')
               ? ("global" as const)
