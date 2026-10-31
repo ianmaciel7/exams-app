@@ -22,7 +22,13 @@ coordinate disclosure and remediation with the reporter.
 ## Contributor expectations
 
 - Keep secrets in local environment files; never commit `.env*` files or
-  credentials.
+  credentials. Never hardcode cloud credentials, API keys, private tokens, or
+  environment overrides into tracked files, including `.vscode/launch.json` or
+  tool configurations. Launch configurations must reference Git-ignored local
+  files via `"envFile": "${workspaceFolder}/.env.production.local"`.
+- Staged changes are automatically scanned for secrets by Gitleaks during the
+  Husky pre-commit hook (`gitleaks protect --staged`). The `check:secret-guard`
+  and `check:secrets` checks enforce this protection in `verify:fast` and CI.
 - Validate and authorize all untrusted input at the server boundary.
 - Firebase Web SDK access is still untrusted client input: enforce ownership and
   permitted fields, values, and upload constraints in Firestore and Storage

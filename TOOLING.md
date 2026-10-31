@@ -46,7 +46,7 @@ repository. It is not a catalog of every runtime library; `package.json` and
 | Spelling | CSpell | 10.4.0 | Checks spelling in code, JSON, and Markdown. | `cspell.json` |
 | Markdown | markdownlint-cli2 | 0.23.3 | Lints repository Markdown. | `.markdownlint-cli2.jsonc` |
 | Static security | Semgrep Community Edition | Host tool (CI pins 1.181.0) | Runs the project's security rules on `src` with `--error` so findings fail the run; `check:security:rules` tests them against an annotated fixture. | `.semgrep/rules.yml`, `.semgrep/rules.tsx`, `package.json` |
-| Secret scanning | Gitleaks | Host tool (CI pins 8.30.1) | Scans the Git history for secrets with `gitleaks git --redact`. `detect` is deprecated upstream. | `package.json` (`check:secrets`) |
+| Secret scanning | Gitleaks | Host tool (CI pins 8.30.1) | Scans staged files during pre-commit with `gitleaks protect --staged` and repository history with `gitleaks git --redact`. `detect` is deprecated upstream. | `package.json` (`check:secrets`, `check:secrets:staged`), `.husky/pre-commit` |
 | Root dependency audit | `pnpm audit` | Included with pnpm | Reports known vulnerable dependencies in the root dependency graph. | `pnpm-workspace.yaml` (`auditConfig`) |
 | Sign-in allowlist | Firebase Auth blocking functions (`beforeUserCreated`, `beforeUserSignedIn`) | Identity Platform (enabled) | Refuses addresses outside `ALLOWED_USER_EMAILS` and `ADMIN_USER_EMAILS` and sets the `role` claim. Fails closed in production and stays open in the emulator while no list is set. `pnpm test:logging` runs its tests. | `functions/access-policy.cjs`, `functions/index.js`, [ADR 0017](docs/adr/0017-restrict-sign-in-to-an-email-allowlist.md) |
 | Functions dependency audit | `npm audit` through `pnpm audit:functions` | Included with npm | Reports known vulnerable dependencies in the independent backend graph. | `functions/package-lock.json`, `functions/package.json` (`overrides`) |
@@ -74,7 +74,7 @@ outside pnpm and are only needed for the commands noted next to them:
 | Playwright browsers | `test:browser`, `test:e2e`, `test:a11y`, `test:mobile`, `test:visual`, `check:lighthouse` | `pnpm exec playwright install chromium` |
 | pre-commit | Repository-integrity checks in the Git hook | `pre-commit --version` |
 | Semgrep | `check:security` | `semgrep --version` |
-| Gitleaks | `check:secrets` | `gitleaks version` |
+| Gitleaks | `check:secrets`, `check:secrets:staged`, pre-commit | `gitleaks version` |
 | actionlint, zizmor | `check:workflows` | `actionlint -version`, `zizmor --version` |
 | Graphify | On-demand codebase graph | `graphify --version` |
 
@@ -150,7 +150,9 @@ project skills are tracked in `.agents/skills/` and `skills-lock.json`.
 | `pnpm check:emulator-snapshot` | Validate `demo-test` emulator commands, exported directories, and fictional Auth seed identities; includes valid and invalid fixtures and runs in fast/static verification. |
 | `pnpm check:spelling` / `pnpm check:markdown` | CSpell / markdownlint. |
 | `pnpm check:security` / `pnpm check:security:rules` | Semgrep scan of `src` (fails on findings) / tests of the Semgrep rules. Run inside a Git work tree. |
-| `pnpm check:secrets` / `pnpm audit` | Gitleaks / dependency audit. |
+| `pnpm check:secrets` / `pnpm check:secrets:staged` | Gitleaks repository history audit / staged pre-commit scanner. |
+| `pnpm check:secret-guard` | Validate that `.husky/pre-commit` wires in Gitleaks and `.vscode/launch.json` has no hardcoded secrets without exemptions; includes regression tests. |
+| `pnpm audit` | Root dependency audit. |
 | `pnpm audit:functions` | Audit the independent npm lockfile in `functions/`, including optional backend dependencies. |
 | `pnpm check:workflows` | actionlint and zizmor on `.github/workflows`. |
 | `pnpm analyze:health` | Unit tests with coverage, then Fallow complexity and CRAP. |

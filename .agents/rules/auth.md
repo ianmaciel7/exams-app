@@ -22,6 +22,7 @@ active Firebase session, and `return-url.ts` owns safe post-auth navigation.
 - Keep `dal.ts` as the boundary for sensitive/protected data access.
 - Validate remotely supplied arguments and caller permissions on every Server Function and handler.
 - Keep credentials and private resources on the server; context and optimistic UI grant no access.
+- Never commit cloud credentials, private tokens, or API keys into tracked files (such as `.vscode/launch.json` or tool scripts). Launch configurations must reference Git-ignored local files via `envFile`. Staged files are guarded by Gitleaks in the pre-commit hook.
 - Preserve safe post-auth navigation through `return-url.ts`.
 - Follow [SECURITY.md](../../SECURITY.md) and the actual Firebase rules and token-verification implementation.
 
