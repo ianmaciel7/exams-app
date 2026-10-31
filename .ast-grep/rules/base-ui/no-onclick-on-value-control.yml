@@ -1,0 +1,29 @@
+id: no-onclick-on-value-control
+language: tsx
+files:
+  - src/components/**/*.tsx
+  - src/app/**/_components/**/*.tsx
+ignores:
+  - "**/*.test.tsx"
+  - "**/*.stories.tsx"
+  - src/components/ui/*.tsx
+severity: error
+message: Value controls change through onCheckedChange, onValueChange or onPressedChange, not onClick.
+note: |
+  Base UI Switch, Checkbox, Toggle, ToggleGroup, RadioGroup, Slider, Select and
+  Tabs report value changes through dedicated callbacks that receive the new
+  value and eventDetails (reason, cancel). An onClick handler misses keyboard
+  activation, form reset and programmatic changes, and duplicates state that the
+  control already owns (https://base-ui.com/react/handbook/forms).
+rule:
+  kind: jsx_attribute
+  has:
+    kind: property_identifier
+    regex: ^onClick$
+  inside:
+    any:
+      - kind: jsx_opening_element
+      - kind: jsx_self_closing_element
+    has:
+      field: name
+      regex: ^(Switch|Checkbox|Toggle|ToggleGroup|RadioGroup|Slider|Select|Tabs)$
