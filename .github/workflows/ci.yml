@@ -185,7 +185,7 @@ jobs:
         run: npm ci --prefix functions --ignore-scripts
       - run: pnpm exec playwright install chromium
       - name: Firebase emulator E2E
-        run: pnpm dlx firebase-tools@15.34.1 emulators:exec --project demo-test --only auth,firestore,functions "pnpm exec playwright test --project=auth-emulator"
+        run: npx --yes firebase-tools@15.34.2 emulators:exec --project demo-test --only auth,firestore,functions "pnpm exec playwright test --project=auth-emulator"
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: ${{ !cancelled() }}
         with:
