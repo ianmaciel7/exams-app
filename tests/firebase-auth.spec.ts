@@ -2,6 +2,12 @@ import fs from "node:fs";
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 import esMessages from "../src/messages/es.json";
+import {
+  assertLoadingFinished,
+  assertLoadingTrace,
+  installLoadingProbe,
+  readLoadingTrace,
+} from "./support/loading-motion";
 
 for (const envFile of [".env.local", ".env"]) {
   if (fs.existsSync(envFile)) {
@@ -355,6 +361,94 @@ test("saving the profile language keeps the unprefixed route and translates afte
     page.getByText(esMessages.Auth.personalInfoTitle, { exact: true }),
   ).toBeVisible();
   await expect(page).toHaveURL(`${authTestOrigin}/profile`);
+});
+
+test("@loading observes every protected layout state during real profile journey", async ({
+  page,
+  request,
+}, testInfo) => {
+  test.setTimeout(90_000);
+  const email = `loading-profile-${crypto.randomUUID()}@example.test`;
+  const created = await request.post(
+    `${emulator}/identitytoolkit.googleapis.com/v1/accounts:signUp?key=emulator-only`,
+    { data: { email, password, returnSecureToken: true } },
+  );
+  expect(created.ok()).toBe(true);
+  await installLoadingProbe(page);
+  await page.goto("/sign-in");
+  await expect(page.getByLabel("Email Address")).toBeVisible();
+  await assertLoadingFinished(page);
+
+  await page.getByLabel("Email Address").fill(email);
+  await page.locator("#password").fill(password);
+  await page.getByRole("button", { name: "Sign In", exact: true }).click();
+  await expect(page).toHaveURL("/");
+  await expect(page.getByRole("link", { name: "My profile" })).toBeVisible();
+  await assertLoadingFinished(page);
+
+  await page.getByRole("link", { name: "My profile" }).click();
+  await expect(page).toHaveURL(/\/profile$/);
+  await expect(page.getByLabel("Email", { exact: true })).toHaveValue(email);
+  await assertLoadingFinished(page);
+
+  // Force each owned boundary on the actual authenticated profile document.
+  // This makes coverage deterministic when fast RSC responses skip fallback UI.
+  for (const boundary of [
+    "root-provider",
+    "root-route",
+    "protected-layout",
+    "protected-auth",
+    "profile-preferences",
+  ]) {
+    await page.evaluate((name) => {
+      const app = document.querySelector('[data-slot="app-root"]');
+      if (!app) throw new Error("App root missing");
+      const marker = document.createElement("div");
+      marker.dataset.slot = "loading-state";
+      marker.dataset.loadingBoundary = name;
+      marker.dataset.loadingTest = "active";
+      app.append(marker);
+    }, boundary);
+    await expect(
+      page.locator('[data-slot="global-loading-indicator"]'),
+    ).toHaveCSS("visibility", "visible");
+    await page.evaluate(
+      () =>
+        new Promise<void>((resolve) =>
+          requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+        ),
+    );
+    const trace = await readLoadingTrace(page);
+    expect(
+      trace.frames.some(
+        (frame) =>
+          frame.pending.includes(boundary) && frame.visible.length === 1,
+      ),
+      `Missing an observed frame for ${boundary}`,
+    ).toBe(true);
+    assertLoadingTrace(trace, `authenticated profile: ${boundary}`, true);
+    await page.locator('[data-loading-test="active"]').evaluate((el) => {
+      el.remove();
+    });
+    await assertLoadingFinished(page);
+  }
+
+  await page.getByRole("link", { name: "Back to Home" }).click();
+  await expect(page).toHaveURL("/");
+  await expect(page.getByRole("link", { name: "My profile" })).toBeVisible();
+  await assertLoadingFinished(page);
+
+  const trace = await readLoadingTrace(page);
+  await testInfo.attach("profile-loading-frames.json", {
+    body: Buffer.from(JSON.stringify(trace, null, 2)),
+    contentType: "application/json",
+  });
+  assertLoadingTrace(trace, "sign-in → home → profile → home", true);
+
+  await page.getByRole("button", { name: "Sign Out" }).click();
+  await expect(page.getByRole("link", { name: "Sign in", exact: true })).toBeVisible();
+  await assertLoadingFinished(page);
+  assertLoadingTrace(await readLoadingTrace(page), "sign-out → anonymous home");
 });
 
 const accessibilityTags = [
