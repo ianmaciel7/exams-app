@@ -222,3 +222,31 @@
     scroll-behavior: auto;
   }
 }
+
+/* Keep one root-mounted indicator visible across App Router, auth, and profile
+   loading boundaries. Visibility (not display) retains the spinner's animation
+   phase, preventing a visual reset when different fallbacks mount. A standalone
+   LoadingPrimitive still works before the root indicator is available. */
+[data-slot="global-loading-indicator"] {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+body:has([data-slot="global-loading-indicator"]) [data-slot="loading-state"] {
+  visibility: hidden;
+}
+
+body:has([data-slot="loading-state"]) [data-slot="global-loading-indicator"] {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+[data-slot="global-loading-indicator"] [data-slot="spinner"] {
+  animation-play-state: paused;
+}
+
+body:has([data-slot="loading-state"])
+  [data-slot="global-loading-indicator"]
+  [data-slot="spinner"] {
+  animation-play-state: running;
+}
