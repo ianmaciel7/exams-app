@@ -1,6 +1,6 @@
 # Security Policy
 
-<!-- cspell:words gaxios -->
+<!-- cspell:words gaxios googleusercontent -->
 
 ## Supported versions
 
@@ -159,7 +159,12 @@ production. Read the nonce with `getNonce()` from `src/lib/headers.ts` in a
 Server Component and pass it to any library that renders inline `<script>` or
 `<style>` tags; Base UI receives it through `CspProviderServer`. Never add
 `'unsafe-eval'` or `'unsafe-inline'` for production styles or scripts; add the
-narrowest origin to the matching directive instead. `worker-src` also allows
+narrowest origin to the matching directive instead. `img-src` allows only
+`'self'`, `blob:`, `data:`, Firebase Storage, and Google account photos
+(`lh3.googleusercontent.com`), so profile photos render without opening
+`https:` for every image. Cloud Functions expose callables and blocking
+triggers only; `functions/public-surface.test.cjs` fails on an `onRequest`
+endpoint. `worker-src` also allows
 `https://www.gstatic.com/firebasejs/`, where the auth service worker imports
 the Firebase SDK from; Chromium checks those imports against the page policy.
 
