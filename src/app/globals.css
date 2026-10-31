@@ -236,15 +236,16 @@ body:has([data-slot="global-loading-indicator"]) [data-slot="loading-state"] {
 }
 
 body:has(
-  [data-slot="loading-state"]:not(
-    [hidden],
-    [hidden] *,
-    [style*="display:none"],
-    [style*="display:none"] *,
-    [style*="display: none"],
-    [style*="display: none"] *
+    [data-slot="loading-state"]:not(
+        [hidden],
+        [hidden] *,
+        [style*="display:none"],
+        [style*="display:none"] *,
+        [style*="display: none"],
+        [style*="display: none"] *
+      )
   )
-) [data-slot="global-loading-indicator"] {
+  [data-slot="global-loading-indicator"] {
   visibility: visible;
   pointer-events: auto;
 }
@@ -254,15 +255,15 @@ body:has(
 }
 
 body:has(
-  [data-slot="loading-state"]:not(
-    [hidden],
-    [hidden] *,
-    [style*="display:none"],
-    [style*="display:none"] *,
-    [style*="display: none"],
-    [style*="display: none"] *
+    [data-slot="loading-state"]:not(
+        [hidden],
+        [hidden] *,
+        [style*="display:none"],
+        [style*="display:none"] *,
+        [style*="display: none"],
+        [style*="display: none"] *
+      )
   )
-)
   [data-slot="global-loading-indicator"]
   [data-slot="spinner"] {
   animation-play-state: running;
