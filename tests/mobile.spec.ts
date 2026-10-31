@@ -1,5 +1,11 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, type Page, test } from "@playwright/test";
+import {
+  assertLoadingFinished,
+  assertLoadingTrace,
+  installLoadingProbe,
+  readLoadingTrace,
+} from "./support/loading-motion";
 
 // Runs in the `mobile` project: a Pixel 7 with isMobile and hasTouch, so the
 // meta viewport is honored and `(pointer: coarse)` matches, unlike a desktop
@@ -199,3 +205,48 @@ test.describe("with the reduce motion preference", () => {
     }
   });
 });
+
+for (const route of routes) {
+  test(`@loading Pixel 7 keeps loading fixed in portrait and landscape at ${route}`, async ({
+    page,
+  }) => {
+    test.setTimeout(60_000);
+    await installLoadingProbe(page);
+    for (const viewport of [
+      { width: 412, height: 915 },
+      { width: 915, height: 412 },
+    ]) {
+      await page.setViewportSize(viewport);
+      await openRoute(page, route);
+      await assertLoadingFinished(page);
+      const boundary = route === "/" ? "home-session" : "public-auth";
+      await page.evaluate((name) => {
+        const app = document.querySelector('[data-slot="app-root"]');
+        if (!app) throw new Error("App root missing");
+        const marker = document.createElement("div");
+        marker.dataset.slot = "loading-state";
+        marker.dataset.loadingBoundary = name;
+        marker.dataset.loadingTest = "mobile";
+        app.append(marker);
+      }, boundary);
+      await expect(
+        page.locator('[data-slot="global-loading-indicator"]'),
+      ).toHaveCSS("visibility", "visible");
+      await page.evaluate(
+        () =>
+          new Promise<void>((resolve) =>
+            requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+          ),
+      );
+      assertLoadingTrace(
+        await readLoadingTrace(page),
+        `Pixel 7 ${route} ${viewport.width}x${viewport.height}`,
+        true,
+      );
+      await page.locator('[data-loading-test="mobile"]').evaluate((el) => {
+        el.remove();
+      });
+      await assertLoadingFinished(page);
+    }
+  });
+}

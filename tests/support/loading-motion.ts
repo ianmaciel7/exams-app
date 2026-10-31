@@ -116,7 +116,7 @@ export async function installLoadingProbe(page: Page) {
       });
       // Record every active frame and every change of state. Cap memory while
       // preserving the first frames rather than silently hiding a first jump.
-      if (state.frames.length < 1800 && (pending.length > 0 || visible.length > 0 || signature !== lastSignature)) {
+      if (state.frames.length < 8000 && (pending.length > 0 || visible.length > 0 || signature !== lastSignature)) {
         state.frames.push(frame);
       }
       lastSignature = signature;

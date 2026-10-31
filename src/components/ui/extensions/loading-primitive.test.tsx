@@ -12,6 +12,7 @@ describe("LoadingPrimitive", () => {
       <NextIntlClientProvider locale="en" messages={en}>
         <LoadingPrimitive
           data-testid="loading-primitive"
+          boundary="profile-preferences"
           className="custom-loading"
         />
       </NextIntlClientProvider>,
@@ -27,6 +28,9 @@ describe("LoadingPrimitive", () => {
     expect(status.parentElement?.className).toContain("h-svh");
     expect(status.parentElement?.className).toContain("top-0");
     expect(status.closest('[data-slot="loading-state"]')).not.toBeNull();
+    expect(
+      status.closest('[data-slot="loading-state"]')?.getAttribute("data-loading-boundary"),
+    ).toBe("profile-preferences");
   });
 
   it("allows custom label override via children", () => {
