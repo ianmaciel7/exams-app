@@ -1,5 +1,4 @@
 // cspell:ignore firebaseio gstatic
-export { nonceHeader } from "./headers";
 
 type ContentSecurityPolicyOptions = {
   nonce: string;
