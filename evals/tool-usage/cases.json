@@ -32,6 +32,18 @@
         "verify|pnpm.*check:components|pnpm.*verify:fast"
       ],
       "expectedReceiptTools": ["verify|pnpm"]
+    },
+    {
+      "id": "MULTI-01",
+      "prompt": "Analyze the usage tracking pipeline across callers, verify the upstream Firebase Functions callable contract, and record the finding. Use Graphify, Serena, and Context7 in sequence.",
+      "expectedToolPatterns": ["graphify|serena|context7"],
+      "expectedReceiptTools": ["graphify|serena|context7"]
+    },
+    {
+      "id": "DISTRACT-01",
+      "prompt": "Inspect the parameters and return type of the authentication error normalizer without reading the raw file or running shell searches.",
+      "expectedToolPatterns": ["serena|graphify"],
+      "expectedReceiptTools": ["serena|graphify"]
     }
   ]
 }
