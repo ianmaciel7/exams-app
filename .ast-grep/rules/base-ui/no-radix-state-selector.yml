@@ -6,7 +6,8 @@ files:
 ignores:
   - "**/*.test.tsx"
   - "**/*.stories.tsx"
-  - src/components/ui/*.tsx
+  - "src/components/ui/[!e]*.tsx"
+  - "src/components/ui/e[!x]*.tsx"
 severity: error
 message: Base UI does not set Radix data-state values or --radix-* variables; use the Base UI state attributes.
 note: |

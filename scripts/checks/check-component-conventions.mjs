@@ -793,7 +793,11 @@ function checkProfileSectionSafety(source, elements, report) {
 }
 
 function checkProfileProviderSafety(source, elements, report) {
-  const nativeForms = profileElements(elements, "form");
+  // `Form` is the Base UI wrapper from ui/extensions/form, which renders the <form>.
+  const nativeForms = [
+    ...profileElements(elements, "form"),
+    ...profileElements(elements, "Form"),
+  ];
   if (
     nativeForms.length !== 1 ||
     !isInsideProfile(nativeForms[0], ["FormProvider"])

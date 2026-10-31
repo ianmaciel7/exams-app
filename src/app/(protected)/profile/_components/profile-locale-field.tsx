@@ -1,9 +1,12 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { type ComponentProps, useId } from "react";
+import type { ComponentProps } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import {
+  FormField,
+  FormFieldLabel,
+} from "@/components/ui/extensions/form-field";
 import {
   Select,
   SelectContent,
@@ -15,10 +18,9 @@ import {
 import { isLocale, locales } from "@/i18n/routing";
 import type { ProfileValues } from "../_lib/definitions";
 
-type ProfileLocaleFieldProps = ComponentProps<typeof Field>;
+type ProfileLocaleFieldProps = ComponentProps<typeof FormField>;
 
 function ProfileLocaleField(props: ProfileLocaleFieldProps) {
-  const id = useId();
   const t = useTranslations("Auth");
   const { control } = useFormContext<ProfileValues>();
 
@@ -26,9 +28,9 @@ function ProfileLocaleField(props: ProfileLocaleFieldProps) {
     <Controller
       name="locale"
       control={control}
-      render={({ field, fieldState }) => (
-        <Field {...props} data-invalid={fieldState.invalid}>
-          <FieldLabel htmlFor={id}>{t("languageLabel")}</FieldLabel>
+      render={({ field }) => (
+        <FormField {...props} name={field.name}>
+          <FormFieldLabel>{t("languageLabel")}</FormFieldLabel>
           <Select
             name={field.name}
             value={field.value}
@@ -37,13 +39,7 @@ function ProfileLocaleField(props: ProfileLocaleFieldProps) {
               if (isLocale(value)) field.onChange(value);
             }}
           >
-            <SelectTrigger
-              id={id}
-              className="w-full"
-              aria-invalid={fieldState.invalid}
-              aria-describedby={fieldState.invalid ? `${id}-error` : undefined}
-              onBlur={field.onBlur}
-            >
+            <SelectTrigger className="w-full" onBlur={field.onBlur}>
               <SelectValue>
                 {(value) =>
                   isLocale(value) ? t(`languageOptions.${value}`) : undefined
@@ -60,10 +56,7 @@ function ProfileLocaleField(props: ProfileLocaleFieldProps) {
               </SelectGroup>
             </SelectContent>
           </Select>
-          {fieldState.invalid && (
-            <FieldError id={`${id}-error`} errors={[fieldState.error]} />
-          )}
-        </Field>
+        </FormField>
       )}
     />
   );

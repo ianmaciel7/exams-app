@@ -1,0 +1,13 @@
+id: no-manual-label-wiring
+valid:
+  - |
+    const a = <FormField name="email"><FormFieldLabel>Email</FormFieldLabel><FormFieldError match="valueMissing">Required</FormFieldError></FormField>;
+  - |
+    const b = <FieldLabel>Group title</FieldLabel>;
+invalid:
+  - |
+    const a = <FieldLabel htmlFor="email">Email</FieldLabel>;
+  - |
+    const b = <FieldError>{message}</FieldError>;
+  - |
+    const c = <FieldError errors={[error]} />;

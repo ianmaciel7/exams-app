@@ -1,14 +1,9 @@
 "use client";
 
-import type { ComponentProps } from "react";
+import { type ComponentProps, useId } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import {
-  Field,
-  FieldContent,
-  FieldError,
-  FieldTitle,
-} from "@/components/ui/field";
+import { Field, FieldContent, FieldTitle } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 import { useProfileAvatarFieldClient } from "../_hooks/use-profile-avatar-field-client";
 
@@ -18,21 +13,21 @@ function ProfileAvatarFieldClient({
   className,
   ...props
 }: ProfileAvatarFieldClientProps) {
+  const titleId = useId();
   const {
     t,
     disabled,
     avatarSrc,
     avatarAlt,
     fallbackInitial,
-    errorMessage,
     fileInputRef,
     handleAvatarChange,
   } = useProfileAvatarFieldClient();
-  const errorId = "profile-avatar-error";
 
   return (
     <Field
       orientation="horizontal"
+      aria-labelledby={titleId}
       className={cn("items-center gap-4", className)}
       {...props}
     >
@@ -40,7 +35,8 @@ function ProfileAvatarFieldClient({
         type="button"
         variant="ghost"
         className="size-16 rounded-full p-0"
-        aria-label={t("profilePhotoChange")}
+        aria-hidden="true"
+        tabIndex={-1}
         disabled={disabled}
         onClick={() => fileInputRef.current?.click()}
       >
@@ -50,7 +46,7 @@ function ProfileAvatarFieldClient({
         </Avatar>
       </Button>
       <FieldContent className="self-center">
-        <FieldTitle>{t("profilePhotoTitle")}</FieldTitle>
+        <FieldTitle id={titleId}>{t("profilePhotoTitle")}</FieldTitle>
         <Button
           type="button"
           variant="link"
@@ -66,14 +62,11 @@ function ProfileAvatarFieldClient({
         ref={fileInputRef}
         type="file"
         accept="image/jpeg,image/png,image/webp"
-        className="sr-only"
-        aria-label={t("profilePhotoChange")}
-        aria-invalid={Boolean(errorMessage)}
-        aria-describedby={errorMessage ? errorId : undefined}
+        hidden
+        tabIndex={-1}
         disabled={disabled}
         onChange={handleAvatarChange}
       />
-      {errorMessage && <FieldError id={errorId}>{errorMessage}</FieldError>}
     </Field>
   );
 }

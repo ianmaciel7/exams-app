@@ -103,6 +103,13 @@ async function renderProfile(
   return rendered;
 }
 
+async function findAvatarInput() {
+  await screen.findByRole("button", { name: "profilePhotoChange" });
+  return document.querySelector<HTMLInputElement>(
+    "input[type=file]",
+  ) as HTMLInputElement;
+}
+
 describe("ProfileSectionClient", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -308,14 +315,9 @@ describe("ProfileSectionClient", () => {
     await renderProfile();
 
     const file = new File(["avatar"], "avatar.png", { type: "image/png" });
-    fireEvent.change(
-      await screen.findByLabelText("profilePhotoChange", {
-        selector: "input",
-      }),
-      {
-        target: { files: [file] },
-      },
-    );
+    fireEvent.change(await findAvatarInput(), {
+      target: { files: [file] },
+    });
     fireEvent.click(screen.getByRole("button", { name: "saveProfile" }));
 
     await waitFor(() =>
@@ -332,38 +334,19 @@ describe("ProfileSectionClient", () => {
     });
   });
 
-  it("shows an associated inline error when an invalid avatar is chosen", async () => {
+  it("shows error toast when invalid avatar is chosen", async () => {
     mocks.currentUser = { uid: "user-123", email: "user@example.com" };
     await renderProfile();
 
     const file = new File(["test"], "test.txt", { type: "text/plain" });
-    fireEvent.change(
-      await screen.findByLabelText("profilePhotoChange", {
-        selector: "input",
-      }),
-      {
-        target: { files: [file] },
-      },
-    );
+    fireEvent.change(await findAvatarInput(), {
+      target: { files: [file] },
+    });
 
-    const error = screen.getByRole("alert");
-    expect(error.textContent).toBe("profilePhotoInvalid");
-    expect(
-      screen
-        .getByLabelText("profilePhotoChange", { selector: "input" })
-        .getAttribute("aria-describedby"),
-    ).toBe(error.getAttribute("id"));
-    expect(mocks.toastAdd).not.toHaveBeenCalled();
-
-    fireEvent.change(
-      screen.getByLabelText("profilePhotoChange", { selector: "input" }),
-      {
-        target: {
-          files: [new File(["avatar"], "avatar.png", { type: "image/png" })],
-        },
-      },
-    );
-    await waitFor(() => expect(screen.queryByRole("alert")).toBeNull());
+    expect(mocks.toastAdd).toHaveBeenCalledWith({
+      title: "profilePhotoInvalid",
+      type: "error",
+    });
   });
 
   it("applies saved preferences from the user's document", async () => {
@@ -413,6 +396,23 @@ describe("ProfileSectionClient", () => {
       title: "profileSaved",
       type: "success",
     });
+  });
+
+  it("links an invalid email to its error, focuses it and does not save", async () => {
+    mocks.currentUser = { uid: "user-123", email: "old@example.com" };
+    await renderProfile();
+
+    const email = await screen.findByLabelText("emailLabel");
+    fireEvent.change(email, { target: { value: "not-an-email" } });
+    fireEvent.click(screen.getByRole("button", { name: "saveProfile" }));
+
+    const error = await screen.findByText("emailInvalid");
+    await waitFor(() => expect(document.activeElement).toBe(email));
+    expect(email.getAttribute("aria-invalid")).toBe("true");
+    const describedBy = email.getAttribute("aria-describedby") ?? "";
+    expect(describedBy.split(" ")).toContain(error.id);
+    expect(mocks.verifyBeforeUpdateEmail).not.toHaveBeenCalled();
+    expect(mocks.updateProfile).not.toHaveBeenCalled();
   });
 
   it("updates the display name and requests email verification with toast", async () => {
@@ -530,9 +530,7 @@ describe("ProfileSectionClient", () => {
     const log = vi.spyOn(console, "error").mockImplementation(() => {});
     try {
       await renderProfile();
-      const input = (await screen.findByLabelText("profilePhotoChange", {
-        selector: "input",
-      })) as HTMLInputElement;
+      const input = (await findAvatarInput()) as HTMLInputElement;
       const file = new File(["avatar"], "avatar.png", { type: "image/png" });
       fireEvent.change(input, { target: { files: [file] } });
       fireEvent.click(screen.getByRole("button", { name: "saveProfile" }));

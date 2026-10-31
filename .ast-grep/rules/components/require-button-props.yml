@@ -9,7 +9,8 @@ ignores:
   - "**/*.test.tsx"
   - "**/*.test.ts"
   - "**/*.stories.tsx"
-  - src/components/ui/*.tsx
+  - "src/components/ui/[!e]*.tsx"
+  - "src/components/ui/e[!x]*.tsx"
 severity: error
 message: Component props ending in ButtonProps should extend ComponentProps<typeof Button> or ComponentProps<"button">.
 note: |

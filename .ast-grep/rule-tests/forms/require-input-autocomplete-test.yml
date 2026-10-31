@@ -1,0 +1,11 @@
+id: require-input-autocomplete
+valid:
+  - |
+    const a = <Input type="email" autoComplete="email" />;
+  - |
+    const b = <Input autoComplete="off" />;
+invalid:
+  - |
+    const a = <Input type="email" />;
+  - |
+    const b = <Input {...field} maxLength={100} />;

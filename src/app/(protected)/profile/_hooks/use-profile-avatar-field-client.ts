@@ -10,11 +10,12 @@ export function useProfileAvatarFieldClient() {
   const { user, photoURL, avatarVersion } = useProfileSessionContext();
   const { control, setValue, formState } = useFormContext<ProfileFormValues>();
   const avatarFile = useWatch({ control, name: "avatarFile" });
-  const { avatarPreview, errorMessage, fileInputRef, handleAvatarChange } =
-    useProfileAvatar(avatarFile, (file) =>
-      setValue("avatarFile", file, { shouldDirty: true }),
-    );
-  const { displayName, email } = user;
+  const { avatarPreview, fileInputRef, handleAvatarChange } = useProfileAvatar(
+    avatarFile,
+    (file) => setValue("avatarFile", file, { shouldDirty: true }),
+  );
+  const displayName = user?.displayName ?? null;
+  const email = user?.email ?? null;
   const disabled = formState.disabled || formState.isSubmitting;
   const avatarSrc = getAvatarSource(avatarPreview, photoURL, avatarVersion);
   const fallbackInitial = (
@@ -29,7 +30,6 @@ export function useProfileAvatarFieldClient() {
     disabled,
     avatarSrc,
     avatarAlt,
-    errorMessage,
     fallbackInitial,
     fileInputRef,
     handleAvatarChange,

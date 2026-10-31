@@ -329,6 +329,21 @@ behavior/accessibility tests remain responsible for their respective contracts.
 
 ### Form and Field Architecture (shadcn/ui & React Hook Form)
 
+Compose forms with `Form`, `FormField`, `FormFieldLabel`,
+`FormFieldDescription` and `FormFieldError` from
+`@/components/ui/extensions/form` and `form-field`. They wrap the Base UI `Form` and
+`Field`, which link label, description and error to the control with
+`aria-labelledby`, `aria-describedby` and `aria-invalid`, render `noValidate`,
+and focus the first invalid control on submit. The shadcn `Field` in
+`ui/field.tsx` is a plain `div` and gives none of that, so do not use its
+`FieldLabel htmlFor` or `FieldError` for text controls; only the
+Firebase UI forms still do, until the auth refactor migrates them. Declare
+`required`, `type`, `maxLength` and `autoComplete` on the control and show
+localized text with `<FormFieldError match="valueMissing">`. Do not add a
+second RHF resolver for the same constraint: Base UI validates first and stops
+the submit. Review items that no tool checks: `inputMode`, `autoCapitalize`,
+`spellCheck`, and `focusableWhenDisabled` on pending submit buttons.
+
 Use `FieldGroup`, `Field`, `FieldLabel`, `FieldDescription`, and `FieldError`
 from the installed `@/components/ui/field` alongside React Hook Form
 `Controller`. The upstream guide demonstrates a choice of schema validation;

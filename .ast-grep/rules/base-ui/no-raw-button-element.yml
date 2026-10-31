@@ -6,7 +6,8 @@ files:
 ignores:
   - "**/*.test.tsx"
   - "**/*.stories.tsx"
-  - src/components/ui/*.tsx
+  - "src/components/ui/[!e]*.tsx"
+  - "src/components/ui/e[!x]*.tsx"
   - src/components/ai-elements/**
   - src/components/firebase/policies.tsx
 severity: error
