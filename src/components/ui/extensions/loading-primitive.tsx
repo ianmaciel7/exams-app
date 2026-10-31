@@ -17,11 +17,13 @@ function LoadingPrimitive({
 }: LoadingPrimitiveProps) {
   const t = useTranslations("App");
   return (
-    <LoadingOverlay>
-      <LabeledSpinner className={className} {...props}>
-        {children ?? t("loading")}
-      </LabeledSpinner>
-    </LoadingOverlay>
+    <div data-slot="loading-state">
+      <LoadingOverlay>
+        <LabeledSpinner className={className} {...props}>
+          {children ?? t("loading")}
+        </LabeledSpinner>
+      </LoadingOverlay>
+    </div>
   );
 }
 

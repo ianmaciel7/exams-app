@@ -199,9 +199,30 @@ test("profile displays user email and signs out successfully", async ({
   await page.locator("#password").fill(password);
   await page.getByRole("button", { name: "Sign In", exact: true }).click();
   await expect(page).toHaveURL("/");
+  await page.evaluate(() => {
+    const spinner = document.querySelector(
+      '[data-slot="global-loading-indicator"] [data-slot="spinner"]',
+    );
+    if (!spinner) throw new Error("Root loading indicator not mounted");
+    (
+      window as Window & { __profileLoadingSpinner?: Element }
+    ).__profileLoadingSpinner = spinner;
+  });
   await page.getByRole("link", { name: "My profile" }).click();
   await expect(page).toHaveURL(/\/profile$/);
   await expect(page.getByLabel("Email", { exact: true })).toHaveValue(email);
+  // Navigating into the protected route must not mount a new loading icon:
+  // the root indicator remains the same DOM node across route/auth/profile.
+  expect(
+    await page.evaluate(
+      () =>
+        (window as Window & { __profileLoadingSpinner?: Element })
+          .__profileLoadingSpinner ===
+        document.querySelector(
+          '[data-slot="global-loading-indicator"] [data-slot="spinner"]',
+        ),
+    ),
+  ).toBe(true);
   await expect(page.getByRole("button", { name: "Sign Out" })).toHaveCount(0);
   await page.getByRole("link", { name: "Back to Home" }).click();
   await expect(page).toHaveURL("/");
