@@ -115,7 +115,7 @@ project skills are tracked in `.agents/skills/` and `skills-lock.json`.
 
 | Command | Purpose |
 | --- | --- |
-| `pnpm dev` / `pnpm build` / `pnpm start` | Develop, build, and serve the Next.js application. |
+| `pnpm dev` / `pnpm dev:prod` / `pnpm build` / `pnpm start` | Develop (emulators or production), build, and serve the Next.js application. |
 | `pnpm setup:github` | Configure repository settings and branch protection rulesets via GitHub CLI. |
 | `pnpm lint` / `pnpm lint:ci` / `pnpm format` | Biome check, CI check, and formatting. |
 | `pnpm typecheck` | Generate route types and run `tsc --noEmit -p tsconfig.build.json`. |

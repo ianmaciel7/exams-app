@@ -12,7 +12,7 @@
         },
         "background": {
           "activeOnStart": true,
-          "beginsPattern": "Starting emulators...",
+          "beginsPattern": "Starting emulators",
           "endsPattern": "All emulators ready!"
         }
       },
