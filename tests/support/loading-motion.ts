@@ -74,9 +74,7 @@ export async function installLoadingProbe(page: Page) {
           // Empty marker elements still have a client rect when rendered.
           const style = getComputedStyle(element);
           return (
-            style.visibility === "visible" &&
-            style.display !== "none" &&
-            element.getClientRects().length > 0
+            style.display !== "none" && element.getClientRects().length > 0
           );
         })
         .map((element) =>
