@@ -1,13 +1,5 @@
 // cspell:ignore firebaseio gstatic
-import { headers } from "next/headers";
-
-/** Request header that carries the per-request CSP nonce to Server Components. */
-export const nonceHeader = "x-nonce";
-
-/** Reads the per-request CSP nonce that `src/proxy.ts` sets. */
-export async function getNonce() {
-  return (await headers()).get(nonceHeader) ?? undefined;
-}
+export { nonceHeader } from "./headers";
 
 type ContentSecurityPolicyOptions = {
   nonce: string;

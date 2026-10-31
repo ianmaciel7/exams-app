@@ -1,5 +1,6 @@
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
+import { securityHeaders } from "./src/lib/headers";
 
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 const authEmulatorHost = process.env.FIREBASE_AUTH_EMULATOR_HOST?.trim();
@@ -10,27 +11,6 @@ const authEmulatorUrl = authEmulatorHost
       : `http://${authEmulatorHost}`
     ).replace(/\/$/, "")
   : undefined;
-
-// Baseline response headers from the Next.js `headers` guide. Documents get the
-// full nonce-based CSP from `src/proxy.ts`, which replaces this header; the
-// baseline CSP below still covers public files and the auth service worker.
-const securityHeaders = [
-  { key: "X-Content-Type-Options", value: "nosniff" },
-  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-  { key: "X-Frame-Options", value: "SAMEORIGIN" },
-  {
-    key: "Content-Security-Policy",
-    value: "frame-ancestors 'self'; base-uri 'self'; object-src 'none'",
-  },
-  {
-    key: "Permissions-Policy",
-    value: "camera=(), microphone=(), geolocation=(), browsing-topics=()",
-  },
-  {
-    key: "Strict-Transport-Security",
-    value: "max-age=63072000; includeSubDomains",
-  },
-];
 
 const nextConfig: NextConfig = {
   /* config options here */
