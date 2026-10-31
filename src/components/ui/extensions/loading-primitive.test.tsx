@@ -26,6 +26,7 @@ describe("LoadingPrimitive", () => {
     expect(overlay?.className).toContain("inset-0");
     expect(status.parentElement?.className).toContain("h-svh");
     expect(status.parentElement?.className).toContain("top-0");
+    expect(status.closest('[data-slot="loading-state"]')).not.toBeNull();
   });
 
   it("allows custom label override via children", () => {
