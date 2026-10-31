@@ -26,6 +26,7 @@ test("accepts a launch.json referencing an envFile without inline secrets", () =
           name: "Next.js: Dev",
           type: "node",
           request: "launch",
+          // biome-ignore lint/suspicious/noTemplateCurlyInString: VS Code variable syntax
           envFile: "${workspaceFolder}/.env.production.local",
         },
       ],
