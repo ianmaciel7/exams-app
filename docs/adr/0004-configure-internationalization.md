@@ -53,7 +53,7 @@ We adopt `next-intl` with a decoupled routing, provider, and message structure:
    root fallback must rerun the server-response language checks.
 
 5. **Navigation**:
-   Navigation uses the standard Next.js `Link` (`next/link`) and `useRouter` / `usePathname` (`next/navigation`) directly against unprefixed public URLs. There is no localized navigation wrapper: the locale lives in a cookie, not in the path, so a re-export shim would add an import path without changing behavior.
+   Navigation uses the standard Next.js `Link`, `useRouter`, and `usePathname` directly against unprefixed public URLs (localized navigation wrappers are also available via `src/i18n/navigation.ts` when needed, without internal pathname normalization helpers).
 
 6. **Context Provider Wrapper (`src/components/ui/extensions/intl-provider-server.tsx`)**:
    An async Server Component (`server-only`) adhering to pure React context provider standards. It extends `Omit<React.ComponentProps<typeof NextIntlClientProvider>, "locale" | "messages">`, removes unnecessary DOM wrapper markup (`<div className="contents">`) to eliminate DOM tree pollution, resolves messages and locale server-side cleanly (`getLocale()`, `getMessages()`), assigns `locale` and `messages` after caller props, and adopts the standardized shadcn `function ... export { ... }` convention:
