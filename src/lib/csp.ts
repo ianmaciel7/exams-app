@@ -1,4 +1,4 @@
-// cspell:ignore firebaseio gstatic
+// cspell:ignore firebaseio gstatic googleusercontent
 
 type ContentSecurityPolicyOptions = {
   nonce: string;
@@ -94,6 +94,21 @@ function frameSources(
 }
 
 /**
+ * Profile photos: avatars uploaded to Firebase Storage and the Google account
+ * photo that Google sign-in sets as `photoURL`. `blob:` is the upload preview.
+ */
+function imageSources(emulators: string[]): Sources {
+  return [
+    "'self'",
+    "blob:",
+    "data:",
+    "https://firebasestorage.googleapis.com",
+    "https://lh3.googleusercontent.com",
+    ...emulators.filter((origin) => origin.startsWith("http")),
+  ];
+}
+
+/**
  * Builds the strict, nonce-based policy from the Next.js CSP guide. Scripts
  * load through `'strict-dynamic'`, so Firebase Auth, Google sign-in, and
  * reCAPTCHA scripts injected by trusted bundles keep working; `https:` and
@@ -116,7 +131,7 @@ export function buildContentSecurityPolicy({
     ],
     // Server-rendered style="" attributes from Base UI, Motion, and charts.
     "style-src-attr": ["'unsafe-inline'"],
-    "img-src": ["'self'", "blob:", "data:"],
+    "img-src": imageSources(emulators),
     "font-src": ["'self'", "data:"],
     "connect-src": ["'self'", ...firebaseConnectSources(env, emulators)],
     "frame-src": frameSources(env, emulators),
