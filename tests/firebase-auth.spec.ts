@@ -74,8 +74,8 @@ test("registration and persisted authentication redirect", async ({ page }) => {
   await page.goto("/sign-in");
   await page.getByRole("button", { name: /don't have an account/i }).click();
   await expect(page).toHaveURL(/\/register$/);
-  await page.getByLabel("Email Address").fill(email);
-  await page.getByLabel("Password", { exact: true }).fill(password);
+  await page.getByLabel("Email Address").filter({ visible: true }).fill(email);
+  await page.getByLabel("Password").filter({ visible: true }).fill(password);
   await page.getByRole("button", { name: "Create Account" }).click();
   await expect(page).toHaveURL("/");
   await page.goto("/sign-in");
@@ -93,11 +93,14 @@ test("invalid credentials and successful sign-in", async ({
   );
   expect(created.ok()).toBeTruthy();
   await page.goto("/sign-in");
-  await page.getByLabel("Email Address").fill(email);
-  await page.getByLabel("Password", { exact: true }).fill("wrong-password");
+  await page.getByLabel("Email Address").filter({ visible: true }).fill(email);
+  await page
+    .getByLabel("Password")
+    .filter({ visible: true })
+    .fill("wrong-password");
   await page.getByRole("button", { name: "Sign In", exact: true }).click();
   await expect(page.getByText(/invalid|incorrect/i)).toBeVisible();
-  await page.getByLabel("Password", { exact: true }).fill(password);
+  await page.getByLabel("Password").filter({ visible: true }).fill(password);
   await page.getByRole("button", { name: "Sign In", exact: true }).click();
   await expect(page).toHaveURL("/");
 });
@@ -199,7 +202,7 @@ test("Google popup cancellation restores sign-in and supports retry", async ({
   const googleButton = page.getByRole("button", {
     name: "Sign in with Google",
   });
-  const emailField = page.getByLabel("Email Address");
+  const emailField = page.getByLabel("Email Address").filter({ visible: true });
 
   await expect(googleButton).toBeEnabled();
 
@@ -263,8 +266,8 @@ test("profile displays user email and signs out successfully", async ({
   );
   expect(created.ok()).toBeTruthy();
   await page.goto("/sign-in");
-  await page.getByLabel("Email Address").fill(email);
-  await page.getByLabel("Password", { exact: true }).fill(password);
+  await page.getByLabel("Email Address").filter({ visible: true }).fill(email);
+  await page.getByLabel("Password").filter({ visible: true }).fill(password);
   await page.getByRole("button", { name: "Sign In", exact: true }).click();
   await expect(page).toHaveURL("/");
   await page.getByRole("link", { name: "My profile" }).click();
@@ -291,8 +294,8 @@ test("saving the profile language keeps the unprefixed route and translates afte
   );
   expect(created.ok()).toBeTruthy();
   await page.goto("/sign-in");
-  await page.getByLabel("Email Address").fill(email);
-  await page.getByLabel("Password", { exact: true }).fill(password);
+  await page.getByLabel("Email Address").filter({ visible: true }).fill(email);
+  await page.getByLabel("Password").filter({ visible: true }).fill(password);
   await page.getByRole("button", { name: "Sign In", exact: true }).click();
   await expect(page).toHaveURL("/");
   await page.getByRole("link", { name: "My profile" }).click();
@@ -341,8 +344,8 @@ test("guest deep link returns to the protected page after sign-in", async ({
     "/profile?tab=security",
   );
 
-  await page.getByLabel("Email Address").fill(email);
-  await page.getByLabel("Password", { exact: true }).fill(password);
+  await page.getByLabel("Email Address").filter({ visible: true }).fill(email);
+  await page.getByLabel("Password").filter({ visible: true }).fill(password);
   await page.getByRole("button", { name: "Sign In", exact: true }).click();
 
   await expect(page).toHaveURL(`${authTestOrigin}/profile?tab=security`);
@@ -367,8 +370,8 @@ test("profile changes survive reload, sign-out and a new sign-in", async ({
   };
 
   await page.goto("/sign-in");
-  await page.getByLabel("Email Address").fill(email);
-  await page.getByLabel("Password", { exact: true }).fill(password);
+  await page.getByLabel("Email Address").filter({ visible: true }).fill(email);
+  await page.getByLabel("Password").filter({ visible: true }).fill(password);
   await page.getByRole("button", { name: "Sign In", exact: true }).click();
   await expect(page).toHaveURL("/");
   await page.getByRole("link", { name: "My profile" }).click();
@@ -411,8 +414,8 @@ test("profile changes survive reload, sign-out and a new sign-in", async ({
   ).toBeVisible();
 
   await page.goto("/sign-in");
-  await page.getByLabel("Email Address").fill(email);
-  await page.getByLabel("Password", { exact: true }).fill(password);
+  await page.getByLabel("Email Address").filter({ visible: true }).fill(email);
+  await page.getByLabel("Password").filter({ visible: true }).fill(password);
   await page.getByRole("button", { name: "Sign In", exact: true }).click();
   await page.getByRole("link", { name: "My profile" }).click();
   await expect(page.getByLabel("Name", { exact: true })).toHaveValue(
@@ -523,8 +526,8 @@ test("@a11y authenticated profile has no detected WCAG A/AA violations", async (
   expect(created.ok()).toBeTruthy();
 
   await page.goto("/sign-in");
-  await page.getByLabel("Email Address").fill(email);
-  await page.getByLabel("Password", { exact: true }).fill(password);
+  await page.getByLabel("Email Address").filter({ visible: true }).fill(email);
+  await page.getByLabel("Password").filter({ visible: true }).fill(password);
   await page.getByRole("button", { name: "Sign In", exact: true }).click();
   await expect(page).toHaveURL("/");
   await page.goto("/profile");
@@ -563,8 +566,14 @@ for (const colorScheme of ["light", "dark"] as const) {
       );
       expect(created.ok()).toBeTruthy();
       await page.goto("/sign-in");
-      await page.getByLabel("Email Address").fill(email);
-      await page.getByLabel("Password", { exact: true }).fill(password);
+      await page
+        .getByLabel("Email Address")
+        .filter({ visible: true })
+        .fill(email);
+      await page
+        .getByLabel("Password")
+        .filter({ visible: true })
+        .fill(password);
       await page.getByRole("button", { name: "Sign In", exact: true }).click();
       await expect(page).toHaveURL("/");
       await page.goto("/profile");
