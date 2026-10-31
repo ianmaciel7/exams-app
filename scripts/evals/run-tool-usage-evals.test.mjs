@@ -139,4 +139,74 @@ describe("tool-usage eval runner", () => {
     assert.equal(scoreCase(testCase, events, 1).passed, false);
     assert.equal(scoreCase(testCase, [events[1]], 0).passed, false);
   });
+
+  it("scores multi-hop MCP tool sequences across multiple servers", () => {
+    const multiCase = {
+      id: "MULTI-01",
+      expectedToolPatterns: [
+        "graphify.*serena|serena.*context7|graphify|serena",
+      ],
+      expectedReceiptTools: ["graphify", "serena", "context7"],
+    };
+    const multiReceipt = {
+      selected_tools: ["Graphify", "Serena", "Context7"],
+      evidence: [
+        "query_graph mapped pipeline",
+        "find_symbol verified body",
+        "query-docs verified SDK",
+      ],
+      outcome: "Multi-hop cross-server trajectory succeeded.",
+      limitation: "None.",
+      validation: "Trace inspected.",
+    };
+    const events = [
+      {
+        type: "item.completed",
+        item: {
+          type: "mcp_tool_call",
+          server: "graphify",
+          tool: "query_graph",
+        },
+      },
+      {
+        type: "item.completed",
+        item: { type: "mcp_tool_call", server: "serena", tool: "find_symbol" },
+      },
+      {
+        type: "item.completed",
+        item: { type: "mcp_tool_call", server: "context7", tool: "query-docs" },
+      },
+      {
+        type: "item.completed",
+        item: { type: "agent_message", text: JSON.stringify(multiReceipt) },
+      },
+    ];
+    assert.equal(scoreCase(multiCase, events, 0).passed, true);
+  });
+
+  it("rejects shell command execution as a distractor for symbolic navigation", () => {
+    const distractCase = {
+      id: "DISTRACT-01",
+      expectedToolPatterns: ["serena|graphify"],
+      expectedReceiptTools: ["serena|graphify"],
+    };
+    const distractReceipt = {
+      selected_tools: ["shell"],
+      evidence: ["cat src/lib/auth.ts"],
+      outcome: "Read via shell.",
+      limitation: "Used distractor.",
+      validation: "None.",
+    };
+    const events = [
+      {
+        type: "item.completed",
+        item: { type: "command_execution", command: "cat src/lib/auth.ts" },
+      },
+      {
+        type: "item.completed",
+        item: { type: "agent_message", text: JSON.stringify(distractReceipt) },
+      },
+    ];
+    assert.equal(scoreCase(distractCase, events, 0).passed, false);
+  });
 });
