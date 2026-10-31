@@ -3,7 +3,7 @@ import type { Locale } from "@/lib/locale";
 
 export function syncSavedLocale(
   savedLocale: Locale,
-  activeLocale: Locale,
+  activeLocale: string,
   refresh: () => void,
 ) {
   if (savedLocale === activeLocale) return false;
