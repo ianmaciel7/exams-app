@@ -9,7 +9,8 @@
       "args": ["dev"],
       "preLaunchTask": "Firebase: Start Emulators",
       "skipFiles": ["<node_internals>/**"],
-      "console": "integratedTerminal"
+      "console": "integratedTerminal",
+      "envFile": "${workspaceFolder}/.env.emulator.local"
     },
     {
       "name": "Next.js: Dev (Production)",
@@ -30,6 +31,7 @@
       "preLaunchTask": "Firebase: Start Emulators",
       "runtimeArgs": ["--inspect"],
       "skipFiles": ["<node_internals>/**"],
+      "envFile": "${workspaceFolder}/.env.emulator.local",
       "serverReadyAction": {
         "action": "debugWithChrome",
         "killOnServerStop": true,
