@@ -1,7 +1,7 @@
 import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
 import { LabeledSpinner } from "@/components/ui/extensions/labeled-spinner";
-import { cn } from "@/lib/utils";
+import { LoadingOverlay } from "@/components/ui/extensions/loading-overlay";
 
 type LoadingPrimitiveProps = ComponentProps<typeof LabeledSpinner>;
 
@@ -17,15 +17,13 @@ function LoadingPrimitive({
 }: LoadingPrimitiveProps) {
   const t = useTranslations("App");
   return (
-    <LabeledSpinner
-      className={cn(
-        "fixed inset-0 z-50 flex items-center justify-center bg-background p-6",
-        className,
-      )}
-      {...props}
-    >
-      {children ?? t("loading")}
-    </LabeledSpinner>
+    <div data-slot="loading-state">
+      <LoadingOverlay>
+        <LabeledSpinner className={className} {...props}>
+          {children ?? t("loading")}
+        </LabeledSpinner>
+      </LoadingOverlay>
+    </div>
   );
 }
 

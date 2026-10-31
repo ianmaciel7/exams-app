@@ -199,9 +199,114 @@ test("profile displays user email and signs out successfully", async ({
   await page.locator("#password").fill(password);
   await page.getByRole("button", { name: "Sign In", exact: true }).click();
   await expect(page).toHaveURL("/");
+  await expect(page.getByRole("link", { name: "My profile" })).toBeVisible();
+  await expect(
+    page.locator('[data-slot="global-loading-indicator"]'),
+  ).toHaveCSS("visibility", "hidden");
+
+  await page.evaluate(() => {
+    const spinner = document.querySelector(
+      '[data-slot="global-loading-indicator"] [data-slot="spinner"]',
+    );
+    if (!spinner) throw new Error("Root loading indicator not mounted");
+    (
+      window as Window & { __profileLoadingSpinner?: Element }
+    ).__profileLoadingSpinner = spinner;
+  });
+  // Observe every visible loading frame during the real route transition.
+  // Previous tests only compared DOM nodes before and after navigation.
+  await page.evaluate(() => {
+    const root = document.querySelector(
+      '[data-slot="global-loading-indicator"] [data-slot="spinner"]',
+    );
+    if (!root) throw new Error("Missing persistent loading spinner");
+    const trace: { x: number; y: number; source: string }[] = [];
+    let running = true;
+    const sample = () => {
+      if (!running) return;
+      const spinners = document.querySelectorAll<SVGSVGElement>(
+        '[data-slot="loading-overlay"] [data-slot="spinner"]',
+      );
+      for (const spinner of spinners) {
+        if (getComputedStyle(spinner).visibility !== "visible") continue;
+        const bounds = spinner.getBoundingClientRect();
+        trace.push({
+          x: bounds.left + bounds.width / 2,
+          y: bounds.top + bounds.height / 2,
+          source: spinner.closest('[data-slot="global-loading-indicator"]')
+            ? "root"
+            : "fallback",
+        });
+      }
+      requestAnimationFrame(sample);
+    };
+    const browser = window as typeof window & {
+      __profileLoadingTrace?: () => {
+        sameNode: boolean;
+        bodyChild: boolean;
+        trace: typeof trace;
+        viewportWidth: number;
+        viewportHeight: number;
+      };
+    };
+    browser.__profileLoadingTrace = () => {
+      running = false;
+      return {
+        sameNode:
+          root ===
+          document.querySelector(
+            '[data-slot="global-loading-indicator"] [data-slot="spinner"]',
+          ),
+        bodyChild:
+          root.closest('[data-slot="global-loading-indicator"]')
+            ?.parentElement === document.body,
+        trace,
+        viewportWidth: window.innerWidth,
+        viewportHeight: window.innerHeight,
+      };
+    };
+    requestAnimationFrame(sample);
+  });
   await page.getByRole("link", { name: "My profile" }).click();
   await expect(page).toHaveURL(/\/profile$/);
   await expect(page.getByLabel("Email", { exact: true })).toHaveValue(email);
+  const loadingMotion = await page.evaluate(() => {
+    const browser = window as typeof window & {
+      __profileLoadingTrace?: () => {
+        sameNode: boolean;
+        bodyChild: boolean;
+        trace: { x: number; y: number; source: string }[];
+        viewportWidth: number;
+        viewportHeight: number;
+      };
+    };
+    return browser.__profileLoadingTrace?.();
+  });
+  expect(loadingMotion?.sameNode).toBe(true);
+  expect(loadingMotion?.bodyChild).toBe(true);
+  expect(loadingMotion?.trace.every((sample) => sample.source === "root")).toBe(
+    true,
+  );
+  for (const sample of loadingMotion?.trace ?? []) {
+    expect(sample.x).toBeGreaterThan(0);
+    expect(sample.x).toBeLessThan(loadingMotion?.viewportWidth ?? 0);
+    expect(
+      Math.abs(sample.y - (loadingMotion?.viewportHeight ?? 0) / 2),
+    ).toBeLessThanOrEqual(1);
+  }
+
+  // Navigating into the protected route must not mount a new loading icon:
+  // the root indicator remains the same DOM node across route/auth/profile.
+  expect(
+    await page.evaluate(
+      () =>
+        (window as Window & { __profileLoadingSpinner?: Element })
+          .__profileLoadingSpinner ===
+        document.querySelector(
+          '[data-slot="global-loading-indicator"] [data-slot="spinner"]',
+        ),
+    ),
+  ).toBe(true);
   await expect(page.getByRole("button", { name: "Sign Out" })).toHaveCount(0);
   await page.getByRole("link", { name: "Back to Home" }).click();
   await expect(page).toHaveURL("/");

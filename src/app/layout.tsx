@@ -6,7 +6,6 @@ import { FirebaseAuthSessionBridgeClient } from "@/components/ui/extensions/fire
 import { IntlDocumentServer } from "@/components/ui/extensions/intl-document-server";
 import { IntlProviderServer } from "@/components/ui/extensions/intl-provider-server";
 import { ThemeProviderClient } from "@/components/ui/extensions/theme-provider-client";
-import { Spinner } from "@/components/ui/spinner";
 import { Toaster } from "@/components/ui/toast";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
@@ -44,16 +43,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <Suspense fallback={null}>
       <IntlDocumentServer className={fontClassName}>
-        <Suspense
-          fallback={
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-background p-6">
-              <Spinner
-                className="size-8 text-muted-foreground"
-                aria-hidden="true"
-              />
-            </div>
-          }
-        >
+        <Suspense fallback={<div data-slot="loading-state" />}>
           <IntlProviderServer>
             <FirebaseAuthSessionBridgeClient />
             <ThemeProviderClient
