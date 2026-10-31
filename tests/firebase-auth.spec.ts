@@ -127,8 +127,8 @@ test("password recovery sends an emulator reset code and displays failures", asy
   await page.goto("/sign-in");
   await page.getByRole("button", { name: "Forgot Password?" }).click();
   await expect(page).toHaveURL(/\/forgot-password$/);
-  // Next.js can retain an offscreen previous route during transitions.
-  // Target the form the user can actually interact with, not hidden inputs.
+  // Route transitions can retain previous form controls in the DOM; the
+  // autocomplete token identifies the recovery email field on this route.
   const emailField = recoveryEmail(page);
   await expect(emailField).toBeVisible();
   await page

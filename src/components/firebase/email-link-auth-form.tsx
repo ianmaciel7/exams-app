@@ -2,9 +2,11 @@
 
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import type { EmailLinkAuthFormSchema } from "@firebase-oss/ui-core";
-import { getTranslation } from "@firebase-oss/ui-core";
 import {
-  useEmailLinkAuthFormAction,
+  getTranslation,
+  sendSignInLinkToEmail,
+} from "@firebase-oss/ui-core";
+import {
   useEmailLinkAuthFormCompleteSignIn,
   useEmailLinkAuthFormSchema,
   useUI,
@@ -28,7 +30,6 @@ export function EmailLinkAuthForm(props: EmailLinkAuthFormProps) {
   const { onEmailSent, onSignIn } = props;
   const ui = useUI();
   const schema = useEmailLinkAuthFormSchema();
-  const action = useEmailLinkAuthFormAction();
   const [emailSent, setEmailSent] = useState(false);
 
   const form = useForm<EmailLinkAuthFormSchema>({
@@ -43,7 +44,7 @@ export function EmailLinkAuthForm(props: EmailLinkAuthFormProps) {
 
   async function onSubmit(values: EmailLinkAuthFormSchema) {
     try {
-      await action(values);
+      await sendSignInLinkToEmail(ui, values.email);
       setEmailSent(true);
       onEmailSent?.();
     } catch (error) {

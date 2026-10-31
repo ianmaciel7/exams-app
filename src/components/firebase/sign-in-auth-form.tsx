@@ -2,9 +2,11 @@
 
 import { Spinner } from "@/components/ui/spinner";
 
-import type { SignInAuthFormSchema } from "@firebase-oss/ui-core";
 import {
-  useSignInAuthFormAction,
+  signInWithEmailAndPassword,
+  type SignInAuthFormSchema,
+} from "@firebase-oss/ui-core";
+import {
   useSignInAuthFormSchema,
   useUI,
   type SignInAuthFormProps,
@@ -27,7 +29,6 @@ export function SignInAuthForm(props: SignInAuthFormProps) {
   const passwordId = useId();
   const ui = useUI();
   const schema = useSignInAuthFormSchema();
-  const action = useSignInAuthFormAction();
 
   const form = useForm<SignInAuthFormSchema>({
     resolver: standardSchemaResolver(schema),
@@ -40,7 +41,11 @@ export function SignInAuthForm(props: SignInAuthFormProps) {
 
   async function onSubmit(values: SignInAuthFormSchema) {
     try {
-      const credential = await action(values);
+      const credential = await signInWithEmailAndPassword(
+        ui,
+        values.email,
+        values.password,
+      );
       if (credential) {
         props.onSignIn?.(credential);
       }

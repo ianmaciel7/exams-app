@@ -2,9 +2,11 @@
 
 import { Spinner } from "@/components/ui/spinner";
 
-import type { ForgotPasswordAuthFormSchema } from "@firebase-oss/ui-core";
 import {
-  useForgotPasswordAuthFormAction,
+  sendPasswordResetEmail,
+  type ForgotPasswordAuthFormSchema,
+} from "@firebase-oss/ui-core";
+import {
   useForgotPasswordAuthFormSchema,
   useUI,
   type ForgotPasswordAuthFormProps,
@@ -26,7 +28,6 @@ export function ForgotPasswordAuthForm(props: ForgotPasswordAuthFormProps) {
   const emailId = useId();
   const ui = useUI();
   const schema = useForgotPasswordAuthFormSchema();
-  const action = useForgotPasswordAuthFormAction();
   const [emailSent, setEmailSent] = useState(false);
 
   const form = useForm<ForgotPasswordAuthFormSchema>({
@@ -39,7 +40,7 @@ export function ForgotPasswordAuthForm(props: ForgotPasswordAuthFormProps) {
 
   async function onSubmit(values: ForgotPasswordAuthFormSchema) {
     try {
-      await action(values);
+      await sendPasswordResetEmail(ui, values.email);
       setEmailSent(true);
       props.onPasswordSent?.();
     } catch (error) {

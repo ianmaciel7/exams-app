@@ -2,9 +2,11 @@
 
 import { Spinner } from "@/components/ui/spinner";
 
-import type { SignUpAuthFormSchema } from "@firebase-oss/ui-core";
 import {
-  useSignUpAuthFormAction,
+  createUserWithEmailAndPassword,
+  type SignUpAuthFormSchema,
+} from "@firebase-oss/ui-core";
+import {
   useSignUpAuthFormSchema,
   useUI,
   type SignUpAuthFormProps,
@@ -29,7 +31,6 @@ export function SignUpAuthForm(props: SignUpAuthFormProps) {
   const passwordId = useId();
   const ui = useUI();
   const schema = useSignUpAuthFormSchema();
-  const action = useSignUpAuthFormAction();
   const requireDisplayName = useRequireDisplayName();
 
   const form = useForm<SignUpAuthFormSchema>({
@@ -44,7 +45,12 @@ export function SignUpAuthForm(props: SignUpAuthFormProps) {
 
   async function onSubmit(values: SignUpAuthFormSchema) {
     try {
-      const credential = await action(values);
+      const credential = await createUserWithEmailAndPassword(
+        ui,
+        values.email,
+        values.password,
+        values.displayName,
+      );
       if (credential) {
         props.onSignUp?.(credential);
       }
