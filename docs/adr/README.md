@@ -210,3 +210,9 @@ implementation is [theme-provider-client.tsx](../../src/components/ui/extensions
 The ADR retains the old path as historical context; the documentation guard maps
 only that exact source link to the current file. It does not exempt other broken
 links. Logging links in ADRs 0001 and 0009 resolve through [the logging entrypoint](../logging.md).
+
+- **ADR 0023: Service worker imports**:
+  - `worker-src` is `'self' https://www.gstatic.com/firebasejs/`, not `'self'` alone.
+    Chromium checks the static Firebase SDK imports of `public/firebase-auth-sw.js`
+    against the registering page's `worker-src`; with `'self'` alone the worker fails
+    with "ServiceWorker cannot be started".
