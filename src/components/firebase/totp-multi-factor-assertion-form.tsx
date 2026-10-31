@@ -14,7 +14,7 @@ import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
-import { getAuthErrorMessage } from "./auth-error-message";
+import { getAuthActionErrorMessage } from "./auth-error-message";
 
 type TotpMultiFactorAssertionFormProps = {
   hint: MultiFactorInfo;
@@ -39,7 +39,7 @@ export function TotpMultiFactorAssertionForm(props: TotpMultiFactorAssertionForm
       const credential = await action({ verificationCode: values.verificationCode, hint: props.hint });
       props.onSuccess?.(credential);
     } catch (error) {
-      form.setError("root", { message: getAuthErrorMessage(error, ui) });
+      form.setError("root", { message: getAuthActionErrorMessage(error, ui) });
     }
   };
 

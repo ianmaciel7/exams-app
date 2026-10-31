@@ -18,7 +18,7 @@ import { Field, FieldLabel, FieldDescription, FieldError } from "@/components/ui
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
-import { getAuthErrorMessage } from "./auth-error-message";
+import { getAuthActionErrorMessage } from "./auth-error-message";
 
 type PhoneMultiFactorInfo = MultiFactorInfo & {
   phoneNumber?: string;
@@ -42,7 +42,7 @@ function SmsMultiFactorAssertionPhoneForm(props: SmsMultiFactorAssertionPhoneFor
       const verificationId = await action({ hint: props.hint, recaptchaVerifier: recaptchaVerifier! });
       props.onSubmit(verificationId);
     } catch (error) {
-      setError(getAuthErrorMessage(error, ui));
+      setError(getAuthActionErrorMessage(error, ui));
     }
   };
 
@@ -96,7 +96,7 @@ function SmsMultiFactorAssertionVerifyForm(props: SmsMultiFactorAssertionVerifyF
       });
       props.onSuccess(credential);
     } catch (error) {
-      form.setError("root", { message: getAuthErrorMessage(error, ui) });
+      form.setError("root", { message: getAuthActionErrorMessage(error, ui) });
     }
   };
 

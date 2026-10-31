@@ -28,7 +28,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { Policies } from "@/components/firebase/policies";
 import { CountrySelector, type CountrySelectorRef } from "@/components/firebase/country-selector";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
-import { getAuthErrorMessage } from "./auth-error-message";
+import { getAuthActionErrorMessage } from "./auth-error-message";
 
 type VerifyPhoneNumberFormProps = {
   verificationId: string;
@@ -56,7 +56,7 @@ function VerifyPhoneNumberForm(props: VerifyPhoneNumberFormProps) {
         props.onSuccess(credential);
       }
     } catch (error) {
-      form.setError("root", { message: getAuthErrorMessage(error, ui) });
+      form.setError("root", { message: getAuthActionErrorMessage(error, ui) });
     }
   }
 
@@ -129,7 +129,7 @@ function PhoneNumberForm(props: PhoneNumberFormProps) {
       const verificationId = await action({ phoneNumber: formatted, recaptchaVerifier: recaptchaVerifier! });
       props.onSubmit(verificationId);
     } catch (error) {
-      form.setError("root", { message: getAuthErrorMessage(error, ui) });
+      form.setError("root", { message: getAuthActionErrorMessage(error, ui) });
     }
   }
 
