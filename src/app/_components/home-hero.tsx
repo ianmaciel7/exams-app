@@ -81,10 +81,13 @@ type HomeHeroActionVariant = "default" | "outline";
 
 /**
  * One size for every hero action (links, sign-out, and their loading
- * skeletons) so the row never shifts when the session resolves.
+ * skeletons) so the row never shifts when the session resolves. There is no
+ * `w-full`: the column container already stretches the actions on mobile, and
+ * a percentage width would let the button's `transition-all` animate the
+ * width when the viewport crosses the `sm` breakpoint.
  */
 const homeHeroActionSize =
-  "h-12 w-full rounded-full px-5 text-base font-medium sm:w-[158px]";
+  "h-12 rounded-full px-5 text-base font-medium sm:w-[158px]";
 
 function homeHeroActionVariants(variant: HomeHeroActionVariant = "default") {
   return buttonVariants({ variant, className: homeHeroActionSize });
