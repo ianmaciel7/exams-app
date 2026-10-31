@@ -3,6 +3,11 @@
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
+// Loaded on demand, like the session, to keep Firebase out of the home page's
+// initial bundle. Outside the hook because React Compiler does not support
+// `import()`.
+const loadAuth = () => import("@/lib/auth");
+
 export function useHomeSignOutButtonClient() {
   const t = useTranslations("Home");
   const auth = useTranslations("Auth");
@@ -12,9 +17,7 @@ export function useHomeSignOutButtonClient() {
     if (state === "pending") return;
     setState("pending");
     try {
-      // Loaded on demand, like the session, to keep Firebase out of the home
-      // page's initial bundle.
-      const { signOutUser } = await import("@/lib/auth");
+      const { signOutUser } = await loadAuth();
       await signOutUser();
     } catch {
       setState("error");

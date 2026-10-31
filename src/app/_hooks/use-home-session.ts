@@ -3,6 +3,11 @@
 import type { User } from "firebase/auth";
 import { useEffect, useState } from "react";
 
+// Firebase loads after hydration so it stays off the home's critical path and
+// the server-rendered hero paints as the Largest Contentful Paint. The import
+// lives outside the hook because React Compiler does not support `import()`.
+const loadSession = () => import("@/lib/session");
+
 type HomeSession = {
   isError: boolean;
   isLoading: boolean;
@@ -24,9 +29,7 @@ export function useHomeSession() {
     const fail = () => {
       if (isActive) setSession({ isError: true, isLoading: false, user: null });
     };
-    // Firebase loads after hydration so it stays off the home's critical path
-    // and the server-rendered hero paints as the Largest Contentful Paint.
-    import("@/lib/session")
+    loadSession()
       .then(({ subscribeToSession }) => {
         if (isActive) unsubscribe = subscribeToSession(update, fail);
       })
