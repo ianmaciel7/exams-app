@@ -19,12 +19,12 @@ describe("route entrypoint guard", () => {
     const packageJson = JSON.parse(
       readFileSync(new URL("../../package.json", import.meta.url), "utf8"),
     );
+    const { scripts } = packageJson;
     assert.ok(
-      packageJson.scripts["verify:fast"]
-        .split(" && ")
-        .includes("pnpm check:structure"),
+      scripts["check:repo"].split(" && ").includes("pnpm check:structure"),
     );
-    assert.match(packageJson.scripts["verify:static"], /pnpm check:structure/);
+    for (const gate of ["verify:fast", "verify:static"])
+      assert.ok(scripts[gate].split(" && ").includes("pnpm check:repo"));
   });
 
   it("scans route special files but not private components", () => {

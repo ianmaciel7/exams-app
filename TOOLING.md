@@ -151,6 +151,8 @@ project skills are tracked in `.agents/skills/` and `skills-lock.json`.
 | `pnpm check:spelling` / `pnpm check:markdown` | CSpell / markdownlint. |
 | `pnpm check:security` / `pnpm check:security:rules` | Semgrep scan of `src` (fails on findings) / tests of the Semgrep rules. Run inside a Git work tree. |
 | `pnpm check:secrets` / `pnpm check:secrets:staged` | Gitleaks repository history audit / staged pre-commit scanner. |
+| `pnpm check:package-scripts` | Reject package scripts that alias another script's command and `pnpm <script>` calls (in scripts or `.github/workflows`) to scripts that do not exist; includes valid and invalid fixtures. |
+| `pnpm check:repo` | Repository guards shared by `verify:fast` and `verify:static`: structure, routes, components, responsiveness, English, docs, ADR, release, App Hosting IAM, emulator snapshot, secret guard, and package scripts. |
 | `pnpm check:secret-guard` | Validate that `.husky/pre-commit` wires in Gitleaks and `.vscode/launch.json` has no hardcoded secrets without exemptions; includes regression tests. |
 | `pnpm audit` | Root dependency audit. |
 | `pnpm audit:functions` | Audit the independent npm lockfile in `functions/`, including optional backend dependencies. |
@@ -159,9 +161,8 @@ project skills are tracked in `.agents/skills/` and `skills-lock.json`.
 | `pnpm analyze:react` | React Doctor. |
 | `pnpm analyze:size` | Production build, then Size Limit budgets. |
 | `pnpm analyze:bundle` | Next.js bundle analyzer. |
-| `pnpm analyze:lighthouse` | Lighthouse report against a running server. |
+| `pnpm analyze:lighthouse` | Report-only Lighthouse run (headless, `--no-sandbox`) against a server on port 3000, written to `reports/lighthouse/report.html`; used by the scheduled workflow. |
 | `pnpm check:lighthouse` | Test the budget evaluator, then run Lighthouse's mobile profile on `/` and `/sign-in` (starting `pnpm start` when nothing serves port 3000) and fail below the budgets in `scripts/checks/check-lighthouse.mjs`. Needs a production build; CI and Firebase CD run it after `pnpm verify:e2e`. |
-| `pnpm analyze:lighthouse:ci` | Same, headless with `--no-sandbox` and an `.html` report path; used by the scheduled workflow. |
 
 ### Verification entry points
 
