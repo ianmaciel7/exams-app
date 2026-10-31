@@ -24,6 +24,8 @@
     "configurationError": "Firebase authentication is not configured. Check the application configuration.",
     "profileTitle": "User Profile",
     "emailLabel": "Email",
+    "emailRequired": "Enter your email.",
+    "emailInvalid": "Enter a valid email, such as name@example.com.",
     "displayNameLabel": "Name",
     "notSet": "Not set",
     "signOut": "Sign Out",

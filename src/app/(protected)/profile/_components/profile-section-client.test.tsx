@@ -93,6 +93,13 @@ vi.mock("@/components/ui/toast", () => ({
   },
 }));
 
+async function findAvatarInput() {
+  await screen.findByRole("button", { name: "profilePhotoChange" });
+  return document.querySelector<HTMLInputElement>(
+    "input[type=file]",
+  ) as HTMLInputElement;
+}
+
 describe("ProfileSectionClient", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -261,14 +268,9 @@ describe("ProfileSectionClient", () => {
     render(<ProfileSectionClient />);
 
     const file = new File(["avatar"], "avatar.png", { type: "image/png" });
-    fireEvent.change(
-      await screen.findByLabelText("profilePhotoChange", {
-        selector: "input",
-      }),
-      {
-        target: { files: [file] },
-      },
-    );
+    fireEvent.change(await findAvatarInput(), {
+      target: { files: [file] },
+    });
     fireEvent.click(screen.getByRole("button", { name: "saveProfile" }));
 
     await waitFor(() =>
@@ -290,14 +292,9 @@ describe("ProfileSectionClient", () => {
     render(<ProfileSectionClient />);
 
     const file = new File(["test"], "test.txt", { type: "text/plain" });
-    fireEvent.change(
-      await screen.findByLabelText("profilePhotoChange", {
-        selector: "input",
-      }),
-      {
-        target: { files: [file] },
-      },
-    );
+    fireEvent.change(await findAvatarInput(), {
+      target: { files: [file] },
+    });
 
     expect(mocks.toastAdd).toHaveBeenCalledWith({
       title: "profilePhotoInvalid",
@@ -352,6 +349,23 @@ describe("ProfileSectionClient", () => {
       title: "profileSaved",
       type: "success",
     });
+  });
+
+  it("links an invalid email to its error, focuses it and does not save", async () => {
+    mocks.currentUser = { uid: "user-123", email: "old@example.com" };
+    render(<ProfileSectionClient />);
+
+    const email = await screen.findByLabelText("emailLabel");
+    fireEvent.change(email, { target: { value: "not-an-email" } });
+    fireEvent.click(screen.getByRole("button", { name: "saveProfile" }));
+
+    const error = await screen.findByText("emailInvalid");
+    await waitFor(() => expect(document.activeElement).toBe(email));
+    expect(email.getAttribute("aria-invalid")).toBe("true");
+    const describedBy = email.getAttribute("aria-describedby") ?? "";
+    expect(describedBy.split(" ")).toContain(error.id);
+    expect(mocks.verifyBeforeUpdateEmail).not.toHaveBeenCalled();
+    expect(mocks.updateProfile).not.toHaveBeenCalled();
   });
 
   it("updates the display name and requests email verification with toast", async () => {
@@ -469,9 +483,7 @@ describe("ProfileSectionClient", () => {
     const log = vi.spyOn(console, "error").mockImplementation(() => {});
     try {
       render(<ProfileSectionClient />);
-      const input = (await screen.findByLabelText("profilePhotoChange", {
-        selector: "input",
-      })) as HTMLInputElement;
+      const input = (await findAvatarInput()) as HTMLInputElement;
       const file = new File(["avatar"], "avatar.png", { type: "image/png" });
       fireEvent.change(input, { target: { files: [file] } });
       fireEvent.click(screen.getByRole("button", { name: "saveProfile" }));

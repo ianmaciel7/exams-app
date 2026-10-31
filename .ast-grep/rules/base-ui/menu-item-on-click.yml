@@ -6,7 +6,8 @@ files:
 ignores:
   - "**/*.test.tsx"
   - "**/*.stories.tsx"
-  - src/components/ui/*.tsx
+  - "src/components/ui/[!e]*.tsx"
+  - "src/components/ui/e[!x]*.tsx"
 severity: error
 message: Base UI menu items fire onClick; onSelect is a Radix API and never runs here.
 note: |

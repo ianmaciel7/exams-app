@@ -1,0 +1,7 @@
+id: no-raw-form-element
+valid:
+  - |
+    const a = <Form onSubmit={save}><FormField name="email" /></Form>;
+invalid:
+  - |
+    const a = <form onSubmit={save}>{children}</form>;

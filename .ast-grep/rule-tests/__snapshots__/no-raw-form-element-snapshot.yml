@@ -1,0 +1,12 @@
+id: no-raw-form-element
+snapshots:
+  "const a = <form onSubmit={save}>{children}</form>;\n":
+    labels:
+    - source: <form onSubmit={save}>
+      style: primary
+      start: 10
+      end: 32
+    - source: form
+      style: secondary
+      start: 11
+      end: 15

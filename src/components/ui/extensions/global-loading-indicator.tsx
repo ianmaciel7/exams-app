@@ -1,6 +1,7 @@
+import type { ComponentProps } from "react";
 import { Spinner } from "@/components/ui/spinner";
 
-type GlobalLoadingIndicatorProps = {
+type GlobalLoadingIndicatorProps = ComponentProps<"div"> & {
   label: string;
 };
 
@@ -11,9 +12,12 @@ type GlobalLoadingIndicatorProps = {
  * spinner remounting or moving. It is pinned to the small viewport so mobile
  * browser chrome does not shift it.
  */
-function GlobalLoadingIndicator({ label }: GlobalLoadingIndicatorProps) {
+function GlobalLoadingIndicator({
+  label,
+  ...props
+}: GlobalLoadingIndicatorProps) {
   return (
-    <div data-slot="global-loading-indicator">
+    <div {...props} data-slot="global-loading-indicator">
       <div
         data-slot="loading-overlay"
         className="fixed inset-0 z-50 bg-background"

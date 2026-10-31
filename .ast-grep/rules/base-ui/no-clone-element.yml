@@ -6,7 +6,8 @@ files:
 ignores:
   - "**/*.test.tsx"
   - "**/*.stories.tsx"
-  - src/components/ui/*.tsx
+  - "src/components/ui/[!e]*.tsx"
+  - "src/components/ui/e[!x]*.tsx"
 severity: error
 message: Compose elements with a render prop (useRender and mergeProps) instead of cloneElement.
 note: |

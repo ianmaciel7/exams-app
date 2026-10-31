@@ -6,7 +6,11 @@ files:
 ignores:
   - "**/*.test.tsx"
   - "**/*.stories.tsx"
-  - src/components/ui/*.tsx
+  - "src/components/ui/[!e]*.tsx"
+  - "src/components/ui/e[!x]*.tsx"
+  # Owned Base UI form wrappers: the one place the Field and Form primitives are composed.
+  - src/components/ui/extensions/form.tsx
+  - src/components/ui/extensions/form-field.tsx
 severity: error
 message: Import the wrapper from @/components/ui instead of a Base UI primitive; only use-render, merge-props and csp-provider may be imported directly.
 note: |
