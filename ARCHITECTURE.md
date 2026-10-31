@@ -29,7 +29,7 @@ configuration and repository documentation.
 │   │   └── _components/     # Route-private components and auth providers
 │   ├── components/          # Reusable application and UI components
 │   ├── hooks/               # Reusable React hooks
-│   ├── i18n/                # Locale routing, navigation, and request config
+│   ├── i18n/                # Locale routing and request config
 │   ├── lib/                 # Framework-independent utilities
 │   ├── messages/            # Locale message catalogs
 │   └── types/               # Shared TypeScript declarations
@@ -71,7 +71,7 @@ files, and `public/` remain at the repository root, as required by the Next.js
 
 ## Authentication navigation
 
-When an unauthenticated user requests a protected route, the client guard redirects to `/sign-in?next=<encoded-path-and-query>`. Once authenticated, the public authentication provider sends the user to that destination, or `/profile` if no valid destination was supplied. The return URL validator accepts only application-relative paths and rejects external URLs and authentication-screen loops; query strings are preserved. Route protection in the UI is not a substitute for Firebase Security Rules or authorization at the data source.
+When an unauthenticated user requests a protected route, the client guard redirects to `/sign-in?next=<encoded-path-and-query>`. Only the `(protected)` guard (`src/app/(protected)/_hooks/use-protected-guard-client.ts`) and the server session check in `src/app/(protected)/_lib/` send a signed-out visitor to sign-in. Pages and hooks inside `(protected)` read the session but do not redirect: Firebase notifies observers in subscription order, so a second redirect from a descendant runs last and drops the `?next=` destination. The ast-grep rules `no-protected-descendant-sign-in-redirect-ts` and `-tsx` enforce this. Once authenticated, the public authentication provider sends the user to that destination, or `/profile` if no valid destination was supplied. The return URL validator accepts only application-relative paths and rejects external URLs and authentication-screen loops; query strings are preserved. Route protection in the UI is not a substitute for Firebase Security Rules or authorization at the data source.
 
 ## Test boundaries
 

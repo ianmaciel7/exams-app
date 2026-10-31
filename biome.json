@@ -162,7 +162,8 @@
                   "next/router": "Use next/navigation in App Router code.",
                   "next/head": "Use the App Router Metadata API.",
                   "next/document": "Use the App Router root layout.",
-                  "next/app": "Use App Router layouts and providers."
+                  "next/app": "Use App Router layouts and providers.",
+                  "@/i18n/navigation": "Import Link from next/link and router hooks from next/navigation; the locale lives in a cookie, so there is no navigation wrapper."
                 }
               }
             }
@@ -191,6 +192,7 @@
                   "next/head": "Use the App Router Metadata API.",
                   "next/document": "Use the App Router root layout.",
                   "next/app": "Use App Router layouts and providers.",
+                  "@/i18n/navigation": "Import Link from next/link and router hooks from next/navigation; the locale lives in a cookie, so there is no navigation wrapper.",
                   "firebase": "Route entrypoints must access Firebase through a data layer.",
                   "firebase-admin": "Route entrypoints must access Firebase through a data layer.",
                   "@/lib/firebase/client": "Use a server data module or a dedicated client component."
