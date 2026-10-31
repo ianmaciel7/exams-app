@@ -21,6 +21,9 @@ for (const { name: viewportName, viewport } of viewports) {
       }) => {
         await page.goto("/");
         await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+        // The hero paints from the server HTML; the actions follow once the
+        // client session resolves.
+        await expect(page.locator("main [role='status']")).toHaveCount(0);
 
         const results = await new AxeBuilder({ page })
           .withTags(standards)

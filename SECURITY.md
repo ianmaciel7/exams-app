@@ -139,10 +139,21 @@ control. Private/remote cache examples and taint APIs are optional tools, not
 proof that cached data is safe.
 
 For new external image sources, use narrow `remotePatterns`; validate external
-URLs and proxy destinations to prevent unintended server requests. A dynamic
-nonce-based CSP, instrumentation exporter, or hosting adapter needs a deployment
-and rendering review. None is enabled by this documentation update. See the
-[Next.js maintenance rule](.agents/rules/cache.md).
+URLs and proxy destinations to prevent unintended server requests. An
+instrumentation exporter or hosting adapter needs a deployment and rendering
+review. See the [Next.js maintenance rule](.agents/rules/cache.md).
+
+## Content Security Policy
+
+`src/proxy.ts` sends a nonce-based CSP on every document
+([ADR 0023](docs/adr/0023-enforce-a-nonce-based-content-security-policy.md)).
+`src/lib/csp.ts` owns the directives. Scripts run only with the request nonce
+or when a script carrying the nonce loads them (`'strict-dynamic'`); eval is blocked in
+production. Read the nonce with `getNonce()` from `src/lib/csp-nonce.ts` in a
+Server Component and pass it to any library that renders inline `<script>` or
+`<style>` tags; Base UI receives it through `CspProviderServer`. Never add
+`'unsafe-eval'` or `'unsafe-inline'` for production styles or scripts; add the
+narrowest origin to the matching directive instead.
 
 ## React rendering and input boundaries
 

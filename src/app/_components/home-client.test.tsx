@@ -22,6 +22,13 @@ vi.mock("firebase/auth", () => ({
 }));
 vi.mock("@/lib/firebase/client", () => ({ getFirebaseUI: mocks.getUI }));
 
+// The home imports Firebase after hydration, so the session subscription
+// starts asynchronously.
+async function resolveSession(user: unknown) {
+  await vi.waitFor(() => expect(mocks.subscribe).toHaveBeenCalled());
+  act(() => mocks.subscribe.mock.calls[0][1](user));
+}
+
 function renderHome() {
   return render(
     <NextIntlClientProvider locale="en" messages={en}>
@@ -40,13 +47,16 @@ describe("home session", () => {
     cleanup();
     vi.unstubAllEnvs();
   });
-  it("waits for authentication before offering registration", () => {
+  it("paints the hero right away and waits for authentication before offering registration", async () => {
     renderHome();
+    expect(screen.getByRole("heading", { level: 1 }).textContent).toBe(
+      en.Home.title,
+    );
+    expect(screen.getByText(en.Home.description)).toBeDefined();
+    expect(screen.getByRole("presentation")).toBeDefined();
     expect(screen.queryByRole("link", { name: en.Home.getStarted })).toBeNull();
-    expect(screen.queryByRole("heading", { level: 1 })).toBeNull();
     expect(screen.getByRole("status").textContent).toBe(en.Home.loading);
-    expect(screen.queryByRole("presentation")).toBeNull();
-    act(() => mocks.subscribe.mock.calls[0][1](null));
+    await resolveSession(null);
     expect(
       screen
         .getByRole("link", { name: en.Home.getStarted })
@@ -58,22 +68,20 @@ describe("home session", () => {
     expect(screen.queryByRole("status")).toBeNull();
     expect(screen.getByRole("presentation")).toBeDefined();
   });
-  it("shows the public build tag after authentication resolves", () => {
+  it("shows the public build tag after authentication resolves", async () => {
     vi.stubEnv("NEXT_PUBLIC_GIT_TAG", "v1.2.3");
 
     renderHome();
-    act(() => mocks.subscribe.mock.calls[0][1](null));
+    await resolveSession(null);
 
     expect(screen.getByText("v1.2.3").dataset.variant).toBe("secondary");
   });
-  it("personalizes the home and returns to visitor actions after sign out", () => {
+  it("personalizes the home and returns to visitor actions after sign out", async () => {
     const { unmount } = renderHome();
-    act(() =>
-      mocks.subscribe.mock.calls[0][1]({
-        displayName: "Alex Smith",
-        email: "alex@example.test",
-      }),
-    );
+    await resolveSession({
+      displayName: "Alex Smith",
+      email: "alex@example.test",
+    });
     expect(screen.getByRole("heading", { level: 1 }).textContent).toContain(
       "Welcome, Alex Smith.",
     );
@@ -83,21 +91,19 @@ describe("home session", () => {
         .getAttribute("href"),
     ).toBe("/profile");
     expect(screen.queryByRole("link", { name: en.Home.getStarted })).toBeNull();
-    act(() => mocks.subscribe.mock.calls[0][1](null));
+    await resolveSession(null);
     expect(
       screen.getByRole("link", { name: en.Home.getStarted }),
     ).toBeDefined();
     unmount();
     expect(mocks.unsubscribe).toHaveBeenCalledOnce();
   });
-  it("uses the friend fallback when displayName is not provided", () => {
+  it("uses the friend fallback when displayName is not provided", async () => {
     renderHome();
-    act(() =>
-      mocks.subscribe.mock.calls[0][1]({
-        displayName: "",
-        email: "alex@example.test",
-      }),
-    );
+    await resolveSession({
+      displayName: "",
+      email: "alex@example.test",
+    });
     expect(screen.getByRole("heading", { level: 1 }).textContent).toContain(
       `Welcome, ${en.Home.friend}.`,
     );
@@ -107,19 +113,19 @@ describe("home session", () => {
       mocks.subscribe.mock.calls[0][1](null);
     });
     renderHome();
-    act(() =>
-      mocks.subscribe.mock.calls[0][1]({
-        displayName: "Alex",
-        email: "alex@example.test",
-      }),
-    );
+    await resolveSession({
+      displayName: "Alex",
+      email: "alex@example.test",
+    });
     expect(screen.getAllByRole("link")).toHaveLength(1);
     expect(screen.getAllByRole("button")).toHaveLength(1);
     await act(async () =>
       fireEvent.click(screen.getByRole("button", { name: en.Auth.signOut })),
     );
+    expect(
+      await screen.findByRole("link", { name: en.Home.signIn }),
+    ).toBeDefined();
     expect(mocks.signOut).toHaveBeenCalledOnce();
-    expect(screen.getByRole("link", { name: en.Home.signIn })).toBeDefined();
   });
 
   it("shows the shared loading indicator and prevents repeated sign-out requests", async () => {
@@ -130,12 +136,13 @@ describe("home session", () => {
       }),
     );
     renderHome();
-    act(() => mocks.subscribe.mock.calls[0][1]({ displayName: "Alex" }));
+    await resolveSession({ displayName: "Alex" });
     fireEvent.click(screen.getByRole("button", { name: en.Auth.signOut }));
     const pending = screen.getByRole("button", { name: en.Home.signingOut });
     expect(pending.hasAttribute("disabled")).toBe(true);
     expect(pending.getAttribute("aria-busy")).toBe("true");
     fireEvent.click(pending);
+    await vi.waitFor(() => expect(mocks.signOut).toHaveBeenCalled());
     expect(mocks.signOut).toHaveBeenCalledOnce();
     await act(async () => {
       finish();
@@ -145,7 +152,7 @@ describe("home session", () => {
   it("allows retrying when sign out fails", async () => {
     mocks.signOut.mockRejectedValue(new Error("network"));
     renderHome();
-    act(() => mocks.subscribe.mock.calls[0][1]({ displayName: "Alex" }));
+    await resolveSession({ displayName: "Alex" });
     await act(async () =>
       fireEvent.click(screen.getByRole("button", { name: en.Auth.signOut })),
     );
@@ -160,13 +167,15 @@ describe("home session", () => {
     ).toBeDefined();
   });
 
-  it("keeps visitor access available if Firebase configuration is missing", () => {
+  it("keeps visitor access available if Firebase configuration is missing", async () => {
     mocks.getUI.mockImplementation(() => {
       throw new Error("missing configuration");
     });
     renderHome();
     expect(
-      screen.getByRole("link", { name: en.Home.signIn }).getAttribute("href"),
+      (await screen.findByRole("link", { name: en.Home.signIn })).getAttribute(
+        "href",
+      ),
     ).toBe("/sign-in");
   });
 });

@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { signOutUser } from "@/lib/auth";
+import { loadAuth } from "../_lib/firebase-loaders";
 
 export function useHomeSignOutButtonClient() {
   const t = useTranslations("Home");
@@ -13,6 +13,7 @@ export function useHomeSignOutButtonClient() {
     if (state === "pending") return;
     setState("pending");
     try {
+      const { signOutUser } = await loadAuth();
       await signOutUser();
     } catch {
       setState("error");

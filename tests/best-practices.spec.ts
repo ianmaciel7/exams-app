@@ -1,3 +1,4 @@
+// cspell:ignore networkidle
 import { expect, test } from "@playwright/test";
 
 // Platform hygiene that Lighthouse and the Next.js production checklist expect
@@ -16,6 +17,48 @@ test("sends baseline security headers and hides the framework banner", async ({
   expect(headers["permissions-policy"]).toContain("camera=()");
   expect(headers["strict-transport-security"]).toContain("max-age=");
 });
+
+test("enforces a per-request nonce CSP on every script", async ({
+  request,
+}) => {
+  const [first, second] = await Promise.all([
+    request.get("/sign-in"),
+    request.get("/sign-in"),
+  ]);
+  const policy = first.headers()["content-security-policy"];
+  const nonce = policy.match(/'nonce-([^']+)'/)?.[1];
+  expect(nonce).toBeTruthy();
+  expect(policy).toContain("'strict-dynamic'");
+  expect(policy).toContain("object-src 'none'");
+  expect(policy).toContain("base-uri 'none'");
+  expect(policy).not.toContain("'unsafe-eval'");
+  expect(second.headers()["content-security-policy"]).not.toContain(
+    `'nonce-${nonce}'`,
+  );
+
+  // Browsers hide the nonce attribute from the DOM, so check the raw HTML.
+  const scripts = (await first.text()).match(/<script\b[^>]*>/g) ?? [];
+  expect(scripts.length).toBeGreaterThan(0);
+  for (const script of scripts) expect(script).toContain(`nonce="${nonce}"`);
+});
+
+for (const path of ["/", "/sign-in", "/register", "/forgot-password"]) {
+  test(`renders ${path} without CSP violations`, async ({ page }) => {
+    await page.addInitScript(() => {
+      const violations: string[] = [];
+      Object.assign(window, { cspViolations: violations });
+      document.addEventListener("securitypolicyviolation", (event) =>
+        violations.push(`${event.violatedDirective} ${event.blockedURI}`),
+      );
+    });
+    await page.goto(path);
+    await page.waitForLoadState("networkidle");
+    const violations = await page.evaluate(
+      () => (window as unknown as { cspViolations: string[] }).cspViolations,
+    );
+    expect(violations).toEqual([]);
+  });
+}
 
 test("serves an installable web app manifest", async ({ request }) => {
   const response = await request.get("/manifest.webmanifest");

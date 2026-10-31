@@ -10,7 +10,7 @@ const routes = [
   {
     path: "/",
     ready: "main h1",
-    boundaries: ["root-provider", "root-route", "home-session"],
+    boundaries: ["root-provider", "root-route"],
   },
   {
     path: "/sign-in",

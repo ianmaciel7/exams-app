@@ -22,6 +22,21 @@ export const defaultBudget = {
 
 export const defaultRoutes = ["/", "/sign-in"];
 
+// Extra audit ceilings per route. The home hero renders on the server, so its
+// LCP is held well under the ~6 s it took while it waited for Firebase. The
+// margin over the Core Web Vitals 2.5 s covers runner variance.
+export const routeBudgets = {
+  "/": { audits: { "largest-contentful-paint": 4000 } },
+};
+
+export function budgetFor(route, budget = defaultBudget) {
+  const extra = routeBudgets[route];
+  return {
+    categories: { ...budget.categories, ...extra?.categories },
+    audits: { ...budget.audits, ...extra?.audits },
+  };
+}
+
 export function evaluateLighthouseReport(report, budget = defaultBudget) {
   const failures = [];
   for (const [id, minimum] of Object.entries(budget.categories)) {
@@ -126,7 +141,10 @@ async function main() {
         readFileSync(`${outputBase}.report.json`, "utf8"),
       );
       console.log(`${route}: ${summarizeLighthouseReport(report)}`);
-      for (const failure of evaluateLighthouseReport(report)) {
+      for (const failure of evaluateLighthouseReport(
+        report,
+        budgetFor(route),
+      )) {
         console.error(`${route}: ${failure}`);
         failed = true;
       }

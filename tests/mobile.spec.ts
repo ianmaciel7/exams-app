@@ -26,6 +26,8 @@ async function openRoute(page: Page, route: string) {
   await expect(page.locator("main")).toBeVisible();
   if (route === "/") {
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    // The hero is server-rendered; the actions follow the client session.
+    await expect(page.locator("main [role='status']")).toHaveCount(0);
     return;
   }
   await expect(
@@ -101,10 +103,13 @@ for (const route of routes) {
       page,
     }) => {
       await openRoute(page, route);
-      await page.addStyleTag({
-        content:
-          "* { line-height: 1.5 !important; letter-spacing: 0.12em !important; word-spacing: 0.16em !important; } p { margin-bottom: 2em !important; }",
-      });
+      // A constructed stylesheet stands in for a user stylesheet: the nonce
+      // CSP blocks the inline <style> that addStyleTag would inject.
+      await page.evaluate((css) => {
+        const sheet = new CSSStyleSheet();
+        sheet.replaceSync(css);
+        document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
+      }, "* { line-height: 1.5 !important; letter-spacing: 0.12em !important; word-spacing: 0.16em !important; } p { margin-bottom: 2em !important; }");
       expect(await hasHorizontalOverflow(page)).toBe(false);
     });
 
@@ -219,7 +224,7 @@ for (const route of routes) {
       await page.setViewportSize(viewport);
       await openRoute(page, route);
       await assertLoadingFinished(page);
-      const boundary = route === "/" ? "home-session" : "public-auth";
+      const boundary = route === "/" ? "root-route" : "public-auth";
       await page.evaluate((name) => {
         const app = document.querySelector('[data-slot="app-root"]');
         if (!app) throw new Error("App root missing");

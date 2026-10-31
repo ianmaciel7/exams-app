@@ -4,8 +4,8 @@ import Link from "next/link";
 import type { ComponentProps } from "react";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
-import { LoadingPrimitive } from "@/components/ui/extensions/loading-primitive";
 import { Version } from "@/components/ui/extensions/version";
+import { Skeleton } from "@/components/ui/skeleton";
 import { routes } from "@/lib/navigation";
 import { useHomeClient } from "../_hooks/use-home-client";
 import { Home, HomeContent, HomeFooter, HomeHeading, HomeLogo } from "./home";
@@ -18,13 +18,6 @@ function HomeClient({ className, ...props }: HomeClientProps) {
   const { t, session, title, description } = useHomeClient();
   const user = session.user;
 
-  if (session.isLoading)
-    return (
-      <LoadingPrimitive boundary="home-session">
-        {t("loading")}
-      </LoadingPrimitive>
-    );
-
   return (
     <Home className={className} {...props}>
       <HomeContent>
@@ -32,7 +25,26 @@ function HomeClient({ className, ...props }: HomeClientProps) {
         <HomeHero>
           <HomeHeading title={title} description={description} />
           <HomeHeroActions>
-            {user ? (
+            {session.isLoading ? (
+              // The hero text paints from the server HTML; only the actions
+              // wait for Firebase. Placeholders the size of the buttons keep
+              // the layout stable and no visitor action shows before the
+              // session is known.
+              <div
+                role="status"
+                className="flex w-full flex-col gap-4 sm:w-auto sm:flex-row"
+              >
+                <span className="sr-only">{t("loading")}</span>
+                <Skeleton
+                  aria-hidden="true"
+                  className="h-12 w-full rounded-full motion-reduce:animate-none sm:w-[158px]"
+                />
+                <Skeleton
+                  aria-hidden="true"
+                  className="h-12 w-full rounded-full motion-reduce:animate-none sm:w-[158px]"
+                />
+              </div>
+            ) : user ? (
               <>
                 <Link
                   href={routes.profile}

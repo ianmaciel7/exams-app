@@ -8,12 +8,14 @@ ignores:
   - "**/*.stories.tsx"
   - src/components/ui/*.tsx
 severity: error
-message: Import the wrapper from @/components/ui instead of a Base UI primitive; only use-render and merge-props may be imported directly.
+message: Import the wrapper from @/components/ui instead of a Base UI primitive; only use-render, merge-props and csp-provider may be imported directly.
 note: |
   src/components/ui owns the Base UI primitives (styling, data-slot, sizes and
   touch targets). Owned components compose those wrappers. Use
   @base-ui/react/use-render and @base-ui/react/merge-props to build a render
   prop, as https://base-ui.com/react/utils/use-render describes.
+  @base-ui/react/csp-provider renders no UI; CspProviderServer passes it the
+  request nonce (https://base-ui.com/react/utils/csp-provider).
 rule:
   kind: import_statement
   has:
@@ -22,4 +24,4 @@ rule:
   not:
     has:
       field: source
-      regex: ^.@base-ui/react/(use-render|merge-props).$
+      regex: ^.@base-ui/react/(use-render|merge-props|csp-provider).$
