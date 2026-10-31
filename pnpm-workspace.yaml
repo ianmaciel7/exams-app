@@ -19,6 +19,10 @@ overrides:
   "@modelcontextprotocol/sdk": ">=1.31.0"
   linkify-it: ">=5.0.2"
   markdown-it: ">=15.0.2"
+  # GHSA-g3hv-75wg-m249: globparts amplification DoS; patched in minimatch 11.0.1.
+  minimatch: ">=11.0.1"
+  # GHSA-3g3m-2fjr-6pw4: aborted traversal continues filesystem work; patched in glob 14.0.2.
+  glob: ">=14.0.2"
   qs: ">=6.16.0"
   # GHSA-gg6h-894w-4m9c: quadratic-time lookbehind matching; fixed in 2.8.7.
   # Reached only through markdownlint-cli2 (markdownlint > re2js).
