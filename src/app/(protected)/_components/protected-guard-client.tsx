@@ -19,7 +19,7 @@ function ProtectedGuardClient({ children }: ProtectedGuardClientProps) {
   }
 
   if (state.isLoading)
-    return <LoadingPrimitive>{t("loading")}</LoadingPrimitive>;
+    return <LoadingPrimitive boundary="protected-auth">{t("loading")}</LoadingPrimitive>;
 
   return (
     <main className="flex min-h-svh flex-1 items-center justify-center p-6 md:p-10">
