@@ -769,13 +769,15 @@ test("an active worker forwards a fresh token on navigation", async ({
   await signIn(page, account.email);
   await expect(page).toHaveURL("/");
   await waitForActiveWorker(page);
-  await page.goto("/profile");
-  await expect(page.getByLabel("Email", { exact: true })).toHaveValue(
-    account.email,
-  );
-
-  expect(forwarded.length).toBeGreaterThan(0);
-  expect(forwarded.at(-1)).toMatch(/^Bearer ./);
+  // The worker's Auth instance learns of a page sign-in by polling IndexedDB, so
+  // a navigation right after it can legitimately carry no token yet.
+  await expect(async () => {
+    await page.goto("/profile");
+    await expect(page.getByLabel("Email", { exact: true })).toHaveValue(
+      account.email,
+    );
+    expect(forwarded.at(-1)).toMatch(/^Bearer ./);
+  }).toPass({ timeout: 15_000 });
 });
 
 test("a failed token refresh does not block navigation or loop", async ({

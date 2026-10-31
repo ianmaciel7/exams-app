@@ -32,7 +32,8 @@ The Firebase Auth service worker attaches a refreshed ID token to same-origin
 navigation and RSC requests only. Server Function and Route Handler requests do
 not carry it: a new endpoint of that kind must extend the worker and its tests.
 `getFirebaseServerSession()` verifies the token with the Admin SDK, including
-revocation checks. A missing bridge is not proof of a signed-out visitor.
+revocation checks. A missing bridge is not proof of a signed-out visitor: besides
+the first load, the worker can lag a sign-in briefly while it polls IndexedDB.
 
 ## Responsibilities
 
