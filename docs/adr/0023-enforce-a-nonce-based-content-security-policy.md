@@ -26,7 +26,7 @@ locale routing cookie-driven and unprefixed.
   `'unsafe-inline'` as fallbacks that CSP Level 3 browsers ignore),
   `style-src 'self' 'nonce-…'`, `style-src-attr 'unsafe-inline'` for
   server-rendered `style` attributes, `object-src 'none'`, `base-uri 'none'`,
-  `worker-src 'self'`, and `connect-src`/`frame-src` limited to Firebase,
+  `worker-src 'self' https://www.gstatic.com/firebasejs/` (the auth service worker imports the Firebase SDK from there, and Chromium checks those module imports against the page's `worker-src`), and `connect-src`/`frame-src` limited to Firebase,
   Google sign-in, and reCAPTCHA. Development adds `'unsafe-eval'`, inline
   styles, and the configured emulator origins.
 - Pass the nonce from the `x-nonce` request header to Base UI through

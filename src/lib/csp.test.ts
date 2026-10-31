@@ -42,7 +42,10 @@ describe("buildContentSecurityPolicy", () => {
     expect(policy.get("object-src")).toEqual(["'none'"]);
     expect(policy.get("base-uri")).toEqual(["'none'"]);
     expect(policy.get("frame-ancestors")).toEqual(["'self'"]);
-    expect(policy.get("worker-src")).toEqual(["'self'"]);
+    expect(policy.get("worker-src")).toEqual([
+      "'self'",
+      "https://www.gstatic.com/firebasejs/",
+    ]);
   });
 
   it("allows the Firebase Auth domain and database without emulators in production", () => {
