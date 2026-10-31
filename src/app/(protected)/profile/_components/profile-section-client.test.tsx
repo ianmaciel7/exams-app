@@ -215,7 +215,9 @@ describe("ProfileSectionClient", () => {
       <ProfileSectionClient data-testid="loading-profile" />,
     );
 
-    await screen.findByRole("status");
+    const status = await screen.findByRole("status");
+    expect(status.closest('[data-slot="loading-overlay"]')).toBeTruthy();
+    expect(status.parentElement?.className).toContain("h-svh");
     expect(screen.getByTestId("loading-profile")).toBeTruthy();
     expect(container.querySelector('[data-slot="card"]')).toBeNull();
   });

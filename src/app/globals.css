@@ -222,3 +222,49 @@
     scroll-behavior: auto;
   }
 }
+
+/* React/Next may retain inactive route segments in hidden DOM subtrees.
+   Ignore those loading-state markers or a stale fallback covers an already
+   usable page. Visibility (not display) preserves the root spinner identity. */
+[data-slot="global-loading-indicator"] {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+body:has([data-slot="global-loading-indicator"]) [data-slot="loading-state"] {
+  visibility: hidden;
+}
+
+body:has(
+    [data-slot="loading-state"]:not(
+        [hidden],
+        [hidden] *,
+        [style*="display:none"],
+        [style*="display:none"] *,
+        [style*="display: none"],
+        [style*="display: none"] *
+      )
+  )
+  [data-slot="global-loading-indicator"] {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+[data-slot="global-loading-indicator"] [data-slot="spinner"] {
+  animation-play-state: paused;
+}
+
+body:has(
+    [data-slot="loading-state"]:not(
+        [hidden],
+        [hidden] *,
+        [style*="display:none"],
+        [style*="display:none"] *,
+        [style*="display: none"],
+        [style*="display: none"] *
+      )
+  )
+  [data-slot="global-loading-indicator"]
+  [data-slot="spinner"] {
+  animation-play-state: running;
+}
