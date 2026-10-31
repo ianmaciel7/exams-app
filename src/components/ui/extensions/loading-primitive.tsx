@@ -3,7 +3,9 @@ import type { ComponentProps } from "react";
 import { LabeledSpinner } from "@/components/ui/extensions/labeled-spinner";
 import { LoadingOverlay } from "@/components/ui/extensions/loading-overlay";
 
-type LoadingPrimitiveProps = ComponentProps<typeof LabeledSpinner>;
+type LoadingPrimitiveProps = ComponentProps<typeof LabeledSpinner> & {
+  boundary?: string;
+};
 
 /**
  * Shared page-level loading state. It is pinned to the viewport so every
@@ -13,11 +15,12 @@ type LoadingPrimitiveProps = ComponentProps<typeof LabeledSpinner>;
 function LoadingPrimitive({
   className,
   children,
+  boundary,
   ...props
 }: LoadingPrimitiveProps) {
   const t = useTranslations("App");
   return (
-    <div data-slot="loading-state">
+    <div data-slot="loading-state" data-loading-boundary={boundary}>
       <LoadingOverlay>
         <LabeledSpinner className={className} {...props}>
           {children ?? t("loading")}

@@ -44,7 +44,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <Suspense fallback={null}>
       <IntlDocumentServer className={fontClassName}>
-        <Suspense fallback={<div data-slot="loading-state" />}>
+        <Suspense
+          fallback={
+            <div
+              data-slot="loading-state"
+              data-loading-boundary="root-provider"
+            />
+          }
+        >
           <IntlProviderServer>
             <CspProviderServer>
               <FirebaseAuthSessionBridgeClient />
