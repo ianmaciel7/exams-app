@@ -16,6 +16,11 @@ test("keeps a single viewport-stable spinner through loading-state replacements"
     if (!global || !spinner) {
       throw new Error("The persistent loading indicator is missing");
     }
+    // The global spinner must survive even when app-root's Suspense tree is
+    // replaced by the root fallback.
+    if (global.parentElement !== document.body) {
+      throw new Error("The spinner is incorrectly nested in app-root");
+    }
 
     const nextFrame = () =>
       new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
