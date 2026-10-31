@@ -1,6 +1,6 @@
 import "server-only";
 import type * as React from "react";
-import { getNonce } from "@/lib/csp-nonce";
+import { getNonce } from "@/lib/csp";
 import { ThemeProviderClient } from "./theme-provider-client";
 
 /** Gives the next-themes pre-hydration script the request CSP nonce. */

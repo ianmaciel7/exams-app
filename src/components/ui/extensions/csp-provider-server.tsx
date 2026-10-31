@@ -1,7 +1,7 @@
 import "server-only";
 import { CSPProvider } from "@base-ui/react/csp-provider";
 import type * as React from "react";
-import { getNonce } from "@/lib/csp-nonce";
+import { getNonce } from "@/lib/csp";
 
 /** Gives Base UI inline <style> and <script> tags the request CSP nonce. */
 async function CspProviderServer({
