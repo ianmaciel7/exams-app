@@ -20,6 +20,8 @@ async function openRoute(page: Page, route: string) {
   await expect(page.locator("main")).toBeVisible();
   if (route === "/") {
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    // The hero is server-rendered; the actions follow the client session.
+    await expect(page.locator("main [role='status']")).toHaveCount(0);
     return;
   }
   await expect(
