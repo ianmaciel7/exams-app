@@ -5,7 +5,8 @@ files:
   - src/**/*.tsx
 ignores:
   - src/app/(protected)/profile/_lib/locale-sync.ts
-  - src/components/ui/*.tsx
+  - "src/components/ui/[!e]*.tsx"
+  - "src/components/ui/e[!x]*.tsx"
   - src/**/*.test.ts
   - src/**/*.test.tsx
 severity: error
