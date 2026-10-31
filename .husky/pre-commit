@@ -1,4 +1,4 @@
-pnpm exec lint-staged
+pnpm check:staged
 
 # On Windows, pre-commit builds its Python virtual environments under a cache
 # path that can exceed the path-length limit (WinError 206) when Python comes

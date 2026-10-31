@@ -1,11 +1,11 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useHomeSession } from "./use-home-session";
+import { useAuthSession } from "@/hooks/use-auth-session";
 
 export function useHomeClient() {
   const t = useTranslations("Home");
-  const session = useHomeSession();
+  const session = useAuthSession();
 
   return {
     t,

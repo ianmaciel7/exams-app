@@ -2,9 +2,11 @@
 
 import { Spinner } from "@/components/ui/spinner";
 
-import type { SignUpAuthFormSchema } from "@firebase-oss/ui-core";
 import {
-  useSignUpAuthFormAction,
+  createUserWithEmailAndPassword,
+  type SignUpAuthFormSchema,
+} from "@firebase-oss/ui-core";
+import {
   useSignUpAuthFormSchema,
   useUI,
   type SignUpAuthFormProps,
@@ -12,19 +14,23 @@ import {
 } from "@firebase-oss/ui-react";
 import { useForm, FormProvider, Controller } from "react-hook-form";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import { FirebaseUIError, getTranslation } from "@firebase-oss/ui-core";
+import { getTranslation } from "@firebase-oss/ui-core";
+import { useId } from "react";
 
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Policies } from "./policies";
+import { getAuthErrorMessage } from "./auth-error-message";
 
 export type { SignUpAuthFormProps };
 
 export function SignUpAuthForm(props: SignUpAuthFormProps) {
+  const displayNameId = useId();
+  const emailId = useId();
+  const passwordId = useId();
   const ui = useUI();
   const schema = useSignUpAuthFormSchema();
-  const action = useSignUpAuthFormAction();
   const requireDisplayName = useRequireDisplayName();
 
   const form = useForm<SignUpAuthFormSchema>({
@@ -39,13 +45,17 @@ export function SignUpAuthForm(props: SignUpAuthFormProps) {
 
   async function onSubmit(values: SignUpAuthFormSchema) {
     try {
-      const credential = await action(values);
+      const credential = await createUserWithEmailAndPassword(
+        ui,
+        values.email,
+        values.password,
+        values.displayName,
+      );
       if (credential) {
         props.onSignUp?.(credential);
       }
     } catch (error) {
-      const message = error instanceof FirebaseUIError ? error.message : String(error);
-      form.setError("root", { message });
+      form.setError("root", { message: getAuthErrorMessage(error, ui) });
     }
   }
 
@@ -58,9 +68,9 @@ export function SignUpAuthForm(props: SignUpAuthFormProps) {
             name="displayName"
             render={({ field, fieldState }) => (
               <Field data-invalid={!!fieldState.error}>
-                <FieldLabel htmlFor="displayName">{getTranslation(ui, "labels", "displayName")}</FieldLabel>
-                <Input {...field} id="displayName" autoComplete="name" aria-invalid={!!fieldState.error} />
-                {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
+                <FieldLabel htmlFor={displayNameId}>{getTranslation(ui, "labels", "displayName")}</FieldLabel>
+                <Input {...field} id={displayNameId} autoComplete="name" aria-invalid={!!fieldState.error} aria-describedby={fieldState.error ? `${displayNameId}-error` : undefined} />
+                {fieldState.error && <FieldError id={`${displayNameId}-error`}>{fieldState.error.message}</FieldError>}
               </Field>
             )}
           />
@@ -70,9 +80,9 @@ export function SignUpAuthForm(props: SignUpAuthFormProps) {
           name="email"
           render={({ field, fieldState }) => (
             <Field data-invalid={!!fieldState.error}>
-              <FieldLabel htmlFor="email">{getTranslation(ui, "labels", "emailAddress")}</FieldLabel>
-              <Input {...field} id="email" type="email" autoComplete="email" aria-invalid={!!fieldState.error} />
-              {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
+              <FieldLabel htmlFor={emailId}>{getTranslation(ui, "labels", "emailAddress")}</FieldLabel>
+              <Input {...field} id={emailId} type="email" autoComplete="email" aria-invalid={!!fieldState.error} aria-describedby={fieldState.error ? `${emailId}-error` : undefined} />
+              {fieldState.error && <FieldError id={`${emailId}-error`}>{fieldState.error.message}</FieldError>}
             </Field>
           )}
         />
@@ -81,9 +91,9 @@ export function SignUpAuthForm(props: SignUpAuthFormProps) {
           name="password"
           render={({ field, fieldState }) => (
             <Field data-invalid={!!fieldState.error}>
-              <FieldLabel htmlFor="password">{getTranslation(ui, "labels", "password")}</FieldLabel>
-              <Input {...field} id="password" type="password" autoComplete="new-password" aria-invalid={!!fieldState.error} />
-              {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
+              <FieldLabel htmlFor={passwordId}>{getTranslation(ui, "labels", "password")}</FieldLabel>
+              <Input {...field} id={passwordId} type="password" autoComplete="new-password" aria-invalid={!!fieldState.error} aria-describedby={fieldState.error ? `${passwordId}-error` : undefined} />
+              {fieldState.error && <FieldError id={`${passwordId}-error`}>{fieldState.error.message}</FieldError>}
             </Field>
           )}
         />

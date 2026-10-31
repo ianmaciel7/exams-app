@@ -2,6 +2,7 @@ import "server-only";
 
 import { headers } from "next/headers";
 import { connection } from "next/server";
+import { cache } from "react";
 import { readUserRole, type UserRole } from "@/lib/role";
 import { getAdminAuth } from "./admin";
 
@@ -24,6 +25,7 @@ const TOKEN_REJECTION_CODES = new Set([
   "auth/id-token-expired",
   "auth/id-token-revoked",
   "auth/user-disabled",
+  "auth/user-not-found",
 ]);
 
 function isTokenRejection(error: unknown) {
@@ -57,19 +59,24 @@ async function verifyIdToken(authIdToken: string) {
 
 /**
  * Reads only a worker-injected, refreshed ID token. An absent worker is not an
- * unauthenticated verdict: the existing browser guard remains the first-load
- * fallback until the worker controls the tab. Authorization that must not
- * depend on that fallback belongs in `requireRole` under
- * `src/app/(protected)/_lib/require-protected-access.ts`.
+ * unauthenticated verdict: the worker covers only navigation and RSC requests,
+ * and the browser gate remains the first-load fallback until it controls the
+ * tab. Authorization must use `verifySession` or `verifyRole` under
+ * `src/app/(protected)/_lib/dal.ts`, which fail closed.
+ *
+ * `cache` shares one revocation-aware verification across a render pass. It has
+ * no effect in Server Functions and Route Handlers, which verify on every call.
  */
-export async function getFirebaseServerSession(): Promise<FirebaseServerSession> {
-  const requestHeaders = await headers();
-  const isBridgeActive = requestHeaders.get("x-firebase-auth-bridge") === "1";
-  const authIdToken = readBearerToken(requestHeaders);
+export const getFirebaseServerSession = cache(
+  async (): Promise<FirebaseServerSession> => {
+    const requestHeaders = await headers();
+    const isBridgeActive = requestHeaders.get("x-firebase-auth-bridge") === "1";
+    const authIdToken = readBearerToken(requestHeaders);
 
-  if (!isBridgeActive || !authIdToken) {
-    return { isBridgeActive, role: readUserRole({}), userId: null };
-  }
+    if (!isBridgeActive || !authIdToken) {
+      return { isBridgeActive, role: readUserRole({}), userId: null };
+    }
 
-  return { isBridgeActive, ...(await verifyIdToken(authIdToken)) };
-}
+    return { isBridgeActive, ...(await verifyIdToken(authIdToken)) };
+  },
+);

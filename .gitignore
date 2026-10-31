@@ -31,6 +31,9 @@ node_modules
 .DS_Store
 *.pem
 
+# Generated documentation artifacts
+/docs/artifacs/
+
 # debug
 npm-debug.log*
 yarn-debug.log*

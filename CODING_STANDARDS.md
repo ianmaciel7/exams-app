@@ -1,5 +1,9 @@
 # Coding Standards
 
+The evidence-backed applicability matrix for external web standards lives in
+[quality standards](docs/agents/quality-standards.md). This guide owns source
+conventions and implementation boundaries.
+
 ## Sources of truth
 
 When standards conflict, apply them in this order:
@@ -83,7 +87,7 @@ When standards conflict, apply them in this order:
   - Follow the canonical module taxonomy in [agent rules](.agents/rules/data.md#data-layer-module-conventions) for data and auth boundaries:
     - `definitions.ts`: Types, interfaces, and validation schemas (e.g. Zod schemas).
     - `dto.ts`: Select and structure transferred data crossing system boundaries.
-    - `dal.ts`: Protected data access and authorization boundary (`verifySession()`).
+    - `dal.ts`: Protected data access and authorization boundary (`verifySession()`, `verifyRole()`).
     - `data.ts`: Low-level database/persistence operations and query execution. Exported functions must use explicit `<verb><DomainNoun>` naming (`read*`, `write*`, `save*`, `create*`, `update*`, `delete*`, `remove*`, `upload*`, `fetch*`, `get*`, `set*`, `list*`, `verify*`), stay within **150 non-empty lines per file**, and obey the Biome per-function budgets (cognitive complexity **<= 8**, body **<= 40 non-empty lines**, callback nesting **<= 2**).
     - `auth.ts`: Authentication operations answering identity verification ("Who are you?"), such as credential validation, sign-in, sign-up, password recovery, and sign-out.
     - `session.ts`: Session lifecycle, state, token verification, and cookie persistence ("Are you authenticated and what is your active session?").
@@ -543,7 +547,7 @@ sign-in redirects. `authRoutes` also drives the auth-route exclusion in
 presentation-screen rule below still applies: screens receive callbacks and do
 not import `routes`; route-private composition roots and hooks do.
 
-With installed Next.js 16.4.2, use the error boundary's `retry()` for an action
+With installed Next.js 16.4.3, use the error boundary's `retry()` for an action
 that promises to retry a failed read. `reset()` only clears and rerenders the
 boundary state; it is not equivalent to refetching.
 
@@ -821,6 +825,32 @@ Owned source (`src/`, `scripts/`, `functions/`, `tests/`) follows one style:
 - Use `type` aliases, not `interface`. Props are named `<ComponentName>Props`.
 - Only module-level constants use `SCREAMING_CASE`.
 - Message files (`en`, `es`, `pt-BR`) keep an identical key set.
+- Keep short, straightforward calls on one line. Use an expanded trailing-object
+  call when any of these conditions applies:
+
+  - The final object is invocation policy or options, distinct from the operation's
+    domain input, even when it currently has one property (for example, Firestore's
+    `merge` option).
+  - The object has multiple properties, contains a nested value, callback, or
+    collection, or will be read or modified as a distinct configuration block.
+  - The complete call exceeds Biome's configured line width; accept its automatic
+    wrapping rather than selecting line breaks by hand.
+
+  Keep compact scalar or domain-input arguments on the opening line, and begin the
+  first property of the final object on the next line to express intentional
+  expansion. With the default `expand: "auto"`, Biome preserves that object layout.
+  SDK/provider mutations commonly use this form:
+
+  ```ts
+  await setDoc(doc(getFirebaseFirestore(), "users", uid), preferences, {
+    merge: true,
+  });
+  ```
+
+  Do not expand a simple data object solely for visual symmetry. Biome is the
+  mechanical safeguard for the resulting wrapping, two-space indentation, and
+  trailing commas; selecting a semantically distinct configuration block remains a
+  review-time judgement.
 
 Documented exceptions, not to be renamed:
 

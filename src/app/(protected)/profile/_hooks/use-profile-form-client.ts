@@ -5,7 +5,7 @@ import { useProfileSubmit } from "./use-profile-submit";
 
 export function useProfileFormClient() {
   const session = useProfileSessionContext();
-  const { onSubmit } = useProfileSubmit(session);
+  const { onSubmit, saveError } = useProfileSubmit(session);
   const form = useForm<ProfileFormValues>({
     defaultValues: { ...session.defaultValues, avatarFile: null },
     values: { ...session.defaultValues, avatarFile: null },
@@ -22,5 +22,5 @@ export function useProfileFormClient() {
     }
   }
 
-  return { form, handleSubmit };
+  return { form, handleSubmit, saveError };
 }

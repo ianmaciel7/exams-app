@@ -7,6 +7,7 @@ import {
   waitFor,
 } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { AuthGateClient } from "../../_components/auth-gate-client";
 import { ProfileSectionClient } from "./profile-section-client";
 
 const mocks = vi.hoisted(() => ({
@@ -107,6 +108,10 @@ vi.mock("@/components/ui/toast", () => ({
   },
 }));
 
+function renderProfile(ui: React.ReactElement = <ProfileSectionClient />) {
+  return render(<AuthGateClient>{ui}</AuthGateClient>);
+}
+
 describe("ProfileSectionClient", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -135,16 +140,53 @@ describe("ProfileSectionClient", () => {
 
   afterEach(cleanup);
 
-  it("renders nothing when user is null", () => {
+  it("leaves the sign-in redirect and its return path to the gate", () => {
     mocks.currentUser = null;
-    const { container } = render(<ProfileSectionClient />);
-    expect(container.firstChild).toBeNull();
-    expect(mocks.router.replace).toHaveBeenCalledWith("/sign-in");
+    window.history.replaceState(null, "", "/profile?tab=security");
+    const { container } = renderProfile();
+    expect(container.querySelector('[data-slot="card"]')).toBeNull();
+    expect(mocks.router.replace).toHaveBeenCalledOnce();
+    expect(mocks.router.replace).toHaveBeenCalledWith(
+      `/sign-in?next=${encodeURIComponent("/profile?tab=security")}`,
+    );
+    window.history.replaceState(null, "", "/");
+  });
+
+  it("does not show the previous account's profile after an account switch", async () => {
+    mocks.currentUser = { uid: "user-a", displayName: "User A" };
+    let authCallback: (user: unknown) => void = () => {};
+    mocks.subscribe.mockImplementation((_auth, callback) => {
+      authCallback = callback;
+      callback(mocks.currentUser);
+      return () => {};
+    });
+    let finishRead!: (value: object) => void;
+    mocks.readPreferences.mockResolvedValueOnce({});
+    renderProfile();
+    const nameField = (await screen.findByLabelText(
+      "displayNameLabel",
+    )) as HTMLInputElement;
+    expect(nameField.value).toBe("User A");
+
+    mocks.readPreferences.mockReturnValueOnce(
+      new Promise((resolve) => {
+        finishRead = resolve;
+      }),
+    );
+    mocks.currentUser = { uid: "user-b", displayName: "User B" };
+    act(() => authCallback(mocks.currentUser));
+    expect(screen.queryByLabelText("displayNameLabel")).toBeNull();
+
+    await act(async () => finishRead({}));
+    expect(
+      ((await screen.findByLabelText("displayNameLabel")) as HTMLInputElement)
+        .value,
+    ).toBe("User B");
   });
 
   it("forwards element props to the card while the session is active", async () => {
     mocks.currentUser = { uid: "user-123", email: "user@example.com" };
-    render(<ProfileSectionClient data-testid="profile-section" />);
+    renderProfile(<ProfileSectionClient data-testid="profile-section" />);
 
     await waitFor(() => {
       expect(
@@ -155,7 +197,7 @@ describe("ProfileSectionClient", () => {
 
   it("renders user information with fallback when fields are not set", async () => {
     mocks.currentUser = { uid: "user-123", email: null, displayName: null };
-    render(<ProfileSectionClient />);
+    renderProfile();
 
     await waitFor(() => {
       expect(screen.getByText("personalInfoTitle")).toBeTruthy();
@@ -173,7 +215,7 @@ describe("ProfileSectionClient", () => {
       displayName: "Ada Lovelace",
       photoURL: "https://example.com/photo.jpg",
     };
-    render(<ProfileSectionClient />);
+    renderProfile();
 
     await waitFor(() => {
       expect(
@@ -191,7 +233,7 @@ describe("ProfileSectionClient", () => {
   it("renders language and theme preferences", async () => {
     mocks.currentUser = { uid: "user-123" };
 
-    render(<ProfileSectionClient />);
+    renderProfile();
 
     await waitFor(() => {
       expect(screen.getByLabelText("languageLabel")).toBeTruthy();
@@ -211,7 +253,7 @@ describe("ProfileSectionClient", () => {
     mocks.currentUser = { uid: "user-123" };
     mocks.readPreferences.mockReturnValue(new Promise(() => {}));
 
-    const { container } = render(
+    const { container } = renderProfile(
       <ProfileSectionClient data-testid="loading-profile" />,
     );
 
@@ -226,7 +268,7 @@ describe("ProfileSectionClient", () => {
     const log = vi.spyOn(console, "error").mockImplementation(() => {});
 
     try {
-      render(<ProfileSectionClient />);
+      renderProfile();
       expect((await screen.findByRole("alert")).textContent).toBe(
         "profileLoadError",
       );
@@ -237,7 +279,7 @@ describe("ProfileSectionClient", () => {
 
   it("keeps form fields in CardContent and buttons in CardFooter", async () => {
     mocks.currentUser = { uid: "user-123", email: "user@example.com" };
-    render(<ProfileSectionClient />);
+    renderProfile();
 
     const saveButton = await screen.findByRole("button", {
       name: "saveProfile",
@@ -266,7 +308,7 @@ describe("ProfileSectionClient", () => {
       uid: "user-123",
       email: "user@example.com",
     };
-    render(<ProfileSectionClient />);
+    renderProfile();
 
     const file = new File(["avatar"], "avatar.png", { type: "image/png" });
     fireEvent.change(
@@ -293,9 +335,9 @@ describe("ProfileSectionClient", () => {
     });
   });
 
-  it("shows error toast when invalid avatar is chosen", async () => {
+  it("shows an associated inline error when an invalid avatar is chosen", async () => {
     mocks.currentUser = { uid: "user-123", email: "user@example.com" };
-    render(<ProfileSectionClient />);
+    renderProfile();
 
     const file = new File(["test"], "test.txt", { type: "text/plain" });
     fireEvent.change(
@@ -307,10 +349,24 @@ describe("ProfileSectionClient", () => {
       },
     );
 
-    expect(mocks.toastAdd).toHaveBeenCalledWith({
-      title: "profilePhotoInvalid",
-      type: "error",
-    });
+    const error = screen.getByRole("alert");
+    expect(error.textContent).toBe("profilePhotoInvalid");
+    expect(
+      screen
+        .getByLabelText("profilePhotoChange", { selector: "input" })
+        .getAttribute("aria-describedby"),
+    ).toBe(error.getAttribute("id"));
+    expect(mocks.toastAdd).not.toHaveBeenCalled();
+
+    fireEvent.change(
+      screen.getByLabelText("profilePhotoChange", { selector: "input" }),
+      {
+        target: {
+          files: [new File(["avatar"], "avatar.png", { type: "image/png" })],
+        },
+      },
+    );
+    await waitFor(() => expect(screen.queryByRole("alert")).toBeNull());
   });
 
   it("applies saved preferences from the user's document", async () => {
@@ -318,7 +374,7 @@ describe("ProfileSectionClient", () => {
     mocks.locale = "es";
     mocks.readPreferences.mockResolvedValue({ locale: "es", theme: "dark" });
 
-    render(<ProfileSectionClient />);
+    renderProfile();
 
     await waitFor(() => expect(mocks.setTheme).toHaveBeenCalledWith("dark"));
     expect(mocks.readPreferences).toHaveBeenCalledWith("user-123");
@@ -328,7 +384,7 @@ describe("ProfileSectionClient", () => {
     mocks.currentUser = { uid: "user-123" };
     mocks.readPreferences.mockResolvedValue({ locale: "pt-BR" });
 
-    const { container } = render(<ProfileSectionClient />);
+    const { container } = renderProfile();
 
     await waitFor(() => expect(mocks.router.refresh).toHaveBeenCalledOnce());
     expect(document.cookie).toContain("NEXT_LOCALE=pt-BR");
@@ -337,7 +393,7 @@ describe("ProfileSectionClient", () => {
 
   it("saves a changed theme preference and shows success toast", async () => {
     mocks.currentUser = { uid: "user-123", email: "user@example.com" };
-    render(<ProfileSectionClient />);
+    renderProfile();
 
     fireEvent.click(await screen.findByLabelText("themeLabel"));
     const darkOption = await screen.findByRole("option", {
@@ -368,7 +424,7 @@ describe("ProfileSectionClient", () => {
       email: "old@example.com",
       displayName: "Old Name",
     };
-    render(<ProfileSectionClient />);
+    renderProfile();
 
     fireEvent.change(await screen.findByLabelText("displayNameLabel"), {
       target: { value: "New Name" },
@@ -395,7 +451,7 @@ describe("ProfileSectionClient", () => {
 
   it("saves a changed language preference and refreshes without a locale-prefixed route", async () => {
     mocks.currentUser = { uid: "user-123", email: "user@example.com" };
-    render(<ProfileSectionClient />);
+    renderProfile();
 
     fireEvent.click(await screen.findByLabelText("languageLabel"));
     const spanishOption = await screen.findByRole("option", {
@@ -429,7 +485,7 @@ describe("ProfileSectionClient", () => {
       authCallback = callback;
       return () => {};
     });
-    render(<ProfileSectionClient />);
+    renderProfile();
     const dynamicUser = {
       uid: "uid-dynamic",
       email: "dynamic@example.com",
@@ -457,7 +513,7 @@ describe("ProfileSectionClient", () => {
         finish = resolve;
       }),
     );
-    render(<ProfileSectionClient />);
+    renderProfile();
     fireEvent.change(await screen.findByLabelText("displayNameLabel"), {
       target: { value: "After" },
     });
@@ -476,7 +532,7 @@ describe("ProfileSectionClient", () => {
     mocks.uploadBytes.mockRejectedValueOnce(new Error("Upload failed"));
     const log = vi.spyOn(console, "error").mockImplementation(() => {});
     try {
-      render(<ProfileSectionClient />);
+      renderProfile();
       const input = (await screen.findByLabelText("profilePhotoChange", {
         selector: "input",
       })) as HTMLInputElement;
@@ -484,18 +540,17 @@ describe("ProfileSectionClient", () => {
       fireEvent.change(input, { target: { files: [file] } });
       fireEvent.click(screen.getByRole("button", { name: "saveProfile" }));
       await waitFor(() =>
-        expect(mocks.toastAdd).toHaveBeenCalledWith({
-          title: "profileSaveError",
-          type: "error",
-        }),
+        expect(screen.getByRole("alert").textContent).toBe("profileSaveError"),
       );
+      expect(mocks.toastAdd).not.toHaveBeenCalled();
       const save = await screen.findByRole("button", { name: "saveProfile" });
       fireEvent.click(save);
       await waitFor(() => expect(mocks.updateProfile).toHaveBeenCalled());
+      await waitFor(() => expect(screen.queryByRole("alert")).toBeNull());
       expect(mocks.uploadBytes).toHaveBeenCalledTimes(2);
       await screen.findByRole("button", { name: "saveProfile" });
       fireEvent.click(screen.getByRole("button", { name: "saveProfile" }));
-      await waitFor(() => expect(mocks.toastAdd).toHaveBeenCalledTimes(3));
+      await waitFor(() => expect(mocks.toastAdd).toHaveBeenCalledTimes(2));
       expect(mocks.uploadBytes).toHaveBeenCalledTimes(2);
       expect(input.value).toBe("");
     } finally {

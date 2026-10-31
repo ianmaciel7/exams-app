@@ -2,29 +2,32 @@
 
 import { Spinner } from "@/components/ui/spinner";
 
-import type { ForgotPasswordAuthFormSchema } from "@firebase-oss/ui-core";
 import {
-  useForgotPasswordAuthFormAction,
+  sendPasswordResetEmail,
+  type ForgotPasswordAuthFormSchema,
+} from "@firebase-oss/ui-core";
+import {
   useForgotPasswordAuthFormSchema,
   useUI,
   type ForgotPasswordAuthFormProps,
 } from "@firebase-oss/ui-react";
 import { useForm, FormProvider, Controller } from "react-hook-form";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import { FirebaseUIError, getTranslation } from "@firebase-oss/ui-core";
-import { useState } from "react";
+import { getTranslation } from "@firebase-oss/ui-core";
+import { useId, useState } from "react";
 
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Policies } from "./policies";
+import { getAuthErrorMessage } from "./auth-error-message";
 
 export type { ForgotPasswordAuthFormProps };
 
 export function ForgotPasswordAuthForm(props: ForgotPasswordAuthFormProps) {
+  const emailId = useId();
   const ui = useUI();
   const schema = useForgotPasswordAuthFormSchema();
-  const action = useForgotPasswordAuthFormAction();
   const [emailSent, setEmailSent] = useState(false);
 
   const form = useForm<ForgotPasswordAuthFormSchema>({
@@ -37,12 +40,11 @@ export function ForgotPasswordAuthForm(props: ForgotPasswordAuthFormProps) {
 
   async function onSubmit(values: ForgotPasswordAuthFormSchema) {
     try {
-      await action(values);
+      await sendPasswordResetEmail(ui, values.email);
       setEmailSent(true);
       props.onPasswordSent?.();
     } catch (error) {
-      const message = error instanceof FirebaseUIError ? error.message : String(error);
-      form.setError("root", { message });
+      form.setError("root", { message: getAuthErrorMessage(error, ui) });
     }
   }
 
@@ -62,9 +64,9 @@ export function ForgotPasswordAuthForm(props: ForgotPasswordAuthFormProps) {
           name="email"
           render={({ field, fieldState }) => (
             <Field data-invalid={!!fieldState.error}>
-              <FieldLabel htmlFor="email">{getTranslation(ui, "labels", "emailAddress")}</FieldLabel>
-              <Input {...field} id="email" type="email" autoComplete="email" aria-invalid={!!fieldState.error} />
-              {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
+              <FieldLabel htmlFor={emailId}>{getTranslation(ui, "labels", "emailAddress")}</FieldLabel>
+              <Input {...field} id={emailId} type="email" autoComplete="email" aria-invalid={!!fieldState.error} aria-describedby={fieldState.error ? `${emailId}-error` : undefined} />
+              {fieldState.error && <FieldError id={`${emailId}-error`}>{fieldState.error.message}</FieldError>}
             </Field>
           )}
         />

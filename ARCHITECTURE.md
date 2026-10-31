@@ -1,5 +1,9 @@
 # Architecture
 
+The repository's standards applicability and evidence register is maintained
+in [quality standards](docs/agents/quality-standards.md); this document owns
+the runtime and data-boundary architecture behind those findings.
+
 ## Overview
 
 This repository is a Next.js 16 application using the App Router, React 19,
@@ -65,13 +69,13 @@ files, and `public/` remain at the repository root, as required by the Next.js
   - `(public)` groups unauthenticated identity flows (`/sign-in`, `/register`,
     `/forgot-password`) under a shared layout and redirects authenticated visitors
     to `/profile`.
-  - `(protected)` isolates authenticated routes (e.g. `/profile`) behind a
-    client-side layout guard that observes `onAuthStateChanged` and redirects
+  - `(protected)` isolates authenticated routes (e.g. `/profile`) behind
+    `AuthGateClient`, which observes `onAuthStateChanged` and redirects
     unauthenticated visitors to `/sign-in`.
 
 ## Authentication navigation
 
-When an unauthenticated user requests a protected route, the client guard redirects to `/sign-in?next=<encoded-path-and-query>`. Once authenticated, the public authentication provider sends the user to that destination, or `/profile` if no valid destination was supplied. The return URL validator accepts only application-relative paths and rejects external URLs and authentication-screen loops; query strings are preserved. Route protection in the UI is not a substitute for Firebase Security Rules or authorization at the data source.
+When an unauthenticated user requests a protected route, the client auth gate redirects to `/sign-in?next=<encoded-path-and-query>`. Once authenticated, the public authentication provider sends the user to that destination, or the home page if no valid destination was supplied. The return URL validator accepts only application-relative paths and rejects external URLs and authentication-screen loops; query strings are preserved. Route protection in the UI is not a substitute for Firebase Security Rules or authorization at the data source.
 
 ## Test boundaries
 
@@ -158,9 +162,9 @@ Firebase Authentication provides browser authentication on public auth routes an
 client-guarded protected routes (`(protected)/profile`); see [ADR 0009](docs/adr/0009-integrate-firebase-authentication.md).
 `FirebaseAuthSessionBridgeClient` registers the root-scoped
 `firebase-auth-sw.js` worker. The worker refreshes an ID token and attaches it
-only to same-origin Next navigation requests; `src/lib/firebase/server.ts` verifies that
-bridged token through `FirebaseServerApp`. Until the worker controls a tab, the
-browser guard remains the first-load fallback. The development worker receives
+only to same-origin Next navigation and RSC requests; `src/lib/firebase/server.ts`
+verifies that bridged token with the Admin SDK. Until the worker controls a tab,
+the browser auth gate remains the first-load fallback. The development worker receives
 the existing public Auth Emulator host, so it shares the local emulator session.
 The authentication modules intentionally remain flat under `src/lib`:
 `auth.ts`, `session.ts`, and `return-url.ts`; consumers should import them as
@@ -230,7 +234,7 @@ checks local contracts and leaves complete graph validation to Next.js.
 
 ## Next.js rendering and cache model
 
-The installed Next.js 16.4.2 configuration explicitly enables both
+The installed Next.js 16.4.3 configuration explicitly enables both
 `cacheComponents` and `partialPrefetching`. The applicable model combines a
 prerendered shell, cached work, and request-time streamed content. Guidance for
 caching without Cache Components and Pages Router APIs remains migration
@@ -307,8 +311,8 @@ and [the integration convention](CODING_STANDARDS.md#integration-filename-conven
 
 ## Usage records
 
-The protected guard calls `recordUsage` on pathname changes before releasing
-children. Profile saves call `withUsageGuard` before starting the operation.
+`RouteUsageClient` calls `recordUsage` on pathname changes without delaying
+protected content. Profile saves call `withUsageGuard` before starting the operation.
 The Firebase callable validates authentication and an allowlist of screen and
 functionality names, then emits structured `INFO` entries using the native
 `firebase-functions/logger` SDK. Cloud Logging supplies the timestamp and
@@ -317,8 +321,9 @@ documents are denied to browser clients.
 
 The server derives `uid` from verified callable authentication. Event fields are
 `event`, `schemaVersion`, `eventId`, `uid`, `type`, and `name`; query strings, form
-values, email addresses, and tokens are excluded. The callable response releases
-the guard; failures and the 15-second client timeout block access or execution.
+values, email addresses, and tokens are excluded. A failed route record is
+ignored. For a profile save, the failure or the 15-second client timeout blocks
+the operation.
 Sign-out stays independent. Logging acknowledgment confirms handler execution,
 not durable ingestion into Cloud Logging.
 

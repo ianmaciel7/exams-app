@@ -41,6 +41,7 @@ function ProfileLocaleField(props: ProfileLocaleFieldProps) {
               id={id}
               className="w-full"
               aria-invalid={fieldState.invalid}
+              aria-describedby={fieldState.invalid ? `${id}-error` : undefined}
               onBlur={field.onBlur}
             >
               <SelectValue>
@@ -59,7 +60,9 @@ function ProfileLocaleField(props: ProfileLocaleFieldProps) {
               </SelectGroup>
             </SelectContent>
           </Select>
-          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          {fieldState.invalid && (
+            <FieldError id={`${id}-error`} errors={[fieldState.error]} />
+          )}
         </Field>
       )}
     />

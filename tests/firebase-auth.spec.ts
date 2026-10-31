@@ -1,6 +1,13 @@
+// cspell:ignore domcontentloaded describedby
 import fs from "node:fs";
 import AxeBuilder from "@axe-core/playwright";
-import { expect, test } from "@playwright/test";
+import {
+  type APIRequestContext,
+  type Browser,
+  expect,
+  type Page,
+  test,
+} from "@playwright/test";
 import esMessages from "../src/messages/es.json";
 
 for (const envFile of [".env.local", ".env"]) {
@@ -25,6 +32,16 @@ const emulator =
     : `http://${rawHost}`.replace(/\/$/, "");
 const authTestOrigin = `http://${new URL(emulator).hostname}:3100`;
 
+const signInEmail = (page: Page) =>
+  page.locator('input[autocomplete="username"]');
+const signInPassword = (page: Page) =>
+  page.locator('input[autocomplete="current-password"]');
+const signUpEmail = (page: Page) => page.locator('input[autocomplete="email"]');
+const signUpPassword = (page: Page) =>
+  page.locator('input[autocomplete="new-password"]');
+const recoveryEmail = (page: Page) =>
+  page.locator('input[type="email"][autocomplete="email"]');
+
 const project =
   process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || process.env.GCLOUD_PROJECT;
 if (!project) {
@@ -32,6 +49,16 @@ if (!project) {
     "Missing NEXT_PUBLIC_FIREBASE_PROJECT_ID in environment. Define it in .env (e.g. demo-test).",
   );
 }
+
+const firestoreEmulatorHost =
+  process.env.FIRESTORE_EMULATOR_HOST ||
+  process.env.NEXT_PUBLIC_FIRESTORE_EMULATOR_HOST ||
+  "127.0.0.1:8080";
+const firestoreEmulatorOrigin = new URL(
+  firestoreEmulatorHost.includes("://")
+    ? firestoreEmulatorHost
+    : `http://${firestoreEmulatorHost}`,
+).origin;
 
 const password = process.env.TEST_USER_PASSWORD;
 if (!password) {
@@ -63,8 +90,8 @@ test("registration and persisted authentication redirect", async ({ page }) => {
   await page.goto("/sign-in");
   await page.getByRole("button", { name: /don't have an account/i }).click();
   await expect(page).toHaveURL(/\/register$/);
-  await page.getByLabel("Email Address").fill(email);
-  await page.getByLabel("Password", { exact: true }).fill(password);
+  await signUpEmail(page).fill(email);
+  await signUpPassword(page).fill(password);
   await page.getByRole("button", { name: "Create Account" }).click();
   await expect(page).toHaveURL("/");
   await page.goto("/sign-in");
@@ -82,11 +109,13 @@ test("invalid credentials and successful sign-in", async ({
   );
   expect(created.ok()).toBeTruthy();
   await page.goto("/sign-in");
-  await page.getByLabel("Email Address").fill(email);
-  await page.locator("#password").fill("wrong-password");
+  await signInEmail(page).fill(email);
+  await page
+    .locator('input[autocomplete="current-password"]')
+    .fill("wrong-password");
   await page.getByRole("button", { name: "Sign In", exact: true }).click();
   await expect(page.getByText(/invalid|incorrect/i)).toBeVisible();
-  await page.locator("#password").fill(password);
+  await signInPassword(page).fill(password);
   await page.getByRole("button", { name: "Sign In", exact: true }).click();
   await expect(page).toHaveURL("/");
 });
@@ -104,7 +133,23 @@ test("password recovery sends an emulator reset code and displays failures", asy
   await page.goto("/sign-in");
   await page.getByRole("button", { name: "Forgot Password?" }).click();
   await expect(page).toHaveURL(/\/forgot-password$/);
-  await page.getByLabel("Email Address").fill(email);
+  // Route transitions can retain previous form controls in the DOM; the
+  // autocomplete token identifies the recovery email field on this route.
+  const emailField = recoveryEmail(page);
+  await expect(emailField).toBeVisible();
+  await page
+    .getByRole("button", { name: "Reset Password", exact: true })
+    .click();
+  const emailError = page.getByRole("alert").filter({ visible: true }).first();
+  await expect(emailError).toBeVisible();
+  await expect(emailField).toHaveAttribute("aria-invalid", "true");
+  const emailErrorId = await emailError.getAttribute("id");
+  expect(emailErrorId).toBeTruthy();
+  await expect(emailField).toHaveAttribute(
+    "aria-describedby",
+    emailErrorId ?? "",
+  );
+  await emailField.fill(email);
   await page.route("**/accounts:sendOobCode?*", (route) =>
     route.abort("failed"),
   );
@@ -144,16 +189,57 @@ test("navigation and translated screens", async ({ page, context }) => {
 });
 
 test("Google popup signs in with the emulator", async ({ page }) => {
+  // The emulator serves the OAuth account picker from a separate page. Give
+  // that first page its own startup budget on constrained CI runners, while
+  // still requiring the first attempt to complete successfully.
+  test.setTimeout(60_000);
   await page.goto("/sign-in");
   const popupPromise = page.waitForEvent("popup");
   await page.getByRole("button", { name: "Sign in with Google" }).click();
   const popup = await popupPromise;
-  await popup.getByRole("button", { name: /add new account/i }).click();
-  await popup
-    .getByLabel(/email/i)
-    .fill(`google-${crypto.randomUUID()}@example.test`);
+  await popup.waitForLoadState("domcontentloaded");
+  const addAccount = popup.getByRole("button", { name: /add new account/i });
+  await expect(addAccount).toBeEnabled();
+  await addAccount.click();
+  const email = popup.getByLabel(/email/i);
+  await expect(email).toBeVisible();
+  await email.fill(`google-${crypto.randomUUID()}@example.test`);
+  const popupClosed = popup.waitForEvent("close");
   await popup.getByRole("button", { name: /sign in/i }).click();
-  await expect(page).toHaveURL("/");
+  await popupClosed;
+  await expect(page).toHaveURL("/", { timeout: 30_000 });
+});
+
+test("Google popup cancellation restores sign-in and supports retry", async ({
+  page,
+}) => {
+  await page.goto("/sign-in");
+  const googleButton = page.getByRole("button", {
+    name: "Sign in with Google",
+  });
+  const emailField = signInEmail(page);
+
+  await expect(googleButton).toBeEnabled();
+
+  // Cancel the first attempt instead of completing the happy path.
+  const firstPopupPromise = page.waitForEvent("popup");
+  await googleButton.click();
+  const firstPopup = await firstPopupPromise;
+  await firstPopup.close();
+
+  // A dismissed OAuth popup must not strand the form in a pending state.
+  await expect(googleButton).toBeEnabled({ timeout: 15_000 });
+  await expect(emailField).toBeEditable();
+  await expect(page).toHaveURL(`${authTestOrigin}/sign-in`);
+
+  // Recoverability is not established until the next attempt also works.
+  const secondPopupPromise = page.waitForEvent("popup");
+  await googleButton.click();
+  const secondPopup = await secondPopupPromise;
+  await secondPopup.close();
+
+  await expect(googleButton).toBeEnabled({ timeout: 15_000 });
+  await expect(emailField).toBeEditable();
 });
 
 test("Google redirect signs in when the browser identifies as Electron", async ({
@@ -195,8 +281,8 @@ test("profile displays user email and signs out successfully", async ({
   );
   expect(created.ok()).toBeTruthy();
   await page.goto("/sign-in");
-  await page.getByLabel("Email Address").fill(email);
-  await page.locator("#password").fill(password);
+  await signInEmail(page).fill(email);
+  await signInPassword(page).fill(password);
   await page.getByRole("button", { name: "Sign In", exact: true }).click();
   await expect(page).toHaveURL("/");
   await page.getByRole("link", { name: "My profile" }).click();
@@ -223,8 +309,8 @@ test("saving the profile language keeps the unprefixed route and translates afte
   );
   expect(created.ok()).toBeTruthy();
   await page.goto("/sign-in");
-  await page.getByLabel("Email Address").fill(email);
-  await page.locator("#password").fill(password);
+  await signInEmail(page).fill(email);
+  await signInPassword(page).fill(password);
   await page.getByRole("button", { name: "Sign In", exact: true }).click();
   await expect(page).toHaveURL("/");
   await page.getByRole("link", { name: "My profile" }).click();
@@ -250,6 +336,567 @@ test("saving the profile language keeps the unprefixed route and translates afte
     page.getByText(esMessages.Auth.personalInfoTitle, { exact: true }),
   ).toBeVisible();
   await expect(page).toHaveURL(`${authTestOrigin}/profile`);
+});
+
+test("guest deep link returns to the protected page after sign-in", async ({
+  page,
+  request,
+}) => {
+  const email = `return-${crypto.randomUUID()}@example.test`;
+  const created = await request.post(
+    `${emulator}/identitytoolkit.googleapis.com/v1/accounts:signUp?key=emulator-only`,
+    { data: { email, password, returnSecureToken: true } },
+  );
+  expect(created.ok()).toBe(true);
+
+  await page.goto("/profile?tab=security");
+  await expect(page).toHaveURL(
+    (url) =>
+      url.pathname === "/sign-in" &&
+      url.searchParams.get("next") === "/profile?tab=security",
+  );
+  expect(new URL(page.url()).searchParams.get("next")).toBe(
+    "/profile?tab=security",
+  );
+
+  await signInEmail(page).fill(email);
+  await signInPassword(page).fill(password);
+  await page.getByRole("button", { name: "Sign In", exact: true }).click();
+
+  await expect(page).toHaveURL(`${authTestOrigin}/profile?tab=security`);
+  await expect(page.getByLabel("Email", { exact: true })).toHaveValue(email);
+});
+
+test("profile changes survive reload, sign-out and a new sign-in", async ({
+  page,
+  request,
+}) => {
+  test.setTimeout(60_000);
+  const email = `persist-${crypto.randomUUID()}@example.test`;
+  const displayName = "Regression Journey User";
+  const created = await request.post(
+    `${emulator}/identitytoolkit.googleapis.com/v1/accounts:signUp?key=emulator-only`,
+    { data: { email, password, returnSecureToken: true } },
+  );
+  expect(created.ok()).toBe(true);
+  const account = (await created.json()) as {
+    idToken: string;
+    localId: string;
+  };
+
+  await page.goto("/sign-in");
+  await signInEmail(page).fill(email);
+  await signInPassword(page).fill(password);
+  await page.getByRole("button", { name: "Sign In", exact: true }).click();
+  await expect(page).toHaveURL("/");
+  await page.getByRole("link", { name: "My profile" }).click();
+  await expect(page).toHaveURL(`${authTestOrigin}/profile`);
+
+  await page.getByLabel("Name", { exact: true }).fill(displayName);
+  await page.getByLabel("Theme", { exact: true }).click();
+  await page.getByRole("option", { name: "Dark", exact: true }).click();
+  await page.getByRole("button", { name: "Save profile", exact: true }).click();
+
+  // The backend is an independent oracle: a toast or mocked callback is not
+  // sufficient evidence that Firestore persisted the user's preferences.
+  const documentUrl = `${firestoreEmulatorOrigin}/v1/projects/${project}/databases/(default)/documents/users/${account.localId}`;
+  await expect
+    .poll(
+      async () => {
+        const response = await request.get(documentUrl, {
+          headers: { Authorization: `Bearer ${account.idToken}` },
+        });
+        if (!response.ok()) return null;
+        const body = (await response.json()) as {
+          fields?: { theme?: { stringValue?: string } };
+        };
+        return body.fields?.theme?.stringValue ?? null;
+      },
+      { message: "theme must be persisted in Firestore", timeout: 15_000 },
+    )
+    .toBe("dark");
+
+  await page.reload();
+  await expect(page.getByLabel("Name", { exact: true })).toHaveValue(
+    displayName,
+  );
+  await expect(page.getByLabel("Theme", { exact: true })).toContainText("Dark");
+
+  await page.getByRole("link", { name: "Back to Home" }).click();
+  await page.getByRole("button", { name: "Sign Out" }).click();
+  await expect(
+    page.getByRole("link", { name: "Sign in", exact: true }),
+  ).toBeVisible();
+
+  await page.goto("/sign-in");
+  await signInEmail(page).fill(email);
+  await signInPassword(page).fill(password);
+  await page.getByRole("button", { name: "Sign In", exact: true }).click();
+  await page.getByRole("link", { name: "My profile" }).click();
+  await expect(page.getByLabel("Name", { exact: true })).toHaveValue(
+    displayName,
+  );
+  await expect(page.getByLabel("Theme", { exact: true })).toContainText("Dark");
+});
+
+test("Firestore user preferences are private to their owner", async ({
+  request,
+}) => {
+  const createAccount = async (prefix: string) => {
+    const response = await request.post(
+      `${emulator}/identitytoolkit.googleapis.com/v1/accounts:signUp?key=emulator-only`,
+      {
+        data: {
+          email: `${prefix}-${crypto.randomUUID()}@example.test`,
+          password,
+          returnSecureToken: true,
+        },
+      },
+    );
+    expect(response.ok()).toBe(true);
+    return (await response.json()) as { idToken: string; localId: string };
+  };
+
+  const owner = await createAccount("owner");
+  const stranger = await createAccount("stranger");
+  const documentUrl = `${firestoreEmulatorOrigin}/v1/projects/${project}/databases/(default)/documents/users/${owner.localId}`;
+
+  const written = await request.patch(documentUrl, {
+    headers: { Authorization: `Bearer ${owner.idToken}` },
+    data: {
+      fields: {
+        locale: { stringValue: "en" },
+        theme: { stringValue: "dark" },
+      },
+    },
+  });
+  expect(written.ok(), "owner must be able to save preferences").toBe(true);
+
+  const ownerRead = await request.get(documentUrl, {
+    headers: { Authorization: `Bearer ${owner.idToken}` },
+  });
+  expect(ownerRead.ok(), "owner must be able to read preferences").toBe(true);
+  const saved = (await ownerRead.json()) as {
+    fields?: { theme?: { stringValue?: string } };
+  };
+  expect(saved.fields?.theme?.stringValue).toBe("dark");
+
+  const strangerWrite = await request.patch(documentUrl, {
+    headers: { Authorization: `Bearer ${stranger.idToken}` },
+    data: {
+      fields: {
+        locale: { stringValue: "en" },
+        theme: { stringValue: "light" },
+      },
+    },
+  });
+  expect(
+    strangerWrite.status(),
+    "other accounts must not write preferences",
+  ).toBe(403);
+
+  const strangerRead = await request.get(documentUrl, {
+    headers: { Authorization: `Bearer ${stranger.idToken}` },
+  });
+  expect(
+    strangerRead.status(),
+    "other accounts must not read preferences",
+  ).toBe(403);
+
+  const guestRead = await request.get(documentUrl);
+  expect(guestRead.status(), "unauthenticated clients must be denied").toBe(
+    403,
+  );
+});
+
+type TestAccount = {
+  email: string;
+  idToken: string;
+  localId: string;
+  refreshToken: string;
+};
+
+async function createAccount(
+  request: APIRequestContext,
+  prefix: string,
+): Promise<TestAccount> {
+  const email = `${prefix}-${crypto.randomUUID()}@example.test`;
+  const response = await request.post(
+    `${emulator}/identitytoolkit.googleapis.com/v1/accounts:signUp?key=emulator-only`,
+    { data: { email, password, returnSecureToken: true } },
+  );
+  expect(response.ok()).toBe(true);
+  return { ...(await response.json()), email };
+}
+
+const signInUrlTo = (next: string) =>
+  `/sign-in?next=${encodeURIComponent(next)}`;
+
+async function signIn(page: Page, email: string, path = "/sign-in") {
+  await page.goto(path);
+  await signInEmail(page).fill(email);
+  await signInPassword(page).fill(password ?? "");
+  await page.getByRole("button", { name: "Sign In", exact: true }).click();
+}
+
+/** Refreshes like `getIdToken(true)`, which is how a client receives new claims. */
+async function refreshIdToken(
+  request: APIRequestContext,
+  refreshToken: string,
+) {
+  const response = await request.post(
+    `${emulator}/securetoken.googleapis.com/v1/token?key=emulator-only`,
+    { form: { grant_type: "refresh_token", refresh_token: refreshToken } },
+  );
+  expect(response.ok()).toBe(true);
+  return ((await response.json()) as { id_token: string }).id_token;
+}
+
+/** Applies an administrative change through the emulator's owner credential. */
+async function updateAccount(
+  request: APIRequestContext,
+  localId: string,
+  changes: Record<string, unknown>,
+) {
+  const response = await request.post(
+    `${emulator}/identitytoolkit.googleapis.com/v1/projects/${project}/accounts:update`,
+    {
+      headers: { Authorization: "Bearer owner" },
+      data: { localId, ...changes },
+    },
+  );
+  expect(response.ok()).toBe(true);
+}
+
+/** The Auth emulator does not check signatures, so only the claims matter. */
+function unsignedToken(claims: Record<string, unknown>) {
+  const encode = (value: object) =>
+    Buffer.from(JSON.stringify(value)).toString("base64url");
+  return `${encode({ alg: "none", typ: "JWT" })}.${encode(claims)}.`;
+}
+
+function expiredToken(uid: string) {
+  const now = Math.floor(Date.now() / 1000);
+  return unsignedToken({
+    aud: project,
+    auth_time: now - 7200,
+    exp: now - 3600,
+    iat: now - 7200,
+    iss: `https://securetoken.google.com/${project}`,
+    sub: uid,
+    user_id: uid,
+  });
+}
+
+/** Opens a protected route carrying the token the worker would have forwarded. */
+async function openProfileWithBridgeToken(
+  browser: Browser,
+  token: string,
+): Promise<URL> {
+  const context = await browser.newContext({
+    baseURL: authTestOrigin,
+    extraHTTPHeaders: {
+      Authorization: `Bearer ${token}`,
+      "x-firebase-auth-bridge": "1",
+    },
+    serviceWorkers: "block",
+  });
+  try {
+    const page = await context.newPage();
+    await page.goto("/profile");
+    await expect(page).toHaveURL(/\/sign-in/);
+    return new URL(page.url());
+  } finally {
+    await context.close();
+  }
+}
+
+test.describe("server session verification", () => {
+  // Without a client session, both verdicts end at sign-in. Only the client gate
+  // knows the route, so `next` identifies which layer sent the visitor there.
+  test("accepts a valid token and leaves navigation to the client gate", async ({
+    browser,
+    request,
+  }) => {
+    const account = await createAccount(request, "bridge-valid");
+    const url = await openProfileWithBridgeToken(browser, account.idToken);
+    expect(url.searchParams.get("next")).toBe("/profile");
+  });
+
+  test("rejects a malformed token", async ({ browser }) => {
+    const url = await openProfileWithBridgeToken(browser, "not-a-token");
+    expect(url.searchParams.get("next")).toBe("/");
+  });
+
+  test("rejects an expired token", async ({ browser, request }) => {
+    const account = await createAccount(request, "bridge-expired");
+    const url = await openProfileWithBridgeToken(
+      browser,
+      expiredToken(account.localId),
+    );
+    expect(url.searchParams.get("next")).toBe("/");
+  });
+
+  test("rejects a token issued before revocation", async ({
+    browser,
+    request,
+  }) => {
+    const account = await createAccount(request, "bridge-revoked");
+    await updateAccount(request, account.localId, {
+      validSince: String(Math.floor(Date.now() / 1000) + 60),
+    });
+    const url = await openProfileWithBridgeToken(browser, account.idToken);
+    expect(url.searchParams.get("next")).toBe("/");
+  });
+
+  test("rejects the token of a disabled account", async ({
+    browser,
+    request,
+  }) => {
+    const account = await createAccount(request, "bridge-disabled");
+    await updateAccount(request, account.localId, { disableUser: true });
+    const url = await openProfileWithBridgeToken(browser, account.idToken);
+    expect(url.searchParams.get("next")).toBe("/");
+  });
+
+  test("rejects the token of a deleted account", async ({
+    browser,
+    request,
+  }) => {
+    const account = await createAccount(request, "bridge-deleted");
+    const deleted = await request.post(
+      `${emulator}/identitytoolkit.googleapis.com/v1/accounts:delete?key=emulator-only`,
+      { data: { idToken: account.idToken } },
+    );
+    expect(deleted.ok()).toBe(true);
+    const url = await openProfileWithBridgeToken(browser, account.idToken);
+    expect(url.searchParams.get("next")).toBe("/");
+  });
+
+  test("a rejected token cannot loop a client that is still signed in", async ({
+    browser,
+    request,
+  }) => {
+    const account = await createAccount(request, "bridge-loop");
+    const context = await browser.newContext({
+      baseURL: authTestOrigin,
+      serviceWorkers: "block",
+    });
+    try {
+      const page = await context.newPage();
+      await signIn(page, account.email);
+      await expect(page).toHaveURL(`${authTestOrigin}/`);
+
+      let protectedLoads = 0;
+      // Only the document request: Firebase SDK calls must keep their own auth.
+      await page.route("**/profile", (route) => {
+        // The home page also prefetches this route; only documents can loop.
+        if (!route.request().isNavigationRequest()) return route.continue();
+        protectedLoads += 1;
+        return route.continue({
+          headers: {
+            ...route.request().headers(),
+            authorization: "Bearer not-a-token",
+            "x-firebase-auth-bridge": "1",
+          },
+        });
+      });
+      await page.goto("/profile");
+
+      await expect(page).toHaveURL(`${authTestOrigin}/`, { timeout: 15_000 });
+      await expect(
+        page.getByRole("link", { name: "My profile" }),
+      ).toBeVisible();
+      await page.waitForTimeout(1_500);
+      await expect(page).toHaveURL(`${authTestOrigin}/`);
+      expect(protectedLoads).toBe(1);
+    } finally {
+      await context.close();
+    }
+  });
+});
+
+test("a first load without the worker still reaches the signed-in profile", async ({
+  browser,
+  request,
+}) => {
+  const account = await createAccount(request, "no-worker");
+  const context = await browser.newContext({
+    baseURL: authTestOrigin,
+    serviceWorkers: "block",
+  });
+  try {
+    const page = await context.newPage();
+    await signIn(page, account.email, signInUrlTo("/profile?tab=security"));
+    await expect(page).toHaveURL(`${authTestOrigin}/profile?tab=security`);
+    await expect(page.getByLabel("Email", { exact: true })).toHaveValue(
+      account.email,
+    );
+    await page.reload();
+    await expect(page.getByLabel("Email", { exact: true })).toHaveValue(
+      account.email,
+    );
+  } finally {
+    await context.close();
+  }
+});
+
+async function waitForActiveWorker(page: Page) {
+  await page.evaluate(async () => {
+    await navigator.serviceWorker.ready;
+  });
+  await expect
+    .poll(() =>
+      page.evaluate(() => Boolean(navigator.serviceWorker.controller)),
+    )
+    .toBe(true);
+}
+
+test("an active worker forwards a fresh token on navigation", async ({
+  context,
+  page,
+  request,
+}) => {
+  const account = await createAccount(request, "worker");
+  const forwarded: string[] = [];
+  context.on("request", (sent) => {
+    const { authorization, "x-firebase-auth-bridge": bridge } = sent.headers();
+    if (new URL(sent.url()).pathname === "/profile" && bridge === "1") {
+      forwarded.push(authorization ?? "");
+    }
+  });
+
+  await signIn(page, account.email);
+  await expect(page).toHaveURL("/");
+  await waitForActiveWorker(page);
+  // The worker's Auth instance learns of a page sign-in by polling IndexedDB, so
+  // a navigation right after it can legitimately carry no token yet.
+  await expect(async () => {
+    await page.goto("/profile");
+    await expect(page.getByLabel("Email", { exact: true })).toHaveValue(
+      account.email,
+    );
+    expect(forwarded.at(-1)).toMatch(/^Bearer ./);
+  }).toPass({ timeout: 15_000 });
+});
+
+test("a failed token refresh does not block navigation or loop", async ({
+  context,
+  page,
+  request,
+}) => {
+  const account = await createAccount(request, "refresh-failure");
+  await signIn(page, account.email);
+  await expect(page).toHaveURL("/");
+  await waitForActiveWorker(page);
+
+  await context.route("**/securetoken.googleapis.com/**", (route) =>
+    route.abort("failed"),
+  );
+  await page.goto("/profile");
+  await expect(page.getByLabel("Email", { exact: true })).toHaveValue(
+    account.email,
+  );
+  await expect(page).toHaveURL(`${authTestOrigin}/profile`);
+  await context.unrouteAll();
+});
+
+test("sign-out ends protected access, including history navigation", async ({
+  page,
+  request,
+}) => {
+  const account = await createAccount(request, "sign-out");
+  await signIn(page, account.email);
+  await expect(page).toHaveURL("/");
+  await page.getByRole("link", { name: "My profile" }).click();
+  await expect(page.getByLabel("Email", { exact: true })).toHaveValue(
+    account.email,
+  );
+  await page.getByRole("link", { name: "Back to Home" }).click();
+  await page.getByRole("button", { name: "Sign Out" }).click();
+  await expect(
+    page.getByRole("link", { name: "Sign in", exact: true }),
+  ).toBeVisible();
+
+  await page.goBack();
+  await expect(page).toHaveURL(
+    (url) =>
+      url.pathname === "/sign-in" &&
+      url.searchParams.get("next") === "/profile",
+  );
+  await expect(page.getByLabel("Email", { exact: true })).toHaveCount(0);
+
+  await page.goto("/profile");
+  await expect(page).toHaveURL(`${authTestOrigin}${signInUrlTo("/profile")}`);
+});
+
+test("switching accounts shows only the new account", async ({
+  page,
+  request,
+}) => {
+  const first = await createAccount(request, "switch-first");
+  const second = await createAccount(request, "switch-second");
+
+  await signIn(page, first.email, signInUrlTo("/profile"));
+  await expect(page.getByLabel("Email", { exact: true })).toHaveValue(
+    first.email,
+  );
+  await page.getByLabel("Name", { exact: true }).fill("First Account");
+  await page.getByRole("button", { name: "Save profile", exact: true }).click();
+  await expect(page.getByText("Profile saved")).toBeVisible();
+
+  await page.getByRole("link", { name: "Back to Home" }).click();
+  await page.getByRole("button", { name: "Sign Out" }).click();
+  await expect(
+    page.getByRole("link", { name: "Sign in", exact: true }),
+  ).toBeVisible();
+
+  await signIn(page, second.email, signInUrlTo("/profile"));
+  await expect(page.getByLabel("Email", { exact: true })).toHaveValue(
+    second.email,
+  );
+  await expect(page.getByLabel("Name", { exact: true })).toHaveValue("");
+});
+
+test("Firestore Rules follow the role claim of the presented token", async ({
+  request,
+}) => {
+  const owner = await createAccount(request, "claims-owner");
+  const reader = await createAccount(request, "claims-reader");
+  const documentUrl = `${firestoreEmulatorOrigin}/v1/projects/${project}/databases/(default)/documents/users/${owner.localId}`;
+  const read = async (idToken: string) =>
+    (
+      await request.get(documentUrl, {
+        headers: { Authorization: `Bearer ${idToken}` },
+      })
+    ).status();
+
+  const saved = await request.patch(documentUrl, {
+    headers: { Authorization: `Bearer ${owner.idToken}` },
+    data: { fields: { theme: { stringValue: "dark" } } },
+  });
+  expect(saved.ok()).toBe(true);
+  expect(await read(reader.idToken), "a plain user is denied").toBe(403);
+
+  await updateAccount(request, reader.localId, {
+    customAttributes: JSON.stringify({ role: "admin" }),
+  });
+  expect(await read(reader.idToken), "the old token has no new claim").toBe(
+    403,
+  );
+  const adminToken = await refreshIdToken(request, reader.refreshToken);
+  expect(await read(adminToken), "a refreshed token carries the claim").toBe(
+    200,
+  );
+
+  await updateAccount(request, reader.localId, {
+    customAttributes: JSON.stringify({}),
+  });
+  const demotedToken = await refreshIdToken(request, reader.refreshToken);
+  expect(await read(demotedToken), "demotion applies to a new token").toBe(403);
+  // Rules do not check revocation: an issued admin token stays valid there until
+  // it expires. Only `verifyIdToken(token, true)` rejects it earlier.
+  expect(await read(adminToken), "documented Rules limitation").toBe(200);
 });
 
 const accessibilityTags = [
@@ -284,8 +931,8 @@ test("@a11y authenticated profile has no detected WCAG A/AA violations", async (
   expect(created.ok()).toBeTruthy();
 
   await page.goto("/sign-in");
-  await page.getByLabel("Email Address").fill(email);
-  await page.locator("#password").fill(password);
+  await signInEmail(page).fill(email);
+  await signInPassword(page).fill(password);
   await page.getByRole("button", { name: "Sign In", exact: true }).click();
   await expect(page).toHaveURL("/");
   await page.goto("/profile");
@@ -324,11 +971,12 @@ for (const colorScheme of ["light", "dark"] as const) {
       );
       expect(created.ok()).toBeTruthy();
       await page.goto("/sign-in");
-      await page.getByLabel("Email Address").fill(email);
-      await page.locator("#password").fill(password);
+      await signInEmail(page).fill(email);
+      await signInPassword(page).fill(password);
       await page.getByRole("button", { name: "Sign In", exact: true }).click();
       await expect(page).toHaveURL("/");
       await page.goto("/profile");
+      await expect(page.getByLabel("Language", { exact: true })).toBeVisible();
 
       const card = page.locator('[data-slot="card"]').first();
       await expect(card).toBeVisible();

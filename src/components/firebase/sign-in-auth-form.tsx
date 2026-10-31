@@ -2,28 +2,33 @@
 
 import { Spinner } from "@/components/ui/spinner";
 
-import type { SignInAuthFormSchema } from "@firebase-oss/ui-core";
 import {
-  useSignInAuthFormAction,
+  signInWithEmailAndPassword,
+  type SignInAuthFormSchema,
+} from "@firebase-oss/ui-core";
+import {
   useSignInAuthFormSchema,
   useUI,
   type SignInAuthFormProps,
 } from "@firebase-oss/ui-react";
 import { useForm, FormProvider, Controller } from "react-hook-form";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import { FirebaseUIError, getTranslation } from "@firebase-oss/ui-core";
+import { getTranslation } from "@firebase-oss/ui-core";
+import { useId } from "react";
 
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Policies } from "./policies";
+import { getAuthErrorMessage } from "./auth-error-message";
 
 export type { SignInAuthFormProps };
 
 export function SignInAuthForm(props: SignInAuthFormProps) {
+  const emailId = useId();
+  const passwordId = useId();
   const ui = useUI();
   const schema = useSignInAuthFormSchema();
-  const action = useSignInAuthFormAction();
 
   const form = useForm<SignInAuthFormSchema>({
     resolver: standardSchemaResolver(schema),
@@ -36,13 +41,16 @@ export function SignInAuthForm(props: SignInAuthFormProps) {
 
   async function onSubmit(values: SignInAuthFormSchema) {
     try {
-      const credential = await action(values);
+      const credential = await signInWithEmailAndPassword(
+        ui,
+        values.email,
+        values.password,
+      );
       if (credential) {
         props.onSignIn?.(credential);
       }
     } catch (error) {
-      const message = error instanceof FirebaseUIError ? error.message : String(error);
-      form.setError("root", { message });
+      form.setError("root", { message: getAuthErrorMessage(error, ui) });
     }
   }
 
@@ -54,9 +62,9 @@ export function SignInAuthForm(props: SignInAuthFormProps) {
           name="email"
           render={({ field, fieldState }) => (
             <Field data-invalid={!!fieldState.error}>
-              <FieldLabel htmlFor="email">{getTranslation(ui, "labels", "emailAddress")}</FieldLabel>
-              <Input {...field} id="email" type="email" autoComplete="username" aria-invalid={!!fieldState.error} />
-              {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
+              <FieldLabel htmlFor={emailId}>{getTranslation(ui, "labels", "emailAddress")}</FieldLabel>
+              <Input {...field} id={emailId} type="email" autoComplete="username" aria-invalid={!!fieldState.error} aria-describedby={fieldState.error ? `${emailId}-error` : undefined} />
+              {fieldState.error && <FieldError id={`${emailId}-error`}>{fieldState.error.message}</FieldError>}
             </Field>
           )}
         />
@@ -65,7 +73,7 @@ export function SignInAuthForm(props: SignInAuthFormProps) {
           name="password"
           render={({ field, fieldState }) => (
             <Field data-invalid={!!fieldState.error}>
-              <FieldLabel htmlFor="password" className="flex items-center gap-2">
+              <FieldLabel htmlFor={passwordId} className="flex items-center gap-2">
                 <span className="grow">{getTranslation(ui, "labels", "password")}</span>
                 {props.onForgotPasswordClick ? (
                   <Button type="button" variant="link" onClick={props.onForgotPasswordClick} size="sm">
@@ -73,8 +81,8 @@ export function SignInAuthForm(props: SignInAuthFormProps) {
                   </Button>
                 ) : null}
               </FieldLabel>
-              <Input {...field} id="password" type="password" autoComplete="current-password" aria-invalid={!!fieldState.error} />
-              {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
+              <Input {...field} id={passwordId} type="password" autoComplete="current-password" aria-invalid={!!fieldState.error} aria-describedby={fieldState.error ? `${passwordId}-error` : undefined} />
+              {fieldState.error && <FieldError id={`${passwordId}-error`}>{fieldState.error.message}</FieldError>}
             </Field>
           )}
         />

@@ -3,7 +3,12 @@
 import type { ComponentProps } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Field, FieldContent, FieldTitle } from "@/components/ui/field";
+import {
+  Field,
+  FieldContent,
+  FieldError,
+  FieldTitle,
+} from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 import { useProfileAvatarFieldClient } from "../_hooks/use-profile-avatar-field-client";
 
@@ -19,9 +24,11 @@ function ProfileAvatarFieldClient({
     avatarSrc,
     avatarAlt,
     fallbackInitial,
+    errorMessage,
     fileInputRef,
     handleAvatarChange,
   } = useProfileAvatarFieldClient();
+  const errorId = "profile-avatar-error";
 
   return (
     <Field
@@ -61,9 +68,12 @@ function ProfileAvatarFieldClient({
         accept="image/jpeg,image/png,image/webp"
         className="sr-only"
         aria-label={t("profilePhotoChange")}
+        aria-invalid={Boolean(errorMessage)}
+        aria-describedby={errorMessage ? errorId : undefined}
         disabled={disabled}
         onChange={handleAvatarChange}
       />
+      {errorMessage && <FieldError id={errorId}>{errorMessage}</FieldError>}
     </Field>
   );
 }

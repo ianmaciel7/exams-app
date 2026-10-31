@@ -38,7 +38,7 @@ test.describe("home page smoke tests", () => {
         {
           name: localeCookie,
           value: locale,
-          url: "http://127.0.0.1:3000",
+          url: "http://127.0.0.1:4173",
         },
       ]);
       const response = await page.goto("/");
@@ -64,7 +64,7 @@ test.describe("home page smoke tests", () => {
       {
         name: localeCookie,
         value: "unsupported-locale",
-        url: "http://127.0.0.1:3000",
+        url: "http://127.0.0.1:4173",
       },
     ]);
     const response = await page.goto("/");
