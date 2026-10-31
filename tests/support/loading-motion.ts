@@ -4,6 +4,8 @@ type VisibleIndicator = {
   origin: "global" | "local";
   x: number;
   y: number;
+  iconX: number;
+  iconY: number;
   expectedX: number;
   expectedY: number;
 };
@@ -35,6 +37,8 @@ export async function installLoadingProbe(page: Page) {
         origin: "global" | "local";
         x: number;
         y: number;
+        iconX: number;
+        iconY: number;
         expectedX: number;
         expectedY: number;
       }[];
@@ -89,6 +93,9 @@ export async function installLoadingProbe(page: Page) {
         .filter(isRendered)
         .map((element) => {
           const rect = element.getBoundingClientRect();
+          const icon = element.querySelector('[data-slot="spinner"]');
+          if (!icon) throw new Error("Labeled loading indicator has no icon");
+          const iconBox = icon.getBoundingClientRect();
           const overlay = element.closest('[data-slot="loading-overlay"]');
           const center = overlay?.firstElementChild?.getBoundingClientRect();
           return {
@@ -97,6 +104,8 @@ export async function installLoadingProbe(page: Page) {
               : ("local" as const),
             x: rect.left + rect.width / 2,
             y: rect.top + rect.height / 2,
+            iconX: iconBox.left + iconBox.width / 2,
+            iconY: iconBox.top + iconBox.height / 2,
             expectedX: center ? center.left + center.width / 2 : 0,
             expectedY: center ? center.top + center.height / 2 : 0,
           };
@@ -111,10 +120,12 @@ export async function installLoadingProbe(page: Page) {
       const signature = JSON.stringify({
         path: frame.path,
         pending,
-        visible: visible.map(({ origin, x, y }) => ({
+        visible: visible.map(({ origin, x, y, iconX, iconY }) => ({
           origin,
           x: Math.round(x * 10) / 10,
           y: Math.round(y * 10) / 10,
+          iconX: Math.round(iconX * 10) / 10,
+          iconY: Math.round(iconY * 10) / 10,
         })),
       });
       // Record every active frame and every change of state. Cap memory while
@@ -200,6 +211,14 @@ export function assertLoadingTrace(
         expect(
           Math.abs(indicator.y - reference.y),
           `${scenario}: vertical jump across loading phases`,
+        ).toBeLessThanOrEqual(1);
+        expect(
+          Math.abs(indicator.iconX - reference.iconX),
+          `${scenario}: spinner icon jumped horizontally`,
+        ).toBeLessThanOrEqual(1);
+        expect(
+          Math.abs(indicator.iconY - reference.iconY),
+          `${scenario}: spinner icon jumped vertically`,
         ).toBeLessThanOrEqual(1);
       } else {
         reference = indicator;
