@@ -28,9 +28,7 @@ function ProfileSaveButton({
       focusableWhenDisabled
     >
       {isSubmitting && <Spinner data-icon="inline-start" aria-hidden="true" />}
-      {isSubmitting
-        ? (children ?? t("savingProfile"))
-        : (children ?? t("saveProfile"))}
+      {children ?? t(isSubmitting ? "savingProfile" : "saveProfile")}
     </Button>
   );
 }
