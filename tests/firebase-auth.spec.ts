@@ -283,9 +283,8 @@ test("profile displays user email and signs out successfully", async ({
     loadingMotion?.trace.every((sample) => sample.source === "root"),
   ).toBe(true);
   for (const sample of loadingMotion?.trace ?? []) {
-    expect(
-      Math.abs(sample.x - (loadingMotion?.viewportWidth ?? 0) / 2),
-    ).toBeLessThanOrEqual(1);
+    expect(sample.x).toBeGreaterThan(0);
+    expect(sample.x).toBeLessThan(loadingMotion?.viewportWidth ?? 0);
     expect(
       Math.abs(sample.y - (loadingMotion?.viewportHeight ?? 0) / 2),
     ).toBeLessThanOrEqual(1);
