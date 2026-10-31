@@ -12,7 +12,7 @@ import {
 import { useForm, FormProvider, Controller } from "react-hook-form";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { getTranslation } from "@firebase-oss/ui-core";
-import { useState } from "react";
+import { useId, useState } from "react";
 
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -23,6 +23,7 @@ import { getAuthErrorMessage } from "./auth-error-message";
 export type { ForgotPasswordAuthFormProps };
 
 export function ForgotPasswordAuthForm(props: ForgotPasswordAuthFormProps) {
+  const emailId = useId();
   const ui = useUI();
   const schema = useForgotPasswordAuthFormSchema();
   const action = useForgotPasswordAuthFormAction();
@@ -62,9 +63,9 @@ export function ForgotPasswordAuthForm(props: ForgotPasswordAuthFormProps) {
           name="email"
           render={({ field, fieldState }) => (
             <Field data-invalid={!!fieldState.error}>
-              <FieldLabel htmlFor="email">{getTranslation(ui, "labels", "emailAddress")}</FieldLabel>
-              <Input {...field} id="email" type="email" autoComplete="email" aria-invalid={!!fieldState.error} />
-              {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
+              <FieldLabel htmlFor={emailId}>{getTranslation(ui, "labels", "emailAddress")}</FieldLabel>
+              <Input {...field} id={emailId} type="email" autoComplete="email" aria-invalid={!!fieldState.error} aria-describedby={fieldState.error ? `${emailId}-error` : undefined} />
+              {fieldState.error && <FieldError id={`${emailId}-error`}>{fieldState.error.message}</FieldError>}
             </Field>
           )}
         />

@@ -14,9 +14,9 @@ All 474 Markdown documents in the installed Next.js bundle were inventoried by
 path and title. Individual bodies were consulted for the index, Proxy, and
 handler/cache boundaries. API/version guidance outside those reads still needs
 verification before implementation. The live Context7 Next.js corpus includes
-canary material and did not advertise the exact installed 16.4.2 snapshot.
+canary material and did not advertise the exact installed 16.4.3 snapshot.
 
-The project declares Next.js 16.4.2, React/React DOM 19.3.1, Compiler 1.0.0,
+The project declares Next.js 16.4.3, React/React DOM 19.3.1, Compiler 1.0.0,
 and shadcn ^4.22.0. The implemented UI uses `base-nova`, Base UI, Tailwind v4,
 and Lucide. Configuration and installed source establish applicability, not a
 live upstream example. [Version applicability](react-versions.md) distinguishes

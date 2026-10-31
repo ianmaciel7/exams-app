@@ -26,6 +26,10 @@ regressions, and structural ast-grep checks, including migrated route rules for
 client directives, hooks, and JSX event handlers. Browser, end-to-end, visual,
 and mutation suites run separately.
 
+Vitest Browser Mode binds its local API on port 4174. Keep this separate from
+the Playwright production E2E server on 4173 and outside Windows' commonly
+reserved high-port range; Vite may advance to the next available port if needed.
+
 `pnpm check:ui-state` runs positive and negative AST fixtures, then scans
 application TypeScript and TSX for direct `String(error|cause|err)` coercion
 that reaches JSX, React Hook Form error sinks, or toast payloads. It runs in
@@ -38,7 +42,10 @@ browser, including its loading, error, and localized states where applicable.
 
 ## Production server startup
 
-The ordinary Playwright suite runs `pnpm build && pnpm start`. Its five-minute
+The ordinary Playwright suite runs `pnpm build && pnpm start --port 4173` and
+always starts its own server. It must not reuse an already-running local server:
+that can silently test a stale build. Browser base URLs and locale-cookie setup
+use the same isolated port. Its five-minute
 `webServer.timeout` covers both the production build and the readiness check;
 it is separate from individual test timeouts. The Firebase emulator development
 server retains its two-minute startup limit. Build output is piped into the

@@ -1,5 +1,9 @@
 # Coding Standards
 
+The evidence-backed applicability matrix for external web standards lives in
+[quality standards](docs/agents/quality-standards.md). This guide owns source
+conventions and implementation boundaries.
+
 ## Sources of truth
 
 When standards conflict, apply them in this order:
@@ -543,7 +547,7 @@ sign-in redirects. `authRoutes` also drives the auth-route exclusion in
 presentation-screen rule below still applies: screens receive callbacks and do
 not import `routes`; route-private composition roots and hooks do.
 
-With installed Next.js 16.4.2, use the error boundary's `retry()` for an action
+With installed Next.js 16.4.3, use the error boundary's `retry()` for an action
 that promises to retry a failed read. `reset()` only clears and rerenders the
 boundary state; it is not equivalent to refetching.
 

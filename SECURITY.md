@@ -1,5 +1,9 @@
 # Security Policy
 
+The project-specific security applicability and evidence status for HTTP
+headers, authentication, authorization, and security testing is tracked in
+[quality standards](docs/agents/quality-standards.md#status-and-evidence-model).
+
 <!-- cspell:words gaxios -->
 
 ## Supported versions

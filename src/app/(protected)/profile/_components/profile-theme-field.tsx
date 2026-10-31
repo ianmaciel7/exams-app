@@ -41,6 +41,7 @@ function ProfileThemeField(props: ProfileThemeFieldProps) {
               id={id}
               className="w-full"
               aria-invalid={fieldState.invalid}
+              aria-describedby={fieldState.invalid ? `${id}-error` : undefined}
               onBlur={field.onBlur}
             >
               <SelectValue>
@@ -61,7 +62,9 @@ function ProfileThemeField(props: ProfileThemeFieldProps) {
               </SelectGroup>
             </SelectContent>
           </Select>
-          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          {fieldState.invalid && (
+            <FieldError id={`${id}-error`} errors={[fieldState.error]} />
+          )}
         </Field>
       )}
     />

@@ -204,9 +204,9 @@
     "semantic_hash": ""
   },
   "package.json": {
-    "mtime": 1793379764.0369973,
-    "seen": 1793398216.8266919,
-    "ast_hash": "d78749917530b36bbe0d7333548014b4",
+    "mtime": 1793401988.359203,
+    "seen": 1793402754.6410875,
+    "ast_hash": "9ea097b4560d9b304b34949654671f75",
     "semantic_hash": ""
   },
   "playwright.config.ts": {
@@ -282,10 +282,10 @@
     "semantic_hash": ""
   },
   "src/app/(protected)/profile/_components/profile-avatar-field-client.tsx": {
-    "mtime": 1793371836.2507794,
-    "seen": 1793398216.8268237,
-    "ast_hash": "262b85d0d3fdd43c2ab18dae52fc7703",
-    "semantic_hash": "262b85d0d3fdd43c2ab18dae52fc7703"
+    "mtime": 1793402309.2411852,
+    "seen": 1793402754.6411808,
+    "ast_hash": "8d734f80968bed5a3a234e2495071140",
+    "semantic_hash": ""
   },
   "src/app/(protected)/profile/_components/profile-back-to-home-button.tsx": {
     "mtime": 1793371836.251781,
@@ -318,10 +318,10 @@
     "semantic_hash": "50652a1f9e8d3c249c73592ab3edd1ac"
   },
   "src/app/(protected)/profile/_components/profile-form-client.tsx": {
-    "mtime": 1793371836.2582998,
-    "seen": 1793398216.8268394,
-    "ast_hash": "9f44142d942110df767bed89c9c9946c",
-    "semantic_hash": "9f44142d942110df767bed89c9c9946c"
+    "mtime": 1793402246.1867375,
+    "seen": 1793402754.6411953,
+    "ast_hash": "86afd73b5614d67e7ef2f9c6bfcd85eb",
+    "semantic_hash": ""
   },
   "src/app/(protected)/profile/_components/profile-locale-field.tsx": {
     "mtime": 1793371836.2605379,
@@ -336,9 +336,9 @@
     "semantic_hash": "f8b19ae4eea1bc68238b9b09c9798d4a"
   },
   "src/app/(protected)/profile/_components/profile-section-client.test.tsx": {
-    "mtime": 1793379268.4257395,
-    "seen": 1793398216.826851,
-    "ast_hash": "97220ebcc7f0d36456414124ab079276",
+    "mtime": 1793402329.5954344,
+    "seen": 1793402754.641204,
+    "ast_hash": "4d948471bd532b66ce07a49e8b0fc870",
     "semantic_hash": ""
   },
   "src/app/(protected)/profile/_components/profile-section-client.tsx": {
@@ -360,22 +360,22 @@
     "semantic_hash": "439fc663dc9b5bf6b045313b3bba4777"
   },
   "src/app/(protected)/profile/_hooks/use-profile-avatar-field-client.ts": {
-    "mtime": 1793371836.2700536,
-    "seen": 1793398216.8268611,
-    "ast_hash": "e29e26ce5f9047e49e68dc056a8ebb49",
-    "semantic_hash": "e29e26ce5f9047e49e68dc056a8ebb49"
+    "mtime": 1793402248.0983932,
+    "seen": 1793402754.641213,
+    "ast_hash": "57fd1ba72d387f8f2ded1f65f7939b2b",
+    "semantic_hash": ""
   },
   "src/app/(protected)/profile/_hooks/use-profile-avatar.ts": {
-    "mtime": 1793371836.27258,
-    "seen": 1793398216.8268635,
-    "ast_hash": "b4c825c68df5f2243a63150ad47efa4a",
-    "semantic_hash": "b4c825c68df5f2243a63150ad47efa4a"
+    "mtime": 1793402257.7151237,
+    "seen": 1793402754.6412146,
+    "ast_hash": "4c2918a23551e97ea4c7a10549b1fffb",
+    "semantic_hash": ""
   },
   "src/app/(protected)/profile/_hooks/use-profile-form-client.ts": {
-    "mtime": 1793371836.2735806,
-    "seen": 1793398216.8268666,
-    "ast_hash": "01299d46868e6e8d97f55acf4861efb5",
-    "semantic_hash": "01299d46868e6e8d97f55acf4861efb5"
+    "mtime": 1793402245.2888496,
+    "seen": 1793402754.6412163,
+    "ast_hash": "56ca1ddae7ee2e98790a71e7056db143",
+    "semantic_hash": ""
   },
   "src/app/(protected)/profile/_hooks/use-profile-preferences.ts": {
     "mtime": 1793379268.4282484,
@@ -426,9 +426,9 @@
     "semantic_hash": "70f9628857070df0797c914ffc3f5240"
   },
   "src/app/(protected)/profile/_hooks/use-profile-submit.ts": {
-    "mtime": 1793371836.2913227,
-    "seen": 1793398216.82689,
-    "ast_hash": "1ddadbdea9107a1f45b676e4597281e6",
+    "mtime": 1793402256.9422448,
+    "seen": 1793402754.6412382,
+    "ast_hash": "6c6194866abb8d8fa3910c501609db3b",
     "semantic_hash": ""
   },
   "src/app/(protected)/profile/_lib/avatar.test.ts": {
@@ -990,9 +990,9 @@
     "semantic_hash": ""
   },
   "src/components/firebase/email-link-auth-form.tsx": {
-    "mtime": 1793379764.05019,
-    "seen": 1793398216.827112,
-    "ast_hash": "b25e87c9cd58b09409950791ba965acf",
+    "mtime": 1793401392.778759,
+    "seen": 1793402754.6414819,
+    "ast_hash": "f9b4601f58990f04301e6290ea6a0ce8",
     "semantic_hash": ""
   },
   "src/components/firebase/email-link-auth-screen.tsx": {
@@ -1008,9 +1008,9 @@
     "semantic_hash": ""
   },
   "src/components/firebase/forgot-password-auth-form.tsx": {
-    "mtime": 1793379764.0518248,
-    "seen": 1793398216.8271165,
-    "ast_hash": "a101ca280506459c255beeb4e861ce6a",
+    "mtime": 1793401391.3828368,
+    "seen": 1793402754.6414862,
+    "ast_hash": "190c6bb7bfe2450735cfa479b7fc0b61",
     "semantic_hash": ""
   },
   "src/components/firebase/forgot-password-auth-screen.tsx": {
@@ -1062,9 +1062,9 @@
     "semantic_hash": ""
   },
   "src/components/firebase/oauth-button.tsx": {
-    "mtime": 1793194019.907362,
-    "seen": 1793398216.827131,
-    "ast_hash": "f5912dccad3d8f3f23b24360b33a60ef",
+    "mtime": 1793401421.9574885,
+    "seen": 1793402754.6415033,
+    "ast_hash": "5733c7c34974172b2a83cdea66f21827",
     "semantic_hash": ""
   },
   "src/components/firebase/oauth-screen.tsx": {
@@ -1074,9 +1074,9 @@
     "semantic_hash": ""
   },
   "src/components/firebase/phone-auth-form.tsx": {
-    "mtime": 1793379764.0585325,
-    "seen": 1793398216.8271337,
-    "ast_hash": "a27d25b45ee885428e0afa3f10d5d2b5",
+    "mtime": 1793401407.5666049,
+    "seen": 1793402754.6415076,
+    "ast_hash": "c6d02671a443950181a962978fadfd23",
     "semantic_hash": ""
   },
   "src/components/firebase/phone-auth-screen.tsx": {
@@ -1092,15 +1092,15 @@
     "semantic_hash": ""
   },
   "src/components/firebase/redirect-error.tsx": {
-    "mtime": 1793194019.911245,
-    "seen": 1793398216.8271406,
-    "ast_hash": "141be407959afdbd5270408185a81069",
+    "mtime": 1793401393.9833975,
+    "seen": 1793402754.6415167,
+    "ast_hash": "c5cc901749dded435d7806a2d107c2d9",
     "semantic_hash": ""
   },
   "src/components/firebase/sign-in-auth-form.tsx": {
-    "mtime": 1793379764.061038,
-    "seen": 1793398216.8271415,
-    "ast_hash": "91cb40487ecf019e4306d38506652b39",
+    "mtime": 1793401388.8208163,
+    "seen": 1793402754.6415179,
+    "ast_hash": "f75d92369bd02e7508813747955220ba",
     "semantic_hash": ""
   },
   "src/components/firebase/sign-in-auth-screen.tsx": {
@@ -1110,9 +1110,9 @@
     "semantic_hash": ""
   },
   "src/components/firebase/sign-up-auth-form.tsx": {
-    "mtime": 1793379764.0628786,
-    "seen": 1793398216.8271441,
-    "ast_hash": "adfca033a8d9a3bf420d956db60fd811",
+    "mtime": 1793401389.9788058,
+    "seen": 1793402754.6415205,
+    "ast_hash": "d5ddd4d2f7320cd3ba0b331c291db053",
     "semantic_hash": ""
   },
   "src/components/firebase/sign-up-auth-screen.tsx": {
@@ -1122,27 +1122,27 @@
     "semantic_hash": ""
   },
   "src/components/firebase/sms-multi-factor-assertion-form.tsx": {
-    "mtime": 1793194019.9142592,
-    "seen": 1793398216.827147,
-    "ast_hash": "eff58c059940e32da2e834370265b554",
+    "mtime": 1793401408.4339237,
+    "seen": 1793402754.6415231,
+    "ast_hash": "56d6b37383ef6698d067095e892bd005",
     "semantic_hash": ""
   },
   "src/components/firebase/sms-multi-factor-enrollment-form.tsx": {
-    "mtime": 1793379764.0659096,
-    "seen": 1793398216.8271484,
-    "ast_hash": "92a412033671fe27447922d6b283f232",
+    "mtime": 1793401412.8912444,
+    "seen": 1793402754.6415246,
+    "ast_hash": "c7c0d0d160ecf92281393c2c3ee2b999",
     "semantic_hash": ""
   },
   "src/components/firebase/totp-multi-factor-assertion-form.tsx": {
-    "mtime": 1793194019.914764,
-    "seen": 1793398216.82715,
-    "ast_hash": "ddfa7d37ca02060ab6e0932162b6d263",
+    "mtime": 1793401413.6763356,
+    "seen": 1793402754.6415257,
+    "ast_hash": "8858a1442384eee64594c034b92d1f45",
     "semantic_hash": ""
   },
   "src/components/firebase/totp-multi-factor-enrollment-form.tsx": {
-    "mtime": 1793379764.0674121,
-    "seen": 1793398216.8271532,
-    "ast_hash": "cbd6dd8bc207223bdbfe4ca78195df6e",
+    "mtime": 1793401414.5479038,
+    "seen": 1793402754.6415284,
+    "ast_hash": "7fd53c4e20ce5974ea3791d3bfe8263b",
     "semantic_hash": ""
   },
   "src/components/firebase/twitter-sign-in-button.tsx": {
@@ -2226,9 +2226,9 @@
     "semantic_hash": ""
   },
   "AGENTS.md": {
-    "mtime": 1793397607.2277215,
-    "seen": 1793398216.8282013,
-    "ast_hash": "bd9adf659c921d9ddb5c26ddf1112840",
+    "mtime": 1793401988.3606637,
+    "seen": 1793402754.6423774,
+    "ast_hash": "a122af78f04a9ac82d03803ef786ad16",
     "semantic_hash": ""
   },
   "ARCHITECTURE.md": {
@@ -2280,21 +2280,21 @@
     "semantic_hash": ""
   },
   "TESTING.md": {
-    "mtime": 1793397607.2316146,
-    "seen": 1793398216.8282247,
-    "ast_hash": "d17d22de0405e617d5e4c7628697299d",
+    "mtime": 1793402038.9638844,
+    "seen": 1793402754.6424046,
+    "ast_hash": "86cd8ab94b1503d8ff90e522f4426b3c",
     "semantic_hash": ""
   },
   "TOOLING.md": {
-    "mtime": 1793398058.321169,
-    "seen": 1793398216.8282268,
-    "ast_hash": "a5741e1cf11b1994ada6505d490671e9",
+    "mtime": 1793402047.055169,
+    "seen": 1793402754.642407,
+    "ast_hash": "8767e1a3c85d1fb142602d8712d9dbef",
     "semantic_hash": ""
   },
   "docs/README.md": {
-    "mtime": 1793398181.3422794,
-    "seen": 1793398216.8282313,
-    "ast_hash": "79061f76674f9f56bcdb0a8cf33ab268",
+    "mtime": 1793401988.3606637,
+    "seen": 1793402754.6424117,
+    "ast_hash": "90841351089d0935a531db6e7ef7b384",
     "semantic_hash": ""
   },
   "docs/adr/0001-configure-nextjs.md": {
@@ -2706,9 +2706,9 @@
     "semantic_hash": ""
   },
   ".agents/rules/README.md": {
-    "mtime": 1793397607.2202098,
-    "seen": 1793398216.827465,
-    "ast_hash": "adeabf81a0a9eb71d8bede1fecb1d008",
+    "mtime": 1793401988.3606637,
+    "seen": 1793402754.641767,
+    "ast_hash": "81b3303a493939408b2b869a389cac9b",
     "semantic_hash": ""
   },
   ".agents/rules/adr.md": {
@@ -4320,9 +4320,9 @@
     "semantic_hash": ""
   },
   ".agents/rules/testing.md": {
-    "mtime": 1793397607.2247226,
-    "seen": 1793398216.8275268,
-    "ast_hash": "fc73c4b7358bf1d4b414392326f6f50e",
+    "mtime": 1793402035.1208355,
+    "seen": 1793402754.6418297,
+    "ast_hash": "f3c3ade1b45e41e0da6878b6361bff0c",
     "semantic_hash": ""
   },
   ".ast-grep/rule-tests/base-ui/menu-item-on-click-test.yml": {
@@ -4557,6 +4557,48 @@
     "mtime": 1793399689.59561,
     "seen": 1793400468.4093819,
     "ast_hash": "b4c6dcc46420c7b4184d6188b386326d",
+    "semantic_hash": ""
+  },
+  "scripts/checks/check-ui-state.mjs": {
+    "mtime": 1793402290.9521809,
+    "seen": 1793402754.6411314,
+    "ast_hash": "3d8a0391ca11521481f6714d8ab4c600",
+    "semantic_hash": ""
+  },
+  "scripts/checks/check-ui-state.test.mjs": {
+    "mtime": 1793402290.9521809,
+    "seen": 1793402754.6411335,
+    "ast_hash": "8365e2f3d3dd1acfbed5d92ce1ad933f",
+    "semantic_hash": ""
+  },
+  "src/components/firebase/auth-error-message.test.ts": {
+    "mtime": 1793402476.1752388,
+    "seen": 1793402754.6414773,
+    "ast_hash": "a591cf0747f4790b9620103e9e02799d",
+    "semantic_hash": ""
+  },
+  "src/components/firebase/auth-error-message.ts": {
+    "mtime": 1793401386.2931077,
+    "seen": 1793402754.641479,
+    "ast_hash": "653d6b63b290997ae5a16fc9815e2699",
+    "semantic_hash": ""
+  },
+  "src/components/firebase/oauth-button.test.tsx": {
+    "mtime": 1793402437.0603924,
+    "seen": 1793402754.6415007,
+    "ast_hash": "e59b72547bffc0fe9601085b2ca1f189",
+    "semantic_hash": ""
+  },
+  ".agents/rules/ui-state.md": {
+    "mtime": 1793401938.1678154,
+    "seen": 1793402754.6418312,
+    "ast_hash": "445cc30100c8ebc9dde248782cf7bdc1",
+    "semantic_hash": ""
+  },
+  "docs/ui-state-feedback.md": {
+    "mtime": 1793402706.25059,
+    "seen": 1793402754.642523,
+    "ast_hash": "14cf41b9bd3dd38af2bf5dea452819b2",
     "semantic_hash": ""
   }
 }

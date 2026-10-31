@@ -4,11 +4,11 @@ Read this guide when checking framework compatibility or planning an upgrade.
 
 ## Local evidence
 
-Checked on 2026-10-27 without changing dependencies:
+Checked on 2026-10-30 without changing dependencies:
 
 | Item | Value |
 | --- | --- |
-| Next.js (`package.json`, installed) | 16.4.2 |
+| Next.js (`package.json`, installed) | 16.4.3 |
 | React / React DOM | 19.3.1 |
 | React Compiler plugin | 1.0.0 |
 | Router | App Router only |
@@ -20,7 +20,7 @@ Checked on 2026-10-27 without changing dependencies:
 ## What the evidence covers
 
 The installed documentation bundle is the version authority. Context7 can include
-canary material and did not advertise the exact 16.4.2 snapshot, so an upstream
+canary material and did not advertise the exact 16.4.3 snapshot, so an upstream
 example is a lead, not proof. Confirm each API in the installed documentation
 (`node_modules/next/dist/docs/`) and, where behavior matters, in a running build.
 

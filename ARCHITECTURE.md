@@ -1,5 +1,9 @@
 # Architecture
 
+The repository's standards applicability and evidence register is maintained
+in [quality standards](docs/agents/quality-standards.md); this document owns
+the runtime and data-boundary architecture behind those findings.
+
 ## Overview
 
 This repository is a Next.js 16 application using the App Router, React 19,
@@ -230,7 +234,7 @@ checks local contracts and leaves complete graph validation to Next.js.
 
 ## Next.js rendering and cache model
 
-The installed Next.js 16.4.2 configuration explicitly enables both
+The installed Next.js 16.4.3 configuration explicitly enables both
 `cacheComponents` and `partialPrefetching`. The applicable model combines a
 prerendered shell, cached work, and request-time streamed content. Guidance for
 caching without Cache Components and Pages Router APIs remains migration

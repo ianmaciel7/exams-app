@@ -28,8 +28,11 @@ function ProfileDisplayNameField(props: ProfileDisplayNameFieldProps) {
             placeholder={t("notSet")}
             maxLength={100}
             aria-invalid={fieldState.invalid}
+            aria-describedby={fieldState.invalid ? `${id}-error` : undefined}
           />
-          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          {fieldState.invalid && (
+            <FieldError id={`${id}-error`} errors={[fieldState.error]} />
+          )}
         </Field>
       )}
     />

@@ -1,23 +1,69 @@
 # Quality standards
 
-<!-- cspell:words CLDR bidi DTCG ASVS MASVS LGPD -->
+<!-- cspell:words CLDR bidi DTCG ASVS MASVS LGPD PKCE HSTS -->
 
 The project owner's agreed list of external standards for auditing the app.
-Use it to choose which standard a change must satisfy and to find gaps. Status
-says how the repository checks each one today: **automated** means a check fails
-in CI and in the Firebase CD `browser-checks` job, **partial** means only part of
-the standard is machine-checkable, and **gap** means nothing checks it yet.
+This is the central applicability and evidence register for web quality
+standards. It distinguishes normative requirements, best current practice,
+implementation guidance, and local conventions. A standard's presence here
+does not make every provision applicable or prove conformance.
 
-## Accessibility
+## Status and evidence model
 
-| Standard | Status | Coverage |
-| --- | --- | --- |
-| [WCAG 2.2](https://www.w3.org/TR/WCAG22/) | Automated (partial) | axe A/AA on desktop and mobile; reflow 1.4.10, text spacing 1.4.12, input purpose 1.3.5, and motion 2.3.3 have dedicated tests. Keyboard and screen-reader behavior stay manual. |
-| [Target Size](https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum) | Automated | 24px on desktop (`check:responsiveness`, `responsive.spec.ts`), 44px on coarse pointers (`mobile.spec.ts`). |
-| [WAI-ARIA 1.2](https://www.w3.org/TR/wai-aria-1.2/), [ARIA APG](https://www.w3.org/WAI/ARIA/apg/) | Partial | axe validates roles and attributes; Base UI provides the keyboard patterns, which are not tested one by one. |
-| [WAI Forms Tutorial](https://www.w3.org/WAI/tutorials/forms/) | Partial | Labels (axe), autofill tokens, and 16px field text. |
-| [WCAG2ICT](https://www.w3.org/WAI/standards-guidelines/wcag/non-web-ict/), [EN 301 549](https://www.etsi.org/technologies/human-factors-accessibility) | Indirect | EN 301 549 references WCAG AA for web content. |
-| [Android accessibility](https://developer.android.com/guide/topics/ui/accessibility/apps) | Partial | 44px targets and Android device emulation. |
+Use `Compliant` only for the stated, scoped requirement when implementation and
+an appropriate check support it. `Partial` means evidence covers only part of
+the applicable requirement. `Non-compliant` means a known, reproducible gap
+exists. `Not verified` means the evidence is insufficient. `Not applicable`
+requires a repository-specific reason. Automated checks are evidence only for
+the scenarios they exercise; axe, static scans, Lighthouse, and mocks do not
+prove complete standards conformance, real-user performance, or production
+provider behavior.
+
+| Requirement / source | Reference class | Applies to | Current status and implementation evidence | Gap / priority |
+| --- | --- | --- | --- | --- |
+| WCAG 2.2 A/AA, including 1.1.1, 1.3.1, 1.4.3, 1.4.10, 1.4.11, 1.4.12, 2.1.1, 2.4.3, 2.4.7, 2.4.11, 2.5.8, 3.3.1, 3.3.3, 4.1.2, 4.1.3 | Normative Standard: [WCAG 2.2 conformance](https://www.w3.org/TR/WCAG22/#conformance) and [success criteria](https://www.w3.org/TR/WCAG22/#guidelines) | All user-facing routes and interactions | **Partial** — Playwright axe A/AA, responsive, text-spacing, target-size, reduced-motion, and selected user-journey checks run in CI. Sign-in/register/recovery/profile field errors now connect `aria-invalid` controls to inline `FieldError`; Firebase Emulator journey checks this on recovery. | Keyboard/focus and screen-reader review remains manual; MFA/phone form associations and every criterion are not covered end-to-end. Priority: P1 for inaccessible critical errors; otherwise ongoing. |
+| WAI-ARIA 1.2 and APG alert/dialog/widget patterns | Normative semantics plus Implementation Guidance: [WAI-ARIA 1.2](https://www.w3.org/TR/wai-aria-1.2/), [APG Alert](https://www.w3.org/WAI/ARIA/apg/patterns/alert/), [forms notifications](https://www.w3.org/WAI/tutorials/forms/notifications/) | Dynamic status, errors, dialogs, custom controls | **Partial** — native HTML and Base UI patterns are used; `FieldError` exposes `role="alert"`; axe and selected keyboard journeys run. | No complete per-widget APG keyboard matrix or assistive-technology verification. Avoid claiming APG conformance from axe alone. |
+| HTML Living Standard, DOM, Fetch, URL, CSS, ECMAScript / ECMA-402 | Normative Standards: [HTML](https://html.spec.whatwg.org/), [DOM](https://dom.spec.whatwg.org/), [Fetch](https://fetch.spec.whatwg.org/), [URL](https://url.spec.whatwg.org/), [CSS](https://www.w3.org/TR/css/), [ECMAScript](https://tc39.es/ecma262/), [ECMA-402](https://tc39.es/ecma402/) | Browser output, APIs, styling, locale formatting | **Partial** — TypeScript, Biome, Next build, browser tests and locale catalogs validate selected contracts; installed browser tests run Chromium. | Not a full conformance suite. Firefox/WebKit and broader CSS Baseline compatibility are not currently part of the configured critical journey matrix. |
+| HTTP semantics and caching (RFC 9110, 9111), cookies (RFC 6265), URI (RFC 3986), date/JSON formats (RFC 3339, 8259) | Normative Standards: [RFC 9110](https://www.rfc-editor.org/rfc/rfc9110), [RFC 9111](https://www.rfc-editor.org/rfc/rfc9111), [RFC 6265](https://www.rfc-editor.org/rfc/rfc6265), [RFC 3986](https://www.rfc-editor.org/rfc/rfc3986), [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339), [RFC 8259](https://www.rfc-editor.org/rfc/rfc8259) | Next.js responses, service-worker token bridge, Firebase SDK calls | **Partial** — HTTP response smoke tests, configured response headers, same-origin service-worker bridge, Firebase callable SDK and browser journeys are covered. | No first-party REST Route Handler or Server Action contract exists; there is no app-owned Problem Details/OpenAPI/JSON Patch API. Firebase-managed wire formats are not redefined. Audit cache/cookie behavior at deploy boundary remains limited. |
+| CORS, CSRF, content negotiation and redirects | Platform/HTTP requirements applied to the actual request boundary | Browser-to-Firebase SDK requests and same-origin Firebase session bridge | **Not applicable** for a custom app API policy — there is no app-owned cross-origin HTTP API or session-cookie endpoint; redirects are constrained by the safe return-URL module and browser journeys. | Provider-managed Firebase CORS behavior and deployed hosting redirects are outside this local test boundary; re-evaluate if custom endpoints or cookies are introduced. |
+| RFC 9457 Problem Details, OpenAPI, JSON Schema, JSON Patch | Normative/registry standards | App-owned HTTP APIs only | **Not applicable** — source inventory has no app-owned Next Route Handler or Server Action response API; Firebase callable functions retain their SDK contract. | Reassess when an app-owned HTTP API is introduced. |
+| OAuth 2.0 Security BCP (RFC 9700), PKCE (RFC 7636), JWT BCP (RFC 8725), Firebase Auth | Normative Standards plus vendor Implementation Guidance: [RFC 9700](https://www.rfc-editor.org/rfc/rfc9700), [RFC 7636](https://www.rfc-editor.org/rfc/rfc7636), [RFC 8725](https://www.rfc-editor.org/rfc/rfc8725), [Firebase Google sign-in](https://firebase.google.com/docs/auth/web/google-signin) | Firebase identity, ID-token verification, role and data access | **Partial** — Firebase Auth Emulator browser journeys, blocking-function allowlists, revocation-aware Admin token verification, owner/admin Firestore rules, owner Storage rules, closed RTDB rules, and security scans are present. | Emulator does not validate actual Google consent/provider/browser popup behavior or production IAM. Deployed OAuth and permission review remains required. Priority: P1 for auth/security regressions. |
+| CSP Level 3, HSTS (RFC 6797), OWASP ASVS / Cheat Sheets | W3C Working Draft / Normative RFC / Best Current Practice: [CSP3 status](https://www.w3.org/TR/CSP3/), [HSTS](https://www.rfc-editor.org/rfc/rfc6797), [ASVS](https://asvs.owasp.org/), [OWASP Cheat Sheets](https://cheatsheetseries.owasp.org/) | Deployed browser security boundary and code/security configuration | **Partial** — `next.config.ts` provides HSTS, nosniff, Referrer-Policy, frame options, Permissions-Policy, and restrictive CSP directives; browser check plus Semgrep, Gitleaks, workflow audit, and dependency audits run. | CSP is not a complete script policy; nonce integration was deferred because of Firebase Auth/runtime constraints. No ASVS level-by-level audit or production header observation is claimed. |
+| BCP 47, RFC 5646/4647, ECMA-402, CLDR/UTS #35, Unicode bidi | Normative Standards: [RFC 5646](https://www.rfc-editor.org/rfc/rfc5646), [RFC 4647](https://www.rfc-editor.org/rfc/rfc4647), [ECMA-402](https://tc39.es/ecma402/), [UTS #35](https://www.unicode.org/reports/tr35/), [UAX #9](https://www.unicode.org/reports/tr9/) | Supported `en`, `pt-BR`, `es` content and browser formatting | **Partial** — localized catalogs and server-rendered `lang` are tested; locale fallback and persistence have unit/browser coverage. | No date/number formatting contract tests, RTL locale, bidi isolation, or RTL layout is required by the current supported locales. |
+| Core Web Vitals and Web Platform Baseline | Best Current Practice: [Web Vitals](https://web.dev/articles/vitals), [Baseline](https://web.dev/baseline) | User-perceived loading, interaction, stability and browser support | **Partial** — Lighthouse CI gates selected lab budgets and bundle size; layout regression and responsive Playwright checks exist. | No RUM/field dataset, so no field CWV claim; Lighthouse lab results are not field performance. No explicit Baseline browser matrix. |
+| PWA manifest / Service Worker and offline behavior | Platform standards and Implementation Guidance: [Manifest](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest), [Service Worker API](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API) | Installability/offline only if product promises these capabilities | **Not applicable** for offline behavior — service worker exists only to bridge Firebase session tokens; app makes no offline capability promise. Manifest is independently validated. | No offline cache, offline mutation queue, or PWA icon/installability claim. |
+| ISO 9241, ISO/IEC 25010, Nielsen heuristics, GOV.UK/Carbon/Material | Ergonomics/quality models and Implementation Guidance | Product interaction and quality review | **Partial/manual** — local design, mobile and interaction conventions plus CI quality checks cover selected concerns. | No formal ISO certification or complete heuristic/user research audit. These references are guidance, not universal implementation mandates. |
+| RFC 9745 Deprecation, RFC 6902 JSON Patch, WebAuthn, Search structured data, WPT | Normative Standards / project-specific implementation | Only if app adds versioned HTTP APIs, patch semantics, passkeys, search schema or browser conformance ownership | **Not applicable** — none are present or promised by the product today. | Reassess when a corresponding capability is introduced. |
+
+### Evidence scope
+
+The source inventory for this revision found App Router pages/layouts and
+Firebase callable SDK usage, but no project-authored `route.ts` handlers or
+`'use server'` Server Functions. Firebase Security Rules remain the browser
+data authorization boundary; Admin SDK operations require application-level
+authorization because they bypass those rules. CI jobs and local commands are
+listed in [TOOLING.md](../../TOOLING.md) and the journey coverage is documented
+in [TESTING.md](../../TESTING.md). Context7 lookup was attempted for the exact
+installed framework/SDK versions but was unavailable due to monthly quota; no
+Context7 success is claimed. Version-matched Next.js installed docs and linked
+primary sources informed the checks.
+
+## Revision findings and validation
+
+| Location | Finding and user impact | Reference | Change | Validation | Status |
+| --- | --- | --- | --- | --- | --- |
+| `playwright.config.ts`, `tests/home.spec.ts` | Local E2E could reuse an already-running server at port 3000, so results could come from a stale build. | [Playwright webServer](https://playwright.dev/docs/test-webserver); project convention | E2E now builds and starts its own production server on port 4173 with reuse disabled; locale-cookie tests target the same origin. | `pnpm verify:e2e`: production build passed; 40 passed, 31 skipped. | Resolved |
+| `vitest.config.mts` | Vitest Browser Mode used port 62315, inside a Windows-reserved port range, so browser tests could not start on this host. | Installed Vitest Browser Mode API configuration; Windows port reservation query | Moved its local API to port 4174, separate from Playwright E2E. | `pnpm test:browser`: 5 files, 17 tests passed. | Resolved |
+| Firebase sign-in, registration, recovery and profile forms | Inline field errors were visually present but not consistently described by invalid controls, weakening error recovery for assistive technology. | [WCAG 2.2 SC 3.3.1](https://www.w3.org/TR/WCAG22/#error-identification), [ARIA `aria-describedby`](https://www.w3.org/TR/wai-aria-1.2/#aria-describedby), [WAI form notifications](https://www.w3.org/WAI/tutorials/forms/notifications/) | Field error IDs are referenced by `aria-describedby`; the rule is recorded in `.agents/rules/forms.md`. | Firebase Emulator browser journey asserts invalid email relation; existing profile avatar test checks the same association pattern. | Resolved for these routes; Partial overall because MFA/phone and every form are not yet covered |
+| `AGENTS.md`, `ARCHITECTURE.md`, `CODING_STANDARDS.md`, `TOOLING.md`, version guides | Operational docs described Next.js 16.4.2 while package and installed runtime were 16.4.3. | Installed package and `node_modules/next/dist/docs/` | Current operational references now agree on 16.4.3; historical ADR wording remains unchanged. | `pnpm verify:fast` and production build under E2E passed. | Resolved |
+| Repository tool environment | Context7 refused lookups after monthly quota was reached; local Node was 22.19.0, below the package engine range `^22.22.1 \|\| ^24.5.0`. | Context7 result; `package.json` engines | Used exact installed Next.js docs plus directly consulted W3C, WHATWG, RFC Editor, Firebase and web.dev sources. No dependency/runtime upgrade was made. | Checks listed above ran with the available runtime. | Partial — repeat Context7 lookup and verification on a supported Node runtime |
+
+This revision changes project code, docs and Playwright configuration; it does
+not modify GitHub workflow definitions or Firebase authorization rules. Existing
+CI remains the enforcement path. Chromium is the configured browser project;
+Firefox/WebKit and manual screen-reader, keyboard-only and production OAuth
+verification remain outstanding where they apply. The emulator's real-provider
+limitations are documented in [TESTING.md](../../TESTING.md).
 
 ## Internationalization
 

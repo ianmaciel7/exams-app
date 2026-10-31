@@ -9,7 +9,7 @@ repository. It is not a catalog of every runtime library; `package.json` and
 | Category | Tool | Version or status | Purpose | Source of truth |
 | --- | --- | --- | --- | --- |
 | Package management | pnpm | 12.14.0 | Installs dependencies and runs project commands. Do not use npm or Yarn to modify dependencies. | `package.json`, `pnpm-lock.yaml` |
-| Application build | Next.js | 16.4.2 | App Router framework, development server, production build, and server runtime. | `package.json`, `next.config.ts` |
+| Application build | Next.js | 16.4.3 | App Router framework, development server, production build, and server runtime. | `package.json`, `next.config.ts` |
 | Bundler | Turbopack | Included with Next.js | Bundles development and production builds; loads Tailwind CSS through `@tailwindcss/turbopack`. | `next.config.ts` |
 | Language | TypeScript | `^5`; inspect the installed version and lockfile | Provides type checking and the `@/*` import alias. | `package.json`, `tsconfig.json`, `pnpm-lock.yaml` |
 | Compiler | React Compiler | 1.0.0 | Optimizes React components through Next.js configuration. | `package.json`, `next.config.ts` |
@@ -20,7 +20,7 @@ repository. It is not a catalog of every runtime library; `package.json` and
 | Component workbench | Ladle | 5.1.1 | Develops and reviews components in isolation through colocated `*.stories.tsx` files. | `.ladle/`, `package.json` |
 | Unit and component testing | Vitest + React Testing Library | Vitest 5.0.5 | Runs colocated unit, hook, and component tests in `jsdom` (`unit` project). | `vitest.config.mts`, `package.json` |
 | Property-based testing | fast-check | 4.10.2 | Generates inputs for pure logic such as `isLocale`. | `package.json`, `src/i18n/routing.test.ts` |
-| Browser component testing | Vitest Browser Mode + `vitest-browser-react` | Chromium through Playwright | Runs `*.browser.test.tsx` files in a real browser (`browser` project). | `vitest.config.mts`, `package.json` |
+| Browser component testing | Vitest Browser Mode + `vitest-browser-react` | Chromium through Playwright, local API port 4174 | Runs `*.browser.test.tsx` files in a real browser (`browser` project); port is separate from Playwright E2E and avoids the Windows excluded range containing Vitest's default. | `vitest.config.mts`, `package.json` |
 | End-to-end testing | Playwright | `^1.64.1` | Runs `tests/*.spec.ts` against a production build. | `playwright.config.ts`, `tests/` |
 | Accessibility testing | `@axe-core/playwright` | 4.14.0 | Scans pages for WCAG 2.x A/AA violations in Playwright (`@a11y`). | `tests/a11y.spec.ts` |
 | Firebase Emulator E2E (CI) | Firebase CLI 15.34.1 (pinned via pnpm dlx) | CI on demo-test only | Starts Auth, Firestore and Functions emulators; the profile guard and saves require the `recordUsage` callable. Installs the separate `functions/package-lock.json` package with npm ci and uses no production Firebase secrets. | `.github/workflows/ci.yml`, `tests/firebase-auth.spec.ts`, `firebase.json` |
@@ -54,7 +54,7 @@ repository. It is not a catalog of every runtime library; `package.json` and
 | Continuous integration | GitHub Actions | Pinned by commit SHA | Runs `static`, `build`, `e2e`, `auth-emulator`, `security`, and `pr-title` in parallel, with a required `ci-result` aggregate. | `.github/workflows/ci.yml`, `TESTING.md` |
 | Workflow linting | actionlint, zizmor | Host tools | Lint and audit the GitHub Actions workflows. | `package.json` (`check:workflows`) |
 | Codebase graph | Graphify | Host tool | Builds an on-demand knowledge graph; versioned products are `graphify-out/graph.json`, `GRAPH_REPORT.md`, and the portable `manifest.json`; the rest of `graphify-out/` is machine-local and ignored. `graphify hook install` (run once per clone) adds the Husky `post-commit`/`post-checkout` rebuild hooks and registers the local `graph.json` merge driver; after `git pull`/`merge`, run `graphify update .` to re-anchor `manifest.json`. | `.gitignore`, `.gitattributes`, `.husky/post-commit`, `.husky/post-checkout` |
-| Git hooks | Husky + lint-staged + Commitlint | 9.1.7 / 17.6.0 / 21.2.3 | Check staged files with Biome and the language policy, and validate commit messages with Commitlint and `check:english`. | `.husky/`, `package.json`, `commitlint.config.mjs` |
+| Git hooks | Husky + lint-staged + Commitlint | 9.1.7 / 17.6.0 / 21.2.3 | `pnpm check:staged` checks staged files with Biome and the language policy; Commitlint and `check:english` validate commit messages. The package script makes the hook dependency visible to Knip. | `.husky/`, `package.json`, `commitlint.config.mjs` |
 | Repository integrity | pre-commit | Host tool | Runs file-integrity hooks (large files, except the generated `graphify-out/graph.json`; case conflicts, JSON/YAML, merge markers) and `detect-private-key`. | `.pre-commit-config.yaml` |
 | Infrastructure as code | Terraform | Host tool; stacks pin `>= 1.9` and providers `~> 7.0` | Describes the Google Cloud project and Firebase infrastructure in `infra/bootstrap` and `infra/prod`. Applied manually, never from CI. State, plans, `*.tfvars`, and `backend.hcl` are ignored by Git; only `*.tfvars.example` and `.terraform.lock.hcl` are committed. See [ADR 0012](docs/adr/0012-configure-terraform-infrastructure.md) and [infra/README.md](infra/README.md). | `infra/`, `.gitignore` |
 | Decision record guard | Node script | Uses no new dependency | Fails when `infra/` exists without a Terraform ADR, when an ADR is missing from `docs/adr/README.md`, when numbers have gaps, or when a heading does not match its number. Add a row to `decisionAreas` for a new top-level area. | `scripts/checks/check-adr.mjs`, `scripts/checks/check-adr.test.mjs`, `package.json` |
@@ -171,7 +171,7 @@ project skills are tracked in `.agents/skills/` and `skills-lock.json`.
 | `pnpm verify:static` | Biome CI, typecheck, unit tests with coverage thresholds, logging and seed CLI regressions, architecture, unused code, duplication, structural rules, route/component/responsiveness guards, spelling, Markdown, Fallow health, and React Doctor. The CI `static` job. | minutes |
 | `pnpm verify:build` | Browser tests, production build with size budgets, and the Ladle build. The CI `build` job. | minutes |
 | `pnpm verify:full` | `verify:static` then `verify:build`. | minutes |
-| `pnpm verify:e2e` | Ordinary Playwright suite: functional, accessibility, and visual; emulator cases run independently. | minutes |
+| `pnpm verify:e2e` | Ordinary Playwright suite on isolated port 4173: functional, accessibility, and visual; starts its own production server and does not reuse existing servers. Emulator cases run independently. | minutes |
 | `pnpm verify:security` | Semgrep rule tests and scan, Gitleaks, workflow linting, root dependency audit, and the separate Functions audit. Needs the host tools; the same checks run in the CI `security` job. | seconds |
 
 `verify:full` intentionally excludes Playwright E2E (but includes Browser Mode),
@@ -639,7 +639,7 @@ explicit additional registry is `@firebase`. See
 
 ## Next.js documentation and CLI workflow
 
-`package.json` pins Next.js 16.4.2. The
+`package.json` pins Next.js 16.4.3. The
 [Next.js maintenance rule](.agents/rules/cache.md) governs framework guidance.
 The installed `node_modules/next/dist/docs/` bundle contains version-matched
 Markdown generated from upstream MDX; its filenames and bytes can differ from

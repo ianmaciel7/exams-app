@@ -10,7 +10,7 @@ import {
   useUI,
   type EmailLinkAuthFormProps,
 } from "@firebase-oss/ui-react";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { useForm, FormProvider, Controller } from "react-hook-form";
 
 import { Policies } from "@/components/firebase/policies";
@@ -24,6 +24,7 @@ import { getAuthErrorMessage } from "./auth-error-message";
 export type { EmailLinkAuthFormProps };
 
 export function EmailLinkAuthForm(props: EmailLinkAuthFormProps) {
+  const emailId = useId();
   const { onEmailSent, onSignIn } = props;
   const ui = useUI();
   const schema = useEmailLinkAuthFormSchema();
@@ -66,9 +67,9 @@ export function EmailLinkAuthForm(props: EmailLinkAuthFormProps) {
           name="email"
           render={({ field, fieldState }) => (
             <Field data-invalid={!!fieldState.error}>
-              <FieldLabel htmlFor="email">{getTranslation(ui, "labels", "emailAddress")}</FieldLabel>
-              <Input {...field} id="email" type="email" autoComplete="email" aria-invalid={!!fieldState.error} />
-              {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
+              <FieldLabel htmlFor={emailId}>{getTranslation(ui, "labels", "emailAddress")}</FieldLabel>
+              <Input {...field} id={emailId} type="email" autoComplete="email" aria-invalid={!!fieldState.error} aria-describedby={fieldState.error ? `${emailId}-error` : undefined} />
+              {fieldState.error && <FieldError id={`${emailId}-error`}>{fieldState.error.message}</FieldError>}
             </Field>
           )}
         />

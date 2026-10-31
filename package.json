@@ -12,6 +12,7 @@
     "start": "next start",
     "lint": "biome check",
     "lint:ci": "biome ci",
+    "check:staged": "lint-staged",
     "format": "biome format --write",
     "typecheck": "next typegen && tsc --noEmit -p tsconfig.build.json",
     "check:architecture": "depcruise --config .dependency-cruiser.cjs -- src",

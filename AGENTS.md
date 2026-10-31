@@ -159,7 +159,7 @@ with regression cases for both boundary and directive-free modules.
 Before Next.js changes, read [agent rules](.agents/rules/cache.md)
 and the relevant installed `node_modules/next/dist/docs/` guide, consulting Context7 (`/vercel/next.js`)
 for verified upstream documentation. Match guidance to installed
-Next.js 16.4.2, App Router, Cache Components, and Partial Prefetching.
+Next.js 16.4.3, App Router, Cache Components, and Partial Prefetching.
 See [Next.js sources](docs/agents/nextjs-sources.md) and
 [Next.js versions](docs/agents/nextjs-versions.md).
 
