@@ -1,7 +1,13 @@
 // cspell:ignore domcontentloaded describedby
 import fs from "node:fs";
 import AxeBuilder from "@axe-core/playwright";
-import { expect, type Page, test } from "@playwright/test";
+import {
+  type APIRequestContext,
+  type Browser,
+  expect,
+  type Page,
+  test,
+} from "@playwright/test";
 import esMessages from "../src/messages/es.json";
 
 for (const envFile of [".env.local", ".env"]) {
@@ -501,6 +507,394 @@ test("Firestore user preferences are private to their owner", async ({
   expect(guestRead.status(), "unauthenticated clients must be denied").toBe(
     403,
   );
+});
+
+type TestAccount = {
+  email: string;
+  idToken: string;
+  localId: string;
+  refreshToken: string;
+};
+
+async function createAccount(
+  request: APIRequestContext,
+  prefix: string,
+): Promise<TestAccount> {
+  const email = `${prefix}-${crypto.randomUUID()}@example.test`;
+  const response = await request.post(
+    `${emulator}/identitytoolkit.googleapis.com/v1/accounts:signUp?key=emulator-only`,
+    { data: { email, password, returnSecureToken: true } },
+  );
+  expect(response.ok()).toBe(true);
+  return { ...(await response.json()), email };
+}
+
+const signInUrlTo = (next: string) =>
+  `/sign-in?next=${encodeURIComponent(next)}`;
+
+async function signIn(page: Page, email: string, path = "/sign-in") {
+  await page.goto(path);
+  await signInEmail(page).fill(email);
+  await signInPassword(page).fill(password ?? "");
+  await page.getByRole("button", { name: "Sign In", exact: true }).click();
+}
+
+/** Refreshes like `getIdToken(true)`, which is how a client receives new claims. */
+async function refreshIdToken(
+  request: APIRequestContext,
+  refreshToken: string,
+) {
+  const response = await request.post(
+    `${emulator}/securetoken.googleapis.com/v1/token?key=emulator-only`,
+    { form: { grant_type: "refresh_token", refresh_token: refreshToken } },
+  );
+  expect(response.ok()).toBe(true);
+  return ((await response.json()) as { id_token: string }).id_token;
+}
+
+/** Applies an administrative change through the emulator's owner credential. */
+async function updateAccount(
+  request: APIRequestContext,
+  localId: string,
+  changes: Record<string, unknown>,
+) {
+  const response = await request.post(
+    `${emulator}/identitytoolkit.googleapis.com/v1/projects/${project}/accounts:update`,
+    {
+      headers: { Authorization: "Bearer owner" },
+      data: { localId, ...changes },
+    },
+  );
+  expect(response.ok()).toBe(true);
+}
+
+/** The Auth emulator does not check signatures, so only the claims matter. */
+function unsignedToken(claims: Record<string, unknown>) {
+  const encode = (value: object) =>
+    Buffer.from(JSON.stringify(value)).toString("base64url");
+  return `${encode({ alg: "none", typ: "JWT" })}.${encode(claims)}.`;
+}
+
+function expiredToken(uid: string) {
+  const now = Math.floor(Date.now() / 1000);
+  return unsignedToken({
+    aud: project,
+    auth_time: now - 7200,
+    exp: now - 3600,
+    iat: now - 7200,
+    iss: `https://securetoken.google.com/${project}`,
+    sub: uid,
+    user_id: uid,
+  });
+}
+
+/** Opens a protected route carrying the token the worker would have forwarded. */
+async function openProfileWithBridgeToken(
+  browser: Browser,
+  token: string,
+): Promise<URL> {
+  const context = await browser.newContext({
+    baseURL: authTestOrigin,
+    extraHTTPHeaders: {
+      Authorization: `Bearer ${token}`,
+      "x-firebase-auth-bridge": "1",
+    },
+    serviceWorkers: "block",
+  });
+  try {
+    const page = await context.newPage();
+    await page.goto("/profile");
+    await expect(page).toHaveURL(/\/sign-in/);
+    return new URL(page.url());
+  } finally {
+    await context.close();
+  }
+}
+
+test.describe("server session verification", () => {
+  // Without a client session, both verdicts end at sign-in. Only the client gate
+  // knows the route, so `next` identifies which layer sent the visitor there.
+  test("accepts a valid token and leaves navigation to the client gate", async ({
+    browser,
+    request,
+  }) => {
+    const account = await createAccount(request, "bridge-valid");
+    const url = await openProfileWithBridgeToken(browser, account.idToken);
+    expect(url.searchParams.get("next")).toBe("/profile");
+  });
+
+  test("rejects a malformed token", async ({ browser }) => {
+    const url = await openProfileWithBridgeToken(browser, "not-a-token");
+    expect(url.searchParams.get("next")).toBe("/");
+  });
+
+  test("rejects an expired token", async ({ browser, request }) => {
+    const account = await createAccount(request, "bridge-expired");
+    const url = await openProfileWithBridgeToken(
+      browser,
+      expiredToken(account.localId),
+    );
+    expect(url.searchParams.get("next")).toBe("/");
+  });
+
+  test("rejects a token issued before revocation", async ({
+    browser,
+    request,
+  }) => {
+    const account = await createAccount(request, "bridge-revoked");
+    await updateAccount(request, account.localId, {
+      validSince: String(Math.floor(Date.now() / 1000) + 60),
+    });
+    const url = await openProfileWithBridgeToken(browser, account.idToken);
+    expect(url.searchParams.get("next")).toBe("/");
+  });
+
+  test("rejects the token of a disabled account", async ({
+    browser,
+    request,
+  }) => {
+    const account = await createAccount(request, "bridge-disabled");
+    await updateAccount(request, account.localId, { disableUser: true });
+    const url = await openProfileWithBridgeToken(browser, account.idToken);
+    expect(url.searchParams.get("next")).toBe("/");
+  });
+
+  test("rejects the token of a deleted account", async ({
+    browser,
+    request,
+  }) => {
+    const account = await createAccount(request, "bridge-deleted");
+    const deleted = await request.post(
+      `${emulator}/identitytoolkit.googleapis.com/v1/accounts:delete?key=emulator-only`,
+      { data: { idToken: account.idToken } },
+    );
+    expect(deleted.ok()).toBe(true);
+    const url = await openProfileWithBridgeToken(browser, account.idToken);
+    expect(url.searchParams.get("next")).toBe("/");
+  });
+
+  test("a rejected token cannot loop a client that is still signed in", async ({
+    browser,
+    request,
+  }) => {
+    const account = await createAccount(request, "bridge-loop");
+    const context = await browser.newContext({
+      baseURL: authTestOrigin,
+      serviceWorkers: "block",
+    });
+    try {
+      const page = await context.newPage();
+      await signIn(page, account.email);
+      await expect(page).toHaveURL(`${authTestOrigin}/`);
+
+      let protectedLoads = 0;
+      // Only the document request: Firebase SDK calls must keep their own auth.
+      await page.route("**/profile", (route) => {
+        // The home page also prefetches this route; only documents can loop.
+        if (!route.request().isNavigationRequest()) return route.continue();
+        protectedLoads += 1;
+        return route.continue({
+          headers: {
+            ...route.request().headers(),
+            authorization: "Bearer not-a-token",
+            "x-firebase-auth-bridge": "1",
+          },
+        });
+      });
+      await page.goto("/profile");
+
+      await expect(page).toHaveURL(`${authTestOrigin}/`, { timeout: 15_000 });
+      await expect(
+        page.getByRole("link", { name: "My profile" }),
+      ).toBeVisible();
+      await page.waitForTimeout(1_500);
+      await expect(page).toHaveURL(`${authTestOrigin}/`);
+      expect(protectedLoads).toBe(1);
+    } finally {
+      await context.close();
+    }
+  });
+});
+
+test("a first load without the worker still reaches the signed-in profile", async ({
+  browser,
+  request,
+}) => {
+  const account = await createAccount(request, "no-worker");
+  const context = await browser.newContext({
+    baseURL: authTestOrigin,
+    serviceWorkers: "block",
+  });
+  try {
+    const page = await context.newPage();
+    await signIn(page, account.email, signInUrlTo("/profile?tab=security"));
+    await expect(page).toHaveURL(`${authTestOrigin}/profile?tab=security`);
+    await expect(page.getByLabel("Email", { exact: true })).toHaveValue(
+      account.email,
+    );
+    await page.reload();
+    await expect(page.getByLabel("Email", { exact: true })).toHaveValue(
+      account.email,
+    );
+  } finally {
+    await context.close();
+  }
+});
+
+async function waitForActiveWorker(page: Page) {
+  await page.evaluate(async () => {
+    await navigator.serviceWorker.ready;
+  });
+  await expect
+    .poll(() =>
+      page.evaluate(() => Boolean(navigator.serviceWorker.controller)),
+    )
+    .toBe(true);
+}
+
+test("an active worker forwards a fresh token on navigation", async ({
+  context,
+  page,
+  request,
+}) => {
+  const account = await createAccount(request, "worker");
+  const forwarded: string[] = [];
+  context.on("request", (sent) => {
+    const { authorization, "x-firebase-auth-bridge": bridge } = sent.headers();
+    if (new URL(sent.url()).pathname === "/profile" && bridge === "1") {
+      forwarded.push(authorization ?? "");
+    }
+  });
+
+  await signIn(page, account.email);
+  await expect(page).toHaveURL("/");
+  await waitForActiveWorker(page);
+  await page.goto("/profile");
+  await expect(page.getByLabel("Email", { exact: true })).toHaveValue(
+    account.email,
+  );
+
+  expect(forwarded.length).toBeGreaterThan(0);
+  expect(forwarded.at(-1)).toMatch(/^Bearer ./);
+});
+
+test("a failed token refresh does not block navigation or loop", async ({
+  context,
+  page,
+  request,
+}) => {
+  const account = await createAccount(request, "refresh-failure");
+  await signIn(page, account.email);
+  await expect(page).toHaveURL("/");
+  await waitForActiveWorker(page);
+
+  await context.route("**/securetoken.googleapis.com/**", (route) =>
+    route.abort("failed"),
+  );
+  await page.goto("/profile");
+  await expect(page.getByLabel("Email", { exact: true })).toHaveValue(
+    account.email,
+  );
+  await expect(page).toHaveURL(`${authTestOrigin}/profile`);
+  await context.unrouteAll();
+});
+
+test("sign-out ends protected access, including history navigation", async ({
+  page,
+  request,
+}) => {
+  const account = await createAccount(request, "sign-out");
+  await signIn(page, account.email);
+  await expect(page).toHaveURL("/");
+  await page.getByRole("link", { name: "My profile" }).click();
+  await expect(page.getByLabel("Email", { exact: true })).toHaveValue(
+    account.email,
+  );
+  await page.getByRole("link", { name: "Back to Home" }).click();
+  await page.getByRole("button", { name: "Sign Out" }).click();
+  await expect(
+    page.getByRole("link", { name: "Sign in", exact: true }),
+  ).toBeVisible();
+
+  await page.goBack();
+  await expect(page).toHaveURL(
+    (url) =>
+      url.pathname === "/sign-in" &&
+      url.searchParams.get("next") === "/profile",
+  );
+  await expect(page.getByLabel("Email", { exact: true })).toHaveCount(0);
+
+  await page.goto("/profile");
+  await expect(page).toHaveURL(`${authTestOrigin}${signInUrlTo("/profile")}`);
+});
+
+test("switching accounts shows only the new account", async ({
+  page,
+  request,
+}) => {
+  const first = await createAccount(request, "switch-first");
+  const second = await createAccount(request, "switch-second");
+
+  await signIn(page, first.email, signInUrlTo("/profile"));
+  await expect(page.getByLabel("Email", { exact: true })).toHaveValue(
+    first.email,
+  );
+  await page.getByLabel("Name", { exact: true }).fill("First Account");
+  await page.getByRole("button", { name: "Save profile", exact: true }).click();
+  await expect(page.getByText("Profile saved")).toBeVisible();
+
+  await page.getByRole("link", { name: "Back to Home" }).click();
+  await page.getByRole("button", { name: "Sign Out" }).click();
+  await expect(
+    page.getByRole("link", { name: "Sign in", exact: true }),
+  ).toBeVisible();
+
+  await signIn(page, second.email, signInUrlTo("/profile"));
+  await expect(page.getByLabel("Email", { exact: true })).toHaveValue(
+    second.email,
+  );
+  await expect(page.getByLabel("Name", { exact: true })).toHaveValue("");
+});
+
+test("Firestore Rules follow the role claim of the presented token", async ({
+  request,
+}) => {
+  const owner = await createAccount(request, "claims-owner");
+  const reader = await createAccount(request, "claims-reader");
+  const documentUrl = `${firestoreEmulatorOrigin}/v1/projects/${project}/databases/(default)/documents/users/${owner.localId}`;
+  const read = async (idToken: string) =>
+    (
+      await request.get(documentUrl, {
+        headers: { Authorization: `Bearer ${idToken}` },
+      })
+    ).status();
+
+  const saved = await request.patch(documentUrl, {
+    headers: { Authorization: `Bearer ${owner.idToken}` },
+    data: { fields: { theme: { stringValue: "dark" } } },
+  });
+  expect(saved.ok()).toBe(true);
+  expect(await read(reader.idToken), "a plain user is denied").toBe(403);
+
+  await updateAccount(request, reader.localId, {
+    customAttributes: JSON.stringify({ role: "admin" }),
+  });
+  expect(await read(reader.idToken), "the old token has no new claim").toBe(
+    403,
+  );
+  const adminToken = await refreshIdToken(request, reader.refreshToken);
+  expect(await read(adminToken), "a refreshed token carries the claim").toBe(
+    200,
+  );
+
+  await updateAccount(request, reader.localId, {
+    customAttributes: JSON.stringify({}),
+  });
+  const demotedToken = await refreshIdToken(request, reader.refreshToken);
+  expect(await read(demotedToken), "demotion applies to a new token").toBe(403);
+  // Rules do not check revocation: an issued admin token stays valid there until
+  // it expires. Only `verifyIdToken(token, true)` rejects it earlier.
+  expect(await read(adminToken), "documented Rules limitation").toBe(200);
 });
 
 const accessibilityTags = [
