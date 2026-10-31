@@ -96,7 +96,8 @@ commands and implementation conventions.
 The internationalization architecture is cookie-preferred (`NEXT_LOCALE`) with
 an `Accept-Language` fallback. It has neither `middleware.ts` nor a `[locale]`
 folder segment in the App Router. The application serves `src/app/page.tsx`
-directly at `/`; there are no localized URL route prefixes or proxy scripts.
+directly at `/`; there are no localized URL route prefixes, and the Proxy
+never rewrites or reads the locale.
 This is an explicit maintainer requirement recorded in
 [ADR 0004](docs/adr/0004-configure-internationalization.md) and
 [ADR 0021](docs/adr/0021-resolve-locale-from-browser-preferences.md).
@@ -252,9 +253,11 @@ server-owned data; its API choices belong in
 [Coding standards](CODING_STANDARDS.md#nextjs-request-data-and-caching).
 
 Route groups are URL-neutral, private folders do not create routes, and
-`src/app` is the active router. There is no Pages Router, `proxy.ts`, or
-`middleware.ts` implementation. A proxy or route-group layout is not a data
-access authorization boundary. Hosting adapters, static export, Edge runtime,
+`src/app` is the active router. There is no Pages Router. `src/proxy.ts` only
+sets the per-request nonce Content Security Policy
+([ADR 0023](docs/adr/0023-enforce-a-nonce-based-content-security-policy.md));
+it does not rewrite, redirect, or authorize. A proxy or route-group layout is
+not a data access authorization boundary. Hosting adapters, static export, Edge runtime,
 remote/private caches, parallel/intercepted routes, and offline support are
 reviewed upstream options; this refresh does not adopt them.
 

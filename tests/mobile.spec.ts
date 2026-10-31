@@ -95,10 +95,13 @@ for (const route of routes) {
       page,
     }) => {
       await openRoute(page, route);
-      await page.addStyleTag({
-        content:
-          "* { line-height: 1.5 !important; letter-spacing: 0.12em !important; word-spacing: 0.16em !important; } p { margin-bottom: 2em !important; }",
-      });
+      // A constructed stylesheet stands in for a user stylesheet: the nonce
+      // CSP blocks the inline <style> that addStyleTag would inject.
+      await page.evaluate((css) => {
+        const sheet = new CSSStyleSheet();
+        sheet.replaceSync(css);
+        document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
+      }, "* { line-height: 1.5 !important; letter-spacing: 0.12em !important; word-spacing: 0.16em !important; } p { margin-bottom: 2em !important; }");
       expect(await hasHorizontalOverflow(page)).toBe(false);
     });
 
