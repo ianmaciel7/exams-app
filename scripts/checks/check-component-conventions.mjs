@@ -416,6 +416,23 @@ function dependencyIntegrations(statement, specifier) {
   };
 }
 
+// A lazy `import("…")` still runs the module, so it counts like a static one.
+function dynamicImportDependencies(source) {
+  const dependencies = [];
+  function visit(node) {
+    if (
+      ts.isCallExpression(node) &&
+      node.expression.kind === ts.SyntaxKind.ImportKeyword &&
+      node.arguments[0] &&
+      ts.isStringLiteralLike(node.arguments[0])
+    )
+      dependencies.push([node, node.arguments[0].text]);
+    ts.forEachChild(node, visit);
+  }
+  visit(source);
+  return dependencies;
+}
+
 function mergeIntegrations(result, child) {
   for (const key of Object.keys(result)) result[key] ||= child[key];
 }
@@ -427,8 +444,14 @@ function componentIntegrations(source, filename, modules, visited = new Set()) {
     return { client: false, server: false, fetch: false };
   visited.add(filename);
   const result = integrationSyntax(source);
-  for (const statement of source.statements) {
-    const specifier = runtimeDependencySpecifier(statement);
+  const dependencies = [
+    ...source.statements.map((statement) => [
+      statement,
+      runtimeDependencySpecifier(statement),
+    ]),
+    ...dynamicImportDependencies(source),
+  ];
+  for (const [statement, specifier] of dependencies) {
     if (!specifier) continue;
     mergeIntegrations(result, dependencyIntegrations(statement, specifier));
     const target = helperModuleTarget(filename, specifier, modules);
