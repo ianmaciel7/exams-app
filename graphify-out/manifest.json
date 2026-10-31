@@ -3091,8 +3091,8 @@
   },
   ".agents/skills/impeccable/scripts/data/font-index.json": {
     "mtime": 1793222836.9409418,
-    "seen": 1793405254.3444424,
-    "ast_hash": "",
+    "seen": 1793406430.582755,
+    "ast_hash": "4a4426c85ec12df1d9a487a39d656ff4",
     "semantic_hash": ""
   },
   ".agents/skills/impeccable/scripts/impeccable": {
@@ -4093,50 +4093,50 @@
   },
   "infra/bootstrap/.terraform.lock.hcl": {
     "mtime": 1793227336.469956,
-    "seen": 1793405254.344747,
-    "ast_hash": "",
+    "seen": 1793406430.5828593,
+    "ast_hash": "0d7c2fe8b2d37064f0deee8e32b97243",
     "semantic_hash": ""
   },
   "infra/bootstrap/main.tf": {
     "mtime": 1793227336.477282,
-    "seen": 1793405254.3447585,
-    "ast_hash": "",
+    "seen": 1793406430.582861,
+    "ast_hash": "55d437d20673844868cff1add700fede",
     "semantic_hash": ""
   },
   "infra/bootstrap/outputs.tf": {
     "mtime": 1793227336.4782832,
-    "seen": 1793405254.3447626,
-    "ast_hash": "",
+    "seen": 1793406430.5828624,
+    "ast_hash": "8f6ec4b5b193b255e50e06b5662cdafb",
     "semantic_hash": ""
   },
   "infra/bootstrap/variables.tf": {
     "mtime": 1793227336.482299,
-    "seen": 1793405254.344766,
-    "ast_hash": "",
+    "seen": 1793406430.5828638,
+    "ast_hash": "b685f97167b48660a8ff1d286b421b7e",
     "semantic_hash": ""
   },
   "infra/prod/.terraform.lock.hcl": {
     "mtime": 1793379268.3774655,
-    "seen": 1793405254.3447697,
-    "ast_hash": "",
+    "seen": 1793406430.582865,
+    "ast_hash": "112d7a97479734863dac05cb62e3b39e",
     "semantic_hash": ""
   },
   "infra/prod/main.tf": {
     "mtime": 1793379268.3789868,
-    "seen": 1793405254.3447728,
-    "ast_hash": "",
+    "seen": 1793406430.5828664,
+    "ast_hash": "50451a9a1cf5cf6b45856020325700ab",
     "semantic_hash": ""
   },
   "infra/prod/outputs.tf": {
     "mtime": 1793378738.070029,
-    "seen": 1793405254.3447764,
-    "ast_hash": "",
+    "seen": 1793406430.5828676,
+    "ast_hash": "8e4e8b565c28ebbaceff799b19321b61",
     "semantic_hash": ""
   },
   "infra/prod/variables.tf": {
     "mtime": 1793379268.383508,
-    "seen": 1793405254.3448067,
-    "ast_hash": "",
+    "seen": 1793406430.5828688,
+    "ast_hash": "2f240f40e0bdecfc2589c627fa927bcd",
     "semantic_hash": ""
   },
   "scripts/checks/check-adr.mjs": {
