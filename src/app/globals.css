@@ -223,10 +223,9 @@
   }
 }
 
-/* Keep one root-mounted indicator visible across App Router, auth, and profile
-   loading boundaries. Visibility (not display) retains the spinner's animation
-   phase, preventing a visual reset when different fallbacks mount. A standalone
-   LoadingPrimitive still works before the root indicator is available. */
+/* React/Next may retain inactive route segments in hidden DOM subtrees.
+   Ignore those loading-state markers or a stale fallback covers an already
+   usable page. Visibility (not display) preserves the root spinner identity. */
 [data-slot="global-loading-indicator"] {
   visibility: hidden;
   pointer-events: none;
@@ -236,7 +235,17 @@ body:has([data-slot="global-loading-indicator"]) [data-slot="loading-state"] {
   visibility: hidden;
 }
 
-body:has([data-slot="loading-state"]) [data-slot="global-loading-indicator"] {
+body:has(
+    [data-slot="loading-state"]:not(
+        [hidden],
+        [hidden] *,
+        [style*="display:none"],
+        [style*="display:none"] *,
+        [style*="display: none"],
+        [style*="display: none"] *
+      )
+  )
+  [data-slot="global-loading-indicator"] {
   visibility: visible;
   pointer-events: auto;
 }
@@ -245,7 +254,16 @@ body:has([data-slot="loading-state"]) [data-slot="global-loading-indicator"] {
   animation-play-state: paused;
 }
 
-body:has([data-slot="loading-state"])
+body:has(
+    [data-slot="loading-state"]:not(
+        [hidden],
+        [hidden] *,
+        [style*="display:none"],
+        [style*="display:none"] *,
+        [style*="display: none"],
+        [style*="display: none"] *
+      )
+  )
   [data-slot="global-loading-indicator"]
   [data-slot="spinner"] {
   animation-play-state: running;

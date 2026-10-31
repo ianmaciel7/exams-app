@@ -3,12 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 import { FirebaseAuthSessionBridgeClient } from "@/components/ui/extensions/firebase-auth-session-bridge-client";
-import { GlobalLoadingIndicator } from "@/components/ui/extensions/global-loading-indicator";
 import { IntlDocumentServer } from "@/components/ui/extensions/intl-document-server";
 import { IntlProviderServer } from "@/components/ui/extensions/intl-provider-server";
-import { LoadingOverlay } from "@/components/ui/extensions/loading-overlay";
 import { ThemeProviderClient } from "@/components/ui/extensions/theme-provider-client";
-import { Spinner } from "@/components/ui/spinner";
 import { Toaster } from "@/components/ui/toast";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
@@ -46,16 +43,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <Suspense fallback={null}>
       <IntlDocumentServer className={fontClassName}>
-        <Suspense
-          fallback={
-            <LoadingOverlay>
-              <Spinner
-                className="size-4 text-muted-foreground"
-                aria-hidden="true"
-              />
-            </LoadingOverlay>
-          }
-        >
+        <Suspense fallback={<div data-slot="loading-state" />}>
           <IntlProviderServer>
             <FirebaseAuthSessionBridgeClient />
             <ThemeProviderClient
@@ -65,7 +53,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               disableTransitionOnChange
             >
               <TooltipProvider>{children}</TooltipProvider>
-              <GlobalLoadingIndicator />
               <Toaster />
             </ThemeProviderClient>
           </IntlProviderServer>
