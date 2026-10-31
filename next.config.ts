@@ -13,7 +13,6 @@ const authEmulatorUrl = authEmulatorHost
   : undefined;
 
 const nextConfig: NextConfig = {
-  /* config options here */
   cacheComponents: true,
   partialPrefetching: true,
   reactCompiler: true,

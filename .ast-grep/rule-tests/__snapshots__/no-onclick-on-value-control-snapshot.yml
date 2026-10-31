@@ -1,0 +1,56 @@
+id: no-onclick-on-value-control
+snapshots:
+  "const a = <Switch checked={on} onClick={() => setOn(!on)} />;\n":
+    labels:
+    - source: onClick={() => setOn(!on)}
+      style: primary
+      start: 31
+      end: 57
+    - source: Switch
+      style: secondary
+      start: 11
+      end: 17
+    - source: <Switch checked={on} onClick={() => setOn(!on)} />
+      style: secondary
+      start: 10
+      end: 60
+    - source: onClick
+      style: secondary
+      start: 31
+      end: 38
+  "const b = <Checkbox onClick={toggle}>Accept</Checkbox>;\n":
+    labels:
+    - source: onClick={toggle}
+      style: primary
+      start: 20
+      end: 36
+    - source: Checkbox
+      style: secondary
+      start: 11
+      end: 19
+    - source: <Checkbox onClick={toggle}>
+      style: secondary
+      start: 10
+      end: 37
+    - source: onClick
+      style: secondary
+      start: 20
+      end: 27
+  "const c = <RadioGroup value={v} onClick={pick} />;\n":
+    labels:
+    - source: onClick={pick}
+      style: primary
+      start: 32
+      end: 46
+    - source: RadioGroup
+      style: secondary
+      start: 11
+      end: 21
+    - source: <RadioGroup value={v} onClick={pick} />
+      style: secondary
+      start: 10
+      end: 49
+    - source: onClick
+      style: secondary
+      start: 32
+      end: 39

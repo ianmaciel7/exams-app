@@ -1,10 +1,11 @@
 "use client";
 
 import type { ComponentProps } from "react";
+import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 import { useHomeSignOutButtonClient } from "../_hooks/use-home-sign-out-button-client";
-import { homeHeroActionVariants } from "./home-hero";
+import { homeHeroActionSize } from "./home-hero";
 
 type HomeSignOutButtonClientProps = ComponentProps<"div">;
 
@@ -22,17 +23,18 @@ function HomeSignOutButtonClient({
       {...props}
       className={cn("flex w-full flex-col gap-2 sm:w-auto", className)}
     >
-      <button
+      <Button
         type="button"
+        variant="outline"
         onClick={handleSignOut}
         disabled={isPending}
         aria-busy={isPending}
         aria-describedby={isError ? errorId : undefined}
-        className={homeHeroActionVariants("outline")}
+        className={homeHeroActionSize}
       >
         {isPending && <Spinner data-icon="inline-start" aria-hidden="true" />}
         {isPending ? t("signingOut") : auth("signOut")}
-      </button>
+      </Button>
       {isError && (
         <p
           id={errorId}

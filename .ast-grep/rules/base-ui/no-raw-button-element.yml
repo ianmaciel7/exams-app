@@ -1,0 +1,26 @@
+id: no-raw-button-element
+language: tsx
+files:
+  - src/components/**/*.tsx
+  - src/app/**/_components/**/*.tsx
+ignores:
+  - "**/*.test.tsx"
+  - "**/*.stories.tsx"
+  - src/components/ui/*.tsx
+  - src/components/ai-elements/**
+  - src/components/firebase/policies.tsx
+severity: error
+message: Use the shadcn Button from @/components/ui/button instead of a raw <button>.
+note: |
+  The Base UI Button wrapper keeps the touch target, focus ring, disabled and
+  pending semantics consistent with the rest of the app. A raw <button> styled
+  with buttonVariants drifts from them. For navigation, use a Link styled with
+  buttonVariants (ADR 0002). src/components/ai-elements holds unused registry copies and policies.tsx is excluded because it renders the
+  Firebase UI policy link with the caller's own className.
+rule:
+  any:
+    - kind: jsx_opening_element
+    - kind: jsx_self_closing_element
+  has:
+    field: name
+    regex: ^button$
