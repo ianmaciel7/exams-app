@@ -1,7 +1,7 @@
 # Graph Report - exams-app  (2026-10-30)
 
 ## Corpus Check
-- 684 files · ~423,281 words
+- 684 files · ~423,310 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 32 file(s) not represented in the graph (top: (none) 9, .toml 4, .css 4)
 
@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `1c42aea4`
+- Built from commit: `b650a4a5`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -524,16 +524,16 @@
 10. `firebase` - 36 edges
 
 ## Surprising Connections (you probably didn't know these)
+- `Component Selection` --references--> `ContextMenu()`  [INFERRED]
+  .agents/skills/shadcn/SKILL.md → src/components/ui/context-menu.tsx
 - `Items always inside their Group component` --references--> `ContextMenuGroup()`  [INFERRED]
   .agents/skills/shadcn/rules/composition.md → src/components/ui/context-menu.tsx
 - `Items always inside their Group component` --references--> `ContextMenuItem()`  [INFERRED]
   .agents/skills/shadcn/rules/composition.md → src/components/ui/context-menu.tsx
-- `Decision` --references--> `isLocale()`  [INFERRED]
-  docs/adr/0006-configure-testing.md → src/lib/locale.ts
 - `Hook dependencies and external synchronization` --references--> `useIsMobile()`  [INFERRED]
   CODING_STANDARDS.md → src/hooks/use-mobile.ts
-- `Inventory` --references--> `AuthProviderClient()`  [INFERRED]
-  docs/ui-state-feedback.md → src/components/ui/extensions/auth-provider-client.tsx
+- `Component Selection` --references--> `Breadcrumb()`  [INFERRED]
+  .agents/skills/shadcn/SKILL.md → src/components/ui/breadcrumb.tsx
 
 ## Import Cycles
 - None detected.
@@ -1641,7 +1641,7 @@ Nodes (21): authEmulatorEndpoint, ref_node_assert, ref_node_fs, ref_node_os, ref
   CODING_STANDARDS.md · relation: conceptually_related_to
 
 ## Knowledge Gaps
-- **2406 isolated node(s):** `Discovery Model`, `Style`, `Add/update threshold`, `Maintenance Actions`, `AttachmentsContext` (+2401 more)
+- **2406 isolated node(s):** `warmedRoutes`, `accessibilityTags`, `profileViewports`, `AttachmentsContext`, `PromptInputActionAddAttachmentsProps` (+2401 more)
   These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 3112 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **234 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -1650,15 +1650,15 @@ _Questions this graph is uniquely positioned to answer:_
 
 - **What is the exact relationship between `Native Biome rule evaluation history` and `Boolean UI phase flags instead of status tag`?**
   _Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low._
-- **Why does `init()` connect `initGlobalBar` to `setLiveState`, `impeccable/SKILL.md`, `connectSSE`, `Init flow`, `live-browser.js`, `syncPageChatFocus`, `live.md`, `onAnnotDown`, `handleManualEditActivity`, `doctor.md`?**
-  _High betweenness centrality (0.202) - this node is a cross-community bridge._
 - **Why does `react` connect `react` to `prompt-input.tsx`, `cn`, `chart.tsx`, `plan.tsx`, `card.tsx`, `node.tsx`, `message-scroller.tsx`, `useIsMobile`, `_components/profile-card.tsx`, `Composition: asChild (radix) vs render (base)`, `model-selector.tsx`, `drawer.tsx`, `ui/code-block.tsx`, `commit.tsx`, `confirmation.tsx`, `test-results.tsx`, `Button`, `Assistant activity uses Trace`, `package.json`, `sidebar.tsx`, `voice-selector.tsx`, `app/layout.tsx`, `home-client.tsx`, `profile-section-client.tsx`, `web-preview.tsx`, `client.ts`, `lucide-react`, `menubar.tsx`, `ai-elements/code-block.tsx`, `firebase`, `queue.tsx`, `color-pair.tsx`, `schema-display.tsx`, `next-intl`, `server.ts`, `stack-trace.tsx`, `alert-dialog.tsx`, `inline-citation.tsx`, `audio-player.tsx`, `attachments.tsx`, `persona.tsx`, `tool.tsx`, `speech-input.tsx`, `ai-elements/message.tsx`, `environment-variables.tsx`, `mic-selector.tsx`, `open-in-chat.tsx`, `agent.tsx`, `sandbox.tsx`, `reasoning.tsx`, `question.tsx`, `sheet.tsx`, `context.tsx`, `package-info.tsx`, `data.ts`, `vitest`, `use-auth-navigation.ts`, `collapsible.tsx`, `transcription.tsx`, `alert.tsx`, `file-tree.tsx`, `terminal.tsx`, `table.tsx`, `bubble.tsx`, `chain-of-thought.tsx`, `artifact.tsx`, `context-menu.tsx`, `carousel.tsx`, `review-findings.test.tsx`, `conversation.tsx`?**
-  _High betweenness centrality (0.193) - this node is a cross-community bridge._
-- **Why does `event()` connect `access-policy.test.cjs` to `audio-player.tsx`?**
-  _High betweenness centrality (0.106) - this node is a cross-community bridge._
+  _High betweenness centrality (0.164) - this node is a cross-community bridge._
+- **Why does `init()` connect `initGlobalBar` to `setLiveState`, `impeccable/SKILL.md`, `connectSSE`, `Init flow`, `live-browser.js`, `syncPageChatFocus`, `live.md`, `onAnnotDown`, `handleManualEditActivity`, `doctor.md`?**
+  _High betweenness centrality (0.153) - this node is a cross-community bridge._
+- **Why does `vitest` connect `vitest` to `prompt-input.tsx`, `react`, `useIsMobile`, `card.tsx`, `_components/profile-card.tsx`, `ui/code-block.tsx`, `react-dom`, `Button`, `package.json`, `home-client.tsx`, `app/layout.tsx`, `profile-section-client.tsx`, `vitest.config.mts`, `client.ts`, `hook-module-scope.test.ts`, `ai-elements/code-block.tsx`, `firebase`, `next-intl`, `server.ts`, `audio-player.tsx`, `attachments.tsx`, `speech-input.tsx`, `agent.tsx`, `context.tsx`, `data.ts`, `use-auth-navigation.ts`, `test-helpers.ts`, `Application logging`, `auth-service-worker.test.ts`, `carousel.tsx`, `review-findings.test.tsx`?**
+  _High betweenness centrality (0.094) - this node is a cross-community bridge._
 - **Are the 14 inferred relationships involving `Button()` (e.g. with `Compound forms` and `Obligations`) actually correct?**
   _`Button()` has 14 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `Discovery Model`, `Style`, `Add/update threshold` to the rest of the system?**
+- **What connects `warmedRoutes`, `accessibilityTags`, `profileViewports` to the rest of the system?**
   _2406 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `prompt-input.tsx` be split into smaller, more focused modules?**
   _Cohesion score 0.025165865934568748 - nodes in this community are weakly interconnected._

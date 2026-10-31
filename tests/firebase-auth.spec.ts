@@ -1,7 +1,7 @@
 // cspell:ignore domcontentloaded describedby
 import fs from "node:fs";
 import AxeBuilder from "@axe-core/playwright";
-import { expect, test } from "@playwright/test";
+import { expect, type Page, test } from "@playwright/test";
 import esMessages from "../src/messages/es.json";
 
 for (const envFile of [".env.local", ".env"]) {
@@ -25,6 +25,16 @@ const emulator =
     ? rawHost.replace(/\/$/, "")
     : `http://${rawHost}`.replace(/\/$/, "");
 const authTestOrigin = `http://${new URL(emulator).hostname}:3100`;
+
+const signInEmail = (page: Page) =>
+  page.locator('input[autocomplete="username"]');
+const signInPassword = (page: Page) =>
+  page.locator('input[autocomplete="current-password"]');
+const signUpEmail = (page: Page) => page.locator('input[autocomplete="email"]');
+const signUpPassword = (page: Page) =>
+  page.locator('input[autocomplete="new-password"]');
+const recoveryEmail = (page: Page) =>
+  page.locator('input[type="email"][autocomplete="email"]');
 
 const project =
   process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || process.env.GCLOUD_PROJECT;
@@ -74,8 +84,8 @@ test("registration and persisted authentication redirect", async ({ page }) => {
   await page.goto("/sign-in");
   await page.getByRole("button", { name: /don't have an account/i }).click();
   await expect(page).toHaveURL(/\/register$/);
-  await page.getByLabel("Email Address").filter({ visible: true }).fill(email);
-  await page.getByLabel("Password").filter({ visible: true }).fill(password);
+  await signUpEmail(page).fill(email);
+  await signUpPassword(page).fill(password);
   await page.getByRole("button", { name: "Create Account" }).click();
   await expect(page).toHaveURL("/");
   await page.goto("/sign-in");
@@ -93,14 +103,13 @@ test("invalid credentials and successful sign-in", async ({
   );
   expect(created.ok()).toBeTruthy();
   await page.goto("/sign-in");
-  await page.getByLabel("Email Address").filter({ visible: true }).fill(email);
+  await signInEmail(page).fill(email);
   await page
-    .getByLabel("Password")
-    .filter({ visible: true })
+    .locator('input[autocomplete="current-password"]')
     .fill("wrong-password");
   await page.getByRole("button", { name: "Sign In", exact: true }).click();
   await expect(page.getByText(/invalid|incorrect/i)).toBeVisible();
-  await page.getByLabel("Password").filter({ visible: true }).fill(password);
+  await signInPassword(page).fill(password);
   await page.getByRole("button", { name: "Sign In", exact: true }).click();
   await expect(page).toHaveURL("/");
 });
@@ -120,7 +129,7 @@ test("password recovery sends an emulator reset code and displays failures", asy
   await expect(page).toHaveURL(/\/forgot-password$/);
   // Next.js can retain an offscreen previous route during transitions.
   // Target the form the user can actually interact with, not hidden inputs.
-  const emailField = page.getByLabel("Email Address").filter({ visible: true });
+  const emailField = recoveryEmail(page);
   await expect(emailField).toBeVisible();
   await page
     .getByRole("button", { name: "Reset Password", exact: true })
@@ -202,7 +211,7 @@ test("Google popup cancellation restores sign-in and supports retry", async ({
   const googleButton = page.getByRole("button", {
     name: "Sign in with Google",
   });
-  const emailField = page.getByLabel("Email Address").filter({ visible: true });
+  const emailField = signInEmail(page);
 
   await expect(googleButton).toBeEnabled();
 
@@ -266,8 +275,8 @@ test("profile displays user email and signs out successfully", async ({
   );
   expect(created.ok()).toBeTruthy();
   await page.goto("/sign-in");
-  await page.getByLabel("Email Address").filter({ visible: true }).fill(email);
-  await page.getByLabel("Password").filter({ visible: true }).fill(password);
+  await signInEmail(page).fill(email);
+  await signInPassword(page).fill(password);
   await page.getByRole("button", { name: "Sign In", exact: true }).click();
   await expect(page).toHaveURL("/");
   await page.getByRole("link", { name: "My profile" }).click();
@@ -294,8 +303,8 @@ test("saving the profile language keeps the unprefixed route and translates afte
   );
   expect(created.ok()).toBeTruthy();
   await page.goto("/sign-in");
-  await page.getByLabel("Email Address").filter({ visible: true }).fill(email);
-  await page.getByLabel("Password").filter({ visible: true }).fill(password);
+  await signInEmail(page).fill(email);
+  await signInPassword(page).fill(password);
   await page.getByRole("button", { name: "Sign In", exact: true }).click();
   await expect(page).toHaveURL("/");
   await page.getByRole("link", { name: "My profile" }).click();
@@ -344,8 +353,8 @@ test("guest deep link returns to the protected page after sign-in", async ({
     "/profile?tab=security",
   );
 
-  await page.getByLabel("Email Address").filter({ visible: true }).fill(email);
-  await page.getByLabel("Password").filter({ visible: true }).fill(password);
+  await signInEmail(page).fill(email);
+  await signInPassword(page).fill(password);
   await page.getByRole("button", { name: "Sign In", exact: true }).click();
 
   await expect(page).toHaveURL(`${authTestOrigin}/profile?tab=security`);
@@ -370,8 +379,8 @@ test("profile changes survive reload, sign-out and a new sign-in", async ({
   };
 
   await page.goto("/sign-in");
-  await page.getByLabel("Email Address").filter({ visible: true }).fill(email);
-  await page.getByLabel("Password").filter({ visible: true }).fill(password);
+  await signInEmail(page).fill(email);
+  await signInPassword(page).fill(password);
   await page.getByRole("button", { name: "Sign In", exact: true }).click();
   await expect(page).toHaveURL("/");
   await page.getByRole("link", { name: "My profile" }).click();
@@ -414,8 +423,8 @@ test("profile changes survive reload, sign-out and a new sign-in", async ({
   ).toBeVisible();
 
   await page.goto("/sign-in");
-  await page.getByLabel("Email Address").filter({ visible: true }).fill(email);
-  await page.getByLabel("Password").filter({ visible: true }).fill(password);
+  await signInEmail(page).fill(email);
+  await signInPassword(page).fill(password);
   await page.getByRole("button", { name: "Sign In", exact: true }).click();
   await page.getByRole("link", { name: "My profile" }).click();
   await expect(page.getByLabel("Name", { exact: true })).toHaveValue(
@@ -526,8 +535,8 @@ test("@a11y authenticated profile has no detected WCAG A/AA violations", async (
   expect(created.ok()).toBeTruthy();
 
   await page.goto("/sign-in");
-  await page.getByLabel("Email Address").filter({ visible: true }).fill(email);
-  await page.getByLabel("Password").filter({ visible: true }).fill(password);
+  await signInEmail(page).fill(email);
+  await signInPassword(page).fill(password);
   await page.getByRole("button", { name: "Sign In", exact: true }).click();
   await expect(page).toHaveURL("/");
   await page.goto("/profile");
@@ -566,14 +575,8 @@ for (const colorScheme of ["light", "dark"] as const) {
       );
       expect(created.ok()).toBeTruthy();
       await page.goto("/sign-in");
-      await page
-        .getByLabel("Email Address")
-        .filter({ visible: true })
-        .fill(email);
-      await page
-        .getByLabel("Password")
-        .filter({ visible: true })
-        .fill(password);
+      await signInEmail(page).fill(email);
+      await signInPassword(page).fill(password);
       await page.getByRole("button", { name: "Sign In", exact: true }).click();
       await expect(page).toHaveURL("/");
       await page.goto("/profile");

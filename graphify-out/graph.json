@@ -66224,7 +66224,7 @@
       "file_type": "code",
       "norm_label": "accessibilitytags",
       "source_file": "tests/firebase-auth.spec.ts",
-      "source_location": "L494"
+      "source_location": "L497"
     },
     {
       "id": "tests_firebase_auth_spec_profileviewports",
@@ -66235,7 +66235,7 @@
       "file_type": "code",
       "norm_label": "profileviewports",
       "source_file": "tests/firebase-auth.spec.ts",
-      "source_location": "L542"
+      "source_location": "L545"
     },
     {
       "id": "tests_firebase_auth_spec_warmedroutes",
@@ -179594,7 +179594,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/firebase-auth.spec.ts",
-      "source_location": "L494",
+      "source_location": "L497",
       "weight": 1.0
     },
     {
@@ -179605,7 +179605,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/firebase-auth.spec.ts",
-      "source_location": "L542",
+      "source_location": "L545",
       "weight": 1.0
     },
     {
@@ -199331,5 +199331,5 @@
       "source_file": ".agents/skills/setup-matt-pocock-skills/issue-tracker-github.md"
     }
   ],
-  "built_at_commit": "1c42aea49d6789c1796ba0212601d526e8acd406"
+  "built_at_commit": "b650a4a5dcea182fd74172602c41e57ebc3ac19d"
 }
