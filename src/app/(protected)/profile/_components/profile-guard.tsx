@@ -12,8 +12,6 @@ type ProfileGuardProps = ComponentProps<"div"> & {
 function ProfileGuard({ status, children, ...props }: ProfileGuardProps) {
   const t = useTranslations("Auth");
 
-  if (status.isHidden) return null;
-
   if (status.isLoading) {
     return (
       <div {...props}>

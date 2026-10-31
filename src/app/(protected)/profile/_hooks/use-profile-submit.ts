@@ -16,7 +16,7 @@ type UseProfileSubmitOptions = {
   setAvatarVersion: (version: number) => void;
   setPhotoURL: (photoURL: string | null) => void;
   setTheme: (theme: ProfileValues["theme"]) => void;
-  user: User | null;
+  user: User;
 };
 
 export function useProfileSubmit({
@@ -42,7 +42,7 @@ export function useProfileSubmit({
   ): Promise<ProfileValues | undefined> => {
     setSaveError(null);
     const previous = savedValuesRef.current;
-    if (!user || !previous) return;
+    if (!previous) return;
 
     try {
       const savedProfile: SavedProfile = await withUsageGuard(

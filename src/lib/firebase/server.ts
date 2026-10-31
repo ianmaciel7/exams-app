@@ -25,6 +25,7 @@ const TOKEN_REJECTION_CODES = new Set([
   "auth/id-token-expired",
   "auth/id-token-revoked",
   "auth/user-disabled",
+  "auth/user-not-found",
 ]);
 
 function isTokenRejection(error: unknown) {
@@ -58,10 +59,10 @@ async function verifyIdToken(authIdToken: string) {
 
 /**
  * Reads only a worker-injected, refreshed ID token. An absent worker is not an
- * unauthenticated verdict: the existing browser guard remains the first-load
- * fallback until the worker controls the tab. Authorization that must not
- * depend on that fallback belongs in `verifyRole` under
- * `src/app/(protected)/_lib/dal.ts`.
+ * unauthenticated verdict: the worker covers only navigation and RSC requests,
+ * and the browser gate remains the first-load fallback until it controls the
+ * tab. Authorization must use `verifySession` or `verifyRole` under
+ * `src/app/(protected)/_lib/dal.ts`, which fail closed.
  *
  * `cache` shares one revocation-aware verification across a render pass. It has
  * no effect in Server Functions and Route Handlers, which verify on every call.

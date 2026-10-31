@@ -75,6 +75,7 @@ describe("getFirebaseServerSession", () => {
     "auth/id-token-expired",
     "auth/argument-error",
     "auth/user-disabled",
+    "auth/user-not-found",
   ])("treats a %s token as unauthenticated", async (code) => {
     setHeaders({ "x-firebase-auth-bridge": "1", authorization: "Bearer t" });
     mocks.verifyIdToken.mockRejectedValue(

@@ -14,8 +14,7 @@ export function useProfileAvatarFieldClient() {
     useProfileAvatar(avatarFile, (file) =>
       setValue("avatarFile", file, { shouldDirty: true }),
     );
-  const displayName = user?.displayName ?? null;
-  const email = user?.email ?? null;
+  const { displayName, email } = user;
   const disabled = formState.disabled || formState.isSubmitting;
   const avatarSrc = getAvatarSource(avatarPreview, photoURL, avatarVersion);
   const fallbackInitial = (

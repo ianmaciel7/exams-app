@@ -4,7 +4,6 @@ import type { useProfileSession } from "./use-profile-session";
 export type ProfileStatus = {
   errorMessage: string;
   isError: boolean;
-  isHidden: boolean;
   isLoading: boolean;
   isReady: boolean;
   userId: string | undefined;
@@ -17,16 +16,13 @@ export function useProfileStatus(
   const idle: ProfileStatus = {
     errorMessage: "",
     isError: false,
-    isHidden: false,
     isLoading: false,
     isReady: false,
     userId: undefined,
   };
-  const { user, error, defaultValues, authReady, preferencesReady } = session;
-  if (!authReady || (user && !preferencesReady))
-    return { ...idle, isLoading: true };
-  if (!user && !error) return { ...idle, isHidden: true };
-  if (!user || !defaultValues)
+  const { user, error, defaultValues, preferencesReady } = session;
+  if (!preferencesReady) return { ...idle, isLoading: true };
+  if (!defaultValues)
     return {
       ...idle,
       errorMessage: error ?? t("profileLoadError"),
