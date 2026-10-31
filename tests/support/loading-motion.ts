@@ -97,7 +97,7 @@ export async function installLoadingProbe(page: Page) {
           if (!icon) throw new Error("Labeled loading indicator has no icon");
           const iconBox = icon.getBoundingClientRect();
           const overlay = element.closest('[data-slot="loading-overlay"]');
-          const center = overlay?.firstElementChild?.getBoundingClientRect();
+          const center = overlay?.firstElementChild?.getBoundingClientRect() ?? new DOMRect();
           return {
             origin: element.closest('[data-slot="global-loading-indicator"]')
               ? ("global" as const)
@@ -106,8 +106,8 @@ export async function installLoadingProbe(page: Page) {
             y: rect.top + rect.height / 2,
             iconX: iconBox.left + iconBox.width / 2,
             iconY: iconBox.top + iconBox.height / 2,
-            expectedX: center ? center.left + center.width / 2 : 0,
-            expectedY: center ? center.top + center.height / 2 : 0,
+            expectedX: center.left + center.width / 2,
+            expectedY: center.top + center.height / 2,
           };
         });
       const frame: Frame = {
