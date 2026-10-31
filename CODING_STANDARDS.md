@@ -533,6 +533,11 @@ imports and re-exports are checked; this is not a complete transitive graph
 analysis. Keep the current unprefixed locale URLs and use the existing safe
 return-URL validator for user-controlled redirect destinations.
 
+Import `Link` from `next/link` and router hooks from `next/navigation`
+directly. Do not add a re-export shim such as `@/i18n/navigation`: the locale
+lives in a cookie, not in the path, so a wrapper changes nothing and splits the
+import path. Biome `noRestrictedImports` rejects `@/i18n/navigation`.
+
 Centralize application route paths and sign-in redirects in
 `src/lib/navigation.ts`. Owned modules reference `routes` (`home`, `signIn`,
 `register`, `forgotPassword`, `profile`) instead of string literals such as

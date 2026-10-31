@@ -1,6 +1,6 @@
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "@/i18n/navigation";
 import type { Locale } from "@/lib/locale";
 import type { ThemePreference } from "@/lib/theme";
 import { readProfile } from "../_lib/data";

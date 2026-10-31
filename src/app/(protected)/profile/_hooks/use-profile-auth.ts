@@ -1,8 +1,6 @@
 import type { User } from "firebase/auth";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
-import { useRouter } from "@/i18n/navigation";
-import { routes } from "@/lib/navigation";
 import { subscribeToSession } from "@/lib/session";
 
 type AuthState = {
@@ -11,9 +9,12 @@ type AuthState = {
   user: User | null;
 };
 
+/**
+ * Reads the Firebase session for the profile form. Redirecting a signed-out
+ * visitor is owned by the (protected) guard, which keeps the return URL.
+ */
 export function useProfileAuth() {
   const t = useTranslations("Auth");
-  const router = useRouter();
   const [auth, setAuth] = useState<AuthState>({
     error: null,
     isLoading: true,
@@ -35,12 +36,11 @@ export function useProfileAuth() {
       return subscribeToSession((user) => {
         setAuth({ error: null, isLoading: false, user });
         setPhotoURL(user?.photoURL ?? null);
-        if (!user) router.replace(routes.signIn);
       }, onError);
     } catch (cause) {
       onError(cause instanceof Error ? cause : new Error(String(cause)));
     }
-  }, [router, t]);
+  }, [t]);
 
   return {
     authReady: !auth.isLoading,

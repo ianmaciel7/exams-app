@@ -1,0 +1,25 @@
+id: no-protected-descendant-sign-in-redirect-ts
+language: typescript
+files:
+  - "src/app/(protected)/**/*.ts"
+ignores:
+  - "src/app/(protected)/_hooks/use-protected-guard-client.ts"
+  - "src/app/(protected)/_lib/**"
+  - "**/*.test.ts"
+severity: error
+message: Only the (protected) guard redirects a signed-out visitor to sign-in; read the session here and let the guard keep the ?next= destination.
+note: |
+  Firebase notifies auth observers in subscription order. A page or hook inside
+  (protected) subscribes after the guard, so its redirect runs last and replaces
+  /sign-in?next=<current URL> with a bare /sign-in. See ARCHITECTURE.md
+  (Authentication navigation). The server session check in _lib/ is exempt.
+rule:
+  kind: call_expression
+  any:
+    - pattern: $ROUTER.replace(routes.signIn)
+    - pattern: $ROUTER.push(routes.signIn)
+    - pattern: $ROUTER.replace(getSignInUrl($$$))
+    - pattern: $ROUTER.push(getSignInUrl($$$))
+    - pattern: redirect(routes.signIn)
+    - pattern: redirect(getSignInUrl($$$))
+    - pattern: redirectToSignIn($$$)

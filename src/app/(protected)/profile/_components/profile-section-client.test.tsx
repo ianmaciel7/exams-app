@@ -31,20 +31,6 @@ vi.mock("next/navigation", () => ({
   useRouter: () => mocks.router,
 }));
 
-vi.mock("@/i18n/navigation", () => ({
-  Link: ({
-    href,
-    children,
-    ...props
-  }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
-    <a href={href} {...props}>
-      {children}
-    </a>
-  ),
-  usePathname: () => "/profile",
-  useRouter: () => mocks.router,
-}));
-
 vi.mock("@/lib/firebase/usage", () => ({
   withUsageGuard: async (_event: unknown, operation: () => Promise<unknown>) =>
     operation(),
@@ -135,11 +121,11 @@ describe("ProfileSectionClient", () => {
 
   afterEach(cleanup);
 
-  it("renders nothing when user is null", () => {
+  it("renders nothing when user is null and leaves the redirect to the protected guard", () => {
     mocks.currentUser = null;
     const { container } = render(<ProfileSectionClient />);
     expect(container.firstChild).toBeNull();
-    expect(mocks.router.replace).toHaveBeenCalledWith("/sign-in");
+    expect(mocks.router.replace).not.toHaveBeenCalled();
   });
 
   it("forwards element props to the card while the session is active", async () => {
