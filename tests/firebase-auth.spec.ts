@@ -463,11 +463,11 @@ test("@loading observes every protected layout state during real profile journey
   expect(created.ok()).toBe(true);
   await installLoadingProbe(page);
   await page.goto("/sign-in");
-  await expect(page.getByLabel("Email Address")).toBeVisible();
+  await expect(signInEmail(page)).toBeVisible();
   await assertLoadingFinished(page);
 
-  await page.getByLabel("Email Address").fill(email);
-  await page.locator("#password").fill(password);
+  await signInEmail(page).fill(email);
+  await signInPassword(page).fill(password);
   await page.getByRole("button", { name: "Sign In", exact: true }).click();
   await expect(page).toHaveURL("/");
   await expect(page.getByRole("link", { name: "My profile" })).toBeVisible();
@@ -549,10 +549,10 @@ test("@loading Pixel 7 real authenticated Home to Profile does not jump", async 
     expect(created.ok()).toBe(true);
     await installLoadingProbe(page);
     await page.goto(`${authTestOrigin}/sign-in`);
-    await expect(page.getByLabel("Email Address")).toBeVisible();
+    await expect(signInEmail(page)).toBeVisible();
     await assertLoadingFinished(page);
-    await page.getByLabel("Email Address").fill(email);
-    await page.locator("#password").fill(password);
+    await signInEmail(page).fill(email);
+    await signInPassword(page).fill(password);
     await page.getByRole("button", { name: "Sign In", exact: true }).click();
     await expect(page).toHaveURL(`${authTestOrigin}/`);
     await expect(page.getByRole("link", { name: "My profile" })).toBeVisible();
