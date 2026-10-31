@@ -32,11 +32,13 @@
     "check:secrets": "gitleaks git --no-banner --redact",
     "check:secrets:staged": "gitleaks protect --staged --no-banner --redact",
     "check:secret-guard": "node --test scripts/checks/check-secret-guard.test.mjs && node scripts/checks/check-secret-guard.mjs",
+    "check:package-scripts": "node --test scripts/checks/check-package-scripts.test.mjs && node scripts/checks/check-package-scripts.mjs",
     "check:workflows": "actionlint && zizmor .github/workflows",
     "audit": "pnpm audit",
     "audit:functions": "npm --prefix functions audit --package-lock-only --ignore-scripts",
-    "verify:fast": "pnpm lint:ci && pnpm typecheck && pnpm test && pnpm test:logging && pnpm test:evals && pnpm test:production-smoke && pnpm check:structure && pnpm check:routes && pnpm check:components && pnpm check:responsiveness && pnpm check:english && pnpm check:docs && pnpm check:adr && pnpm check:release && pnpm check:app-hosting-auth-iam && pnpm check:emulator-snapshot && pnpm check:secret-guard",
-    "verify:static": "pnpm lint:ci && pnpm typecheck && pnpm test:coverage && pnpm test:logging && pnpm test:production-smoke && pnpm check:architecture && pnpm check:unused && pnpm check:duplicates && pnpm check:structure && pnpm check:routes && pnpm check:components && pnpm check:responsiveness && pnpm check:english && pnpm check:docs && pnpm check:adr && pnpm check:release && pnpm check:app-hosting-auth-iam && pnpm check:emulator-snapshot && pnpm check:secret-guard && pnpm check:spelling && pnpm check:markdown && pnpm analyze:fallow && pnpm analyze:react",
+    "check:repo": "pnpm check:structure && pnpm check:routes && pnpm check:components && pnpm check:responsiveness && pnpm check:english && pnpm check:docs && pnpm check:adr && pnpm check:release && pnpm check:app-hosting-auth-iam && pnpm check:emulator-snapshot && pnpm check:secret-guard && pnpm check:package-scripts",
+    "verify:fast": "pnpm lint:ci && pnpm typecheck && pnpm test && pnpm test:logging && pnpm test:evals && pnpm test:production-smoke && pnpm check:repo",
+    "verify:static": "pnpm lint:ci && pnpm typecheck && pnpm test:coverage && pnpm test:logging && pnpm test:production-smoke && pnpm check:architecture && pnpm check:unused && pnpm check:duplicates && pnpm check:repo && pnpm check:spelling && pnpm check:markdown && pnpm analyze:fallow && pnpm analyze:react",
     "verify:build": "pnpm test:browser && pnpm analyze:size && pnpm ladle:build",
     "verify:full": "pnpm verify:static && pnpm verify:build",
     "verify:security": "pnpm check:security:rules && pnpm check:security && pnpm check:secrets && pnpm check:workflows && pnpm audit && pnpm audit:functions",
@@ -60,8 +62,7 @@
     "analyze:react": "react-doctor --no-score --no-telemetry --no-supply-chain",
     "analyze:bundle": "next experimental-analyze",
     "analyze:size": "next build && size-limit",
-    "analyze:lighthouse": "node -e \"require('node:fs').mkdirSync('reports/lighthouse',{recursive:true})\" && lighthouse http://127.0.0.1:3000 --output=html --output-path=reports/lighthouse/report.html --chrome-flags=\"--headless\"",
-    "analyze:lighthouse:ci": "node -e \"require('node:fs').mkdirSync('reports/lighthouse',{recursive:true})\" && lighthouse http://127.0.0.1:3000 --output=html --output-path=reports/lighthouse/report.html --chrome-flags=\"--headless --no-sandbox\"",
+    "analyze:lighthouse": "node -e \"require('node:fs').mkdirSync('reports/lighthouse',{recursive:true})\" && lighthouse http://127.0.0.1:3000 --output=html --output-path=reports/lighthouse/report.html --chrome-flags=\"--headless --no-sandbox\"",
     "ladle": "ladle serve",
     "ladle:build": "ladle build",
     "prepare": "husky",
@@ -73,8 +74,7 @@
     "check:english": "node --test scripts/checks/check-english.test.mjs && node scripts/checks/check-english.mjs",
     "check:responsiveness": "node --test scripts/checks/check-responsiveness.test.mjs && node scripts/checks/check-responsiveness.mjs",
     "check:lighthouse": "node --test scripts/checks/check-lighthouse.test.mjs && node scripts/checks/check-lighthouse.mjs",
-    "eval:tool-usage": "node scripts/evals/run-tool-usage-evals.mjs",
-    "doctor": "react-doctor --no-score --no-telemetry --no-supply-chain"
+    "eval:tool-usage": "node scripts/evals/run-tool-usage-evals.mjs"
   },
   "lint-staged": {
     "*.{ts,tsx}": [

@@ -337,7 +337,7 @@ scans do not mean WCAG compliance. Test those manually.
   hosted runner; it fails below the `break` score in `stryker.config.json`
   and uploads the HTML report.
 - `lighthouse`: builds and serves the app, then runs
-  `pnpm analyze:lighthouse:ci` and uploads the report. It is report-only: it
+  `pnpm analyze:lighthouse` and uploads the report. It is report-only: it
   fails only when the audit cannot run, because no score threshold is set.
 
 Fallow and React Doctor already run in the `static` job. The Lighthouse job's
