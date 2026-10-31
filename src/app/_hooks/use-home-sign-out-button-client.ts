@@ -2,11 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-
-// Loaded on demand, like the session, to keep Firebase out of the home page's
-// initial bundle. Outside the hook because React Compiler does not support
-// `import()`.
-const loadAuth = () => import("@/lib/auth");
+import { loadAuth } from "../_lib/firebase-loaders";
 
 export function useHomeSignOutButtonClient() {
   const t = useTranslations("Home");
