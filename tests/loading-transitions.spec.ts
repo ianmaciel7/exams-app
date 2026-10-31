@@ -111,7 +111,13 @@ test("@loading records real public-layout navigation and no stuck overlay", asyn
   await expect(page.getByLabel("Email Address")).toBeVisible();
   await assertLoadingFinished(page);
 
-  await page.goto("/forgot-password");
+  await page.getByRole("button", { name: /have an account/i }).click();
+  await expect(page).toHaveURL(/\/sign-in$/);
+  await expect(page.getByLabel("Email Address")).toBeVisible();
+  await assertLoadingFinished(page);
+
+  await page.getByRole("button", { name: /forgot password/i }).click();
+  await expect(page).toHaveURL(/\/forgot-password$/);
   await expect(page.getByLabel("Email Address")).toBeVisible();
   await assertLoadingFinished(page);
 
@@ -124,4 +130,15 @@ test("@loading records real public-layout navigation and no stuck overlay", asyn
     await readLoadingTrace(page),
     "sign-in → register → forgot-password → sign-in",
   );
+});
+
+test("@loading not-found page uses the root layout without a lingering overlay", async ({
+  page,
+}) => {
+  await installLoadingProbe(page);
+  const response = await page.goto("/missing-loading-page");
+  expect(response?.status()).toBe(404);
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  await assertLoadingFinished(page);
+  assertLoadingTrace(await readLoadingTrace(page), "not-found root layout");
 });
