@@ -81,3 +81,50 @@ test("keeps a single viewport-stable spinner through loading-state replacements"
     0.5,
   );
 });
+
+test("does not show a loader for hidden inactive route segments", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+
+  const result = await page.evaluate(async () => {
+    const global = document.querySelector<HTMLElement>(
+      '[data-slot="global-loading-indicator"]',
+    );
+    if (!global) throw new Error("Missing global loader");
+    const nextFrame = () =>
+      new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+    const visibility = () => getComputedStyle(global).visibility;
+
+    const hidden = document.createElement("div");
+    hidden.hidden = true;
+    hidden.innerHTML = '<div data-slot="loading-state"></div>';
+    document.body.append(hidden);
+    await nextFrame();
+    const hiddenAttribute = visibility();
+
+    hidden.hidden = false;
+    hidden.style.display = "none";
+    await nextFrame();
+    const hiddenInlineStyle = visibility();
+
+    hidden.style.display = "";
+    await nextFrame();
+    const active = visibility();
+
+    hidden.remove();
+    await nextFrame();
+    return {
+      hiddenAttribute,
+      hiddenInlineStyle,
+      active,
+      afterRemoval: visibility(),
+    };
+  });
+
+  expect(result.hiddenAttribute).toBe("hidden");
+  expect(result.hiddenInlineStyle).toBe("hidden");
+  expect(result.active).toBe("visible");
+  expect(result.afterRemoval).toBe("hidden");
+});

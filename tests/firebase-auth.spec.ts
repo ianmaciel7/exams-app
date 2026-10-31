@@ -199,6 +199,11 @@ test("profile displays user email and signs out successfully", async ({
   await page.locator("#password").fill(password);
   await page.getByRole("button", { name: "Sign In", exact: true }).click();
   await expect(page).toHaveURL("/");
+  await expect(page.getByRole("link", { name: "My profile" })).toBeVisible();
+  await expect(
+    page.locator('[data-slot="global-loading-indicator"]'),
+  ).toHaveCSS("visibility", "hidden");
+
   await page.evaluate(() => {
     const spinner = document.querySelector(
       '[data-slot="global-loading-indicator"] [data-slot="spinner"]',
