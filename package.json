@@ -73,7 +73,11 @@
     "doctor": "react-doctor --no-score --no-telemetry --no-supply-chain"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,json,jsonc,css}": "biome check --write --no-errors-on-unmatched",
+    "*.{ts,tsx}": [
+      "biome check --write --no-errors-on-unmatched",
+      "ast-grep scan"
+    ],
+    "*.{js,jsx,json,jsonc,css}": "biome check --write --no-errors-on-unmatched",
     "*.{md,mdx,mjs,cjs,yml,yaml}": "node scripts/checks/check-english.mjs"
   },
   "dependencies": {
