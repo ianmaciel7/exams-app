@@ -1,6 +1,5 @@
-import { useTranslations } from "next-intl";
 import type { ComponentProps, ReactNode } from "react";
-import { LoadingPrimitive } from "@/components/ui/extensions/loading-primitive";
+import { LoadingState } from "@/components/ui/extensions/loading-state";
 import type { ProfileStatus } from "../_hooks/use-profile-status";
 import { ProfileCard, ProfileCardContent } from "./profile-card";
 
@@ -10,16 +9,12 @@ type ProfileGuardProps = ComponentProps<"div"> & {
 };
 
 function ProfileGuard({ status, children, ...props }: ProfileGuardProps) {
-  const t = useTranslations("Auth");
-
   if (status.isHidden) return null;
 
   if (status.isLoading) {
     return (
       <div {...props}>
-        <LoadingPrimitive boundary="profile-preferences">
-          {t("loading")}
-        </LoadingPrimitive>
+        <LoadingState boundary="profile-preferences" />
       </div>
     );
   }

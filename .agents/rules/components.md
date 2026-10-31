@@ -152,7 +152,7 @@ Export aliases, named function/class expressions, enums and type parameters also
 
 Place shared application components in `src/components/ui/extensions/` and
 route-private components in `src/app/**/_components/`. For example,
-`LabeledSpinner` belongs in `ui/extensions` because both
+`LoadingState` belongs in `ui/extensions` because both
 route components and Firebase UI consume it. Do not create parallel application
 component folders such as `src/components/loading/`.
 

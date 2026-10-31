@@ -62,7 +62,9 @@ describe("ProtectedGuardClient", () => {
         <div>{"Protected Content"}</div>
       </ProtectedGuardClient>,
     );
-    expect(screen.getByRole("status").textContent).toBe("loading");
+    expect(
+      document.querySelector('[data-loading-boundary="protected-auth"]'),
+    ).not.toBeNull();
     expect(screen.queryByText("Protected Content")).toBeNull();
   });
 
