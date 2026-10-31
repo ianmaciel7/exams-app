@@ -2,7 +2,6 @@
 
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { signOutUser } from "@/lib/auth";
 
 export function useHomeSignOutButtonClient() {
   const t = useTranslations("Home");
@@ -13,6 +12,9 @@ export function useHomeSignOutButtonClient() {
     if (state === "pending") return;
     setState("pending");
     try {
+      // Loaded on demand, like the session, to keep Firebase out of the home
+      // page's initial bundle.
+      const { signOutUser } = await import("@/lib/auth");
       await signOutUser();
     } catch {
       setState("error");

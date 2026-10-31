@@ -2,7 +2,6 @@
 
 import type { User } from "firebase/auth";
 import { useEffect, useState } from "react";
-import { subscribeToSession } from "@/lib/session";
 
 type HomeSession = {
   isError: boolean;
@@ -17,14 +16,25 @@ export function useHomeSession() {
     user: null,
   });
   useEffect(() => {
-    try {
-      return subscribeToSession(
-        (user) => setSession({ isError: false, isLoading: false, user }),
-        () => setSession({ isError: true, isLoading: false, user: null }),
-      );
-    } catch {
-      setSession({ isError: true, isLoading: false, user: null });
-    }
+    let isActive = true;
+    let unsubscribe: (() => void) | undefined;
+    const update = (user: User | null) => {
+      if (isActive) setSession({ isError: false, isLoading: false, user });
+    };
+    const fail = () => {
+      if (isActive) setSession({ isError: true, isLoading: false, user: null });
+    };
+    // Firebase loads after hydration so it stays off the home's critical path
+    // and the server-rendered hero paints as the Largest Contentful Paint.
+    import("@/lib/session")
+      .then(({ subscribeToSession }) => {
+        if (isActive) unsubscribe = subscribeToSession(update, fail);
+      })
+      .catch(fail);
+    return () => {
+      isActive = false;
+      unsubscribe?.();
+    };
   }, []);
   return session;
 }
