@@ -16,7 +16,7 @@ export const securityHeaders = [
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   { key: "X-Frame-Options", value: "SAMEORIGIN" },
   {
-    key: "Content-Security-Policy",
+    key: cspHeader,
     value: "frame-ancestors 'self'; base-uri 'self'; object-src 'none'",
   },
   {

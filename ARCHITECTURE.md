@@ -114,9 +114,9 @@ locale is received.
 
 Message catalogs (`src/messages/*.json`) adhere to a structural testing
 contract in `src/messages/messages.test.ts`, which validates key parity across
-`en.json`, `pt-BR.json`, and `es.json`, forbids empty messages, and ensures ICU
-placeholders match the reference catalog. Global message type safety is enforced
-by augmenting the `IntlMessages` interface in `src/types/global.d.ts`. Spelling
+`en.json`, `pt-BR.json`, and `es.json`, forbids empty messages, rejects keys that no application code
+references, and ensures ICU placeholders match the reference catalog. Message keys and locales are type-checked
+by augmenting next-intl's `AppConfig` in `src/types/global.d.ts`. Spelling
 validation integrates `@cspell/dict-pt-br`.
 
 The root layout (`src/app/layout.tsx`) remains synchronous and

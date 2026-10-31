@@ -15,15 +15,10 @@
     // ADR 0004 specifies these path-based navigation helpers as part of the
     // accepted i18n design, even though no route uses every export yet.
     "src/i18n/navigation.ts": ["exports"],
-    // The component conventions require named exports for every owned
-    // component in the module, even when only the root is imported elsewhere.
-    "src/app/_components/home-section-client.tsx": ["exports"],
     // Firebase shadcn registry imports assume their upstream flat layout.
     "src/components/firebase/**": ["unresolved"]
   },
   "ignoreDependencies": [
-    // Next.js resolves this boundary marker internally; no npm package is required.
-    "server-only",
     // Referenced only from CSS, which Knip does not follow.
     "shadcn",
     "tailwindcss",
@@ -34,12 +29,5 @@
     "@stryker-mutator/command-runner"
   ],
   // Host tools installed outside pnpm (see TOOLING.md).
-  "ignoreBinaries": [
-    "semgrep",
-    "gitleaks",
-    "actionlint",
-    "zizmor",
-    "firebase",
-    "codex"
-  ]
+  "ignoreBinaries": ["semgrep", "gitleaks", "actionlint", "zizmor", "firebase"]
 }

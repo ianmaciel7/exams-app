@@ -3,6 +3,7 @@ import { NextIntlClientProvider } from "next-intl";
 import type { ReactNode } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { useRouter } from "./navigation";
+import { routing } from "./routing";
 
 const router = vi.hoisted(() => ({
   replace: vi.fn(),
@@ -19,7 +20,7 @@ describe("cookie-based locale navigation", () => {
     cleanup();
     vi.clearAllMocks();
   });
-  it.each(["en", "pt-BR", "es"])(
+  it.each(routing.locales)(
     "keeps actual route paths when the locale is %s",
     (locale) => {
       const { result } = renderHook(() => useRouter(), {
