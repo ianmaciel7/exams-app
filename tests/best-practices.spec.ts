@@ -1,4 +1,4 @@
-// cspell:ignore networkidle
+// cspell:ignore gstatic networkidle
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { expect, test } from "@playwright/test";
