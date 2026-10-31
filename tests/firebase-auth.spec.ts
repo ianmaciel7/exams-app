@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import AxeBuilder from "@axe-core/playwright";
-import { expect, test } from "@playwright/test";
+import { devices, expect, test } from "@playwright/test";
 import esMessages from "../src/messages/es.json";
 import {
   assertLoadingFinished,
@@ -451,6 +451,45 @@ test("@loading observes every protected layout state during real profile journey
   ).toBeVisible();
   await assertLoadingFinished(page);
   assertLoadingTrace(await readLoadingTrace(page), "sign-out → anonymous home");
+});
+
+test("@loading Pixel 7 real authenticated Home to Profile does not jump", async ({
+  browser,
+  request,
+}, testInfo) => {
+  test.setTimeout(90_000);
+  const context = await browser.newContext({ ...devices["Pixel 7"] });
+  const page = await context.newPage();
+  const email = `mobile-profile-${crypto.randomUUID()}@example.test`;
+  try {
+    const created = await request.post(
+      `${emulator}/identitytoolkit.googleapis.com/v1/accounts:signUp?key=emulator-only`,
+      { data: { email, password, returnSecureToken: true } },
+    );
+    expect(created.ok()).toBe(true);
+    await installLoadingProbe(page);
+    await page.goto(`${authTestOrigin}/sign-in`);
+    await expect(page.getByLabel("Email Address")).toBeVisible();
+    await assertLoadingFinished(page);
+    await page.getByLabel("Email Address").fill(email);
+    await page.locator("#password").fill(password);
+    await page.getByRole("button", { name: "Sign In", exact: true }).click();
+    await expect(page).toHaveURL(`${authTestOrigin}/`);
+    await expect(page.getByRole("link", { name: "My profile" })).toBeVisible();
+    await assertLoadingFinished(page);
+    await page.getByRole("link", { name: "My profile" }).click();
+    await expect(page).toHaveURL(/\/profile$/);
+    await expect(page.getByLabel("Email", { exact: true })).toHaveValue(email);
+    await assertLoadingFinished(page);
+    const trace = await readLoadingTrace(page);
+    await testInfo.attach("mobile-profile-loading-frames.json", {
+      body: Buffer.from(JSON.stringify(trace, null, 2)),
+      contentType: "application/json",
+    });
+    assertLoadingTrace(trace, "Pixel 7 sign-in → Home → Profile", true);
+  } finally {
+    await context.close();
+  }
 });
 
 const accessibilityTags = [
