@@ -60,6 +60,7 @@
     "emulator:export": "firebase emulators:export --project demo-test ./emulator-data --force",
     "emulator:clear": "node scripts/emulator/clear.mjs",
     "test:a11y": "playwright test --grep @a11y",
+    "test:loading": "playwright test --grep @loading",
     "test:mobile": "playwright test --project=mobile",
     "test:visual": "playwright test --grep @visual",
     "test:mutation": "stryker run",

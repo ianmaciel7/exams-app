@@ -40,4 +40,28 @@ describe("UI state feedback guard", () => {
       { line: 2, sink: "toast notification" },
     ]);
   });
+
+  it("rejects template literal exception interpolation in JSX, form errors, and toasts", () => {
+    const source = [
+      "function View({ error }) {",
+      "  toast.add({ title: `Error: " + "$" + "{error}` });",
+      '  form.setError("root", { message: `Failed: ' + "$" + "{cause}` });",
+      "  return <span>{`Detail: " + "$" + "{err}`}</span>;",
+      "}",
+    ].join("\n");
+    const violations = findUnsafeFeedback(source, "view.tsx");
+    assert.deepEqual(violations, [
+      { line: 2, sink: "toast notification" },
+      { line: 3, sink: "form error" },
+      { line: 4, sink: "JSX content" },
+    ]);
+  });
+
+  it("accepts intentional exceptions when preceded or marked with check-ui-state-ignore", () => {
+    const violations = findUnsafeFeedback(
+      "// check-ui-state-ignore: internal debug display\nfunction Debug({ error }) {\n  return <pre>{String(error)}</pre>;\n}",
+      "debug.tsx",
+    );
+    assert.deepEqual(violations, []);
+  });
 });
