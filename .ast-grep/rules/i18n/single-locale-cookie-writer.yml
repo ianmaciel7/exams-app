@@ -1,0 +1,20 @@
+id: single-locale-cookie-writer
+language: tsx
+files:
+  - src/**/*.ts
+  - src/**/*.tsx
+ignores:
+  - src/app/(protected)/profile/_lib/locale-sync.ts
+  - src/components/ui/*.tsx
+  - src/**/*.test.ts
+  - src/**/*.test.tsx
+severity: error
+message: Write the locale cookie through syncSavedLocale() in profile/_lib/locale-sync.ts, not with document.cookie.
+note: |
+  Biome's noDocumentCookie is suppressed in the one place that must write the
+  NEXT_LOCALE cookie, so a second inline copy would also arrive with a
+  biome-ignore and pass lint. Keeping a single writer keeps the cookie
+  attributes and the router refresh after a locale change in one tested
+  helper. Copied shadcn files in src/components/ui/*.tsx are excluded.
+rule:
+  pattern: document.cookie = $VALUE

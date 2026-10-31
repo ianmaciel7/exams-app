@@ -1,12 +1,12 @@
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { localeCookie } from "@/i18n/routing";
 import { toast } from "@/lib/toast";
 import type {
   ProfileFormValues,
   ProfileValues,
   SavedProfile,
 } from "../_lib/definitions";
+import { syncSavedLocale } from "../_lib/locale-sync";
 
 type UseProfileSaveFeedbackOptions = {
   activeLocale: string;
@@ -40,11 +40,7 @@ export function useProfileSaveFeedback({
         : t("profileSaved"),
       type: "success",
     });
-    if (values.locale !== activeLocale) {
-      // biome-ignore lint/suspicious/noDocumentCookie: Preserve cookie-only locale selection on browsers without Cookie Store API.
-      document.cookie = `${localeCookie}=${values.locale}; Path=/; Max-Age=31536000; SameSite=Lax`;
-      router.refresh();
-    }
+    syncSavedLocale(savedProfile.values.locale, activeLocale, router.refresh);
   };
   return { onSaved };
 }
