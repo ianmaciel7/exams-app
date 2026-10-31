@@ -73,6 +73,18 @@ Storage avatars. Projects derived from it must document their own access-control
 data-retention, and incident-response requirements, including changes to these
 services or their Security Rules.
 
+## Firebase security rules
+
+Every rule in `firestore.rules`, `storage.rules`, and `database.rules.json`
+needs a negative test in `tests/rules/` that runs on the emulators: another
+user, an anonymous visitor, a forged `role` claim, and an unmatched path must
+all be refused. Browser clients never write the `role` claim, and a rule must
+not allow access unconditionally. `pnpm test:rules` runs these tests (CI job
+`rules`), and `pnpm check:firebase-rules` fails when a rules file has no test,
+a matched path is not named in its test, or CI stops running them. Admin SDK
+code ignores these rules, so Cloud Functions keep their own authorization
+checks.
+
 ## Cloud Functions dependency audit
 
 The Functions deployment has an independent `functions/package-lock.json`.

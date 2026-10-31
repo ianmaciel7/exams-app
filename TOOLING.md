@@ -125,6 +125,7 @@ project skills are tracked in `.agents/skills/` and `skills-lock.json`.
 | `pnpm test:browser` | `browser` Vitest project in Chromium. |
 | `pnpm test:e2e` | Functional Playwright specs (excludes `@a11y` and `@visual`). |
 | `pnpm test:auth` | Run Playwright's `auth-emulator` project with Firebase Auth, Firestore, and Functions via `firebase emulators:exec`; install the separate Functions dependencies first. |
+| `pnpm test:rules` | Run the Firestore, Cloud Storage, and Realtime Database security rules tests in `tests/rules/` against the `demo-rules` emulators with `firebase emulators:exec`. Needs Java and the Firebase CLI; CI runs the same command in the `rules` job. |
 | `pnpm test:a11y` | Axe accessibility scans. |
 | `pnpm test:mobile` | Playwright `mobile` project (Pixel 7 emulation): viewport, touch targets, field font size, autofill, reflow, text spacing, reduced motion, and axe on public routes. |
 | `pnpm test:visual` | Compare screenshots with baselines. Never rewrites them. Skipped locally; runs in CI (or with `PLAYWRIGHT_VISUAL=1`). |
@@ -148,6 +149,7 @@ project skills are tracked in `.agents/skills/` and `skills-lock.json`.
 | `pnpm check:release` | Validate that the package version and the App Hosting release tag agree; includes regression tests and runs in fast/static verification. |
 | `pnpm check:app-hosting-auth-iam` | Validate that the App Hosting runtime account retains its least-privilege Firebase Auth Viewer binding, required by revocation-aware Firebase Admin token verification. Includes valid and invalid Terraform fixtures and runs in fast/static verification. |
 | `pnpm check:emulator-snapshot` | Validate `demo-test` emulator commands, exported directories, and fictional Auth seed identities; includes valid and invalid fixtures and runs in fast/static verification. |
+| `pnpm check:firebase-rules` | Fail when a rules file has no emulator test, a matched path is never named in its test, a rule allows everything, or CI stops running `tests/rules`; includes valid and invalid fixtures and runs in fast/static verification. |
 | `pnpm check:spelling` / `pnpm check:markdown` | CSpell / markdownlint. |
 | `pnpm check:security` / `pnpm check:security:rules` | Semgrep scan of `src` (fails on findings) / tests of the Semgrep rules. Run inside a Git work tree. |
 | `pnpm check:secrets` / `pnpm check:secrets:staged` | Gitleaks repository history audit / staged pre-commit scanner. |
