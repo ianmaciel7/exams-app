@@ -25,6 +25,7 @@ function ProfileSaveButton({
       type="submit"
       className={cn("w-full", className)}
       disabled={disabled || isDisabled}
+      focusableWhenDisabled
     >
       {isSubmitting && <Spinner data-icon="inline-start" aria-hidden="true" />}
       {isSubmitting

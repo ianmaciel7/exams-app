@@ -1,16 +1,19 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { type ComponentProps, useId } from "react";
+import type { ComponentProps } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import {
+  FormField,
+  FormFieldError,
+  FormFieldLabel,
+} from "@/components/ui/extensions/form-field";
 import { Input } from "@/components/ui/input";
 import type { ProfileValues } from "../_lib/definitions";
 
-type ProfileEmailFieldProps = ComponentProps<typeof Field>;
+type ProfileEmailFieldProps = ComponentProps<typeof FormField>;
 
 function ProfileEmailField(props: ProfileEmailFieldProps) {
-  const id = useId();
   const t = useTranslations("Auth");
   const { control } = useFormContext<ProfileValues>();
 
@@ -18,21 +21,26 @@ function ProfileEmailField(props: ProfileEmailFieldProps) {
     <Controller
       name="email"
       control={control}
-      rules={{ required: t("profileSaveError") }}
-      render={({ field, fieldState }) => (
-        <Field {...props} data-invalid={fieldState.invalid}>
-          <FieldLabel htmlFor={id}>{t("emailLabel")}</FieldLabel>
+      render={({ field }) => (
+        <FormField {...props} name={field.name}>
+          <FormFieldLabel>{t("emailLabel")}</FormFieldLabel>
           <Input
             {...field}
-            id={id}
             type="email"
+            inputMode="email"
             autoComplete="email"
+            autoCapitalize="none"
+            spellCheck={false}
             required
             maxLength={254}
-            aria-invalid={fieldState.invalid}
           />
-          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-        </Field>
+          <FormFieldError match="valueMissing">
+            {t("emailRequired")}
+          </FormFieldError>
+          <FormFieldError match="typeMismatch">
+            {t("emailInvalid")}
+          </FormFieldError>
+        </FormField>
       )}
     />
   );

@@ -1,0 +1,22 @@
+id: require-input-autocomplete
+snapshots:
+  "const a = <Input type=\"email\" />;\n":
+    labels:
+    - source: <Input type="email" />
+      style: primary
+      start: 10
+      end: 32
+    - source: Input
+      style: secondary
+      start: 11
+      end: 16
+  "const b = <Input {...field} maxLength={100} />;\n":
+    labels:
+    - source: <Input {...field} maxLength={100} />
+      style: primary
+      start: 10
+      end: 46
+    - source: Input
+      style: secondary
+      start: 11
+      end: 16

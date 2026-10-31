@@ -24,6 +24,8 @@
     "configurationError": "A autenticação do Firebase não está configurada. Verifique a configuração da aplicação.",
     "profileTitle": "Perfil do Usuário",
     "emailLabel": "E-mail",
+    "emailRequired": "Informe seu e-mail.",
+    "emailInvalid": "Informe um e-mail válido, como nome@exemplo.com.",
     "displayNameLabel": "Nome",
     "notSet": "Não informado",
     "signOut": "Sair",

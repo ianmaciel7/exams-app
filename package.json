@@ -19,7 +19,7 @@
     "check:architecture": "depcruise --config .dependency-cruiser.cjs -- src",
     "check:unused": "knip",
     "check:duplicates": "jscpd --config .jscpd.json",
-    "check:structure": "ast-grep test && ast-grep scan",
+    "check:structure": "node --test scripts/checks/check-ast-grep-scope.test.mjs && node scripts/checks/check-ast-grep-scope.mjs && ast-grep test && ast-grep scan",
     "check:docs": "node --test scripts/checks/check-docs.test.mjs && node scripts/checks/check-docs.mjs",
     "check:adr": "node --test scripts/checks/check-adr.test.mjs && node scripts/checks/check-adr.mjs",
     "check:release": "node --test scripts/checks/check-release.test.mjs && node scripts/checks/check-release.mjs",

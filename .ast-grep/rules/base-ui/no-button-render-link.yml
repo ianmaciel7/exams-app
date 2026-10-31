@@ -6,7 +6,8 @@ files:
 ignores:
   - "**/*.test.tsx"
   - "**/*.stories.tsx"
-  - src/components/ui/*.tsx
+  - "src/components/ui/[!e]*.tsx"
+  - "src/components/ui/e[!x]*.tsx"
 severity: error
 message: Style a real Link or anchor with buttonVariants instead of rendering it through Button.
 note: |

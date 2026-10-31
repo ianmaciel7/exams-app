@@ -1,0 +1,31 @@
+id: require-input-autocomplete
+language: tsx
+files:
+  - src/components/**/*.tsx
+  - src/app/**/*.tsx
+ignores:
+  - "**/*.test.tsx"
+  - "**/*.stories.tsx"
+  - "src/components/ui/[!e]*.tsx"
+  - "src/components/ui/e[!x]*.tsx"
+  - src/components/ai-elements/**
+  # See no-raw-form-element: remove after the auth refactor (PR #37) merges.
+  - src/components/firebase/**
+severity: error
+message: A text <Input> must declare autoComplete (a WHATWG token, or "off" when none applies).
+note: |
+  WCAG 2.2 SC 1.3.5 (Identify Input Purpose) and the HTML autofill spec require
+  the token for fields about the user (name, email, tel, password,
+  one-time-code). Add inputMode when type="text" holds digits, and
+  autoCapitalize="none" with spellCheck={false} for emails and usernames.
+rule:
+  any:
+    - kind: jsx_opening_element
+    - kind: jsx_self_closing_element
+  has:
+    field: name
+    regex: ^(Input|InputGroupInput)$
+  not:
+    has:
+      kind: jsx_attribute
+      regex: ^autoComplete
