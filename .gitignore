@@ -59,6 +59,7 @@ gha-creds-*.json
 next-env.d.ts
 
 # agents & local tool state
+.serena/
 .agents/local.json
 .agents/generated/
 .agents/agents.json.*.bak

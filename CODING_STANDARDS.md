@@ -769,6 +769,31 @@ Suspense can also clean up and rerun layout Effects when content hides/reappears
 Cleanup is therefore not synonymous with permanent unmount. Preserve and test
 intentional form, dialog, media, and subscription behavior across navigation.
 
+### Asynchronous resilience, retries, and layout stability
+
+Asynchronous flows follow the Google Cloud reliability pattern:
+$$\text{Timeout/Deadline} + \text{Bounded Retry} + \text{Truncated Exponential Backoff} + \text{Jitter} + \text{Idempotency} + \text{Error Handling}$$
+
+- Model async states and life cycles using explicit states (`idle`, `loading`, `success`,
+  `empty`, `error`, `timeout`, `cancelled`). Avoid ambiguous boolean flags that
+  permit invalid states (e.g., both loading and error being true).
+- Configure category-specific timeouts using `AbortSignal.timeout()`; do not
+  impose arbitrary global timeouts.
+- Bounded retries: limit retry attempts (maximum 3) with truncated exponential
+  backoff and full jitter ($t_{\text{sleep}} = \text{random}(0, \min(M, B \times 2^{\text{attempt}}))$)
+  exclusively for eligible transient failures.
+- Enforce idempotency: verify that an operation is safe to repeat before
+  retrying. Never auto-retry non-idempotent state mutations or permanent errors
+  (400, 401, 403, 422). Strictly respect HTTP 429 and `Retry-After`.
+- Visual stability: preserve layout dimensions and element positions during
+  state transitions. Skeletons must match the dimensions, line height, and
+  margins of final rendered content to eliminate Cumulative Layout Shift (CLS).
+  Do not hide layout issues behind arbitrary `min-height` CSS hacks.
+- User feedback safety: normalize all errors through localized helpers
+  (`getAuthErrorMessage`, `getAuthActionErrorMessage`). Never expose raw
+  exception coercion (`String(error)`, template interpolation, or stack traces)
+  in JSX, form errors, or toasts. Enforced mechanically by `pnpm check:ui-state`.
+
 ### Compiler and performance boundaries
 
 React Compiler optimizes eligible components/hooks, not every function or every

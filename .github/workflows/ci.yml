@@ -47,6 +47,8 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm verify:static
+      - name: Verify UI state and resilience safeguards
+        run: pnpm check:ui-state
       - name: Biome 2.6 plugin pilot
         run: |
           set -euo pipefail

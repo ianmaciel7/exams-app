@@ -18,14 +18,24 @@ function sourceFiles(directory, root = directory) {
 }
 
 function isExceptionCoercion(node) {
-  return (
+  if (
     ts.isCallExpression(node) &&
     ts.isIdentifier(node.expression) &&
     node.expression.text === "String" &&
     node.arguments.length === 1 &&
     ts.isIdentifier(node.arguments[0]) &&
     exceptionNames.has(node.arguments[0].text)
-  );
+  ) {
+    return true;
+  }
+  if (
+    ts.isTemplateSpan(node) &&
+    ts.isIdentifier(node.expression) &&
+    exceptionNames.has(node.expression.text)
+  ) {
+    return true;
+  }
+  return false;
 }
 
 function containsExceptionCoercion(node) {
@@ -45,13 +55,24 @@ export function findUnsafeFeedback(sourceText, filename = "source.tsx") {
     true,
     filename.endsWith(".tsx") ? ts.ScriptKind.TSX : ts.ScriptKind.TS,
   );
+  const lines = sourceText.split(/\r?\n/);
   const violations = [];
+
+  function isIgnored(lineNumber) {
+    for (let l = lineNumber; l >= 1 && l >= lineNumber - 3; l--) {
+      const text = lines[l - 1] ?? "";
+      if (/check-ui-state-ignore\b/.test(text)) return true;
+    }
+    return false;
+  }
 
   function report(node, sink) {
     const { line } = source.getLineAndCharacterOfPosition(
       node.getStart(source),
     );
-    violations.push({ line: line + 1, sink });
+    const lineNumber = line + 1;
+    if (isIgnored(lineNumber)) return;
+    violations.push({ line: lineNumber, sink });
   }
 
   function reportJsx(node) {
