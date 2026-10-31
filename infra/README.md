@@ -52,6 +52,22 @@ then apply again so the repository link and backend can finish.
 - Rules, indexes and Functions are still deployed by the CD workflow, not by Terraform.
 - The App Hosting runtime account receives `roles/firebaseauth.viewer`, which is required for the server's revocation-aware Firebase Admin ID-token verification. Run `pnpm check:app-hosting-auth-iam` before applying infrastructure changes; after an apply, validate an authenticated protected route in the deployed application.
 
+## Layout (`prod/`)
+
+The production stack is organized into domain-scoped files:
+
+| File | Purpose |
+| --- | --- |
+| `main.tf` | Required versions, providers, backend configuration, and root project data |
+| `apis.tf` | Google Cloud API service activations |
+| `firebase.tf` | Firebase project, web app, Firestore Native, Realtime Database, and Storage |
+| `app_hosting.tf` | App Hosting backend, service accounts, and Developer Connect GitHub link |
+| `auth.tf` | Identity Platform configuration and Auth blocking function triggers |
+| `iam.tf` | Additive team access bindings (owners and Firebase developers) |
+| `github_wif.tf` | Workload Identity Federation for GitHub Actions and release secrets |
+| `outputs.tf` | Web configuration and environment outputs |
+| `variables.tf` | Input variable declarations |
+
 ## Team access
 
 Human access is managed here (see [ADR 0013](../docs/adr/0013-configure-team-access.md)). Set the members in

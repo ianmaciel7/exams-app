@@ -27,6 +27,7 @@
     "check:app-hosting-auth-iam": "node --test scripts/checks/check-app-hosting-auth-iam.test.mjs && node scripts/checks/check-app-hosting-auth-iam.mjs",
     "check:emulator-snapshot": "node --test scripts/checks/check-emulator-snapshot.test.mjs && node scripts/checks/check-emulator-snapshot.mjs",
     "check:firebase-rules": "node --test scripts/checks/check-firebase-rules.test.mjs && node scripts/checks/check-firebase-rules.mjs",
+    "check:terraform": "terraform -chdir=infra/bootstrap fmt -check && terraform -chdir=infra/prod fmt -check",
     "check:spelling": "cspell lint \"**/*.{ts,tsx,md,json}\" --no-progress",
     "check:markdown": "markdownlint-cli2 \"**/*.md\" \"#node_modules\" \"#.next\"",
     "check:security": "semgrep scan --config .semgrep/rules.yml --error --metrics=off --disable-version-check src next.config.ts",
