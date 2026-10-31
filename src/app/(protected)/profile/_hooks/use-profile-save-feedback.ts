@@ -1,5 +1,5 @@
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useRouter } from "@/i18n/navigation";
 import { toast } from "@/lib/toast";
 import type {
   ProfileFormValues,

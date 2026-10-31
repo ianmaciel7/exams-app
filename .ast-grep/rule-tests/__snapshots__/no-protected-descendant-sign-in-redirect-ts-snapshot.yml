@@ -1,0 +1,26 @@
+id: no-protected-descendant-sign-in-redirect-ts
+snapshots:
+  "redirect(routes.signIn);\n":
+    labels:
+    - source: redirect(routes.signIn)
+      style: primary
+      start: 0
+      end: 23
+  "redirectToSignIn(\"/profile\");\n":
+    labels:
+    - source: redirectToSignIn("/profile")
+      style: primary
+      start: 0
+      end: 28
+  "router.push(getSignInUrl(\"/profile\"));\n":
+    labels:
+    - source: router.push(getSignInUrl("/profile"))
+      style: primary
+      start: 0
+      end: 37
+  "subscribeToSession((user) => {\n  if (!user) router.replace(routes.signIn);\n});\n":
+    labels:
+    - source: router.replace(routes.signIn)
+      style: primary
+      start: 44
+      end: 73
