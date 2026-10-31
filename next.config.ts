@@ -11,8 +11,9 @@ const authEmulatorUrl = authEmulatorHost
     ).replace(/\/$/, "")
   : undefined;
 
-// Baseline response headers from the Next.js `headers` guide. No full CSP yet:
-// Firebase Auth popups and the Google sign-in flow need a nonce-based policy.
+// Baseline response headers from the Next.js `headers` guide. Documents get the
+// full nonce-based CSP from `src/proxy.ts`, which replaces this header; the
+// baseline CSP below still covers public files and the auth service worker.
 const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
