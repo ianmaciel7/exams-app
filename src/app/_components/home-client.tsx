@@ -3,13 +3,17 @@
 import Link from "next/link";
 import type { ComponentProps } from "react";
 import { Badge } from "@/components/ui/badge";
-import { buttonVariants } from "@/components/ui/button";
 import { Version } from "@/components/ui/extensions/version";
 import { Skeleton } from "@/components/ui/skeleton";
 import { routes } from "@/lib/navigation";
 import { useHomeClient } from "../_hooks/use-home-client";
 import { Home, HomeContent, HomeFooter, HomeHeading, HomeLogo } from "./home";
-import { HomeHero, HomeHeroActions } from "./home-hero";
+import {
+  HomeHero,
+  HomeHeroActions,
+  homeHeroActionSize,
+  homeHeroActionVariants,
+} from "./home-hero";
 import { HomeSignOutButtonClient } from "./home-sign-out-button-client";
 
 type HomeClientProps = ComponentProps<"main">;
@@ -37,21 +41,18 @@ function HomeClient({ className, ...props }: HomeClientProps) {
                 <span className="sr-only">{t("loading")}</span>
                 <Skeleton
                   aria-hidden="true"
-                  className="h-12 w-full rounded-full motion-reduce:animate-none sm:w-[158px]"
+                  className={`${homeHeroActionSize} motion-reduce:animate-none`}
                 />
                 <Skeleton
                   aria-hidden="true"
-                  className="h-12 w-full rounded-full motion-reduce:animate-none sm:w-[158px]"
+                  className={`${homeHeroActionSize} motion-reduce:animate-none`}
                 />
               </div>
             ) : user ? (
               <>
                 <Link
                   href={routes.profile}
-                  className={buttonVariants({
-                    className:
-                      "flex h-12 items-center justify-center rounded-full px-5 text-base font-medium sm:w-[158px]",
-                  })}
+                  className={homeHeroActionVariants()}
                 >
                   {t("manageAccount")}
                 </Link>
@@ -59,22 +60,12 @@ function HomeClient({ className, ...props }: HomeClientProps) {
               </>
             ) : (
               <>
-                <Link
-                  href={routes.signIn}
-                  className={buttonVariants({
-                    className:
-                      "flex h-12 items-center justify-center rounded-full px-5 text-base font-medium sm:w-[158px]",
-                  })}
-                >
+                <Link href={routes.signIn} className={homeHeroActionVariants()}>
                   {t("signIn")}
                 </Link>
                 <Link
                   href={routes.register}
-                  className={buttonVariants({
-                    variant: "outline",
-                    className:
-                      "flex h-12 items-center justify-center rounded-full px-5 text-base font-medium sm:w-[158px]",
-                  })}
+                  className={homeHeroActionVariants("outline")}
                 >
                   {t("getStarted")}
                 </Link>

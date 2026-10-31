@@ -215,9 +215,13 @@ describe("ProfileSectionClient", () => {
       <ProfileSectionClient data-testid="loading-profile" />,
     );
 
-    const status = await screen.findByRole("status");
-    expect(status.closest('[data-slot="loading-overlay"]')).toBeTruthy();
-    expect(status.parentElement?.className).toContain("h-svh");
+    await vi.waitFor(() =>
+      expect(
+        container.querySelector(
+          '[data-loading-boundary="profile-preferences"]',
+        ),
+      ).not.toBeNull(),
+    );
     expect(screen.getByTestId("loading-profile")).toBeTruthy();
     expect(container.querySelector('[data-slot="card"]')).toBeNull();
   });

@@ -231,7 +231,7 @@ test("profile displays user email and signs out successfully", async ({
     const sample = () => {
       if (!running) return;
       const spinners = document.querySelectorAll<SVGSVGElement>(
-        '[data-slot="loading-overlay"] [data-slot="spinner"]',
+        '[data-slot="global-loading-indicator"] [data-slot="spinner"]',
       );
       for (const spinner of spinners) {
         if (getComputedStyle(spinner).visibility !== "visible") continue;

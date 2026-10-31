@@ -87,7 +87,7 @@ export async function installLoadingProbe(page: Page) {
         );
       const visible = Array.from(
         document.querySelectorAll(
-          '[data-slot="loading-overlay"] [data-slot="labeled-spinner"]',
+          '[data-slot="global-loading-indicator"] [data-slot="labeled-spinner"]',
         ),
       )
         .filter(isRendered)

@@ -44,7 +44,9 @@ describe("AuthProviderClient", () => {
         <p>{"Screen"}</p>
       </AuthProviderClient>,
     );
-    expect(screen.getByRole("status")).toBeTruthy();
+    expect(
+      document.querySelector('[data-loading-boundary="public-auth"]'),
+    ).not.toBeNull();
     expect(screen.queryByText("Screen")).toBeNull();
     expect(mocks.setLocale).toHaveBeenCalled();
     act(() => mocks.subscribe.mock.calls[0][1](null));

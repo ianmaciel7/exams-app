@@ -1,5 +1,5 @@
-import { LoadingPrimitive } from "@/components/ui/extensions/loading-primitive";
+import { LoadingState } from "@/components/ui/extensions/loading-state";
 
 export default function Loading() {
-  return <LoadingPrimitive boundary="root-route" />;
+  return <LoadingState boundary="root-route" />;
 }

@@ -1,4 +1,5 @@
 import type { ComponentProps } from "react";
+import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 type HomeHeroProps = ComponentProps<"div">;
@@ -76,10 +77,25 @@ function HomeHeroActions({ className, ...props }: HomeHeroActionsProps) {
   );
 }
 
+type HomeHeroActionVariant = "default" | "outline";
+
+/**
+ * One size for every hero action (links, sign-out, and their loading
+ * skeletons) so the row never shifts when the session resolves.
+ */
+const homeHeroActionSize =
+  "h-12 w-full rounded-full px-5 text-base font-medium sm:w-[158px]";
+
+function homeHeroActionVariants(variant: HomeHeroActionVariant = "default") {
+  return buttonVariants({ variant, className: homeHeroActionSize });
+}
+
 export {
   HomeHero,
   HomeHeroActions,
   HomeHeroDescription,
   HomeHeroHeader,
   HomeHeroTitle,
+  homeHeroActionSize,
+  homeHeroActionVariants,
 };
