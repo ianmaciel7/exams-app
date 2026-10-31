@@ -19,7 +19,11 @@ function HomeClient({ className, ...props }: HomeClientProps) {
   const user = session.user;
 
   if (session.isLoading)
-    return <LoadingPrimitive boundary="home-session">{t("loading")}</LoadingPrimitive>;
+    return (
+      <LoadingPrimitive boundary="home-session">
+        {t("loading")}
+      </LoadingPrimitive>
+    );
 
   return (
     <Home className={className} {...props}>

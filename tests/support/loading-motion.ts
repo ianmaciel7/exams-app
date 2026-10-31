@@ -77,11 +77,14 @@ export async function installLoadingProbe(page: Page) {
             style.display !== "none" && element.getClientRects().length > 0
           );
         })
-        .map((element) =>
-          element.getAttribute("data-loading-boundary") ?? "unlabeled",
+        .map(
+          (element) =>
+            element.getAttribute("data-loading-boundary") ?? "unlabeled",
         );
       const visible = Array.from(
-        document.querySelectorAll('[data-slot="loading-overlay"] [data-slot="labeled-spinner"]'),
+        document.querySelectorAll(
+          '[data-slot="loading-overlay"] [data-slot="labeled-spinner"]',
+        ),
       )
         .filter(isRendered)
         .map((element) => {
@@ -116,7 +119,12 @@ export async function installLoadingProbe(page: Page) {
       });
       // Record every active frame and every change of state. Cap memory while
       // preserving the first frames rather than silently hiding a first jump.
-      if (state.frames.length < 8000 && (pending.length > 0 || visible.length > 0 || signature !== lastSignature)) {
+      if (
+        state.frames.length < 8000 &&
+        (pending.length > 0 ||
+          visible.length > 0 ||
+          signature !== lastSignature)
+      ) {
         state.frames.push(frame);
       }
       lastSignature = signature;
@@ -129,9 +137,8 @@ export async function installLoadingProbe(page: Page) {
 
 export async function readLoadingTrace(page: Page): Promise<LoadingTrace> {
   return page.evaluate(() => {
-    const trace = (
-      window as typeof window & { __loadingProbe?: LoadingTrace }
-    ).__loadingProbe;
+    const trace = (window as typeof window & { __loadingProbe?: LoadingTrace })
+      .__loadingProbe;
     if (!trace) throw new Error("Loading probe did not start");
     return { frames: trace.frames, rootChanged: trace.rootChanged };
   });
@@ -146,7 +153,9 @@ export function assertLoadingTrace(
   expect(trace.rootChanged, `${scenario}: global spinner was remounted`).toBe(
     false,
   );
-  const visibleFrames = trace.frames.filter((frame) => frame.visible.length > 0);
+  const visibleFrames = trace.frames.filter(
+    (frame) => frame.visible.length > 0,
+  );
   if (requireVisible) {
     expect(
       visibleFrames.length,

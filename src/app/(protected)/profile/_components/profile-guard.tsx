@@ -17,7 +17,9 @@ function ProfileGuard({ status, children, ...props }: ProfileGuardProps) {
   if (status.isLoading) {
     return (
       <div {...props}>
-        <LoadingPrimitive boundary="profile-preferences">{t("loading")}</LoadingPrimitive>
+        <LoadingPrimitive boundary="profile-preferences">
+          {t("loading")}
+        </LoadingPrimitive>
       </div>
     );
   }

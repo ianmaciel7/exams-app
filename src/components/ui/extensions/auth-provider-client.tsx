@@ -21,7 +21,9 @@ function AuthProviderClient({ children }: AuthProviderClientProps) {
       </p>
     );
   if (state.isLoading)
-    return <LoadingPrimitive boundary="public-auth">{t("loading")}</LoadingPrimitive>;
+    return (
+      <LoadingPrimitive boundary="public-auth">{t("loading")}</LoadingPrimitive>
+    );
   if (!state.ui) return null;
   return <FirebaseUIProvider ui={state.ui}>{children}</FirebaseUIProvider>;
 }

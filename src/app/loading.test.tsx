@@ -37,7 +37,8 @@ it.each([
     </NextIntlClientProvider>,
   );
   expect(
-    screen.getByRole("status")
+    screen
+      .getByRole("status")
       .closest('[data-slot="loading-state"]')
       ?.getAttribute("data-loading-boundary"),
   ).toBe(boundary);

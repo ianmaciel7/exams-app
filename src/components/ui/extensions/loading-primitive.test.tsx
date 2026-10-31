@@ -29,7 +29,9 @@ describe("LoadingPrimitive", () => {
     expect(status.parentElement?.className).toContain("top-0");
     expect(status.closest('[data-slot="loading-state"]')).not.toBeNull();
     expect(
-      status.closest('[data-slot="loading-state"]')?.getAttribute("data-loading-boundary"),
+      status
+        .closest('[data-slot="loading-state"]')
+        ?.getAttribute("data-loading-boundary"),
     ).toBe("profile-preferences");
   });
 

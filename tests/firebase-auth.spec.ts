@@ -446,7 +446,9 @@ test("@loading observes every protected layout state during real profile journey
   assertLoadingTrace(trace, "sign-in → home → profile → home", true);
 
   await page.getByRole("button", { name: "Sign Out" }).click();
-  await expect(page.getByRole("link", { name: "Sign in", exact: true })).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "Sign in", exact: true }),
+  ).toBeVisible();
   await assertLoadingFinished(page);
   assertLoadingTrace(await readLoadingTrace(page), "sign-out → anonymous home");
 });

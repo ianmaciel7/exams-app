@@ -45,7 +45,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <IntlDocumentServer className={fontClassName}>
         <Suspense
           fallback={
-            <div data-slot="loading-state" data-loading-boundary="root-provider" />
+            <div
+              data-slot="loading-state"
+              data-loading-boundary="root-provider"
+            />
           }
         >
           <IntlProviderServer>
