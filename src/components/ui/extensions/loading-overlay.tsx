@@ -13,7 +13,10 @@ function LoadingOverlay({
   ...props
 }: LoadingOverlayProps) {
   return (
-    <div data-slot="loading-overlay" className="fixed inset-0 z-50 bg-background">
+    <div
+      data-slot="loading-overlay"
+      className="fixed inset-0 z-50 bg-background"
+    >
       <div
         className={cn(
           "absolute inset-x-0 top-0 flex h-svh items-center justify-center p-6",
