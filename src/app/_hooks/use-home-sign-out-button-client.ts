@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { loadAuth } from "../_lib/firebase-loaders";
+import { loadAuth } from "@/lib/firebase-loaders";
 
 export function useHomeSignOutButtonClient() {
   const t = useTranslations("Home");

@@ -104,6 +104,10 @@ rounded:
   4xl: 26px
 ---
 
+The external accessibility and usability applicability matrix, including its
+test limits, is maintained in
+[quality standards](docs/agents/quality-standards.md).
+
 ## Overview
 
 The theme is the default shadcn/ui **neutral** palette: pure grayscale with no brand accent. Hierarchy comes from lightness steps, not hue. The only chromatic tokens are `destructive` (red) and the dark-mode `sidebar-primary` (blue).

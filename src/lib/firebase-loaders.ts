@@ -1,5 +1,6 @@
-// The home loads Firebase after hydration so it stays off the critical path
-// and the server-rendered hero paints as the Largest Contentful Paint. These
+// Client session surfaces load Firebase after hydration so it stays off the
+// critical path and the server-rendered home hero paints as the Largest
+// Contentful Paint. These
 // live outside the hooks because React Compiler does not support `import()`
 // there.
 

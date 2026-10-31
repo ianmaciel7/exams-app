@@ -15,7 +15,7 @@ type PreferencesState = {
 };
 
 export function useProfilePreferences(
-  uid: string | undefined,
+  uid: string,
   activeLocale: Locale,
   setTheme: (theme: ThemePreference) => void,
 ) {
@@ -26,10 +26,9 @@ export function useProfilePreferences(
   const [preferences, setPreferences] = useState<PreferencesState | null>(null);
   const current = preferences?.uid === uid ? preferences : null;
   const defaultValues = current?.values ?? null;
-  const preferencesReady = Boolean(uid && current);
+  const preferencesReady = current !== null;
 
   useEffect(() => {
-    if (!uid) return;
     let active = true;
     savedValuesRef.current = null;
     setPreferences(null);

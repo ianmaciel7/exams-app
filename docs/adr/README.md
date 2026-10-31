@@ -32,6 +32,8 @@ original date. Read current operational details in the
 | [0021](0021-resolve-locale-from-browser-preferences.md) | Accepted; supersedes part of 0004 | Explicit and cookie locale selection with `Accept-Language` fallback, while retaining unprefixed routes and no Proxy |
 | [0022](0022-gate-production-deploys-on-browser-checks.md) | Accepted | Firebase CD deploys only after desktop and mobile Playwright suites, axe, visual checks, and Lighthouse mobile budgets pass on the release commit |
 | [0023](0023-enforce-a-nonce-based-content-security-policy.md) | Accepted; amends the no-Proxy rule of 0004 and 0021 | A header-only Proxy sets a per-request nonce CSP; Base UI `CSPProvider` and next-themes receive the nonce |
+| [0024](0024-keep-service-worker-firebase-session.md) | Accepted | The Firebase Auth service worker stays the server session bridge, without session cookies, `FirebaseServerApp`, or Proxy authentication |
+| [0025](0025-separate-bridge-navigation-check-from-session-verification.md) | Accepted | `verifySession` always fails closed; a separate navigation check tolerates a missing worker, and `AuthGateClient` owns the protected session subscription and redirect |
 
 ## Current operational clarifications
 
@@ -139,7 +141,7 @@ original date. Read current operational details in the
     Firestore storage is retired and denied to browser clients).
   - Role-based authorization uses a `role` custom claim (`user` or `admin` in `src/lib/role.ts`),
     verified on the server via `firebase-admin` (`verifyIdToken(token, true)`) with the fail-closed
-    `requireRole` boundary (`src/app/(protected)/_lib/require-protected-access.ts`) and managed via
+    `verifyRole` boundary (`src/app/(protected)/_lib/dal.ts`) and managed via
     the `setUserRole` callable Cloud Function.
   - Client-side route groups provide UI navigation guarding and UX routing, not zero-trust
     server authorization.

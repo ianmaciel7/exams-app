@@ -4,11 +4,11 @@ Read this guide when checking runtime/type compatibility or planning an upgrade.
 
 ## Local evidence
 
-Checked on 2026-10-27 without changing dependencies:
+Checked on 2026-10-30 without changing dependencies:
 
 | Package | Installed version |
 | --- | --- |
-| Next.js | 16.4.2 |
+| Next.js | 16.4.3 |
 | React | 19.3.1 |
 | React DOM | 19.3.1 |
 

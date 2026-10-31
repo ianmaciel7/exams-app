@@ -102,28 +102,42 @@ test("@loading records real public-layout navigation and no stuck overlay", asyn
   page,
 }) => {
   await installLoadingProbe(page);
+
+  const signInEmail = page
+    .locator("form")
+    .filter({ has: page.getByRole("button", { name: "Sign In", exact: true }) })
+    .getByLabel("Email Address");
+  const registerEmail = page
+    .locator("form")
+    .filter({ has: page.getByRole("button", { name: /create account/i }) })
+    .getByLabel("Email Address");
+  const forgotPasswordEmail = page
+    .locator("form")
+    .filter({ has: page.getByRole("button", { name: /reset password/i }) })
+    .getByLabel("Email Address");
+
   await page.goto("/sign-in");
-  await expect(page.getByLabel("Email Address")).toBeVisible();
+  await expect(signInEmail).toBeVisible();
   await assertLoadingFinished(page);
 
   await page.getByRole("button", { name: /don't have an account/i }).click();
   await expect(page).toHaveURL(/\/register$/);
-  await expect(page.getByLabel("Email Address")).toBeVisible();
+  await expect(registerEmail).toBeVisible();
   await assertLoadingFinished(page);
 
   await page.getByRole("button", { name: /have an account/i }).click();
   await expect(page).toHaveURL(/\/sign-in$/);
-  await expect(page.getByLabel("Email Address")).toBeVisible();
+  await expect(signInEmail).toBeVisible();
   await assertLoadingFinished(page);
 
   await page.getByRole("button", { name: /forgot password/i }).click();
   await expect(page).toHaveURL(/\/forgot-password$/);
-  await expect(page.getByLabel("Email Address")).toBeVisible();
+  await expect(forgotPasswordEmail).toBeVisible();
   await assertLoadingFinished(page);
 
   await page.getByRole("button", { name: /back to sign in/i }).click();
   await expect(page).toHaveURL(/\/sign-in$/);
-  await expect(page.getByLabel("Email Address")).toBeVisible();
+  await expect(signInEmail).toBeVisible();
   await assertLoadingFinished(page);
 
   assertLoadingTrace(

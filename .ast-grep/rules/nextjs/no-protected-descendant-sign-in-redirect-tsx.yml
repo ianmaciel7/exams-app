@@ -3,7 +3,7 @@ language: tsx
 files:
   - "src/app/(protected)/**/*.tsx"
 ignores:
-  - "src/app/(protected)/_hooks/use-protected-guard-client.ts"
+  - "src/app/(protected)/_hooks/use-auth-gate-client.ts"
   - "src/app/(protected)/_lib/**"
   - "**/*.test.tsx"
 severity: error

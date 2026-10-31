@@ -1,5 +1,9 @@
 # Security Policy
 
+The project-specific security applicability and evidence status for HTTP
+headers, authentication, authorization, and security testing is tracked in
+[quality standards](docs/agents/quality-standards.md#status-and-evidence-model).
+
 <!-- cspell:words gaxios googleusercontent -->
 
 ## Supported versions
@@ -135,7 +139,7 @@ identifiers, and closed-over values do not replace those checks. Review response
 serialization, upload limits, error disclosure, and cookie options with the
 new endpoint. Role-based authorization follows [ADR 0009](docs/adr/0009-integrate-firebase-authentication.md):
 verify tokens with Firebase Admin (`checkRevoked`) and gate protected data
-through `requireRole` in `src/app/(protected)/_lib/require-protected-access.ts`
+through `verifySession` or `verifyRole` in `src/app/(protected)/_lib/dal.ts`
 (using role claims from `src/lib/role.ts`); Security Rules remain the
 enforcement point for browser access.
 

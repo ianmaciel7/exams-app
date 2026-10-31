@@ -1,4 +1,4 @@
-pnpm exec lint-staged
+pnpm check:staged
 
 # Gitleaks is a host tool. Scan staged changes for secrets before creating a commit.
 if command -v gitleaks >/dev/null 2>&1; then

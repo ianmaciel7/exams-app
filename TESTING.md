@@ -7,7 +7,7 @@ Run the checks relevant to a change before opening a pull request. See
 
 | Command | Use it for |
 | --- | --- |
-| `pnpm verify:fast` | Code changes: Biome CI, typecheck, unit tests, logging regressions, ast-grep structural rules, route-entrypoint guard, owned-component naming/boundary guard, and responsiveness guard (`check:responsiveness`). Browser suites run separately. |
+| `pnpm verify:fast` | Code changes: Biome CI, typecheck, unit tests, logging regressions, ast-grep structural rules, route-entrypoint guard, owned-component naming/boundary guard, UI feedback guard (`check:ui-state`), and responsiveness guard (`check:responsiveness`). Browser suites run separately. |
 | `pnpm verify:full` | Before a pull request: `verify:static` (adds coverage thresholds, architecture, unused code, duplication, ast-grep structural checks, route/component/responsiveness guards, spelling, Markdown, complexity, React diagnostics) plus `verify:build` (browser tests, production build with size budgets, Ladle build). |
 | `pnpm verify:e2e` | Changes that affect pages or visual output: functional, accessibility, and visual Playwright specs. |
 | `pnpm verify:security` | Dependency or configuration changes: Semgrep rule tests and scan, Gitleaks, workflow lint, `pnpm audit`, and the separate Functions lockfile audit. Needs the host tools in [TOOLING.md](TOOLING.md#host-prerequisites). |
@@ -26,12 +26,26 @@ regressions, and structural ast-grep checks, including migrated route rules for
 client directives, hooks, and JSX event handlers. Browser, end-to-end, visual,
 and mutation suites run separately.
 
+Vitest Browser Mode binds its local API on port 4174. Keep this separate from
+the Playwright production E2E server on 4173 and outside Windows' commonly
+reserved high-port range; Vite may advance to the next available port if needed.
+
+`pnpm check:ui-state` runs positive and negative AST fixtures, then scans
+application TypeScript and TSX for direct `String(error|cause|err)` coercion
+that reaches JSX, React Hook Form error sinks, or toast payloads. It runs in
+`verify:fast` and `verify:static`, so the CI `static` job enforces the same
+contract. This narrow syntax guard does not replace behavioral tests, error
+classification review, or accessibility checks.
+
 For a manual smoke test, run `pnpm dev` and verify the affected route in a
 browser, including its loading, error, and localized states where applicable.
 
 ## Production server startup
 
-The ordinary Playwright suite runs `pnpm build && pnpm start`. Its five-minute
+The ordinary Playwright suite runs `pnpm build && pnpm start --port 4173` and
+always starts its own server. It must not reuse an already-running local server:
+that can silently test a stale build. Browser base URLs and locale-cookie setup
+use the same isolated port. Its five-minute
 `webServer.timeout` covers both the production build and the readiness check;
 it is separate from individual test timeouts. The Firebase emulator development
 server retains its two-minute startup limit. Build output is piped into the
@@ -50,6 +64,120 @@ are `scripts/evals/run-tool-usage-evals.test.mjs`; run them with
 `node --test scripts/evals/run-tool-usage-evals.test.mjs` when changing the
 runner or cases. The test suite verifies the general
 rubric, manual review, and failure follow-up.
+
+## Acceptance journeys and independent verification
+
+A green unit-test suite or coverage percentage does not prove that a user can
+finish a workflow. Critical journeys are tested against the running application
+with the Firebase Auth, Firestore, and Functions emulators. Their assertions
+must verify **observable outcomes** and, where applicable, persisted records
+rather than only mocked calls or navigation.
+
+| Journey / security boundary | Executable evidence | Required outcome |
+| --- | --- | --- |
+| Registration and persisted login | `tests/firebase-auth.spec.ts` | Register in the browser and retain an authenticated session |
+| Guest protected deep link to sign-in | `tests/firebase-auth.spec.ts` | Preserve the requested protected path and query after login |
+| Profile preferences and identity | `tests/firebase-auth.spec.ts` | Save via the browser, read Firestore independently, reload, sign out and sign in again |
+| Cross-account preference isolation | `tests/firebase-auth.spec.ts` | Owner can read/write; a different user cannot read/write; anonymous access is denied |
+| Password recovery | `tests/firebase-auth.spec.ts` | Emulator issues a recovery code and the UI handles network failure |
+| Google sign-in | `tests/firebase-auth.spec.ts` | Emulated popup/redirect flows complete; production OAuth is a separate risk |
+| Google popup cancellation and retry | `tests/firebase-auth.spec.ts` | Closing an unauthenticated popup returns to usable sign-in and permits a second attempt |
+| Protected session and server token verdicts | `tests/firebase-auth.spec.ts` | First load without the worker, forwarded token, failed refresh, rejected tokens, no redirect loop, sign-out, and account switch |
+| Role claims in Security Rules | `tests/firebase-auth.spec.ts` | A refreshed token gains and loses access; an issued token keeps its claim in Rules until it expires |
+| Responsive, visual, and a11y | `tests/*.spec.ts` | Assert defined layouts and detectable issues; these are not substitutes for a completed journey |
+
+Playwright uses `failOnFlakyTests` in CI: a test that fails before passing on
+retry must fail the job. Investigate traces and classify the root cause rather
+than treating retries as proof of reliability. The official Playwright option
+is supported by the installed version and preserves failure artifacts.
+
+The `auth-emulator` GitHub Actions job is a required CI gate and executes these
+journeys with actual emulator services. The ordinary mobile and responsive suites
+may skip authentication-only controls when Firebase configuration is unavailable;
+those skips must not be interpreted as proof of functional authentication.
+Investigate skipped test counts and emulator-job failures before merging.
+
+These tests deliberately do not claim production OAuth compatibility, a complete
+screen-reader audit, all browsers, or 100% defect detection. Add one regression
+scenario for each newly confirmed user-facing defect. Prefer independent
+acceptance criteria from product requirements and bug reports over deriving
+expected results exclusively from the current code. Do not update snapshots,
+relax assertions, or introduce `test.skip` to hide a defect.
+
+## Stateful user journeys and model-based acceptance
+
+When adding or changing a user-facing asynchronous or multi-step feature, first
+model its **observable states, events, transitions, and recovery guarantees**.
+This is a risk-based contract, not a claim that every theoretical input sequence
+can be exhaustively tested. Do not derive the expected behavior solely from the
+current implementation.
+
+1. Identify the user's goal and its independently expected outcome.
+2. List the reachable states (for example, idle, in progress, completed,
+   cancelled, failed, and recovered), including where the UI can become stuck.
+3. Enumerate meaningful events (submit, close, cancel, retry, navigate, reload,
+   duplicate action, network loss, authorization failure, session change).
+4. Build a state-transition matrix for the feature. Select critical
+   transitions and pairs of transitions using likelihood, user impact, and
+   regression history; justify exceptions instead of inventing cases.
+5. Test success **and** applicable interruption, cancellation, failure and
+   recovery paths in a browser or appropriate integration layer.
+6. Assert the final user-visible state, ability to retry, and independent
+   persistence or authorization outcomes. A click, a mock invocation, a
+   screenshot or a generic visible page is not an acceptance oracle.
+7. Keep the model and regression scenario with the owning suite. When an
+   external dependency cannot be reproduced, record the limitation and retain
+   a deterministic contract/integration test for the application-owned part.
+8. Treat unexpected skips, unfinished transitions, and required tests that
+   fail on the CI emulator as a **blocked release**, not green coverage.
+   Do not repair a failing test by deleting it, skipping it, relaxing the
+   requirement, or increasing timeouts without diagnosis.
+
+### OAuth popup transition contract
+
+The current example is `/sign-in` with Google OAuth. Its minimum model is:
+
+| Initial state | Event | Expected observable state | Verification |
+| --- | --- | --- | --- |
+| Idle | Open Google popup | Authentication pending; window appears | Playwright popup event |
+| Pending | Authenticate in popup | Signed-in destination shown | Emulator-backed browser E2E |
+| Pending | Close popup without authenticating | Sign-in is usable again; no indefinite spinner | Emulator-backed browser E2E |
+| Recovered after cancellation | Try Google again | A second popup can open, then cancel cleanly | Emulator-backed browser E2E |
+| Pending | Popup blocked, provider error or network failure | Recoverable error and usable controls | Add targeted tests when failure can be simulated reliably |
+
+The required cancellation/retry regression lives in
+`tests/firebase-auth.spec.ts`. The `auth-emulator` CI job runs it through
+`pnpm exec playwright test --project=auth-emulator`. Failing this acceptance
+test is evidence of a defect or an unresolved test-environment issue; it must
+not be ignored. Firebase's emulator does **not** prove production-provider
+compatibility, so real Google OAuth needs separate, safe verification.
+
+**Enforcement:** `pnpm test:auth` locally and the required
+`auth-emulator` CI job execute the behavioral regression. The model and this
+policy guide test creation; no static analyzer can establish all relevant
+human-experience transitions automatically. Reviewers must compare the
+transition matrix with the feature's requirements and actual UX.
+
+### Protected session transition contract
+
+The route gate owns these transitions. An emulator suite cannot reproduce every
+one, so the last column names the layer that does.
+
+| Initial state | Event | Expected observable state | Verification |
+| --- | --- | --- | --- |
+| Loading | Session resolves signed in | Protected content, one subscription | `auth-gate-client.test.tsx`, emulator E2E |
+| Loading | Session resolves signed out | One redirect that keeps path and query | `auth-gate-client.test.tsx`, emulator E2E |
+| Loading | Firebase fails | Alert with a retry control, no redirect | `auth-gate-client.test.tsx` |
+| Signed in | Sign-out | Content hidden; history cannot restore it | Emulator E2E |
+| Signed in | Account changes | Subtree remounts with no prior account data | Component test, emulator E2E |
+| Signed in, worker active | Token refresh fails | Navigation continues on the client session | Emulator E2E |
+| Signed in | Server rejects the token | Sign-in, then home; the route is requested once | Emulator E2E |
+| Any | Admin SDK infrastructure fault | Error boundary, no sign-in redirect | `server.test.ts`, `dal.test.ts` only: the emulator cannot fail on demand |
+
+`verifySession`, `verifyRole`, 401/403 responses, and resource ownership on a
+server operation have no production caller, so they are unit-tested only. Do not
+add endpoints to exercise them. Ownership and anonymous access are verified against
+Firestore Rules.
 
 ## Test layers
 
@@ -495,8 +623,8 @@ requirements and coverage thresholds intact while reporting those limitations.
 ## React rules and lifecycle verification
 
 Protected-route lifecycle tests must verify that a repeated Firebase Auth session
-emission records screen usage at most once per user and does not replace visible
-content with a loading or telemetry-error state.
+emission records route usage at most once per user and path and does not replace
+visible content with a loading or telemetry-error state.
 
 The native React configuration suite lives in
 `.biome/rules/react/native-rules.test.ts`. It verifies blocking diagnostics for
@@ -639,8 +767,8 @@ normal configuration disables them, so these regressions use normal lint rules.
 
 Auth-provider tests cover initialization errors, first-session loading, safe
 post-auth redirects, locale updates without resubscribing, and cleanup ignoring
-late callbacks. Protected-guard regressions preserve logging acknowledgments and
-obsolete-session rejection after moving subscription ownership. Profile defaults
+late callbacks. Auth gate regressions preserve the single redirect, the pending
+sign-out, subscription cleanup, and account-switch remounting. Profile defaults
 tests cover stored/default preferences, lifecycle cancellation and a changed user;
 profile save tests keep session rechecks after every asynchronous write boundary.
 Home component tests preserve signed-in/out presentation after composing smaller

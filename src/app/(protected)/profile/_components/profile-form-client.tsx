@@ -13,7 +13,7 @@ function ProfileFormClient({
   className,
   ...props
 }: ProfileFormClientProps) {
-  const { form, handleSubmit } = useProfileFormClient();
+  const { form, handleSubmit, saveError } = useProfileFormClient();
 
   return (
     <FormProvider {...form}>
@@ -24,6 +24,11 @@ function ProfileFormClient({
         className={cn("flex w-full flex-col gap-(--card-spacing)", className)}
         onSubmit={form.handleSubmit(handleSubmit)}
       >
+        {saveError && (
+          <p role="alert" className="text-sm text-destructive">
+            {saveError}
+          </p>
+        )}
         {children}
       </Form>
     </FormProvider>

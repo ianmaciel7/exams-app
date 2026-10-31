@@ -1,7 +1,7 @@
 "use client";
 
 import { type UserCredential, type MultiFactorInfo } from "firebase/auth";
-import { FirebaseUIError, getTranslation } from "@firebase-oss/ui-core";
+import { getTranslation } from "@firebase-oss/ui-core";
 import {
   useMultiFactorTotpAuthVerifyFormSchema,
   useUI,
@@ -14,6 +14,7 @@ import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
+import { getAuthActionErrorMessage } from "./auth-error-message";
 
 type TotpMultiFactorAssertionFormProps = {
   hint: MultiFactorInfo;
@@ -38,8 +39,7 @@ export function TotpMultiFactorAssertionForm(props: TotpMultiFactorAssertionForm
       const credential = await action({ verificationCode: values.verificationCode, hint: props.hint });
       props.onSuccess?.(credential);
     } catch (error) {
-      const message = error instanceof FirebaseUIError ? error.message : String(error);
-      form.setError("root", { message });
+      form.setError("root", { message: getAuthActionErrorMessage(error, ui) });
     }
   };
 

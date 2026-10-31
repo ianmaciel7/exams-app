@@ -2,15 +2,17 @@
 
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import type { EmailLinkAuthFormSchema } from "@firebase-oss/ui-core";
-import { FirebaseUIError, getTranslation } from "@firebase-oss/ui-core";
 import {
-  useEmailLinkAuthFormAction,
+  getTranslation,
+  sendSignInLinkToEmail,
+} from "@firebase-oss/ui-core";
+import {
   useEmailLinkAuthFormCompleteSignIn,
   useEmailLinkAuthFormSchema,
   useUI,
   type EmailLinkAuthFormProps,
 } from "@firebase-oss/ui-react";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { useForm, FormProvider, Controller } from "react-hook-form";
 
 import { Policies } from "@/components/firebase/policies";
@@ -19,14 +21,15 @@ import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { getAuthErrorMessage } from "./auth-error-message";
 
 export type { EmailLinkAuthFormProps };
 
 export function EmailLinkAuthForm(props: EmailLinkAuthFormProps) {
+  const emailId = useId();
   const { onEmailSent, onSignIn } = props;
   const ui = useUI();
   const schema = useEmailLinkAuthFormSchema();
-  const action = useEmailLinkAuthFormAction();
   const [emailSent, setEmailSent] = useState(false);
 
   const form = useForm<EmailLinkAuthFormSchema>({
@@ -41,12 +44,11 @@ export function EmailLinkAuthForm(props: EmailLinkAuthFormProps) {
 
   async function onSubmit(values: EmailLinkAuthFormSchema) {
     try {
-      await action(values);
+      await sendSignInLinkToEmail(ui, values.email);
       setEmailSent(true);
       onEmailSent?.();
     } catch (error) {
-      const message = error instanceof FirebaseUIError ? error.message : String(error);
-      form.setError("root", { message });
+      form.setError("root", { message: getAuthErrorMessage(error, ui) });
     }
   }
 
@@ -66,9 +68,9 @@ export function EmailLinkAuthForm(props: EmailLinkAuthFormProps) {
           name="email"
           render={({ field, fieldState }) => (
             <Field data-invalid={!!fieldState.error}>
-              <FieldLabel htmlFor="email">{getTranslation(ui, "labels", "emailAddress")}</FieldLabel>
-              <Input {...field} id="email" type="email" autoComplete="email" aria-invalid={!!fieldState.error} />
-              {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
+              <FieldLabel htmlFor={emailId}>{getTranslation(ui, "labels", "emailAddress")}</FieldLabel>
+              <Input {...field} id={emailId} type="email" autoComplete="email" aria-invalid={!!fieldState.error} aria-describedby={fieldState.error ? `${emailId}-error` : undefined} />
+              {fieldState.error && <FieldError id={`${emailId}-error`}>{fieldState.error.message}</FieldError>}
             </Field>
           )}
         />

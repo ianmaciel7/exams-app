@@ -20,6 +20,8 @@ const authEmulatorEndpoint = (
 ).replace(/^https?:\/\//, "");
 const authTestHost = new URL(`http://${authEmulatorEndpoint}`).hostname;
 const authTestBaseUrl = `http://${authTestHost}:3100`;
+const e2ePort = 4173;
+const e2eBaseUrl = `http://127.0.0.1:${e2ePort}`;
 
 export default defineConfig({
   testDir: "./tests",
@@ -27,6 +29,8 @@ export default defineConfig({
   testIgnore: authEmulator ? undefined : "**/firebase-auth.spec.ts",
   fullyParallel: !authEmulator,
   forbidOnly: Boolean(process.env.CI),
+  // A retry passing does not erase the original failure.
+  failOnFlakyTests: Boolean(process.env.CI),
   retries: process.env.CI ? 2 : 0,
   // Hosted runners have 2 vCPUs; more workers only add flakiness.
   workers: authEmulator ? 1 : process.env.CI ? 2 : undefined,
@@ -43,7 +47,7 @@ export default defineConfig({
   snapshotPathTemplate:
     "{testDir}/snapshots/{arg}{-projectName}{-snapshotSuffix}{ext}",
   use: {
-    baseURL: authEmulator ? authTestBaseUrl : "http://127.0.0.1:3000",
+    baseURL: authEmulator ? authTestBaseUrl : e2eBaseUrl,
     screenshot: "only-on-failure",
     trace: "on-first-retry",
   },
@@ -77,11 +81,12 @@ export default defineConfig({
         timeout: 120_000,
       }
     : {
-        command: "pnpm build && pnpm start",
-        reuseExistingServer: !process.env.CI,
+        command: `pnpm build && pnpm start --port ${e2ePort}`,
+        // Never let an unrelated or stale local server stand in for this build.
+        reuseExistingServer: false,
         // This budget includes the production build, not just server startup.
         timeout: 300_000,
         stdout: "pipe",
-        url: "http://127.0.0.1:3000",
+        url: e2eBaseUrl,
       },
 });

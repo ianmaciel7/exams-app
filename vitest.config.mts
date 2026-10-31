@@ -59,7 +59,7 @@ export default defineConfig({
           include: ["src/**/*.browser.test.{ts,tsx}"],
           api: {
             host: "127.0.0.1",
-            port: 62315,
+            port: 4174,
           },
           browser: {
             enabled: true,
