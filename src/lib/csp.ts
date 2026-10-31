@@ -1,4 +1,4 @@
-// cspell:ignore firebaseio
+// cspell:ignore firebaseio gstatic
 /** Request header that carries the per-request CSP nonce to Server Components. */
 export const nonceHeader = "x-nonce";
 
@@ -45,6 +45,9 @@ function emulatorOrigins(env: Partial<Record<string, string | undefined>>) {
 }
 
 type Sources = (string | undefined)[];
+
+/** Where `public/firebase-auth-sw.js` imports the Firebase SDK from. */
+const firebaseWorkerImports = "https://www.gstatic.com/firebasejs/";
 
 function scriptSources(nonce: string, isDevelopment: boolean): Sources {
   return [
@@ -120,8 +123,10 @@ export function buildContentSecurityPolicy({
     "connect-src": ["'self'", ...firebaseConnectSources(env, emulators)],
     "frame-src": frameSources(env, emulators),
     // 'strict-dynamic' drops 'self' from script-src, so the auth session
-    // worker needs its own source list.
-    "worker-src": ["'self'"],
+    // worker needs its own source list. Chromium checks the module worker's
+    // static Firebase imports against the registering page's worker-src, so
+    // without the gstatic path the worker cannot start.
+    "worker-src": ["'self'", firebaseWorkerImports],
     "manifest-src": ["'self'"],
     "media-src": ["'self'", "blob:"],
     "object-src": ["'none'"],

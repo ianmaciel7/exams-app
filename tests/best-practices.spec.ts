@@ -1,4 +1,6 @@
-// cspell:ignore networkidle
+// cspell:ignore gstatic networkidle
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 import { expect, test } from "@playwright/test";
 
 // Platform hygiene that Lighthouse and the Next.js production checklist expect
@@ -59,6 +61,40 @@ for (const path of ["/", "/sign-in", "/register", "/forgot-password"]) {
     expect(violations).toEqual([]);
   });
 }
+
+test("starts the Firebase auth service worker under the page CSP", async ({
+  context,
+  page,
+}) => {
+  // Serve the worker's gstatic imports from the installed SDK, so the check
+  // depends on the policy and not on the network.
+  const sdk = join(process.cwd(), "node_modules", "firebase");
+  await context.route(
+    "https://www.gstatic.com/firebasejs/**",
+    async (route) => {
+      const file = new URL(route.request().url()).pathname.split("/").pop();
+      await route.fulfill({
+        contentType: "text/javascript",
+        headers: { "access-control-allow-origin": "*" },
+        body: await readFile(join(sdk, file ?? "")),
+      });
+    },
+  );
+  await page.goto("/sign-in");
+  const result = await page.evaluate(async () => {
+    try {
+      await navigator.serviceWorker.register("/firebase-auth-sw.js", {
+        scope: "/",
+        type: "module",
+      });
+      await navigator.serviceWorker.ready;
+      return "active";
+    } catch (cause) {
+      return String(cause);
+    }
+  });
+  expect(result).toBe("active");
+});
 
 test("serves an installable web app manifest", async ({ request }) => {
   const response = await request.get("/manifest.webmanifest");
