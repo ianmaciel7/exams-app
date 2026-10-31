@@ -1,0 +1,17 @@
+id: no-onclick-on-value-control
+valid:
+  - |
+    const a = <Switch checked={on} onCheckedChange={setOn} />;
+  - |
+    const b = <Toggle pressed={p} onPressedChange={setP} />;
+  - |
+    const c = <Button onClick={save}>Save</Button>;
+  - |
+    const d = <SelectItem value="a" onClick={pick}>A</SelectItem>;
+invalid:
+  - |
+    const a = <Switch checked={on} onClick={() => setOn(!on)} />;
+  - |
+    const b = <Checkbox onClick={toggle}>Accept</Checkbox>;
+  - |
+    const c = <RadioGroup value={v} onClick={pick} />;
