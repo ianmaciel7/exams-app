@@ -21,7 +21,10 @@ test("keeps a single viewport-stable spinner through loading-state replacements"
       new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
     const center = () => {
       const bounds = spinner.getBoundingClientRect();
-      return { x: bounds.x + bounds.width / 2, y: bounds.y + bounds.height / 2 };
+      return {
+        x: bounds.x + bounds.width / 2,
+        y: bounds.y + bounds.height / 2,
+      };
     };
     const initialVisibility = getComputedStyle(global).visibility;
     const first = document.createElement("div");
