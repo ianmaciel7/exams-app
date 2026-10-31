@@ -150,7 +150,7 @@ jobs:
       # of a new region would otherwise fail on.
       - name: Deploy Functions and Firebase security rules
         run: >-
-          pnpm dlx firebase-tools@15.34.1 deploy
+          npx --yes firebase-tools@15.34.2 deploy
           --project "$FIREBASE_PROJECT_ID"
           --only functions,firestore,database,storage
           --non-interactive
@@ -174,7 +174,7 @@ jobs:
           done
       - name: Create App Hosting rollout for the release commit
         run: >-
-          pnpm dlx firebase-tools@15.34.1 apphosting:rollouts:create
+          npx --yes firebase-tools@15.34.2 apphosting:rollouts:create
           "$FIREBASE_APP_HOSTING_BACKEND_ID"
           --project "$FIREBASE_PROJECT_ID"
           --git-commit "$GITHUB_SHA"

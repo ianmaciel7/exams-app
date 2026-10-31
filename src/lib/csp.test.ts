@@ -1,4 +1,4 @@
-// cspell:ignore rtdb firebasedatabase firebaseio europe
+// cspell:ignore rtdb firebasedatabase firebaseio europe googleusercontent
 import { describe, expect, it } from "vitest";
 import { buildContentSecurityPolicy, createNonce } from "./csp";
 
@@ -46,6 +46,29 @@ describe("buildContentSecurityPolicy", () => {
       "'self'",
       "https://www.gstatic.com/firebasejs/",
     ]);
+  });
+
+  it("loads profile photos from Firebase Storage and Google accounts", () => {
+    const production = directives(
+      buildContentSecurityPolicy({ nonce: "abc", isDevelopment: false, env }),
+    );
+    expect(production.get("img-src")).toEqual([
+      "'self'",
+      "blob:",
+      "data:",
+      "https://firebasestorage.googleapis.com",
+      "https://lh3.googleusercontent.com",
+    ]);
+
+    const development = directives(
+      buildContentSecurityPolicy({
+        nonce: "abc",
+        isDevelopment: true,
+        env: { NEXT_PUBLIC_FIREBASE_STORAGE_EMULATOR_HOST: "127.0.0.1:9199" },
+      }),
+    );
+    expect(development.get("img-src")).toContain("http://127.0.0.1:9199");
+    expect(development.get("img-src")).not.toContain("ws://127.0.0.1:9199");
   });
 
   it("allows the Firebase Auth domain and database without emulators in production", () => {

@@ -44,7 +44,7 @@
     "verify:security": "pnpm check:security:rules && pnpm check:security && pnpm check:secrets && pnpm check:workflows && pnpm audit && pnpm audit:functions",
     "verify:e2e": "playwright test",
     "test": "vitest run --project unit",
-    "test:logging": "node --test functions/usage-logs.test.cjs functions/user-roles.test.cjs functions/access-policy.test.cjs",
+    "test:logging": "node --test functions/public-surface.test.cjs functions/usage-logs.test.cjs functions/user-roles.test.cjs functions/access-policy.test.cjs",
     "test:evals": "node --test scripts/evals/run-tool-usage-evals.test.mjs",
     "test:production-smoke": "node --test scripts/checks/check-production-smoke.test.mjs",
     "test:watch": "vitest --project unit",

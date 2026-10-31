@@ -66,6 +66,8 @@ rubric, manual review, and failure follow-up.
 | Visual regression | `tests/visual.spec.ts`, titled `@visual` | Playwright screenshots (CI only) | `pnpm test:visual` | Layout and theme changes in rendered pages. |
 | Firebase Auth and profile | `tests/firebase-auth.spec.ts` | Playwright with Firebase Auth, Firestore and Functions emulators | CI `auth-emulator` job | Sign-in, registration, recovery, profile, and authenticated axe checks, including the `recordUsage` callable guard. Not included in ordinary `verify:e2e`. |
 | Sign-in allowlist | `functions/access-policy.test.cjs` | `node:test` | `pnpm test:logging` | Allowed and refused addresses, role claim, verified-email rule, fail-closed empty list, and the open emulator. The auth-emulator E2E runs with no list, so it exercises only the open path. |
+| CSP profile photos | `src/lib/csp.test.ts` | Vitest | `pnpm test`, `pnpm verify:static` | `img-src` must list exactly `'self'`, `blob:`, `data:`, Firebase Storage, and Google account photos, plus the Storage emulator in development only. Removing one fails the test, so profile photos cannot silently stop loading. |
+| Cloud Functions public surface | `functions/public-surface.test.cjs` | `node:test` | `pnpm test:logging`, `pnpm verify:static` | `functions/index.js` must not use `onRequest`: only callables and blocking triggers, which verify the caller. |
 | Mutation | `stryker.config.json` | Stryker | `pnpm test:mutation` | Command-runner mutation testing. Manual CI run until a hosted-run success is confirmed; see [TOOLING.md](TOOLING.md#known-limitations). |
 
 Choose the lightest layer that can fail for the right reason. Keep a behavior
