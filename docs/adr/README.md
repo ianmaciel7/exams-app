@@ -32,6 +32,7 @@ original date. Read current operational details in the
 | [0021](0021-resolve-locale-from-browser-preferences.md) | Accepted; supersedes part of 0004 | Explicit and cookie locale selection with `Accept-Language` fallback, while retaining unprefixed routes and no Proxy |
 | [0022](0022-gate-production-deploys-on-browser-checks.md) | Accepted | Firebase CD deploys only after desktop and mobile Playwright suites, axe, visual checks, and Lighthouse mobile budgets pass on the release commit |
 | [0023](0023-keep-service-worker-firebase-session.md) | Accepted | The Firebase Auth service worker stays the server session bridge, without session cookies, `FirebaseServerApp`, or Proxy authentication |
+| [0024](0024-separate-bridge-navigation-check-from-session-verification.md) | Accepted | `verifySession` always fails closed; a separate navigation check tolerates a missing worker, and `AuthGateClient` owns the protected session subscription and redirect |
 
 ## Current operational clarifications
 

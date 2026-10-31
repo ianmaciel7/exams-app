@@ -87,7 +87,7 @@ When standards conflict, apply them in this order:
   - Follow the canonical module taxonomy in [agent rules](.agents/rules/data.md#data-layer-module-conventions) for data and auth boundaries:
     - `definitions.ts`: Types, interfaces, and validation schemas (e.g. Zod schemas).
     - `dto.ts`: Select and structure transferred data crossing system boundaries.
-    - `dal.ts`: Protected data access and authorization boundary (`verifySession()`).
+    - `dal.ts`: Protected data access and authorization boundary (`verifySession()`, `verifyRole()`).
     - `data.ts`: Low-level database/persistence operations and query execution. Exported functions must use explicit `<verb><DomainNoun>` naming (`read*`, `write*`, `save*`, `create*`, `update*`, `delete*`, `remove*`, `upload*`, `fetch*`, `get*`, `set*`, `list*`, `verify*`), stay within **150 non-empty lines per file**, and obey the Biome per-function budgets (cognitive complexity **<= 8**, body **<= 40 non-empty lines**, callback nesting **<= 2**).
     - `auth.ts`: Authentication operations answering identity verification ("Who are you?"), such as credential validation, sign-in, sign-up, password recovery, and sign-out.
     - `session.ts`: Session lifecycle, state, token verification, and cookie persistence ("Are you authenticated and what is your active session?").

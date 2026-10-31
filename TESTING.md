@@ -82,6 +82,8 @@ rather than only mocked calls or navigation.
 | Password recovery | `tests/firebase-auth.spec.ts` | Emulator issues a recovery code and the UI handles network failure |
 | Google sign-in | `tests/firebase-auth.spec.ts` | Emulated popup/redirect flows complete; production OAuth is a separate risk |
 | Google popup cancellation and retry | `tests/firebase-auth.spec.ts` | Closing an unauthenticated popup returns to usable sign-in and permits a second attempt |
+| Protected session and server token verdicts | `tests/firebase-auth.spec.ts` | First load without the worker, forwarded token, failed refresh, rejected tokens, no redirect loop, sign-out, and account switch |
+| Role claims in Security Rules | `tests/firebase-auth.spec.ts` | A refreshed token gains and loses access; an issued token keeps its claim in Rules until it expires |
 | Responsive, visual, and a11y | `tests/*.spec.ts` | Assert defined layouts and detectable issues; these are not substitutes for a completed journey |
 
 Playwright uses `failOnFlakyTests` in CI: a test that fails before passing on
@@ -155,6 +157,27 @@ compatibility, so real Google OAuth needs separate, safe verification.
 policy guide test creation; no static analyzer can establish all relevant
 human-experience transitions automatically. Reviewers must compare the
 transition matrix with the feature's requirements and actual UX.
+
+### Protected session transition contract
+
+The route gate owns these transitions. An emulator suite cannot reproduce every
+one, so the last column names the layer that does.
+
+| Initial state | Event | Expected observable state | Verification |
+| --- | --- | --- | --- |
+| Loading | Session resolves signed in | Protected content, one subscription | `auth-gate-client.test.tsx`, emulator E2E |
+| Loading | Session resolves signed out | One redirect that keeps path and query | `auth-gate-client.test.tsx`, emulator E2E |
+| Loading | Firebase fails | Alert with a retry control, no redirect | `auth-gate-client.test.tsx` |
+| Signed in | Sign-out | Content hidden; history cannot restore it | Emulator E2E |
+| Signed in | Account changes | Subtree remounts with no prior account data | Component test, emulator E2E |
+| Signed in, worker active | Token refresh fails | Navigation continues on the client session | Emulator E2E |
+| Signed in | Server rejects the token | Sign-in, then home; the route is requested once | Emulator E2E |
+| Any | Admin SDK infrastructure fault | Error boundary, no sign-in redirect | `server.test.ts`, `dal.test.ts` only: the emulator cannot fail on demand |
+
+`verifySession`, `verifyRole`, 401/403 responses, and resource ownership on a
+server operation have no production caller, so they are unit-tested only. Do not
+add endpoints to exercise them. Ownership and anonymous access are verified against
+Firestore Rules.
 
 ## Test layers
 
@@ -597,8 +620,8 @@ requirements and coverage thresholds intact while reporting those limitations.
 ## React rules and lifecycle verification
 
 Protected-route lifecycle tests must verify that a repeated Firebase Auth session
-emission records screen usage at most once per user and does not replace visible
-content with a loading or telemetry-error state.
+emission records route usage at most once per user and path and does not replace
+visible content with a loading or telemetry-error state.
 
 The native React configuration suite lives in
 `.biome/rules/react/native-rules.test.ts`. It verifies blocking diagnostics for
@@ -741,8 +764,8 @@ normal configuration disables them, so these regressions use normal lint rules.
 
 Auth-provider tests cover initialization errors, first-session loading, safe
 post-auth redirects, locale updates without resubscribing, and cleanup ignoring
-late callbacks. Protected-guard regressions preserve logging acknowledgments and
-obsolete-session rejection after moving subscription ownership. Profile defaults
+late callbacks. Auth gate regressions preserve the single redirect, the pending
+sign-out, subscription cleanup, and account-switch remounting. Profile defaults
 tests cover stored/default preferences, lifecycle cancellation and a changed user;
 profile save tests keep session rechecks after every asynchronous write boundary.
 Home component tests preserve signed-in/out presentation after composing smaller

@@ -23,7 +23,7 @@ repository. It is not a catalog of every runtime library; `package.json` and
 | Browser component testing | Vitest Browser Mode + `vitest-browser-react` | Chromium through Playwright, local API port 4174 | Runs `*.browser.test.tsx` files in a real browser (`browser` project); port is separate from Playwright E2E and avoids the Windows excluded range containing Vitest's default. | `vitest.config.mts`, `package.json` |
 | End-to-end testing | Playwright | `^1.64.1` | Runs `tests/*.spec.ts` against a production build. | `playwright.config.ts`, `tests/` |
 | Accessibility testing | `@axe-core/playwright` | 4.14.0 | Scans pages for WCAG 2.x A/AA violations in Playwright (`@a11y`). | `tests/a11y.spec.ts` |
-| Firebase Emulator E2E (CI) | Firebase CLI 15.34.1 (pinned via pnpm dlx) | CI on demo-test only | Starts Auth, Firestore and Functions emulators; the profile guard and saves require the `recordUsage` callable. Installs the separate `functions/package-lock.json` package with npm ci and uses no production Firebase secrets. | `.github/workflows/ci.yml`, `tests/firebase-auth.spec.ts`, `firebase.json` |
+| Firebase Emulator E2E (CI) | Firebase CLI 15.34.1 (pinned via pnpm dlx) | CI on demo-test only | Starts Auth, Firestore and Functions emulators; route usage records and profile saves require the `recordUsage` callable. Installs the separate `functions/package-lock.json` package with npm ci and uses no production Firebase secrets. | `.github/workflows/ci.yml`, `tests/firebase-auth.spec.ts`, `firebase.json` |
 | Visual regression | Playwright screenshots | Linux baselines generated and compared in CI | Compares full-page screenshots against baselines (`@visual`). | `tests/visual.spec.ts`, `tests/snapshots/` |
 | Mutation testing | Stryker with the `command` runner | 10.0.0 (see [Known limitations](#known-limitations)) | On-demand mutation analysis of selected logic; runs the unit tests once per mutant. | `stryker.config.json`, `vitest.mutation.config.mts` |
 | Unused code | Knip | 6.41.0 | Finds unused files, exports, and dependencies. | `knip.jsonc` |
@@ -387,7 +387,7 @@ or move shared modules merely to satisfy a folder name.
 
 | Failure learned from the 2026-10-23 review | Required regression and owner |
 | --- | --- |
-| A committed access-log error survives a replacement session. | `protected-guard-client.test.tsx` fails unless a new session clears the error, waits for its own acknowledgment, and retains stale-response protection. |
+| Usage telemetry delays or fails a protected page. | `route-usage-client.test.tsx` fails unless content renders while the record is pending or rejected. |
 | A completed send erases a newer draft or attachment. | `prompt-input.test.tsx` checks provider draft revisions, identical text re-entered as a new revision, attachment identities, local edits, success reset, and failure preservation. |
 | Permission resolves after media cleanup, or recorder setup fails. | `speech-input.test.tsx` checks late-stream release, setup/start failures, duplicate pending requests, active-track cleanup, and obsolete transcription callbacks. |
 | A session changes during a profile operation. | `src/lib/profile.test.ts` checks that later profile/preference writes do not start after session validation fails. Keep Firebase Security Rules as the authoritative authorization boundary. |
