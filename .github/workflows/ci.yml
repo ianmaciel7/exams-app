@@ -165,7 +165,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       # Same demo project and pinned CLI as the auth emulator job; no production secrets.
       - name: Firestore, Storage and Realtime Database rules tests
-        run: npx --yes firebase-tools@15.34.2 emulators:exec --project demo-rules --only firestore,storage,database "node --test tests/rules/"
+        run: npx --yes firebase-tools@15.34.2 emulators:exec --project demo-rules --only firestore,storage,database "node --test tests/rules/*.test.mjs"
 
   auth-emulator:
     name: Firebase Auth and profile emulator E2E
