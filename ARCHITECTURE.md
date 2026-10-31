@@ -166,6 +166,10 @@ the existing public Auth Emulator host, so it shares the local emulator session.
 The authentication modules intentionally remain flat under `src/lib`:
 `auth.ts`, `session.ts`, and `return-url.ts`; consumers should import them as
 `@/lib/auth`, `@/lib/session`, and `@/lib/return-url`.
+The security and HTTP header modules also remain flat under `src/lib`:
+`headers.ts` (canonical header names, baseline security headers, and `getNonce`)
+and `csp.ts` (pure Content Security Policy directive builder); consumers should
+import them as `@/lib/headers` and `@/lib/csp`.
 Firebase Web SDK initialization lives in `src/lib/firebase/client.ts`. The
 profile route's `useProfilePreferences` and `useProfileSubmit` hooks coordinate
 the load and save workflows; `readProfile`, `readUserPreferences`,

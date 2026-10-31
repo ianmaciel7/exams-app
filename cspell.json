@@ -18,6 +18,7 @@
     ".cursor",
     ".gemini",
     ".serena",
+    ".vscode",
     "skills-lock.json",
     "src/components/ai-elements",
     "src/components/firebase",

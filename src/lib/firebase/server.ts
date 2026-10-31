@@ -31,6 +31,36 @@ function isTokenRejection(error: unknown) {
   return typeof code === "string" && TOKEN_REJECTION_CODES.has(code);
 }
 
+function logVerificationFailure(error: unknown) {
+  const errorWithCode = error as { code?: string; cause?: { code?: string } };
+  const code = errorWithCode.code ?? errorWithCode.cause?.code;
+  const message = error instanceof Error ? error.message : String(error);
+  const causeMessage =
+    error instanceof Error && error.cause instanceof Error
+      ? error.cause.message
+      : undefined;
+
+  // Log the reason, never the token, so a server-side misconfiguration is
+  // not mistaken for an expired session.
+  console.error("Firebase ID token verification failed", {
+    code,
+    message,
+    ...(causeMessage ? { cause: causeMessage } : {}),
+  });
+
+  if (process.env.NODE_ENV !== "development") return;
+
+  if (process.env.FIREBASE_AUTH_EMULATOR_HOST) {
+    console.warn(
+      `[Firebase Dev] Cannot connect to Auth emulator at ${process.env.FIREBASE_AUTH_EMULATOR_HOST}. If the emulator is stopped, start it in another terminal with 'pnpm emulator'.`,
+    );
+  } else {
+    console.warn(
+      "[Firebase Dev] Production token verification failed. Ensure Google Application Default Credentials are set with 'gcloud auth application-default login'.",
+    );
+  }
+}
+
 async function verifyIdToken(authIdToken: string) {
   // Dynamic rendering errors must not be interpreted as invalid user tokens.
   await connection();
@@ -40,12 +70,7 @@ async function verifyIdToken(authIdToken: string) {
     const claims = await getAdminAuth().verifyIdToken(authIdToken, true);
     return { role: readUserRole(claims), userId: claims.uid };
   } catch (error) {
-    // Log the reason, never the token, so a server-side misconfiguration is
-    // not mistaken for an expired session.
-    console.error("Firebase ID token verification failed", {
-      code: (error as { code?: string }).code,
-      message: error instanceof Error ? error.message : String(error),
-    });
+    logVerificationFailure(error);
     // Only a bad token is an unverifiable session. Expired credentials or an
     // unreachable Auth backend are server faults: reporting them as
     // "unauthenticated" redirects to sign-in, where the still-signed-in client

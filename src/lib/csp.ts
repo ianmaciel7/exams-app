@@ -1,6 +1,5 @@
 // cspell:ignore firebaseio gstatic
-/** Request header that carries the per-request CSP nonce to Server Components. */
-export const nonceHeader = "x-nonce";
+export { nonceHeader } from "./headers";
 
 type ContentSecurityPolicyOptions = {
   nonce: string;

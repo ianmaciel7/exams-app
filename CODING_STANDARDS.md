@@ -587,6 +587,21 @@ instrumentation, remote cache handlers, and hosting adapters are separate
 configuration decisions. Do not enable experimental flags, run codemods, or
 install upstream agent skills simply because a guide mentions them.
 
+### Security headers, CSP, and request nonce ownership
+
+- Isolate HTTP header management from Content Security Policy logic:
+  - `src/lib/headers.ts` is the single source of truth for HTTP header names
+    (`nonceHeader`, `cspHeader`), the baseline `securityHeaders` array for
+    `next.config.ts`, and the async `getNonce()` helper.
+  - `src/lib/csp.ts` contains pure CSP policy generation functions
+    (`buildContentSecurityPolicy`, `createNonce`) and does not import `next/headers`.
+  - `src/proxy.ts` imports header constants from `@/lib/headers` and policy
+    builders from `@/lib/csp`, injecting `x-nonce` and `Content-Security-Policy`
+    into the request and response.
+  - Server Components that need the per-request nonce (such as
+    `CspProviderServer` or `ThemeProviderServer`) import `getNonce` from
+    `@/lib/headers`.
+
 ### Owned function complexity and hook responsibility trees
 
 Main component hooks coordinate focused sub-hooks and expose rendering-ready
@@ -870,3 +885,11 @@ instead of `ReactDOM.hydrate`, explicit refs instead of `findDOMNode`,
 `root.unmount()` instead of `unmountComponentAtNode`, and JSX instead of
 `createFactory`. Do not describe a still-available legacy API as removed or
 mechanically rewrite valid boundaries.
+
+## Development tooling and secret isolation
+
+- **VS Code launch configurations (`.vscode/launch.json`)**:
+  - Never commit credentials, private tokens, or API keys directly inside `"env"` blocks.
+  - Configurations must load environment variables through `"envFile": "${workspaceFolder}/.env.*"` targeting Git-ignored environment files.
+  - This rule is enforced mechanically by `pnpm check:secret-guard` and the `.husky/pre-commit` hook.
+  - Emulator launch configurations should automate starting background emulator dependencies using `"preLaunchTask"` paired with background problem matchers in `.vscode/tasks.json`.

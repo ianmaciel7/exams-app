@@ -22,7 +22,13 @@ coordinate disclosure and remediation with the reporter.
 ## Contributor expectations
 
 - Keep secrets in local environment files; never commit `.env*` files or
-  credentials.
+  credentials. Never hardcode cloud credentials, API keys, private tokens, or
+  environment overrides into tracked files, including `.vscode/launch.json` or
+  tool configurations. Launch configurations must reference Git-ignored local
+  files via `"envFile": "${workspaceFolder}/.env.production.local"`.
+- Staged changes are automatically scanned for secrets by Gitleaks during the
+  Husky pre-commit hook (`gitleaks protect --staged`). The `check:secret-guard`
+  and `check:secrets` checks enforce this protection in `verify:fast` and CI.
 - Validate and authorize all untrusted input at the server boundary.
 - Firebase Web SDK access is still untrusted client input: enforce ownership and
   permitted fields, values, and upload constraints in Firestore and Storage
@@ -149,7 +155,7 @@ review. See the [Next.js maintenance rule](.agents/rules/cache.md).
 ([ADR 0023](docs/adr/0023-enforce-a-nonce-based-content-security-policy.md)).
 `src/lib/csp.ts` owns the directives. Scripts run only with the request nonce
 or when a script carrying the nonce loads them (`'strict-dynamic'`); eval is blocked in
-production. Read the nonce with `getNonce()` from `src/lib/csp-nonce.ts` in a
+production. Read the nonce with `getNonce()` from `src/lib/headers.ts` in a
 Server Component and pass it to any library that renders inline `<script>` or
 `<style>` tags; Base UI receives it through `CspProviderServer`. Never add
 `'unsafe-eval'` or `'unsafe-inline'` for production styles or scripts; add the

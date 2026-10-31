@@ -37,6 +37,7 @@ Format: `<type>[optional scope][!]: <description>`
 - Other allowed types: `chore`, `docs`, `refactor`, `test`, `perf`, `ci`,
   `build`, `style`.
 - Use `!` or a `BREAKING CHANGE:` footer for incompatible changes.
+- Never commit secrets, cloud credentials, or private API keys. Launch configurations must use `envFile` with local `.env*` files. Staged changes are automatically scanned by Gitleaks during the `pre-commit` hook.
 
 Examples:
 
