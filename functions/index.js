@@ -1,14 +1,5 @@
-const {
-  onCall,
-  onRequest,
-  HttpsError,
-} = require("firebase-functions/v2/https");
+const { onCall, HttpsError } = require("firebase-functions/v2/https");
 const logger = require("firebase-functions/logger");
-
-exports.helloWorld = onRequest((_request, response) => {
-  logger.info("Hello logs!", { structuredData: true });
-  response.send("Hello from Firebase Functions!");
-});
 
 const { initializeApp } = require("firebase-admin/app");
 const { getAuth } = require("firebase-admin/auth");
