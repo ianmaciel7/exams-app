@@ -37,6 +37,11 @@ original date. Read current operational details in the
 | [0026](0026-load-firebase-on-demand-on-the-home-page.md) | Accepted | The home hero renders on the server, Firebase loads after hydration, and Lighthouse gates the home LCP at 4 s |
 | [0027](0027-build-forms-on-base-ui-form-and-field.md) | Accepted | Forms use Base UI `Form` and `Field` through owned wrappers, enforced by ast-grep rules |
 | [0028](0028-test-security-rules-and-auth-journeys-on-emulators.md) | Accepted | Security rules and authentication journeys are tested against Firebase emulators, with a CI guard |
+| [0029](0029-enforce-base-ui-component-rules-with-ast-grep.md) | Accepted | Base UI composition rules run as ast-grep rules with snapshot tests, in CI and on staged files |
+| [0030](0030-use-one-loading-indicator-and-marker.md) | Accepted | One global loading indicator, an empty marker at each boundary, and Playwright frame recording |
+| [0031](0031-split-the-production-terraform-stack-by-domain.md) | Accepted | `infra/prod` is split into files by domain with one state and no modules |
+| [0032](0032-keep-one-owner-for-navigation-locale-and-scripts.md) | Accepted | One owner each for sign-in redirects, the locale cookie, package scripts, and message keys, enforced by guards |
+| [0033](0033-isolate-ci-tools-from-project-dependencies.md) | Accepted | `firebase-tools` through `npx`, Gitleaks only in the security job, and shared security headers |
 
 ## Current operational clarifications
 
