@@ -1,0 +1,28 @@
+id: require-session-check-in-server-action
+snapshots:
+  "export async function updateName(formData: FormData) {\n  \"use server\";\n  return formData.get(\"name\");\n}\n":
+    labels:
+    - source: |-
+        async function updateName(formData: FormData) {
+          "use server";
+          return formData.get("name");
+        }
+      style: primary
+      start: 7
+      end: 103
+    - source: |-
+        export async function updateName(formData: FormData) {
+          "use server";
+          return formData.get("name");
+        }
+      style: secondary
+      start: 0
+      end: 103
+    - source: |-
+        {
+          "use server";
+          return formData.get("name");
+        }
+      style: secondary
+      start: 53
+      end: 103

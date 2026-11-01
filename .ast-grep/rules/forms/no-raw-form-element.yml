@@ -10,8 +10,6 @@ ignores:
   - "src/components/ui/e[!x]*.tsx"
   - src/components/ai-elements/**
   # Firebase UI forms still use the plain shadcn Field. Remove this line when
-  # the auth refactor (PR #37) has merged and they are migrated to FormField.
-  - src/components/firebase/**
 severity: error
 message: Use Form from @/components/ui/extensions/form instead of a raw <form>.
 note: |

@@ -19,14 +19,15 @@ import { Policies } from "@/components/firebase/policies";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import { Field, FieldLabel, FieldError } from "@/components/ui/field";
+import { Form } from "@/components/ui/extensions/form";
+import { FormField, FormFieldLabel, FormFieldError } from "@/components/ui/extensions/form-field";
+import { FormError } from "@/components/ui/extensions/form-error";
 import { Input } from "@/components/ui/input";
 import { getAuthErrorMessage } from "./auth-error-message";
 
 export type { EmailLinkAuthFormProps };
 
 export function EmailLinkAuthForm(props: EmailLinkAuthFormProps) {
-  const emailId = useId();
   const { onEmailSent, onSignIn } = props;
   const ui = useUI();
   const schema = useEmailLinkAuthFormSchema();
@@ -62,16 +63,16 @@ export function EmailLinkAuthForm(props: EmailLinkAuthFormProps) {
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
+      <Form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
         <Controller
           control={form.control}
           name="email"
           render={({ field, fieldState }) => (
-            <Field data-invalid={!!fieldState.error}>
-              <FieldLabel htmlFor={emailId}>{getTranslation(ui, "labels", "emailAddress")}</FieldLabel>
-              <Input {...field} id={emailId} type="email" autoComplete="email" aria-invalid={!!fieldState.error} aria-describedby={fieldState.error ? `${emailId}-error` : undefined} />
-              {fieldState.error && <FieldError id={`${emailId}-error`}>{fieldState.error.message}</FieldError>}
-            </Field>
+            <FormField name={field.name} invalid={!!fieldState.error} touched={fieldState.isTouched} dirty={fieldState.isDirty}>
+              <FormFieldLabel>{getTranslation(ui, "labels", "emailAddress")}</FormFieldLabel>
+              <Input {...field} type="email" autoComplete="email" />
+              <FormFieldError match={!!fieldState.error}>{fieldState.error?.message}</FormFieldError>
+            </FormField>
           )}
         />
         <Policies />
@@ -82,8 +83,8 @@ export function EmailLinkAuthForm(props: EmailLinkAuthFormProps) {
             getTranslation(ui, "labels", "sendSignInLink")
           )}
         </Button>
-        {form.formState.errors.root && <FieldError>{form.formState.errors.root.message}</FieldError>}
-      </form>
+        {form.formState.errors.root && <FormError>{form.formState.errors.root.message}</FormError>}
+      </Form>
     </FormProvider>
   );
 }

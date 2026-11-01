@@ -22,6 +22,8 @@ import {
 } from "@firebase-oss/ui-core";
 
 import { Field, FieldLabel, FieldDescription, FieldError } from "@/components/ui/field";
+import { Form } from "@/components/ui/extensions/form";
+import { FormError } from "@/components/ui/extensions/form-error";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
@@ -62,7 +64,7 @@ function VerifyPhoneNumberForm(props: VerifyPhoneNumberFormProps) {
 
   return (
     <FormProvider {...form}>
-      <form
+      <Form
         onSubmit={(event) => {
           event.preventDefault();
           void form.handleSubmit(onSubmit)(event);
@@ -76,7 +78,7 @@ function VerifyPhoneNumberForm(props: VerifyPhoneNumberFormProps) {
             <Field data-invalid={!!fieldState.error}>
               <FieldLabel htmlFor="verificationCode">{getTranslation(ui, "labels", "verificationCode")}</FieldLabel>
               <FieldDescription>{getTranslation(ui, "prompts", "smsVerificationPrompt")}</FieldDescription>
-              <InputOTP id="verificationCode" maxLength={6} {...field} aria-invalid={!!fieldState.error}>
+              <InputOTP id="verificationCode" maxLength={6} {...field} aria-invalid={!!fieldState.error} aria-describedby={fieldState.error ? "verificationCode-error" : undefined}>
                 <InputOTPGroup>
                   <InputOTPSlot index={0} />
                   <InputOTPSlot index={1} />
@@ -86,7 +88,7 @@ function VerifyPhoneNumberForm(props: VerifyPhoneNumberFormProps) {
                   <InputOTPSlot index={5} />
                 </InputOTPGroup>
               </InputOTP>
-              {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
+              {fieldState.error && <FieldError id="verificationCode-error">{fieldState.error.message}</FieldError>}
             </Field>
           )}
         />
@@ -97,8 +99,8 @@ function VerifyPhoneNumberForm(props: VerifyPhoneNumberFormProps) {
             getTranslation(ui, "labels", "verifyCode")
           )}
         </Button>
-        {form.formState.errors.root && <FieldError>{form.formState.errors.root.message}</FieldError>}
-      </form>
+        {form.formState.errors.root && <FormError>{form.formState.errors.root.message}</FormError>}
+      </Form>
     </FormProvider>
   );
 }
@@ -135,7 +137,7 @@ function PhoneNumberForm(props: PhoneNumberFormProps) {
 
   return (
     <FormProvider {...form}>
-      <form
+      <Form
         onSubmit={(event) => {
           event.preventDefault();
           void form.handleSubmit(onSubmit)(event);
@@ -150,9 +152,9 @@ function PhoneNumberForm(props: PhoneNumberFormProps) {
               <FieldLabel htmlFor="phoneNumber">{getTranslation(ui, "labels", "phoneNumber")}</FieldLabel>
               <div className="flex items-center gap-2">
                 <CountrySelector ref={countrySelector} />
-                <Input {...field} id="phoneNumber" type="tel" autoComplete="tel-national" aria-invalid={!!fieldState.error} />
+                <Input {...field} id="phoneNumber" type="tel" autoComplete="tel-national" aria-invalid={!!fieldState.error} aria-describedby={fieldState.error ? "phoneNumber-error" : undefined} />
               </div>
-              {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
+              {fieldState.error && <FieldError id="phoneNumber-error">{fieldState.error.message}</FieldError>}
             </Field>
           )}
         />
@@ -165,8 +167,8 @@ function PhoneNumberForm(props: PhoneNumberFormProps) {
             getTranslation(ui, "labels", "sendCode")
           )}
         </Button>
-        {form.formState.errors.root && <FieldError>{form.formState.errors.root.message}</FieldError>}
-      </form>
+        {form.formState.errors.root && <FormError>{form.formState.errors.root.message}</FormError>}
+      </Form>
     </FormProvider>
   );
 }

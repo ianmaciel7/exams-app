@@ -14,7 +14,9 @@ import {
 import { useForm, FormProvider, Controller } from "react-hook-form";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 
-import { Field, FieldLabel, FieldDescription, FieldError } from "@/components/ui/field";
+import { Field, FieldLabel, FieldDescription, FieldError, FieldTitle } from "@/components/ui/field";
+import { Form } from "@/components/ui/extensions/form";
+import { FormError } from "@/components/ui/extensions/form-error";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
@@ -49,7 +51,7 @@ function SmsMultiFactorAssertionPhoneForm(props: SmsMultiFactorAssertionPhoneFor
   return (
     <div className="space-y-4">
       <Field>
-        <FieldLabel>{getTranslation(ui, "labels", "phoneNumber")}</FieldLabel>
+        <FieldTitle>{getTranslation(ui, "labels", "phoneNumber")}</FieldTitle>
         <FieldDescription>
           {getTranslation(ui, "messages", "mfaSmsAssertionPrompt", {
             phoneNumber: (props.hint as PhoneMultiFactorInfo).phoneNumber || "",
@@ -102,7 +104,7 @@ function SmsMultiFactorAssertionVerifyForm(props: SmsMultiFactorAssertionVerifyF
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
+      <Form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
         <Controller
           control={form.control}
           name="verificationCode"
@@ -110,7 +112,7 @@ function SmsMultiFactorAssertionVerifyForm(props: SmsMultiFactorAssertionVerifyF
             <Field data-invalid={!!fieldState.error}>
               <FieldLabel htmlFor="verificationCode">{getTranslation(ui, "labels", "verificationCode")}</FieldLabel>
               <FieldDescription>{getTranslation(ui, "prompts", "smsVerificationPrompt")}</FieldDescription>
-              <InputOTP id="verificationCode" maxLength={6} {...field} aria-invalid={!!fieldState.error}>
+              <InputOTP id="verificationCode" maxLength={6} {...field} aria-invalid={!!fieldState.error} aria-describedby={fieldState.error ? "verificationCode-error" : undefined}>
                 <InputOTPGroup>
                   <InputOTPSlot index={0} />
                   <InputOTPSlot index={1} />
@@ -120,7 +122,7 @@ function SmsMultiFactorAssertionVerifyForm(props: SmsMultiFactorAssertionVerifyF
                   <InputOTPSlot index={5} />
                 </InputOTPGroup>
               </InputOTP>
-              {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
+              {fieldState.error && <FieldError id="verificationCode-error">{fieldState.error.message}</FieldError>}
             </Field>
           )}
         />
@@ -131,8 +133,8 @@ function SmsMultiFactorAssertionVerifyForm(props: SmsMultiFactorAssertionVerifyF
             getTranslation(ui, "labels", "verifyCode")
           )}
         </Button>
-        {form.formState.errors.root && <FieldError>{form.formState.errors.root.message}</FieldError>}
-      </form>
+        {form.formState.errors.root && <FormError>{form.formState.errors.root.message}</FormError>}
+      </Form>
     </FormProvider>
   );
 }

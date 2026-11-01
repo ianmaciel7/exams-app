@@ -17,6 +17,9 @@ import { useForm, FormProvider, Controller } from "react-hook-form";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
+import { Form } from "@/components/ui/extensions/form";
+import { FormField, FormFieldLabel, FormFieldError } from "@/components/ui/extensions/form-field";
+import { FormError } from "@/components/ui/extensions/form-error";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
@@ -50,16 +53,16 @@ function TotpMultiFactorSecretGenerationForm(props: TotpMultiFactorSecretGenerat
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
+      <Form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
         <Controller
           control={form.control}
           name="displayName"
           render={({ field, fieldState }) => (
-            <Field data-invalid={!!fieldState.error}>
-              <FieldLabel htmlFor="displayName">{getTranslation(ui, "labels", "displayName")}</FieldLabel>
-              <Input {...field} id="displayName" type="text" autoComplete="off" aria-invalid={!!fieldState.error} />
-              {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
-            </Field>
+            <FormField name={field.name} invalid={!!fieldState.error} touched={fieldState.isTouched} dirty={fieldState.isDirty}>
+              <FormFieldLabel>{getTranslation(ui, "labels", "displayName")}</FormFieldLabel>
+              <Input {...field} type="text" autoComplete="off" />
+              <FormFieldError match={!!fieldState.error}>{fieldState.error?.message}</FormFieldError>
+            </FormField>
           )}
         />
         <Button type="submit" disabled={ui.state !== "idle"}>
@@ -69,8 +72,8 @@ function TotpMultiFactorSecretGenerationForm(props: TotpMultiFactorSecretGenerat
             getTranslation(ui, "labels", "generateQrCode")
           )}
         </Button>
-        {form.formState.errors.root && <FieldError>{form.formState.errors.root.message}</FieldError>}
-      </form>
+        {form.formState.errors.root && <FormError>{form.formState.errors.root.message}</FormError>}
+      </Form>
     </FormProvider>
   );
 }
@@ -115,14 +118,14 @@ export function MultiFactorEnrollmentVerifyTotpForm(props: MultiFactorEnrollment
         </p>
       </div>
       <FormProvider {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
+        <Form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
           <Controller
             control={form.control}
             name="verificationCode"
             render={({ field, fieldState }) => (
               <Field data-invalid={!!fieldState.error}>
                 <FieldLabel htmlFor="verificationCode">{getTranslation(ui, "labels", "verificationCode")}</FieldLabel>
-                <InputOTP id="verificationCode" maxLength={6} {...field} aria-invalid={!!fieldState.error}>
+                <InputOTP id="verificationCode" maxLength={6} {...field} aria-invalid={!!fieldState.error} aria-describedby={fieldState.error ? "verificationCode-error" : undefined}>
                   <InputOTPGroup>
                     <InputOTPSlot index={0} />
                     <InputOTPSlot index={1} />
@@ -132,7 +135,7 @@ export function MultiFactorEnrollmentVerifyTotpForm(props: MultiFactorEnrollment
                     <InputOTPSlot index={5} />
                   </InputOTPGroup>
                 </InputOTP>
-                {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
+                {fieldState.error && <FieldError id="verificationCode-error">{fieldState.error.message}</FieldError>}
               </Field>
             )}
           />
@@ -143,8 +146,8 @@ export function MultiFactorEnrollmentVerifyTotpForm(props: MultiFactorEnrollment
               getTranslation(ui, "labels", "verifyCode")
             )}
           </Button>
-          {form.formState.errors.root && <FieldError>{form.formState.errors.root.message}</FieldError>}
-        </form>
+          {form.formState.errors.root && <FormError>{form.formState.errors.root.message}</FormError>}
+        </Form>
       </FormProvider>
     </div>
   );
