@@ -9,17 +9,38 @@ original date. Read current operational details in the
 
 | Record | Status | Subject |
 | --- | --- | --- |
-| [0001](0001-configure-nextjs.md) | Accepted | Next.js App Router, TypeScript, React Compiler, pnpm, and server error instrumentation |
-| [0002](0002-configure-shadcn-ui.md) | Accepted | Base UI primitives, locally owned components, pointer cursor, cn utility, typography, and AI Elements |
+| [0001](0001-configure-nextjs.md) | Accepted; incorporates former 0023 and 0026 | Next.js App Router, TypeScript, React Compiler, pnpm, server error instrumentation, the nonce-based CSP Proxy, and on-demand Firebase on the home page |
+| [0002](0002-configure-shadcn-ui.md) | Accepted; incorporates former 0027, 0029 and 0030 | Base UI primitives, locally owned components, Form and Field forms, Base UI ast-grep rules, the single loading indicator, pointer cursor, cn utility, typography, and AI Elements |
 | [0003](0003-configure-theming.md) | Accepted | Class-based light, dark, and system themes |
-| [0004](0004-configure-internationalization.md) | Accepted | Cookie-only `next-intl` resolution without Proxy or `[locale]` routes, catalogs, providers, typed messages |
-| [0005](0005-document-project-standards.md) | Accepted; testing detail superseded by 0006 | Documentation ownership, repository boundaries, cross-route placement, and owned component naming |
-| [0006](0006-configure-testing.md) | Accepted | Colocated Vitest tests, Vitest Browser Mode, Playwright suites, coverage thresholds, mutation testing |
-| [0007](0007-configure-ci.md) | Accepted | Continuous integration, quality tooling, custom rules catalog, layered verification, and Git hooks |
+| [0004](0004-configure-internationalization.md) | Accepted; incorporates former 0021; the no-Proxy rule is amended by ADR 0001 | Cookie and `Accept-Language` locale resolution without `[locale]` routes, catalogs, providers, typed messages |
+| [0005](0005-document-project-standards.md) | Accepted; incorporates former 0032; testing detail superseded by 0006 | Documentation ownership, repository boundaries, cross-route placement, owned component naming, and single owners for navigation, locale cookie, scripts, and message keys |
+| [0006](0006-configure-testing.md) | Accepted; incorporates former 0028 | Colocated Vitest tests, Vitest Browser Mode, Playwright suites, coverage thresholds, mutation testing, and emulator tests for security rules and auth journeys |
+| [0007](0007-configure-ci.md) | Accepted; incorporates former 0033 | Continuous integration, quality tooling, custom rules catalog, layered verification, Git hooks, and isolated CI tools |
 | [0008](0008-install-firebase-ui-registry.md) | Accepted | Dynamic cross-platform installer and locally owned source model for `@firebase` registry |
-| [0009](0009-integrate-firebase-authentication.md) | Accepted | Browser Firebase Authentication, Electron redirect OAuth, native usage logging, role custom claims, and emulators |
+| [0009](0009-integrate-firebase-authentication.md) | Accepted; incorporates former 0017, 0024 and 0025 | Browser Firebase Authentication, Electron redirect OAuth, native usage logging, role custom claims, email allowlist, service worker session bridge, session verification contract, and emulators |
 | [0010](0010-configure-agent-ecosystem.md) | Accepted | Multi-agent orchestration, four MCP servers, fifteen locked skills, domain rule architecture, `PRODUCT.md`, Graphify graph, tool-usage evaluations, repository guards, and Firebase security rules ownership |
-| [0011](0011-configure-firebase-cd.md) | Accepted | Tag-driven Firebase production delivery, App Hosting, OIDC federation, `us-central1`, and budget alerts |
+| [0011](0011-configure-cd.md) | Accepted; incorporates former 0015, 0016, 0018 and 0022; manual provisioning superseded by 0012 | Release-driven Firebase production delivery, App Hosting, OIDC federation, `us-central1`, budget alerts, callable Function access, and browser-check gates |
+| [0012](0012-configure-terraform-infrastructure.md) | Accepted; incorporates former 0013, 0014, 0019, 0020 and 0031 | Terraform stacks for the project, Firebase, App Hosting and federation split by domain; team access; release environment; Auth trigger registration; permanent project IDs; manual apply |
+
+## Consolidation of 2026-11-01
+
+At the maintainer's direction, records 0013 to 0034 were merged into the
+records that own their subject. Each absorbed record keeps its text, original
+status, and date under the heading `Former ADR NNNN` in its new home, and the
+earlier files stay in Git history. Reference the new home in new work.
+
+| Former record | Now in |
+| --- | --- |
+| 0013 team access, 0014 release environment, 0019 Auth trigger registration, 0020 App Hosting Auth viewer, 0031 split production stack | [0012](0012-configure-terraform-infrastructure.md) |
+| 0015 release-driven deploys, 0016 callable Function access, 0018 blocking functions in the deploy, 0022 browser-check gate | [0011](0011-configure-cd.md) |
+| 0017 email allowlist, 0024 service worker session, 0025 session verification | [0009](0009-integrate-firebase-authentication.md) |
+| 0021 locale from browser preferences | [0004](0004-configure-internationalization.md) |
+| 0023 nonce-based CSP, 0026 Firebase on demand on the home page | [0001](0001-configure-nextjs.md) |
+| 0027 Base UI forms, 0029 Base UI ast-grep rules, 0030 one loading indicator | [0002](0002-configure-shadcn-ui.md) |
+| 0028 emulator tests for rules and journeys | [0006](0006-configure-testing.md) |
+| 0032 single owners for navigation, locale cookie, scripts | [0005](0005-document-project-standards.md) |
+| 0033 isolated CI tools | [0007](0007-configure-ci.md) |
+| 0034 amendments cross-reference | Dropped: the merge makes it unnecessary |
 
 ## Current operational clarifications
 
@@ -97,7 +118,8 @@ original date. Read current operational details in the
 - **ADR 0004: Routing and localization**:
   - Locale helpers in ADR 0004 do not create localized routes. Current requests
     resolve a locale from an explicit value or cookie; the application has no
-    locale route segment or request proxy. See
+    locale route segment, and the only request proxy is the header-only CSP proxy
+    of ADR 0001. See
     [Architecture](../../ARCHITECTURE.md#internationalization).
 
 - **ADR 0009: Firebase Authentication, Electron OAuth, usage logging, role custom claims, and emulators**:
@@ -108,15 +130,15 @@ original date. Read current operational details in the
     Suite UI at `http://127.0.0.1:4000`.
   - In-code default fallback values are removed; environment configuration is
     strictly driven by `.env`.
-  - The home page (`src/app/page.tsx`) renders `HomeSectionClient`
-    (`src/app/_components/home-section-client.tsx`), which observes the session and shows a
+  - The home page (`src/app/page.tsx`) renders `HomeClient`
+    (`src/app/_components/home-client.tsx`), which observes the session and shows a
     loading state, then "Manage account" (to `/profile`) with `HomeSignOutButtonClient` for
     authenticated users, or "Sign in" and "Get started" links for visitors. This supersedes
     the single `auth-nav-button-client.tsx` control described in ADR 0009.
-  - The `(protected)` route group guards client-rendered UI via `layout.tsx` observing
-    `onAuthStateChanged`, redirecting unauthenticated visitors to `/sign-in`.
+  - The `(protected)` route group guards client-rendered UI through `AuthGateClient`, the single
+    session subscription and sign-in redirect (with `?next=`), as ADR 0009 records.
   - The `/profile` landing page presents authenticated user details (`email`, `displayName`,
-    `uid`) and provides sign-out controls invoking `signOut(auth)`.
+    `uid`) and provides sign-out controls invoking `signOut(auth)`; it does not redirect itself.
   - Public `AuthProviderClient` redirects authenticated users from public authentication pages to
     `/profile`.
   - FirebaseUI preserves its popup strategy in ordinary browsers and uses its supported redirect
@@ -127,7 +149,7 @@ original date. Read current operational details in the
     Firestore storage is retired and denied to browser clients).
   - Role-based authorization uses a `role` custom claim (`user` or `admin` in `src/lib/role.ts`),
     verified on the server via `firebase-admin` (`verifyIdToken(token, true)`) with the fail-closed
-    `requireRole` boundary (`src/app/(protected)/_lib/require-protected-access.ts`) and managed via
+    `verifyRole` boundary (`src/app/(protected)/_lib/dal.ts`) and managed via
     the `setUserRole` callable Cloud Function.
   - Client-side route groups provide UI navigation guarding and UX routing, not zero-trust
     server authorization.
@@ -198,3 +220,9 @@ implementation is [theme-provider-client.tsx](../../src/components/ui/extensions
 The ADR retains the old path as historical context; the documentation guard maps
 only that exact source link to the current file. It does not exempt other broken
 links. Logging links in ADRs 0001 and 0009 resolve through [the logging entrypoint](../logging.md).
+
+- **ADR 0001: Service worker imports**:
+  - `worker-src` is `'self' https://www.gstatic.com/firebasejs/`, not `'self'` alone.
+    Chromium checks the static Firebase SDK imports of `public/firebase-auth-sw.js`
+    against the registering page's `worker-src`; with `'self'` alone the worker fails
+    with "ServiceWorker cannot be started".

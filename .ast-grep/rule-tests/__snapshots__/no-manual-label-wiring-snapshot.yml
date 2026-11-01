@@ -1,0 +1,28 @@
+id: no-manual-label-wiring
+snapshots:
+  "const a = <FieldLabel htmlFor=\"email\">Email</FieldLabel>;\n":
+    labels:
+    - source: <FieldLabel htmlFor="email">
+      style: primary
+      start: 10
+      end: 38
+    - source: FieldLabel
+      style: secondary
+      start: 11
+      end: 21
+    - source: htmlFor="email"
+      style: secondary
+      start: 22
+      end: 37
+  "const b = <FieldError>{message}</FieldError>;\n":
+    labels:
+    - source: <FieldError>{message}</FieldError>
+      style: primary
+      start: 10
+      end: 44
+  "const c = <FieldError errors={[error]} />;\n":
+    labels:
+    - source: <FieldError errors={[error]} />
+      style: primary
+      start: 10
+      end: 41

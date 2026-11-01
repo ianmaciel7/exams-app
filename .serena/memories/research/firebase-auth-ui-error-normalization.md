@@ -1,0 +1,7 @@
+# Firebase Auth UI error normalization
+
+- In the installed `@firebase-oss/ui-react` 7.1.0, the email/password, password-reset, account-creation, and email-link React action hooks convert non-`FirebaseUIError` failures to a generic translated error. This can erase Firebase error codes before app-specific recovery messaging runs.
+- The corresponding `@firebase-oss/ui-core` operations (`signInWithEmailAndPassword`, `createUserWithEmailAndPassword`, `sendPasswordResetEmail`, and `sendSignInLinkToEmail`) route failures through `handleFirebaseError`, preserving known Firebase error classification and localized messages while handling the UI pending lifecycle.
+- For this version, use the core operation when the form needs code-specific recovery feedback; keep form validation and presentation in the React component. Recheck this behavior after upgrading either package.
+- Regression evidence: emulator E2E showed invalid credentials and password-reset network failures rendered as “An unexpected error occurred” through the React hooks. The desired assertions are actionable invalid-credential and network messages, with retry available and form values retained.
+- Local auth-emulator verification may be blocked when Windows reserves Firebase Auth emulator port 9099; report that as an environment limitation and rely on the CI emulator run for evidence. Do not terminate unknown processes or change emulator ports as an ad hoc workaround.

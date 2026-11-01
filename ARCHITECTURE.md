@@ -1,5 +1,9 @@
 # Architecture
 
+The repository's standards applicability and evidence register is maintained
+in [quality standards](docs/agents/quality-standards.md); this document owns
+the runtime and data-boundary architecture behind those findings.
+
 ## Overview
 
 This repository is a Next.js 16 application using the App Router, React 19,
@@ -19,6 +23,7 @@ configuration and repository documentation.
 ├── docs/
 │   ├── adr/                 # Accepted architecture decisions
 │   └── agents/              # Instructions for automated contributors
+├── infra/                   # Terraform for the Google Cloud and Firebase project (bootstrap, prod)
 ├── public/                  # Static assets served by Next.js
 ├── scripts/                 # Operational and developer tooling scripts (e.g. emulator seed/clear)
 ├── src/
@@ -28,7 +33,7 @@ configuration and repository documentation.
 │   │   └── _components/     # Route-private components and auth providers
 │   ├── components/          # Reusable application and UI components
 │   ├── hooks/               # Reusable React hooks
-│   ├── i18n/                # Locale routing, navigation, and request config
+│   ├── i18n/                # Locale routing and request config
 │   ├── lib/                 # Framework-independent utilities
 │   ├── messages/            # Locale message catalogs
 │   └── types/               # Shared TypeScript declarations
@@ -64,13 +69,13 @@ files, and `public/` remain at the repository root, as required by the Next.js
   - `(public)` groups unauthenticated identity flows (`/sign-in`, `/register`,
     `/forgot-password`) under a shared layout and redirects authenticated visitors
     to `/profile`.
-  - `(protected)` isolates authenticated routes (e.g. `/profile`) behind a
-    client-side layout guard that observes `onAuthStateChanged` and redirects
+  - `(protected)` isolates authenticated routes (e.g. `/profile`) behind
+    `AuthGateClient`, which observes `onAuthStateChanged` and redirects
     unauthenticated visitors to `/sign-in`.
 
 ## Authentication navigation
 
-When an unauthenticated user requests a protected route, the client guard redirects to `/sign-in?next=<encoded-path-and-query>`. Once authenticated, the public authentication provider sends the user to that destination, or `/profile` if no valid destination was supplied. The return URL validator accepts only application-relative paths and rejects external URLs and authentication-screen loops; query strings are preserved. Route protection in the UI is not a substitute for Firebase Security Rules or authorization at the data source.
+When an unauthenticated user requests a protected route, the client auth gate redirects to `/sign-in?next=<encoded-path-and-query>`. Only `AuthGateClient` (`src/app/(protected)/_hooks/use-auth-gate-client.ts`) and the server session check in `src/app/(protected)/_lib/` send a signed-out visitor to sign-in. Pages and hooks inside `(protected)` read the session from context via `useAuthenticatedUser` and do not subscribe or redirect: Firebase notifies observers in subscription order, so a descendant redirect would drop the `?next=` destination. The ast-grep rules `no-protected-descendant-sign-in-redirect-ts` and `-tsx` enforce this. Once authenticated, the public authentication provider sends the user to that destination, or the home page if no valid destination was supplied. The return URL validator accepts only application-relative paths and rejects external URLs and authentication-screen loops; query strings are preserved. Route protection in the UI is not a substitute for Firebase Security Rules or authorization at the data source.
 
 ## Test boundaries
 
@@ -92,26 +97,30 @@ commands and implementation conventions.
 
 ## Internationalization
 
-The internationalization architecture is 100% cookie-driven (`NEXT_LOCALE`)
-without `middleware.ts` and without a `[locale]` folder segment in the App
-Router. The application serves `src/app/page.tsx` directly at `/`; there are no
-localized URL route prefixes or proxy scripts. This is an explicit maintainer
-requirement recorded in [ADR 0004](docs/adr/0004-configure-internationalization.md).
+The internationalization architecture is cookie-preferred (`NEXT_LOCALE`) with
+an `Accept-Language` fallback. It has neither `middleware.ts` nor a `[locale]`
+folder segment in the App Router. The application serves `src/app/page.tsx`
+directly at `/`; there are no localized URL route prefixes, and the Proxy
+never rewrites or reads the locale.
+This is an explicit maintainer requirement recorded in
+[ADR 0004](docs/adr/0004-configure-internationalization.md) and
+[ADR 0004](docs/adr/0004-configure-internationalization.md).
 An internally rewritten locale segment also
 violates this requirement; keeping only the browser URL unprefixed is insufficient.
 
 `src/i18n/routing.ts` defines `en`, `pt-BR`, and `es`, defaulting to `en`, and
 exports `localeCookie = "NEXT_LOCALE"` along with the `isLocale` type guard.
 `src/i18n/routing.test.ts` verifies this guard with property-based testing
-(`fast-check`). `src/i18n/request.ts` reads the cookie (or explicit request
-locale) and imports `src/messages/${locale}.json`, cleanly falling back to `en`
-if an invalid locale is received.
+(`fast-check`). `src/i18n/request.ts` prefers an explicit request locale, then
+the cookie, then the browser's `Accept-Language` header before importing
+`src/messages/${locale}.json`; it cleanly falls back to `en` if no supported
+locale is received.
 
 Message catalogs (`src/messages/*.json`) adhere to a structural testing
 contract in `src/messages/messages.test.ts`, which validates key parity across
-`en.json`, `pt-BR.json`, and `es.json`, forbids empty messages, and ensures ICU
-placeholders match the reference catalog. Global message type safety is enforced
-by augmenting the `IntlMessages` interface in `src/types/global.d.ts`. Spelling
+`en.json`, `pt-BR.json`, and `es.json`, forbids empty messages, rejects keys that no application code
+references, and ensures ICU placeholders match the reference catalog. Message keys and locales are type-checked
+by augmenting next-intl's `AppConfig` in `src/types/global.d.ts`. Spelling
 validation integrates `@cspell/dict-pt-br`.
 
 The root layout (`src/app/layout.tsx`) remains synchronous and
@@ -154,13 +163,17 @@ Firebase Authentication provides browser authentication on public auth routes an
 client-guarded protected routes (`(protected)/profile`); see [ADR 0009](docs/adr/0009-integrate-firebase-authentication.md).
 `FirebaseAuthSessionBridgeClient` registers the root-scoped
 `firebase-auth-sw.js` worker. The worker refreshes an ID token and attaches it
-only to same-origin Next navigation requests; `src/lib/firebase/server.ts` verifies that
-bridged token through `FirebaseServerApp`. Until the worker controls a tab, the
-browser guard remains the first-load fallback. The development worker receives
+only to same-origin Next navigation and RSC requests; `src/lib/firebase/server.ts`
+verifies that bridged token with the Admin SDK. Until the worker controls a tab,
+the browser auth gate remains the first-load fallback. The development worker receives
 the existing public Auth Emulator host, so it shares the local emulator session.
 The authentication modules intentionally remain flat under `src/lib`:
 `auth.ts`, `session.ts`, and `return-url.ts`; consumers should import them as
 `@/lib/auth`, `@/lib/session`, and `@/lib/return-url`.
+The security and HTTP header modules also remain flat under `src/lib`:
+`headers.ts` (canonical header names, baseline security headers, and `getNonce`)
+and `csp.ts` (pure Content Security Policy directive builder); consumers should
+import them as `@/lib/headers` and `@/lib/csp`.
 Firebase Web SDK initialization lives in `src/lib/firebase/client.ts`. The
 profile route's `useProfilePreferences` and `useProfileSubmit` hooks coordinate
 the load and save workflows; `readProfile`, `readUserPreferences`,
@@ -226,7 +239,7 @@ checks local contracts and leaves complete graph validation to Next.js.
 
 ## Next.js rendering and cache model
 
-The installed Next.js 16.4.2 configuration explicitly enables both
+The installed Next.js 16.4.3 configuration explicitly enables both
 `cacheComponents` and `partialPrefetching`. The applicable model combines a
 prerendered shell, cached work, and request-time streamed content. Guidance for
 caching without Cache Components and Pages Router APIs remains migration
@@ -248,9 +261,11 @@ server-owned data; its API choices belong in
 [Coding standards](CODING_STANDARDS.md#nextjs-request-data-and-caching).
 
 Route groups are URL-neutral, private folders do not create routes, and
-`src/app` is the active router. There is no Pages Router, `proxy.ts`, or
-`middleware.ts` implementation. A proxy or route-group layout is not a data
-access authorization boundary. Hosting adapters, static export, Edge runtime,
+`src/app` is the active router. There is no Pages Router. `src/proxy.ts` only
+sets the per-request nonce Content Security Policy
+([ADR 0001](docs/adr/0001-configure-nextjs.md));
+it does not rewrite, redirect, or authorize. A proxy or route-group layout is
+not a data access authorization boundary. Hosting adapters, static export, Edge runtime,
 remote/private caches, parallel/intercepted routes, and offline support are
 reviewed upstream options; this refresh does not adopt them.
 
@@ -282,7 +297,7 @@ and stable/experimental boundaries.
 
 Place shared application components in `src/components/ui/extensions/` and
 route-private components in `src/app/**/_components/`. For example,
-`LabeledSpinner` belongs in `ui/extensions` because both
+`LoadingState` belongs in `ui/extensions` because both
 route components and Firebase UI consume it. Do not create parallel application
 component folders such as `src/components/loading/`.
 
@@ -303,8 +318,8 @@ and [the integration convention](CODING_STANDARDS.md#integration-filename-conven
 
 ## Usage records
 
-The protected guard calls `recordUsage` on pathname changes before releasing
-children. Profile saves call `withUsageGuard` before starting the operation.
+`RouteUsageClient` calls `recordUsage` on pathname changes without delaying
+protected content. Profile saves call `withUsageGuard` before starting the operation.
 The Firebase callable validates authentication and an allowlist of screen and
 functionality names, then emits structured `INFO` entries using the native
 `firebase-functions/logger` SDK. Cloud Logging supplies the timestamp and
@@ -313,8 +328,9 @@ documents are denied to browser clients.
 
 The server derives `uid` from verified callable authentication. Event fields are
 `event`, `schemaVersion`, `eventId`, `uid`, `type`, and `name`; query strings, form
-values, email addresses, and tokens are excluded. The callable response releases
-the guard; failures and the 15-second client timeout block access or execution.
+values, email addresses, and tokens are excluded. A failed route record is
+ignored. For a profile save, the failure or the 15-second client timeout blocks
+the operation.
 Sign-out stays independent. Logging acknowledgment confirms handler execution,
 not durable ingestion into Cloud Logging.
 

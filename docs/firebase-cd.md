@@ -2,10 +2,11 @@
 
 # Firebase continuous delivery
 
-The Firebase CD workflow in `.github/workflows/firebase-cd.yml` deploys stable
-Semantic Versioning tags (`vX.Y.Z`) to the GitHub `production` environment.
-It rejects prerelease tags and tags whose commit is not reachable from the
-configured release branch.
+The Firebase CD workflow in `.github/workflows/firebase-cd.yml` deploys to the GitHub
+`production` environment when a stable GitHub Release (`vX.Y.Z`) is published
+([ADR 0011](adr/0011-configure-cd.md)). Draft releases and
+prereleases do not deploy, and a release whose commit is not reachable from the
+configured release branch is rejected.
 
 ## Production environment configuration
 
@@ -37,14 +38,26 @@ Before the first release, configure the production Firebase project with:
 4. Permissions required to deploy Firebase Functions and security rules,
    including Cloud Functions Admin and Service Account User where applicable.
 5. Runtime secrets in Secret Manager or App Hosting configuration.
-6. A monthly US$10 budget with alerts at 50%, 90%, and 100%.
+6. Permission to update the App Hosting backend (`firebaseapphosting.backends.update`) and create rollouts.
+7. A monthly US$10 budget with alerts at 50%, 90%, and 100%.
 
 The deployment service account needs only deployment permissions. Personal
 administrator access is for setup and troubleshooting, not normal releases.
 
 ## Release procedure
 
-Create and push a stable tag from a commit already merged into the configured
-release branch. For the first release, use `v0.1.0`. The workflow validates the
-tag, runs `pnpm verify:fast`, deploys Functions and rules, then requests an App
-Hosting rollout for that exact commit.
+1. Open a pull request that bumps the `version` in `package.json` and sets
+   `NEXT_PUBLIC_GIT_TAG` in `apphosting.yaml` to the same value with a `v` prefix.
+   `pnpm check:release` fails when they differ.
+2. Merge it into the release branch.
+3. On the Releases page of the repository, create a release for the new tag
+   (`vX.Y.Z`) targeting the merged commit, write the notes, and publish it.
+
+A `browser-checks` job first runs `pnpm verify:e2e` (desktop and Pixel 7 mobile
+projects, axe, visual) and `pnpm check:lighthouse` on the release commit in the
+pinned Playwright container; the deploy job needs it, so a failure stops the
+release before anything reaches production. The deploy job then validates the tag
+against `package.json` and `apphosting.yaml`, runs `pnpm verify:fast`, deploys Functions and rules, turns off the Cloud Run invoker check
+on the callable Functions so browsers can call them ([ADR 0011](adr/0011-configure-cd.md)),
+then requests an App Hosting rollout for that exact commit. Next.js embeds `NEXT_PUBLIC_GIT_TAG` in the browser bundle at
+build time, so the app shows the version that was released.

@@ -1,16 +1,18 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { type ComponentProps, useId } from "react";
+import type { ComponentProps } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import {
+  FormField,
+  FormFieldLabel,
+} from "@/components/ui/extensions/form-field";
 import { Input } from "@/components/ui/input";
 import type { ProfileValues } from "../_lib/definitions";
 
-type ProfileDisplayNameFieldProps = ComponentProps<typeof Field>;
+type ProfileDisplayNameFieldProps = ComponentProps<typeof FormField>;
 
 function ProfileDisplayNameField(props: ProfileDisplayNameFieldProps) {
-  const id = useId();
   const t = useTranslations("Auth");
   const { control } = useFormContext<ProfileValues>();
 
@@ -18,19 +20,16 @@ function ProfileDisplayNameField(props: ProfileDisplayNameFieldProps) {
     <Controller
       name="displayName"
       control={control}
-      render={({ field, fieldState }) => (
-        <Field {...props} data-invalid={fieldState.invalid}>
-          <FieldLabel htmlFor={id}>{t("displayNameLabel")}</FieldLabel>
+      render={({ field }) => (
+        <FormField {...props} name={field.name}>
+          <FormFieldLabel>{t("displayNameLabel")}</FormFieldLabel>
           <Input
             {...field}
-            id={id}
             autoComplete="name"
             placeholder={t("notSet")}
             maxLength={100}
-            aria-invalid={fieldState.invalid}
           />
-          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-        </Field>
+        </FormField>
       )}
     />
   );

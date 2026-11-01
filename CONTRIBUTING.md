@@ -37,6 +37,7 @@ Format: `<type>[optional scope][!]: <description>`
 - Other allowed types: `chore`, `docs`, `refactor`, `test`, `perf`, `ci`,
   `build`, `style`.
 - Use `!` or a `BREAKING CHANGE:` footer for incompatible changes.
+- Never commit secrets, cloud credentials, or private API keys. Launch configurations must use `envFile` with local `.env*` files. Staged changes are automatically scanned by Gitleaks during the `pre-commit` hook.
 
 Examples:
 
@@ -49,6 +50,8 @@ fix(auth): handle expired sessions
 ## Releases and tags
 
 Releases and git tags follow [Semantic Versioning (SemVer)](https://semver.org/).
+A production deploy starts when a GitHub Release is published, not when a tag is
+pushed; see [Firebase continuous delivery](docs/firebase-cd.md#release-procedure).
 
 ## Before opening a pull request
 
@@ -56,7 +59,10 @@ For a documentation-only change, run `pnpm check:markdown` and
 `pnpm check:spelling`, verify relative links and script names, and follow the
 full validation guidance in [TESTING.md](TESTING.md). Accepted ADRs describe
 decisions at their original date; preserve them and use a new ADR when a
-decision changes. Keep current operational details in the root guides.
+decision changes. Write the ADR in the same change as the work that introduces
+an architectural, tooling, or infrastructure choice, before opening the pull
+request, and run `pnpm check:adr`. Keep current operational details in the root
+guides, and never put project, billing, or account identifiers in tracked files.
 
 Run the checks in [TESTING.md](TESTING.md), keep changes focused, title the
 pull request as a Conventional Commit (CI validates it and squash merges use
@@ -72,6 +78,12 @@ the final squash commit title follows Conventional Commits. The intended GitHub
 protection settings and their availability are described in
 [ADR 0007](docs/adr/0007-configure-ci.md#main-branch-merge-policy); repository
 settings must be configured separately to enforce this policy.
+
+The repository deletes the head branch when a pull request merges
+(`delete_branch_on_merge`) and allows auto-merge. Prefer
+`gh pr merge <number> --squash --auto` once the checks are green, so no merged
+branch is left on the remote. A branch whose pull request closed without
+merging is deleted by hand.
 
 ## shadcn/ui documentation and source changes
 

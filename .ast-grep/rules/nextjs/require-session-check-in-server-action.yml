@@ -1,0 +1,31 @@
+id: require-session-check-in-server-action
+language: ts
+files:
+  - src/**/actions.ts
+  - src/**/_actions/**/*.ts
+ignores:
+  - "**/*.test.ts"
+severity: error
+message: Every exported Server Action must call verifySession() or verifyRole() before it reads input or mutates data.
+note: |
+  A Server Function is a public HTTP endpoint that anyone can call directly,
+  even when the form that uses it only renders on an authenticated page. The
+  Next.js forms guide says to verify authentication and authorization inside
+  each Server Action (https://nextjs.org/docs/app/guides/forms and
+  https://nextjs.org/docs/app/guides/authentication). The app has no Server
+  Actions today because every mutation uses the browser Firebase SDK
+  (ARCHITECTURE.md); this rule guards the first one. Validate the FormData
+  with a schema after the check.
+rule:
+  kind: function_declaration
+  inside:
+    kind: export_statement
+  has:
+    field: body
+    kind: statement_block
+  not:
+    has:
+      stopBy: end
+      any:
+        - pattern: await verifySession($$$)
+        - pattern: await verifyRole($$$)

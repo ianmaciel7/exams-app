@@ -20,7 +20,13 @@ type ProfileCardFooterProps = ComponentProps<typeof CardFooter>;
 
 function ProfileCard({ className, ...props }: ProfileCardProps) {
   return (
-    <Card className={cn("mx-auto w-full max-w-sm", className)} {...props} />
+    <Card
+      className={cn(
+        "mx-auto w-full max-w-sm shadow-md ring-foreground/20 sm:max-w-md lg:max-w-lg",
+        className,
+      )}
+      {...props}
+    />
   );
 }
 

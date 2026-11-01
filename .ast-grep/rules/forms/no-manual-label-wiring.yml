@@ -1,0 +1,42 @@
+id: no-manual-label-wiring
+language: tsx
+files:
+  - src/components/**/*.tsx
+  - src/app/**/*.tsx
+ignores:
+  - "**/*.test.tsx"
+  - "**/*.stories.tsx"
+  - "src/components/ui/[!e]*.tsx"
+  - "src/components/ui/e[!x]*.tsx"
+  - src/components/ai-elements/**
+  # Composite controls (input-otp, the country selector) are not Base UI Field
+  # controls, so these forms wire aria-describedby by hand. Do not add files here
+  # for a plain text input; use FormField.
+  - src/components/firebase/phone-auth-form.tsx
+  - src/components/firebase/sms-multi-factor-assertion-form.tsx
+  - src/components/firebase/sms-multi-factor-enrollment-form.tsx
+  - src/components/firebase/totp-multi-factor-assertion-form.tsx
+  - src/components/firebase/totp-multi-factor-enrollment-form.tsx
+severity: error
+message: Use FormField, FormFieldLabel and FormFieldError so Base UI links label, description and error to the control, instead of FieldLabel htmlFor or FieldError.
+note: |
+  The shadcn Field is a plain div. A FieldLabel with htmlFor and a FieldError
+  next to an Input leave aria-describedby unset, so a screen reader never reads
+  the error when the control is focused (WCAG 1.3.1, 3.3.1, 4.1.2). Base UI
+  Field.Root, Label, Description and Error set for, aria-labelledby,
+  aria-describedby and aria-invalid on the control automatically. Use
+  src/components/ui/extensions/form-field.tsx.
+rule:
+  any:
+    - pattern: <FieldError $$$ATTRS />
+    - pattern: <FieldError $$$ATTRS>$$$CHILDREN</FieldError>
+    - all:
+        - any:
+            - kind: jsx_opening_element
+            - kind: jsx_self_closing_element
+        - has:
+            field: name
+            regex: ^FieldLabel$
+        - has:
+            kind: jsx_attribute
+            regex: ^htmlFor

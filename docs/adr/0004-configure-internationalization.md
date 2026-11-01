@@ -1,6 +1,6 @@
 # ADR 0004: Configure Internationalization
 
-- **Status**: Accepted
+- **Status**: Accepted; incorporates former ADR 0021
 - **Date**: 2026-10-16
 - **Deciders**: ianmaciel7
 
@@ -138,3 +138,49 @@ We adopt `next-intl` with a decoupled routing, provider, and message structure:
   - Root document output waits for request-specific locale resolution before emitting the HTML element, trading an immediate static root fallback for correct server-rendered language.
   - Requires configuring `next.config.ts` with `createNextIntlPlugin`.
   - Developers must use `generateMetadata()` with `getTranslations()` when metadata needs localization.
+
+## Incorporated decisions
+
+The following records were merged into this one on 2026-11-01 at the maintainer's direction. Their text is kept as written, with the original number, status, and date, so the history stays traceable. The earlier files remain in Git history.
+
+### Former ADR 0021: Resolve Locale from Browser Preferences
+
+- **Original status**: Accepted
+- **Original date**: 2026-10-30
+
+#### Context (former ADR 0021)
+
+ADR 0004 made the request locale depend only on an explicit server override or
+the `NEXT_LOCALE` cookie. A first visit from a browser configured for Brazilian
+Portuguese therefore rendered English until the user explicitly saved a profile
+preference. The profile's stored locale could also disagree with the cookie,
+causing an incorrect-language profile to be briefly revealed.
+
+#### Decision (former ADR 0021)
+
+Keep direct, unprefixed routes and do not introduce middleware, a Proxy, or a
+`[locale]` segment. Resolve the request locale in this order:
+
+1. An explicit server translation override.
+2. A supported `NEXT_LOCALE` cookie value.
+3. The supported best match from `Accept-Language`, considering quality values
+   and then matching a region-specific locale by its base language.
+4. The `en` default locale.
+
+After the authenticated profile loads its saved locale, synchronize a differing
+value to `NEXT_LOCALE` and refresh before revealing the profile. This makes the
+saved user preference durable without a wrong-language flash.
+
+#### Consequences (former ADR 0021)
+
+- First visits honor supported browser preferences, including `pt-BR` and an
+  `es-*` regional preference.
+- A saved profile preference continues to take precedence after its one-time
+  cookie synchronization.
+- Request configuration remains dynamic because it already reads cookies; it
+  now also reads request headers.
+- Unit regressions cover browser preference matching and profile-cookie
+  synchronization before the profile card is displayed.
+
+This supersedes only ADR 0004's cookie-only locale-source rule. Its unprefixed
+routing and no-Proxy decisions remain in force.

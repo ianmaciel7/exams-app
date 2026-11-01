@@ -2,9 +2,11 @@
 
 import { Spinner } from "@/components/ui/spinner";
 
-import type { SignUpAuthFormSchema } from "@firebase-oss/ui-core";
 import {
-  useSignUpAuthFormAction,
+  createUserWithEmailAndPassword,
+  type SignUpAuthFormSchema,
+} from "@firebase-oss/ui-core";
+import {
   useSignUpAuthFormSchema,
   useUI,
   type SignUpAuthFormProps,
@@ -12,19 +14,21 @@ import {
 } from "@firebase-oss/ui-react";
 import { useForm, FormProvider, Controller } from "react-hook-form";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import { FirebaseUIError, getTranslation } from "@firebase-oss/ui-core";
+import { getTranslation } from "@firebase-oss/ui-core";
 
-import { Field, FieldLabel, FieldError } from "@/components/ui/field";
+import { Form } from "@/components/ui/extensions/form";
+import { FormField, FormFieldLabel, FormFieldError } from "@/components/ui/extensions/form-field";
+import { FormError } from "@/components/ui/extensions/form-error";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Policies } from "./policies";
+import { getAuthErrorMessage } from "./auth-error-message";
 
 export type { SignUpAuthFormProps };
 
 export function SignUpAuthForm(props: SignUpAuthFormProps) {
   const ui = useUI();
   const schema = useSignUpAuthFormSchema();
-  const action = useSignUpAuthFormAction();
   const requireDisplayName = useRequireDisplayName();
 
   const form = useForm<SignUpAuthFormSchema>({
@@ -39,29 +43,33 @@ export function SignUpAuthForm(props: SignUpAuthFormProps) {
 
   async function onSubmit(values: SignUpAuthFormSchema) {
     try {
-      const credential = await action(values);
+      const credential = await createUserWithEmailAndPassword(
+        ui,
+        values.email,
+        values.password,
+        values.displayName,
+      );
       if (credential) {
         props.onSignUp?.(credential);
       }
     } catch (error) {
-      const message = error instanceof FirebaseUIError ? error.message : String(error);
-      form.setError("root", { message });
+      form.setError("root", { message: getAuthErrorMessage(error, ui) });
     }
   }
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
+      <Form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
         {requireDisplayName ? (
           <Controller
             control={form.control}
             name="displayName"
             render={({ field, fieldState }) => (
-              <Field data-invalid={!!fieldState.error}>
-                <FieldLabel htmlFor="displayName">{getTranslation(ui, "labels", "displayName")}</FieldLabel>
-                <Input {...field} id="displayName" aria-invalid={!!fieldState.error} />
-                {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
-              </Field>
+              <FormField name={field.name} invalid={!!fieldState.error} touched={fieldState.isTouched} dirty={fieldState.isDirty}>
+                <FormFieldLabel>{getTranslation(ui, "labels", "displayName")}</FormFieldLabel>
+                <Input {...field} autoComplete="name" />
+                <FormFieldError match={!!fieldState.error}>{fieldState.error?.message}</FormFieldError>
+              </FormField>
             )}
           />
         ) : null}
@@ -69,22 +77,22 @@ export function SignUpAuthForm(props: SignUpAuthFormProps) {
           control={form.control}
           name="email"
           render={({ field, fieldState }) => (
-            <Field data-invalid={!!fieldState.error}>
-              <FieldLabel htmlFor="email">{getTranslation(ui, "labels", "emailAddress")}</FieldLabel>
-              <Input {...field} id="email" type="email" aria-invalid={!!fieldState.error} />
-              {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
-            </Field>
+            <FormField name={field.name} invalid={!!fieldState.error} touched={fieldState.isTouched} dirty={fieldState.isDirty}>
+              <FormFieldLabel>{getTranslation(ui, "labels", "emailAddress")}</FormFieldLabel>
+              <Input {...field} type="email" autoComplete="email" />
+              <FormFieldError match={!!fieldState.error}>{fieldState.error?.message}</FormFieldError>
+            </FormField>
           )}
         />
         <Controller
           control={form.control}
           name="password"
           render={({ field, fieldState }) => (
-            <Field data-invalid={!!fieldState.error}>
-              <FieldLabel htmlFor="password">{getTranslation(ui, "labels", "password")}</FieldLabel>
-              <Input {...field} id="password" type="password" aria-invalid={!!fieldState.error} />
-              {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
-            </Field>
+            <FormField name={field.name} invalid={!!fieldState.error} touched={fieldState.isTouched} dirty={fieldState.isDirty}>
+              <FormFieldLabel>{getTranslation(ui, "labels", "password")}</FormFieldLabel>
+              <Input {...field} type="password" autoComplete="new-password" />
+              <FormFieldError match={!!fieldState.error}>{fieldState.error?.message}</FormFieldError>
+            </FormField>
           )}
         />
         <Policies />
@@ -98,7 +106,7 @@ export function SignUpAuthForm(props: SignUpAuthFormProps) {
             getTranslation(ui, "labels", "createAccount")
           )}
         </Button>
-        {form.formState.errors.root && <FieldError>{form.formState.errors.root.message}</FieldError>}
+        {form.formState.errors.root && <FormError>{form.formState.errors.root.message}</FormError>}
         {props.onSignInClick ? (
           <Button type="button" variant="link" size="sm" onClick={props.onSignInClick}>
             <span className="text-xs">
@@ -106,7 +114,7 @@ export function SignUpAuthForm(props: SignUpAuthFormProps) {
             </span>
           </Button>
         ) : null}
-      </form>
+      </Form>
     </FormProvider>
   );
 }

@@ -1,6 +1,10 @@
 # Security Policy
 
-<!-- cspell:words gaxios -->
+The project-specific security applicability and evidence status for HTTP
+headers, authentication, authorization, and security testing is tracked in
+[quality standards](docs/agents/quality-standards.md#status-and-evidence-model).
+
+<!-- cspell:words gaxios googleusercontent -->
 
 ## Supported versions
 
@@ -22,7 +26,13 @@ coordinate disclosure and remediation with the reporter.
 ## Contributor expectations
 
 - Keep secrets in local environment files; never commit `.env*` files or
-  credentials.
+  credentials. Never hardcode cloud credentials, API keys, private tokens, or
+  environment overrides into tracked files, including `.vscode/launch.json` or
+  tool configurations. Launch configurations must reference Git-ignored local
+  files via `"envFile": "${workspaceFolder}/.env.production.local"`.
+- Staged changes are automatically scanned for secrets by Gitleaks during the
+  Husky pre-commit hook (`gitleaks protect --staged`). The `check:secret-guard`
+  and `check:secrets` checks enforce this protection in `verify:fast` and CI.
 - Validate and authorize all untrusted input at the server boundary.
 - Firebase Web SDK access is still untrusted client input: enforce ownership and
   permitted fields, values, and upload constraints in Firestore and Storage
@@ -66,6 +76,18 @@ The template currently uses Firebase Authentication, Firestore preferences, and
 Storage avatars. Projects derived from it must document their own access-control,
 data-retention, and incident-response requirements, including changes to these
 services or their Security Rules.
+
+## Firebase security rules
+
+Every rule in `firestore.rules`, `storage.rules`, and `database.rules.json`
+needs a negative test in `tests/rules/` that runs on the emulators: another
+user, an anonymous visitor, a forged `role` claim, and an unmatched path must
+all be refused. Browser clients never write the `role` claim, and a rule must
+not allow access unconditionally. `pnpm test:rules` runs these tests (CI job
+`rules`), and `pnpm check:firebase-rules` fails when a rules file has no test,
+a matched path is not named in its test, or CI stops running them. Admin SDK
+code ignores these rules, so Cloud Functions keep their own authorization
+checks.
 
 ## Cloud Functions dependency audit
 
@@ -117,7 +139,7 @@ identifiers, and closed-over values do not replace those checks. Review response
 serialization, upload limits, error disclosure, and cookie options with the
 new endpoint. Role-based authorization follows [ADR 0009](docs/adr/0009-integrate-firebase-authentication.md):
 verify tokens with Firebase Admin (`checkRevoked`) and gate protected data
-through `requireRole` in `src/app/(protected)/_lib/require-protected-access.ts`
+through `verifySession` or `verifyRole` in `src/app/(protected)/_lib/dal.ts`
 (using role claims from `src/lib/role.ts`); Security Rules remain the
 enforcement point for browser access.
 
@@ -139,10 +161,28 @@ control. Private/remote cache examples and taint APIs are optional tools, not
 proof that cached data is safe.
 
 For new external image sources, use narrow `remotePatterns`; validate external
-URLs and proxy destinations to prevent unintended server requests. A dynamic
-nonce-based CSP, instrumentation exporter, or hosting adapter needs a deployment
-and rendering review. None is enabled by this documentation update. See the
-[Next.js maintenance rule](.agents/rules/cache.md).
+URLs and proxy destinations to prevent unintended server requests. An
+instrumentation exporter or hosting adapter needs a deployment and rendering
+review. See the [Next.js maintenance rule](.agents/rules/cache.md).
+
+## Content Security Policy
+
+`src/proxy.ts` sends a nonce-based CSP on every document
+([ADR 0001](docs/adr/0001-configure-nextjs.md)).
+`src/lib/csp.ts` owns the directives. Scripts run only with the request nonce
+or when a script carrying the nonce loads them (`'strict-dynamic'`); eval is blocked in
+production. Read the nonce with `getNonce()` from `src/lib/headers.ts` in a
+Server Component and pass it to any library that renders inline `<script>` or
+`<style>` tags; Base UI receives it through `CspProviderServer`. Never add
+`'unsafe-eval'` or `'unsafe-inline'` for production styles or scripts; add the
+narrowest origin to the matching directive instead. `img-src` allows only
+`'self'`, `blob:`, `data:`, Firebase Storage, and Google account photos
+(`lh3.googleusercontent.com`), so profile photos render without opening
+`https:` for every image. Cloud Functions expose callables and blocking
+triggers only; `functions/public-surface.test.cjs` fails on an `onRequest`
+endpoint. `worker-src` also allows
+`https://www.gstatic.com/firebasejs/`, where the auth service worker imports
+the Firebase SDK from; Chromium checks those imports against the page policy.
 
 ## React rendering and input boundaries
 

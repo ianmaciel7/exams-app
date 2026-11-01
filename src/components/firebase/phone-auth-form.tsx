@@ -15,7 +15,6 @@ import { useRef } from "react";
 import { useForm, FormProvider, Controller } from "react-hook-form";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import {
-  FirebaseUIError,
   formatPhoneNumber,
   getTranslation,
   type PhoneAuthNumberFormSchema,
@@ -23,12 +22,15 @@ import {
 } from "@firebase-oss/ui-core";
 
 import { Field, FieldLabel, FieldDescription, FieldError } from "@/components/ui/field";
+import { Form } from "@/components/ui/extensions/form";
+import { FormError } from "@/components/ui/extensions/form-error";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { Policies } from "@/components/firebase/policies";
 import { CountrySelector, type CountrySelectorRef } from "@/components/firebase/country-selector";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
+import { getAuthActionErrorMessage } from "./auth-error-message";
 
 type VerifyPhoneNumberFormProps = {
   verificationId: string;
@@ -56,14 +58,13 @@ function VerifyPhoneNumberForm(props: VerifyPhoneNumberFormProps) {
         props.onSuccess(credential);
       }
     } catch (error) {
-      const message = error instanceof FirebaseUIError ? error.message : String(error);
-      form.setError("root", { message });
+      form.setError("root", { message: getAuthActionErrorMessage(error, ui) });
     }
   }
 
   return (
     <FormProvider {...form}>
-      <form
+      <Form
         onSubmit={(event) => {
           event.preventDefault();
           void form.handleSubmit(onSubmit)(event);
@@ -77,7 +78,7 @@ function VerifyPhoneNumberForm(props: VerifyPhoneNumberFormProps) {
             <Field data-invalid={!!fieldState.error}>
               <FieldLabel htmlFor="verificationCode">{getTranslation(ui, "labels", "verificationCode")}</FieldLabel>
               <FieldDescription>{getTranslation(ui, "prompts", "smsVerificationPrompt")}</FieldDescription>
-              <InputOTP id="verificationCode" maxLength={6} {...field} aria-invalid={!!fieldState.error}>
+              <InputOTP id="verificationCode" maxLength={6} {...field} aria-invalid={!!fieldState.error} aria-describedby={fieldState.error ? "verificationCode-error" : undefined}>
                 <InputOTPGroup>
                   <InputOTPSlot index={0} />
                   <InputOTPSlot index={1} />
@@ -87,7 +88,7 @@ function VerifyPhoneNumberForm(props: VerifyPhoneNumberFormProps) {
                   <InputOTPSlot index={5} />
                 </InputOTPGroup>
               </InputOTP>
-              {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
+              {fieldState.error && <FieldError id="verificationCode-error">{fieldState.error.message}</FieldError>}
             </Field>
           )}
         />
@@ -98,8 +99,8 @@ function VerifyPhoneNumberForm(props: VerifyPhoneNumberFormProps) {
             getTranslation(ui, "labels", "verifyCode")
           )}
         </Button>
-        {form.formState.errors.root && <FieldError>{form.formState.errors.root.message}</FieldError>}
-      </form>
+        {form.formState.errors.root && <FormError>{form.formState.errors.root.message}</FormError>}
+      </Form>
     </FormProvider>
   );
 }
@@ -130,14 +131,13 @@ function PhoneNumberForm(props: PhoneNumberFormProps) {
       const verificationId = await action({ phoneNumber: formatted, recaptchaVerifier: recaptchaVerifier! });
       props.onSubmit(verificationId);
     } catch (error) {
-      const message = error instanceof FirebaseUIError ? error.message : String(error);
-      form.setError("root", { message });
+      form.setError("root", { message: getAuthActionErrorMessage(error, ui) });
     }
   }
 
   return (
     <FormProvider {...form}>
-      <form
+      <Form
         onSubmit={(event) => {
           event.preventDefault();
           void form.handleSubmit(onSubmit)(event);
@@ -152,9 +152,9 @@ function PhoneNumberForm(props: PhoneNumberFormProps) {
               <FieldLabel htmlFor="phoneNumber">{getTranslation(ui, "labels", "phoneNumber")}</FieldLabel>
               <div className="flex items-center gap-2">
                 <CountrySelector ref={countrySelector} />
-                <Input {...field} id="phoneNumber" type="tel" aria-invalid={!!fieldState.error} />
+                <Input {...field} id="phoneNumber" type="tel" autoComplete="tel-national" aria-invalid={!!fieldState.error} aria-describedby={fieldState.error ? "phoneNumber-error" : undefined} />
               </div>
-              {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
+              {fieldState.error && <FieldError id="phoneNumber-error">{fieldState.error.message}</FieldError>}
             </Field>
           )}
         />
@@ -167,8 +167,8 @@ function PhoneNumberForm(props: PhoneNumberFormProps) {
             getTranslation(ui, "labels", "sendCode")
           )}
         </Button>
-        {form.formState.errors.root && <FieldError>{form.formState.errors.root.message}</FieldError>}
-      </form>
+        {form.formState.errors.root && <FormError>{form.formState.errors.root.message}</FormError>}
+      </Form>
     </FormProvider>
   );
 }

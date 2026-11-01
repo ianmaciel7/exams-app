@@ -1,5 +1,5 @@
-import { RouteLoading } from "@/components/ui/extensions/route-loading";
+import { LoadingState } from "@/components/ui/extensions/loading-state";
 
 export default function Loading() {
-  return <RouteLoading />;
+  return <LoadingState boundary="public-layout" />;
 }

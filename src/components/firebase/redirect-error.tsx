@@ -9,5 +9,9 @@ export function RedirectError() {
     return null;
   }
 
-  return <div className="text-sm text-destructive">{error}</div>;
+  return (
+    <div role="alert" className="text-sm text-destructive">
+      {error}
+    </div>
+  );
 }

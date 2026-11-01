@@ -1,0 +1,46 @@
+id: require-native-button-false
+snapshots:
+  "<CollapsibleTrigger render={<div className=\"row\" />}>Details</CollapsibleTrigger>":
+    labels:
+    - source: <CollapsibleTrigger render={<div className="row" />}>
+      style: primary
+      start: 0
+      end: 53
+    - source: CollapsibleTrigger
+      style: secondary
+      start: 1
+      end: 19
+    - source: render
+      style: secondary
+      start: 20
+      end: 26
+    - source: "{<div className=\"row\" />}"
+      style: secondary
+      start: 27
+      end: 52
+    - source: render={<div className="row" />}
+      style: secondary
+      start: 20
+      end: 52
+  "<TabsTrigger render={<Link href=\"/a\" />} value=\"a\" />":
+    labels:
+    - source: <TabsTrigger render={<Link href="/a" />} value="a" />
+      style: primary
+      start: 0
+      end: 53
+    - source: TabsTrigger
+      style: secondary
+      start: 1
+      end: 12
+    - source: render
+      style: secondary
+      start: 13
+      end: 19
+    - source: "{<Link href=\"/a\" />}"
+      style: secondary
+      start: 20
+      end: 40
+    - source: render={<Link href="/a" />}
+      style: secondary
+      start: 13
+      end: 40

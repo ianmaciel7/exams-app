@@ -9,12 +9,27 @@ allowBuilds:
   esbuild: true
   msw: false
 overrides:
+  # GHSA-qr28-fpjm-wq7f: quadratic-time replacement of percent-encoded runs; fixed in 0.5.1.
+  decode-uri-component: ">=0.5.1"
+  # GHSA-8g5g-mxqh-grgj: server.fs.deny bypassed with queries; fixed in 6.4.5.
+  # Reached only through @ladle/react, which depends on vite 6.
+  "@ladle/react>vite": "6.4.5"
   # Firestore pins 1.9.16; 1.13.6 fixes GHSA-m9gg-hp2v-232j and GHSA-f596-whhp-79r4.
   "@grpc/grpc-js": "^1.13.6"
   "@modelcontextprotocol/sdk": ">=1.31.0"
   linkify-it: ">=5.0.2"
   markdown-it: ">=15.0.2"
+  # GHSA-g3hv-75wg-m249: globparts amplification DoS; patched in minimatch 11.0.1.
+  minimatch: ">=11.0.1"
+  # GHSA-3g3m-2fjr-6pw4: aborted traversal continues filesystem work; patched in glob 14.0.2.
+  glob: ">=14.0.2"
   qs: ">=6.16.0"
+  # GHSA-gg6h-894w-4m9c: quadratic-time lookbehind matching; fixed in 2.8.7.
+  # Reached only through markdownlint-cli2 (markdownlint > re2js).
+  re2js: ">=2.8.7"
+  # GHSA-3f7j-7jwc-fxfj: Windows command injection in services(); fixed in 5.33.16.
+  # Reached only through the shadcn CLI (shadcn > @dotenvx/dotenvx > systeminformation).
+  systeminformation: ">=5.33.16"
   smol-toml: ">=1.9.0"
   katex: ">=0.18.2"
   zod@<4.6.6: ^4.6.6

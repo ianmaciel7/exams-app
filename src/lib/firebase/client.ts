@@ -6,7 +6,6 @@ import {
 import type { FirebaseOptions } from "firebase/app";
 import { getApp, getApps, initializeApp } from "firebase/app";
 import { connectAuthEmulator, getAuth } from "firebase/auth";
-import { connectDatabaseEmulator, getDatabase } from "firebase/database";
 import { connectFirestoreEmulator, getFirestore } from "firebase/firestore";
 import { connectFunctionsEmulator, getFunctions } from "firebase/functions";
 import { connectStorageEmulator, getStorage } from "firebase/storage";
@@ -83,10 +82,6 @@ function getFirebaseAuthForApp(app: ReturnType<typeof getFirebaseApp>) {
   return auth;
 }
 
-export function getFirebaseAuth() {
-  return getFirebaseAuthForApp(getFirebaseApp(getValidatedFirebaseConfig()));
-}
-
 export function getFirebaseUI() {
   const app = getFirebaseApp(getValidatedFirebaseConfig());
   const auth = getFirebaseAuthForApp(app);
@@ -129,24 +124,6 @@ export function getFirebaseFirestore() {
   return firestore;
 }
 
-export function getFirebaseDatabase() {
-  const database = getDatabase(getFirebaseApp(getValidatedFirebaseConfig()));
-  if (process.env.NODE_ENV !== "development") return database;
-
-  const host = (
-    process.env.NEXT_PUBLIC_FIREBASE_DATABASE_EMULATOR_HOST ||
-    process.env.FIREBASE_DATABASE_EMULATOR_HOST
-  )?.trim();
-
-  if (!globalThis.firebaseDatabaseEmulatorConnected && host) {
-    const url = new URL(host.includes("://") ? host : `http://${host}`);
-    connectDatabaseEmulator(database, url.hostname, Number(url.port || 9000));
-    globalThis.firebaseDatabaseEmulatorConnected = true;
-  }
-
-  return database;
-}
-
 export function getFirebaseFunctions() {
   const functions = getFunctions(getFirebaseApp(getValidatedFirebaseConfig()));
   if (process.env.NODE_ENV !== "development") return functions;
@@ -181,53 +158,4 @@ export function getFirebaseStorage() {
   }
 
   return storage;
-}
-
-export function getFirebaseHosting() {
-  const emulatorHost = (
-    process.env.NEXT_PUBLIC_FIREBASE_HOSTING_EMULATOR_HOST ||
-    process.env.FIREBASE_HOSTING_EMULATOR_HOST
-  )?.trim();
-
-  const url = emulatorHost
-    ? emulatorHost.includes("://")
-      ? emulatorHost
-      : `http://${emulatorHost}`
-    : `https://${process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "localhost"}.web.app`;
-
-  return { url };
-}
-
-export function getFirebasePubSub() {
-  const functions = getFirebaseFunctions();
-  return {
-    async publish(
-      topic: string,
-      data: unknown,
-      attributes?: Record<string, string>,
-    ) {
-      const { httpsCallable } = await import("firebase/functions");
-      const publishFn = httpsCallable<
-        { topic: string; data: unknown; attributes?: Record<string, string> },
-        { success: boolean; messageId: string }
-      >(functions, "publishPubSubMessage");
-      const response = await publishFn({ topic, data, attributes });
-      return response.data;
-    },
-  };
-}
-
-export function getFirebaseExtensions() {
-  const host = (
-    process.env.NEXT_PUBLIC_FIREBASE_EXTENSIONS_EMULATOR_HOST ||
-    process.env.FIREBASE_EXTENSIONS_EMULATOR_HOST
-  )?.trim();
-
-  return {
-    emulatorUrl: host
-      ? host.includes("://")
-        ? host
-        : `http://${host}`
-      : undefined,
-  };
 }

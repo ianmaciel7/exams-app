@@ -8,7 +8,6 @@ const mocks = vi.hoisted(() => ({
   getApp: vi.fn(),
   getApps: vi.fn(),
   getAuth: vi.fn(),
-  getDatabase: vi.fn(),
   getFunctions: vi.fn(),
   initializeApp: vi.fn(),
   initializeUI: vi.fn(),
@@ -17,7 +16,6 @@ const mocks = vi.hoisted(() => ({
   providerPopupStrategy: vi.fn(),
   providerRedirectStrategy: vi.fn(),
   connectAuthEmulator: vi.fn(),
-  connectDatabaseEmulator: vi.fn(),
   connectFirestoreEmulator: vi.fn(),
   connectFunctionsEmulator: vi.fn(),
   connectStorageEmulator: vi.fn(),
@@ -42,10 +40,6 @@ vi.mock("@firebase-oss/ui-core", () => ({
 vi.mock("firebase/firestore", () => ({
   connectFirestoreEmulator: mocks.connectFirestoreEmulator,
   getFirestore: mocks.getFirestore,
-}));
-vi.mock("firebase/database", () => ({
-  connectDatabaseEmulator: mocks.connectDatabaseEmulator,
-  getDatabase: mocks.getDatabase,
 }));
 vi.mock("firebase/functions", () => ({
   connectFunctionsEmulator: mocks.connectFunctionsEmulator,
@@ -83,7 +77,6 @@ describe("getFirebaseUI", () => {
     mocks.providerRedirectStrategy.mockReturnValue(mocks.redirectStrategy);
     globalThis.firebaseUIStore = undefined;
     globalThis.firebaseAuthEmulatorConnected = false;
-    globalThis.firebaseDatabaseEmulatorConnected = false;
     globalThis.firebaseStorageEmulatorConnected = false;
     globalThis.firebaseFunctionsEmulatorConnected = false;
   });
@@ -93,7 +86,6 @@ describe("getFirebaseUI", () => {
     vi.unstubAllGlobals();
     globalThis.firebaseUIStore = undefined;
     globalThis.firebaseAuthEmulatorConnected = false;
-    globalThis.firebaseDatabaseEmulatorConnected = false;
     globalThis.firebaseStorageEmulatorConnected = false;
     globalThis.firebaseFunctionsEmulatorConnected = false;
   });
@@ -161,13 +153,12 @@ describe("getFirebaseUI", () => {
     });
   });
 
-  it("returns the shared Auth instance and connects its emulator once", async () => {
+  it("connects the Auth emulator once across repeated calls", async () => {
     vi.stubEnv("NODE_ENV", "development");
     vi.stubEnv("NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_HOST", "127.0.0.1:9098");
 
-    const { getFirebaseAuth } = await import("./client");
-    expect(getFirebaseAuth()).toBe(mocks.auth);
-    expect(getFirebaseAuth()).toBe(mocks.auth);
+    const { getFirebaseUI } = await import("./client");
+    expect(getFirebaseUI()).toBe(getFirebaseUI());
     expect(mocks.connectAuthEmulator).toHaveBeenCalledOnce();
   });
 
@@ -212,28 +203,17 @@ describe("getFirebaseUI", () => {
     );
   });
 
-  it("connects Database and Functions to their public emulator endpoints", async () => {
+  it("connects Functions to its public emulator endpoint", async () => {
     vi.stubEnv("NODE_ENV", "development");
-    vi.stubEnv("NEXT_PUBLIC_FIREBASE_DATABASE_EMULATOR_HOST", "127.0.0.1:9000");
     vi.stubEnv(
       "NEXT_PUBLIC_FIREBASE_FUNCTIONS_EMULATOR_HOST",
       "127.0.0.1:5001",
     );
-    const database = { app: mocks.app };
     const functions = { app: mocks.app };
-    mocks.getDatabase.mockReturnValue(database);
     mocks.getFunctions.mockReturnValue(functions);
 
-    const { getFirebaseDatabase, getFirebaseFunctions } = await import(
-      "./client"
-    );
-    expect(getFirebaseDatabase()).toBe(database);
+    const { getFirebaseFunctions } = await import("./client");
     expect(getFirebaseFunctions()).toBe(functions);
-    expect(mocks.connectDatabaseEmulator).toHaveBeenCalledWith(
-      database,
-      "127.0.0.1",
-      9000,
-    );
     expect(mocks.connectFunctionsEmulator).toHaveBeenCalledWith(
       functions,
       "127.0.0.1",
@@ -241,47 +221,24 @@ describe("getFirebaseUI", () => {
     );
   });
 
-  it("does not connect Storage, Database, or Functions emulators outside development", async () => {
+  it("does not connect Storage or Functions emulators outside development", async () => {
     vi.stubEnv("NODE_ENV", "production");
     vi.stubEnv("NEXT_PUBLIC_FIREBASE_STORAGE_EMULATOR_HOST", "127.0.0.1:9199");
-    vi.stubEnv("NEXT_PUBLIC_FIREBASE_DATABASE_EMULATOR_HOST", "127.0.0.1:9000");
     vi.stubEnv(
       "NEXT_PUBLIC_FIREBASE_FUNCTIONS_EMULATOR_HOST",
       "127.0.0.1:5001",
     );
     const storage = { app: mocks.app };
-    const database = { app: mocks.app };
     const functions = { app: mocks.app };
     mocks.getStorage.mockReturnValue(storage);
-    mocks.getDatabase.mockReturnValue(database);
     mocks.getFunctions.mockReturnValue(functions);
 
-    const { getFirebaseStorage, getFirebaseDatabase, getFirebaseFunctions } =
-      await import("./client");
+    const { getFirebaseStorage, getFirebaseFunctions } = await import(
+      "./client"
+    );
     expect(getFirebaseStorage()).toBe(storage);
-    expect(getFirebaseDatabase()).toBe(database);
     expect(getFirebaseFunctions()).toBe(functions);
     expect(mocks.connectStorageEmulator).not.toHaveBeenCalled();
-    expect(mocks.connectDatabaseEmulator).not.toHaveBeenCalled();
     expect(mocks.connectFunctionsEmulator).not.toHaveBeenCalled();
-  });
-
-  it("provides get for Hosting, PubSub, and Extensions", async () => {
-    vi.stubEnv("NEXT_PUBLIC_FIREBASE_PROJECT_ID", "example-proj");
-    vi.stubEnv("NEXT_PUBLIC_FIREBASE_HOSTING_EMULATOR_HOST", "127.0.0.1:5000");
-    vi.stubEnv(
-      "NEXT_PUBLIC_FIREBASE_EXTENSIONS_EMULATOR_HOST",
-      "127.0.0.1:5003",
-    );
-
-    const { getFirebaseHosting, getFirebasePubSub, getFirebaseExtensions } =
-      await import("./client");
-
-    expect(getFirebaseHosting().url).toBe("http://127.0.0.1:5000");
-    expect(getFirebaseExtensions()).toEqual({
-      emulatorUrl: "http://127.0.0.1:5003",
-    });
-    expect(getFirebasePubSub()).toBeDefined();
-    expect(typeof getFirebasePubSub().publish).toBe("function");
   });
 });

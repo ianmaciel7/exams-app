@@ -43,7 +43,7 @@ export function SignUpAuthScreen({ children, onSignUp, ...props }: SignUpAuthScr
     <div className="max-w-sm mx-auto">
       <Card>
         <CardHeader>
-          <CardTitle>{titleText}</CardTitle>
+          <CardTitle role="heading" aria-level={1}>{titleText}</CardTitle>
           <CardDescription>{subtitleText}</CardDescription>
         </CardHeader>
         <CardContent>

@@ -18,5 +18,7 @@ Read when changing external synchronization, subscriptions, cleanup, or asynchro
 - Reserve layout Effects for necessary pre-paint measurement; insertion Effects belong to style libraries.
 - Do not assume every Effect runs after paint or that an Effect fetch activates Suspense.
 - Preserve a tested loading branch for Firebase Auth subscriptions; do not invent a Promise wrapper.
+- Do not make protected-route rendering wait for best-effort telemetry. Deduplicate
+  repeated session emissions before recording screen usage.
 
 Verify cleanup, request ordering, and hide/reveal behavior using [TESTING.md](../../TESTING.md#react-rules-and-lifecycle-verification).
