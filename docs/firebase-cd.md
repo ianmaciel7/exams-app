@@ -4,7 +4,7 @@
 
 The Firebase CD workflow in `.github/workflows/firebase-cd.yml` deploys to the GitHub
 `production` environment when a stable GitHub Release (`vX.Y.Z`) is published
-([ADR 0015](adr/0015-publish-releases-to-deploy.md)). Draft releases and
+([ADR 0011](adr/0011-configure-firebase-cd.md)). Draft releases and
 prereleases do not deploy, and a release whose commit is not reachable from the
 configured release branch is rejected.
 
@@ -58,6 +58,6 @@ projects, axe, visual) and `pnpm check:lighthouse` on the release commit in the
 pinned Playwright container; the deploy job needs it, so a failure stops the
 release before anything reaches production. The deploy job then validates the tag
 against `package.json` and `apphosting.yaml`, runs `pnpm verify:fast`, deploys Functions and rules, turns off the Cloud Run invoker check
-on the callable Functions so browsers can call them ([ADR 0016](adr/0016-disable-invoker-iam-check-for-callable-functions.md)),
+on the callable Functions so browsers can call them ([ADR 0011](adr/0011-configure-firebase-cd.md)),
 then requests an App Hosting rollout for that exact commit. Next.js embeds `NEXT_PUBLIC_GIT_TAG` in the browser bundle at
 build time, so the app shows the version that was released.

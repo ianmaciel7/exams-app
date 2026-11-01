@@ -1,6 +1,6 @@
 # ADR 0002: Configure shadcn/ui
 
-- **Status**: Accepted
+- **Status**: Accepted; incorporates former ADRs 0027, 0029, 0030
 - **Date**: 2026-10-16
 - **Deciders**: ianmaciel7
 
@@ -128,3 +128,103 @@ Key architectural choices:
 - [ADR 0003: Configure Theming](0003-configure-theming.md)
 - [ADR 0005: Document Project Standards](0005-document-project-standards.md)
 - [ADR 0010: Configure Agent Ecosystem](0010-configure-agent-ecosystem.md)
+
+## Incorporated decisions
+
+The following records were merged into this one on 2026-11-01 at the maintainer's direction. Their text is kept as written, with the original number, status, and date, so the history stays traceable. The earlier files remain in Git history.
+
+### Former ADR 0027: Build forms on Base UI Form and Field
+
+- **Original status**: Accepted
+- **Original date**: 2026-11-01
+
+#### Context (former ADR 0027)
+
+Forms mixed raw `<form>` and `<label>` elements, manual `htmlFor` wiring, and
+ad hoc error text. Accessible names, error association, and native validation
+differed from one form to the next. The profile form (pull request #60) and the
+Firebase authentication forms (pull request #63) moved to one model.
+
+#### Decision (former ADR 0027)
+
+- Forms use the Base UI `Form` and `Field` primitives through the owned wrappers in
+  `src/components/ui/extensions/` (`form`, `form-field`, `form-error`). Labels, descriptions, and
+  errors are associated by Base UI instead of by hand.
+- The profile keeps a single React Hook Form instance wrapped in `FormProvider`; each field
+  composes `FormField`, the input, and `FormFieldError` with a `Controller`.
+- ast-grep rules in `.ast-grep/rules/forms/` block raw `<form>` elements, manual label wiring, a
+  missing `autoComplete`, and a Server Action without a session check. `pnpm check:forms` and the
+  CI gate run them with their snapshot tests.
+- Conventions live in [CODING_STANDARDS.md](../../CODING_STANDARDS.md) and
+  `.agents/rules/forms.md`; this record keeps the reasoning only.
+
+#### Consequences (former ADR 0027)
+
+- Every form exposes the same accessible name, error, and submit-state behavior, and new forms
+  that bypass the wrappers fail at commit time.
+- Forms depend on the Base UI release that provides `Form` and `Field`.
+- The Firebase UI registry forms are now locally edited copies, so a registry update needs a
+  manual merge ([ADR 0008](0008-install-firebase-ui-registry.md)).
+
+### Former ADR 0029: Enforce Base UI component rules with ast-grep
+
+- **Original status**: Accepted
+- **Original date**: 2026-11-01
+
+#### Context (former ADR 0029)
+
+[ADR 0002](0002-configure-shadcn-ui.md) chose Base UI primitives and locally owned
+components, and [ADR 0007](0007-configure-ci.md) added ast-grep for structural
+rules. Base UI misuse (a cloned element instead of `render`, a Radix import,
+`onClick` on a value control, a raw `<button>`) compiled and passed unit tests but
+broke keyboard and accessibility behavior. Pull requests #35, #39 and #58 closed
+the gap.
+
+#### Decision (former ADR 0029)
+
+- Rules in `.ast-grep/rules/base-ui/` reject Radix imports and state selectors, a
+  direct Base UI import outside the owned wrappers, `cloneElement`, `onClick` on
+  value controls, raw `<button>` elements, a button rendered as a link, nested
+  buttons in a trigger, and a menu item `onClick`. A trigger rendered as a
+  non-button requires `nativeButton={false}`.
+- Each rule has snapshot tests and runs through `pnpm check:structure`.
+- `ast-grep scan` also runs on staged `*.{ts,tsx}` files in lint-staged after
+  Biome, so a violation blocks the commit and not only CI.
+- Rules that need types (`asChild`, popup titles) stay with TypeScript and axe.
+- Composition patterns (`render`, `useRender`, `mergeProps`) live in
+  `.agents/rules/shadcn.md`.
+
+#### Consequences (former ADR 0029)
+
+- A Base UI misuse fails at commit time with a message that names the fix.
+- Each rule is a maintenance cost and needs a snapshot when Base UI changes.
+- The rule list lives in the custom rule registry in [TOOLING.md](../../TOOLING.md).
+
+### Former ADR 0030: Use one loading indicator and one loading marker
+
+- **Original status**: Accepted
+- **Original date**: 2026-11-01
+
+#### Context (former ADR 0030)
+
+Route and session loading showed several spinners (a primitive, a labeled spinner,
+and an overlay), so navigation to the profile flashed two indicators, shifted the
+layout, or lost the indicator across a root Suspense boundary. Pull requests 36,
+40 to 44, 46 and 56 fixed it step by step.
+
+#### Decision (former ADR 0030)
+
+- One `GlobalLoadingIndicator` renders the only visible, labeled loading state.
+- Each loading boundary (`loading.tsx`, the protected guard, and client session
+  waits) renders an empty `LoadingState` marker that tells the indicator a
+  transition is pending. A boundary never draws its own spinner.
+- The ast-grep rule `no-inline-loading-state` blocks a hand-made loading state.
+- Playwright records every visible spinner frame across real App Router and
+  Firebase auth transitions on a viewport matrix, so a second indicator or a
+  layout shift fails the suite.
+
+#### Consequences (former ADR 0030)
+
+- A new route only adds a marker and gets the right feedback.
+- Loading looks the same everywhere, and the indicator does not shift the layout.
+- The state inventory lives in [docs/ui-state-feedback.md](../ui-state-feedback.md).

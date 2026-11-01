@@ -1,6 +1,6 @@
 # ADR 0006: Configure testing
 
-- **Status**: Accepted
+- **Status**: Accepted; incorporates former ADR 0028
 - **Date**: 2026-10-16
 - **Deciders**: ianmaciel7
 
@@ -167,3 +167,38 @@ ADR 0005. ADR 0005 remains unchanged under the repository's immutable-ADR policy
 - [Playwright accessibility testing with axe-core](https://playwright.dev/docs/accessibility-testing)
 - [fast-check documentation](https://fast-check.dev/)
 - [Stryker Mutator](https://stryker-mutator.io/)
+
+## Incorporated decisions
+
+The following records were merged into this one on 2026-11-01 at the maintainer's direction. Their text is kept as written, with the original number, status, and date, so the history stays traceable. The earlier files remain in Git history.
+
+### Former ADR 0028: Test security rules and authentication journeys on emulators
+
+- **Original status**: Accepted
+- **Original date**: 2026-11-01
+
+#### Context (former ADR 0028)
+
+[ADR 0010](0010-configure-agent-ecosystem.md) made the repository the owner of the
+Firebase security rules, but nothing proved that they deny what they should.
+Authentication was covered by mocks, so a stale service worker token or a sign-out
+race could pass every test. Pull requests #59 and #37 added the missing layers.
+
+#### Decision (former ADR 0028)
+
+- `tests/rules/*.test.mjs` run with `node:test` and `@firebase/rules-unit-testing` against the
+  Firestore, Storage, and Realtime Database emulators (`pnpm test:rules`). Each rule covers the
+  owner, another user, the administrator claim, and anonymous callers. CI has a `rules` job.
+- `pnpm check:firebase-rules` fails when a rules file has no test, a matched path is never named
+  in its test, a rule allows everything, or CI stops running `tests/rules`.
+- Playwright acceptance journeys run against the Auth and Firestore emulators with an independent
+  oracle for the stored data (own profile writes allowed, cross-account writes denied, sign-out
+  persisted). A Playwright retry that passes fails the CI run, so flaky tests stay visible.
+- Stateful features cover each state transition, including cancellation and recovery.
+
+#### Consequences (former ADR 0028)
+
+- A rules change without a matching test fails review and CI.
+- The `rules` job needs Java and the Firebase CLI, which makes CI slower.
+- Details live in [TESTING.md](../../TESTING.md), [TOOLING.md](../../TOOLING.md), and
+  `.agents/rules/auth.md`.

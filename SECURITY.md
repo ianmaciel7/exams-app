@@ -168,7 +168,7 @@ review. See the [Next.js maintenance rule](.agents/rules/cache.md).
 ## Content Security Policy
 
 `src/proxy.ts` sends a nonce-based CSP on every document
-([ADR 0023](docs/adr/0023-enforce-a-nonce-based-content-security-policy.md)).
+([ADR 0001](docs/adr/0001-configure-nextjs.md)).
 `src/lib/csp.ts` owns the directives. Scripts run only with the request nonce
 or when a script carrying the nonce loads them (`'strict-dynamic'`); eval is blocked in
 production. Read the nonce with `getNonce()` from `src/lib/headers.ts` in a

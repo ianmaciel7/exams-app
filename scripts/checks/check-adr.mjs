@@ -56,6 +56,13 @@ export function inspectAdrs(root) {
         `${adrDirectory}/README.md: missing index entry for ${adr.name}`,
       );
     }
+    for (const match of adr.text.matchAll(/(?<!ormer |# )ADR (\d{4})/g)) {
+      if (Number(match[1]) > adrs.length) {
+        problems.push(
+          `${adrDirectory}/${adr.name}: refers to ADR ${match[1]}, which does not exist; merged records live under a "Former ADR" heading`,
+        );
+      }
+    }
     const heading = `# ADR ${String(adr.number).padStart(4, "0")}: `;
     if (!adr.text.includes(heading)) {
       problems.push(

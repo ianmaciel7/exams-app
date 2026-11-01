@@ -3,8 +3,8 @@ import { buildContentSecurityPolicy, createNonce } from "@/lib/csp";
 import { cspHeader, nonceHeader } from "@/lib/headers";
 
 /**
- * Sets a per-request nonce CSP (ADR 0023). This Proxy only adds headers: it
- * never rewrites, redirects, or resolves the locale (ADR 0004 and ADR 0021).
+ * Sets a per-request nonce CSP (ADR 0001). This Proxy only adds headers: it
+ * never rewrites, redirects, or resolves the locale (ADR 0004 and ADR 0004).
  */
 export function proxy(request: NextRequest) {
   const nonce = createNonce();
