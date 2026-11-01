@@ -9,8 +9,14 @@ ignores:
   - "src/components/ui/[!e]*.tsx"
   - "src/components/ui/e[!x]*.tsx"
   - src/components/ai-elements/**
-  # See no-raw-form-element: remove after the auth refactor (PR #37) merges.
-  - src/components/firebase/**
+  # Composite controls (input-otp, the country selector) are not Base UI Field
+  # controls, so these forms wire aria-describedby by hand. Do not add files here
+  # for a plain text input; use FormField.
+  - src/components/firebase/phone-auth-form.tsx
+  - src/components/firebase/sms-multi-factor-assertion-form.tsx
+  - src/components/firebase/sms-multi-factor-enrollment-form.tsx
+  - src/components/firebase/totp-multi-factor-assertion-form.tsx
+  - src/components/firebase/totp-multi-factor-enrollment-form.tsx
 severity: error
 message: Use FormField, FormFieldLabel and FormFieldError so Base UI links label, description and error to the control, instead of FieldLabel htmlFor or FieldError.
 note: |

@@ -41,6 +41,7 @@ describe("FormField", () => {
     );
     expect(describedBy).toContain(error.id);
     expect(describedBy).toContain(screen.getByText("We never share it.").id);
+    expect(error.getAttribute("role")).toBe("alert");
     expect(onSubmit).not.toHaveBeenCalled();
   });
 });

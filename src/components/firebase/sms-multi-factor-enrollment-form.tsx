@@ -19,6 +19,9 @@ import { useForm, FormProvider, Controller } from "react-hook-form";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 
 import { Field, FieldLabel, FieldDescription, FieldError } from "@/components/ui/field";
+import { Form } from "@/components/ui/extensions/form";
+import { FormField, FormFieldLabel, FormFieldError } from "@/components/ui/extensions/form-field";
+import { FormError } from "@/components/ui/extensions/form-error";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
@@ -58,7 +61,7 @@ function MultiFactorEnrollmentPhoneNumberForm(props: MultiFactorEnrollmentPhoneN
 
   return (
     <FormProvider {...form}>
-      <form
+      <Form
         onSubmit={(event) => {
           event.preventDefault();
           void form.handleSubmit(onSubmit)(event);
@@ -69,11 +72,11 @@ function MultiFactorEnrollmentPhoneNumberForm(props: MultiFactorEnrollmentPhoneN
           control={form.control}
           name="displayName"
           render={({ field, fieldState }) => (
-            <Field data-invalid={!!fieldState.error}>
-              <FieldLabel htmlFor="displayName">{getTranslation(ui, "labels", "displayName")}</FieldLabel>
-              <Input {...field} id="displayName" type="text" autoComplete="off" aria-invalid={!!fieldState.error} />
-              {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
-            </Field>
+            <FormField name={field.name} invalid={!!fieldState.error} touched={fieldState.isTouched} dirty={fieldState.isDirty}>
+              <FormFieldLabel>{getTranslation(ui, "labels", "displayName")}</FormFieldLabel>
+              <Input {...field} type="text" autoComplete="off" />
+              <FormFieldError match={!!fieldState.error}>{fieldState.error?.message}</FormFieldError>
+            </FormField>
           )}
         />
         <Controller
@@ -84,9 +87,9 @@ function MultiFactorEnrollmentPhoneNumberForm(props: MultiFactorEnrollmentPhoneN
               <FieldLabel htmlFor="phoneNumber">{getTranslation(ui, "labels", "phoneNumber")}</FieldLabel>
               <div className="flex items-center gap-2">
                 <CountrySelector ref={countrySelector} />
-                <Input {...field} id="phoneNumber" type="tel" autoComplete="tel-national" className="flex-grow" aria-invalid={!!fieldState.error} />
+                <Input {...field} id="phoneNumber" type="tel" autoComplete="tel-national" className="flex-grow" aria-invalid={!!fieldState.error} aria-describedby={fieldState.error ? "phoneNumber-error" : undefined} />
               </div>
-              {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
+              {fieldState.error && <FieldError id="phoneNumber-error">{fieldState.error.message}</FieldError>}
             </Field>
           )}
         />
@@ -98,8 +101,8 @@ function MultiFactorEnrollmentPhoneNumberForm(props: MultiFactorEnrollmentPhoneN
             getTranslation(ui, "labels", "sendCode")
           )}
         </Button>
-        {form.formState.errors.root && <FieldError>{form.formState.errors.root.message}</FieldError>}
-      </form>
+        {form.formState.errors.root && <FormError>{form.formState.errors.root.message}</FormError>}
+      </Form>
     </FormProvider>
   );
 }
@@ -136,7 +139,7 @@ export function MultiFactorEnrollmentVerifyPhoneNumberForm(props: MultiFactorEnr
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <Form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <Controller
           control={form.control}
           name="verificationCode"
@@ -144,7 +147,7 @@ export function MultiFactorEnrollmentVerifyPhoneNumberForm(props: MultiFactorEnr
             <Field data-invalid={!!fieldState.error}>
               <FieldLabel htmlFor="verificationCode">{getTranslation(ui, "labels", "verificationCode")}</FieldLabel>
               <FieldDescription>{getTranslation(ui, "prompts", "smsVerificationPrompt")}</FieldDescription>
-              <InputOTP id="verificationCode" maxLength={6} {...field} aria-invalid={!!fieldState.error}>
+              <InputOTP id="verificationCode" maxLength={6} {...field} aria-invalid={!!fieldState.error} aria-describedby={fieldState.error ? "verificationCode-error" : undefined}>
                 <InputOTPGroup>
                   <InputOTPSlot index={0} />
                   <InputOTPSlot index={1} />
@@ -154,7 +157,7 @@ export function MultiFactorEnrollmentVerifyPhoneNumberForm(props: MultiFactorEnr
                   <InputOTPSlot index={5} />
                 </InputOTPGroup>
               </InputOTP>
-              {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
+              {fieldState.error && <FieldError id="verificationCode-error">{fieldState.error.message}</FieldError>}
             </Field>
           )}
         />
@@ -165,8 +168,8 @@ export function MultiFactorEnrollmentVerifyPhoneNumberForm(props: MultiFactorEnr
             getTranslation(ui, "labels", "verifyCode")
           )}
         </Button>
-        {form.formState.errors.root && <FieldError>{form.formState.errors.root.message}</FieldError>}
-      </form>
+        {form.formState.errors.root && <FormError>{form.formState.errors.root.message}</FormError>}
+      </Form>
     </FormProvider>
   );
 }

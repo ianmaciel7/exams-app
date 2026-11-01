@@ -329,6 +329,38 @@ behavior/accessibility tests remain responsible for their respective contracts.
 
 ### Form and Field Architecture (shadcn/ui & React Hook Form)
 
+#### Next.js form recommendations: what applies here
+
+The [Next.js forms guide](https://nextjs.org/docs/app/guides/forms) builds forms
+on Server Functions (`action={fn}`, `useActionState`, `useFormStatus`,
+validation with a schema on the server). That fits mutations that run on the
+server. Every form in this app writes through the browser Firebase SDK, which
+needs the signed-in client: sign-in, sign-up, password reset, email link, phone
+and SMS or TOTP second factors (reCAPTCHA and the reCAPTCHA verifier are browser
+only), and the profile (`updateProfile`, `verifyBeforeUpdateEmail`, Storage
+upload and Firestore writes are client calls checked by security rules). A
+Server Action would need the Admin SDK, would drop `verifyBeforeUpdateEmail`,
+and would move authorization from rules to code. So these forms stay client
+forms, and the guide's other points are met as follows:
+
+- Pending state: `formState.isSubmitting` drives the button and its spinner, and
+  the save button uses `focusableWhenDisabled`.
+- Validation: HTML constraints (`required`, `type`, `maxLength`) through the
+  Base UI Form, and the Firebase UI schemas for auth. Firestore and Storage
+  rules validate on the server (`tests/rules`).
+- Errors: `aria-describedby` and `aria-invalid` on the control, a focused first
+  invalid field, and `FormError` (`role="alert"`) for a failed submit.
+- Server forms render nothing before hydration: the sign-in and profile forms
+  are not in the server HTML, so no submit can fall back to a GET with the
+  password in the query string.
+- `next/form` is for GET forms that navigate (search, filters). The app has none.
+
+When a mutation moves to the server, use a Server Action in `actions.ts` that
+calls `verifySession()` or `verifyRole()` first (rule
+`nextjs/require-session-check-in-server-action`), parses `FormData` with a
+schema, and returns field errors for `useActionState`. Add behavior and
+authorization tests with it.
+
 Compose forms with `Form`, `FormField`, `FormFieldLabel`,
 `FormFieldDescription` and `FormFieldError` from
 `@/components/ui/extensions/form` and `form-field`. They wrap the Base UI `Form` and

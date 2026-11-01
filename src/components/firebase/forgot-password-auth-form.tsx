@@ -16,7 +16,9 @@ import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { getTranslation } from "@firebase-oss/ui-core";
 import { useId, useState } from "react";
 
-import { Field, FieldLabel, FieldError } from "@/components/ui/field";
+import { Form } from "@/components/ui/extensions/form";
+import { FormField, FormFieldLabel, FormFieldError } from "@/components/ui/extensions/form-field";
+import { FormError } from "@/components/ui/extensions/form-error";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Policies } from "./policies";
@@ -25,7 +27,6 @@ import { getAuthErrorMessage } from "./auth-error-message";
 export type { ForgotPasswordAuthFormProps };
 
 export function ForgotPasswordAuthForm(props: ForgotPasswordAuthFormProps) {
-  const emailId = useId();
   const ui = useUI();
   const schema = useForgotPasswordAuthFormSchema();
   const [emailSent, setEmailSent] = useState(false);
@@ -58,16 +59,16 @@ export function ForgotPasswordAuthForm(props: ForgotPasswordAuthFormProps) {
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
+      <Form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
         <Controller
           control={form.control}
           name="email"
           render={({ field, fieldState }) => (
-            <Field data-invalid={!!fieldState.error}>
-              <FieldLabel htmlFor={emailId}>{getTranslation(ui, "labels", "emailAddress")}</FieldLabel>
-              <Input {...field} id={emailId} type="email" autoComplete="email" aria-invalid={!!fieldState.error} aria-describedby={fieldState.error ? `${emailId}-error` : undefined} />
-              {fieldState.error && <FieldError id={`${emailId}-error`}>{fieldState.error.message}</FieldError>}
-            </Field>
+            <FormField name={field.name} invalid={!!fieldState.error} touched={fieldState.isTouched} dirty={fieldState.isDirty}>
+              <FormFieldLabel>{getTranslation(ui, "labels", "emailAddress")}</FormFieldLabel>
+              <Input {...field} type="email" autoComplete="email" />
+              <FormFieldError match={!!fieldState.error}>{fieldState.error?.message}</FormFieldError>
+            </FormField>
           )}
         />
         <Policies />
@@ -81,13 +82,13 @@ export function ForgotPasswordAuthForm(props: ForgotPasswordAuthFormProps) {
             getTranslation(ui, "labels", "resetPassword")
           )}
         </Button>
-        {form.formState.errors.root && <FieldError>{form.formState.errors.root.message}</FieldError>}
+        {form.formState.errors.root && <FormError>{form.formState.errors.root.message}</FormError>}
         {props.onBackToSignInClick ? (
           <Button type="button" variant="link" size="sm" onClick={props.onBackToSignInClick}>
             <span className="text-xs">&larr; {getTranslation(ui, "labels", "backToSignIn")}</span>
           </Button>
         ) : null}
-      </form>
+      </Form>
     </FormProvider>
   );
 }
