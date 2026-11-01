@@ -9,6 +9,21 @@ const adrFilePattern = /^(\d{4})-[a-z0-9]+(?:-[a-z0-9]+)*\.md$/;
 // when a new top-level area of infrastructure or tooling is introduced.
 export const decisionAreas = [
   { path: "infra", keyword: /terraform/i, label: "Terraform infrastructure" },
+  {
+    path: "tests/rules",
+    keyword: /rules-unit-testing/i,
+    label: "Firebase security rules emulator tests",
+  },
+  {
+    path: "src/app/_lib/firebase-loaders.ts",
+    keyword: /firebase-loaders/i,
+    label: "on-demand Firebase loading",
+  },
+  {
+    path: "src/components/ui/extensions/form-field.tsx",
+    keyword: /Form and Field/i,
+    label: "Base UI form model",
+  },
 ];
 
 function readAdrs(root) {
