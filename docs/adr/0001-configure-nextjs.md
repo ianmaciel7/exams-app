@@ -165,7 +165,7 @@ locale routing cookie-driven and unprefixed.
 
 The home page waited for Firebase to load on the client before it painted the
 hero, so the simulated mobile LCP (largest content render time) was about 6.0 s.
-[ADR 0011](0011-configure-firebase-cd.md) gates deploys on
+[ADR 0011](0011-configure-cd.md) gates deploys on
 mobile budgets but did not gate LCP, so the regression went unnoticed. The change
 shipped in pull request #41.
 

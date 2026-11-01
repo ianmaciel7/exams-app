@@ -6,7 +6,7 @@
 
 ## Context
 
-[ADR 0011](0011-configure-firebase-cd.md) required privileged Google Cloud
+[ADR 0011](0011-configure-cd.md) required privileged Google Cloud
 configuration for Workload Identity Federation, the App Hosting backend, data
 services, and budget alerts, and left that setup as manual steps. Doing it by
 hand was slow and error-prone: the first releases failed one missing API or
@@ -141,7 +141,7 @@ separate, deliberate step.
 
 The release workflow reads its target project, App Hosting backend, release branch,
 deploy service account, and Workload Identity provider from variables of the GitHub
-`production` environment ([ADR 0011](0011-configure-firebase-cd.md)). They were created
+`production` environment ([ADR 0011](0011-configure-cd.md)). They were created
 by hand and copied from Terraform outputs. The copy drifted: after the infrastructure
 was rebuilt, two values pointed at resources that no longer existed, and a variable
 added to the workflow later was missing, so releases failed on configuration rather than

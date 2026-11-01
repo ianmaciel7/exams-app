@@ -19,7 +19,7 @@ original date. Read current operational details in the
 | [0008](0008-install-firebase-ui-registry.md) | Accepted | Dynamic cross-platform installer and locally owned source model for `@firebase` registry |
 | [0009](0009-integrate-firebase-authentication.md) | Accepted; incorporates former 0017, 0024 and 0025 | Browser Firebase Authentication, Electron redirect OAuth, native usage logging, role custom claims, email allowlist, service worker session bridge, session verification contract, and emulators |
 | [0010](0010-configure-agent-ecosystem.md) | Accepted | Multi-agent orchestration, four MCP servers, fifteen locked skills, domain rule architecture, `PRODUCT.md`, Graphify graph, tool-usage evaluations, repository guards, and Firebase security rules ownership |
-| [0011](0011-configure-firebase-cd.md) | Accepted; incorporates former 0015, 0016, 0018 and 0022; manual provisioning superseded by 0012 | Release-driven Firebase production delivery, App Hosting, OIDC federation, `us-central1`, budget alerts, callable Function access, and browser-check gates |
+| [0011](0011-configure-cd.md) | Accepted; incorporates former 0015, 0016, 0018 and 0022; manual provisioning superseded by 0012 | Release-driven Firebase production delivery, App Hosting, OIDC federation, `us-central1`, budget alerts, callable Function access, and browser-check gates |
 | [0012](0012-configure-terraform-infrastructure.md) | Accepted; incorporates former 0013, 0014, 0019, 0020 and 0031 | Terraform stacks for the project, Firebase, App Hosting and federation split by domain; team access; release environment; Auth trigger registration; permanent project IDs; manual apply |
 
 ## Consolidation of 2026-11-01
@@ -32,7 +32,7 @@ earlier files stay in Git history. Reference the new home in new work.
 | Former record | Now in |
 | --- | --- |
 | 0013 team access, 0014 release environment, 0019 Auth trigger registration, 0020 App Hosting Auth viewer, 0031 split production stack | [0012](0012-configure-terraform-infrastructure.md) |
-| 0015 release-driven deploys, 0016 callable Function access, 0018 blocking functions in the deploy, 0022 browser-check gate | [0011](0011-configure-firebase-cd.md) |
+| 0015 release-driven deploys, 0016 callable Function access, 0018 blocking functions in the deploy, 0022 browser-check gate | [0011](0011-configure-cd.md) |
 | 0017 email allowlist, 0024 service worker session, 0025 session verification | [0009](0009-integrate-firebase-authentication.md) |
 | 0021 locale from browser preferences | [0004](0004-configure-internationalization.md) |
 | 0023 nonce-based CSP, 0026 Firebase on demand on the home page | [0001](0001-configure-nextjs.md) |

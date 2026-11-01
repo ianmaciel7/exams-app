@@ -1,6 +1,6 @@
 <!-- cspell:words southamerica -->
 
-# ADR 0011: Configure Firebase continuous delivery
+# ADR 0011: Configure continuous delivery
 
 - **Status**: Accepted; incorporates former ADRs 0015, 0016, 0018, 0022
 - **Date**: 2026-10-28
@@ -46,7 +46,7 @@ The following records were merged into this one on 2026-11-01 at the maintainer'
 
 #### Context (former ADR 0015)
 
-[ADR 0011](0011-configure-firebase-cd.md) made the production release a push of a
+[ADR 0011](0011-configure-cd.md) made the production release a push of a
 stable `vX.Y.Z` tag. A tag is easy to push by accident, carries no release notes, and
 is invisible on the repository's releases page, which is where a release is expected to
 be announced. A later attempt to show the release tag in the app patched a backend
@@ -147,7 +147,7 @@ private.
 The first release with the sign-in blocking functions ([ADR 0009](0009-integrate-firebase-authentication.md))
 failed in two places. Blocking functions deploy to `us-east1` by default, so the Firebase
 CLI created them there and could not make them public, because the organization policy
-blocks `allUsers` ([ADR 0011](0011-configure-firebase-cd.md)).
+blocks `allUsers` ([ADR 0011](0011-configure-cd.md)).
 The deploy of a new region also stops in non-interactive mode when no artifact cleanup
 policy exists.
 
