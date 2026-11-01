@@ -54,6 +54,9 @@ function FormFieldDescription({
 function FormFieldError({ className, ...props }: FieldPrimitive.Error.Props) {
   return (
     <FieldPrimitive.Error
+      // The error mounts only when it applies, so role="alert" announces it
+      // when it appears (WCAG 4.1.3) even if focus stays elsewhere.
+      role="alert"
       data-slot="form-field-error"
       className={cn("text-sm font-normal text-destructive", className)}
       {...props}
