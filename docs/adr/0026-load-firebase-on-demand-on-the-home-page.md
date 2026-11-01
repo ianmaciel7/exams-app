@@ -7,7 +7,7 @@
 ## Context
 
 The home page waited for Firebase to load on the client before it painted the
-hero, so the simulated mobile Largest Contentful Paint (LCP) was about 6.0 s.
+hero, so the simulated mobile LCP (largest content render time) was about 6.0 s.
 [ADR 0022](0022-gate-production-deploys-on-browser-checks.md) gates deploys on
 mobile budgets but did not gate LCP, so the regression went unnoticed. The change
 shipped in pull request #41.
