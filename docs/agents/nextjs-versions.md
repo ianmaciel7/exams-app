@@ -32,7 +32,7 @@ outside those reads still needs verification before implementation.
 
 - No Proxy implementation is claimed or required; locale resolution prefers the
   cookie and falls back to `Accept-Language`
-  ([ADR 0004](../adr/0004-configure-internationalization.md), [ADR 0021](../adr/0021-resolve-locale-from-browser-preferences.md)).
+  ([ADR 0004](../adr/0004-configure-internationalization.md), [ADR 0004](../adr/0004-configure-internationalization.md)).
 - Renderer-specific React APIs depend on the framework-bundled React build for App
   Router; see [React versions](react-versions.md#renderer-context).
 - Upstream documentation does not authorize dependency upgrades, hosting

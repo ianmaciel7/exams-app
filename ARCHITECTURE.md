@@ -104,7 +104,7 @@ directly at `/`; there are no localized URL route prefixes, and the Proxy
 never rewrites or reads the locale.
 This is an explicit maintainer requirement recorded in
 [ADR 0004](docs/adr/0004-configure-internationalization.md) and
-[ADR 0021](docs/adr/0021-resolve-locale-from-browser-preferences.md).
+[ADR 0004](docs/adr/0004-configure-internationalization.md).
 An internally rewritten locale segment also
 violates this requirement; keeping only the browser URL unprefixed is insufficient.
 
@@ -263,7 +263,7 @@ server-owned data; its API choices belong in
 Route groups are URL-neutral, private folders do not create routes, and
 `src/app` is the active router. There is no Pages Router. `src/proxy.ts` only
 sets the per-request nonce Content Security Policy
-([ADR 0023](docs/adr/0023-enforce-a-nonce-based-content-security-policy.md));
+([ADR 0001](docs/adr/0001-configure-nextjs.md));
 it does not rewrite, redirect, or authorize. A proxy or route-group layout is
 not a data access authorization boundary. Hosting adapters, static export, Edge runtime,
 remote/private caches, parallel/intercepted routes, and offline support are

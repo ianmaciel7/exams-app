@@ -41,7 +41,7 @@ resource "github_actions_environment_variable" "release" {
 # --- Sign-in allowlist -------------------------------------------------------------
 
 # The release workflow writes these secrets into the Functions parameters file at deploy time
-# (ADR 0017). They are secrets, not variables, so the addresses stay masked in workflow logs.
+# (ADR 0009). They are secrets, not variables, so the addresses stay masked in workflow logs.
 # Terraform skips an empty list because GitHub rejects empty secrets.
 resource "github_actions_environment_secret" "allowed_user_emails" {
   count = length(nonsensitive(var.allowed_user_emails)) > 0 ? 1 : 0

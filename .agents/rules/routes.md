@@ -87,7 +87,7 @@ unprefixed locale decision and accepted ADR history.
 Before introducing or changing Proxy, read the installed Next.js Proxy guide and
 [Security](../../SECURITY.md#nextjs-server-and-environment-boundaries). In Next.js 16,
 Proxy is the successor name for Middleware. It is not a full authorization or
-session boundary. `src/proxy.ts` only applies per-request CSP headers ([ADR 0023](../../docs/adr/0023-enforce-a-nonce-based-content-security-policy.md))
+session boundary. `src/proxy.ts` only applies per-request CSP headers ([ADR 0001](../../docs/adr/0001-configure-nextjs.md))
 and does not rewrite or redirect; it imports canonical header names from `src/lib/headers.ts`
 and policy construction from `src/lib/csp.ts`. Preserve the project's cookie-only locale
 decision; the existence of upstream Proxy examples does not require adding one here.

@@ -31,7 +31,7 @@ active Firebase session, and `return-url.ts` owns safe post-auth navigation.
 - Keep telemetry out of the gate and never let it delay protected content.
 - Never read the session inside a `use cache` scope. Resolve it first, then pass only the user id to an unexported cached function; keep tokens and email addresses out of cache keys and tags.
 - Authorize Admin SDK access in application code; it bypasses Firebase Security Rules.
-- Do not add session cookies, Proxy auth checks, or `authInterrupts` without a new ADR; see [ADR 0024](../../docs/adr/0024-keep-service-worker-firebase-session.md).
+- Do not add session cookies, Proxy auth checks, or `authInterrupts` without a new ADR; see [ADR 0009](../../docs/adr/0009-integrate-firebase-authentication.md).
 
 ## Token verification failures
 

@@ -97,3 +97,21 @@ test("accepts the rules tests when an ADR names the emulator library", (t) => {
   t.after(() => rmSync(root, { recursive: true, force: true }));
   assert.deepEqual(inspectAdrs(root), []);
 });
+
+test("rejects a reference to an ADR number that does not exist", (t) => {
+  const root = fixture({
+    "docs/adr/0001-configure-one.md": adr(1, "See ADR 0007 for details."),
+    "docs/adr/README.md": "[0001](0001-configure-one.md)",
+  });
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  assert.match(inspectAdrs(root)[0], /refers to ADR 0007/);
+});
+
+test("accepts a former ADR heading for a merged record", (t) => {
+  const root = fixture({
+    "docs/adr/0001-configure-one.md": adr(1, "### Former ADR 0007: Merged"),
+    "docs/adr/README.md": "[0001](0001-configure-one.md)",
+  });
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  assert.deepEqual(inspectAdrs(root), []);
+});

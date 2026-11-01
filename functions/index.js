@@ -29,7 +29,7 @@ exports.recordUsage = onCall(
 );
 
 // The address lists come from Functions parameters (`functions/.env.<project>` at deploy,
-// never committed). See docs/adr/0017-restrict-sign-in-to-an-email-allowlist.md.
+// never committed). See docs/adr/0009-integrate-firebase-authentication.md.
 const allowedEmails = defineString("ALLOWED_USER_EMAILS", { default: "" });
 const adminEmails = defineString("ADMIN_USER_EMAILS", { default: "" });
 

@@ -128,7 +128,7 @@ jobs:
           project_id: ${{ vars.FIREBASE_PROJECT_ID }}
           service_account: ${{ vars.GOOGLE_SERVICE_ACCOUNT }}
           workload_identity_provider: ${{ vars.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
-      # The sign-in allowlist is not in the repository (ADR 0017). Functions read it as
+      # The sign-in allowlist is not in the repository (ADR 0009). Functions read it as
       # params from this file, which only exists on the runner. Stop before deploying when a
       # list is missing: an empty list would refuse every user.
       - name: Write the sign-in allowlist for Functions
@@ -157,7 +157,7 @@ jobs:
           --force
       # Browsers call callable Functions directly, and the CORS preflight carries no
       # credentials. The organization policy blocks `allUsers`, so turn the Cloud Run
-      # invoker check off instead (ADR 0016). Handlers still verify the Firebase ID token.
+      # invoker check off instead (ADR 0011). Handlers still verify the Firebase ID token.
       - name: Allow browsers to invoke callable Functions
         shell: bash
         run: |

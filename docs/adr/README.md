@@ -9,40 +9,38 @@ original date. Read current operational details in the
 
 | Record | Status | Subject |
 | --- | --- | --- |
-| [0001](0001-configure-nextjs.md) | Accepted | Next.js App Router, TypeScript, React Compiler, pnpm, and server error instrumentation |
-| [0002](0002-configure-shadcn-ui.md) | Accepted; extended by 0027, 0029 and 0030 | Base UI primitives, locally owned components, pointer cursor, cn utility, typography, and AI Elements |
-| [0003](0003-configure-theming.md) | Accepted; extended by 0023 | Class-based light, dark, and system themes |
-| [0004](0004-configure-internationalization.md) | Accepted; parts superseded by 0021, 0023 and 0034 | Cookie-only `next-intl` resolution without Proxy or `[locale]` routes, catalogs, providers, typed messages |
-| [0005](0005-document-project-standards.md) | Accepted; testing detail superseded by 0006 | Documentation ownership, repository boundaries, cross-route placement, and owned component naming |
-| [0006](0006-configure-testing.md) | Accepted | Colocated Vitest tests, Vitest Browser Mode, Playwright suites, coverage thresholds, mutation testing |
-| [0007](0007-configure-ci.md) | Accepted | Continuous integration, quality tooling, custom rules catalog, layered verification, and Git hooks |
+| [0001](0001-configure-nextjs.md) | Accepted; incorporates former 0023 and 0026 | Next.js App Router, TypeScript, React Compiler, pnpm, server error instrumentation, the nonce-based CSP Proxy, and on-demand Firebase on the home page |
+| [0002](0002-configure-shadcn-ui.md) | Accepted; incorporates former 0027, 0029 and 0030 | Base UI primitives, locally owned components, Form and Field forms, Base UI ast-grep rules, the single loading indicator, pointer cursor, cn utility, typography, and AI Elements |
+| [0003](0003-configure-theming.md) | Accepted | Class-based light, dark, and system themes |
+| [0004](0004-configure-internationalization.md) | Accepted; incorporates former 0021; the no-Proxy rule is amended by ADR 0001 | Cookie and `Accept-Language` locale resolution without `[locale]` routes, catalogs, providers, typed messages |
+| [0005](0005-document-project-standards.md) | Accepted; incorporates former 0032; testing detail superseded by 0006 | Documentation ownership, repository boundaries, cross-route placement, owned component naming, and single owners for navigation, locale cookie, scripts, and message keys |
+| [0006](0006-configure-testing.md) | Accepted; incorporates former 0028 | Colocated Vitest tests, Vitest Browser Mode, Playwright suites, coverage thresholds, mutation testing, and emulator tests for security rules and auth journeys |
+| [0007](0007-configure-ci.md) | Accepted; incorporates former 0033 | Continuous integration, quality tooling, custom rules catalog, layered verification, Git hooks, and isolated CI tools |
 | [0008](0008-install-firebase-ui-registry.md) | Accepted | Dynamic cross-platform installer and locally owned source model for `@firebase` registry |
-| [0009](0009-integrate-firebase-authentication.md) | Accepted; protected-route flow superseded by 0025 and 0034 | Browser Firebase Authentication, Electron redirect OAuth, native usage logging, role custom claims, and emulators |
-| [0010](0010-configure-agent-ecosystem.md) | Accepted; rules ownership extended by 0028 | Multi-agent orchestration, four MCP servers, fifteen locked skills, domain rule architecture, `PRODUCT.md`, Graphify graph, tool-usage evaluations, repository guards, and Firebase security rules ownership |
-| [0011](0011-configure-firebase-cd.md) | Accepted; manual provisioning superseded by 0012, tag-push trigger by 0015 | Tag-driven Firebase production delivery, App Hosting, OIDC federation, `us-central1`, and budget alerts |
-| [0012](0012-configure-terraform-infrastructure.md) | Accepted | Terraform stacks for the project, Firebase, App Hosting and federation; permanent project IDs; manual apply; state and variables kept out of Git |
-| [0013](0013-configure-team-access.md) | Accepted | Terraform-managed human access: Owner tier, Firebase developer tier, members from untracked variables, additive bindings |
-| [0014](0014-manage-release-environment.md) | Accepted | Terraform-managed GitHub production environment and release variables, sourced from the infrastructure that owns each value |
-| [0015](0015-publish-releases-to-deploy.md) | Accepted | Production deploys when a GitHub Release is published; the release tag must equal the package version and the App Hosting version variable |
-| [0016](0016-disable-invoker-iam-check-for-callable-functions.md) | Accepted | The CD turns off the Cloud Run invoker IAM check on callable Functions so browsers can call them; handlers verify the Firebase ID token |
-| [0017](0017-restrict-sign-in-to-an-email-allowlist.md) | Accepted | Auth blocking functions refuse addresses outside an untracked allowlist; admin addresses get the admin role |
-| [0018](0018-cover-blocking-functions-in-the-release-deploy.md) | Accepted | The release deploy disables the invoker check on the blocking functions in their own region and passes `--force` for the artifact cleanup policy |
-| [0019](0019-register-blocking-functions-in-terraform.md) | Accepted | Terraform registers the Auth blocking function triggers in the Identity Platform config |
-| [0020](0020-grant-app-hosting-firebase-auth-viewer.md) | Accepted | The App Hosting runtime account holds the read-only Firebase Auth viewer role so revocation-aware token verification works |
-| [0021](0021-resolve-locale-from-browser-preferences.md) | Accepted; supersedes part of 0004 | Explicit and cookie locale selection with `Accept-Language` fallback, while retaining unprefixed routes and no Proxy |
-| [0022](0022-gate-production-deploys-on-browser-checks.md) | Accepted | Firebase CD deploys only after desktop and mobile Playwright suites, axe, visual checks, and Lighthouse mobile budgets pass on the release commit |
-| [0023](0023-enforce-a-nonce-based-content-security-policy.md) | Accepted; amends the no-Proxy rule of 0004 and 0021 | A header-only Proxy sets a per-request nonce CSP; Base UI `CSPProvider` and next-themes receive the nonce |
-| [0024](0024-keep-service-worker-firebase-session.md) | Accepted | The Firebase Auth service worker stays the server session bridge, without session cookies, `FirebaseServerApp`, or Proxy authentication |
-| [0025](0025-separate-bridge-navigation-check-from-session-verification.md) | Accepted | `verifySession` always fails closed; a separate navigation check tolerates a missing worker, and `AuthGateClient` owns the protected session subscription and redirect |
-| [0026](0026-load-firebase-on-demand-on-the-home-page.md) | Accepted | The home hero renders on the server, Firebase loads after hydration, and Lighthouse gates the home LCP at 4 s |
-| [0027](0027-build-forms-on-base-ui-form-and-field.md) | Accepted | Forms use Base UI `Form` and `Field` through owned wrappers, enforced by ast-grep rules |
-| [0028](0028-test-security-rules-and-auth-journeys-on-emulators.md) | Accepted | Security rules and authentication journeys are tested against Firebase emulators, with a CI guard |
-| [0029](0029-enforce-base-ui-component-rules-with-ast-grep.md) | Accepted | Base UI composition rules run as ast-grep rules with snapshot tests, in CI and on staged files |
-| [0030](0030-use-one-loading-indicator-and-marker.md) | Accepted | One global loading indicator, an empty marker at each boundary, and Playwright frame recording |
-| [0031](0031-split-the-production-terraform-stack-by-domain.md) | Accepted | `infra/prod` is split into files by domain with one state and no modules |
-| [0032](0032-keep-one-owner-for-navigation-locale-and-scripts.md) | Accepted | One owner each for sign-in redirects, the locale cookie, package scripts, and message keys, enforced by guards |
-| [0033](0033-isolate-ci-tools-from-project-dependencies.md) | Accepted | `firebase-tools` through `npx`, Gitleaks only in the security job, and shared security headers |
-| [0034](0034-record-later-amendments-to-the-foundation-decisions.md) | Accepted; supersedes parts of 0004 and 0009 | Cross-reference of what 0011 to 0033 changed in 0001 to 0010, with the owner of each current rule |
+| [0009](0009-integrate-firebase-authentication.md) | Accepted; incorporates former 0017, 0024 and 0025 | Browser Firebase Authentication, Electron redirect OAuth, native usage logging, role custom claims, email allowlist, service worker session bridge, session verification contract, and emulators |
+| [0010](0010-configure-agent-ecosystem.md) | Accepted | Multi-agent orchestration, four MCP servers, fifteen locked skills, domain rule architecture, `PRODUCT.md`, Graphify graph, tool-usage evaluations, repository guards, and Firebase security rules ownership |
+| [0011](0011-configure-cd.md) | Accepted; incorporates former 0015, 0016, 0018 and 0022; manual provisioning superseded by 0012 | Release-driven Firebase production delivery, App Hosting, OIDC federation, `us-central1`, budget alerts, callable Function access, and browser-check gates |
+| [0012](0012-configure-terraform-infrastructure.md) | Accepted; incorporates former 0013, 0014, 0019, 0020 and 0031 | Terraform stacks for the project, Firebase, App Hosting and federation split by domain; team access; release environment; Auth trigger registration; permanent project IDs; manual apply |
+
+## Consolidation of 2026-11-01
+
+At the maintainer's direction, records 0013 to 0034 were merged into the
+records that own their subject. Each absorbed record keeps its text, original
+status, and date under the heading `Former ADR NNNN` in its new home, and the
+earlier files stay in Git history. Reference the new home in new work.
+
+| Former record | Now in |
+| --- | --- |
+| 0013 team access, 0014 release environment, 0019 Auth trigger registration, 0020 App Hosting Auth viewer, 0031 split production stack | [0012](0012-configure-terraform-infrastructure.md) |
+| 0015 release-driven deploys, 0016 callable Function access, 0018 blocking functions in the deploy, 0022 browser-check gate | [0011](0011-configure-cd.md) |
+| 0017 email allowlist, 0024 service worker session, 0025 session verification | [0009](0009-integrate-firebase-authentication.md) |
+| 0021 locale from browser preferences | [0004](0004-configure-internationalization.md) |
+| 0023 nonce-based CSP, 0026 Firebase on demand on the home page | [0001](0001-configure-nextjs.md) |
+| 0027 Base UI forms, 0029 Base UI ast-grep rules, 0030 one loading indicator | [0002](0002-configure-shadcn-ui.md) |
+| 0028 emulator tests for rules and journeys | [0006](0006-configure-testing.md) |
+| 0032 single owners for navigation, locale cookie, scripts | [0005](0005-document-project-standards.md) |
+| 0033 isolated CI tools | [0007](0007-configure-ci.md) |
+| 0034 amendments cross-reference | Dropped: the merge makes it unnecessary |
 
 ## Current operational clarifications
 
@@ -121,7 +119,7 @@ original date. Read current operational details in the
   - Locale helpers in ADR 0004 do not create localized routes. Current requests
     resolve a locale from an explicit value or cookie; the application has no
     locale route segment, and the only request proxy is the header-only CSP proxy
-    of ADR 0023. See
+    of ADR 0001. See
     [Architecture](../../ARCHITECTURE.md#internationalization).
 
 - **ADR 0009: Firebase Authentication, Electron OAuth, usage logging, role custom claims, and emulators**:
@@ -138,7 +136,7 @@ original date. Read current operational details in the
     authenticated users, or "Sign in" and "Get started" links for visitors. This supersedes
     the single `auth-nav-button-client.tsx` control described in ADR 0009.
   - The `(protected)` route group guards client-rendered UI through `AuthGateClient`, the single
-    session subscription and sign-in redirect (with `?next=`), as ADR 0025 and ADR 0034 record.
+    session subscription and sign-in redirect (with `?next=`), as ADR 0009 records.
   - The `/profile` landing page presents authenticated user details (`email`, `displayName`,
     `uid`) and provides sign-out controls invoking `signOut(auth)`; it does not redirect itself.
   - Public `AuthProviderClient` redirects authenticated users from public authentication pages to
@@ -223,7 +221,7 @@ The ADR retains the old path as historical context; the documentation guard maps
 only that exact source link to the current file. It does not exempt other broken
 links. Logging links in ADRs 0001 and 0009 resolve through [the logging entrypoint](../logging.md).
 
-- **ADR 0023: Service worker imports**:
+- **ADR 0001: Service worker imports**:
   - `worker-src` is `'self' https://www.gstatic.com/firebasejs/`, not `'self'` alone.
     Chromium checks the static Firebase SDK imports of `public/firebase-auth-sw.js`
     against the registering page's `worker-src`; with `'self'` alone the worker fails

@@ -1,6 +1,6 @@
 # ADR 0009: Integrate Firebase Authentication
 
-- **Status**: Accepted
+- **Status**: Accepted; incorporates former ADRs 0017, 0024, 0025
 - **Date**: 2026-10-19
 - **Deciders**: ianmaciel7
 
@@ -203,3 +203,152 @@ variables (`.env.example` / `.env`), completely removing in-code default fallbac
 values across project source, scripts, and test runners. Canonical root configuration
 files (`firebase.json` and `.firebaserc`) enable the Firebase CLI and test suites to
 discover emulator bindings and project aliases natively.
+
+## Incorporated decisions
+
+The following records were merged into this one on 2026-11-01 at the maintainer's direction. Their text is kept as written, with the original number, status, and date, so the history stays traceable. The earlier files remain in Git history.
+
+### Former ADR 0017: Restrict sign-in to an email allowlist
+
+- **Original status**: Accepted
+- **Original date**: 2026-10-29
+
+#### Context (former ADR 0017)
+
+The app has a handful of known users, but Firebase Authentication lets anyone who finds
+the sign-in page register an account. Production already runs on Identity Platform
+([ADR 0012](0012-configure-terraform-infrastructure.md)), which supports blocking
+functions that run before a user is created or signs in.
+
+#### Decision (former ADR 0017)
+
+Refuse every address that is not on an allowlist, with two Auth blocking functions in
+`functions/`:
+
+- `restrictSignUp` (`beforeUserCreated`) and `restrictSignIn` (`beforeUserSignedIn`) throw
+  `permission-denied` for any address outside the lists.
+- Two lists exist: regular users and admins. Admin addresses are allowed implicitly and
+  receive the `role: admin` custom claim that `setUserRole` already uses; everyone else
+  receives `role: user`. The claim is set only when the address is verified, so someone
+  who registers with an admin address and a password does not become an admin.
+- Sign-in requires a verified email. The allowed users sign in with Google, which verifies
+  the address. Email and password accounts stay refused until the app sends a
+  verification email.
+- Addresses are identifiers, so they are not tracked. They are the Functions parameters
+  `ALLOWED_USER_EMAILS` and `ADMIN_USER_EMAILS` (comma separated), read from
+  `functions/.env.<project id>` at deploy time. Terraform keeps them as `production`
+  environment secrets from the local `terraform.tfvars`, and the release workflow writes
+  the parameters file from them.
+- The policy fails closed: outside the emulator an empty list refuses everyone. In the
+  Functions emulator with no list the app stays open, so the E2E suite keeps using
+  `@example.test` users.
+
+#### Considered options (former ADR 0017)
+
+- **Firestore rules only**: rejected because accounts would still be created and every
+  other Auth-backed feature would stay open.
+- **Disable sign-up in Identity Platform**: rejected because it blocks the owners' first
+  sign-in and does not restrict existing accounts.
+- **Commit the lists**: rejected by the identifier rule.
+
+#### Consequences (former ADR 0017)
+
+- A wrong or missing deploy value locks every user out. Fix the secrets and redeploy.
+- The release workflow needs a step that writes `functions/.env.<project id>` from the
+  `ALLOWED_USER_EMAILS` and `ADMIN_USER_EMAILS` secrets, which is not part of this change.
+- Changing the lists means updating `terraform.tfvars`, applying, and releasing again.
+- Existing sessions keep working until their token expires.
+
+#### Delivery (former ADR 0017)
+
+The release workflow writes the two lists from the `production` environment secrets into
+`functions/.env.<project id>` on the runner before `firebase deploy`, and fails when a
+secret is missing. The blocking functions (`restrictsignup`, `restrictsignin`) join the
+services whose Cloud Run invoker check is turned off, as in ADR 0011, because Identity
+Platform calls them directly.
+
+### Former ADR 0024: Keep the service-worker Firebase session
+
+- **Original status**: Accepted
+- **Original date**: 2026-10-30
+
+#### Context (former ADR 0024)
+
+A review against official Next.js and Firebase guidance compared the existing
+service-worker session with session cookies and `FirebaseServerApp`. Next.js
+describes cookie sessions, optionally checked in Proxy. Firebase names no single
+approach for server-rendered apps. It documents the service worker for carrying
+ID tokens, states that it has no CSRF risk, and warns that session cookies can
+fall out of sync with client tokens. No protected route renders server data today.
+
+#### Decision (former ADR 0024)
+
+- Keep the Firebase Auth service worker as the bridge that carries ID tokens to
+  the server, verified by the Admin SDK with revocation checks.
+- Do not add Firebase session cookies, which would add a sign-in endpoint and CSRF
+  handling.
+- Do not add `FirebaseServerApp` until server rendering needs to read Firebase
+  data under Security Rules.
+- Do not add Proxy for authentication. It can only run optimistic cookie checks,
+  and the session travels in a worker-set header.
+
+Revisit this decision when protected data must render on first load, before the
+worker controls the tab, because only the client guard covers that request.
+
+#### Consequences (former ADR 0024)
+
+- There is no server-side session on a first load without the worker, so
+  protected server data must keep using the fail-closed `verifyRole`.
+- Each verified request costs a revocation-check round trip and a forced token
+  refresh in the worker.
+- Current guidance for entry points and caching lives in
+  [docs/auth.md](../auth.md) and [the auth rule](../../.agents/rules/auth.md).
+
+### Former ADR 0025: Separate the bridge navigation check from session verification
+
+- **Original status**: Accepted
+- **Original date**: 2026-10-30
+
+#### Context (former ADR 0025)
+
+`verifySession()` could return without a verified identity when the service
+worker did not control the tab. That matched the first-load need of the protected
+layout, but the name promises what the Next.js authentication guide shows: a
+verification that yields an identity. A server caller could have taken it for an
+authorization check.
+
+The protected flow also held overlapping layers. A server wrapper existed only to
+call that function, and the route guard and the profile each subscribed to
+Firebase Auth and redirected on sign-out, so the profile's redirect could drop the
+return path. Usage telemetry lived in the guard. The layout check redirected a
+rejected token with a return path to `/profile`, and a client that still held a
+session would be sent straight back.
+
+[ADR 0009](0009-integrate-firebase-authentication.md) keeps the service worker
+and is unchanged by this decision.
+
+#### Decision (former ADR 0025)
+
+- `verifySession()` always fails closed and returns the verified identity.
+  `verifyRole()` builds on it.
+- `rejectInvalidBridgeSession()` is the separate navigation check for the protected
+  layout. It tolerates a missing bridge, and it redirects a rejected token to
+  sign-in with a return to home, so it cannot loop a signed-in client.
+- `AuthGateClient` is the single owner of the session subscription and the sign-in
+  redirect for protected routes. Descendants read the user from context instead of
+  subscribing, and a change of `uid` remounts the subtree.
+- Usage telemetry is a separate `RouteUsageClient`.
+
+The `Client` suffix is a repository naming rule, not a Next.js convention.
+
+#### Consequences (former ADR 0025)
+
+- Nothing can mistake the tolerant check for authentication, but a future
+  server-rendered protected page cannot render on a first load without the worker.
+  [ADR 0009](0009-integrate-firebase-authentication.md) already names this as
+  the trigger to revisit the session mechanism.
+- `verifySession()` and `verifyRole()` have no production caller yet, because no
+  protected route reads server data. Their contract is covered by unit tests.
+- A client whose token keeps failing verification lands on the home page instead
+  of the protected route, and the server log holds the reason.
+- Current guidance lives in [docs/auth.md](../auth.md).

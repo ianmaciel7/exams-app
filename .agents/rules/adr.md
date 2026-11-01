@@ -55,3 +55,9 @@ Apply this rule when creating an Architecture Decision Record in `docs/adr/`.
 This convention applies to every current and future ADR. The original five ADR
 filenames were migrated to this convention on 2026-10-16 at the repository
 maintainer's direction.
+
+On 2026-11-01 the repository maintainer directed a one-time consolidation: records
+0013 to 0034 were merged into the records 0001 to 0012 that own their subject, under
+`Former ADR NNNN` headings, with a map in `docs/adr/README.md`. This exception does
+not allow further merges or rewrites: new decisions get the next unused number, and
+`pnpm check:adr` fails on a reference to an ADR number that does not exist.

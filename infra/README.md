@@ -41,7 +41,7 @@ then apply again so the repository link and backend can finish.
 
 ## 3. After apply
 
-- The `production` environment variables used by `.github/workflows/firebase-cd.yml` are managed here (see [ADR 0014](../docs/adr/0014-manage-release-environment.md)); applying needs `GITHUB_TOKEN` or a logged in `gh` CLI.
+- The `production` environment variables used by `.github/workflows/firebase-cd.yml` are managed here (see [ADR 0012](../docs/adr/0012-configure-terraform-infrastructure.md)); applying needs `GITHUB_TOKEN` or a logged in `gh` CLI.
 - Copy `firebase_web_config` into `apphosting.yaml` (public values, not secrets).
 - Update `.firebaserc` with the new project ID.
 - Email and password sign-in and the authorized domains are managed here (`google_identity_platform_config`);
@@ -70,7 +70,7 @@ The production stack is organized into domain-scoped files:
 
 ## Team access
 
-Human access is managed here (see [ADR 0013](../docs/adr/0013-configure-team-access.md)). Set the members in
+Human access is managed here (see [ADR 0012](../docs/adr/0012-configure-terraform-infrastructure.md)). Set the members in
 the untracked `terraform.tfvars`:
 
 ```hcl
@@ -83,7 +83,7 @@ Bindings are additive. To narrow a user who already has extra roles, remove them
 ## Sign-in allowlist
 
 Only the addresses in the untracked `terraform.tfvars` can sign up or sign in (see
-[ADR 0017](../docs/adr/0017-restrict-sign-in-to-an-email-allowlist.md)). Admin addresses are allowed implicitly and
+[ADR 0009](../docs/adr/0009-integrate-firebase-authentication.md)). Admin addresses are allowed implicitly and
 get the `admin` role:
 
 ```hcl

@@ -28,7 +28,7 @@ resource "google_identity_platform_config" "default" {
   )))
 
   # The blocking functions are deployed by `firebase deploy`, so apply after the first
-  # deploy. Their URIs are read from the deployed services (ADR 0019).
+  # deploy. Their URIs are read from the deployed services (ADR 0012).
   blocking_functions {
     triggers {
       event_type   = "beforeCreate"

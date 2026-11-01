@@ -56,7 +56,7 @@ below and the split between them are choices of this repository.
 Protected data and privileged server operations must use `verifyRole()` or
 `verifySession()` and check ownership. Insufficient roles return `notFound()` so
 privileged routes are not disclosed. See
-[ADR 0025](adr/0025-separate-bridge-navigation-check-from-session-verification.md).
+[ADR 0009](adr/0009-integrate-firebase-authentication.md).
 
 The layout check is not authorization. Layouts do not re-render on client
 navigation, and the check passes when the bridge is absent. It sends a rejected
@@ -148,7 +148,7 @@ the shared Auth session and waits for service-worker acknowledgement.
 
 ## Deliberately not used
 
-[ADR 0024](adr/0024-keep-service-worker-firebase-session.md) records the first
+[ADR 0009](adr/0009-integrate-firebase-authentication.md) records the first
 two decisions.
 
 - **Session cookies:** the worker has no CSRF exposure and stays in step with the
@@ -189,7 +189,7 @@ Firebase documentation:
 
 - [Authentication and authorization rule](../.agents/rules/auth.md)
 - [ADR 0009: Integrate Firebase Authentication](adr/0009-integrate-firebase-authentication.md)
-- [ADR 0017: Restrict sign-in to an email allowlist](adr/0017-restrict-sign-in-to-an-email-allowlist.md)
-- [ADR 0020: Grant App Hosting the Firebase Auth viewer role](adr/0020-grant-app-hosting-firebase-auth-viewer.md)
-- [ADR 0024: Keep the service-worker Firebase session](adr/0024-keep-service-worker-firebase-session.md)
-- [ADR 0025: Separate the bridge navigation check from session verification](adr/0025-separate-bridge-navigation-check-from-session-verification.md)
+- [ADR 0009: Restrict sign-in to an email allowlist](adr/0009-integrate-firebase-authentication.md)
+- [ADR 0012: Grant App Hosting the Firebase Auth viewer role](adr/0012-configure-terraform-infrastructure.md)
+- [ADR 0009: Keep the service-worker Firebase session](adr/0009-integrate-firebase-authentication.md)
+- [ADR 0009: Separate the bridge navigation check from session verification](adr/0009-integrate-firebase-authentication.md)
