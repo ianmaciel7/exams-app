@@ -34,6 +34,9 @@ original date. Read current operational details in the
 | [0023](0023-enforce-a-nonce-based-content-security-policy.md) | Accepted; amends the no-Proxy rule of 0004 and 0021 | A header-only Proxy sets a per-request nonce CSP; Base UI `CSPProvider` and next-themes receive the nonce |
 | [0024](0024-keep-service-worker-firebase-session.md) | Accepted | The Firebase Auth service worker stays the server session bridge, without session cookies, `FirebaseServerApp`, or Proxy authentication |
 | [0025](0025-separate-bridge-navigation-check-from-session-verification.md) | Accepted | `verifySession` always fails closed; a separate navigation check tolerates a missing worker, and `AuthGateClient` owns the protected session subscription and redirect |
+| [0026](0026-load-firebase-on-demand-on-the-home-page.md) | Accepted | The home hero renders on the server, Firebase loads after hydration, and Lighthouse gates the home LCP at 4 s |
+| [0027](0027-build-forms-on-base-ui-form-and-field.md) | Accepted | Forms use Base UI `Form` and `Field` through owned wrappers, enforced by ast-grep rules |
+| [0028](0028-test-security-rules-and-auth-journeys-on-emulators.md) | Accepted | Security rules and authentication journeys are tested against Firebase emulators, with a CI guard |
 
 ## Current operational clarifications
 

@@ -77,3 +77,23 @@ test("rejects a record whose heading does not match its number", (t) => {
   t.after(() => rmSync(root, { recursive: true, force: true }));
   assert.match(inspectAdrs(root)[0], /missing heading/);
 });
+
+test("rejects the rules tests without an emulator ADR", (t) => {
+  const root = fixture({
+    "docs/adr/0001-configure-one.md": adr(1, "Nothing relevant."),
+    "docs/adr/README.md": "[0001](0001-configure-one.md)",
+    "tests/rules/firestore.test.mjs": "",
+  });
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  assert.match(inspectAdrs(root)[0], /tests\/rules\/ exists but no ADR/);
+});
+
+test("accepts the rules tests when an ADR names the emulator library", (t) => {
+  const root = fixture({
+    "docs/adr/0001-test-rules.md": adr(1, "Uses @firebase/rules-unit-testing."),
+    "docs/adr/README.md": "[0001](0001-test-rules.md)",
+    "tests/rules/firestore.test.mjs": "",
+  });
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  assert.deepEqual(inspectAdrs(root), []);
+});
