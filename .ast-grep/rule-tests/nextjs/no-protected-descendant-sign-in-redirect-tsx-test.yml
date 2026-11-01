@@ -1,0 +1,21 @@
+id: no-protected-descendant-sign-in-redirect-tsx
+valid:
+  - |
+    subscribeToSession((user) => {
+      setAuth({ error: null, isLoading: false, user });
+    });
+  - |
+    router.replace(routes.home);
+  - |
+    router.refresh();
+invalid:
+  - |
+    subscribeToSession((user) => {
+      if (!user) router.replace(routes.signIn);
+    });
+  - |
+    router.push(getSignInUrl("/profile"));
+  - |
+    redirect(routes.signIn);
+  - |
+    redirectToSignIn("/profile");

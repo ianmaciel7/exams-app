@@ -10,7 +10,7 @@ Apply this rule before and during external research queries, including web searc
 
 Serena memory operations are scoped to the active project workspace. Before invoking any memory or symbol tools, ensure the project is active:
 
-- Call `activate_project(project="shadcn-firebase-template")` if not already activated in the current session.
+- Call `activate_project(project="exams-app")` if not already activated in the current session.
 - Once activated, use Serena's dedicated memory MCP tools:
   - `list_memories`: List existing project memories.
   - `read_memory`: Retrieve the full content of a specified memory.
@@ -51,7 +51,7 @@ External queries must follow a cache-first workflow to conserve context and elim
    - Use web search only to complement Context7 or for material outside its corpus.
 3. **Cache reusable findings**:
    - Store non-trivial, reusable findings into Serena memory under `research/<topic>` using `write_memory`.
-   - Always record: topic name, retrieval date, source URL or library ID, and applicable version bounds (e.g., Next.js 16.4.2, React 19.3.1).
+   - Always record: topic name, retrieval date, source URL or library ID, and applicable version bounds (e.g., Next.js 16.4.3, React 19.3.1).
 
 ## Promotion and graduation to canonical documentation
 

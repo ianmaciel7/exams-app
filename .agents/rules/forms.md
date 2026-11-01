@@ -18,7 +18,7 @@ These are project conventions aligned with the current shadcn/ui and React Hook 
 ## Compound forms
 
 - A composite form with nested field components (as with `ProfileFormClient`) uses exactly one `useForm` instance, wraps its content in `FormProvider {...form}`, and submits through `form.handleSubmit(onSubmit)`.
-- Child fields access `control` with `useFormContext<ProfileValues>()`; they compose shadcn/ui `Field`, `FieldLabel`, `Input` / `Select`, and `FieldError` with React Hook Form `Controller`.
+- Child fields access `control` with `useFormContext<ProfileValues>()`; they compose `FormField`, `FormFieldLabel`, `Input` / `Select`, and `FormFieldError` (Base UI Field, from `ui/extensions/form-field`) with React Hook Form `Controller`; `ProfileFormClient` renders the Base UI `Form`.
 - Match each independently named `*-field.tsx` to its literal React Hook Form `Controller name`. For example `name="displayName"` is implemented by `ProfileDisplayNameField`, while the label may simply read "Name".
 - A reusable form can accept strongly typed `UseFormProps<Values>`, but
   never pass DOM attributes or `onSubmit` into `useForm`: they are not
@@ -83,6 +83,7 @@ These are project conventions aligned with the current shadcn/ui and React Hook 
 ## Accessibility and Next.js
 
 - For `Controller`-bound fields, set `data-invalid={fieldState.invalid}` on `Field`, `aria-invalid={fieldState.invalid}` on the input or Select trigger, and show `FieldError` for errors. Associate `FieldLabel` with the control. When a field or form is disabled, set `data-disabled` on `Field` and `disabled` on the input control.
+- When an inline field error is rendered, give the `FieldError` a stable or `useId`-derived `id` and reference it from the invalid control with `aria-describedby`. Remove that reference when the error is absent. Root/form errors remain separate from field descriptions.
 - Preserve the `"use client"` entry boundary for the Firebase client-side workflow. Imported field files need no additional directive solely because they are imported by this client subtree.
 - Do not replace the Firebase SDK submit handler with `next/form`, which serves different navigation/Server Action use cases.
 

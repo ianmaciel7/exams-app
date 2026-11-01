@@ -1,9 +1,5 @@
-import { RouteLoading } from "@/components/ui/extensions/route-loading";
+import { LoadingState } from "@/components/ui/extensions/loading-state";
 
 export default function Loading() {
-  return (
-    <main className="flex min-h-svh items-center justify-center">
-      <RouteLoading />
-    </main>
-  );
+  return <LoadingState boundary="root-route" />;
 }

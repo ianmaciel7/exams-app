@@ -1,6 +1,6 @@
 "use client";
 
-import type { ComponentProps } from "react";
+import { type ComponentProps, useId } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Field, FieldContent, FieldTitle } from "@/components/ui/field";
@@ -13,6 +13,7 @@ function ProfileAvatarFieldClient({
   className,
   ...props
 }: ProfileAvatarFieldClientProps) {
+  const titleId = useId();
   const {
     t,
     disabled,
@@ -26,6 +27,7 @@ function ProfileAvatarFieldClient({
   return (
     <Field
       orientation="horizontal"
+      aria-labelledby={titleId}
       className={cn("items-center gap-4", className)}
       {...props}
     >
@@ -33,7 +35,8 @@ function ProfileAvatarFieldClient({
         type="button"
         variant="ghost"
         className="size-16 rounded-full p-0"
-        aria-label={t("profilePhotoChange")}
+        aria-hidden="true"
+        tabIndex={-1}
         disabled={disabled}
         onClick={() => fileInputRef.current?.click()}
       >
@@ -43,7 +46,7 @@ function ProfileAvatarFieldClient({
         </Avatar>
       </Button>
       <FieldContent className="self-center">
-        <FieldTitle>{t("profilePhotoTitle")}</FieldTitle>
+        <FieldTitle id={titleId}>{t("profilePhotoTitle")}</FieldTitle>
         <Button
           type="button"
           variant="link"
@@ -59,8 +62,8 @@ function ProfileAvatarFieldClient({
         ref={fileInputRef}
         type="file"
         accept="image/jpeg,image/png,image/webp"
-        className="sr-only"
-        aria-label={t("profilePhotoChange")}
+        hidden
+        tabIndex={-1}
         disabled={disabled}
         onChange={handleAvatarChange}
       />

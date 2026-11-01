@@ -8,7 +8,8 @@ files:
   - src/lib/**/*.tsx
 ignores:
   - src/components/ai-elements/**
-  - src/components/ui/*.tsx
+  - "src/components/ui/[!e]*.tsx"
+  - "src/components/ui/e[!x]*.tsx"
   - "**/*.test.tsx"
   - "**/*.stories.tsx"
 severity: warning

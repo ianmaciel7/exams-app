@@ -1,5 +1,9 @@
 # Coding Standards
 
+The evidence-backed applicability matrix for external web standards lives in
+[quality standards](docs/agents/quality-standards.md). This guide owns source
+conventions and implementation boundaries.
+
 ## Sources of truth
 
 When standards conflict, apply them in this order:
@@ -83,7 +87,7 @@ When standards conflict, apply them in this order:
   - Follow the canonical module taxonomy in [agent rules](.agents/rules/data.md#data-layer-module-conventions) for data and auth boundaries:
     - `definitions.ts`: Types, interfaces, and validation schemas (e.g. Zod schemas).
     - `dto.ts`: Select and structure transferred data crossing system boundaries.
-    - `dal.ts`: Protected data access and authorization boundary (`verifySession()`).
+    - `dal.ts`: Protected data access and authorization boundary (`verifySession()`, `verifyRole()`).
     - `data.ts`: Low-level database/persistence operations and query execution. Exported functions must use explicit `<verb><DomainNoun>` naming (`read*`, `write*`, `save*`, `create*`, `update*`, `delete*`, `remove*`, `upload*`, `fetch*`, `get*`, `set*`, `list*`, `verify*`), stay within **150 non-empty lines per file**, and obey the Biome per-function budgets (cognitive complexity **<= 8**, body **<= 40 non-empty lines**, callback nesting **<= 2**).
     - `auth.ts`: Authentication operations answering identity verification ("Who are you?"), such as credential validation, sign-in, sign-up, password recovery, and sign-out.
     - `session.ts`: Session lifecycle, state, token verification, and cookie persistence ("Are you authenticated and what is your active session?").
@@ -295,7 +299,7 @@ See the installed Next.js boundary guide and the
 components, without restricting the scan to files with `"use client"`.
 It enforces semantic filenames, a matching family root, locally declared named
 parts with the root prefix, matching props names, separate named exports, and
-exact term parity (`checkStemComponentTermParity`) between filenames and component declarations for non-legacy modules (such as `HomeSectionClient` in `src/app/_components/home-section-client.tsx` requiring a 1:1 term match across component name, props type, and orchestration hook).
+exact term parity (`checkStemComponentTermParity`) between filenames and component declarations for non-legacy modules (such as `HomeClient` in `src/app/_components/home-client.tsx` requiring a 1:1 term match across component name, props type, and orchestration hook, and composing its companion UI component `Home`).
 It rejects static component-property assignment and direct `Object.assign`,
 `Object.defineProperty`, or `Object.defineProperties` on a component family.
 
@@ -324,6 +328,53 @@ to have compound parts. TypeScript, Next.js builds, structural checks, and
 behavior/accessibility tests remain responsible for their respective contracts.
 
 ### Form and Field Architecture (shadcn/ui & React Hook Form)
+
+#### Next.js form recommendations: what applies here
+
+The [Next.js forms guide](https://nextjs.org/docs/app/guides/forms) builds forms
+on Server Functions (`action={fn}`, `useActionState`, `useFormStatus`,
+validation with a schema on the server). That fits mutations that run on the
+server. Every form in this app writes through the browser Firebase SDK, which
+needs the signed-in client: sign-in, sign-up, password reset, email link, phone
+and SMS or TOTP second factors (reCAPTCHA and the reCAPTCHA verifier are browser
+only), and the profile (`updateProfile`, `verifyBeforeUpdateEmail`, Storage
+upload and Firestore writes are client calls checked by security rules). A
+Server Action would need the Admin SDK, would drop `verifyBeforeUpdateEmail`,
+and would move authorization from rules to code. So these forms stay client
+forms, and the guide's other points are met as follows:
+
+- Pending state: `formState.isSubmitting` drives the button and its spinner, and
+  the save button uses `focusableWhenDisabled`.
+- Validation: HTML constraints (`required`, `type`, `maxLength`) through the
+  Base UI Form, and the Firebase UI schemas for auth. Firestore and Storage
+  rules validate on the server (`tests/rules`).
+- Errors: `aria-describedby` and `aria-invalid` on the control, a focused first
+  invalid field, and `FormError` (`role="alert"`) for a failed submit.
+- Server forms render nothing before hydration: the sign-in and profile forms
+  are not in the server HTML, so no submit can fall back to a GET with the
+  password in the query string.
+- `next/form` is for GET forms that navigate (search, filters). The app has none.
+
+When a mutation moves to the server, use a Server Action in `actions.ts` that
+calls `verifySession()` or `verifyRole()` first (rule
+`nextjs/require-session-check-in-server-action`), parses `FormData` with a
+schema, and returns field errors for `useActionState`. Add behavior and
+authorization tests with it.
+
+Compose forms with `Form`, `FormField`, `FormFieldLabel`,
+`FormFieldDescription` and `FormFieldError` from
+`@/components/ui/extensions/form` and `form-field`. They wrap the Base UI `Form` and
+`Field`, which link label, description and error to the control with
+`aria-labelledby`, `aria-describedby` and `aria-invalid`, render `noValidate`,
+and focus the first invalid control on submit. The shadcn `Field` in
+`ui/field.tsx` is a plain `div` and gives none of that, so do not use its
+`FieldLabel htmlFor` or `FieldError` for text controls; only the
+Firebase UI forms still do, until the auth refactor migrates them. Declare
+`required`, `type`, `maxLength` and `autoComplete` on the control and show
+localized text with `<FormFieldError match="valueMissing">`. Do not add a
+second RHF resolver for the same constraint: Base UI validates first and stops
+the submit. Review items that no tool checks: `inputMode`, `autoCapitalize`,
+`spellCheck`, and `focusableWhenDisabled` on pending submit buttons.
 
 Use `FieldGroup`, `Field`, `FieldLabel`, `FieldDescription`, and `FieldError`
 from the installed `@/components/ui/field` alongside React Hook Form
@@ -361,7 +412,20 @@ use the CLI workflow in [TOOLING.md](TOOLING.md#shadcnui-cli-workflow). Base UI
 uses `render` and presence state attributes; Radix `asChild` and
 `data-state` examples do not establish the local API. For navigation, apply
 `buttonVariants` to a real anchor or Link instead of rendering an anchor
-through Base UI Button, which supplies button semantics.
+through Base UI Button, which supplies button semantics. The
+`.ast-grep/rules/base-ui/` rules enforce these Base UI contracts in owned
+components; see the [custom rule registry](TOOLING.md#custom-rule-registry).
+
+Build a component that accepts `render` with `useRender` and `mergeProps`, as
+`src/components/ui/badge.tsx` does: type the public props as
+`useRender.ComponentProps<"tag">`, merge local defaults with
+`mergeProps<"tag">(defaults, props)`, and return `useRender({ defaultTagName,
+render, props })`. Do not use `cloneElement`, `asChild` or a Radix `Slot`. In a
+`render` function, spread the received props so Base UI keeps its ref,
+handlers and ARIA. Prefer Base UI `data-*` attributes for state styling, and
+use the `className={(state) => ...}` form only when a selector cannot express
+the state. The [shadcn agent rule](.agents/rules/shadcn.md#establish-project-context)
+lists the `mergeProps` merge order and the animation attributes.
 
 Keep Select items inside `SelectGroup`, menu items in the corresponding group,
 and Tabs triggers inside `TabsList`. Dialog, Sheet, and Drawer need an
@@ -520,6 +584,11 @@ imports and re-exports are checked; this is not a complete transitive graph
 analysis. Keep the current unprefixed locale URLs and use the existing safe
 return-URL validator for user-controlled redirect destinations.
 
+Import `Link` from `next/link` and router hooks from `next/navigation`
+directly. Do not add a re-export shim such as `@/i18n/navigation`: the locale
+lives in a cookie, not in the path, so a wrapper changes nothing and splits the
+import path. Biome `noRestrictedImports` rejects `@/i18n/navigation`.
+
 Centralize application route paths and sign-in redirects in
 `src/lib/navigation.ts`. Owned modules reference `routes` (`home`, `signIn`,
 `register`, `forgotPassword`, `profile`) instead of string literals such as
@@ -530,7 +599,7 @@ sign-in redirects. `authRoutes` also drives the auth-route exclusion in
 presentation-screen rule below still applies: screens receive callbacks and do
 not import `routes`; route-private composition roots and hooks do.
 
-With installed Next.js 16.4.2, use the error boundary's `retry()` for an action
+With installed Next.js 16.4.3, use the error boundary's `retry()` for an action
 that promises to retry a failed read. `reset()` only clears and rerenders the
 boundary state; it is not equivalent to refetching.
 
@@ -573,6 +642,21 @@ installed reference. Image allowlists, script strategy, CSP, telemetry,
 instrumentation, remote cache handlers, and hosting adapters are separate
 configuration decisions. Do not enable experimental flags, run codemods, or
 install upstream agent skills simply because a guide mentions them.
+
+### Security headers, CSP, and request nonce ownership
+
+- Isolate HTTP header management from Content Security Policy logic:
+  - `src/lib/headers.ts` is the single source of truth for HTTP header names
+    (`nonceHeader`, `cspHeader`), the baseline `securityHeaders` array for
+    `next.config.ts`, and the async `getNonce()` helper.
+  - `src/lib/csp.ts` contains pure CSP policy generation functions
+    (`buildContentSecurityPolicy`, `createNonce`) and does not import `next/headers`.
+  - `src/proxy.ts` imports header constants from `@/lib/headers` and policy
+    builders from `@/lib/csp`, injecting `x-nonce` and `Content-Security-Policy`
+    into the request and response.
+  - Server Components that need the per-request nonce (such as
+    `CspProviderServer` or `ThemeProviderServer`) import `getNonce` from
+    `@/lib/headers`.
 
 ### Owned function complexity and hook responsibility trees
 
@@ -743,7 +827,7 @@ optimistic-state, or experimental Suspense feature.
 
 Place shared application components in `src/components/ui/extensions/` and
 route-private components in `src/app/**/_components/`. For example,
-`LabeledSpinner` belongs in `ui/extensions` because both
+`LoadingState` belongs in `ui/extensions` because both
 route components and Firebase UI consume it. Do not create parallel application
 component folders such as `src/components/loading/`.
 
@@ -755,7 +839,7 @@ policy, not a Next.js requirement.
 
 Placement does not classify runtime. `IntlProvider` in `intl-provider-server.tsx` is an async Server
 Component using server-only translation APIs; `ThemeProvider` in `theme-provider-client.tsx` declares
-`"use client"`; `LabeledSpinner` has no directive and can be used in either
+`"use client"`; `LoadingState` has no directive and can be used in either
 rendering graph. Keep those boundaries even when the files share a directory.
 The existing direct server-import guard complements placement checks; Next.js
 validates the complete module graph.
@@ -779,13 +863,13 @@ review those implementations. `ProfileFormClient` persists through `useProfileSu
 so it remains in `profile-form-client.tsx`. `ProfileEmailField` uses only form
 context and translations, so it lives in `profile-email-field.tsx` while keeping
 `"use client"`. `ProfileAvatarFieldClient` accesses browser object URLs through its
-hook and keeps `profile-avatar-field-client.tsx`. `LabeledSpinner` remains
+hook and keeps `profile-avatar-field-client.tsx`. `LoadingState` remains
 without a suffix and compatible with either graph.
 
 Owned component exports, props types, and component-named orchestration hooks
 use the complete filename stem, including `Client` or `Server` where present.
-For example, `home-section-client.tsx` exports `HomeSectionClient` and uses
-`useHomeSectionClient`. Colocated tests and stories follow the component stem. A fetch alone does not determine
+For example, `home-client.tsx` exports `HomeClient` and uses
+`useHomeClient`. Colocated tests and stories follow the component stem. A fetch alone does not determine
 runtime: the component boundary determines where that request executes.
 Composing an integration component does not make presentation an integration.
 Mandatory Next.js filenames, registry output, hooks and non-component modules
@@ -808,6 +892,32 @@ Owned source (`src/`, `scripts/`, `functions/`, `tests/`) follows one style:
 - Use `type` aliases, not `interface`. Props are named `<ComponentName>Props`.
 - Only module-level constants use `SCREAMING_CASE`.
 - Message files (`en`, `es`, `pt-BR`) keep an identical key set.
+- Keep short, straightforward calls on one line. Use an expanded trailing-object
+  call when any of these conditions applies:
+
+  - The final object is invocation policy or options, distinct from the operation's
+    domain input, even when it currently has one property (for example, Firestore's
+    `merge` option).
+  - The object has multiple properties, contains a nested value, callback, or
+    collection, or will be read or modified as a distinct configuration block.
+  - The complete call exceeds Biome's configured line width; accept its automatic
+    wrapping rather than selecting line breaks by hand.
+
+  Keep compact scalar or domain-input arguments on the opening line, and begin the
+  first property of the final object on the next line to express intentional
+  expansion. With the default `expand: "auto"`, Biome preserves that object layout.
+  SDK/provider mutations commonly use this form:
+
+  ```ts
+  await setDoc(doc(getFirebaseFirestore(), "users", uid), preferences, {
+    merge: true,
+  });
+  ```
+
+  Do not expand a simple data object solely for visual symmetry. Biome is the
+  mechanical safeguard for the resulting wrapping, two-space indentation, and
+  trailing commas; selecting a semantically distinct configuration block remains a
+  review-time judgement.
 
 Documented exceptions, not to be renamed:
 
@@ -857,3 +967,11 @@ instead of `ReactDOM.hydrate`, explicit refs instead of `findDOMNode`,
 `root.unmount()` instead of `unmountComponentAtNode`, and JSX instead of
 `createFactory`. Do not describe a still-available legacy API as removed or
 mechanically rewrite valid boundaries.
+
+## Development tooling and secret isolation
+
+- **VS Code launch configurations (`.vscode/launch.json`)**:
+  - Never commit credentials, private tokens, or API keys directly inside `"env"` blocks.
+  - Configurations must load environment variables through `"envFile": "${workspaceFolder}/.env.*"` targeting Git-ignored environment files.
+  - This rule is enforced mechanically by `pnpm check:secret-guard` and the `.husky/pre-commit` hook.
+  - Emulator launch configurations should automate starting background emulator dependencies using `"preLaunchTask"` paired with background problem matchers in `.vscode/tasks.json`.

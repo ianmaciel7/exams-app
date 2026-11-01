@@ -1,6 +1,8 @@
+<!-- cspell:ignore jitless -->
+
 # ADR 0001: Configure Next.js
 
-- **Status**: Accepted
+- **Status**: Accepted; incorporates former ADRs 0023, 0026
 - **Date**: 2026-10-16
 - **Deciders**: ianmaciel7
 
@@ -100,3 +102,91 @@ Key architectural choices and core Next.js platform requirements:
 - [ADR 0004: Configure Internationalization](0004-configure-internationalization.md)
 - [ADR 0005: Document Project Standards](0005-document-project-standards.md)
 - [ADR 0009: Integrate Firebase Authentication](0009-integrate-firebase-authentication.md)
+
+## Incorporated decisions
+
+The following records were merged into this one on 2026-11-01 at the maintainer's direction. Their text is kept as written, with the original number, status, and date, so the history stays traceable. The earlier files remain in Git history.
+
+### Former ADR 0023: Enforce a nonce-based Content Security Policy
+
+- **Original status**: Accepted; amends the no-Proxy rule of 0004 and 0021
+- **Original date**: 2026-10-31
+
+#### Context (former ADR 0023)
+
+`next.config.ts` sent only `frame-ancestors`, `base-uri`, and `object-src`, so
+any injected script could run. Next.js adds a nonce to its framework scripts
+only when the request carries a CSP with `'nonce-…'`, and only a Proxy can set
+request headers before rendering. Every route already renders on demand
+(the root layout reads cookies and `Accept-Language`), so a per-request nonce
+does not cost a static shell. ADR 0004 and ADR 0004 forbade a Proxy to keep
+locale routing cookie-driven and unprefixed.
+
+#### Decision (former ADR 0023)
+
+- Add `src/proxy.ts`. It creates a 128-bit nonce per document request, builds
+  the policy with `src/lib/csp.ts`, and sets it on the request (for Next.js)
+  and on the response. It only sets headers: it never rewrites, redirects, or
+  reads the locale, so the routing decisions of 0004 and 0021 stand.
+- Policy: `script-src 'nonce-…' 'strict-dynamic'` (with `https:` and
+  `'unsafe-inline'` as fallbacks that CSP Level 3 browsers ignore),
+  `style-src 'self' 'nonce-…'`, `style-src-attr 'unsafe-inline'` for
+  server-rendered `style` attributes, `object-src 'none'`, `base-uri 'none'`,
+  `worker-src 'self'`, and `connect-src`/`frame-src` limited to Firebase,
+  Google sign-in, and reCAPTCHA. Development adds `'unsafe-eval'`, inline
+  styles, and the configured emulator origins.
+- Pass the nonce from the `x-nonce` request header to Base UI through
+  `CspProviderServer` (`CSPProvider`) and to the next-themes script through
+  `ThemeProviderServer`.
+- Turn off the Zod JIT (`config({ jitless: true })`) in `src/instrumentation-client.ts`, so its `new Function`
+  probe does not trigger a violation.
+- Static files, Next.js assets, prefetches, and the auth service worker skip
+  the Proxy and keep the baseline headers from `next.config.ts`.
+
+#### Consequences (former ADR 0023)
+
+- An injected inline or third-party script cannot run without the nonce.
+- `tests/best-practices.spec.ts` checks the policy, a fresh nonce per request,
+  the nonce on every script, and no violations on public routes.
+- Pages cannot be served as a prerendered static shell or cached by a CDN
+  while the policy uses a nonce. A route that becomes static must move to the
+  experimental SRI hashes or leave the Proxy matcher.
+- Inline `<style>` and scripts added by tests or bookmarklets are blocked.
+  Browser extensions and user stylesheets still apply.
+- A new third-party origin (analytics, fonts, images) needs a matching
+  directive in `src/lib/csp.ts`.
+
+### Former ADR 0026: Load Firebase on demand on the home page
+
+- **Original status**: Accepted
+- **Original date**: 2026-11-01
+
+#### Context (former ADR 0026)
+
+The home page waited for Firebase to load on the client before it painted the
+hero, so the simulated mobile LCP (largest content render time) was about 6.0 s.
+[ADR 0011](0011-configure-cd.md) gates deploys on
+mobile budgets but did not gate LCP, so the regression went unnoticed. The change
+shipped in pull request #41.
+
+#### Decision (former ADR 0026)
+
+- The home hero renders in the server HTML. Session surfaces (sign-in, sign-out,
+  profile links) are client components that wait behind button-sized skeletons.
+- Firebase modules load after hydration through dynamic `import()` calls kept in
+  `src/app/_lib/firebase-loaders.ts`, because React Compiler does not support
+  `import()` inside hooks. Other critical-path routes follow the same rule.
+- `pnpm check:lighthouse` fails when the home LCP is above 4 s. The total client
+  JavaScript budget in `.size-limit.json` is 770 kB to cover the extra chunk
+  overhead.
+- `pnpm check:components` follows dynamic imports when it checks the component
+  conventions.
+
+#### Consequences (former ADR 0026)
+
+- The simulated mobile LCP of `/` fell to about 2.3 to 3.1 s.
+- A session control appears after a short skeleton instead of with the first paint.
+- The `/sign-in` LCP stays above the target and is not gated; a later record can
+  extend the ceiling to that route.
+- Budgets and commands live in [TESTING.md](../../TESTING.md) and
+  [TOOLING.md](../../TOOLING.md).

@@ -2,11 +2,12 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
+import { CspProviderServer } from "@/components/ui/extensions/csp-provider-server";
 import { FirebaseAuthSessionBridgeClient } from "@/components/ui/extensions/firebase-auth-session-bridge-client";
 import { IntlDocumentServer } from "@/components/ui/extensions/intl-document-server";
 import { IntlProviderServer } from "@/components/ui/extensions/intl-provider-server";
-import { ThemeProviderClient } from "@/components/ui/extensions/theme-provider-client";
-import { Spinner } from "@/components/ui/spinner";
+import { LoadingState } from "@/components/ui/extensions/loading-state";
+import { ThemeProviderServer } from "@/components/ui/extensions/theme-provider-server";
 import { Toaster } from "@/components/ui/toast";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
@@ -44,27 +45,20 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <Suspense fallback={null}>
       <IntlDocumentServer className={fontClassName}>
-        <Suspense
-          fallback={
-            <div className="flex min-h-svh items-center justify-center">
-              <Spinner
-                className="size-8 text-muted-foreground"
-                aria-hidden="true"
-              />
-            </div>
-          }
-        >
+        <Suspense fallback={<LoadingState boundary="root-provider" />}>
           <IntlProviderServer>
-            <FirebaseAuthSessionBridgeClient />
-            <ThemeProviderClient
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
-              <TooltipProvider>{children}</TooltipProvider>
-              <Toaster />
-            </ThemeProviderClient>
+            <CspProviderServer>
+              <FirebaseAuthSessionBridgeClient />
+              <ThemeProviderServer
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+                disableTransitionOnChange
+              >
+                <TooltipProvider>{children}</TooltipProvider>
+                <Toaster />
+              </ThemeProviderServer>
+            </CspProviderServer>
           </IntlProviderServer>
         </Suspense>
       </IntlDocumentServer>

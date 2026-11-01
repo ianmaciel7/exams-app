@@ -27,7 +27,8 @@ Review the current diff (`git diff --name-only`) restricted to `firestore.rules`
 5. **Server boundary**: protected reads and writes go through `dal.ts`;
    credentials stay server-side; no server-only endpoint reaches the browser
    bundle.
-6. **Coverage**: a rules or function change has a matching test in
+6. **Coverage**: a rules change has a matching negative test in
+   `tests/rules/` (`pnpm test:rules`); a function change has one in
    `functions/*.test.cjs` or `tests/firebase-auth.spec.ts`.
 
 ## Report
@@ -35,5 +36,5 @@ Review the current diff (`git diff --name-only`) restricted to `firestore.rules`
 List findings ordered by severity, each with file and line, the failure
 scenario, and the smallest fix. State which checks found nothing. Run
 `pnpm test:logging` for `functions/` changes. Do not claim emulator tests
-passed unless `pnpm test:auth` actually ran; say so when it was skipped or the
+passed unless `pnpm test:auth` or `pnpm test:rules` actually ran; say so when it was skipped or the
 Firebase CLI was unavailable.

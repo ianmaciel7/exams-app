@@ -18,7 +18,6 @@ const values = {
 function session(overrides: Partial<Session> = {}): Session {
   return {
     activeLocale: "en",
-    authReady: true,
     avatarVersion: 0,
     defaultValues: values,
     error: null,
@@ -34,19 +33,11 @@ function session(overrides: Partial<Session> = {}): Session {
 }
 
 describe("useProfileStatus", () => {
-  it.each([
-    session({ authReady: false }),
-    session({ preferencesReady: false }),
-  ])("waits for authentication and user preferences", (pending) => {
-    const { result } = renderHook(() => useProfileStatus(pending));
-    expect(result.current).toMatchObject({ isLoading: true, isReady: false });
-  });
-
-  it("hides the profile after unauthenticated redirect without an error", () => {
+  it("waits for user preferences", () => {
     const { result } = renderHook(() =>
-      useProfileStatus(session({ user: null, defaultValues: null })),
+      useProfileStatus(session({ preferencesReady: false })),
     );
-    expect(result.current).toMatchObject({ isHidden: true, isReady: false });
+    expect(result.current).toMatchObject({ isLoading: true, isReady: false });
   });
 
   it.each([
@@ -64,16 +55,6 @@ describe("useProfileStatus", () => {
       });
     },
   );
-
-  it("renders an authentication error instead of hiding it", () => {
-    const { result } = renderHook(() =>
-      useProfileStatus(session({ user: null, error: "Authentication failed" })),
-    );
-    expect(result.current).toMatchObject({
-      isError: true,
-      errorMessage: "Authentication failed",
-    });
-  });
 
   it("provides the authenticated user's identity only when ready", () => {
     const { result } = renderHook(() => useProfileStatus(session()));

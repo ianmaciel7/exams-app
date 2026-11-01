@@ -14,9 +14,9 @@ All 474 Markdown documents in the installed Next.js bundle were inventoried by
 path and title. Individual bodies were consulted for the index, Proxy, and
 handler/cache boundaries. API/version guidance outside those reads still needs
 verification before implementation. The live Context7 Next.js corpus includes
-canary material and did not advertise the exact installed 16.4.2 snapshot.
+canary material and did not advertise the exact installed 16.4.3 snapshot.
 
-The project declares Next.js 16.4.2, React/React DOM 19.3.1, Compiler 1.0.0,
+The project declares Next.js 16.4.3, React/React DOM 19.3.1, Compiler 1.0.0,
 and shadcn ^4.22.0. The implemented UI uses `base-nova`, Base UI, Tailwind v4,
 and Lucide. Configuration and installed source establish applicability, not a
 live upstream example. [Version applicability](react-versions.md) distinguishes
@@ -41,7 +41,7 @@ root index. These counts describe document inventory, including section indexes.
 | Metadata, viewport, OG images, robots, sitemap, manifests | [routes](../../.agents/rules/routes.md), installed file-convention/API reference | Individual APIs consulted before use |
 | Proxy, redirects, rewrites | [routes](../../.agents/rules/routes.md), [Security](../../SECURITY.md) | No Proxy implementation claimed or required |
 | Authentication, data security, CSP, environment variables | [auth](../../.agents/rules/auth.md), [Security](../../SECURITY.md), [Tooling](../../TOOLING.md) | Preserve actual access and environment boundaries |
-| Internationalization | [Architecture](../../ARCHITECTURE.md#internationalization), [Coding standards](../../CODING_STANDARDS.md#internationalization) | Existing cookie-only locale decision |
+| Internationalization | [Architecture](../../ARCHITECTURE.md#internationalization), [Coding standards](../../CODING_STANDARDS.md#internationalization) | Cookie-preferred locale selection with browser fallback |
 | Testing, accessibility, responsive behavior | [Testing](../../TESTING.md), [Design](../../DESIGN.md) | Existing owners; automatic checks have documented limits |
 | Analytics, instrumentation, OpenTelemetry, debugging | [Architecture](../../ARCHITECTURE.md), [Tooling](../../TOOLING.md), [Testing](../../TESTING.md) | Actual instrumentation exists; other integrations conditional |
 | Building, deployment, self-hosting, static export, production | [README](../../README.md), [Tooling](../../TOOLING.md), [Security](../../SECURITY.md) | Consult installed deployment guides before changes |

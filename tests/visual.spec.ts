@@ -16,6 +16,8 @@ for (const colorScheme of ["light", "dark"] as const) {
     test("matches the baseline screenshot", async ({ page }) => {
       await page.goto("/");
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+      // Wait for the session actions so the skeletons are not captured.
+      await expect(page.locator("main [role='status']")).toHaveCount(0);
 
       await expect(page).toHaveScreenshot(
         ["visual", `home-${colorScheme}.png`],

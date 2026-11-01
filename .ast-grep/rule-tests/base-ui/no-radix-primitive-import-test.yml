@@ -1,0 +1,8 @@
+id: no-radix-primitive-import
+valid:
+  - import { Dialog, DialogContent } from "@/components/ui/dialog";
+  - import { useControllableState } from "@radix-ui/react-use-controllable-state";
+invalid:
+  - import * as DialogPrimitive from "@radix-ui/react-dialog";
+  - import { Slot } from "radix-ui";
+  - import { toast } from "sonner";

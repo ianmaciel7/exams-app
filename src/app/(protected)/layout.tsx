@@ -1,5 +1,13 @@
-import { ProtectedSessionServer } from "./_components/protected-session-server";
+import { AuthGateClient } from "./_components/auth-gate-client";
+import { RouteUsageClient } from "./_components/route-usage-client";
+import { rejectInvalidBridgeSession } from "./_lib/dal";
 
-export default function ProtectedLayout({ children }: LayoutProps<"/">) {
-  return <ProtectedSessionServer>{children}</ProtectedSessionServer>;
+export default async function ProtectedLayout({ children }: LayoutProps<"/">) {
+  await rejectInvalidBridgeSession();
+
+  return (
+    <AuthGateClient>
+      <RouteUsageClient>{children}</RouteUsageClient>
+    </AuthGateClient>
+  );
 }

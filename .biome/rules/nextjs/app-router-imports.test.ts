@@ -75,6 +75,15 @@ describe("native App Router import policy", () => {
     expect(output).not.toContain("parse");
   });
 
+  it.each([
+    'import { useRouter } from "@/i18n/navigation"; export { useRouter };',
+    'export { Link } from "@/i18n/navigation";',
+  ])("rejects the removed navigation shim: %s", (source) => {
+    expect(lintSingle(join(directories[0], "shim.ts"), source)).toContain(
+      "lint/style/noRestrictedImports",
+    );
+  });
+
   it("rejects re-exports of the legacy router", () => {
     expect(
       lintSingle(

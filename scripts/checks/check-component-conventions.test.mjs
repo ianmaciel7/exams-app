@@ -761,6 +761,15 @@ describe("owned component conventions", () => {
     );
   });
 
+  it("accepts the Base UI Form wrapper as the profile form root", () => {
+    expectValid(
+      compoundForm(
+        "function ProfileForm() { return <FormProvider><Form>{children}</Form></FormProvider>; } export { ProfileForm };",
+      ),
+      "src/app/(protected)/profile/_components/profile-form.tsx",
+    );
+  });
+
   it("keeps FieldGroup in ProfileFormContent rather than ProfileForm", () => {
     const form = "src/app/(protected)/profile/_components/profile-form.tsx";
     const content =
@@ -978,6 +987,18 @@ describe("component integration naming", () => {
       ),
       "",
     );
+    modules.set(
+      "src/components/ui/extensions/use-lazy-account.ts",
+      'export async function load() { const { load } = await import("@/lib/account"); return load(); }',
+    );
+    assert.match(
+      messages(
+        '"use client"; import { load } from "./use-lazy-account";',
+        "account",
+        modules,
+      ),
+      /-client.tsx/,
+    );
     assert.equal(
       messages(
         '"use client"; import { pure } from "./pure-hook";',
@@ -1118,65 +1139,82 @@ describe("UI phase flags", () => {
 });
 
 describe("component filename term matching and parity", () => {
-  it("accepts HomeSectionClient with matching filename, props, and orchestration hook", () => {
+  it("accepts HomeClient with matching filename, props, orchestration hook, and Home composition", () => {
     expectValid(
       `"use client";
        import type { ComponentProps } from "react";
-       import { useHomeSectionClient } from "../_hooks/use-home-section-client";
-       type HomeSectionClientProps = ComponentProps<"div">;
-       function HomeSectionClient(props: HomeSectionClientProps) {
-         const { t } = useHomeSectionClient();
-         return <div {...props} />;
+       import { useHomeClient } from "../_hooks/use-home-client";
+       import { Home } from "./home";
+       type HomeClientProps = ComponentProps<"div">;
+       function HomeClient(props: HomeClientProps) {
+         const { t } = useHomeClient();
+         return <Home {...props} />;
        }
-       export { HomeSectionClient };`,
-      "src/app/_components/home-section-client.tsx",
+       export { HomeClient };`,
+      "src/app/_components/home-client.tsx",
     );
   });
 
-  it("rejects HomeSection in home-section-client.tsx due to missing 'Client' term", () => {
+  it("rejects HomeClient when it does not compose Home", () => {
     expectInvalid(
       `"use client";
        import type { ComponentProps } from "react";
-       type HomeSectionProps = ComponentProps<"div">;
-       function HomeSection(props: HomeSectionProps) { return <div {...props} />; }
-       export { HomeSection };`,
-      /missing term\(s\): "client"/i,
-      "src/app/_components/home-section-client.tsx",
+       import { useHomeClient } from "../_hooks/use-home-client";
+       type HomeClientProps = ComponentProps<"div">;
+       function HomeClient(props: HomeClientProps) {
+         const { t } = useHomeClient();
+         return <div {...props} />;
+       }
+       export { HomeClient };`,
+      /HomeClient must compose Home/i,
+      "src/app/_components/home-client.tsx",
     );
   });
 
-  it("rejects mismatched terms such as HomeViewClient or HomeSectionViewClient", () => {
+  it("rejects Home in home-client.tsx due to missing 'Client' term", () => {
+    expectInvalid(
+      `"use client";
+       import type { ComponentProps } from "react";
+       type HomeProps = ComponentProps<"div">;
+       function Home(props: HomeProps) { return <div {...props} />; }
+       export { Home };`,
+      /missing term\(s\): "client"/i,
+      "src/app/_components/home-client.tsx",
+    );
+  });
+
+  it("rejects mismatched terms such as HomeViewClient", () => {
     expectInvalid(
       `"use client";
        function HomeViewClient() { return <div />; }
        export { HomeViewClient };`,
       /unexpected term\(s\): "view"/i,
-      "src/app/_components/home-section-client.tsx",
+      "src/app/_components/home-client.tsx",
     );
   });
 
-  it("rejects HomeSectionClient delegating to useHomeSection instead of useHomeSectionClient", () => {
+  it("rejects HomeClient delegating to useHome instead of useHomeClient", () => {
     expectInvalid(
       `"use client";
-       import { useHomeSection } from "../_hooks/use-home-section";
-       function HomeSectionClient() {
-         useHomeSection();
+       import { useHome } from "../_hooks/use-home";
+       function HomeClient() {
+         useHome();
          return <div />;
        }
-       export { HomeSectionClient };`,
-      /must delegate hook coordination to useHomeSectionClient/i,
-      "src/app/_components/home-section-client.tsx",
+       export { HomeClient };`,
+      /must delegate hook coordination to useHomeClient/i,
+      "src/app/_components/home-client.tsx",
     );
   });
 
   it("rejects legacy props type naming when component is exact match", () => {
     expectInvalid(
       `"use client";
-       type HomeSectionProps = { id: string };
-       function HomeSectionClient() { return <div />; }
-       export { HomeSectionClient };`,
-      /Props type must be named one of: HomeSectionClientProps/i,
-      "src/app/_components/home-section-client.tsx",
+       type HomeProps = { id: string };
+       function HomeClient() { return <div />; }
+       export { HomeClient };`,
+      /Props type must be named one of: HomeClientProps/i,
+      "src/app/_components/home-client.tsx",
     );
   });
 });
@@ -1189,7 +1227,7 @@ describe("lib and route _lib module placement", () => {
       "src/lib/firebase/client.ts",
       "src/lib/firebase/server.ts",
       "src/lib/firebase/usage.ts",
-      "src/app/(protected)/_lib/require-protected-access.ts",
+      "src/app/(protected)/_lib/dal.ts",
       "src/app/(protected)/profile/_lib/data.ts",
     ]) {
       assert.deepEqual(inspectLibPlacement(validPath), []);

@@ -107,7 +107,10 @@ for the task. Do not read every rule for every change.
 - Owned components: `components.md` and `composition.md`; UI registry work: `shadcn.md`.
 - Custom hooks: `hooks.md`; state changes: `state.md`; external lifecycle work: `effects.md`.
 - Forms: `forms.md`; persistence: `data.md`; protected access/session: `auth.md`.
+- Stateful user workflows and acceptance tests: `testing.md` and `TESTING.md`.
+- User-visible async states and recovery: `ui-state.md` and `docs/ui-state-feedback.md`.
 - Routes, metadata, viewport, navigation: `routes.md`; runtime graphs: `boundaries.md`.
+- Touch targets, form-field text, autofill, motion, mobile layout: `mobile.md`.
 - Streaming and invalidation: `cache.md`; images and fonts: `assets.md`.
 - React correctness: `react.md`; rendering: `rendering.md`; browser integration: `dom.md`.
 - Compiler changes: `compiler.md`; external lookups: `research.md`.
@@ -156,7 +159,7 @@ with regression cases for both boundary and directive-free modules.
 Before Next.js changes, read [agent rules](.agents/rules/cache.md)
 and the relevant installed `node_modules/next/dist/docs/` guide, consulting Context7 (`/vercel/next.js`)
 for verified upstream documentation. Match guidance to installed
-Next.js 16.4.2, App Router, Cache Components, and Partial Prefetching.
+Next.js 16.4.3, App Router, Cache Components, and Partial Prefetching.
 See [Next.js sources](docs/agents/nextjs-sources.md) and
 [Next.js versions](docs/agents/nextjs-versions.md).
 

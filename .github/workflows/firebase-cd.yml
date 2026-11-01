@@ -1,23 +1,71 @@
 name: Firebase CD
 
 on:
-  push:
-    tags:
-      - "v*"
+  release:
+    types:
+      - published
 
 permissions:
   contents: read
-  id-token: write
 
 concurrency:
   group: firebase-production
   cancel-in-progress: false
 
 jobs:
+  # The deploy runs only when the release commit still passes the browser
+  # suites: desktop and mobile end-to-end, accessibility, visual and the
+  # Lighthouse mobile budgets. Same container and checks as the CI e2e job.
+  browser-checks:
+    name: Browser, mobile and Lighthouse gate
+    if: ${{ !github.event.release.prerelease }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    container:
+      image: mcr.microsoft.com/playwright:v1.64.1-noble@sha256:7852dc5a7d72f5fe458a597d690f6c42fbc8e9e26ddfa95f8e6ef552558d9bbf
+    env:
+      CI: "true"
+      HUSKY: "0"
+      NEXT_PUBLIC_FIREBASE_API_KEY: ci-placeholder
+      NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: demo-test.firebaseapp.com
+      NEXT_PUBLIC_FIREBASE_PROJECT_ID: demo-test
+      NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: demo-test.appspot.com
+      NEXT_PUBLIC_FIREBASE_APP_ID: ci-placeholder
+      NEXT_PUBLIC_FIREBASE_GOOGLE_ENABLED: "true"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          package-manager-cache: false
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm verify:e2e
+      - name: Lighthouse mobile budgets
+        run: pnpm check:lighthouse
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: ${{ !cancelled() }}
+        with:
+          name: release-browser-report
+          path: |
+            playwright-report/
+            test-results/
+            reports/lighthouse/
+          retention-days: 7
+          if-no-files-found: ignore
+
   deploy:
     name: Deploy Firebase production release
-    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
+    needs: browser-checks
+    # Draft releases never fire `published`; prereleases are skipped here.
+    if: ${{ !github.event.release.prerelease }}
     runs-on: ubuntu-latest
+    # Only the deploy exchanges an OIDC token for Google credentials.
+    permissions:
+      contents: read
+      id-token: write
     timeout-minutes: 30
     environment: production
     env:
@@ -26,6 +74,7 @@ jobs:
       FIREBASE_RELEASE_BRANCH: ${{ vars.FIREBASE_RELEASE_BRANCH }}
       GOOGLE_SERVICE_ACCOUNT: ${{ vars.GOOGLE_SERVICE_ACCOUNT }}
       GOOGLE_WORKLOAD_IDENTITY_PROVIDER: ${{ vars.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
+      RELEASE_TAG: ${{ github.event.release.tag_name }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -40,8 +89,17 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if [[ ! "$GITHUB_REF_NAME" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "Only stable Semantic Versioning tags (vX.Y.Z) can deploy production." >&2
+          if [[ ! "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Only stable Semantic Versioning releases (vX.Y.Z) can deploy production." >&2
+            exit 1
+          fi
+
+          # The release tag, package.json and apphosting.yaml must agree, so the version
+          # the app shows is the version that was released.
+          package_version="$(jq -r .version package.json)"
+          app_hosting_tag="$(yq -r '.env[] | select(.variable == "NEXT_PUBLIC_GIT_TAG") | .value' apphosting.yaml)"
+          if [[ "$RELEASE_TAG" != "v$package_version" ]] || [[ "$RELEASE_TAG" != "$app_hosting_tag" ]]; then
+            echo "Release $RELEASE_TAG does not match package.json (v$package_version) and apphosting.yaml ($app_hosting_tag)." >&2
             exit 1
           fi
 
@@ -70,15 +128,53 @@ jobs:
           project_id: ${{ vars.FIREBASE_PROJECT_ID }}
           service_account: ${{ vars.GOOGLE_SERVICE_ACCOUNT }}
           workload_identity_provider: ${{ vars.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
+      # The sign-in allowlist is not in the repository (ADR 0009). Functions read it as
+      # params from this file, which only exists on the runner. Stop before deploying when a
+      # list is missing: an empty list would refuse every user.
+      - name: Write the sign-in allowlist for Functions
+        shell: bash
+        env:
+          ALLOWED_USER_EMAILS: ${{ secrets.ALLOWED_USER_EMAILS }}
+          ADMIN_USER_EMAILS: ${{ secrets.ADMIN_USER_EMAILS }}
+        run: |
+          set -euo pipefail
+          for secret_name in ALLOWED_USER_EMAILS ADMIN_USER_EMAILS; do
+            if [[ -z "${!secret_name:-}" ]]; then
+              echo "Missing production environment secret: $secret_name" >&2
+              exit 1
+            fi
+          done
+          printf 'ALLOWED_USER_EMAILS=%s\nADMIN_USER_EMAILS=%s\n' \
+            "$ALLOWED_USER_EMAILS" "$ADMIN_USER_EMAILS" > "functions/.env.$FIREBASE_PROJECT_ID"
+      # `--force` lets the CLI set the artifact cleanup policy that a non-interactive deploy
+      # of a new region would otherwise fail on.
       - name: Deploy Functions and Firebase security rules
         run: >-
-          pnpm dlx firebase-tools@15.34.1 deploy
+          npx --yes firebase-tools@15.34.2 deploy
           --project "$FIREBASE_PROJECT_ID"
           --only functions,firestore,database,storage
           --non-interactive
+          --force
+      # Browsers call callable Functions directly, and the CORS preflight carries no
+      # credentials. The organization policy blocks `allUsers`, so turn the Cloud Run
+      # invoker check off instead (ADR 0011). Handlers still verify the Firebase ID token.
+      - name: Allow browsers to invoke callable Functions
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Blocking functions default to us-east1; the callables run in us-central1.
+          for entry in recordusage:us-central1 setuserrole:us-central1 restrictsignup:us-east1 restrictsignin:us-east1; do
+            service="${entry%%:*}"
+            region="${entry##*:}"
+            gcloud run services update "$service" \
+              --project "$FIREBASE_PROJECT_ID" \
+              --region "$region" \
+              --no-invoker-iam-check \
+              --quiet
+          done
       - name: Create App Hosting rollout for the release commit
         run: >-
-          pnpm dlx firebase-tools@15.34.1 apphosting:rollouts:create
+          npx --yes firebase-tools@15.34.2 apphosting:rollouts:create
           "$FIREBASE_APP_HOSTING_BACKEND_ID"
           --project "$FIREBASE_PROJECT_ID"
           --git-commit "$GITHUB_SHA"

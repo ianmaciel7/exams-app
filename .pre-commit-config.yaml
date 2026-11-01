@@ -10,5 +10,6 @@ repos:
       - id: check-illegal-windows-names
       - id: check-json
       - id: check-merge-conflict
+      - id: detect-private-key
       - id: check-yaml
         args: ["--allow-multiple-documents"]

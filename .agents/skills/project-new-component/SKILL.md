@@ -17,7 +17,9 @@ Read the rules first; they own the contract and this skill only sequences it:
 
 1. Ask for the component's responsibility and whether it touches an integration
    (Firebase, browser storage, navigation, fetch, theme). Name it by
-   responsibility, not runtime.
+   responsibility, not runtime. When creating an integration component (`*Client`
+   or `*Server`), also create its companion UI presentation component (without suffix)
+   to hold layout, HTML elements, and visual compound parts.
 2. Place it: route components in `src/app/<route>/_components/`, hooks in
    `_hooks/`, shared components in `src/components/ui/extensions/`. Never edit
    `src/components/ui/` primitives, `firebase/`, or `ai-elements/` as a new
@@ -25,7 +27,8 @@ Read the rules first; they own the contract and this skill only sequences it:
 3. Use a kebab-case filename whose terms match the PascalCase component, the
    `<Name>Props` type, and any `use<Name>` hook exactly. Add `-client` and
    `"use client"` only for browser integrations; use `"server-only"` for server
-   integrations.
+   integrations. Ensure integration components compose their companion UI
+   component rather than inlining layout or client-suffixed presentation parts.
 4. Add visible text through the existing i18n messages, not literals.
 5. Add a colocated `*.stories.tsx` (Ladle) and, for behavior, a unit or
    `*.browser.test.tsx` test beside the source.

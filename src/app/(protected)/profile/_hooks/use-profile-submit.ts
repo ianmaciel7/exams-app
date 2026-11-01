@@ -1,7 +1,7 @@
 import type { User } from "firebase/auth";
 import { useTranslations } from "next-intl";
+import { useState } from "react";
 import { withUsageGuard } from "@/lib/firebase/usage";
-import { toast } from "@/lib/toast";
 import { saveProfile } from "../_lib/data";
 import type {
   ProfileFormValues,
@@ -16,7 +16,7 @@ type UseProfileSubmitOptions = {
   setAvatarVersion: (version: number) => void;
   setPhotoURL: (photoURL: string | null) => void;
   setTheme: (theme: ProfileValues["theme"]) => void;
-  user: User | null;
+  user: User;
 };
 
 export function useProfileSubmit({
@@ -28,6 +28,7 @@ export function useProfileSubmit({
   user,
 }: UseProfileSubmitOptions) {
   const t = useTranslations("Auth");
+  const [saveError, setSaveError] = useState<string | null>(null);
   const { onSaved } = useProfileSaveFeedback({
     activeLocale,
     savedValuesRef,
@@ -39,8 +40,9 @@ export function useProfileSubmit({
   const onSubmit = async (
     values: ProfileFormValues,
   ): Promise<ProfileValues | undefined> => {
+    setSaveError(null);
     const previous = savedValuesRef.current;
-    if (!user || !previous) return;
+    if (!previous) return;
 
     try {
       const savedProfile: SavedProfile = await withUsageGuard(
@@ -57,13 +59,10 @@ export function useProfileSubmit({
       return savedProfile.values;
     } catch (cause) {
       console.error(cause);
-      toast.add({
-        title: t("profileSaveError"),
-        type: "error",
-      });
+      setSaveError(t("profileSaveError"));
       return undefined;
     }
   };
 
-  return { onSubmit };
+  return { onSubmit, saveError };
 }

@@ -7,7 +7,8 @@ files:
 ignores:
   - "**/*.test.tsx"
   - "**/*.stories.tsx"
-  - src/components/ui/*.tsx
+  - "src/components/ui/[!e]*.tsx"
+  - "src/components/ui/e[!x]*.tsx"
   - src/components/ai-elements/**
 severity: error
 message: Tailwind cannot see class names assembled from a template literal, so the CSS is never generated.

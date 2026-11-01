@@ -1,0 +1,50 @@
+id: no-nested-button-in-trigger
+snapshots:
+  <DialogTrigger><Button>Open</Button></DialogTrigger>:
+    labels:
+    - source: <DialogTrigger><Button>Open</Button></DialogTrigger>
+      style: primary
+      start: 0
+      end: 52
+    - source: Button
+      style: secondary
+      start: 16
+      end: 22
+    - source: Button
+      style: secondary
+      start: 16
+      end: 22
+    - source: <Button>Open</Button>
+      style: secondary
+      start: 15
+      end: 36
+    - source: DialogTrigger
+      style: secondary
+      start: 1
+      end: 14
+    - source: DialogTrigger
+      style: secondary
+      start: 1
+      end: 14
+  <TooltipTrigger><Button size="icon" /></TooltipTrigger>:
+    labels:
+    - source: <TooltipTrigger><Button size="icon" /></TooltipTrigger>
+      style: primary
+      start: 0
+      end: 55
+    - source: Button
+      style: secondary
+      start: 17
+      end: 23
+    - source: <Button size="icon" />
+      style: secondary
+      start: 16
+      end: 38
+    - source: TooltipTrigger
+      style: secondary
+      start: 1
+      end: 15
+    - source: TooltipTrigger
+      style: secondary
+      start: 1
+      end: 15

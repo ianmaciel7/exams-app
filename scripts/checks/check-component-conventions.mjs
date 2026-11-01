@@ -337,9 +337,7 @@ function runtimeDependencySpecifier(statement) {
 
 function browserNavigationImport(statement, specifier) {
   if (
-    !["next/navigation", "@/i18n/navigation", "next-intl/navigation"].includes(
-      specifier,
-    ) ||
+    !["next/navigation", "next-intl/navigation"].includes(specifier) ||
     !ts.isImportDeclaration(statement)
   )
     return false;
@@ -416,6 +414,23 @@ function dependencyIntegrations(statement, specifier) {
   };
 }
 
+// A lazy `import("…")` still runs the module, so it counts like a static one.
+function dynamicImportDependencies(source) {
+  const dependencies = [];
+  function visit(node) {
+    if (
+      ts.isCallExpression(node) &&
+      node.expression.kind === ts.SyntaxKind.ImportKeyword &&
+      node.arguments[0] &&
+      ts.isStringLiteralLike(node.arguments[0])
+    )
+      dependencies.push([node, node.arguments[0].text]);
+    ts.forEachChild(node, visit);
+  }
+  visit(source);
+  return dependencies;
+}
+
 function mergeIntegrations(result, child) {
   for (const key of Object.keys(result)) result[key] ||= child[key];
 }
@@ -427,8 +442,14 @@ function componentIntegrations(source, filename, modules, visited = new Set()) {
     return { client: false, server: false, fetch: false };
   visited.add(filename);
   const result = integrationSyntax(source);
-  for (const statement of source.statements) {
-    const specifier = runtimeDependencySpecifier(statement);
+  const dependencies = [
+    ...source.statements.map((statement) => [
+      statement,
+      runtimeDependencySpecifier(statement),
+    ]),
+    ...dynamicImportDependencies(source),
+  ];
+  for (const [statement, specifier] of dependencies) {
     if (!specifier) continue;
     mergeIntegrations(result, dependencyIntegrations(statement, specifier));
     const target = helperModuleTarget(filename, specifier, modules);
@@ -772,7 +793,11 @@ function checkProfileSectionSafety(source, elements, report) {
 }
 
 function checkProfileProviderSafety(source, elements, report) {
-  const nativeForms = profileElements(elements, "form");
+  // `Form` is the Base UI wrapper from ui/extensions/form, which renders the <form>.
+  const nativeForms = [
+    ...profileElements(elements, "form"),
+    ...profileElements(elements, "Form"),
+  ];
   if (
     nativeForms.length !== 1 ||
     !isInsideProfile(nativeForms[0], ["FormProvider"])
@@ -924,6 +949,14 @@ function checkProfileFormSafety(source, stem, report) {
   check(source, jsxEntries(source), report);
 }
 
+function checkHomeSafety(source, stem, report) {
+  if (stem !== "home-client") return;
+  const elements = jsxEntries(source);
+  if (!elements.some((element) => element.name === "Home")) {
+    report(source, "HomeClient must compose Home.");
+  }
+}
+
 const statefulHooks = new Set([
   "useState",
   "useReducer",
@@ -1033,6 +1066,7 @@ function checkComponentHook(component, source, report) {
     "useId",
     "useFormContext",
     "useWatch",
+    "useRender",
   ]);
   const orchestrationHooks = hooks.filter(
     (hook) => !presentationHooks.has(hook.name),
@@ -1314,6 +1348,7 @@ export function inspectComponent(content, filename) {
   checkFieldControllerNames(source, stem, report);
   checkProfilePropDrilling(source, report);
   checkProfileFormSafety(source, stem, report);
+  checkHomeSafety(source, stem, report);
   return findings;
 }
 

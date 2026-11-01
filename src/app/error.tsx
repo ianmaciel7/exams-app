@@ -19,9 +19,9 @@ export default function ErrorPage({
 
   return (
     <main className="flex min-h-svh flex-1 flex-col items-center justify-center p-6 text-center">
-      <h2 className="text-2xl font-semibold tracking-tight">
+      <h1 className="text-2xl font-semibold tracking-tight">
         {t("errorTitle")}
-      </h2>
+      </h1>
       <p className="mt-2 text-muted-foreground">{t("errorMessage")}</p>
       <Button onClick={() => retry()} className="mt-6">
         {t("tryAgain")}
