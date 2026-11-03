@@ -1,8 +1,8 @@
 import { createContext } from "react";
-import type { useProfileSession } from "../_hooks/use-profile-session";
+import type { useSession } from "../_hooks/use-session";
 
-const SessionContext = createContext<ReturnType<
-  typeof useProfileSession
-> | null>(null);
+const SessionContext = createContext<ReturnType<typeof useSession> | null>(
+  null,
+);
 
 export { SessionContext };

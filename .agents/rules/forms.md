@@ -48,7 +48,7 @@ These are project conventions aligned with the current shadcn/ui and React Hook 
   `profile/error.tsx`. Its retry evicts the failed read before calling
   `retry()`. Components render only loaded data; there is no status guard.
 - `useProfileController` is removed. `useProfileFormClient` reads
-  `useProfileSession`, and `ProfileFormClient` shares it through
+  `useSession`, and `ProfileFormClient` shares it through
   `SessionContext`; it does not assemble field or button props.
 - `ProfileFormClient` delegates its React Hook Form lifecycle to
   `useProfileFormClient`, which calls `useProfileSubmit` for persistence.

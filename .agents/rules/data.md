@@ -66,7 +66,7 @@ See [auth.md](auth.md) for authentication/session placement and authorization.
 
 `_lib/` also owns route-private non-hook support declarations, not just persistence
 operations. Use descriptive modules such as `avatar.ts` for avatar URL selection
-and upload limits, and `profile-session-context.ts` for the shared context object.
+and upload limits, and `session.ts` for the shared context object.
 Do not place these helpers in hook modules or force them into `data.ts` merely
 because they are under `_lib`. Keep actual hooks in `_hooks`; a type-only reference
 to a hook return type does not execute that hook or create a runtime dependency.

@@ -31,7 +31,7 @@ Owned components keep rendering, translations, primitive prop forwarding and sim
 A component coordinating application behavior must use the imported
 `use<ComponentName>` hook in a separate module. For example,
 `ProfileFormClient` calls `useProfileFormClient`, which composes
-`useProfileSession`, `useProfileSubmit`, and React Hook Form, and resolves
+`useSession`, `useProfileSubmit`, and React Hook Form, and resolves
 conditional properties (such as `userId`) so component JSX remains free of
 inline `in` operator guards or ternary expressions. Stateful avatar
 fields, save actions, and auth flows use focused hooks; simple display name,
@@ -56,7 +56,7 @@ that route's `_lib/`: this includes constants, lookup collections and React
 context objects. A filename starting with `use-` does not make helpers inside
 that module part of the hook. `getAvatarSource` and avatar limits live in
 `profile/_lib/avatar.ts`; the session context object lives in
-`profile/_lib/profile-session-context.ts`.
+`profile/_lib/session.ts`.
 
 The hook itself may be a named `useX` function declaration or a `useX` variable
 initialized directly with an arrow/function expression. Local constants,
