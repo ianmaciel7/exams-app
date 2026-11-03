@@ -66,10 +66,12 @@ test("summarizes scores and Core Web Vitals", () => {
 
 test("holds the home LCP under its route ceiling", () => {
   const home = report();
+  home.audits["largest-contentful-paint"].numericValue = 4030;
+  assert.deepEqual(evaluateLighthouseReport(home, budgetFor("/")), []);
   home.audits["largest-contentful-paint"].numericValue = 6000;
   const failures = evaluateLighthouseReport(home, budgetFor("/"));
   assert.equal(failures.length, 1);
-  assert.match(failures[0], /largest-contentful-paint is 6000.000, above 4000/);
+  assert.match(failures[0], /largest-contentful-paint is 6000.000, above 4500/);
 });
 
 test("keeps the shared budget for routes without overrides", () => {

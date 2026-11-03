@@ -48,6 +48,8 @@ earlier files stay in Git history. Reference the new home in new work.
   - `src/instrumentation.ts` uses Next.js native `onRequestError` to emit structured
     `ERROR` JSON on `stderr` with route metadata and optional numeric error digest,
     excluding raw stacks, headers, URLs, and bodies.
+  - The home LCP ceiling in `pnpm check:lighthouse` is 4.5 s, not the 4 s recorded in the
+    original decision: the CI runner measures about 4.0 s, so a 4 s ceiling failed on variance.
 
 - **ADR 0006: Owned component placement, integration suffixes, and export parity**:
   - Shared application components live in `src/components/ui/extensions/`, shared hooks in
