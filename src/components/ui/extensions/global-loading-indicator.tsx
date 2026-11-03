@@ -1,4 +1,3 @@
-import { cn } from "cn";
 import type { ComponentProps } from "react";
 import { Spinner } from "@/components/ui/spinner";
 
@@ -15,27 +14,30 @@ type GlobalLoadingIndicatorProps = ComponentProps<"div"> & {
  */
 function GlobalLoadingIndicator({
   label,
-  className,
   ...props
 }: GlobalLoadingIndicatorProps) {
   return (
-    <div
-      {...props}
-      data-slot="global-loading-indicator"
-      className={cn("fixed inset-0 z-50 bg-background", className)}
-    >
+    <div {...props} data-slot="global-loading-indicator">
       <div
-        role="status"
-        aria-live="polite"
-        className="absolute inset-x-0 top-0 flex h-svh items-center justify-center gap-2 p-6 text-sm text-muted-foreground"
+        data-slot="loading-overlay"
+        className="fixed inset-0 z-50 bg-background"
       >
-        <Spinner
-          role="presentation"
-          aria-hidden="true"
-          aria-label={undefined}
-          className="shrink-0 motion-reduce:animate-none"
-        />
-        <span>{label}</span>
+        <div className="absolute inset-x-0 top-0 flex h-svh items-center justify-center p-6">
+          <span
+            data-slot="labeled-spinner"
+            role="status"
+            aria-live="polite"
+            className="inline-flex items-center justify-center gap-2 text-sm text-muted-foreground"
+          >
+            <Spinner
+              role="presentation"
+              aria-hidden="true"
+              aria-label={undefined}
+              className="shrink-0 motion-reduce:animate-none"
+            />
+            <span>{label}</span>
+          </span>
+        </div>
       </div>
     </div>
   );
