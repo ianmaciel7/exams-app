@@ -286,6 +286,15 @@ to ignore secret scanners. Pull request #69 moved it out.
   installed, so secret scanning is never silently bypassed.
 - A leaked key is rotated by creating a restricted key, adding it as a new secret
   version, redeploying, and deleting the old key. See [infra/README.md](../../infra/README.md).
+- Resolving the `latest` secret alias at build time needs `secretmanager.versions.get`, so
+  `secretAccessor` alone fails the build with `fah/misconfigured-secret`. Terraform also grants
+  `roles/secretmanager.viewer` to the default compute account (build), the App Hosting runtime
+  account, and the App Hosting service agent, and `secretAccessor` to the service agent.
+- Terraform enables `apikeys.googleapis.com`, but it does not manage the key itself: the key
+  is created and restricted (Identity Toolkit and Secure Token APIs, App Hosting and Firebase
+  referrers) with `gcloud`, so its value never enters the state. After a rotation, the
+  `firebase_web_config` output is not the secret's value and must not be copied into
+  `apphosting.yaml`.
 
 #### Consequences (Web API key secret)
 
