@@ -193,8 +193,7 @@ earlier files stay in Git history. Reference the new home in new work.
   - `check:routes`, `check:components`, `check:responsiveness`, `check:english`,
     `test:production-smoke`, and `check:docs` are `verify:fast` guards, each with its own
     regression tests.
-  - `review-validation.yml` is manual-dispatch only and not a required check;
-    `knip.runtime-audit.jsonc` is the entrypoint-scoped Knip configuration.
+  - `review-validation.yml` is manual-dispatch only and not a required check.
 
 These clarifications describe the checked-in configuration. They do not claim
 that a hosted run succeeded or that all tooling is installed on a contributor's

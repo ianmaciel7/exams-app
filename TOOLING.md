@@ -119,7 +119,7 @@ project skills are tracked in `.agents/skills/` and `skills-lock.json`.
 | `pnpm dev` / `pnpm dev:prod` / `pnpm dev:emulator` / `pnpm build` / `pnpm start` | Develop (production or emulators), build, and serve the Next.js application. |
 | `pnpm setup:github` | Configure repository settings and branch protection rulesets via GitHub CLI. |
 | `pnpm lint` / `pnpm lint:ci` / `pnpm format` | Biome check, CI check, and formatting. |
-| `pnpm typecheck` | Generate route types and run `tsc --noEmit -p tsconfig.build.json`. |
+| `pnpm typecheck` | Generate route types and run `tsc --noEmit`. |
 | `pnpm test` | Fast `unit` Vitest project in `jsdom`. |
 | `pnpm test:watch` / `pnpm test:coverage` | Watch mode / coverage (writes `coverage/`). |
 | `pnpm test:logging` | Run logging and diagnostic test suite. |
@@ -209,7 +209,6 @@ theming decision is recorded in ADR 0003.
 | `pnpm-workspace.yaml` | Native-build allowlist, security `overrides`, and `auditConfig`. |
 | `next.config.ts` | Next.js, Turbopack, React Compiler, and `next-intl` configuration. |
 | `tsconfig.json` | TypeScript compiler settings, editor project, and the `@/*` alias. |
-| `tsconfig.build.json` | Application typecheck and Next.js build settings, inherited from `tsconfig.json`. |
 | `biome.json` | Biome formatting, linting, and custom-rule configuration. |
 | `.biome/rules/nextjs/*.grit` | GritQL source for project-specific Biome rules. |
 | `components.json` | shadcn/ui configuration and import aliases. |
@@ -683,7 +682,7 @@ pnpm build
 Next.js configuration in the production build phase and can require its
 plugins, environment, and native dependencies even without a full build.
 `next dev` and `next build` also generate route types. Do not hand-edit generated
-`.next/types` or replace the configured `tsconfig.build.json` with an example.
+`.next/types` or replace the configured `tsconfig.json` with an example.
 `next lint` is removed in Next.js 16; Biome owns this project's lint commands.
 Turbopack is the configured bundler; webpack-only configuration is not applied
 by copying an example into it.

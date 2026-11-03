@@ -16,7 +16,7 @@
     "lint:ci": "biome ci",
     "check:staged": "lint-staged",
     "format": "biome format --write",
-    "typecheck": "next typegen && tsc --noEmit -p tsconfig.build.json",
+    "typecheck": "next typegen && tsc --noEmit",
     "check:architecture": "depcruise --config .dependency-cruiser.cjs -- src",
     "check:unused": "knip",
     "check:duplicates": "jscpd --config .jscpd.json",

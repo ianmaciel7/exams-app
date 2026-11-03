@@ -44,7 +44,6 @@ Key architectural choices and core Next.js platform requirements:
    - **`cacheComponents: true`**: Activates Next.js 16 Cache Components and the `"use cache"` directive for granular, component-level caching.
    - **`partialPrefetching: true`**: Enables Partial Pre-rendering (PPR) prefetch optimizations across routes.
    - **`reactCompiler: true`**: Enables the React Compiler out-of-the-box to automate memoization (`useMemo`, `useCallback`).
-   - **`typescript.tsconfigPath: "tsconfig.build.json"`**: Enforces application build-specific TypeScript configuration excluding non-shipped fixtures.
 
    The baseline Next.js configuration is:
    ```ts
@@ -54,9 +53,6 @@ Key architectural choices and core Next.js platform requirements:
      cacheComponents: true,
      partialPrefetching: true,
      reactCompiler: true,
-     typescript: {
-       tsconfigPath: "tsconfig.build.json",
-     },
    };
 
    export default nextConfig;
@@ -68,7 +64,7 @@ Key architectural choices and core Next.js platform requirements:
    - Development proxy `rewrites()` for the Firebase Auth Emulator are governed by [ADR 0009](0009-integrate-firebase-authentication.md).
 
 3. **Strict Route Type Generation (`next typegen`)**:
-   - Script in `package.json`: `"typecheck": "next typegen && tsc --noEmit -p tsconfig.build.json"`.
+   - Script in `package.json`: `"typecheck": "next typegen && tsc --noEmit"`.
    - Next.js automatically generates route segment typings under `.next/types/app/`.
    - Application layouts and pages depend strictly on generated Next.js types such as `LayoutProps` (e.g., `LayoutProps<"/">` in `src/app/layout.tsx`) and `PageProps` (enforced via project standards in [ADR 0006](0006-document-project-standards.md)).
 
