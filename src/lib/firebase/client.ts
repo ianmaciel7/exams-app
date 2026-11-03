@@ -24,13 +24,11 @@ function getEmulatorUrl(): string | undefined {
     );
   }
 
-  const emulatorUrl = url.replace(/\/$/, "");
-
   if (isElectronBrowser() && typeof window !== "undefined") {
     return window.location.origin;
   }
 
-  return emulatorUrl;
+  return url.replace(/\/$/, "");
 }
 
 function isElectronBrowser() {
@@ -134,8 +132,8 @@ export function getFirebaseFunctions() {
   )?.trim();
 
   if (!globalThis.firebaseFunctionsEmulatorConnected && host) {
-    const url = new URL(host.includes("://") ? host : `http://${host}`);
-    connectFunctionsEmulator(functions, url.hostname, Number(url.port || 5001));
+    const endpoint = getEmulatorEndpoint(host, 5001);
+    connectFunctionsEmulator(functions, endpoint.host, endpoint.port);
     globalThis.firebaseFunctionsEmulatorConnected = true;
   }
 
@@ -152,8 +150,8 @@ export function getFirebaseStorage() {
   )?.trim();
 
   if (!globalThis.firebaseStorageEmulatorConnected && host) {
-    const url = new URL(host.includes("://") ? host : `http://${host}`);
-    connectStorageEmulator(storage, url.hostname, Number(url.port || 9199));
+    const endpoint = getEmulatorEndpoint(host, 9199);
+    connectStorageEmulator(storage, endpoint.host, endpoint.port);
     globalThis.firebaseStorageEmulatorConnected = true;
   }
 

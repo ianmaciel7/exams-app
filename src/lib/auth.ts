@@ -20,9 +20,10 @@ async function synchronizeSignedOutWorker() {
 
   const worker = navigator.serviceWorker.controller;
   const channel = new MessageChannel();
+  let timeout: ReturnType<typeof setTimeout> | undefined;
   try {
     await new Promise<void>((resolve, reject) => {
-      const timeout = setTimeout(() => {
+      timeout = setTimeout(() => {
         reject(
           new Error(
             "Firebase auth service worker did not acknowledge sign-out",
@@ -30,20 +31,14 @@ async function synchronizeSignedOutWorker() {
         );
       }, 3000);
       channel.port1.onmessage = (event: MessageEvent) => {
-        if (event.data?.type !== "firebase-auth-session-ack") return;
-        clearTimeout(timeout);
-        resolve();
+        if (event.data?.type === "firebase-auth-session-ack") resolve();
       };
-      try {
-        worker.postMessage({ type: "firebase-auth-session", uid: null }, [
-          channel.port2,
-        ]);
-      } catch (error) {
-        clearTimeout(timeout);
-        reject(error);
-      }
+      worker.postMessage({ type: "firebase-auth-session", uid: null }, [
+        channel.port2,
+      ]);
     });
   } finally {
+    clearTimeout(timeout);
     channel.port1.close();
     channel.port2.close();
   }
