@@ -36,6 +36,17 @@ export function validateLaunchConfig(content) {
   return issues;
 }
 
+export function validateAppHostingConfig(content) {
+  const issues = [];
+  // No exemption marker: the key lives in Secret Manager, never in the file.
+  if (gcpApiKeyPattern.test(content)) {
+    issues.push(
+      "apphosting.yaml: contains a GCP API key literal. Reference the Secret Manager secret with 'secret: firebase-web-api-key' instead.",
+    );
+  }
+  return issues;
+}
+
 export function inspectSecretGuard(root) {
   const issues = [];
 
@@ -51,6 +62,13 @@ export function inspectSecretGuard(root) {
   if (existsSync(launchJsonPath)) {
     const launchJson = readFileSync(launchJsonPath, "utf8");
     issues.push(...validateLaunchConfig(launchJson));
+  }
+
+  const appHostingPath = join(root, "apphosting.yaml");
+  if (existsSync(appHostingPath)) {
+    issues.push(
+      ...validateAppHostingConfig(readFileSync(appHostingPath, "utf8")),
+    );
   }
 
   return issues;

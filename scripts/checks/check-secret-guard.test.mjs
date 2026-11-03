@@ -1,9 +1,13 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
+  validateAppHostingConfig,
   validateLaunchConfig,
   validatePreCommitHook,
 } from "./check-secret-guard.mjs";
+
+// Key-shaped but invented, built in pieces so no scanner sees a literal.
+const fakeKey = `AIza${"x".repeat(35)}`;
 
 test("accepts a pre-commit hook that runs gitleaks protect", () => {
   const valid = "gitleaks protect --staged --no-banner --redact";
@@ -58,7 +62,7 @@ test("rejects a launch.json with hardcoded GCP API key", () => {
           type: "node",
           request: "launch",
           env: {
-            API_KEY: "AIzaSyDpuq9aUKLI1EjKj8afSGxOgP8oSSwUWqQ", // gitleaks:allow
+            API_KEY: fakeKey,
           },
         },
       ],
@@ -72,7 +76,18 @@ test("rejects a launch.json with hardcoded GCP API key", () => {
 });
 
 test("accepts an inline key when explicitly exempted with gitleaks:allow", () => {
-  const exempted =
-    '{\n  "key": "AIzaSyDpuq9aUKLI1EjKj8afSGxOgP8oSSwUWqQ" /* gitleaks:allow */\n}';
+  const exempted = `{\n  "key": "${fakeKey}" /* gitleaks:allow */\n}`;
   assert.deepEqual(validateLaunchConfig(exempted), []);
+});
+
+test("accepts an apphosting.yaml whose API key comes from a secret", () => {
+  const valid = `env:\n  - variable: NEXT_PUBLIC_FIREBASE_API_KEY\n    secret: firebase-web-api-key\n`;
+  assert.deepEqual(validateAppHostingConfig(valid), []);
+});
+
+test("rejects a GCP API key literal in apphosting.yaml even with gitleaks:allow", () => {
+  const leaked = `env:\n  - variable: NEXT_PUBLIC_FIREBASE_API_KEY\n    value: "${fakeKey}" # gitleaks:allow\n`;
+  const issues = validateAppHostingConfig(leaked);
+  assert.equal(issues.length, 1);
+  assert.match(issues[0], /Secret Manager/);
 });

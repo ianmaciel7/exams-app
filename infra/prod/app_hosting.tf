@@ -85,3 +85,35 @@ resource "google_firebase_app_hosting_backend" "app" {
     google_project_iam_member.app_hosting_firebase_auth_viewer,
   ]
 }
+
+# --- Firebase Web API key secret ---------------------------------------------
+# apphosting.yaml references this secret (`secret: firebase-web-api-key`) instead of
+# carrying the key, so no key-shaped literal lives in the repository. Terraform creates
+# the container and the access; the value is added out of band, see infra/README.md.
+
+resource "google_secret_manager_secret" "firebase_web_api_key" {
+  project   = var.project_id
+  secret_id = "firebase-web-api-key"
+
+  replication {
+    auto {}
+  }
+
+  depends_on = [google_project_service.apis]
+}
+
+# The backend reads it at runtime; Cloud Build (the default compute account) reads it
+# at build time because NEXT_PUBLIC_* values are inlined into the client bundle.
+resource "google_secret_manager_secret_iam_member" "firebase_web_api_key_runtime" {
+  project   = var.project_id
+  secret_id = google_secret_manager_secret.firebase_web_api_key.secret_id
+  role      = "roles/secretmanager.secretAccessor"
+  member    = google_service_account.app_hosting.member
+}
+
+resource "google_secret_manager_secret_iam_member" "firebase_web_api_key_build" {
+  project   = var.project_id
+  secret_id = google_secret_manager_secret.firebase_web_api_key.secret_id
+  role      = "roles/secretmanager.secretAccessor"
+  member    = "serviceAccount:${data.google_project.this.number}-compute@developer.gserviceaccount.com"
+}

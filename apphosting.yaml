@@ -1,9 +1,11 @@
 # Firebase Web SDK configuration for the production App Hosting backend.
 # These values are public browser configuration (they ship in the client bundle), not credentials.
 # Regenerate them from the Terraform output `firebase_web_config` (see infra/README.md).
+# The Web API key is the exception to "copy the value": it lives in Secret Manager
+# (`firebase-web-api-key`) so no key-shaped literal sits in the repository.
 env:
   - variable: NEXT_PUBLIC_FIREBASE_API_KEY
-    value: "AIzaSyDpuq9aUKLI1EjKj8afSGxOgP8oSSwUWqQ" # gitleaks:allow (public Firebase Web API key, shipped in the client bundle)
+    secret: firebase-web-api-key
     availability:
       - BUILD
       - RUNTIME
