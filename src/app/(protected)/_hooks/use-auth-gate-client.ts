@@ -21,7 +21,6 @@ export function useAuthGateClient() {
   return {
     errorMessage: t("configurationError"),
     isError: session.isError,
-    loadingMessage: t("loading"),
     // Reloading re-creates the Firebase app, which re-subscribing would not.
     onRetry: () => window.location.reload(),
     retryLabel: app("tryAgain"),
