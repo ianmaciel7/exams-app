@@ -29,6 +29,7 @@
     "nosniff",
     "SAMEORIGIN",
     "cloudfunctions",
+    "secretmanager",
     "recordusage",
     "restrictsignin",
     "restrictsignup",

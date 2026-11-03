@@ -47,6 +47,19 @@ then apply again so the repository link and backend can finish.
   rejects any key literal in that file. Add the value once, from a key restricted to your domains and the
   Firebase APIs (Google Cloud console > APIs & Services > Credentials):
   `printf '%s' "$KEY" | gcloud secrets versions add firebase-web-api-key --data-file=- --project <project-id>`.
+- Rotating the Web API key (for example after a secret scanning alert):
+  1. Enable `apikeys.googleapis.com` on the project (it is not managed by Terraform) and pass
+     `--billing-project <project-id>` to `gcloud services api-keys`, otherwise gcloud bills the wrong project.
+  2. Create a browser key restricted to `identitytoolkit.googleapis.com` and `securetoken.googleapis.com`, and to
+     the referrers `https://<backend>.hosted.app/*`, `https://<project-id>.firebaseapp.com/*` and
+     `https://<project-id>.web.app/*`. Add it as a new secret version, then create a build and a rollout.
+  3. Verify the deployed bundle carries the new key, then delete the old key and close the alert as `revoked`.
+  - Resolving `latest` at build time needs `roles/secretmanager.viewer`, in addition to `secretAccessor`, on
+    the secret for the default compute account (`<project-number>-compute@developer.gserviceaccount.com`), the
+    App Hosting compute account and the App Hosting service agent
+    (`service-<project-number>@gcp-sa-firebaseapphosting.iam.gserviceaccount.com`). Without it the build fails
+    with `fah/misconfigured-secret`. The 2026-11-03 rotation applied these grants and the service agent
+    `secretAccessor` grant by hand; they are not yet in `prod/app_hosting.tf`.
 - Update `.firebaserc` with the new project ID.
 - Email and password sign-in and the authorized domains are managed here (`google_identity_platform_config`);
   add custom domains through `extra_authorized_domains`.
