@@ -4,29 +4,14 @@ import { cspHeader, nonceHeader } from "@/lib/headers";
 
 /**
  * Sets a per-request nonce CSP (ADR 0001). This Proxy only adds headers: it
- * never rewrites, redirects, or resolves the locale (ADR 0004 and ADR 0004).
+ * never rewrites, redirects, or resolves the locale (ADR 0004).
  */
 export function proxy(request: NextRequest) {
   const nonce = createNonce();
   const policy = buildContentSecurityPolicy({
     nonce,
     isDevelopment: process.env.NODE_ENV === "development",
-    env: {
-      NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN:
-        process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-      NEXT_PUBLIC_FIREBASE_DATABASE_URL:
-        process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL,
-      NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_HOST:
-        process.env.NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_HOST,
-      NEXT_PUBLIC_FIRESTORE_EMULATOR_HOST:
-        process.env.NEXT_PUBLIC_FIRESTORE_EMULATOR_HOST,
-      NEXT_PUBLIC_FIREBASE_DATABASE_EMULATOR_HOST:
-        process.env.NEXT_PUBLIC_FIREBASE_DATABASE_EMULATOR_HOST,
-      NEXT_PUBLIC_FIREBASE_FUNCTIONS_EMULATOR_HOST:
-        process.env.NEXT_PUBLIC_FIREBASE_FUNCTIONS_EMULATOR_HOST,
-      NEXT_PUBLIC_FIREBASE_STORAGE_EMULATOR_HOST:
-        process.env.NEXT_PUBLIC_FIREBASE_STORAGE_EMULATOR_HOST,
-    },
+    env: process.env,
   });
 
   // Next.js reads the nonce from the request CSP header and adds it to its
