@@ -142,7 +142,7 @@ exact term parity (`checkStemComponentTermParity`), and existing composition/for
 
 ## Banned generic naming terms
 
-Do not use `View` or `Screen` as words in owned component, hook, type, variable, parameter, import-binding or file names. Use the responsibility instead (`ProfileFormClient`, `useProfileFormClient`, `ProfileHeading`, `AuthContent`, `AuthFlow`).
+Do not use `View` or `Screen` as words in owned component, hook, type, variable, parameter, import-binding or file names. Use the responsibility instead (`ProfileFormClient`, `useProfileFormClient`, `ProfileCardHeader`, `AuthContent`, `AuthFlow`).
 
 `check:components` scans owned `.ts` and `.tsx` files throughout `src`, including hooks and library modules. CamelCase, kebab-case and numbered words are checked, so `AccountScreenState`, `AccountScreen2` and `use-account-view.ts` fail; unrelated words such as `Viewport` and `preview` remain valid. Generated registries and test/story files retain their exclusions. Preserve external API export names, but alias their local bindings (`SignInAuthScreen as SignInAuthContent`).
 

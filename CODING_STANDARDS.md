@@ -73,7 +73,7 @@ When standards conflict, apply them in this order:
 - **Form Architecture and State Propagation**:
   - Compound forms composed with field-component `children` use one
     `useForm` and `<FormProvider {...form}>`; fields obtain `control`
-    with `useFormContext()`. `ProfileFormClientContent` already renders
+    with `useFormContext()`. `ProfileCardContent` already renders
     one `FieldGroup`, so do not introduce a second group in the
     profile `page.tsx`. Read native RHF `formState.isSubmitting`
     rather than synchronizing a separate saving flag. The Provider

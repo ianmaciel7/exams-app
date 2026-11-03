@@ -385,8 +385,8 @@ Recheck current documentation before adding a replacement rule.
 - Use a typed adapter interface at service boundaries when it improves
   test isolation (`ProfileDependencies` in `src/app/(protected)/profile/_lib/data.ts`).
   Do not expose Firebase SDK instances to UI field components.
-- This profile has exactly one `FieldGroup` under
-  `ProfileFormClientContent`, and `formState.isSubmitting` is the
+- This profile has exactly one `FieldGroup`, rendered by
+  `ProfileCardContent` (enforced by `pnpm check:components`), and `formState.isSubmitting` is the
   source of truth for submission activity.
 - `Suspense` does not make an effect-based Firebase Auth subscription
   suspend. Do not wrap it in artificial Promises solely for loading UI.

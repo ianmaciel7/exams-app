@@ -183,7 +183,8 @@ persistence and inject typed Firebase adapters for independent tests.
 `useProfileFormClient` owns the React Hook Form lifecycle and uses the
 native submitting state and shares the loaded session through
 `SessionContext`. The route's `page.tsx` composes Card and Form
-parts with one `FieldGroup`; the segment's `loading.tsx` and `error.tsx`
+parts, including the Card header; `ProfileCardContent` renders the one
+`FieldGroup`. The segment's `loading.tsx` and `error.tsx`
 cover the suspended read and its failure. Profile value types live in
 `src/app/(protected)/profile/_lib/definitions.ts`, alongside the route-private profile
 workflow. The canonical profile

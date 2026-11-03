@@ -710,6 +710,16 @@ function checkProfileCardSafety(source, elements, report) {
       report(source, `ProfileCard must wrap exactly one ${primitive}.`);
     }
   }
+  const fieldGroups = profileElements(elements, "FieldGroup");
+  if (
+    fieldGroups.length !== 1 ||
+    !isInsideProfile(fieldGroups[0], ["CardContent"])
+  ) {
+    report(
+      source,
+      "ProfileCardContent must render exactly one FieldGroup inside CardContent.",
+    );
+  }
 }
 
 function checkProfileSectionAction(source, elements, action, report) {
@@ -751,17 +761,32 @@ function checkProfilePageSafety(source, elements, report) {
   requireProfilePlacement(
     source,
     elements,
-    "ProfileHeading",
+    "ProfileCardHeader",
     ["ProfileFormClient", "ProfileCard"],
     report,
   );
+  for (const part of ["ProfileCardTitle", "ProfileCardDescription"]) {
+    requireProfilePlacement(
+      source,
+      elements,
+      part,
+      ["ProfileCardHeader", "ProfileFormClient", "ProfileCard"],
+      report,
+    );
+  }
   requireProfilePlacement(
     source,
     elements,
     "ProfileDisplayNameField",
-    ["FieldGroup", "ProfileCardContent", "ProfileFormClient", "ProfileCard"],
+    ["ProfileCardContent", "ProfileFormClient", "ProfileCard"],
     report,
   );
+  if (profileElements(elements, "FieldGroup").length) {
+    report(
+      source,
+      "The profile page must delegate FieldGroup to ProfileCardContent.",
+    );
+  }
   requireProfilePlacement(
     source,
     elements,
@@ -779,18 +804,6 @@ function checkProfilePageSafety(source, elements, report) {
     report(
       source,
       "The profile page must delegate native Card and form roots.",
-    );
-  }
-}
-
-function checkProfileHeadingSafety(source, elements, report) {
-  for (const part of ["ProfileCardTitle", "ProfileCardDescription"]) {
-    requireProfilePlacement(
-      source,
-      elements,
-      part,
-      ["ProfileCardHeader"],
-      report,
     );
   }
 }
@@ -911,7 +924,6 @@ function checkProfileButtonSafety(source, elements, report, stem) {
 function checkProfileFormSafety(source, stem, report) {
   const checks = {
     "profile-card": checkProfileCardSafety,
-    "profile-heading": checkProfileHeadingSafety,
     "profile-form-client": checkProfileProviderSafety,
     "profile-form": checkProfileProviderSafety,
     "profile-form-content": checkProfileContentSafety,
