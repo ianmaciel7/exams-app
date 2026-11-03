@@ -1,5 +1,6 @@
 import { useNavigation } from "@/hooks/use-navigation";
 
 export function useRegisterClient() {
-  return useNavigation();
+  const { goToSignIn } = useNavigation();
+  return { goToSignIn };
 }

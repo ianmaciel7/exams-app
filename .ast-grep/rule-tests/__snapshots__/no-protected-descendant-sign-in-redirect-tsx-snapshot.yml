@@ -1,5 +1,23 @@
 id: no-protected-descendant-sign-in-redirect-tsx
 snapshots:
+  "goToSignIn();\n":
+    labels:
+    - source: goToSignIn()
+      style: primary
+      start: 0
+      end: 12
+  "navigation.replaceWithSignIn(\"/profile\");\n":
+    labels:
+    - source: navigation.replaceWithSignIn("/profile")
+      style: primary
+      start: 0
+      end: 40
+  "push(routes.signIn);\n":
+    labels:
+    - source: push(routes.signIn)
+      style: primary
+      start: 0
+      end: 19
   "redirect(routes.signIn);\n":
     labels:
     - source: redirect(routes.signIn)
@@ -12,6 +30,18 @@ snapshots:
       style: primary
       start: 0
       end: 28
+  "replace(getSignInUrl(\"/profile\"));\n":
+    labels:
+    - source: replace(getSignInUrl("/profile"))
+      style: primary
+      start: 0
+      end: 33
+  "replaceWithSignIn(\"/profile\");\n":
+    labels:
+    - source: replaceWithSignIn("/profile")
+      style: primary
+      start: 0
+      end: 29
   "router.push(getSignInUrl(\"/profile\"));\n":
     labels:
     - source: router.push(getSignInUrl("/profile"))

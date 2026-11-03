@@ -584,8 +584,17 @@ imports and re-exports are checked; this is not a complete transitive graph
 analysis. Keep the current unprefixed locale URLs and use the existing safe
 return-URL validator for user-controlled redirect destinations.
 
-Import `Link` from `next/link` and router hooks from `next/navigation`
-directly. Do not add a re-export shim such as `@/i18n/navigation`: the locale
+Navigate on the client through `useNavigation` from
+`src/hooks/use-navigation.ts`. It is the only module that calls `useRouter`
+and exposes `push`, `replace`, `refresh`, `back`, the auth destinations
+(`goToSignIn`, `goToRegister`, `goToForgotPassword`, which keep the `?next=`
+query), and `replaceWithSignIn(destination)`. Its callbacks keep a stable
+identity so effects can depend on them. Biome `noRestrictedImports` rejects
+`useRouter` from `next/navigation` in every other owned module; other
+`next/navigation` hooks such as `usePathname` stay allowed.
+
+Import `Link` from `next/link` and the remaining router hooks from
+`next/navigation` directly. Do not add a re-export shim such as `@/i18n/navigation`: the locale
 lives in a cookie, not in the path, so a wrapper changes nothing and splits the
 import path. Biome `noRestrictedImports` rejects `@/i18n/navigation`.
 

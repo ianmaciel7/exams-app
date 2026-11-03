@@ -1,5 +1,5 @@
-import { useRouter } from "next/navigation";
 import { use, useEffect, useRef, useState } from "react";
+import { useNavigation } from "@/hooks/use-navigation";
 import type { Locale } from "@/lib/locale";
 import type { ThemePreference } from "@/lib/theme";
 import type { ProfileValues } from "../_lib/definitions";
@@ -10,11 +10,11 @@ export function useProfilePreferences(
   activeLocale: Locale,
   setTheme: (theme: ThemePreference) => void,
 ) {
-  const router = useRouter();
+  const { refresh } = useNavigation();
   // State pins the read once mounted; until then the shared cache keeps the
   // promise stable across suspended render attempts.
   const [profile] = useState(() =>
-    loadProfile({ uid, activeLocale, refresh: router.refresh, setTheme }),
+    loadProfile({ uid, activeLocale, refresh, setTheme }),
   );
   const defaultValues = use(profile);
   const savedValuesRef = useRef<ProfileValues | null>(defaultValues);
