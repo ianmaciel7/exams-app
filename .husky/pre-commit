@@ -1,10 +1,12 @@
 pnpm check:staged
 
 # Gitleaks is a host tool. Scan staged changes for secrets before creating a commit.
+# A missing gitleaks blocks the commit: secret scanning must never be skipped silently.
 if command -v gitleaks >/dev/null 2>&1; then
   gitleaks protect --staged --no-banner --redact
 else
-  echo "husky: 'gitleaks' not found; skipping staged secret scanning (see TOOLING.md)." >&2
+  echo "husky: 'gitleaks' not found; refusing to commit without secret scanning (install it, see TOOLING.md)." >&2
+  exit 1
 fi
 
 # On Windows, pre-commit builds its Python virtual environments under a cache

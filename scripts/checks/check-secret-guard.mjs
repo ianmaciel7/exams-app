@@ -13,6 +13,11 @@ export function validatePreCommitHook(content) {
       ".husky/pre-commit: must run 'gitleaks protect --staged' before creating commits.",
     );
   }
+  if (/gitleaks[^\n]*not found; skipping/.test(content)) {
+    issues.push(
+      ".husky/pre-commit: must fail, not skip, when 'gitleaks' is not installed.",
+    );
+  }
   return issues;
 }
 

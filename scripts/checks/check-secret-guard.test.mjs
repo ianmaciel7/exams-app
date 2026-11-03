@@ -17,6 +17,17 @@ test("rejects a pre-commit hook without gitleaks protect", () => {
   assert.match(issues[0], /gitleaks protect --staged/);
 });
 
+test("rejects a pre-commit hook that skips when gitleaks is missing", () => {
+  const skipping = `if command -v gitleaks >/dev/null 2>&1; then
+  gitleaks protect --staged
+else
+  echo "husky: 'gitleaks' not found; skipping staged secret scanning" >&2
+fi`;
+  const issues = validatePreCommitHook(skipping);
+  assert.equal(issues.length, 1);
+  assert.match(issues[0], /must fail, not skip/);
+});
+
 test("accepts a launch.json referencing an envFile without inline secrets", () => {
   const valid = JSON.stringify(
     {
