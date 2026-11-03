@@ -10,7 +10,7 @@ it("announces the label once and hides the decorative spinner", () => {
   expect(status.textContent).toBe("Loading…");
   expect(status.getAttribute("aria-live")).toBe("polite");
   expect(status.querySelector("svg")?.getAttribute("aria-hidden")).toBe("true");
-  expect(status.closest('[data-slot="loading-overlay"]')?.className).toContain(
-    "fixed",
-  );
+  expect(
+    status.closest('[data-slot="global-loading-indicator"]')?.className,
+  ).toContain("fixed");
 });
