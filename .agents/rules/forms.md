@@ -29,8 +29,9 @@ These are project conventions aligned with the current shadcn/ui and React Hook 
 - Avatar file selection and preview remain a separate field, since `File` / `FileList` need application-level lifecycle handling.
 - The profile follows native shadcn/ui composition: `ProfileCard` is a
   thin `Card` adapter forwarding primitive props and children, without
-  loading data. `ProfileSectionClient` composes `ProfileCard` with
-  `ProfileFormClient`, Card header/content/footer, and Form content/footer.
+  loading data. The route's `page.tsx` composes `ProfileCard` with
+  `ProfileFormClient`, `ProfileHeading` (the Card header), Card
+  content/footer, and Form content/footer.
   `ProfileFormClientContent` provides one `FieldGroup` with the avatar,
   display name, email, locale, and theme fields as direct children.
   `ProfileFormClient` owns `FormProvider` and one native `<form>`;
@@ -41,12 +42,14 @@ These are project conventions aligned with the current shadcn/ui and React Hook 
 
 ## Profile behavior ownership
 
-- `useProfileStatus` returns `isLoading`, `isHidden`, and `isError` flags,
-  plus resolved `message` and `userId` payloads. The section renders the
-  applicable branch from these flags without completing error messages itself.
-- `useProfileController` is removed. `ProfileSectionClient` uses
-  `useProfileSectionClient` to compose session and status hooks with
-  translations; it does not assemble field or button props.
+- The profile segment owns load states: `useProfilePreferences` suspends
+  with `use()` on the read cached in `_lib/profile-resource.ts`, so
+  `profile/loading.tsx` renders the pending state and a rejection reaches
+  `profile/error.tsx`. Its retry evicts the failed read before calling
+  `retry()`. Components render only loaded data; there is no status guard.
+- `useProfileController` is removed. `useProfileFormClient` reads
+  `useProfileSession`, and `ProfileFormClient` shares it through
+  `SessionContext`; it does not assemble field or button props.
 - `ProfileFormClient` delegates its React Hook Form lifecycle to
   `useProfileFormClient`, which calls `useProfileSubmit` for persistence.
   Read `formState.isSubmitting` instead of keeping a second saving flag;
@@ -64,9 +67,9 @@ These are project conventions aligned with the current shadcn/ui and React Hook 
 ## Profile form action safety (repository guard)
 
 - `ProfileCard` renders one native shadcn `Card` as its sole root and
-  forwards children and applicable primitive props. `ProfileSectionClient`
-  composes its header, content, and footer, renders the discriminated status,
-  and shares loaded session data through `ProfileSessionContext`.
+  forwards children and applicable primitive props. `profile/page.tsx`
+  composes `ProfileHeading`, content, and footer; `ProfileFormClient`
+  shares loaded session data through `SessionContext`.
   `ProfileFormClient` owns the only HTML `<form>` inside the Card under
   `FormProvider`; do not render a second Card.
 - `ProfileCardHeader`, `ProfileCardTitle`, `ProfileCardDescription`,
@@ -100,7 +103,7 @@ The profile components were compared with all maintained UI component modules un
 - Preserve native slots: `ProfileCard`, `ProfileCardHeader`,
   `ProfileCardTitle`, `ProfileCardDescription`, `ProfileCardContent`,
   and `ProfileCardFooter` are exported together from
-  `profile-card.tsx`. `ProfileSectionClient` composes the content;
+  `profile-card.tsx`. `profile/page.tsx` composes the content;
   `ProfileFormClient` adds `data-slot="profile-form"` and uses
   `gap-(--card-spacing)` for spacing.
 - Follow `ComponentProps<typeof Primitive>`, native children, `cn()` overrides and named exports for component adapters.

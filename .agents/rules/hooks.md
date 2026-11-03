@@ -18,8 +18,8 @@ Owned components keep rendering, translations, primitive prop forwarding and sim
 - Expose explicit session flags (`isLoading`, `isHidden`, `isError`) and an
   already resolved error message. Components render the applicable flag rather
   than deriving readiness from user, authentication and preferences flags.
-- Keep responsibilities local: `useProfileStatus` derives the profile session
-  flags; `useProfileFormClient` owns the React Hook Form lifecycle
+- Keep responsibilities local: `useProfilePreferences` suspends on the
+  profile read; `useProfileFormClient` owns the React Hook Form lifecycle
   and uses `formState.isSubmitting` rather than a parallel saving flag;
   `useProfileAvatarFieldClient` handles avatar field data. Do not mirror
   derived state in additional `useState` variables.
@@ -30,8 +30,8 @@ Owned components keep rendering, translations, primitive prop forwarding and sim
 
 A component coordinating application behavior must use the imported
 `use<ComponentName>` hook in a separate module. For example,
-`ProfileSectionClient` calls `useProfileSectionClient`, which composes
-`useProfileSession`, `useProfileStatus`, and translations, and resolves
+`ProfileFormClient` calls `useProfileFormClient`, which composes
+`useProfileSession`, `useProfileSubmit`, and React Hook Form, and resolves
 conditional properties (such as `userId`) so component JSX remains free of
 inline `in` operator guards or ternary expressions. Stateful avatar
 fields, save actions, and auth flows use focused hooks; simple display name,

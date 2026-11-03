@@ -58,8 +58,8 @@ When standards conflict, apply them in this order:
   All conditional identifiers and resolved properties must be derived inside the
   component-named orchestration hook and exposed as clean, ready-to-consume values
   (for example, exposing `userId` so JSX can simply pass `key={userId}`).
-- **Self-contained fallback components**: Status and fallback wrapper components
-  (such as `ProfileGuard`) must encapsulate their internal presentation logic,
+- **Self-contained fallback components**: Status and fallback components
+  (such as the profile segment's `error.tsx`) must encapsulate their internal presentation logic,
   localized spinner text, and error card structures directly using local translations,
   rather than requiring callers to pass down redundant presentation labels (for example,
   avoid passing `loadingLabel={t("loading")}`).
@@ -74,8 +74,8 @@ When standards conflict, apply them in this order:
   - Compound forms composed with field-component `children` use one
     `useForm` and `<FormProvider {...form}>`; fields obtain `control`
     with `useFormContext()`. `ProfileFormClientContent` already renders
-    one `FieldGroup`, so do not introduce a second group in
-    `ProfileSectionClient`. Read native RHF `formState.isSubmitting`
+    one `FieldGroup`, so do not introduce a second group in the
+    profile `page.tsx`. Read native RHF `formState.isSubmitting`
     rather than synchronizing a separate saving flag. The Provider
     requirement is a repository convention, not universal shadcn/ui policy.
   - Name standalone field components after their React Hook Form data property (for example `ProfileDisplayNameField` for `Controller name="displayName"`). Prefer built-in `FieldGroup`/`FieldSet` over arbitrary wrapper components.

@@ -6,9 +6,12 @@ import {
   screen,
   waitFor,
 } from "@testing-library/react";
+import { Component, type ReactNode, Suspense } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { AuthGateClient } from "../../_components/auth-gate-client";
-import { ProfileSectionClient } from "./profile-section-client";
+import ProfileError from "../error";
+import ProfileLoading from "../loading";
+import ProfilePage from "../page";
 
 const mocks = vi.hoisted(() => ({
   router: { replace: vi.fn(), push: vi.fn(), refresh: vi.fn() },
@@ -94,13 +97,53 @@ vi.mock("@/components/ui/toast", () => ({
   },
 }));
 
+/** Stands in for the boundary Next.js builds from the segment's `error.tsx`. */
+class SegmentErrorBoundary extends Component<
+  { children: ReactNode },
+  { error: Error | null }
+> {
+  state: { error: Error | null } = { error: null };
+
+  static getDerivedStateFromError(error: Error) {
+    return { error };
+  }
+
+  render() {
+    const { error } = this.state;
+    if (!error) return this.props.children;
+    return (
+      <ProfileError
+        error={error}
+        retry={() => this.setState({ error: null })}
+      />
+    );
+  }
+}
+
 /** Firebase loads on demand; wait for it so the gate has subscribed. */
-async function renderProfile(
-  ui: React.ReactElement = <ProfileSectionClient />,
-) {
-  const rendered = render(<AuthGateClient>{ui}</AuthGateClient>);
+async function renderProfile() {
+  const rendered = render(
+    <AuthGateClient>
+      <SegmentErrorBoundary>
+        <Suspense fallback={<ProfileLoading />}>
+          <ProfilePage />
+        </Suspense>
+      </SegmentErrorBoundary>
+    </AuthGateClient>,
+  );
   await act(() => vi.dynamicImportSettled());
   return rendered;
+}
+
+/**
+ * Runs an update that suspends on the profile read and lets the read settle in
+ * the same act scope, so React's retry of the suspended render is flushed.
+ */
+async function settleAfter(update: () => void) {
+  await act(async () => {
+    update();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+  });
 }
 
 async function findAvatarInput() {
@@ -110,7 +153,7 @@ async function findAvatarInput() {
   ) as HTMLInputElement;
 }
 
-describe("ProfileSectionClient", () => {
+describe("ProfilePage", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mocks.locale = "en";
@@ -172,25 +215,14 @@ describe("ProfileSectionClient", () => {
       }),
     );
     mocks.currentUser = { uid: "user-b", displayName: "User B" };
-    act(() => authCallback(mocks.currentUser));
+    await act(async () => authCallback(mocks.currentUser));
     expect(screen.queryByLabelText("displayNameLabel")).toBeNull();
 
-    await act(async () => finishRead({}));
+    await settleAfter(() => finishRead({}));
     expect(
       ((await screen.findByLabelText("displayNameLabel")) as HTMLInputElement)
         .value,
     ).toBe("User B");
-  });
-
-  it("forwards element props to the card while the session is active", async () => {
-    mocks.currentUser = { uid: "user-123", email: "user@example.com" };
-    await renderProfile(<ProfileSectionClient data-testid="profile-section" />);
-
-    await waitFor(() => {
-      expect(
-        screen.getByTestId("profile-section").getAttribute("data-slot"),
-      ).toBe("card");
-    });
   });
 
   it("renders user information with fallback when fields are not set", async () => {
@@ -247,13 +279,12 @@ describe("ProfileSectionClient", () => {
     expect(screen.queryByText("preferencesTitle")).toBeNull();
   });
 
-  it("does not render an empty card while profile preferences load", async () => {
-    mocks.currentUser = { uid: "user-123" };
+  it("suspends into the segment loading state while preferences load", async () => {
+    // A unique uid: the never-settling read stays cached for this session.
+    mocks.currentUser = { uid: "user-pending" };
     mocks.readPreferences.mockReturnValue(new Promise(() => {}));
 
-    const { container } = await renderProfile(
-      <ProfileSectionClient data-testid="loading-profile" />,
-    );
+    const { container } = await renderProfile();
 
     await vi.waitFor(() =>
       expect(
@@ -262,13 +293,14 @@ describe("ProfileSectionClient", () => {
         ),
       ).not.toBeNull(),
     );
-    expect(screen.getByTestId("loading-profile")).toBeTruthy();
     expect(container.querySelector('[data-slot="card"]')).toBeNull();
   });
 
-  it("renders an accessible error when preferences cannot load", async () => {
-    mocks.currentUser = { uid: "user-123" };
-    mocks.readPreferences.mockRejectedValue(new Error("Preferences failed"));
+  it("throws a failed read to the segment error boundary and retries it", async () => {
+    mocks.currentUser = { uid: "user-123", displayName: "Ada" };
+    mocks.readPreferences.mockRejectedValueOnce(
+      new Error("Preferences failed"),
+    );
     const log = vi.spyOn(console, "error").mockImplementation(() => {});
 
     try {
@@ -276,6 +308,17 @@ describe("ProfileSectionClient", () => {
       expect((await screen.findByRole("alert")).textContent).toBe(
         "profileLoadError",
       );
+      expect(screen.queryByLabelText("displayNameLabel")).toBeNull();
+
+      await settleAfter(() =>
+        fireEvent.click(screen.getByRole("button", { name: "tryAgain" })),
+      );
+
+      expect(
+        ((await screen.findByLabelText("displayNameLabel")) as HTMLInputElement)
+          .value,
+      ).toBe("Ada");
+      expect(mocks.readPreferences).toHaveBeenCalledTimes(2);
     } finally {
       log.mockRestore();
     }
@@ -361,7 +404,8 @@ describe("ProfileSectionClient", () => {
   });
 
   it("synchronizes a saved Portuguese locale before revealing the profile", async () => {
-    mocks.currentUser = { uid: "user-123" };
+    // A unique uid: the read stays pending until the refresh changes locale.
+    mocks.currentUser = { uid: "user-locale-sync" };
     mocks.readPreferences.mockResolvedValue({ locale: "pt-BR" });
 
     const { container } = await renderProfile();
@@ -489,9 +533,7 @@ describe("ProfileSectionClient", () => {
       displayName: "Dynamic User",
     };
     mocks.currentUser = dynamicUser;
-    act(() => {
-      authCallback(dynamicUser);
-    });
+    await settleAfter(() => authCallback(dynamicUser));
     expect(
       ((await screen.findByLabelText("displayNameLabel")) as HTMLInputElement)
         .value,

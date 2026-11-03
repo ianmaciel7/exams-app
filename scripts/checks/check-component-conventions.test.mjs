@@ -8,6 +8,7 @@ import {
   inspectHookFilename,
   inspectLibPlacement,
   inspectNaming,
+  inspectProfilePage,
   inspectUiPhaseStatus,
   isOwnedComponent,
   isOwnedHookModule,
@@ -30,6 +31,18 @@ function expectValid(content, file) {
 
 function expectInvalid(content, pattern, file) {
   assert.match(inspect(content, file).join(" "), pattern);
+}
+
+const profilePage = "src/app/(protected)/profile/page.tsx";
+const inspectPage = (content) =>
+  inspectProfilePage(content, profilePage).map((issue) => issue.message);
+
+function expectPageValid(content) {
+  assert.deepEqual(inspectPage(content), []);
+}
+
+function expectPageInvalid(content, pattern) {
+  assert.match(inspectPage(content).join(" "), pattern);
 }
 
 const compoundParts = [
@@ -258,11 +271,6 @@ describe("owned component conventions", () => {
       "function ProfileForm(props) { return <form {...props} />; } export { ProfileForm };",
       /ProfileFormClient/,
       "src/app/(protected)/profile/_components/profile-form-client.tsx",
-    );
-    expectInvalid(
-      "function ProfileSection(props) { return <div {...props} />; } export { ProfileSection };",
-      /ProfileSectionClient/,
-      "src/app/(protected)/profile/_components/profile-section-client.tsx",
     );
   });
 
@@ -655,61 +663,68 @@ describe("owned component conventions", () => {
     );
   });
 
-  it("keeps ProfileCard compound parts inside ProfileSection", () => {
-    const section =
-      "src/app/(protected)/profile/_components/profile-section.tsx";
+  it("keeps the profile heading inside one ProfileCardHeader", () => {
+    const heading =
+      "src/app/(protected)/profile/_components/profile-heading.tsx";
     expectValid(
-      "function ProfileSection() { return <ProfileCard><ProfileForm><ProfileCardHeader><ProfileCardTitle /><ProfileCardDescription /></ProfileCardHeader><ProfileCardContent><FieldGroup><ProfileDisplayNameField /></FieldGroup></ProfileCardContent><ProfileCardFooter><ProfileSaveButton /><ProfileSignOutButton /></ProfileCardFooter></ProfileForm></ProfileCard>; } export { ProfileSection };",
-      section,
+      "function ProfileHeading(props) { return <ProfileCardHeader {...props}><ProfileCardTitle /><ProfileCardDescription /></ProfileCardHeader>; } export { ProfileHeading };",
+      heading,
     );
     expectInvalid(
-      'function ProfileSection() { return <ProfileCard><ProfileForm><ProfileCardHeader><ProfileCardTitle /><ProfileCardDescription /></ProfileCardHeader><ProfileCardContent><ProfileDisplayNameField /></ProfileCardContent><ProfileCardFooter><ProfileSaveButton type="submit" /><ProfileSignOutButton /></ProfileCardFooter></ProfileForm></ProfileCard>; } export { ProfileSection };',
+      "function ProfileHeading(props) { return <ProfileCardHeader {...props}><ProfileCardTitle /></ProfileCardHeader>; } export { ProfileHeading };",
+      /ProfileCardDescription must be inside ProfileCardHeader/,
+      heading,
+    );
+    expectInvalid(
+      "function ProfileHeading(props) { return <div {...props}><ProfileCardTitle /><ProfileCardDescription /></div>; } export { ProfileHeading };",
+      /ProfileCardTitle must be inside ProfileCardHeader/,
+      heading,
+    );
+  });
+
+  it("keeps ProfileCard compound parts inside the profile page", () => {
+    expectPageValid(
+      "export default function ProfilePage() { return <ProfileCard><ProfileForm><ProfileHeading /><ProfileCardContent><FieldGroup><ProfileDisplayNameField /></FieldGroup></ProfileCardContent><ProfileCardFooter><ProfileSaveButton /><ProfileSignOutButton /></ProfileCardFooter></ProfileForm></ProfileCard>; }",
+    );
+    expectPageInvalid(
+      'export default function ProfilePage() { return <ProfileCard><ProfileForm><ProfileHeading /><ProfileCardContent><ProfileDisplayNameField /></ProfileCardContent><ProfileCardFooter><ProfileSaveButton type="submit" /><ProfileSignOutButton /></ProfileCardFooter></ProfileForm></ProfileCard>; }',
       /ProfileSaveButton must not accept an override/,
-      section,
     );
-    expectInvalid(
-      "function ProfileSection() { return <ProfileCard><ProfileForm><ProfileCardHeader><ProfileCardTitle /><ProfileCardDescription /></ProfileCardHeader><ProfileCardContent><ProfileDisplayNameField /></ProfileCardContent><form /><ProfileCardFooter><ProfileSaveButton /><ProfileSignOutButton /></ProfileCardFooter></ProfileForm></ProfileCard>; } export { ProfileSection };",
+    expectPageInvalid(
+      "export default function ProfilePage() { return <ProfileCard><ProfileForm><ProfileHeading /><ProfileCardContent><ProfileDisplayNameField /></ProfileCardContent><form /><ProfileCardFooter><ProfileSaveButton /><ProfileSignOutButton /></ProfileCardFooter></ProfileForm></ProfileCard>; }",
       /delegate native Card and form roots/,
-      section,
     );
-    expectInvalid(
-      "function ProfileSection() { return <ProfileForm><ProfileCard><ProfileCardHeader><ProfileCardTitle /><ProfileCardDescription /></ProfileCardHeader><ProfileCardContent><ProfileDisplayNameField /></ProfileCardContent><ProfileCardFooter><ProfileSaveButton /><ProfileSignOutButton /></ProfileCardFooter></ProfileCard></ProfileForm>; } export { ProfileSection };",
+    expectPageInvalid(
+      "export default function ProfilePage() { return <ProfileForm><ProfileCard><ProfileHeading /><ProfileCardContent><ProfileDisplayNameField /></ProfileCardContent><ProfileCardFooter><ProfileSaveButton /><ProfileSignOutButton /></ProfileCardFooter></ProfileCard></ProfileForm>; }",
       /ProfileFormClient must be inside ProfileCard/,
-      section,
     );
-    expectInvalid(
-      "function ProfileSection() { return <ProfileCard><ProfileForm><ProfileCardHeader><ProfileCardTitle /><ProfileCardDescription /></ProfileCardHeader><ProfileCardContent><ProfileDisplayNameField /></ProfileCardContent><ProfileSaveButton /><ProfileCardFooter><ProfileSignOutButton /></ProfileCardFooter></ProfileForm></ProfileCard>; } export { ProfileSection };",
+    expectPageInvalid(
+      "export default function ProfilePage() { return <ProfileCard><ProfileForm><ProfileHeading /><ProfileCardContent><ProfileDisplayNameField /></ProfileCardContent><ProfileSaveButton /><ProfileCardFooter><ProfileSignOutButton /></ProfileCardFooter></ProfileForm></ProfileCard>; }",
       /ProfileSaveButton must be inside ProfileCardFooter/,
-      section,
     );
-    expectInvalid(
-      "function ProfileSection() { return <ProfileCard><ProfileForm><ProfileCardHeader><ProfileCardTitle /><ProfileCardDescription /></ProfileCardHeader><ProfileDisplayNameField /><ProfileCardFooter><ProfileSaveButton /><ProfileSignOutButton /></ProfileCardFooter></ProfileForm></ProfileCard>; } export { ProfileSection };",
+    expectPageInvalid(
+      "export default function ProfilePage() { return <ProfileCard><ProfileForm><ProfileHeading /><ProfileDisplayNameField /><ProfileCardFooter><ProfileSaveButton /><ProfileSignOutButton /></ProfileCardFooter></ProfileForm></ProfileCard>; }",
       /ProfileDisplayNameField must be inside/,
-      section,
     );
   });
 
   it("rejects wrappers between profile regions and their direct parents", () => {
-    const path = "src/app/(protected)/profile/_components/profile-section.tsx";
     const valid =
-      "function ProfileSection() { return <ProfileCard><ProfileForm><ProfileCardHeader><ProfileCardTitle /><ProfileCardDescription /></ProfileCardHeader><ProfileCardContent><FieldGroup><ProfileDisplayNameField /></FieldGroup></ProfileCardContent><ProfileCardFooter><ProfileSaveButton /><ProfileSignOutButton /></ProfileCardFooter></ProfileForm></ProfileCard>; } export { ProfileSection };";
-    expectValid(valid, path);
+      "export default function ProfilePage() { return <ProfileCard><ProfileForm><ProfileHeading /><ProfileCardContent><FieldGroup><ProfileDisplayNameField /></FieldGroup></ProfileCardContent><ProfileCardFooter><ProfileSaveButton /><ProfileSignOutButton /></ProfileCardFooter></ProfileForm></ProfileCard>; }";
+    expectPageValid(valid);
     const regions = [
-      "<ProfileCardHeader><ProfileCardTitle /><ProfileCardDescription /></ProfileCardHeader>",
+      "<ProfileHeading />",
       "<ProfileCardContent><FieldGroup><ProfileDisplayNameField /></FieldGroup></ProfileCardContent>",
       "<FieldGroup><ProfileDisplayNameField /></FieldGroup>",
       "<ProfileCardFooter><ProfileSaveButton /><ProfileSignOutButton /></ProfileCardFooter>",
-      "<ProfileCardTitle />",
-      "<ProfileCardDescription />",
       "<ProfileDisplayNameField />",
       "<ProfileSaveButton />",
       "<ProfileSignOutButton />",
     ];
     for (const region of regions) {
-      expectInvalid(
+      expectPageInvalid(
         valid.replace(region, `<div>${region}</div>`),
         /must be inside/,
-        path,
       );
     }
   });

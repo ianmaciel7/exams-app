@@ -1,10 +1,10 @@
 import { useForm } from "react-hook-form";
 import type { ProfileFormValues } from "../_lib/definitions";
-import { useProfileSessionContext } from "./use-profile-session-context";
+import { useProfileSession } from "./use-profile-session";
 import { useProfileSubmit } from "./use-profile-submit";
 
 export function useProfileFormClient() {
-  const session = useProfileSessionContext();
+  const session = useProfileSession();
   const { onSubmit, saveError } = useProfileSubmit(session);
   const form = useForm<ProfileFormValues>({
     defaultValues: { ...session.defaultValues, avatarFile: null },
@@ -22,5 +22,5 @@ export function useProfileFormClient() {
     }
   }
 
-  return { form, handleSubmit, saveError };
+  return { form, handleSubmit, saveError, session };
 }

@@ -12,16 +12,17 @@ export function useProfileSession() {
   const user = useAuthenticatedUser();
   const [photoURL, setPhotoURL] = useState(user.photoURL ?? null);
   const [avatarVersion, setAvatarVersion] = useState(0);
-  const { current, defaultValues, preferencesReady, savedValuesRef } =
-    useProfilePreferences(user.uid, activeLocale, setTheme);
+  const { defaultValues, savedValuesRef } = useProfilePreferences(
+    user.uid,
+    activeLocale,
+    setTheme,
+  );
 
   return {
     activeLocale,
     avatarVersion,
     defaultValues,
-    error: current?.isError ? current.error : null,
     photoURL,
-    preferencesReady,
     savedValuesRef,
     setAvatarVersion,
     setPhotoURL,

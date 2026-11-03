@@ -695,7 +695,7 @@ function checkProfileCardSafety(source, elements, report) {
   if (profileElements(elements, "ProfileFormClient").length) {
     report(
       source,
-      "ProfileCard must accept children; compose profile UI in ProfileSectionClient.",
+      "ProfileCard must accept children; compose profile UI in the profile page.",
     );
   }
   for (const primitive of [
@@ -737,9 +737,9 @@ function checkProfileSectionAction(source, elements, action, report) {
   }
 }
 
-function checkProfileSectionSafety(source, elements, report) {
+function checkProfilePageSafety(source, elements, report) {
   if (profileElements(elements, "ProfileCard").length === 0) {
-    report(source, "ProfileSectionClient must compose ProfileCard.");
+    report(source, "The profile page must compose ProfileCard.");
   }
   requireProfilePlacement(
     source,
@@ -751,19 +751,10 @@ function checkProfileSectionSafety(source, elements, report) {
   requireProfilePlacement(
     source,
     elements,
-    "ProfileCardHeader",
+    "ProfileHeading",
     ["ProfileFormClient", "ProfileCard"],
     report,
   );
-  for (const part of ["ProfileCardTitle", "ProfileCardDescription"]) {
-    requireProfilePlacement(
-      source,
-      elements,
-      part,
-      ["ProfileCardHeader", "ProfileFormClient", "ProfileCard"],
-      report,
-    );
-  }
   requireProfilePlacement(
     source,
     elements,
@@ -787,7 +778,19 @@ function checkProfileSectionSafety(source, elements, report) {
   ) {
     report(
       source,
-      "ProfileSectionClient must delegate native Card and form roots.",
+      "The profile page must delegate native Card and form roots.",
+    );
+  }
+}
+
+function checkProfileHeadingSafety(source, elements, report) {
+  for (const part of ["ProfileCardTitle", "ProfileCardDescription"]) {
+    requireProfilePlacement(
+      source,
+      elements,
+      part,
+      ["ProfileCardHeader"],
+      report,
     );
   }
 }
@@ -908,8 +911,7 @@ function checkProfileButtonSafety(source, elements, report, stem) {
 function checkProfileFormSafety(source, stem, report) {
   const checks = {
     "profile-card": checkProfileCardSafety,
-    "profile-section-client": checkProfileSectionSafety,
-    "profile-section": checkProfileSectionSafety,
+    "profile-heading": checkProfileHeadingSafety,
     "profile-form-client": checkProfileProviderSafety,
     "profile-form": checkProfileProviderSafety,
     "profile-form-content": checkProfileContentSafety,
@@ -947,6 +949,31 @@ function checkProfileFormSafety(source, stem, report) {
     return;
   }
   check(source, jsxEntries(source), report);
+}
+
+/** The profile page composes the profile form; Next.js owns its boundaries. */
+export function inspectProfilePage(content, filename) {
+  if (!filename.replaceAll("\\", "/").endsWith("/profile/page.tsx")) return [];
+  const source = ts.createSourceFile(
+    filename,
+    content,
+    ts.ScriptTarget.Latest,
+    true,
+    ts.ScriptKind.TSX,
+  );
+  const findings = [];
+  checkProfilePageSafety(source, jsxEntries(source), (node, message) => {
+    const position = source.getLineAndCharacterOfPosition(
+      node.getStart(source),
+    );
+    findings.push({
+      file: filename,
+      line: position.line + 1,
+      column: position.character + 1,
+      message,
+    });
+  });
+  return findings;
 }
 
 function checkHomeSafety(source, stem, report) {
@@ -1649,6 +1676,7 @@ export function checkComponents(root) {
       ...inspectHookFilename(content, path),
       ...inspectUiPhaseStatus(content, path),
       ...inspectComponent(content, path),
+      ...inspectProfilePage(content, path),
     ];
   });
 }
