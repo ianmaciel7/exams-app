@@ -1,62 +1,62 @@
-# Graph Report - exams-app  (2026-10-30)
+# Graph Report - exams-app  (2026-11-03)
 
 ## Corpus Check
-- 685 files · ~423,534 words
+- 714 files · ~442,268 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 32 file(s) not represented in the graph (top: (none) 9, .toml 4, .css 4)
 
 ## Summary
-- 5943 nodes · 10984 edges · 504 communities (270 shown, 234 thin omitted)
-- Extraction: 93% EXTRACTED · 7% INFERRED · 0% AMBIGUOUS · INFERRED: 741 edges (avg confidence: 0.91)
+- 5784 nodes · 10659 edges · 502 communities (268 shown, 234 thin omitted)
+- Extraction: 93% EXTRACTED · 7% INFERRED · 0% AMBIGUOUS · INFERRED: 722 edges (avg confidence: 0.91)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `ba4d406d`
+- Built from commit: `c62f6b45`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - prompt-input.tsx
-- Continuous integration
-- react
+- voice-selector.tsx
+- utils.ts
 - DESIGN.md Design system
 - combobox.tsx
-- suggestion.tsx
+- ui/message.tsx
+- Tool inventory
 - plan.tsx
-- node.tsx
 - client.ts
 - scripts
 - adr/README.md
 - profile-section-client.tsx
 - check-component-conventions.test.mjs
-- voice-selector.tsx
+- model-selector.tsx
 - Component Selection
 - Testing
 - commit.tsx
 - test-results.tsx
 - live-browser.js
-- Button
+- react
 - compilerOptions
 - package.json
 - dependencies
 - sidebar.tsx
 - ARCHITECTURE.md
-- next-intl
+- web-preview.tsx
 - biome.json
-- src_lib_utils_cn
+- home-client.tsx
 - devDependencies
-- profile-avatar-field-client.tsx
+- Profile behavior ownership
 - shadcn/SKILL.md
-- profile-locale-field.tsx
-- lib/session.ts
+- sms-multi-factor-enrollment-form.tsx
+- review-findings.test.tsx
 - index.js
 - CI workflow
 - menubar.tsx
-- Authentication
-- next
+- auth.ts
+- Forms use FieldGroup + Field
 - ai-elements/code-block.tsx
 - setLiveState
-- use-firebase-auth-session-bridge-client.ts
+- The Design System Page
 - queue.tsx
 - Colors
 - schema-display.tsx
@@ -69,33 +69,33 @@
 - audio-player.tsx
 - attachments.tsx
 - coverage.md
-- 0009-integrate-firebase-authentication.md
+- Message catalogs (en, pt-BR, es)
 - speech-input.tsx
 - ai-elements/message.tsx
 - 0001-configure-nextjs.md
 - environment-variables.tsx
 - mic-selector.tsx
 - open-in-chat.tsx
-- The Design System Page
+- Design Systems from DESIGN.md
 - agent.tsx
 - el
 - check-docs.mjs
-- check-ui-state.mjs
-- sandbox.tsx
-- ProfileSectionClient
+- ref_node_test
+- tabs.tsx
+- alert.tsx
 - reasoning.tsx
 - question.tsx
 - firebase-auth-basics skill
-- hook-module-scope.test.ts
+- ref_node_child_process
 - context.tsx
 - package-info.tsx
 - connectSSE
-- data.ts
+- next-intl
 - components.json
-- Assistant activity uses Trace
-- use-auth-navigation.ts
+- collapsible.tsx
+- next
 - shadcn/ui
-- agents/domain.md
+- button.stories.tsx
 - user-roles.test.cjs
 - file-tree.tsx
 - syncPageChatFocus
@@ -107,46 +107,46 @@
 - vitest
 - test-helpers.ts
 - progress.tsx
-- Decision
+- isLocale
 - table.tsx
 - Process
 - Firebase Android Setup Guide
 - Tools
 - Application logging
-- vitest.config.mts
-- @playwright/test
+- color-pair.tsx
+- firebase-auth.spec.ts
 - Flutter & Firebase Setup Guide
 - Firebase Local Environment Setup
 - bolder.md
 - chain-of-thought.tsx
 - check-responsiveness.mjs
-- web-preview.tsx
+- artifact.tsx
 - Agent instructions
 - Customization & Theming
 - startVariantObserver
 - Quality standards
 - impeccable/SKILL.md
-- ADR 0007: Configure CI
+- Responsive Design
 - context-menu.tsx
 - Firebase Authentication Web SDK
 - Commands
 - live.md
-- Responsive Design
+- adapt.md
 - ADR 0008: Install Firebase UI registry
 - Firebase Auth & Google Sign-In for Flutter
 - carousel.tsx
 - jsx-preview.tsx
 - conversation.tsx
 - check-component-conventions.mjs
-- ADR 0006: Configure testing
-- Avatar
+- shadcn template
+- profile-avatar-field-client.tsx
 - injectSvelteComponentsFromManifest
 - Registry Authoring and Addresses
-- button-group.tsx
+- Foundations
 - Save Knowledge & Project Rules
 - tsconfig.build.json
 - firebase-basics/references/ios_setup.md
-- audio-player.browser.test.tsx
+- Product
 - usage-logs.test.cjs
 - Coding Standards
 - chart.tsx
@@ -155,23 +155,23 @@
 - Operate mode depth (and Read notes)
 - Authentication in Security Rules
 - Refresh Antigravity Local Environment
-- Base vs Radix
+- Data access
 - drawer.tsx
 - Firebase Authentication - Android Setup Guide (Kotlin)
 - checkHookResponsibilities
-- ui/code-block.tsx
+- Implement Adaptations
 - confirmation.tsx
-- item.tsx
+- Assistant activity uses Trace
 - Antigravity Setup
-- ref_node_test
-- buttonVariants
+- ref_node_assert
+- kbd.stories.tsx
 - Read
 - document.md
 - handleManualEditActivity
 - Command guidance
 - showcase-coverage.mjs
 - onboard.md
-- cn
+- Button
 - check-route-files.mjs
 - ctx7 CLI
 - Issue tracker: GitHub
@@ -181,22 +181,23 @@
 - Documentation coverage
 - questionnaire.tsx
 - actOnAgentTarget
-- ai
+- shadcn CLI Reference
 - Research workflow
-- scripts
+- info
 - Ask Matt
 - ⛔️ CRITICAL RULE: INITIALIZATION ORDER ⛔️
-- hover-card.tsx
+- icons.md
 - gh CLI issue operations
-- firebase-auth.spec.ts
+- app/layout.tsx
 - captureElementToBlob
 - Firebase Web Setup Guide
+- 4. Client-Side Data Fetching
 - Issue tracker: GitHub
 - createLiveBrowserDomHelpers
 - createLiveBrowserSessionState
 - onAnnotDown
 - persona.tsx
-- tool.tsx
+- sandbox.tsx
 - check-component-composition.mjs
 - report
 - empty.tsx
@@ -219,8 +220,7 @@
 - 7. JavaScript Performance
 - run-tool-usage-evals.mjs
 - New visual work
-- firebase
-- transcription.tsx
+- @firebase-oss/ui-core
 - optimize.md
 - Alternative: Manual MCP Configuration (Project Scope)
 - GitHub native issue dependencies (blocked_by)
@@ -256,15 +256,12 @@
 - check-production-smoke.mjs
 - Common Cognitive Load Violations
 - iOS platform
-- 8. Advanced Patterns
 - match-component-filename.js
 - Shape
 - doctor.config.json
 - create-next-app default starter assets
 - firebase-auth-sw.js
-- loading-primitive.tsx
-- clear.mjs
-- Entity-relationship diagram
+- use-auth-provider-client.ts
 - lint-staged
 - Android platform
 - Persona-Based Design Testing
@@ -285,7 +282,6 @@
 - React Best Practices
 - post-checkout
 - post-commit
-- ADR 0016: Disable the invoker IAM check for callable Functions
 - inspectNaming
 - AuthService (Dart boilerplate)
 - Bypass Firestore composite index with client-side sort
@@ -513,38 +509,36 @@
 - React Compiler
 - Mobile web and touch
 - Review Firebase security changes
-- Do's and Don'ts
+- DESIGN.md
 
 ## God Nodes (most connected - your core abstractions)
-1. `react` - 156 edges
-2. `vitest` - 70 edges
-3. `Button()` - 69 edges
-4. `scripts` - 68 edges
+1. `react` - 148 edges
+2. `Button()` - 69 edges
+3. `scripts` - 68 edges
+4. `vitest` - 65 edges
 5. `cn` - 64 edges
 6. `lucide-react` - 57 edges
 7. `Component Selection` - 44 edges
 8. `@base-ui/react` - 41 edges
-9. `next-intl` - 37 edges
-10. `firebase` - 36 edges
+9. `connectSSE()` - 34 edges
+10. `report()` - 33 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `Decision` --references--> `TooltipProvider()`  [INFERRED]
-  docs/adr/0007-configure-ci.md → src/components/ui/tooltip.tsx
-- `State and integration ownership` --references--> `FieldGroup()`  [INFERRED]
-  TOOLING.md → src/components/ui/field.tsx
 - `Component Selection` --references--> `ContextMenu()`  [INFERRED]
   .agents/skills/shadcn/SKILL.md → src/components/ui/context-menu.tsx
 - `Items always inside their Group component` --references--> `ContextMenuGroup()`  [INFERRED]
   .agents/skills/shadcn/rules/composition.md → src/components/ui/context-menu.tsx
 - `Items always inside their Group component` --references--> `ContextMenuItem()`  [INFERRED]
   .agents/skills/shadcn/rules/composition.md → src/components/ui/context-menu.tsx
+- `5.4 Don't Define Components Inside Components` --references--> `Avatar()`  [INFERRED]
+  .agents/skills/vercel-react-best-practices/AGENTS.md → src/components/ui/avatar.tsx
+- `Component Selection` --references--> `Pagination()`  [INFERRED]
+  .agents/skills/shadcn/SKILL.md → src/components/ui/pagination.tsx
 
 ## Import Cycles
 - None detected.
 
 ## Hyperedges (group relationships)
-- **CI pipeline aggregated by ci-result** — docs_adr_0007_configure_ci_parallel_jobs, docs_adr_0007_configure_ci_verify_scripts, docs_adr_0007_configure_ci_ci_result [EXTRACTED 0.90]
-- **Testing toolchain layers** — docs_adr_0006_configure_testing_vitest_multi_project, docs_adr_0006_configure_testing_playwright_suites, docs_adr_0006_configure_testing_property_based_testing, docs_adr_0006_configure_testing_mutation_testing [EXTRACTED 0.90]
 - **Chat component composition** — agents_skills_shadcn_rules_chat_messagescroller, agents_skills_shadcn_rules_chat_message, agents_skills_shadcn_rules_chat_bubble, agents_skills_shadcn_rules_chat_attachment, agents_skills_shadcn_rules_chat_marker, agents_skills_shadcn_rules_chat_trace, agents_skills_shadcn_rules_chat_codeblock [EXTRACTED 0.95]
 - **App Check debug token persistence without committing secrets** — agents_skills_firebase_basics_references_android_setup_app_check_debug_token, agents_skills_firebase_basics_references_ios_setup_app_check_debug_token, agents_skills_firebase_basics_references_android_setup_never_commit_debug_tokens [EXTRACTED 1.00]
 - **Agent environment refresh guides** — agents_skills_firebase_basics_references_refresh_android_studio_refresh_android_studio_local_environment, agents_skills_firebase_basics_references_refresh_antigravity_refresh_antigravity_local_environment, agents_skills_firebase_basics_references_refresh_gemini_cli_refresh_gemini_cli_local_environment [EXTRACTED 1.00]
@@ -558,71 +552,71 @@
 - **Firebase persistence and rules boundary** — architecture_firestore_storage_rules, der_technical_persistence, security_firebase_rules_authority, der_user_preferences_module [INFERRED 0.85]
 - **Wayfinding operations across GitHub, GitLab and local trackers** — agents_skills_setup_matt_pocock_skills_issue_tracker_github_wayfinding, agents_skills_setup_matt_pocock_skills_issue_tracker_gitlab_wayfinding, agents_skills_setup_matt_pocock_skills_issue_tracker_local_wayfinding [INFERRED 0.85]
 
-## Communities (504 total, 234 thin omitted)
+## Communities (502 total, 234 thin omitted)
 
 ### Community 0 - "prompt-input.tsx"
 Cohesion: 0.03
 Nodes (61): AttachmentsContext, captureScreenshot(), convertBlobUrlToDataUrl(), InternalPromptInputControllerProps, LocalAttachmentsContext, LocalReferencedSourcesContext, PromptInput(), PromptInputActionAddAttachments() (+53 more)
 
-### Community 1 - "Continuous integration"
-Cohesion: 0.18
-Nodes (12): Commit hook environment failure disclosure, After creating a repository from template checklist, braces GHSA-vfj7-8cjw-p6xm accepted risk, Adapting the tests in a generated project, Automated accessibility limits, Continuous integration, Firebase emulator regression coverage, Known limitations (+4 more)
+### Community 1 - "voice-selector.tsx"
+Cohesion: 0.05
+Nodes (21): VoiceSelectorAccentProps, VoiceSelectorAgeProps, VoiceSelectorAttributesProps, VoiceSelectorBulletProps, VoiceSelectorContentProps, VoiceSelectorContext, VoiceSelectorContextValue, VoiceSelectorDescriptionProps (+13 more)
 
-### Community 2 - "react"
-Cohesion: 0.04
-Nodes (23): Owned component placement, Owned component placement, react, @xyflow/react, HomeSignOutButtonClientProps, geist, geistMono, viewport (+15 more)
+### Community 2 - "utils.ts"
+Cohesion: 0.08
+Nodes (17): defaultStates, ai, @radix-ui/react-use-controllable-state, @xyflow/react, CanvasProps, deleteKeyCode, ControlsProps, ImageProps (+9 more)
 
 ### Community 3 - "DESIGN.md Design system"
-Cohesion: 0.07
-Nodes (33): Cache Components, partial prefetching, React Compiler runtime, Compound APIs vs Server/Client runtime graphs, React runtime and lifecycle boundaries (Activity, Effects), Cache Components APIs (use cache, cacheLife, revalidateTag, updateTag), Compound components and named exports, State derivation and Effect elimination, React rendering, hooks and identity rules, AI Elements upstream patterns (+25 more)
+Cohesion: 0.06
+Nodes (39): Next.js managed agent-rules block, Cache Components, partial prefetching, React Compiler runtime, Compound APIs vs Server/Client runtime graphs, React runtime and lifecycle boundaries (Activity, Effects), Cache Components APIs (use cache, cacheLife, revalidateTag, updateTag), Compound components and named exports, State derivation and Effect elimination, React rendering, hooks and identity rules (+31 more)
 
 ### Community 4 - "combobox.tsx"
-Cohesion: 0.05
-Nodes (42): Composition matching local shadcn/ui primitives, Compound forms, Establish project context, Step 5: Map Component Recipes to Variants, Contents, Field validation and disabled states, FieldSet + FieldLegend for grouping related fields, Forms & Inputs (+34 more)
+Cohesion: 0.06
+Nodes (26): Compound forms, Step 5: Map Component Recipes to Variants, InputGroup requires InputGroupInput/InputGroupTextarea, CLI, Critical Rules, Forms & Inputs → [forms.md](./rules/forms.md), Icons → [icons.md](./rules/icons.md), Styling & Tailwind → [styling.md](./rules/styling.md) (+18 more)
 
-### Community 5 - "suggestion.tsx"
-Cohesion: 0.09
-Nodes (19): Chat & Messaging, Contents, Escape hatch: the scroller hooks, Message rows use Message, Scrollable threads use MessageScroller, Streaming, anchoring, and jump-to-latest are built in, Use shimmer / scroll-fade utilities, not custom animations, SuggestionProps (+11 more)
+### Community 5 - "ui/message.tsx"
+Cohesion: 0.25
+Nodes (3): Message rows use Message, MessageFooter(), MessageGroup()
 
-### Community 6 - "plan.tsx"
-Cohesion: 0.11
-Nodes (13): PlanActionProps, PlanContentProps, PlanContext, PlanContextValue, PlanDescription(), PlanDescriptionProps, PlanFooterProps, PlanHeaderProps (+5 more)
-
-### Community 7 - "node.tsx"
+### Community 6 - "Tool inventory"
 Cohesion: 0.10
-Nodes (27): Component Structure → [composition.md](./rules/composition.md), Compound components and Server/Client boundaries, Component composition contracts, vitest-browser-react, src_app_globals, NodeActionProps, NodeContentProps, NodeDescriptionProps (+19 more)
+Nodes (23): dependency-cruiser boundary rules, Boolean UI phase flags instead of status tag, Biome complexity budget (cognitive 8, 40 lines, nesting 2), Hook modules do not own module-level support declarations, Component-named orchestration hooks, Conventional Commits 1.0.0, Squash merge into main with CI result check, Biome replaces ESLint and Prettier (+15 more)
+
+### Community 7 - "plan.tsx"
+Cohesion: 0.07
+Nodes (38): Component Structure → [composition.md](./rules/composition.md), Compound components and Server/Client boundaries, Component composition contracts, NodeActionProps, NodeContentProps, NodeDescriptionProps, NodeFooterProps, NodeHeaderProps (+30 more)
 
 ### Community 8 - "client.ts"
-Cohesion: 0.16
-Nodes (25): useAuthProviderClient(), useFirebaseUiReturnNavigation(), useFirebaseUiTranslations(), useFirebaseUi(), connectFirebaseAuthEmulator(), connectFirestoreIfNeeded(), getEmulatorEndpoint(), getEmulatorUrl() (+17 more)
+Cohesion: 0.10
+Nodes (34): FirebaseAuthSessionBridgeClient(), useFirebaseAuthSessionBridgeClient(), useFirebaseUiReturnNavigation(), connectFirebaseAuthEmulator(), connectFirestoreIfNeeded(), getEmulatorEndpoint(), getEmulatorUrl(), getFirebaseApp() (+26 more)
 
 ### Community 9 - "scripts"
 Cohesion: 0.03
 Nodes (68): scripts, analyze:bundle, analyze:fallow, analyze:health, analyze:lighthouse, analyze:lighthouse:ci, analyze:react, analyze:size (+60 more)
 
 ### Community 10 - "adr/README.md"
-Cohesion: 0.03
-Nodes (72): ADR 0011: Configure Firebase continuous delivery, Consequences, Considered options, Context, Decision, ADR 0012: Configure Terraform infrastructure, Consequences, Considered options (+64 more)
+Cohesion: 0.09
+Nodes (26): Adding a decision, ADR 0004: next-intl internationalization, ADR 0006: Testing configuration, ADR 0007: Continuous integration and quality tooling, ADR 0009: Firebase Authentication integration, ADR 0010: Electron OAuth strategy, ADR 0011: Record authenticated usage, ADR 0012: Native Firebase logging (+18 more)
 
 ### Community 11 - "profile-section-client.tsx"
-Cohesion: 0.09
-Nodes (31): Direct parent relationships, Form Architecture and Context Standards, Forms, Forms and Actions, Native primitive audit, Official references, Profile form action safety (repository guard), React Form Actions are not a migration (+23 more)
+Cohesion: 0.11
+Nodes (30): Direct parent relationships, Form Architecture and Context Standards, Forms, Forms and Actions, Native primitive audit, Official references, Profile form action safety (repository guard), React Form Actions are not a migration (+22 more)
 
 ### Community 12 - "check-component-conventions.test.mjs"
 Cohesion: 0.16
-Nodes (12): checkComponents(), exportedDataFunctionNames(), inspectComponentPlacement(), inspectDataModuleConventions(), inspectHookFilename(), inspectUiPhaseStatus(), isOwnedHookModule(), scan() (+4 more)
+Nodes (13): checkComponents(), exportedDataFunctionNames(), inspectComponentPlacement(), inspectDataModuleConventions(), inspectHookFilename(), inspectLibPlacement(), inspectUiPhaseStatus(), isOwnedHookModule() (+5 more)
 
-### Community 13 - "voice-selector.tsx"
-Cohesion: 0.03
-Nodes (50): Fonts, Dialog, Sheet, and Drawer always need a Title, cmdk, ModelSelectorContentProps, ModelSelectorDialogProps, ModelSelectorEmptyProps, ModelSelectorGroupProps, ModelSelectorInputProps (+42 more)
+### Community 13 - "model-selector.tsx"
+Cohesion: 0.05
+Nodes (29): Fonts, Dialog, Sheet, and Drawer always need a Title, cmdk, ModelSelectorContentProps, ModelSelectorDialogProps, ModelSelectorEmptyProps, ModelSelectorGroupProps, ModelSelectorInputProps (+21 more)
 
 ### Community 14 - "Component Selection"
-Cohesion: 0.09
-Nodes (24): Known traps, Button has no isPending or isLoading prop, Callouts use Alert, Card structure, Choosing between overlay components, Component Composition, Contents, Empty states use Empty component (+16 more)
+Cohesion: 0.14
+Nodes (24): Known traps, Avatar always needs AvatarFallback, Button has no isPending or isLoading prop, Callouts use Alert, Card structure, Choosing between overlay components, Component Composition, Contents (+16 more)
 
 ### Community 15 - "Testing"
-Cohesion: 0.04
-Nodes (66): Next.js managed agent-rules block, dependency-cruiser boundary rules, Boolean UI phase flags instead of status tag, Biome complexity budget (cognitive 8, 40 lines, nesting 2), Hook modules do not own module-level support declarations, Component-named orchestration hooks, Conventional Commits 1.0.0, Squash merge into main with CI result check (+58 more)
+Cohesion: 0.05
+Nodes (43): Commit hook environment failure disclosure, After creating a repository from template checklist, verify:fast / verify:full / verify:e2e, braces GHSA-vfj7-8cjw-p6xm accepted risk, Cloud Functions dependency audit and uuid override, 1. Static responsiveness guard (`pnpm check:responsiveness`), 2. Browser component testing (colocated `*.browser.test.tsx`), 3. End-to-end responsiveness and reflow suite (`tests/responsive.spec.ts`) (+35 more)
 
 ### Community 16 - "commit.tsx"
 Cohesion: 0.04
@@ -636,17 +630,17 @@ Nodes (29): formatDuration(), statusIcons, statusStyles, TestContext, TestContex
 Cohesion: 0.03
 Nodes (139): addManualContextText(), applyGlobalBarLabelState(), applyPlaceholderSizingStyles(), bindEditBadgeProxy(), bufferToBase64(), buildCollapsible(), buildColorModels(), buildInsertPlaceholderSnapshotFromDom() (+131 more)
 
-### Community 19 - "Button"
-Cohesion: 0.08
-Nodes (56): Accessibility and Next.js, Obligations, Buttons inside inputs use InputGroup + InputGroupAddon, Option sets (2–7 choices) use ToggleGroup, Audit findings and disposition, @hookform/resolvers, react-hook-form, ProfileDisplayNameFieldProps (+48 more)
+### Community 19 - "react"
+Cohesion: 0.09
+Nodes (42): @hookform/resolvers, react, react-hook-form, HomeSignOutButtonClientProps, ProfileSaveButtonProps, getAuthErrorMessage(), ui, EmailLinkAuthForm() (+34 more)
 
 ### Community 20 - "compilerOptions"
 Cohesion: 0.11
 Nodes (18): compilerOptions, allowJs, esModuleInterop, incremental, isolatedModules, jsx, lib, module (+10 more)
 
 ### Community 21 - "package.json"
-Cohesion: 0.05
-Nodes (40): engines, node, firebase-admin, name, packageManager, private, version, @ast-grep/cli (+32 more)
+Cohesion: 0.04
+Nodes (44): engines, node, firebase-admin, name, packageManager, private, version, @ast-grep/cli (+36 more)
 
 ### Community 22 - "dependencies"
 Cohesion: 0.05
@@ -654,70 +648,66 @@ Nodes (44): dependencies, ai, ansi-to-react, @base-ui/react, class-variance-auth
 
 ### Community 23 - "sidebar.tsx"
 Cohesion: 0.06
-Nodes (20): Composition: asChild (radix) vs render (base), react-dom, BreadcrumbLink(), DialogClose(), DialogTrigger(), DropdownMenuTrigger(), SheetClose(), SheetContent() (+12 more)
+Nodes (15): react-dom, SheetContent(), SheetDescription(), SheetHeader(), SheetTrigger(), Sidebar(), SidebarContext, SidebarContextProps (+7 more)
 
 ### Community 24 - "ARCHITECTURE.md"
-Cohesion: 0.06
-Nodes (42): Application boundaries, Architecture, Authentication navigation and ?next= return URL, Authentication navigation, Compound APIs and runtime graphs, Cookie-driven NEXT_LOCALE internationalization, Decision records, Firebase auth session bridge service worker (FirebaseServerApp) (+34 more)
+Cohesion: 0.05
+Nodes (59): Next.js / React / shadcn documentation workflows, Plan, implement minimal change, validate, report workflow, GitHub issues via gh CLI, MCP and skills sync workflow (agents sync), AGENTS.md Agent instructions, save skill (/save), Application boundaries, Architecture (+51 more)
 
-### Community 25 - "next-intl"
-Cohesion: 0.10
-Nodes (25): fast-check, next-intl, ProfileGuard(), ProfileGuardProps, AuthState, useProfileAuth(), PreferencesState, useProfilePreferences() (+17 more)
+### Community 25 - "web-preview.tsx"
+Cohesion: 0.16
+Nodes (14): isAllowedUrlScheme(), useWebPreview(), WebPreview(), WebPreviewBody(), WebPreviewBodyProps, WebPreviewConsole(), WebPreviewConsoleProps, WebPreviewContext (+6 more)
 
 ### Community 26 - "biome.json"
 Cohesion: 0.05
 Nodes (40): source, assist, actions, noExcessiveCognitiveComplexity, css, parser, next, react (+32 more)
 
-### Community 27 - "src_lib_utils_cn"
-Cohesion: 0.09
-Nodes (38): Component Architecture: Dimensions and File Contracts, Component contracts, Component file contracts, Exact filename stem and component term parity (`checkStemComponentTermParity`), Official references, UI companion components for integration boundaries (Client and Server), When to read, Component composition (+30 more)
+### Community 27 - "home-client.tsx"
+Cohesion: 0.07
+Nodes (41): CI enforcement, Component Architecture: Dimensions and File Contracts, Component contracts, Component file contracts, Exact filename stem and component term parity (`checkStemComponentTermParity`), Official references, Owned component placement, UI companion components for integration boundaries (Client and Server) (+33 more)
 
 ### Community 28 - "devDependencies"
 Cohesion: 0.05
 Nodes (40): devDependencies, @ast-grep/cli, @axe-core/playwright, babel-plugin-react-compiler, @biomejs/biome, @commitlint/cli, @commitlint/config-conventional, cspell (+32 more)
 
-### Community 29 - "profile-avatar-field-client.tsx"
+### Community 29 - "Profile behavior ownership"
 Cohesion: 0.09
-Nodes (23): Profile behavior ownership, Avatar always needs AvatarFallback, Integration filename convention, Owned function complexity and hook responsibility trees, ProfileAvatarFieldClient(), ProfileAvatarFieldClientProps, ProfileEmailField(), ProfileFormClient() (+15 more)
+Nodes (31): Banned generic naming terms, Profile behavior ownership, Component behavior and custom hooks, Component-named orchestration hooks, Custom hooks, Main hooks and focused sub-hooks, Private hook module support declarations, When to read (+23 more)
 
 ### Community 30 - "shadcn/SKILL.md"
-Cohesion: 0.16
-Nodes (11): Built-in variants first, className for layout only, Contents, No manual dark: color overrides, No raw color values for status/state indicators, No space-x-* / space-y-*, Prefer size-* over w-* h-* when equal, Prefer truncate shorthand (+3 more)
+Cohesion: 0.14
+Nodes (13): Built-in variants first, className for layout only, Contents, No manual dark: color overrides, No raw color values for status/state indicators, No space-x-* / space-y-*, Prefer size-* over w-* h-* when equal, Prefer truncate shorthand (+5 more)
 
-### Community 31 - "profile-locale-field.tsx"
-Cohesion: 0.11
-Nodes (24): Workflow, Components and styling, Composition guard coverage, Dependency Inversion and Composition in Screen and Presentation Components, Responsive design and layout contracts, shadcn/ui API and accessibility, ProfileLocaleFieldProps, ProfileThemeField() (+16 more)
+### Community 31 - "sms-multi-factor-enrollment-form.tsx"
+Cohesion: 0.08
+Nodes (40): Composition matching local shadcn/ui primitives, Accessibility and Next.js, Workflow, Profile save workflow (useProfileSubmit, saveProfile), Form and Field Architecture (shadcn/ui & React Hook Form), TypeScript and React, Accessibility and design constraints, Audit findings and disposition (+32 more)
 
-### Community 32 - "lib/session.ts"
-Cohesion: 0.16
-Nodes (16): ProtectedGuardClient(), ProtectedGuardClientProps, useProtectedGuardClient(), AccessSubscriptionOptions, notifySessionTransition(), SessionHandlerState, subscribeToProtectedSession(), recordUsage() (+8 more)
+### Community 32 - "review-findings.test.tsx"
+Cohesion: 0.14
+Nodes (14): src_app_globals, ArtifactAction(), AttachmentHoverCard(), AttachmentHoverCardContent(), AttachmentHoverCardTrigger(), Attachments(), Commit(), CommitContent() (+6 more)
 
 ### Community 33 - "index.js"
-Cohesion: 0.15
-Nodes (12): adminEmails, allowedEmails, {
+Cohesion: 0.13
+Nodes (18): createAccessPolicy(), createBeforeCreateHandler(), createBeforeSignInHandler(), parseEmails(), handlers(), adminEmails, allowedEmails, {
   beforeUserCreated,
   beforeUserSignedIn,
-}, {
-  createAccessPolicy,
-  createBeforeCreateHandler,
-  createBeforeSignInHandler,
-}, { createSetUserRoleHandler }, { createUsageLogHandler }, { defineString }, { getAuth } (+4 more)
+} (+10 more)
 
 ### Community 34 - "CI workflow"
 Cohesion: 0.11
 Nodes (25): Dependabot configuration, Dependabot docker updates via playwright mirror Dockerfile, Dependabot github-actions updates (SHA-pinned), CI Python tool pins (requirements.txt), pre-commit 4.7.0, semgrep 1.181.0, zizmor 1.31.1, Dependabot npm updates (grouped dev/prod) (+17 more)
 
 ### Community 35 - "menubar.tsx"
-Cohesion: 0.09
-Nodes (17): Items always inside their Group component, CommandGroup(), CommandItem(), DropdownMenuContent(), DropdownMenuGroup(), DropdownMenuItem(), DropdownMenuLabel(), DropdownMenuPortal() (+9 more)
+Cohesion: 0.08
+Nodes (19): Items always inside their Group component, CommandGroup(), CommandItem(), DropdownMenuContent(), DropdownMenuGroup(), DropdownMenuItem(), DropdownMenuLabel(), DropdownMenuPortal() (+11 more)
 
-### Community 36 - "Authentication"
-Cohesion: 0.10
-Nodes (20): Admin SDK and Security Rules, Authentication, Caching, Deliberately not used, Local development and verification, Official guidance, Related references, Roles and allowlist (+12 more)
+### Community 36 - "auth.ts"
+Cohesion: 0.26
+Nodes (8): Token failures and sign-out, useHomeSignOutButtonClient(), handleSignOut(), getPendingSignOut(), signOutUser(), synchronizeSignedOutWorker(), FakeMessageChannel, mocks
 
-### Community 37 - "next"
-Cohesion: 0.19
-Nodes (9): authEmulatorHost, nextConfig, securityHeaders, withNextIntl, next, NotFound(), authRoutes, routes (+1 more)
+### Community 37 - "Forms use FieldGroup + Field"
+Cohesion: 0.22
+Nodes (12): Buttons inside inputs use InputGroup + InputGroupAddon, Contents, Field validation and disabled states, FieldSet + FieldLegend for grouping related fields, Forms & Inputs, Forms use FieldGroup + Field, Option sets (2–7 choices) use ToggleGroup, Checkbox() (+4 more)
 
 ### Community 38 - "ai-elements/code-block.tsx"
 Cohesion: 0.06
@@ -727,13 +717,13 @@ Nodes (30): shiki, addKeysToTokens(), CodeBlockBody, CodeBlockContent(), CodeBlo
 Cohesion: 0.10
 Nodes (64): abortSvelteComponentInjection(), applyEditing(), beginNewLiveConfiguration(), cancelEditing(), cancelEditingToPicking(), cancelInsertConfigure(), cleanup(), cleanupAcceptedSession() (+56 more)
 
-### Community 40 - "use-firebase-auth-session-bridge-client.ts"
-Cohesion: 0.36
-Nodes (5): FirebaseAuthSessionBridgeClient(), useFirebaseAuthSessionBridgeClient(), getFirebaseConfig(), subscribeToWorkerSession(), mocks
+### Community 40 - "The Design System Page"
+Cohesion: 0.15
+Nodes (13): Coverage check, Block anatomy, Checklist, Components: Tiers and Block Anatomy, Contents, Do and Don't, Edge Cases, Page Outline (+5 more)
 
 ### Community 41 - "queue.tsx"
-Cohesion: 0.06
-Nodes (18): QueueItemActionProps, QueueItemActionsProps, QueueItemAttachmentProps, QueueItemContentProps, QueueItemDescriptionProps, QueueItemFileProps, QueueItemImageProps, QueueItemIndicatorProps (+10 more)
+Cohesion: 0.05
+Nodes (22): QueueItemActionProps, QueueItemActionsProps, QueueItemAttachmentProps, QueueItemContentProps, QueueItemDescriptionProps, QueueItemFileProps, QueueItemImageProps, QueueItemIndicatorProps (+14 more)
 
 ### Community 42 - "Colors"
 Cohesion: 0.29
@@ -744,8 +734,8 @@ Cohesion: 0.06
 Nodes (19): HttpMethod, methodStyles, SchemaDisplayBodyProps, SchemaDisplayContentProps, SchemaDisplayContext, SchemaDisplayContextType, SchemaDisplayDescriptionProps, SchemaDisplayExampleProps (+11 more)
 
 ### Community 44 - "server.ts"
-Cohesion: 0.09
-Nodes (29): Authentication and authorization, Local emulator identities, Protected access, Token verification failures, When to read, ADR 0023: Keep the service-worker Firebase session, Consequences, Context (+21 more)
+Cohesion: 0.08
+Nodes (32): Authentication and authorization, Local emulator identities, Protected access, Token verification failures, When to read, Admin SDK and Security Rules, Authentication, Caching (+24 more)
 
 ### Community 45 - "modern-screenshot.umd.js"
 Cohesion: 0.08
@@ -755,25 +745,29 @@ Nodes (59): ae(), be(), bt(), Ce(), s(), Ct(), de(), dt() (+51 more)
 Cohesion: 0.08
 Nodes (29): FilePathButton, FilePathButtonProps, ParsedStackTrace, parseStackFrame(), parseStackTrace(), StackFrame, StackTrace, StackTraceActions (+21 more)
 
+### Community 47 - "alert-dialog.tsx"
+Cohesion: 0.06
+Nodes (15): Accordion, Base vs Radix, Button / trigger as non-button element (base only), Composition: asChild (radix) vs render (base), Contents, Select, Select — multiple selection and object values (base only), Slider (+7 more)
+
 ### Community 49 - "inline-citation.tsx"
 Cohesion: 0.07
-Nodes (21): CarouselApiContext, getSourceHostname(), InlineCitationCardBodyProps, InlineCitationCardProps, InlineCitationCardTrigger(), InlineCitationCardTriggerProps, InlineCitationCarouselContentProps, InlineCitationCarouselHeaderProps (+13 more)
+Nodes (23): CarouselApiContext, getSourceHostname(), InlineCitationCardBodyProps, InlineCitationCardProps, InlineCitationCardTrigger(), InlineCitationCardTriggerProps, InlineCitationCarouselContentProps, InlineCitationCarouselHeaderProps (+15 more)
 
 ### Community 50 - "audio-player.tsx"
-Cohesion: 0.10
-Nodes (12): media-chrome, AudioPlayerControlBarProps, AudioPlayerDurationDisplayProps, AudioPlayerElementProps, AudioPlayerMuteButtonProps, AudioPlayerPlayButtonProps, AudioPlayerProps, AudioPlayerSeekBackwardButtonProps (+4 more)
+Cohesion: 0.07
+Nodes (20): media-chrome, vitest-browser-react, AudioPlayerControlBarProps, AudioPlayerDurationDisplayProps, AudioPlayerElementProps, AudioPlayerMuteButtonProps, AudioPlayerPlayButton(), AudioPlayerPlayButtonProps (+12 more)
 
 ### Community 51 - "attachments.tsx"
-Cohesion: 0.06
-Nodes (40): ArtifactAction(), Attachment(), AttachmentContext, AttachmentContextValue, AttachmentData, AttachmentEmptyProps, AttachmentHoverCard(), AttachmentHoverCardContent() (+32 more)
+Cohesion: 0.09
+Nodes (27): Attachment(), AttachmentContext, AttachmentContextValue, AttachmentData, AttachmentEmptyProps, AttachmentHoverCardContentProps, AttachmentHoverCardDelays, AttachmentHoverCardProps (+19 more)
 
 ### Community 52 - "coverage.md"
-Cohesion: 0.05
-Nodes (57): Next.js / React / shadcn documentation workflows, Plan, implement minimal change, validate, report workflow, GitHub issues via gh CLI, MCP and skills sync workflow (agents sync), AGENTS.md Agent instructions, Agents CLI sync workflow, Next.js DevTools MCP server, Serena MCP server (+49 more)
-
-### Community 53 - "0009-integrate-firebase-authentication.md"
 Cohesion: 0.07
-Nodes (31): Catalog structural validation and property-based tests, Cookie-driven locale routing without middleware, IntlMessages global type augmentation, IntlProvider async server component, Message catalogs (en, pt-BR, es), createNextIntlPlugin integration, i18n request config, routing.ts (locales, isLocale, localeCookie) (+23 more)
+Nodes (32): Agents CLI sync workflow, Next.js DevTools MCP server, Serena MCP server, Caching and streaming, When to read, Effects and resources, When to read, Research policy (+24 more)
+
+### Community 53 - "Message catalogs (en, pt-BR, es)"
+Cohesion: 0.33
+Nodes (7): Catalog structural validation and property-based tests, IntlMessages global type augmentation, IntlProvider async server component, Message catalogs (en, pt-BR, es), createNextIntlPlugin integration, i18n request config, routing.ts (locales, isLocale, localeCookie)
 
 ### Community 54 - "speech-input.tsx"
 Cohesion: 0.12
@@ -784,24 +778,24 @@ Cohesion: 0.09
 Nodes (22): MessageActionProps, MessageActionsProps, MessageBranchContent(), MessageBranchContentProps, MessageBranchContext, MessageBranchContextType, MessageBranchNext(), MessageBranchNextProps (+14 more)
 
 ### Community 56 - "0001-configure-nextjs.md"
-Cohesion: 0.04
-Nodes (67): PageProps LayoutProps RouteContext helpers, ADR 0001: Configure Next.js, Consequences, Context, Decision, References, create-next-app bootstrap command, GritQL prefer-layout-props / page-props / route-context rules (+59 more)
+Cohesion: 0.03
+Nodes (66): PageProps LayoutProps RouteContext helpers, ADR 0001: Configure Next.js, Consequences, Context, Decision, References, create-next-app bootstrap command, GritQL prefer-layout-props / page-props / route-context rules (+58 more)
 
 ### Community 57 - "environment-variables.tsx"
-Cohesion: 0.06
-Nodes (21): @ladle/react, EnvironmentVariableContext, EnvironmentVariableContextType, EnvironmentVariableCopyButtonProps, EnvironmentVariableGroupProps, EnvironmentVariableNameProps, EnvironmentVariableProps, EnvironmentVariableRequiredProps (+13 more)
+Cohesion: 0.07
+Nodes (15): EnvironmentVariableContext, EnvironmentVariableContextType, EnvironmentVariableCopyButtonProps, EnvironmentVariableGroupProps, EnvironmentVariableNameProps, EnvironmentVariableProps, EnvironmentVariableRequiredProps, EnvironmentVariablesContentProps (+7 more)
 
 ### Community 58 - "mic-selector.tsx"
 Cohesion: 0.08
-Nodes (16): MicSelector(), MicSelectorContentProps, MicSelectorContext, MicSelectorContextType, MicSelectorEmptyProps, MicSelectorInputProps, MicSelectorItemProps, MicSelectorLabelProps (+8 more)
+Nodes (15): MicSelector(), MicSelectorContentProps, MicSelectorContext, MicSelectorContextType, MicSelectorEmptyProps, MicSelectorInputProps, MicSelectorItemProps, MicSelectorLabelProps (+7 more)
 
 ### Community 59 - "open-in-chat.tsx"
 Cohesion: 0.09
 Nodes (21): OpenInChatGPT(), OpenInChatGPTProps, OpenInClaude(), OpenInClaudeProps, OpenInContentProps, OpenInContext, OpenInCursor(), OpenInCursorProps (+13 more)
 
-### Community 60 - "The Design System Page"
-Cohesion: 0.05
-Nodes (43): ColorPair(), contrast(), luminance(), toHex(), toRgb(), previewState(), StateMatrix(), Contents (+35 more)
+### Community 60 - "Design Systems from DESIGN.md"
+Cohesion: 0.17
+Nodes (13): Contents, Dark mode, Design Systems from DESIGN.md, Elevation, Focus, Inputs to Confirm, Radius, Report Back (+5 more)
 
 ### Community 61 - "agent.tsx"
 Cohesion: 0.11
@@ -812,20 +806,20 @@ Cohesion: 0.07
 Nodes (60): actionLabel(), applyConfigureBarChrome(), bindConfigureCountPillTooltip(), bindConfigureInlineControlHover(), bindConfigureModifierPillHover(), buildConfigureActionControl(), buildConfigureCountControl(), buildConfigureRow() (+52 more)
 
 ### Community 63 - "check-docs.mjs"
-Cohesion: 0.42
+Cohesion: 0.35
 Nodes (8): checkDocumentation(), headingIds(), historicalReplacement(), inspectLinks(), inspectSkillInventory(), inspectTarget(), ownedDocument(), prose()
 
-### Community 64 - "check-ui-state.mjs"
-Cohesion: 0.35
-Nodes (10): containsExceptionCoercion(), exceptionNames, findUnsafeFeedback(), report(), reportCall(), reportJsx(), visit(), inspectUiState() (+2 more)
+### Community 64 - "ref_node_test"
+Cohesion: 0.25
+Nodes (12): ref_node_test, typescript, containsExceptionCoercion(), exceptionNames, findUnsafeFeedback(), report(), reportCall(), reportJsx() (+4 more)
 
-### Community 65 - "sandbox.tsx"
-Cohesion: 0.11
-Nodes (14): TabsTrigger must be inside TabsList, SandboxContentProps, SandboxHeaderProps, SandboxRootProps, SandboxTabContentProps, SandboxTabsBarProps, SandboxTabsListProps, SandboxTabsProps (+6 more)
+### Community 65 - "tabs.tsx"
+Cohesion: 0.21
+Nodes (11): TabsTrigger must be inside TabsList, Components and styling, Composition guard coverage, Dependency Inversion and Composition in Screen and Presentation Components, Responsive design and layout contracts, shadcn/ui API and accessibility, Tabs(), TabsContent() (+3 more)
 
-### Community 66 - "ProfileSectionClient"
-Cohesion: 0.29
-Nodes (11): Banned generic naming terms, Component behavior and custom hooks, Component-named orchestration hooks, Custom hooks, Main hooks and focused sub-hooks, Private hook module support declarations, When to read, Runtime and component boundaries (+3 more)
+### Community 66 - "alert.tsx"
+Cohesion: 0.25
+Nodes (6): Use Components, Not Custom Markup → [composition.md](./rules/composition.md), Alert(), AlertDescription(), AlertTitle(), alertVariants, Empty()
 
 ### Community 67 - "reasoning.tsx"
 Cohesion: 0.09
@@ -839,9 +833,9 @@ Nodes (21): EMPTY_VALUE, getSelectedValues(), Question(), QuestionActionsProps, 
 Cohesion: 0.22
 Nodes (7): firebase-auth-basics skill, Core Concepts, Firebase ID token and refresh token, Identity Providers, Prerequisites, Tokens, Users
 
-### Community 70 - "hook-module-scope.test.ts"
-Cohesion: 0.18
-Nodes (7): child, [command, ...args], binary, require, ref_node_child_process, ref_node_module, rulesetFilePath
+### Community 70 - "ref_node_child_process"
+Cohesion: 0.29
+Nodes (4): child, [command, ...args], ref_node_child_process, rulesetFilePath
 
 ### Community 71 - "context.tsx"
 Cohesion: 0.09
@@ -855,29 +849,29 @@ Nodes (14): ChangeType, changeTypeIcons, changeTypeStyles, PackageInfoChangeType
 Cohesion: 0.07
 Nodes (53): abandonForeignSession(), abandonSupersededGo(), applyLiveBarPreference(), applySavedSessionMeta(), captureAndEmit(), checkpointPayload(), clampVariantIndex(), clearHandled() (+45 more)
 
-### Community 74 - "data.ts"
-Cohesion: 0.12
-Nodes (22): Architectural guidelines, Core module responsibilities, Data access, Data Layer Module Conventions, Dependency injection and auth subscriptions, Official references, Route-private support modules, When to read (+14 more)
+### Community 74 - "next-intl"
+Cohesion: 0.11
+Nodes (29): Architectural guidelines, next-intl, ProfileThemeField(), PreferencesState, useProfilePreferences(), useProfileSaveButton(), UseProfileSaveFeedbackOptions, UseProfileSubmitOptions (+21 more)
 
 ### Community 75 - "components.json"
 Cohesion: 0.09
 Nodes (22): aliases, components, hooks, lib, ui, utils, iconLibrary, menuAccent (+14 more)
 
-### Community 76 - "Assistant activity uses Trace"
-Cohesion: 0.09
-Nodes (24): Assistant activity uses Trace, Chat & Messaging → [chat.md](./rules/chat.md), SourceProps, SourcesContentProps, SourcesProps, SourcesTriggerProps, TaskContentProps, TaskItemFileProps (+16 more)
-
-### Community 77 - "use-auth-navigation.ts"
+### Community 76 - "collapsible.tsx"
 Cohesion: 0.10
-Nodes (24): ForgotPasswordAuthFlowClient(), ForgotPasswordAuthFlowClientProps, useForgotPasswordAuthFlowClient(), ForgotPasswordPage(), instant, useAuthNavigation(), navigate(), RegisterAuthFlowClient() (+16 more)
+Nodes (11): SourceProps, SourcesContentProps, SourcesProps, SourcesTriggerProps, TaskContentProps, TaskItemFileProps, TaskItemProps, TaskProps (+3 more)
+
+### Community 77 - "next"
+Cohesion: 0.07
+Nodes (32): Three independent dimensions, authEmulatorHost, nextConfig, securityHeaders, withNextIntl, next, ProfileBackToHomeButtonProps, ForgotPasswordAuthFlowClient() (+24 more)
 
 ### Community 78 - "shadcn/ui"
-Cohesion: 0.14
-Nodes (14): `info` — Project information, Picking a style, Step 1: Scaffold, Component Docs, Examples, and Usage, Current Project Context, Design Systems from DESIGN.md, Detailed References, Key Fields (+6 more)
+Cohesion: 0.22
+Nodes (9): Component Docs, Examples, and Usage, Current Project Context, Design Systems from DESIGN.md, Detailed References, Key Patterns, Principles, Quick Reference, shadcn/ui (+1 more)
 
-### Community 79 - "agents/domain.md"
-Cohesion: 0.25
-Nodes (8): Before exploring, read these, DER.md Firebase persistence boundary, Domain Docs, File structure, Flag ADR conflicts, GLOSSARY.md pending glossary, Technical UI references, Use the glossary's vocabulary
+### Community 79 - "button.stories.tsx"
+Cohesion: 0.20
+Nodes (7): Images and fonts, Other media references, When to read, srcset with Width Descriptors, @ladle/react, Sizes, Variants
 
 ### Community 80 - "user-roles.test.cjs"
 Cohesion: 0.18
@@ -896,33 +890,33 @@ Cohesion: 0.08
 Nodes (46): agentStatusText(), barPaletteForTheme(), brandMarkSvg(), buildDesignHeader(), cursorForInsertAxis(), designPanelCss(), detectPageTheme(), own() (+38 more)
 
 ### Community 85 - "functions/package.json"
-Cohesion: 0.14
-Nodes (13): dependencies, firebase-admin, firebase-functions, description, engines, node, firebase-admin, main (+5 more)
+Cohesion: 0.10
+Nodes (20): dependencies, firebase-admin, firebase-functions, description, engines, node, firebase-admin, main (+12 more)
 
 ### Community 86 - "terminal.tsx"
 Cohesion: 0.10
 Nodes (11): ansi-to-react, TerminalActionsProps, TerminalClearButtonProps, TerminalContentProps, TerminalContext, TerminalContextType, TerminalCopyButtonProps, TerminalHeaderProps (+3 more)
 
 ### Community 87 - "access-policy.test.cjs"
-Cohesion: 0.19
-Nodes (13): Step 2: Reuse the page, then start, createAccessPolicy(), createBeforeCreateHandler(), createBeforeSignInHandler(), parseEmails(), assert, config, {
+Cohesion: 0.22
+Nodes (7): Step 2: Reuse the page, then start, assert, config, {
   createAccessPolicy,
   createBeforeCreateHandler,
   createBeforeSignInHandler,
   parseEmails,
-} (+5 more)
+}, event(), HttpsError, { test }
 
 ### Community 88 - "vitest"
-Cohesion: 0.09
-Nodes (13): @testing-library/react, vitest, mocks, mocks, ErrorPage(), mocks, ProtectedLayout(), mocks (+5 more)
+Cohesion: 0.07
+Nodes (28): fast-check, @testing-library/react, vitest, mocks, HomeSignOutButtonClient(), mocks, ErrorPage(), Loading() (+20 more)
 
 ### Community 89 - "test-helpers.ts"
 Cohesion: 0.08
 Nodes (33): categories, directories, lint(), locations, ruleFlags, vendorFiles, vendorParents, [dir] (+25 more)
 
-### Community 91 - "Decision"
-Cohesion: 0.33
-Nodes (8): Internationalization, ADR 0004: Configure Internationalization, Consequences, Context, Decision, RootLayout(), IntlMessages, Messages
+### Community 91 - "isLocale"
+Cohesion: 0.27
+Nodes (10): Internationalization, ADR 0004: Configure Internationalization, Consequences, Context, Decision, RootLayout(), ProfileLocaleField(), isLocale() (+2 more)
 
 ### Community 93 - "Process"
 Cohesion: 0.25
@@ -940,13 +934,13 @@ Nodes (11): Configuring Registries, Setup, `shadcn:get_add_command_for_items`, `
 Cohesion: 0.16
 Nodes (11): Next.js server error logging, Application logging, Deployment and local use, Guard behavior, Native services, Official guidance review, Viewing and controlling logs, HttpsError (+3 more)
 
-### Community 97 - "vitest.config.mts"
+### Community 97 - "color-pair.tsx"
 Cohesion: 0.29
-Nodes (4): root, @tailwindcss/vite, @vitejs/plugin-react, @vitest/browser-playwright
+Nodes (9): ColorPair(), contrast(), luminance(), toHex(), toRgb(), previewState(), StateMatrix(), Helpers (+1 more)
 
-### Community 98 - "@playwright/test"
-Cohesion: 0.11
-Nodes (10): authEmulatorEndpoint, @axe-core/playwright, @playwright/test, standards, viewports, authRoutes, routes, standards (+2 more)
+### Community 98 - "firebase-auth.spec.ts"
+Cohesion: 0.08
+Nodes (12): @axe-core/playwright, @playwright/test, standards, viewports, accessibilityTags, profileViewports, warmedRoutes, authRoutes (+4 more)
 
 ### Community 99 - "Flutter & Firebase Setup Guide"
 Cohesion: 0.15
@@ -968,9 +962,9 @@ Nodes (18): ChainOfThought, ChainOfThoughtContent, ChainOfThoughtContentProps, C
 Cohesion: 0.09
 Nodes (46): checkClassLiteralConstant(), checkClassTokens(), checkElementTouchTarget(), checkInlineStyleObject(), checkJsxClassName(), checkJsxElement(), checkJsxInlineStyle(), checkJsxMetaElement() (+38 more)
 
-### Community 104 - "web-preview.tsx"
-Cohesion: 0.06
-Nodes (30): Step 2: Install Everything, ArtifactActionProps, ArtifactActionsProps, ArtifactCloseProps, ArtifactContentProps, ArtifactDescriptionProps, ArtifactHeaderProps, ArtifactProps (+22 more)
+### Community 104 - "artifact.tsx"
+Cohesion: 0.08
+Nodes (15): Step 2: Install Everything, ArtifactActionProps, ArtifactActionsProps, ArtifactCloseProps, ArtifactContentProps, ArtifactDescriptionProps, ArtifactHeaderProps, ArtifactProps (+7 more)
 
 ### Community 105 - "Agent instructions"
 Cohesion: 0.12
@@ -992,9 +986,9 @@ Nodes (10): Evidence scope, Internationalization, Performance and installability
 Cohesion: 0.07
 Nodes (28): Assess Adaptation Challenge, Implement & Verify, Recommended Actions, Craft (deprecated alias), Monorepo notes, Opting out of the boot check, Step 1: Run the pass, Step 2: Act by severity (+20 more)
 
-### Community 110 - "ADR 0007: Configure CI"
-Cohesion: 0.33
-Nodes (6): ADR 0007: Configure CI, Alternatives considered, Consequences, Context, Decision, References
+### Community 110 - "Responsive Design"
+Cohesion: 0.22
+Nodes (9): Breakpoints: Content-Driven, Detect Input Method, Not Just Screen Size, Layout Adaptation Patterns, Mobile-First: Write It Right, Picture Element for Art Direction, Responsive Design, Responsive Images: Get It Right, Safe Areas: Handle the Notch (+1 more)
 
 ### Community 111 - "context-menu.tsx"
 Cohesion: 0.12
@@ -1005,16 +999,16 @@ Cohesion: 0.13
 Nodes (15): Connect to Emulator, Email Link Authentication, Firebase Authentication Web SDK, Initialization, Observe Auth State, Sign In Anonymously, Sign In with Apple (Popup), Sign In with Facebook (Popup) (+7 more)
 
 ### Community 113 - "Commands"
-Cohesion: 0.12
-Nodes (16): `add` — Add components, `apply` — Apply a preset to an existing project, `build` — Build a custom registry, Commands, Contents, `diff` — Check for updates, `docs` — Get component documentation URLs, Dry-Run Mode (+8 more)
+Cohesion: 0.18
+Nodes (11): `add` — Add components, `apply` — Apply a preset to an existing project, `build` — Build a custom registry, Commands, `diff` — Check for updates, `docs` — Get component documentation URLs, Dry-Run Mode, `init` — Initialize or create a project (+3 more)
 
 ### Community 114 - "live.md"
 Cohesion: 0.06
 Nodes (32): Apply at system scale, Audit before choosing, Choose a strategy, Contrast and perception, Live-mode signature params, Verify, Visitor mode, Step 1: Parse the request (+24 more)
 
-### Community 115 - "Responsive Design"
-Cohesion: 0.06
-Nodes (30): Images and fonts, Other media references, When to read, Assess Adaptation Challenge, Breakpoints: Content-Driven, Content Adaptation, Desktop Adaptation (Mobile → Desktop), Detect Input Method, Not Just Screen Size (+22 more)
+### Community 115 - "adapt.md"
+Cohesion: 0.20
+Nodes (9): Assess Adaptation Challenge, Desktop Adaptation (Mobile → Desktop), Email Adaptation (Web → Email), Mobile Adaptation (Desktop → Mobile), Plan Adaptation Strategy, Print Adaptation (Screen → Print), Reference Material, Tablet Adaptation (Hybrid Approach) (+1 more)
 
 ### Community 116 - "ADR 0008: Install Firebase UI registry"
 Cohesion: 0.13
@@ -1040,13 +1034,13 @@ Nodes (10): use-stick-to-bottom, ConversationContentProps, ConversationDownload(
 Cohesion: 0.11
 Nodes (31): browserNavigationImport(), checkClientImports(), checkFileName(), childSource(), componentIntegrations(), dependencyIntegrations(), exportedHookSpecifier(), hasServerOnlyMarker() (+23 more)
 
-### Community 122 - "ADR 0006: Configure testing"
-Cohesion: 0.40
-Nodes (5): ADR 0006: Configure testing, Consequences, Context, Decision, References
+### Community 122 - "shadcn template"
+Cohesion: 0.22
+Nodes (9): Pinned runtimes (Node, Next.js 16.4.1, React 19.3.0, pnpm 12.11.2), After creating a repository from this template, Current application behavior, Documentation, Getting Started, Learn More, shadcn template, Validation (+1 more)
 
-### Community 123 - "Avatar"
-Cohesion: 0.50
-Nodes (3): 5.4 Don't Define Components Inside Components, Don't Define Components Inside Components, Avatar()
+### Community 123 - "profile-avatar-field-client.tsx"
+Cohesion: 0.19
+Nodes (7): Don't Define Components Inside Components, ProfileAvatarFieldClientProps, Avatar(), AvatarFallback(), AvatarImage(), FieldContent(), FieldTitle()
 
 ### Community 124 - "injectSvelteComponentsFromManifest"
 Cohesion: 0.12
@@ -1056,9 +1050,9 @@ Nodes (29): applyOriginalAttrsToSvelteAnchor(), commitAcceptedSvelteComponentToD
 Cohesion: 0.22
 Nodes (9): Address Schemes, Build and Verify, GitHub Registries, Include, Item Definitions, Mental Model, Registry Authoring and Addresses, Registry Dependencies (+1 more)
 
-### Community 126 - "button-group.tsx"
-Cohesion: 0.50
-Nodes (3): ButtonGroup(), ButtonGroupText(), buttonGroupVariants
+### Community 126 - "Foundations"
+Cohesion: 0.25
+Nodes (8): Color roles, Elevation, Foundations, Motion and icons, Palette, Radius, Spacing, Typography
 
 ### Community 127 - "Save Knowledge & Project Rules"
 Cohesion: 0.07
@@ -1072,9 +1066,9 @@ Nodes (3): ./tsconfig.json, exclude, extends
 Cohesion: 0.33
 Nodes (4): Firebase Auth iOS Setup Guide, ⛔️ CRITICAL RULE: STATE MANAGEMENT (OBSERVATION VS COMBINE) ⛔️, Firebase iOS Setup Guide, xcode-project-setup skill (SPM install)
 
-### Community 130 - "audio-player.browser.test.tsx"
-Cohesion: 0.40
-Nodes (4): AudioPlayerPlayButton(), AudioPlayerSeekBackwardButton(), AudioPlayerSeekForwardButton(), controls
+### Community 130 - "Product"
+Cohesion: 0.25
+Nodes (7): Constraints & Standards, Core Capabilities, Platform, Positioning, Product, Product Purpose, Users
 
 ### Community 131 - "usage-logs.test.cjs"
 Cohesion: 0.23
@@ -1082,7 +1076,7 @@ Nodes (10): createUsageLogHandler(), events, hasEventFields(), isAllowedEvent(),
 
 ### Community 132 - "Coding Standards"
 Cohesion: 0.05
-Nodes (40): Navigation and locale, Next.js Route Special Files Logic, Official references, Proxy reference, Route special files, boundaries, and handlers, Routes and navigation, Thin entrypoint guardrails, When to read (+32 more)
+Nodes (41): Navigation and locale, Next.js Route Special Files Logic, Official references, Proxy reference, Route special files, boundaries, and handlers, Routes and navigation, Thin entrypoint guardrails, When to read (+33 more)
 
 ### Community 133 - "chart.tsx"
 Cohesion: 0.19
@@ -1108,9 +1102,9 @@ Nodes (10): Authentication in Security Rules, Basic Checks, Check if user is sig
 Cohesion: 0.24
 Nodes (7): Refresh Android Studio Local Environment, Refresh Antigravity Local Environment, Refresh Gemini CLI Local Environment, firebase/agent-skills repository, Firebase skills install via npx skills add, gemini extensions update firebase, npx skills CLI (add/list/update)
 
-### Community 139 - "Base vs Radix"
-Cohesion: 0.25
-Nodes (8): Accordion, Base vs Radix, Button / trigger as non-button element (base only), Contents, Select, Select — multiple selection and object values (base only), Slider, ToggleGroup
+### Community 139 - "Data access"
+Cohesion: 0.29
+Nodes (7): Core module responsibilities, Data access, Data Layer Module Conventions, Dependency injection and auth subscriptions, Official references, Route-private support modules, When to read
 
 ### Community 140 - "drawer.tsx"
 Cohesion: 0.17
@@ -1124,29 +1118,25 @@ Nodes (12): 1. Enable Authentication via CLI, 2. Add dependencies to Gradle buil
 Cohesion: 0.28
 Nodes (9): checkHookImport(), checkHookResponsibilities(), checkDerivedState(), hasLogic(), visit(), checkStateHookImport(), hasValueImport(), isAsyncWorkflow() (+1 more)
 
-### Community 143 - "ui/code-block.tsx"
-Cohesion: 0.19
-Nodes (6): Code and tool output use CodeBlock, CodeBlock(), CodeBlockCopyButton(), CodeBlockLine(), codeBlockLineVariants, codeBlockVariants
+### Community 143 - "Implement Adaptations"
+Cohesion: 0.33
+Nodes (6): Content Adaptation, Implement Adaptations, Layout Adaptation Techniques, Navigation Adaptation, Responsive Breakpoints, Touch Adaptation
 
 ### Community 144 - "confirmation.tsx"
-Cohesion: 0.08
-Nodes (23): Icons, Icons in Button use data-icon attribute, No sizing classes on icons inside components, Pass icons as component objects, not string keys, ConfirmationAccepted(), ConfirmationAcceptedProps, ConfirmationActionProps, ConfirmationActions() (+15 more)
+Cohesion: 0.13
+Nodes (15): ConfirmationAccepted(), ConfirmationAcceptedProps, ConfirmationActionProps, ConfirmationActions(), ConfirmationActionsProps, ConfirmationContext, ConfirmationContextValue, ConfirmationProps (+7 more)
 
-### Community 145 - "item.tsx"
-Cohesion: 0.09
-Nodes (11): Attachments use Attachment, Attachment(), AttachmentGroup(), AttachmentMedia(), attachmentMediaVariants, attachmentVariants, Item(), ItemActions() (+3 more)
+### Community 145 - "Assistant activity uses Trace"
+Cohesion: 0.08
+Nodes (34): Assistant activity uses Trace, Attachments use Attachment, Chat & Messaging, Contents, Escape hatch: the scroller hooks, Message surfaces use Bubble, Scrollable threads use MessageScroller, Streaming, anchoring, and jump-to-latest are built in (+26 more)
 
 ### Community 146 - "Antigravity Setup"
 Cohesion: 0.40
 Nodes (4): 1. Install and Verify Firebase Skills, 2. Configure and Verify Firebase MCP Server, 3. Restart and Verify Connection, Antigravity Setup
 
-### Community 147 - "ref_node_test"
+### Community 147 - "ref_node_assert"
 Cohesion: 0.28
-Nodes (10): ref_node_test, defaultBudget, defaultRoutes, evaluateLighthouseReport(), isServing(), main(), resolveChromePath(), startServerIfNeeded() (+2 more)
-
-### Community 148 - "buttonVariants"
-Cohesion: 0.22
-Nodes (8): react-day-picker, HomeSignOutButtonClient(), buttonVariants, Calendar(), QuestionnaireNext(), QuestionnairePrevious(), QuestionnaireSkip(), QuestionnaireSubmit()
+Nodes (10): ref_node_assert, defaultBudget, defaultRoutes, evaluateLighthouseReport(), isServing(), main(), resolveChromePath(), startServerIfNeeded() (+2 more)
 
 ### Community 149 - "Read"
 Cohesion: 0.50
@@ -1172,9 +1162,9 @@ Nodes (6): components, missing, source, [uiArg, ...roots], uiDir, walk()
 Cohesion: 0.09
 Nodes (22): Assess Onboarding Needs, Context Over Ceremony, Contextual Help, Design Onboarding Experiences, Documentation & Help, Empty State Design, Feature Discovery & Adoption, Guided Tours & Walkthroughs (+14 more)
 
-### Community 155 - "cn"
-Cohesion: 0.07
-Nodes (24): Message surfaces use Bubble, System notes and dividers use Marker, @base-ui/react, class-variance-authority, cn, lucide-react, Breadcrumb(), Bubble() (+16 more)
+### Community 155 - "Button"
+Cohesion: 0.03
+Nodes (35): Obligations, Establish project context, Code and tool output use CodeBlock, System notes and dividers use Marker, @base-ui/react, class-variance-authority, cn, lucide-react (+27 more)
 
 ### Community 156 - "check-route-files.mjs"
 Cohesion: 0.13
@@ -1204,17 +1194,25 @@ Nodes (20): Animate complex properties, Assess What "Extraordinary" Means Here, 
 Cohesion: 0.25
 Nodes (8): Changes from this audit, Documentation coverage, Firebase and design context, Next.js, React, Scope and evidence, shadcn/ui, Sources and maintenance
 
+### Community 163 - "questionnaire.tsx"
+Cohesion: 0.11
+Nodes (9): @shadcn/react, NotFound(), ProfileBackToHomeButton(), buttonVariants, Calendar(), QuestionnaireNext(), QuestionnairePrevious(), QuestionnaireSkip() (+1 more)
+
 ### Community 164 - "actOnAgentTarget"
 Cohesion: 0.22
 Nodes (20): actOnAgentTarget(), agentTargetBusyReason(), agentTargetOverlayGone(), agentTargetTaken(), claimAgentTarget(), claimAndActOnAgentTarget(), declineAgentTargetBusy(), declineAgentTargetUnresolvable() (+12 more)
+
+### Community 165 - "shadcn CLI Reference"
+Cohesion: 0.40
+Nodes (5): Contents, Presets, shadcn CLI Reference, Switching Presets, Templates
 
 ### Community 166 - "Research workflow"
 Cohesion: 0.25
 Nodes (8): Boundary and criteria: Serena memory vs. canonical Markdown documentation, Git and working tree policy, Invalidation and memory maintenance, Promotion and graduation to canonical documentation, Research workflow, Research workflow, Context7 interaction, and cache-first lookup, Serena External-Research Memory, Tool inventory and project activation prerequisite
 
-### Community 167 - "scripts"
-Cohesion: 0.29
-Nodes (7): scripts, deploy, logs, serve, shell, start, test
+### Community 167 - "info"
+Cohesion: 0.40
+Nodes (5): `info` — Project information, Picking a style, Step 1: Scaffold, Key Fields, info()
 
 ### Community 168 - "Ask Matt"
 Cohesion: 0.11
@@ -1224,9 +1222,13 @@ Nodes (18): ask-matt OpenAI interface config, Continue, clear, handoff, subagent
 Cohesion: 0.29
 Nodes (7): 1. Create a Firebase Project and App (Automated), 2. Installation (Automated via Swift Package Manager CLI), 3. Initialization, 4. App Check (Debug Token Persistence), AppDelegate (Traditional / UIKit), ⛔️ CRITICAL RULE: INITIALIZATION ORDER ⛔️, SwiftUI (Modern - SAFE PATTERN)
 
-### Community 172 - "firebase-auth.spec.ts"
-Cohesion: 0.07
-Nodes (18): Provider(), ladle_ladle, next-themes, Loading(), ThemeProviderClient(), src_i18n_routing_defaultlocale, src_i18n_routing_locales, src_messages_en (+10 more)
+### Community 170 - "icons.md"
+Cohesion: 0.50
+Nodes (4): Icons, Icons in Button use data-icon attribute, No sizing classes on icons inside components, Pass icons as component objects, not string keys
+
+### Community 172 - "app/layout.tsx"
+Cohesion: 0.15
+Nodes (10): Provider(), ladle_ladle, next-themes, geist, geistMono, viewport, IntlDocumentServer(), IntlProviderServer() (+2 more)
 
 ### Community 173 - "captureElementToBlob"
 Cohesion: 0.13
@@ -1236,9 +1238,13 @@ Nodes (19): averageRgb01(), captureChromeNodes(), captureElementFromRenderedAnce
 Cohesion: 0.29
 Nodes (6): 1. Create a Firebase Project and App, 2. Installation, 3. Initialization, 4. Using Services, 5. App Check (Debug Token Persistence), Firebase Web Setup Guide
 
+### Community 175 - "4. Client-Side Data Fetching"
+Cohesion: 0.40
+Nodes (5): 4.1 Deduplicate Global Event Listeners, 4.2 Use Passive Event Listeners for Scrolling Performance, 4.3 Use SWR for Automatic Deduplication, 4.4 Version and Minimize localStorage Data, 4. Client-Side Data Fetching
+
 ### Community 176 - "Issue tracker: GitHub"
-Cohesion: 0.29
-Nodes (6): Conventions, gh CLI issue workflow, Issue tracker: GitHub, Pull requests as a triage surface, When a skill says "fetch the relevant ticket", When a skill says "publish to the issue tracker"
+Cohesion: 0.40
+Nodes (5): Conventions, Issue tracker: GitHub, Pull requests as a triage surface, When a skill says "fetch the relevant ticket", When a skill says "publish to the issue tracker"
 
 ### Community 177 - "createLiveBrowserDomHelpers"
 Cohesion: 0.16
@@ -1256,21 +1262,17 @@ Nodes (19): applyPlaceholderDimensions(), beginEditPin(), buildAnnotationsForCap
 Cohesion: 0.14
 Nodes (17): ADR 0003: Configure Theming, Consequences, Context, Decision, References, @rive-app/react-webgl2, getCurrentTheme(), Persona (+9 more)
 
-### Community 181 - "tool.tsx"
-Cohesion: 0.13
-Nodes (15): CodeBlock(), SandboxHeader(), formatToolValue(), getStatusBadge(), statusIcons, statusLabels, ToolContentProps, ToolHeader() (+7 more)
+### Community 181 - "sandbox.tsx"
+Cohesion: 0.06
+Nodes (26): CodeBlock(), SandboxContentProps, SandboxHeader(), SandboxHeaderProps, SandboxRootProps, SandboxTabContentProps, SandboxTabsBarProps, SandboxTabsListProps (+18 more)
 
 ### Community 182 - "check-component-composition.mjs"
-Cohesion: 0.20
-Nodes (17): typescript, assignedTarget(), checkAdapter(), checkAdapterRoot(), checkComponentComposition(), visit(), forwardsBinding(), forwardsSpread() (+9 more)
+Cohesion: 0.22
+Nodes (16): assignedTarget(), checkAdapter(), checkAdapterRoot(), checkComponentComposition(), visit(), forwardsBinding(), forwardsSpread(), inheritedPrimitive() (+8 more)
 
 ### Community 183 - "report"
 Cohesion: 0.27
 Nodes (17): attributePosition(), checkFixedProfileButtonDisabled(), checkFixedProfileButtonType(), checkProfileButtonSafety(), checkProfileCardSafety(), checkProfileContentSafety(), checkProfileFooterSafety(), checkProfileFormSafety() (+9 more)
-
-### Community 184 - "empty.tsx"
-Cohesion: 0.25
-Nodes (4): Use Components, Not Custom Markup → [composition.md](./rules/composition.md), Empty(), EmptyMedia(), emptyMediaVariants
 
 ### Community 185 - "Recommended: Global Setup"
 Cohesion: 0.33
@@ -1297,12 +1299,12 @@ Cohesion: 0.25
 Nodes (7): ignorePaths, import, language, $schema, useGitignore, version, words
 
 ### Community 195 - "5. Re-render Optimization"
-Cohesion: 0.13
-Nodes (15): 5.10 Subscribe to Derived State, 5.11 Use Functional setState Updates, 5.12 Use Lazy State Initialization, 5.13 Use Transitions for Non-Urgent Updates, 5.14 Use useDeferredValue for Expensive Derived Renders, 5.15 Use useRef for Transient Values, 5.1 Calculate Derived State During Rendering, 5.2 Defer State Reads to Usage Point (+7 more)
+Cohesion: 0.12
+Nodes (16): 5.10 Subscribe to Derived State, 5.11 Use Functional setState Updates, 5.12 Use Lazy State Initialization, 5.13 Use Transitions for Non-Urgent Updates, 5.14 Use useDeferredValue for Expensive Derived Renders, 5.15 Use useRef for Transient Values, 5.1 Calculate Derived State During Rendering, 5.2 Defer State Reads to Usage Point (+8 more)
 
 ### Community 196 - "inspectComponent"
-Cohesion: 0.18
-Nodes (17): CI enforcement, checkComponentExportNames(), checkExportStyle(), checkPrimaryExport(), checkProps(), checkStemComponentTermParity(), componentExports(), expectedComponentNames() (+9 more)
+Cohesion: 0.19
+Nodes (16): checkComponentExportNames(), checkExportStyle(), checkPrimaryExport(), checkProps(), checkStemComponentTermParity(), componentExports(), expectedComponentNames(), exported() (+8 more)
 
 ### Community 197 - "visit"
 Cohesion: 0.17
@@ -1332,13 +1334,9 @@ Nodes (13): casesPath, findReceipt(), findToolEvidence(), main(), matchesAny(), 
 Cohesion: 0.14
 Nodes (14): 1. Decide what is already true, 2. Ask what will change the work, 3. Choose the right amount of invention, 4. Commit the world, 5. Record the decision, 6. Build with full commitment, 7. Inspect and finish, Both paths (+6 more)
 
-### Community 204 - "firebase"
-Cohesion: 0.10
-Nodes (16): firebase, @firebase-oss/ui-core, @firebase-oss/ui-react, MultiFactorAuthAssertionForm(), MultiFactorAuthAssertionFormProps, testHints, DEFAULT_HINTS, Hint (+8 more)
-
-### Community 205 - "transcription.tsx"
-Cohesion: 0.25
-Nodes (7): @radix-ui/react-use-controllable-state, TranscriptionContext, TranscriptionContextValue, TranscriptionProps, TranscriptionSegment, TranscriptionSegmentProps, useTranscription()
+### Community 204 - "@firebase-oss/ui-core"
+Cohesion: 0.09
+Nodes (19): firebase, @firebase-oss/ui-core, @firebase-oss/ui-react, SignInAuthFlowClientProps, GoogleSignInButton(), MultiFactorAuthAssertionForm(), MultiFactorAuthAssertionFormProps, testHints (+11 more)
 
 ### Community 206 - "optimize.md"
 Cohesion: 0.14
@@ -1425,8 +1423,8 @@ Cohesion: 0.18
 Nodes (10): 3.10 Use after() for Non-Blocking Operations, 3.1 Authenticate Server Actions Like API Routes, 3.2 Avoid Duplicate Serialization in RSC Props, 3.3 Avoid Shared Module State for Request Data, 3.4 Cross-Request LRU Caching, 3.5 Hoist Static I/O to Module Level, 3.6 Minimize Serialization at RSC Boundaries, 3.7 Parallel Data Fetching with Component Composition (+2 more)
 
 ### Community 234 - "skills/README.md"
-Cohesion: 0.05
-Nodes (30): ADR Naming and Immutability, Architecture decisions, When an ADR is required, When to read, Language, Language Policy, When to read, Report (+22 more)
+Cohesion: 0.08
+Nodes (18): ADR Naming and Immutability, Architecture decisions, When an ADR is required, When to read, Language, Language Policy, When to read, Report (+10 more)
 
 ### Community 235 - "Init flow"
 Cohesion: 0.20
@@ -1438,7 +1436,7 @@ Nodes (8): impeccable script, check_download(), fetch_url(), hash_file(), manife
 
 ### Community 238 - "React Best Practices"
 Cohesion: 0.20
-Nodes (9): 4.1 Deduplicate Global Event Listeners, 4.2 Use Passive Event Listeners for Scrolling Performance, 4.3 Use SWR for Automatic Deduplication, 4.4 Version and Minimize localStorage Data, 4. Client-Side Data Fetching, Abstract, React Best Practices, References (+1 more)
+Nodes (9): 8.1 Do Not Put Effect Events in Dependency Arrays, 8.2 Initialize App Once, Not Per Mount, 8.3 Store Event Handlers in Refs, 8.4 useEffectEvent for Stable Callback Refs, 8. Advanced Patterns, Abstract, React Best Practices, References (+1 more)
 
 ### Community 239 - "Sections"
 Cohesion: 0.20
@@ -1456,10 +1454,6 @@ Nodes (9): 1. The Wall of Options, 2. The Memory Bridge, 3. The Hidden Navigatio
 Cohesion: 0.22
 Nodes (9): Color & materials, Components & controls, iOS platform, Layout & structure, Motion, The iOS slop test, Touch targets, Typography (+1 more)
 
-### Community 243 - "8. Advanced Patterns"
-Cohesion: 0.40
-Nodes (5): 8.1 Do Not Put Effect Events in Dependency Arrays, 8.2 Initialize App Once, Not Per Mount, 8.3 Store Event Handlers in Refs, 8.4 useEffectEvent for Stable Callback Refs, 8. Advanced Patterns
-
 ### Community 245 - "Shape"
 Cohesion: 0.22
 Nodes (8): Cadence, Confirm and stop, Phase 1: Discovery interview, Phase 2: Resolve the design direction, Phase 3: Write the brief, Round 1: purpose, people, and outcome, Round 2: material, behavior, and boundaries, Shape
@@ -1472,17 +1466,9 @@ Nodes (3): ignore, files, $schema
 Cohesion: 0.67
 Nodes (4): create-next-app default starter assets, Globe icon (grey wireframe globe, 16x16 SVG), Next.js wordmark logo (black SVG), Vercel triangle logo (white SVG)
 
-### Community 250 - "loading-primitive.tsx"
-Cohesion: 0.10
-Nodes (15): Three independent dimensions, Accessibility and design constraints, Inventory, References and verification, Required behavior, Scope and priorities, Scope note, UI state and feedback (+7 more)
-
-### Community 251 - "clear.mjs"
-Cohesion: 0.83
-Nodes (3): clearAccounts(), reportClearError(), reportClearResult()
-
-### Community 252 - "Entity-relationship diagram"
-Cohesion: 0.67
-Nodes (3): Entity-relationship diagram, Existing technical persistence, Status: pending product persistence model
+### Community 250 - "use-auth-provider-client.ts"
+Cohesion: 0.22
+Nodes (8): @firebase-oss/ui-translations, AuthProviderClient(), AuthProviderClientProps, mocks, useAuthProviderClient(), useFirebaseUiTranslations(), useFirebaseUi(), parseLocale()
 
 ### Community 253 - "lint-staged"
 Cohesion: 0.67
@@ -1539,10 +1525,6 @@ Nodes (5): After approval: the comp becomes a spec, Generate three compositional
 ### Community 274 - "React Best Practices"
 Cohesion: 0.33
 Nodes (5): Creating a New Rule, Getting Started, React Best Practices, Rule File Structure, Structure
-
-### Community 277 - "ADR 0016: Disable the invoker IAM check for callable Functions"
-Cohesion: 0.33
-Nodes (6): ADR 0016: Disable the invoker IAM check for callable Functions, Consequences, Considered options, Context, Decision, helloWorld()
 
 ### Community 278 - "inspectNaming"
 Cohesion: 0.40
@@ -1633,8 +1615,8 @@ Cohesion: 0.67
 Nodes (3): Server and client boundaries, Server Components and Server Functions, When to read
 
 ### Community 445 - "ref_node_fs"
-Cohesion: 0.11
-Nodes (16): ref_node_assert, ref_node_fs, ref_node_os, ref_node_path, ref_node_url, decisionAreas, inspectAdrs(), readAdrs() (+8 more)
+Cohesion: 0.08
+Nodes (23): binary, require, root, authEmulatorEndpoint, ref_node_fs, ref_node_module, ref_node_os, ref_node_path (+15 more)
 
 ### Community 513 - "React Compiler"
 Cohesion: 0.67
@@ -1648,17 +1630,17 @@ Nodes (3): Enforcement, Mobile web and touch, When to read
 Cohesion: 0.67
 Nodes (3): Checks, Report, Review Firebase security changes
 
-### Community 516 - "Do's and Don'ts"
-Cohesion: 0.67
-Nodes (3): Do, Do's and Don'ts, Don't
+### Community 516 - "DESIGN.md"
+Cohesion: 0.17
+Nodes (11): Behavior, Components, Do, Do's and Don'ts, Don't, Next.js streaming and navigation presentation, Overview, React identity, refs, and lifecycle presentation (+3 more)
 
 ## Ambiguous Edges - Review These
 - `Native Biome rule evaluation history` → `Boolean UI phase flags instead of status tag`  [AMBIGUOUS]
   CODING_STANDARDS.md · relation: conceptually_related_to
 
 ## Knowledge Gaps
-- **2407 isolated node(s):** `Firebase Auth UI error normalization`, `Evidence scope`, `Revision findings and validation`, `Internationalization`, `Usability and design systems` (+2402 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 3119 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **2338 isolated node(s):** `$schema`, `version`, `language`, `import`, `useGitignore` (+2333 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 3050 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **234 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
@@ -1667,14 +1649,14 @@ _Questions this graph is uniquely positioned to answer:_
 - **What is the exact relationship between `Native Biome rule evaluation history` and `Boolean UI phase flags instead of status tag`?**
   _Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low._
 - **Why does `init()` connect `initGlobalBar` to `setLiveState`, `connectSSE`, `Init flow`, `impeccable/SKILL.md`, `live-browser.js`, `syncPageChatFocus`, `live.md`, `onAnnotDown`, `handleManualEditActivity`?**
-  _High betweenness centrality (0.204) - this node is a cross-community bridge._
-- **Why does `react` connect `react` to `prompt-input.tsx`, `combobox.tsx`, `suggestion.tsx`, `plan.tsx`, `node.tsx`, `chart.tsx`, `client.ts`, `Coding Standards`, `profile-section-client.tsx`, `drawer.tsx`, `voice-selector.tsx`, `Component Selection`, `ui/code-block.tsx`, `commit.tsx`, `confirmation.tsx`, `test-results.tsx`, `Button`, `item.tsx`, `package.json`, `buttonVariants`, `sidebar.tsx`, `next-intl`, `src_lib_utils_cn`, `cn`, `profile-avatar-field-client.tsx`, `profile-locale-field.tsx`, `lib/session.ts`, `menubar.tsx`, `Authentication`, `questionnaire.tsx`, `ai-elements/code-block.tsx`, `use-firebase-auth-session-bridge-client.ts`, `queue.tsx`, `schema-display.tsx`, `server.ts`, `firebase-auth.spec.ts`, `stack-trace.tsx`, `alert-dialog.tsx`, `inline-citation.tsx`, `audio-player.tsx`, `attachments.tsx`, `persona.tsx`, `tool.tsx`, `speech-input.tsx`, `ai-elements/message.tsx`, `environment-variables.tsx`, `mic-selector.tsx`, `open-in-chat.tsx`, `The Design System Page`, `agent.tsx`, `sandbox.tsx`, `reasoning.tsx`, `question.tsx`, `context.tsx`, `package-info.tsx`, `Assistant activity uses Trace`, `use-auth-navigation.ts`, `transcription.tsx`, `firebase`, `file-tree.tsx`, `terminal.tsx`, `vitest`, `table.tsx`, `chain-of-thought.tsx`, `web-preview.tsx`, `context-menu.tsx`, `carousel.tsx`, `jsx-preview.tsx`, `conversation.tsx`, `loading-primitive.tsx`?**
-  _High betweenness centrality (0.169) - this node is a cross-community bridge._
-- **Why does `event()` connect `access-policy.test.cjs` to `audio-player.browser.test.tsx`?**
-  _High betweenness centrality (0.100) - this node is a cross-community bridge._
+  _High betweenness centrality (0.195) - this node is a cross-community bridge._
+- **Why does `react` connect `react` to `prompt-input.tsx`, `voice-selector.tsx`, `utils.ts`, `combobox.tsx`, `chart.tsx`, `ui/message.tsx`, `plan.tsx`, `client.ts`, `Coding Standards`, `profile-section-client.tsx`, `drawer.tsx`, `model-selector.tsx`, `commit.tsx`, `confirmation.tsx`, `test-results.tsx`, `Assistant activity uses Trace`, `package.json`, `sidebar.tsx`, `web-preview.tsx`, `Button`, `home-client.tsx`, `Profile behavior ownership`, `sms-multi-factor-enrollment-form.tsx`, `menubar.tsx`, `auth.ts`, `questionnaire.tsx`, `ai-elements/code-block.tsx`, `queue.tsx`, `schema-display.tsx`, `app/layout.tsx`, `server.ts`, `stack-trace.tsx`, `alert-dialog.tsx`, `inline-citation.tsx`, `audio-player.tsx`, `attachments.tsx`, `persona.tsx`, `sandbox.tsx`, `speech-input.tsx`, `ai-elements/message.tsx`, `environment-variables.tsx`, `mic-selector.tsx`, `open-in-chat.tsx`, `agent.tsx`, `alert.tsx`, `reasoning.tsx`, `question.tsx`, `context.tsx`, `package-info.tsx`, `next-intl`, `@firebase-oss/ui-core`, `next`, `collapsible.tsx`, `file-tree.tsx`, `terminal.tsx`, `table.tsx`, `color-pair.tsx`, `chain-of-thought.tsx`, `artifact.tsx`, `context-menu.tsx`, `carousel.tsx`, `jsx-preview.tsx`, `conversation.tsx`, `use-auth-provider-client.ts`, `profile-avatar-field-client.tsx`?**
+  _High betweenness centrality (0.150) - this node is a cross-community bridge._
+- **Why does `vitest` connect `vitest` to `prompt-input.tsx`, `Coding Standards`, `plan.tsx`, `client.ts`, `profile-section-client.tsx`, `react`, `package.json`, `sidebar.tsx`, `web-preview.tsx`, `home-client.tsx`, `Button`, `Profile behavior ownership`, `review-findings.test.tsx`, `auth.ts`, `ai-elements/code-block.tsx`, `server.ts`, `app/layout.tsx`, `inline-citation.tsx`, `audio-player.tsx`, `speech-input.tsx`, `agent.tsx`, `ref_node_fs`, `context.tsx`, `next-intl`, `@firebase-oss/ui-core`, `next`, `test-helpers.ts`, `Application logging`, `auth-service-worker.test.ts`, `carousel.tsx`, `use-auth-provider-client.ts`?**
+  _High betweenness centrality (0.125) - this node is a cross-community bridge._
 - **Are the 14 inferred relationships involving `Button()` (e.g. with `Compound forms` and `Obligations`) actually correct?**
   _`Button()` has 14 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `Firebase Auth UI error normalization`, `Evidence scope`, `Revision findings and validation` to the rest of the system?**
-  _2407 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **What connects `$schema`, `version`, `language` to the rest of the system?**
+  _2338 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `prompt-input.tsx` be split into smaller, more focused modules?**
   _Cohesion score 0.025165865934568748 - nodes in this community are weakly interconnected._

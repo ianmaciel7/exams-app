@@ -117,3 +117,27 @@ resource "google_secret_manager_secret_iam_member" "firebase_web_api_key_build" 
   role      = "roles/secretmanager.secretAccessor"
   member    = "serviceAccount:${data.google_project.this.number}-compute@developer.gserviceaccount.com"
 }
+
+# Resolving the `latest` alias at build time also needs `secretmanager.versions.get`, so
+# `secretAccessor` alone fails the build with `fah/misconfigured-secret`. The default compute
+# account (the build), the App Hosting runtime account and the App Hosting service agent each
+# get `viewer`; the service agent also gets `secretAccessor`.
+resource "google_secret_manager_secret_iam_member" "firebase_web_api_key_viewer" {
+  for_each = {
+    build         = "serviceAccount:${data.google_project.this.number}-compute@developer.gserviceaccount.com"
+    runtime       = google_service_account.app_hosting.member
+    service_agent = "serviceAccount:service-${data.google_project.this.number}@gcp-sa-firebaseapphosting.iam.gserviceaccount.com"
+  }
+
+  project   = var.project_id
+  secret_id = google_secret_manager_secret.firebase_web_api_key.secret_id
+  role      = "roles/secretmanager.viewer"
+  member    = each.value
+}
+
+resource "google_secret_manager_secret_iam_member" "firebase_web_api_key_service_agent" {
+  project   = var.project_id
+  secret_id = google_secret_manager_secret.firebase_web_api_key.secret_id
+  role      = "roles/secretmanager.secretAccessor"
+  member    = "serviceAccount:service-${data.google_project.this.number}@gcp-sa-firebaseapphosting.iam.gserviceaccount.com"
+}

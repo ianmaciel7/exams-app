@@ -58,8 +58,11 @@ then apply again so the repository link and backend can finish.
     the secret for the default compute account (`<project-number>-compute@developer.gserviceaccount.com`), the
     App Hosting compute account and the App Hosting service agent
     (`service-<project-number>@gcp-sa-firebaseapphosting.iam.gserviceaccount.com`). Without it the build fails
-    with `fah/misconfigured-secret`. The 2026-11-03 rotation applied these grants and the service agent
-    `secretAccessor` grant by hand; they are not yet in `prod/app_hosting.tf`.
+    with `fah/misconfigured-secret`. `prod/app_hosting.tf` declares these grants and `prod/apis.tf` enables
+    `apikeys.googleapis.com`. The 2026-11-03 rotation applied them by hand first, so the next apply adopts
+    them: import any binding that already exists, or let apply report it as already present.
+  - The key itself is not managed by Terraform. After a rotation, `firebase_web_config.NEXT_PUBLIC_FIREBASE_API_KEY`
+    comes from the Firebase config API and is not the secret's value; do not copy it into `apphosting.yaml`.
 - Update `.firebaserc` with the new project ID.
 - Email and password sign-in and the authorized domains are managed here (`google_identity_platform_config`);
   add custom domains through `extra_authorized_domains`.
