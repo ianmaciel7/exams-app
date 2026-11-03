@@ -23,6 +23,7 @@
       "!.claude",
       "!.serena",
       "!.semgrep",
+      "!graphify-out",
       "!src/components/firebase",
       "!public/*.svg"
     ]
@@ -78,7 +79,8 @@
       "includes": [
         "src/components/ai-elements/**",
         "src/components/ui/**",
-        "!src/components/ui/extensions/**"
+        "!src/components/ui/extensions/**",
+        "src/lib/highlighter.tsx"
       ],
       "formatter": {
         "enabled": false
