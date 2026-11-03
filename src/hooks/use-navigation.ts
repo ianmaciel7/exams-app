@@ -2,7 +2,7 @@ import { useRouter } from "next/navigation";
 import { type AuthRoute, routes } from "@/lib/navigation";
 import { getAuthNavigationUrl } from "@/lib/return-url";
 
-export function useAuthNavigation() {
+export function useNavigation() {
   const router = useRouter();
   function navigate(path: AuthRoute) {
     router.push(getAuthNavigationUrl(path, window.location.search));
