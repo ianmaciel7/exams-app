@@ -5,7 +5,7 @@ import { FormProvider } from "react-hook-form";
 import { Form } from "@/components/ui/extensions/form";
 import { cn } from "@/lib/utils";
 import { useProfileFormClient } from "../_hooks/use-profile-form-client";
-import { SessionContext } from "../_lib/session";
+import { ProfileContext } from "../_lib/profile-context";
 
 type ProfileFormClientProps = Omit<ComponentProps<typeof Form>, "onSubmit">;
 
@@ -14,10 +14,10 @@ function ProfileFormClient({
   className,
   ...props
 }: ProfileFormClientProps) {
-  const { form, handleSubmit, saveError, session } = useProfileFormClient();
+  const { form, handleSubmit, saveError, profile } = useProfileFormClient();
 
   return (
-    <SessionContext value={session}>
+    <ProfileContext value={profile}>
       <FormProvider {...form}>
         <Form
           {...props}
@@ -34,7 +34,7 @@ function ProfileFormClient({
           {children}
         </Form>
       </FormProvider>
-    </SessionContext>
+    </ProfileContext>
   );
 }
 

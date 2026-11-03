@@ -3,11 +3,11 @@ import { useFormContext, useWatch } from "react-hook-form";
 import { getAvatarSource } from "../_lib/avatar";
 import type { ProfileFormValues } from "../_lib/definitions";
 import { useProfileAvatar } from "./use-profile-avatar";
-import { useSessionContext } from "./use-session-context";
+import { useProfileContext } from "./use-profile-context";
 
 export function useProfileAvatarFieldClient() {
   const t = useTranslations("Auth");
-  const { user, photoURL, avatarVersion } = useSessionContext();
+  const { user, photoURL, avatarVersion } = useProfileContext();
   const { control, setValue, formState } = useFormContext<ProfileFormValues>();
   const avatarFile = useWatch({ control, name: "avatarFile" });
   const { avatarPreview, fileInputRef, handleAvatarChange } = useProfileAvatar(

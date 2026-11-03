@@ -8,6 +8,7 @@ import {
 } from "@testing-library/react";
 import { Component, type ReactNode, Suspense } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { SessionProviderClient } from "@/components/ui/extensions/session-provider-client";
 import { AuthGateClient } from "../../_components/auth-gate-client";
 import ProfileError from "../error";
 import ProfileLoading from "../loading";
@@ -123,13 +124,15 @@ class SegmentErrorBoundary extends Component<
 /** Firebase loads on demand; wait for it so the gate has subscribed. */
 async function renderProfile() {
   const rendered = render(
-    <AuthGateClient>
-      <SegmentErrorBoundary>
-        <Suspense fallback={<ProfileLoading />}>
-          <ProfilePage />
-        </Suspense>
-      </SegmentErrorBoundary>
-    </AuthGateClient>,
+    <SessionProviderClient>
+      <AuthGateClient>
+        <SegmentErrorBoundary>
+          <Suspense fallback={<ProfileLoading />}>
+            <ProfilePage />
+          </Suspense>
+        </SegmentErrorBoundary>
+      </AuthGateClient>
+    </SessionProviderClient>,
   );
   await act(() => vi.dynamicImportSettled());
   return rendered;

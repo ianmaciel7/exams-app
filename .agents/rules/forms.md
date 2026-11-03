@@ -50,8 +50,8 @@ These are project conventions aligned with the current shadcn/ui and React Hook 
   `profile/error.tsx`. Its retry evicts the failed read before calling
   `retry()`. Components render only loaded data; there is no status guard.
 - `useProfileController` is removed. `useProfileFormClient` reads
-  `useSession`, and `ProfileFormClient` shares it through
-  `SessionContext`; it does not assemble field or button props.
+  `useProfile`, and `ProfileFormClient` shares it through
+  `ProfileContext`; it does not assemble field or button props.
 - `ProfileFormClient` delegates its React Hook Form lifecycle to
   `useProfileFormClient`, which calls `useProfileSubmit` for persistence.
   Read `formState.isSubmitting` instead of keeping a second saving flag;
@@ -69,7 +69,7 @@ These are project conventions aligned with the current shadcn/ui and React Hook 
 - `ProfileCard` renders one native shadcn `Card` as its sole root and
   forwards children and applicable primitive props. `profile/page.tsx`
   composes the Card header, content, and footer; `ProfileFormClient`
-  shares loaded session data through `SessionContext`.
+  shares loaded profile data through `ProfileContext`.
   `ProfileFormClient` owns the only HTML `<form>` inside the Card under
   `FormProvider`; do not render a second Card.
 - `ProfileCardHeader`, `ProfileCardTitle`, `ProfileCardDescription`,

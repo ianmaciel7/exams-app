@@ -1,13 +1,13 @@
 import { useTranslations } from "next-intl";
 import { useEffect } from "react";
-import { useAuthSession } from "@/hooks/use-auth-session";
 import { useNavigation } from "@/hooks/use-navigation";
+import { useSession } from "@/hooks/use-session";
 
 export function useAuthGateClient() {
   const t = useTranslations("Auth");
   const app = useTranslations("App");
   const { replaceWithSignIn } = useNavigation();
-  const session = useAuthSession();
+  const session = useSession();
   const isUnauthenticated =
     !session.isLoading && !session.isError && !session.user;
 

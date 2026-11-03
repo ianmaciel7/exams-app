@@ -7,6 +7,7 @@ import {
 } from "@testing-library/react";
 import { NextIntlClientProvider } from "next-intl";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { SessionProviderClient } from "@/components/ui/extensions/session-provider-client";
 import en from "@/messages/en.json";
 import { HomeClient } from "./home-client";
 
@@ -32,7 +33,9 @@ async function resolveSession(user: unknown) {
 function renderHome() {
   return render(
     <NextIntlClientProvider locale="en" messages={en}>
-      <HomeClient />
+      <SessionProviderClient>
+        <HomeClient />
+      </SessionProviderClient>
     </NextIntlClientProvider>,
   );
 }
