@@ -72,11 +72,11 @@ When standards conflict, apply them in this order:
   to create an interface for every helper.
 - **Form Architecture and State Propagation**:
   - The profile form is a React form Action (`<Form action>` +
-    `useActionState`); its uncontrolled fields read their `defaultValue`
-    from the profile context, and `useFormStatus().pending` replaces a
-    separate saving flag. `ProfileCardContent` already renders
-    one `FieldGroup`, so do not introduce a second group in the
-    profile `page.tsx`. Other compound forms that still use React Hook
+    `useActionState`); `ProfileForm` is one client component that renders
+    its uncontrolled fields with `defaultValue` from the Action state, and
+    the pending flag from `useActionState` replaces a separate saving flag.
+    `ProfileForm` renders the one `FieldGroup`, so `page.tsx` only composes
+    a `Card` around `<ProfileForm />`. Other compound forms that still use React Hook
     Form use one `useForm` and `<FormProvider {...form}>`; that Provider
     requirement is a repository convention, not universal shadcn/ui policy.
   - Name standalone field components after their React Hook Form data property (for example `ProfileDisplayNameField` for `Controller name="displayName"`). Prefer built-in `FieldGroup`/`FieldSet` over arbitrary wrapper components.
@@ -348,14 +348,14 @@ and would move authorization from rules to code. So these forms stay client
 forms, and the guide's other points are met as follows:
 
 - Profile form (the reference): `<Form action={formAction}>` where `formAction`
-  comes from `useActionState(submitProfile, initialState)`. `submitProfile`
-  (`use-profile-action.ts`) is a client Action that parses `FormData`
+  comes from `useActionState(createProfileAction(...), initialState)`. The
+  Action (`_lib/profile-action.ts`) is a client function that parses `FormData`
   (`_lib/form-data.ts`), writes through Firebase and returns the next state
   (`values`, pending `avatarFile`, `error`). Fields are uncontrolled inputs with
   `name` and `defaultValue` from that state. After an Action React resets the
   form, so a failed save returns the submitted values to keep the user's input.
-- Pending state: `useFormStatus().pending` in the submit button and the avatar
-  field (they sit inside the form), and the save button uses
+- Pending state: the third value of `useActionState` in `ProfileForm`, passed
+  to the avatar field as a prop; the save button uses
   `focusableWhenDisabled`. The Firebase UI auth forms still use
   `formState.isSubmitting` from React Hook Form until they migrate.
 - Validation: HTML constraints (`required`, `type`, `maxLength`) through the
@@ -688,8 +688,9 @@ state/callbacks. A sub-hook owns one cohesive lifecycle or workflow, not one lin
 of code. For example, `useAuthProviderClient` composes `useAuthUiStore`,
 `useFirebaseUiReturnNavigation` and `useAuthUiLocale`; it does not initialize Firebase,
 subscribe to authentication and synchronize locale inside one monolithic Effect.
-`useProfileFormClient` reads the suspended profile through `loadProfile`, and
-`useProfileAction` delegates successful UI feedback to `useProfileSaveFeedback`.
+`ProfileForm` is exempt: a `*-form.tsx` component owns its Action and reads the
+suspended profile through `loadProfile` itself, as the Next.js and shadcn form
+guides do. It delegates successful UI feedback to `useProfileSaveFeedback`.
 Pure transformations, constants and subscription support functions remain in the
 route's `_lib`, following the hook support placement contract.
 
@@ -907,10 +908,10 @@ do not establish an integration. A filename without a suffix does not guarantee 
 can run on the server. Shared presentation is the subset compatible with both.
 
 Integrations may delegate their environment access to focused hooks/helpers;
-review those implementations. `ProfileFormClient` persists through `useProfileAction`,
-so it remains in `profile-form-client.tsx`. `ProfileEmailField` uses only form
-context and translations, so it lives in `profile-email-field.tsx` while keeping
-`"use client"`. `ProfileAvatarFieldClient` accesses browser object URLs through its
+review those implementations. A `*-form.tsx` component such as `ProfileForm`
+is exempt from the `-client` suffix and from the custom-hook delegation rules,
+but `pnpm check:components` still requires exactly one form root and rejects
+`FormProvider` there. `ProfileAvatarFieldClient` accesses browser object URLs through its
 hook and keeps `profile-avatar-field-client.tsx`. `LoadingStatus` remains
 without a suffix and compatible with either graph.
 

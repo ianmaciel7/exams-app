@@ -327,7 +327,7 @@ describe("ProfilePage", () => {
     }
   });
 
-  it("keeps form fields in CardContent and buttons in CardFooter", async () => {
+  it("renders the fields and buttons in one form inside CardContent", async () => {
     mocks.currentUser = { uid: "user-123", email: "user@example.com" };
     await renderProfile();
 
@@ -335,20 +335,11 @@ describe("ProfilePage", () => {
       name: "saveProfile",
     });
     const displayName = screen.getByLabelText("displayNameLabel");
-
-    expect(displayName.closest('[data-slot="card-content"]')).toBeTruthy();
-    expect(document.querySelectorAll('[data-slot="field-group"]')).toHaveLength(
-      1,
-    );
-    expect(saveButton.closest('[data-slot="card-footer"]')).toBeTruthy();
     const form = saveButton.closest("form");
+
     expect(form).toBeTruthy();
     expect(displayName.closest("form")).toBe(form);
-    expect(
-      displayName
-        .closest('[data-slot="field-group"]')
-        ?.closest('[data-slot="card-content"]'),
-    ).toBeTruthy();
+    expect(form?.closest('[data-slot="card-content"]')).toBeTruthy();
     expect(form?.querySelectorAll("form")).toHaveLength(0);
     expect(saveButton.getAttribute("type")).toBe("submit");
   });

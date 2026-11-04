@@ -175,16 +175,15 @@ The security and HTTP header modules also remain flat under `src/lib`:
 and `csp.ts` (pure Content Security Policy directive builder); consumers should
 import them as `@/lib/headers` and `@/lib/csp`.
 Firebase Web SDK initialization lives in `src/lib/firebase/client.ts`. The
-profile route's `useProfileFormClient` and `useProfileAction` hooks coordinate
-the load and save workflows; `readProfile`, `readUserPreferences`,
+profile route's `ProfileForm` component coordinates the load and save
+workflows through `createProfileAction`; `readProfile`, `readUserPreferences`,
 `writeUserPreferences`, and `saveProfile` in
 `src/app/(protected)/profile/_lib/data.ts` handle Firestore/Storage/Auth
 persistence and inject typed Firebase adapters for independent tests.
-`useProfileFormClient` owns the form Action (`useActionState`), reads the
-suspended profile with `use()`, and composes `useSession`; fields read the
-Action state with `use(ProfileFormContext)`. The route's `page.tsx` composes Card and Form
-parts, including the Card header; `ProfileCardContent` renders the one
-`FieldGroup`. The segment's `loading.tsx` and `error.tsx`
+`ProfileForm` owns the form Action (`useActionState`), reads the suspended
+profile with `use()`, composes `useSession` and renders its fields inline
+(ADR 0017). The route's `page.tsx` composes a Card with the header around
+`<ProfileForm />`, which renders the one `FieldGroup`. The segment's `loading.tsx` and `error.tsx`
 cover the suspended read and its failure. Profile value types live in
 `src/app/(protected)/profile/_lib/definitions.ts`, alongside the route-private profile
 workflow. The canonical profile

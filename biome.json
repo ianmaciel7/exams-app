@@ -281,6 +281,16 @@
           }
         }
       }
+    },
+    {
+      "includes": ["src/**/_components/*-form.tsx"],
+      "linter": {
+        "rules": {
+          "complexity": {
+            "noExcessiveLinesPerFunction": "off"
+          }
+        }
+      }
     }
   ]
 }

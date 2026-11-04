@@ -6,8 +6,8 @@ vi.mock("next-intl", () => ({
   useTranslations: () => (key: string) => key,
 }));
 
-vi.mock("./profile/_components/profile-form-client", () => ({
-  ProfileFormClient: () => <div data-testid="profile-form">{"Profile"}</div>,
+vi.mock("./profile/_components/profile-form", () => ({
+  ProfileForm: () => <div data-testid="profile-form">{"Profile"}</div>,
 }));
 
 afterEach(cleanup);
