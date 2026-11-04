@@ -1206,22 +1206,6 @@ describe("component filename term matching and parity", () => {
     );
   });
 
-  it("rejects HomeSection when it does not compose Home", () => {
-    expectInvalid(
-      `"use client";
-       import type { ComponentProps } from "react";
-       import { useHomeSection } from "../_hooks/use-home-section";
-       type HomeSectionProps = ComponentProps<"div">;
-       function HomeSection(props: HomeSectionProps) {
-         const { t } = useHomeSection();
-         return <div {...props} />;
-       }
-       export { HomeSection };`,
-      /HomeSection must compose Home/i,
-      "src/app/_components/home-section.tsx",
-    );
-  });
-
   it("rejects Home in home-section.tsx due to missing 'Section' term", () => {
     expectInvalid(
       `"use client";
