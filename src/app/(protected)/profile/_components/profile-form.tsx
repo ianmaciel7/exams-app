@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Form } from "@/components/ui/extensions/form";
@@ -35,8 +34,7 @@ type ProfileFormProps = Omit<
 >;
 
 function ProfileForm({ className, ...props }: ProfileFormProps) {
-  const t = useTranslations("Auth");
-  const { state, pending, formAction, avatarFile, pickAvatar } =
+  const { t, state, pending, formAction, avatarFile, pickAvatar } =
     useProfileForm();
 
   // Edits made while a save is pending would be reset with the form.

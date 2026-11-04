@@ -37,7 +37,9 @@ This is a stricter project policy, not a React rule.
 Form components (`*-form.tsx`, such as `ProfileForm`) render their fields inline,
 as in the Next.js and shadcn form guides, but delegate `useActionState`, `use()`
 and sibling hooks to `use<Component>` like any component (`useProfileForm`,
-ADR 0018).
+ADR 0018). `useProfileForm` also returns the `Auth` translator `t`, so
+`ProfileForm` calls no hook of its own; this refines ADR 0018, which kept
+`useTranslations` in the component.
 
 `check:components` checks the imported orchestration hook's canonical name,
 including aliased imports, and rejects unrelated application orchestration
