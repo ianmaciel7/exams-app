@@ -174,11 +174,24 @@ describe("form components", () => {
   const form = (body) =>
     `"use client"; import { useActionState, useState } from "react"; import { createAction } from "../_lib/actions"; function ProfileForm() { ${body} } export { ProfileForm };`;
 
-  it("lets a form own its Action, state and integrations", () => {
+  const delegatedForm = (body) =>
+    `"use client"; import { useTranslations } from "next-intl"; import { useProfileForm } from "../_hooks/use-profile-form"; function ProfileForm() { ${body} } export { ProfileForm };`;
+
+  it("lets a form delegate its Action and state to its component hook", () => {
     expectValid(
+      delegatedForm(
+        'const t = useTranslations("Auth"); const { state, formAction } = useProfileForm(); return <Form action={formAction}>{state.error}{t("a")}</Form>;',
+      ),
+      formFile,
+    );
+  });
+
+  it("rejects a form that coordinates its Action and state inline", () => {
+    expectInvalid(
       form(
         "const [state, action] = useActionState(createAction(), {}); const [pick] = useState(null); return <Form action={action}>{state.error}</Form>;",
       ),
+      /useProfileForm/,
       formFile,
     );
   });

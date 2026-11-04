@@ -688,9 +688,9 @@ state/callbacks. A sub-hook owns one cohesive lifecycle or workflow, not one lin
 of code. For example, `useAuthProviderClient` composes `useAuthUiStore`,
 `useFirebaseUiReturnNavigation` and `useAuthUiLocale`; it does not initialize Firebase,
 subscribe to authentication and synchronize locale inside one monolithic Effect.
-`ProfileForm` is exempt: a `*-form.tsx` component owns its Action and reads the
-suspended profile through `loadProfile` itself, as the Next.js and shadcn form
-guides do. It delegates successful UI feedback to `useProfileSaveFeedback`.
+`ProfileForm` renders its fields inline and delegates the suspended profile read,
+its Action and the picked avatar to `useProfileForm`, which delegates successful
+UI feedback to `useProfileSaveFeedback` (ADR 0018).
 Pure transformations, constants and subscription support functions remain in the
 route's `_lib`, following the hook support placement contract.
 
@@ -909,8 +909,8 @@ can run on the server. Shared presentation is the subset compatible with both.
 
 Integrations may delegate their environment access to focused hooks/helpers;
 review those implementations. A `*-form.tsx` component such as `ProfileForm`
-is exempt from the `-client` suffix and from the custom-hook delegation rules,
-but `pnpm check:components` still requires exactly one form root and rejects
+is exempt from the `-client` suffix only; it delegates hooks to `use<Component>`
+like any component (ADR 0018), and `pnpm check:components` still requires exactly one form root and rejects
 `FormProvider` there. `ProfileAvatarFieldClient` accesses browser object URLs through its
 hook and keeps `profile-avatar-field-client.tsx`. `LoadingStatus` remains
 without a suffix and compatible with either graph.

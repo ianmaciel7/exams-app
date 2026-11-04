@@ -989,9 +989,10 @@ export function inspectLibPlacement(filename) {
 }
 
 /**
- * A `*-form.tsx` component calls `useActionState` and its sibling hooks
- * directly (Next.js forms guide, shadcn Next.js form), so the custom-hook
- * delegation rules do not apply. It still renders exactly one form root and
+ * A `*-form.tsx` component renders its fields inline and submits through a
+ * React form Action (Next.js forms guide, shadcn Next.js form). Its hooks are
+ * still delegated to `use<Component>` like any component, so the Action,
+ * effects and state live in `_hooks/`. It renders exactly one form root and
  * shares state through the Action, not React Hook Form's `FormProvider`.
  */
 function checkFormComponent(source, report) {
@@ -1043,7 +1044,7 @@ export function inspectComponent(content, filename) {
     report,
   );
   if (stem.endsWith("-form")) checkFormComponent(source, report);
-  else checkHookResponsibilities(source, report);
+  checkHookResponsibilities(source, report);
   checkFieldControllerNames(source, stem, report);
   checkProfilePropDrilling(source, report);
   return findings;

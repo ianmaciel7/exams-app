@@ -180,9 +180,9 @@ workflows through `createProfileAction`; `readProfile`, `readUserPreferences`,
 `writeUserPreferences`, and `saveProfile` in
 `src/app/(protected)/profile/_lib/data.ts` handle Firestore/Storage/Auth
 persistence and inject typed Firebase adapters for independent tests.
-`ProfileForm` owns the form Action (`useActionState`), reads the suspended
-profile with `use()`, composes `useSession` and renders its fields inline
-(ADR 0017). The route's `page.tsx` composes a Card with the header around
+`useProfileForm` owns the form Action (`useActionState`), reads the suspended
+profile with `use()` and composes `useSession`; `ProfileForm` renders its
+fields inline (ADRs 0017 and 0018). The route's `page.tsx` composes a Card with the header around
 `<ProfileForm />`, which renders the one `FieldGroup`. The segment's `loading.tsx` and `error.tsx`
 cover the suspended read and its failure. Profile value types live in
 `src/app/(protected)/profile/_lib/definitions.ts`, alongside the route-private profile
