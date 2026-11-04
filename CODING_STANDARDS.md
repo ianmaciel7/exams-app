@@ -697,7 +697,7 @@ state/callbacks. A sub-hook owns one cohesive lifecycle or workflow, not one lin
 of code. For example, `useAuthProviderClient` composes `useAuthUiStore`,
 `useFirebaseUiReturnNavigation` and `useAuthUiLocale`; it does not initialize Firebase,
 subscribe to authentication and synchronize locale inside one monolithic Effect.
-`ProfileClient` delegates the cancellable browser read to `useProfileClient` and
+`ProfileClient` delegates the browser read lifecycle to `useProfileClient` and
 mounts `ProfileForm` only with loaded values. `ProfileForm` renders its fields
 inline and delegates its Action and picked avatar to `useProfileForm`, which
 delegates successful UI feedback to `useProfileSaveFeedback` (ADR 0019).
