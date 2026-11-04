@@ -4,10 +4,13 @@ files:
   - src/app/**/page.tsx
   - src/app/**/layout.tsx
   - src/app/**/template.tsx
+  - src/app/**/not-found.tsx
+  - src/app/**/loading.tsx
+  - src/app/**/default.tsx
 ignores:
   - "**/*.test.tsx"
 severity: error
-message: Route entrypoints must not use stateful or navigation hooks; useTranslations is allowed for server-rendered copy.
+message: Route entrypoints must not call hooks; use `await getTranslations()` from `next-intl/server` for server-rendered copy.
 note: |
   This is a project policy requiring thin route entrypoints, not a restriction
   imposed by Next.js on every page or layout.
@@ -18,7 +21,3 @@ rule:
     - has:
         field: function
         regex: '(^|\.)use[A-Z]'
-    - not:
-        has:
-          field: function
-          pattern: useTranslations
