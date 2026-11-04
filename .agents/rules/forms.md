@@ -51,28 +51,13 @@ These are project conventions aligned with the current shadcn/ui and React Hook 
   `data.ts` module.
   `saveProfile` accepts typed `ProfileDependencies` with default Firebase
   adapters to test persistence without production services.
-- `ProfileAvatarFieldClient` uses `useProfileAvatarFieldClient` for field state and avatar display data, with `useProfileAvatarInput` handling validation and `useProfileAvatarPreview` the preview. Only the picked `File` lives in `useProfileFormClient` state (and in the Action result after a failure) so submission can upload it; preview URLs are released on replacement, successful reset and unmount. Failed saves retain the selection for retry.
-- `ProfileCardContent` owns the **one** `FieldGroup`: do not wrap the
-  individual profile fields in another `FieldGroup` in `page.tsx`.
+- `ProfileAvatarFieldClient` uses `useProfileAvatarFieldClient` for field state and avatar display data, with `useProfileAvatarInput` handling validation and `useProfileAvatarPreview` the preview. Only the picked `File` lives in `ProfileForm` state (and in the Action result after a failure) so submission can upload it; preview URLs are released on replacement, successful reset and unmount. Failed saves retain the selection for retry.
+- `ProfileForm` renders the **one** `FieldGroup`: do not wrap the individual profile fields in another `FieldGroup`, and keep `page.tsx` to a plain `Card` around `<ProfileForm />`.
 
 ## Profile form action safety (repository guard)
 
-- `ProfileCard` renders one native shadcn `Card` as its sole root and
-  forwards children and applicable primitive props. `profile/page.tsx`
-  composes the Card header, content, and footer.
-  `ProfileFormClient` owns the only HTML `<form>` inside the Card under
-  the profile context; do not render a second Card.
-- `ProfileCardHeader`, `ProfileCardTitle`, `ProfileCardDescription`,
-  `ProfileCardContent`, and `ProfileCardFooter` share
-  `profile-card.tsx` and forward their native primitive props.
-  `ProfileCardContent` owns `CardContent` and the **only** `FieldGroup`
-  directly inside it. `ProfileCardFooter` owns the one native
-  `CardFooter`. Both are inside the same native form from
-  `ProfileFormClient`, and the Card title and description sit inside
-  `ProfileCardHeader` on the page.
-- `ProfileSaveButton` is the only form action and must force `type="submit"`.
-- Spread caller attributes **before** fixed `type` and computed `disabled`, so even if a caller supplies a conflicting `type` the component enforces its intended action. A late `...props` may silently override both safeguards. The separate AST guard also disallows explicit `type` overrides at profile call sites.
-- `pnpm check:components` enforces these concrete profile invariants through TypeScript AST tests. This is a **UI action-safety guard**, not a substitute for Firebase security rules, authorization or server-side validation.
+- `profile/page.tsx` renders a shadcn `Card` with the header and `<ProfileForm />` in `CardContent`. `ProfileForm` owns the only HTML `<form>` and the save button, which has `type="submit"`; do not render a second Card or form.
+- `pnpm check:components` enforces that a `*-form.tsx` component renders exactly one form root and no `FormProvider`. This is a **UI action-safety guard**, not a substitute for Firebase security rules, authorization or server-side validation.
 
 ## Accessibility and Next.js
 
@@ -91,25 +76,10 @@ These are project conventions aligned with the current shadcn/ui and React Hook 
 The profile components were compared with all maintained UI component modules under `src/components/ui` (excluding story/test fixtures), including `card.tsx`, `field.tsx`, `input.tsx`, `select.tsx`, `avatar.tsx`, `button.tsx` and the compound patterns used by `dialog.tsx`, `item.tsx` and `tabs.tsx`.
 
 - Keep application-owned components in private `_components/`, importing rather than modifying the registry.
-- Preserve native slots: `ProfileCard`, `ProfileCardHeader`,
-  `ProfileCardTitle`, `ProfileCardDescription`, `ProfileCardContent`,
-  and `ProfileCardFooter` are exported together from
-  `profile-card.tsx`. `profile/page.tsx` composes the content;
-  `ProfileFormClient` adds `data-slot="profile-form"` and uses
-  `gap-(--card-spacing)` for spacing.
+- Use the shadcn `Card` parts directly in `page.tsx`; do not add application wrappers that only forward props to a Card primitive.
 - Follow `ComponentProps<typeof Primitive>`, native children, `cn()` overrides and named exports for component adapters.
 - Use `useId()` for reusable field label/control pairs; do not hard-code duplicate `id` values when a profile form might mount more than once.
-- Keep `type="submit"` fixed after props spreads. This is an explicit repository convention, not a mandatory official shadcn file structure.
-
-## Direct parent relationships
-
-The JSX guard requires the immediate parent chain, not just an ancestor.
-Card header/content/footer are direct children of `ProfileFormClient`,
-which is a direct child of `ProfileCard`. Title and description are
-direct header children; Form content is directly in Card content, and Form
-footer is directly in Card footer. Action buttons are direct Form footer
-children. Additional wrappers at these boundaries fail the guard because
-they change the intended slot layout.
+- Keep `type="submit"` on the save button. This is an explicit repository convention, not a mandatory official shadcn file structure.
 
 ## React Form Actions
 

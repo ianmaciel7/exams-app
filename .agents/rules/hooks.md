@@ -18,25 +18,25 @@ Owned components keep rendering, translations, primitive prop forwarding and sim
 - Expose explicit session flags (`isLoading`, `isHidden`, `isError`) and an
   already resolved error message. Components render the applicable flag rather
   than deriving readiness from user, authentication and preferences flags.
-- Keep responsibilities local: `useProfileFormClient` suspends on the
-  profile read and owns the form Action (`useActionState`), and fields read
-  `useFormStatus().pending` rather than a parallel saving flag;
-  `useProfileAvatarFieldClient` handles avatar field data. Do not mirror
-  derived state in additional `useState` variables.
+- Keep responsibilities local: `ProfileForm` suspends on the
+  profile read and owns the form Action (`useActionState`), using its pending
+  value rather than a parallel saving flag; `useProfileAvatarFieldClient`
+  handles avatar field data. Do not mirror derived state in additional
+  `useState` variables.
 - `check:components` rejects React state/effect imports (including aliases), namespace state/effect calls, Firebase value imports, async workflow functions, compound `if` conditions/derived locals and error fallbacks inside owned component functions. Async Server Components, simple discriminated-state branches, translations, form context and presentation props such as `disabled={disabled || pending}` remain valid.
 - The guard checks syntax, not arbitrary semantic equivalence or the ideal number of hooks. Generated Firebase/UI registries and Next.js special files retain their existing scope exclusions. Module-level setup is outside component branch analysis.
 
 ## Component-named orchestration hooks
 
 A component coordinating application behavior must use the imported
-`use<ComponentName>` hook in a separate module. For example,
-`ProfileFormClient` calls `useProfileFormClient`, which composes
-`useSession`, the profile read (`loadProfile` with `use()`), and `useProfileAction` with `useActionState`, and resolves
-conditional properties (such as `userId`) so component JSX remains free of
-inline `in` operator guards or ternary expressions. Stateful avatar
-fields, save actions, and auth flows use focused hooks; simple display name,
-email, locale, and theme fields do **not** need one-line wrappers around
-standard hooks. This is a stricter project policy, not a React rule.
+`use<ComponentName>` hook in a separate module, which resolves conditional
+properties so component JSX remains free of inline `in` operator guards or
+ternary expressions. Stateful avatar fields and auth flows use focused hooks.
+This is a stricter project policy, not a React rule.
+
+Form components (`*-form.tsx`, such as `ProfileForm`) are exempt: they call
+`useActionState`, `use()` and sibling hooks directly and render their fields
+inline, as in the Next.js and shadcn form guides (ADR 0017).
 
 `check:components` checks the imported orchestration hook's canonical name,
 including aliased imports, and rejects unrelated application orchestration
