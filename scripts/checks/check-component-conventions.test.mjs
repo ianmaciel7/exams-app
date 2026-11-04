@@ -1038,9 +1038,29 @@ describe("lib and route _lib module placement", () => {
       "src/lib/firebase/usage.ts",
       "src/app/(protected)/_lib/dal.ts",
       "src/app/(protected)/profile/_lib/data.ts",
+      "src/app/(protected)/profile/_lib/actions.ts",
+      "src/app/(protected)/profile/_lib/actions.test.ts",
     ]) {
       assert.deepEqual(inspectLibPlacement(validPath), []);
     }
+  });
+
+  it("rejects legacy profile Action module names while allowing the canonical actions module", () => {
+    for (const path of [
+      "src/app/(protected)/profile/_lib/profile-action.ts",
+      "src/app/(protected)/profile/_lib/profile-actions.ts",
+      "src/app/(protected)/profile/_lib/profile-action.test.ts",
+      "src\\app\\(protected)\\profile\\_lib\\profile-action.ts",
+    ]) {
+      assert.match(
+        inspectLibPlacement(path)[0]?.message ?? "",
+        /Keep profile Actions in _lib\/actions\.ts/,
+      );
+    }
+    assert.deepEqual(
+      inspectLibPlacement("src/app/(protected)/profile/_lib/actions.ts"),
+      [],
+    );
   });
 
   it("rejects nested domain directories in src/lib, nested firestore folders, and standalone _lib/defaults.ts", () => {

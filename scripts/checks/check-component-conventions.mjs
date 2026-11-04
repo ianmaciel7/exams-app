@@ -985,6 +985,21 @@ export function inspectLibPlacement(filename) {
       },
     ];
   }
+  if (
+    /^src\/app\/\(protected\)\/profile\/_lib\/profile-actions?(?:\.test)?\.ts$/.test(
+      path,
+    )
+  ) {
+    return [
+      {
+        file: filename,
+        line: 1,
+        column: 1,
+        message:
+          "Keep profile Actions in _lib/actions.ts, not profile-action.ts or profile-actions.ts.",
+      },
+    ];
+  }
   return [];
 }
 
