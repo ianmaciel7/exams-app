@@ -103,6 +103,32 @@ describe("route entrypoint guard", () => {
     );
   });
 
+  it("rejects hook calls and requires getTranslations for copy", () => {
+    expectRejected(
+      'export default function Page() { const t = useTranslations("Auth"); return <h1>{t("a")}</h1>; }',
+      /getTranslations/,
+    );
+    expectRejected(
+      "export default function Page() { React.useEffect(() => {}, []); return <div />; }",
+      /Route entrypoints are Server Components/,
+    );
+    expectValid(
+      'export default async function Page() { const t = await getTranslations("Auth"); return <h1>{t("a")}</h1>; }',
+    );
+  });
+
+  it("scans not-found, loading, and default special files", () => {
+    for (const file of ["not-found", "loading", "default"]) {
+      assert.equal(isRouteEntrypoint(`src/app/${file}.tsx`), true);
+    }
+    expectRejected(
+      'export default function NotFound() { const t = useTranslations("App"); return <p>{t("a")}</p>; }',
+      /getTranslations/,
+      "src/app/not-found.tsx",
+    );
+    assert.equal(isRouteEntrypoint("src/app/error.tsx"), false);
+  });
+
   it("rejects browser APIs, mutable state, and helper declarations", () => {
     expectRejected(
       "export default function Page() { let count = 0; return <div />; }",

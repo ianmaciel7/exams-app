@@ -71,12 +71,13 @@ When standards conflict, apply them in this order:
   profile controller. Dependency injection is a design choice, not a rule
   to create an interface for every helper.
 - **Form Architecture and State Propagation**:
-  - Compound forms composed with field-component `children` use one
-    `useForm` and `<FormProvider {...form}>`; fields obtain `control`
-    with `useFormContext()`. `ProfileCardContent` already renders
-    one `FieldGroup`, so do not introduce a second group in the
-    profile `page.tsx`. Read native RHF `formState.isSubmitting`
-    rather than synchronizing a separate saving flag. The Provider
+  - The profile form is a React form Action (`<Form action>` +
+    `useActionState`); `ProfileForm` is one client component that renders
+    its uncontrolled fields with `defaultValue` from the Action state, and
+    the pending flag from `useActionState` replaces a separate saving flag.
+    `ProfileForm` renders the one `FieldGroup`, so `page.tsx` only composes
+    a `Card` around `<ProfileForm />`. Other compound forms that still use React Hook
+    Form use one `useForm` and `<FormProvider {...form}>`; that Provider
     requirement is a repository convention, not universal shadcn/ui policy.
   - Name standalone field components after their React Hook Form data property (for example `ProfileDisplayNameField` for `Controller name="displayName"`). Prefer built-in `FieldGroup`/`FieldSet` over arbitrary wrapper components.
   - Allow React Hook Form `UseFormProps<Values>` as an appropriate form component contract. Extract `onSubmit` and component presentation props before passing only RHF options into `useForm`.
@@ -94,12 +95,21 @@ When standards conflict, apply them in this order:
 
 ## Next.js App Router
 
+- Separate framework requirements, supported alternatives, and repository choices
+  when reviewing structure against the official documentation for the installed
+  version. Next.js permits route-local support files; `_lib` excludes its subtree
+  from routing and does not need to move outside `app`. The module taxonomy above
+  is this repository's responsibility split, not a mandatory Next.js filename
+  scheme. Keep cohesive helpers separate when they own different concerns;
+  moving every helper into `data.ts` does not simplify the data boundary. Review
+  these decisions alongside the existing route, component, and dependency checks.
+  See [Next.js project structure](https://nextjs.org/docs/app/getting-started/project-structure).
 - Keep route entrypoints and Next.js special files in `src/app`.
 - **Server and Client boundary separation**: Route entrypoints (`page.tsx`, `layout.tsx`) cannot be simultaneously Server and Client Components. In the React Server Components model:
   - Adding `"use client"` transforms the entire module into a Client Component boundary, rendering it and all its imports in the client bundle.
   - Framework server exports such as `metadata`, `generateMetadata`, and `generateStaticParams` cannot be exported from a `"use client"` route module. Ordinary browser data-fetching functions are different; their allowed APIs depend on the import graph.
   - Server Components cannot use client state/effect/navigation hooks (`useState`, `useEffect`, `useRouter`) or DOM event handlers (`onClick`). This does not prohibit every API whose name begins with `use`; for example, React supports `use` in synchronous Server Components.
-  - Therefore, keep route entrypoint files (`page.tsx`) as Server Components by default. Whenever interactivity or client hooks are required, never create a generic `*-page-client.tsx` at the route root. Instead, extract the client logic into a semantically named UI component in a private `_components/` directory (e.g., following shadcn conventions such as `_components/register-client.tsx`, `_components/sign-in-client.tsx`, or `_components/forgot-password-client.tsx`) and render it from the server `page.tsx`.
+  - Therefore, keep route entrypoint files (`page.tsx`) as Server Components by default. Whenever interactivity or client hooks are required, never create a generic `*-page-client.tsx` at the route root. Instead, extract the client logic into a semantically named UI component in a private `_components/` directory (e.g., following shadcn conventions such as `_components/register-form-client.tsx`, `_components/sign-in-form-client.tsx`, or `_components/forgot-password-form-client.tsx`) and render it from the server `page.tsx`.
 - Use the generated `PageProps`, `LayoutProps`, and `RouteContext` helpers for
   route parameters rather than hand-written equivalents:
   - **Route entrypoint parameters (`page.tsx`)**: When a page does not consume `params`
@@ -143,7 +153,7 @@ When standards conflict, apply them in this order:
 - Maintain single-responsibility module separation: keep domain types, constants,
   and type guards (such as `role.ts`, `theme.ts`, and `locale.ts`) in dedicated modules under
   `src/lib/`, decoupled from persistence and database clients (e.g. `src/lib/firebase/` and route `_lib/data.ts`).
-- **Enforced thin route entrypoints**: `page.tsx`, `layout.tsx`, and `template.tsx` are Server Component composition seams in this repository. They can orchestrate server data reads, access route props, declare metadata, and compose UI, but must not embed client hooks, direct Firebase SDK calls, browser APIs, event handlers, state mutation, branching, loops, or helper callbacks. Extract UI into `_components/`, hooks into `_hooks/`, and business logic into dedicated `src/lib/` services. Run `pnpm check:routes` locally; it is mandatory in `verify:fast` and `verify:static` CI. This is a repository policy, not a general Next.js restriction. See [agent rules](.agents/rules/routes.md#nextjs-route-special-files-logic).
+- **Enforced thin route entrypoints**: `page.tsx`, `layout.tsx`, `template.tsx`, `not-found.tsx`, `loading.tsx`, and `default.tsx` are Server Component composition seams in this repository. They can orchestrate server data reads, access route props, declare metadata, and compose UI, but must not embed client hooks (use `await getTranslations()` from `next-intl/server` for copy), direct Firebase SDK calls, browser APIs, event handlers, state mutation, branching, loops, or helper callbacks. Extract UI into `_components/`, hooks into `_hooks/`, and business logic into dedicated `src/lib/` services. Run `pnpm check:routes` locally; it is mandatory in `verify:fast` and `verify:static` CI. This is a repository policy, not a general Next.js restriction. See [agent rules](.agents/rules/routes.md#nextjs-route-special-files-logic).
 - Use the configured `@/*` path aliases instead of deep relative imports when
   crossing module boundaries.
 - Use Tailwind CSS and the existing design tokens. Avoid inline styles unless a
@@ -299,7 +309,7 @@ See the installed Next.js boundary guide and the
 components, without restricting the scan to files with `"use client"`.
 It enforces semantic filenames, a matching family root, locally declared named
 parts with the root prefix, matching props names, separate named exports, and
-exact term parity (`checkStemComponentTermParity`) between filenames and component declarations for non-legacy modules (such as `HomeSection` in `src/app/_components/home-section.tsx` requiring a 1:1 term match across component name, props type, and orchestration hook, and composing its companion UI component `Home`).
+exact term parity (`checkStemComponentTermParity`) between filenames and component declarations for non-legacy modules (such as `HomeWelcomeHero` in `src/app/_components/home-welcome-hero.tsx` requiring a 1:1 term match across component name and orchestration hook, while the Server Component `src/app/page.tsx` composes the companion UI component `Home`).
 It rejects static component-property assignment and direct `Object.assign`,
 `Object.defineProperty`, or `Object.defineProperties` on a component family.
 
@@ -332,24 +342,37 @@ behavior/accessibility tests remain responsible for their respective contracts.
 #### Next.js form recommendations: what applies here
 
 The [Next.js forms guide](https://nextjs.org/docs/app/guides/forms) builds forms
-on Server Functions (`action={fn}`, `useActionState`, `useFormStatus`,
-validation with a schema on the server). That fits mutations that run on the
-server. Every form in this app writes through the browser Firebase SDK, which
-needs the signed-in client: sign-in, sign-up, password reset, email link, phone
-and SMS or TOTP second factors (reCAPTCHA and the reCAPTCHA verifier are browser
+on `<form action={fn}>`, `FormData`, `useActionState` and `useFormStatus`. In
+React 19 the Action does not have to be a Server Function: a client function
+works the same way, with the same `(prevState, formData)` signature, pending
+state and automatic form reset. The guide's Server Function part (`'use server'`,
+`verifySession()`, schema parsing on the server) is what does not apply here.
+Every mutation in this app writes through the browser Firebase SDK, which needs
+the signed-in client: sign-in, sign-up, password reset, email link, phone and
+SMS or TOTP second factors (reCAPTCHA and the reCAPTCHA verifier are browser
 only), and the profile (`updateProfile`, `verifyBeforeUpdateEmail`, Storage
 upload and Firestore writes are client calls checked by security rules). A
 Server Action would need the Admin SDK, would drop `verifyBeforeUpdateEmail`,
 and would move authorization from rules to code. So these forms stay client
 forms, and the guide's other points are met as follows:
 
-- Pending state: `formState.isSubmitting` drives the button and its spinner, and
-  the save button uses `focusableWhenDisabled`.
+- Profile form (the reference): `<Form action={formAction}>` where `formAction`
+  comes from `useActionState(createProfileAction(...), initialState)`. The
+  Action (`_lib/actions.ts`) is a client function that parses `FormData`
+  (`_lib/dto.ts`), writes through Firebase and returns the next state
+  (`values`, pending `avatarFile`, `error`). Fields are uncontrolled inputs with
+  `name` and `defaultValue` from that state. After an Action React resets the
+  form, so a failed save returns the submitted values to keep the user's input.
+- Pending state: the third value of `useActionState` in `ProfileForm`, passed
+  to the avatar field as a prop; the save button uses
+  `focusableWhenDisabled`. The Firebase UI auth forms still use
+  `formState.isSubmitting` from React Hook Form until they migrate.
 - Validation: HTML constraints (`required`, `type`, `maxLength`) through the
   Base UI Form, and the Firebase UI schemas for auth. Firestore and Storage
-  rules validate on the server (`tests/rules`).
+  rules validate on the server (`tests/rules`). Unknown `FormData` values fall
+  back to the previous ones instead of reaching the SDK.
 - Errors: `aria-describedby` and `aria-invalid` on the control, a focused first
-  invalid field, and `FormError` (`role="alert"`) for a failed submit.
+  invalid field, and a `role="alert"` message for a failed submit.
 - Server forms render nothing before hydration: the sign-in and profile forms
   are not in the server HTML, so no submit can fall back to a GET with the
   password in the query string.
@@ -463,7 +486,7 @@ Components throughout the application—regardless of whether they are Server Co
   - Do not hardcode high-level infrastructure, application routing (`useRouter`, `redirect`, `Link`), external API clients, or environment-dependent SDKs inside reusable or presentation components.
   - Presentational and domain UI components must receive their actions, dynamic slots, and data abstractions via props (e.g., explicit callbacks, `children`, or injected interfaces) rather than instantiating or coupling to concrete implementations directly.
 - **Zero route coupling in presentation screens**: Screen and auth form components must remain purely presentational and never import Next.js navigation hooks (`useRouter`, `redirect`, `Link`) or hardcode application routes (such as `/register`, `/sign-in`, or `/forgot-password`). Decouple them by defining explicit callback props (e.g., `onSignUpClick?: () => void`, `onForgotPasswordClick?: () => void`, `onSignIn?: (credential: UserCredential) => void`).
-- **Route-private composition roots**: Route-level private components (such as `src/app/(public)/sign-in/_components/sign-in-client.tsx` and `src/app/(public)/register/_components/register-client.tsx`) act as composition roots. They connect Next.js navigation hooks (`router.push(...)`) to the screen's callback props and assemble feature-specific dependencies.
+- **Route-private composition roots**: Route-level private components (such as `src/app/(public)/sign-in/_components/sign-in-form-client.tsx` and `src/app/(public)/register/_components/register-form-client.tsx`) act as composition roots. They connect Next.js navigation hooks (`router.push(...)`) to the screen's callback props and assemble feature-specific dependencies.
 - **Provider and addon injection via `children` slots**: Presentation screens and shared surfaces must not hardcode third-party identity providers (e.g., Google, GitHub, or SAML) or concrete third-party services. Instead, expose extensible `children` slots so that provider buttons (e.g., `<GoogleSignInButton />`) or custom actions can be injected at the composition root, conditioned on environment variables (such as `NEXT_PUBLIC_FIREBASE_GOOGLE_ENABLED`).
 - **Logic abstraction via custom hooks or service interfaces**: Isolate business logic, validation schemas, and lifecycle effects behind specialized hooks or pure service functions (such as `useUI()`, `useSignInAuthFormSchema()`, `useSignInAuthFormAction()`, and `useOnUserAuthenticated()`). This keeps presentation components focused on rendering state, layout, and event propagation without direct coupling to underlying SDK operations.
 
@@ -674,8 +697,10 @@ state/callbacks. A sub-hook owns one cohesive lifecycle or workflow, not one lin
 of code. For example, `useAuthProviderClient` composes `useAuthUiStore`,
 `useFirebaseUiReturnNavigation` and `useAuthUiLocale`; it does not initialize Firebase,
 subscribe to authentication and synchronize locale inside one monolithic Effect.
-`useSession` delegates preference loading to `useProfilePreferences`, and
-`useProfileSubmit` delegates successful UI feedback to `useProfileSaveFeedback`.
+`ProfileClient` delegates the browser read lifecycle to `useProfileClient` and
+mounts `ProfileForm` only with loaded values. `ProfileForm` renders its fields
+inline and delegates its Action and picked avatar to `useProfileForm`, which
+delegates successful UI feedback to `useProfileSaveFeedback` (ADR 0019).
 Pure transformations, constants and subscription support functions remain in the
 route's `_lib`, following the hook support placement contract.
 
@@ -793,6 +818,19 @@ not a fresh Promise created on each client render. Rejected resources need an
 error boundary; async callbacks and event-handler failures need their own
 appropriate error handling.
 
+Creating the Promise with `useState` or `useMemo` inside a component that
+suspends before its first mount does not establish a stable resource: React
+can discard that initial render. For a screen-owned browser SDK read, prefer
+the existing Effect lifecycle and local loading/error state. Do not introduce
+a module-level Promise registry solely to activate `loading.tsx`. If shared
+client caching becomes a requirement, evaluate an established cache library;
+for server-owned data, consider passing a Promise from a Server Component.
+Keep preference, cookie, and navigation effects out of render-time reads and
+apply them through the mounted owner. Review this ownership with the lifecycle
+coverage described in [TESTING.md](TESTING.md).
+See [React's client Promise guidance](https://react.dev/reference/react/use#caching-promises-for-client-components)
+and [fetching data with Effects](https://react.dev/reference/react/useEffect#fetching-data-with-effects).
+
 A React Action is transition-coordinated work and may run on the client.
 A Server Function is a separate network-callable server surface. `useTransition`
 marks non-urgent updates and provides pending feedback; it does not authorize
@@ -861,7 +899,7 @@ optimistic-state, or experimental Suspense feature.
 
 Place shared application components in `src/components/ui/extensions/` and
 route-private components in `src/app/**/_components/`. For example,
-`LoadingState` belongs in `ui/extensions` because both
+`LoadingStatus` belongs in `ui/extensions` because both
 route components and Firebase UI consume it. Do not create parallel application
 component folders such as `src/components/loading/`.
 
@@ -873,7 +911,7 @@ policy, not a Next.js requirement.
 
 Placement does not classify runtime. `IntlProvider` in `intl-provider-server.tsx` is an async Server
 Component using server-only translation APIs; `ThemeProvider` in `theme-provider-client.tsx` declares
-`"use client"`; `LoadingState` has no directive and can be used in either
+`"use client"`; `LoadingStatus` has no directive and can be used in either
 rendering graph. Keep those boundaries even when the files share a directory.
 The existing direct server-import guard complements placement checks; Next.js
 validates the complete module graph.
@@ -893,17 +931,17 @@ do not establish an integration. A filename without a suffix does not guarantee 
 can run on the server. Shared presentation is the subset compatible with both.
 
 Integrations may delegate their environment access to focused hooks/helpers;
-review those implementations. `ProfileFormClient` persists through `useProfileSubmit`,
-so it remains in `profile-form-client.tsx`. `ProfileEmailField` uses only form
-context and translations, so it lives in `profile-email-field.tsx` while keeping
-`"use client"`. `ProfileAvatarFieldClient` accesses browser object URLs through its
-hook and keeps `profile-avatar-field-client.tsx`. `LoadingState` remains
+review those implementations. A `*-form.tsx` component such as `ProfileForm`
+is exempt from the `-client` suffix only; it delegates hooks to `use<Component>`
+like any component (ADR 0018), and `pnpm check:components` still requires exactly one form root and rejects
+`FormProvider` there. `ProfileAvatarFieldClient` accesses browser object URLs through its
+hook and keeps `profile-avatar-field-client.tsx`. `LoadingStatus` remains
 without a suffix and compatible with either graph.
 
 Owned component exports, props types, and component-named orchestration hooks
 use the complete filename stem, including `Client` or `Server` where present.
-For example, `home-section.tsx` exports `HomeSection` and uses
-`useHomeSection`. Colocated tests and stories follow the component stem. A fetch alone does not determine
+For example, `home-welcome-hero.tsx` exports `HomeWelcomeHero` and uses
+`useHomeWelcomeHero`. Colocated tests and stories follow the component stem. A fetch alone does not determine
 runtime: the component boundary determines where that request executes.
 Composing an integration component does not make presentation an integration.
 Mandatory Next.js filenames, registry output, hooks and non-component modules

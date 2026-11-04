@@ -165,9 +165,9 @@ one, so the last column names the layer that does.
 
 | Initial state | Event | Expected observable state | Verification |
 | --- | --- | --- | --- |
-| Loading | Session resolves signed in | Protected content, one subscription | `auth-gate-client.test.tsx`, emulator E2E |
-| Loading | Session resolves signed out | One redirect that keeps path and query | `auth-gate-client.test.tsx`, emulator E2E |
-| Loading | Firebase fails | Alert with a retry control, no redirect | `auth-gate-client.test.tsx` |
+| Loading | Session resolves signed in | Protected content, one subscription | `auth-guard-client.test.tsx`, emulator E2E |
+| Loading | Session resolves signed out | One redirect that keeps path and query | `auth-guard-client.test.tsx`, emulator E2E |
+| Loading | Firebase fails | Alert with a retry control, no redirect | `auth-guard-client.test.tsx` |
 | Signed in | Sign-out | Content hidden; history cannot restore it | Emulator E2E |
 | Signed in | Account changes | Subtree remounts with no prior account data | Component test, emulator E2E |
 | Signed in, worker active | Token refresh fails | Navigation continues on the client session | Emulator E2E |
@@ -192,7 +192,6 @@ Firestore Rules.
 | Lighthouse mobile budgets | `scripts/checks/check-lighthouse.mjs` | Lighthouse (default mobile profile) | `pnpm check:lighthouse` | Fails `/` or `/sign-in` below accessibility 95, best practices 90, SEO 90, performance 40 (a regression floor), CLS above 0.1, or a home LCP above 4.5 s (the CI runner measures about 4.0 s). Reports go to `reports/lighthouse/`. |
 | Accessibility | `tests/a11y.spec.ts`, titled `@a11y` | Playwright and axe-core | `pnpm test:a11y` | Automated WCAG 2.0, 2.1, and 2.2 A/AA scans (`wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`, `wcag22aa`) across desktop (`1280x800`) and mobile (`390x844`) viewports in light and dark mode. |
 | Visual regression | `tests/visual.spec.ts`, titled `@visual` | Playwright screenshots (CI only) | `pnpm test:visual` | Layout and theme changes in rendered pages. |
-| Loading transitions & visual motion | `tests/loading-transitions.spec.ts`, titled `@loading` | Playwright and `tests/support/loading-motion.ts` | `pnpm test:loading`, `pnpm verify:e2e` | Asserts that global loading indicators never remount (`rootChanged: false`) and indicators/spinners do not jump along x/y coordinates across viewports (390px, 768px, 1440px) during route and auth state transitions. |
 | Firebase Auth and profile | `tests/firebase-auth.spec.ts` | Playwright with Firebase Auth, Firestore and Functions emulators | CI `auth-emulator` job | Sign-in, registration, recovery, profile, and authenticated axe checks, including the `recordUsage` callable guard. Not included in ordinary `verify:e2e`. |
 | Firebase security rules | `tests/rules/*.test.mjs` | `node:test` with `@firebase/rules-unit-testing` on the Firestore, Storage, and Realtime Database emulators | `pnpm test:rules`, CI `rules` job | Owner, other user, administrator claim, and anonymous cases for `users/{uid}`, `usageLogs`, the avatar path, deny-all defaults, field allow-lists, size and content-type limits. A rules change without a matching test fails review; `pnpm check:firebase-rules` blocks a rules file with no test. |
 | Sign-in allowlist | `functions/access-policy.test.cjs` | `node:test` | `pnpm test:logging` | Allowed and refused addresses, role claim, verified-email rule, fail-closed empty list, and the open emulator. The auth-emulator E2E runs with no list, so it exercises only the open path. |
@@ -565,6 +564,12 @@ The [coverage contract](CODING_STANDARDS.md#composition-guard-coverage) records
 what the guard can prove. It does not resolve arbitrary component anatomy or
 transitive RSC imports; builds and behavior tests still validate those paths.
 
+The same suite accepts the profile's `actions.ts` and `actions.test.ts` paths and
+rejects the legacy `profile-action.ts` and `profile-actions.ts` names, including
+Windows path separators. The ast-grep Server Action fixtures separately verify
+client Actions and module-level/inline `"use server"` declarations with and without
+session checks. Naming and server authorization remain distinct contracts.
+
 ## Responsiveness guard regression tests
 
 `pnpm check:responsiveness` executes `scripts/checks/check-responsiveness.test.mjs` before scanning
@@ -642,6 +647,13 @@ runs exactly once. Verify unsubscribe/release behavior and that obsolete async
 results cannot overwrite the current user or resource. Activity and Suspense
 can tear down Effects while preserving other state, so permanent unmount is
 not the only cleanup case.
+
+For the profile browser read, retain regression cases for the loading deadline,
+late success/failure, retry, a fresh visit, and switching away from and back to
+the same user object. Assert that obsolete results cannot change rendered
+values, theme, or locale. The deadline ends the UI wait and cleanup ignores
+late SDK results; neither physically aborts a Firebase read that exposes no
+abort signal. Keep this distinction explicit in test names and delivery claims.
 
 Keep real viewport/media/focus behavior in Browser Mode, and hydration,
 framework navigation, async Server Components, and production cache behavior
@@ -768,7 +780,7 @@ normal configuration disables them, so these regressions use normal lint rules.
 
 Auth-provider tests cover initialization errors, first-session loading, safe
 post-auth redirects, locale updates without resubscribing, and cleanup ignoring
-late callbacks. Auth gate regressions preserve the single redirect, the pending
+late callbacks. Auth guard regressions preserve the single redirect, the pending
 sign-out, subscription cleanup, and account-switch remounting. Profile defaults
 tests cover stored/default preferences, lifecycle cancellation and a changed user;
 profile save tests keep session rechecks after every asynchronous write boundary.

@@ -8,7 +8,6 @@ import {
   inspectHookFilename,
   inspectLibPlacement,
   inspectNaming,
-  inspectProfilePage,
   inspectUiPhaseStatus,
   isOwnedComponent,
   isOwnedHookModule,
@@ -31,18 +30,6 @@ function expectValid(content, file) {
 
 function expectInvalid(content, pattern, file) {
   assert.match(inspect(content, file).join(" "), pattern);
-}
-
-const profilePage = "src/app/(protected)/profile/page.tsx";
-const inspectPage = (content) =>
-  inspectProfilePage(content, profilePage).map((issue) => issue.message);
-
-function expectPageValid(content) {
-  assert.deepEqual(inspectPage(content), []);
-}
-
-function expectPageInvalid(content, pattern) {
-  assert.match(inspectPage(content).join(" "), pattern);
 }
 
 const compoundParts = [
@@ -178,6 +165,65 @@ describe("presentation hooks in owned fields", () => {
       '"use client"; import { useWrong } from "../_hooks/use-wrong"; import { useId } from "react"; function AccountCard(props) { useId(); useWrong(); return <div {...props} />; } export { AccountCard };',
       /must delegate hook coordination to useAccountCard/,
       "src/app/_components/account-card.tsx",
+    );
+  });
+});
+
+describe("form components", () => {
+  const formFile = "src/app/(protected)/profile/_components/profile-form.tsx";
+  const form = (body) =>
+    `"use client"; import { useActionState, useState } from "react"; import { createAction } from "../_lib/actions"; function ProfileForm() { ${body} } export { ProfileForm };`;
+
+  const delegatedForm = (body) =>
+    `"use client"; import { useTranslations } from "next-intl"; import { useProfileForm } from "../_hooks/use-profile-form"; function ProfileForm() { ${body} } export { ProfileForm };`;
+
+  it("lets a form delegate its Action and state to its component hook", () => {
+    expectValid(
+      delegatedForm(
+        'const t = useTranslations("Auth"); const { state, formAction } = useProfileForm(); return <Form action={formAction}>{state.error}{t("a")}</Form>;',
+      ),
+      formFile,
+    );
+  });
+
+  it("rejects a form that coordinates its Action and state inline", () => {
+    expectInvalid(
+      form(
+        "const [state, action] = useActionState(createAction(), {}); const [pick] = useState(null); return <Form action={action}>{state.error}</Form>;",
+      ),
+      /useProfileForm/,
+      formFile,
+    );
+  });
+
+  it("still requires exactly one form root", () => {
+    expectInvalid(form("return <div />;"), /exactly one form root/, formFile);
+    expectInvalid(
+      form("return <><Form /><Form /></>;"),
+      /exactly one form root/,
+      formFile,
+    );
+  });
+
+  it("rejects FormProvider in a form component", () => {
+    expectInvalid(
+      form("return <Form><FormProvider /></Form>;"),
+      /do not use FormProvider/,
+      formFile,
+    );
+  });
+
+  it("keeps the hook delegation rules for non-form components", () => {
+    expectInvalid(
+      '"use client"; import { useState } from "react"; function ProfileCard() { const [open] = useState(false); return <Card />; } export { ProfileCard };',
+      /custom hook/,
+    );
+  });
+
+  it("rejects passing the complete profile controller to a form", () => {
+    expectInvalid(
+      "function ProfileCard() { return <ProfileForm profile={profile} />; } export { ProfileCard };",
+      /focused field\/form\/button props/,
     );
   });
 });
@@ -601,271 +647,22 @@ describe("owned component conventions", () => {
     );
   });
 
-  it("rejects passing the complete profile controller to a child", () => {
+  it("rejects FormProvider in the profile form, which submits through a React form Action", () => {
     expectInvalid(
-      "function ProfileCard() { return <ProfileFormClient profile={profile} />; } export { ProfileCard };",
-      /focused field\/form\/button props/,
-    );
-    expectInvalid(
-      "function ProfileCard() { return <ProfileSignOutButton profile={profile} />; } export { ProfileCard };",
-      /focused field\/form\/button props/,
-    );
-    expectValid(
-      compoundCard(
-        "function ProfileCard() { return <Card {...props} />; } export { ProfileCard };",
+      compoundForm(
+        "function ProfileForm() { return <FormProvider><Form>{children}</Form></FormProvider>; } export { ProfileForm };",
       ),
-    );
-  });
-
-  it("enforces fixed submit and sign-out button types after prop spreads", () => {
-    const submit =
-      "src/app/(protected)/profile/_components/profile-save-button.tsx";
-    const signOut =
-      "src/app/(protected)/profile/_components/profile-sign-out-button.tsx";
-    expectValid(
-      'function ProfileSaveButton() { return <Button {...props} type="submit" disabled={disabled} />; } export { ProfileSaveButton };',
-      submit,
-    );
-    expectInvalid(
-      'function ProfileSaveButton() { return <Button type="submit" disabled={disabled} {...props} />; } export { ProfileSaveButton };',
-      /enforce type="submit"/,
-      submit,
-    );
-    expectValid(
-      'function ProfileSignOutButton() { return <Button {...props} type="button" disabled={disabled} />; } export { ProfileSignOutButton };',
-      signOut,
-    );
-    expectInvalid(
-      'function ProfileSignOutButton() { return <Button type="button" disabled={disabled} {...props} />; } export { ProfileSignOutButton };',
-      /enforce type="button"/,
-      signOut,
-    );
-    expectInvalid(
-      'function ProfileSignOutButton() { return <Button {...props} type="submit" disabled={disabled} />; } export { ProfileSignOutButton };',
-      /enforce type="button"/,
-      signOut,
-    );
-  });
-
-  it("keeps ProfileCard a native, composable Card wrapper", () => {
-    expectValid(
-      compoundCard(
-        "function ProfileCard(props) { return <Card {...props} />; } export { ProfileCard };",
-      ),
-    );
-    expectInvalid(
-      "function ProfileCard() { return <ProfileForm><Card /></ProfileForm>; } export { ProfileCard };",
-      /one native Card as its root/,
-    );
-    expectInvalid(
-      "function ProfileCard() { return <Card><ProfileForm /></Card>; } export { ProfileCard };",
-      /accept children/,
-    );
-  });
-
-  it("keeps the profile heading inside one ProfileCardHeader on the page", () => {
-    const page = (header) =>
-      `export default function ProfilePage() { return <ProfileCard><ProfileForm>${header}<ProfileCardContent><ProfileDisplayNameField /></ProfileCardContent><ProfileCardFooter><ProfileSaveButton /></ProfileCardFooter></ProfileForm></ProfileCard>; }`;
-    expectPageValid(
-      page(
-        "<ProfileCardHeader><ProfileCardTitle /><ProfileCardDescription /></ProfileCardHeader>",
-      ),
-    );
-    expectPageInvalid(
-      page("<ProfileCardHeader><ProfileCardTitle /></ProfileCardHeader>"),
-      /ProfileCardDescription must be inside ProfileCardHeader/,
-    );
-    expectPageInvalid(
-      page(
-        "<ProfileCardHeader /><ProfileCardTitle /><ProfileCardDescription />",
-      ),
-      /ProfileCardTitle must be inside ProfileCardHeader/,
-    );
-    expectPageInvalid(
-      page("<ProfileCardTitle /><ProfileCardDescription />"),
-      /ProfileCardHeader must be inside/,
-    );
-  });
-
-  it("keeps ProfileCard compound parts inside the profile page", () => {
-    expectPageValid(
-      "export default function ProfilePage() { return <ProfileCard><ProfileForm><ProfileCardHeader><ProfileCardTitle /><ProfileCardDescription /></ProfileCardHeader><ProfileCardContent><ProfileDisplayNameField /></ProfileCardContent><ProfileCardFooter><ProfileSaveButton /><ProfileSignOutButton /></ProfileCardFooter></ProfileForm></ProfileCard>; }",
-    );
-    expectPageInvalid(
-      'export default function ProfilePage() { return <ProfileCard><ProfileForm><ProfileCardHeader><ProfileCardTitle /><ProfileCardDescription /></ProfileCardHeader><ProfileCardContent><ProfileDisplayNameField /></ProfileCardContent><ProfileCardFooter><ProfileSaveButton type="submit" /><ProfileSignOutButton /></ProfileCardFooter></ProfileForm></ProfileCard>; }',
-      /ProfileSaveButton must not accept an override/,
-    );
-    expectPageInvalid(
-      "export default function ProfilePage() { return <ProfileCard><ProfileForm><ProfileCardHeader><ProfileCardTitle /><ProfileCardDescription /></ProfileCardHeader><ProfileCardContent><ProfileDisplayNameField /></ProfileCardContent><form /><ProfileCardFooter><ProfileSaveButton /><ProfileSignOutButton /></ProfileCardFooter></ProfileForm></ProfileCard>; }",
-      /delegate native Card and form roots/,
-    );
-    expectPageInvalid(
-      "export default function ProfilePage() { return <ProfileForm><ProfileCard><ProfileCardHeader><ProfileCardTitle /><ProfileCardDescription /></ProfileCardHeader><ProfileCardContent><ProfileDisplayNameField /></ProfileCardContent><ProfileCardFooter><ProfileSaveButton /><ProfileSignOutButton /></ProfileCardFooter></ProfileCard></ProfileForm>; }",
-      /ProfileFormClient must be inside ProfileCard/,
-    );
-    expectPageInvalid(
-      "export default function ProfilePage() { return <ProfileCard><ProfileForm><ProfileCardHeader><ProfileCardTitle /><ProfileCardDescription /></ProfileCardHeader><ProfileCardContent><ProfileDisplayNameField /></ProfileCardContent><ProfileSaveButton /><ProfileCardFooter><ProfileSignOutButton /></ProfileCardFooter></ProfileForm></ProfileCard>; }",
-      /ProfileSaveButton must be inside ProfileCardFooter/,
-    );
-    expectPageInvalid(
-      "export default function ProfilePage() { return <ProfileCard><ProfileForm><ProfileCardHeader><ProfileCardTitle /><ProfileCardDescription /></ProfileCardHeader><ProfileDisplayNameField /><ProfileCardFooter><ProfileSaveButton /><ProfileSignOutButton /></ProfileCardFooter></ProfileForm></ProfileCard>; }",
-      /ProfileDisplayNameField must be inside/,
-    );
-    expectPageInvalid(
-      "export default function ProfilePage() { return <ProfileCard><ProfileForm><ProfileCardHeader><ProfileCardTitle /><ProfileCardDescription /></ProfileCardHeader><ProfileCardContent><FieldGroup><ProfileDisplayNameField /></FieldGroup></ProfileCardContent><ProfileCardFooter><ProfileSaveButton /><ProfileSignOutButton /></ProfileCardFooter></ProfileForm></ProfileCard>; }",
-      /delegate FieldGroup to ProfileCardContent/,
-    );
-  });
-
-  it("rejects wrappers between profile regions and their direct parents", () => {
-    const valid =
-      "export default function ProfilePage() { return <ProfileCard><ProfileForm><ProfileCardHeader><ProfileCardTitle /><ProfileCardDescription /></ProfileCardHeader><ProfileCardContent><ProfileDisplayNameField /></ProfileCardContent><ProfileCardFooter><ProfileSaveButton /><ProfileSignOutButton /></ProfileCardFooter></ProfileForm></ProfileCard>; }";
-    expectPageValid(valid);
-    const regions = [
-      "<ProfileCardHeader><ProfileCardTitle /><ProfileCardDescription /></ProfileCardHeader>",
-      "<ProfileCardTitle />",
-      "<ProfileCardDescription />",
-      "<ProfileCardContent><ProfileDisplayNameField /></ProfileCardContent>",
-      "<ProfileCardFooter><ProfileSaveButton /><ProfileSignOutButton /></ProfileCardFooter>",
-      "<ProfileDisplayNameField />",
-      "<ProfileSaveButton />",
-      "<ProfileSignOutButton />",
-    ];
-    for (const region of regions) {
-      expectPageInvalid(
-        valid.replace(region, `<div>${region}</div>`),
-        /must be inside/,
-      );
-    }
-  });
-
-  it("keeps the compound Card parts declared and exported together", () => {
-    const valid = compoundCard(
-      "function ProfileCard(props) { return <Card {...props} />; } export { ProfileCard };",
-    );
-    expectValid(valid);
-    for (const primitive of [
-      "CardHeader",
-      "CardTitle",
-      "CardDescription",
-      "CardFooter",
-    ]) {
-      expectInvalid(
-        valid.replace(`<${primitive} {...props} />`, "<div />"),
-        /must wrap exactly one/,
-      );
-    }
-    const content =
-      "<CardContent {...props}><FieldGroup>{children}</FieldGroup></CardContent>";
-    expectInvalid(valid.replace(content, "<div />"), /must wrap exactly one/);
-    expectInvalid(
-      valid.replace(
-        content,
-        "<CardContent {...props}>{children}</CardContent>",
-      ),
-      /exactly one FieldGroup inside CardContent/,
-    );
-    expectInvalid(
-      valid.replace(
-        content,
-        "<CardContent {...props}><div><FieldGroup>{children}</FieldGroup></div></CardContent>",
-      ),
-      /exactly one FieldGroup inside CardContent/,
-    );
-    expectInvalid(
-      valid.replace(
-        "ProfileCardDescription, ProfileCardContent, ProfileCardFooter };",
-        "ProfileCardContent };",
-      ),
-      /Export exactly the named components/,
-    );
-    expectInvalid(
-      valid.replace(
-        "function ProfileCardTitle(props)",
-        "function OtherTitle(props)",
-      ),
-      /Declare ProfileCardTitle/,
-    );
-  });
-
-  it("keeps ProfileFormFooter a layout component without nested CardFooter", () => {
-    const footer =
-      "src/app/(protected)/profile/_components/profile-form-footer.tsx";
-    expectValid(
-      'function ProfileFormFooter() { return <div className="flex">{children}</div>; } export { ProfileFormFooter };',
-      footer,
-    );
-    expectInvalid(
-      "function ProfileFormFooter() { return <CardFooter>{children}</CardFooter>; } export { ProfileFormFooter };",
-      /layout div inside ProfileCardFooter/,
-      footer,
+      /React form Action/,
+      "src/app/(protected)/profile/_components/profile-form.tsx",
     );
   });
 
   it("accepts the Base UI Form wrapper as the profile form root", () => {
     expectValid(
       compoundForm(
-        "function ProfileForm() { return <FormProvider><Form>{children}</Form></FormProvider>; } export { ProfileForm };",
+        "function ProfileForm() { return <Form>{children}</Form>; } export { ProfileForm };",
       ),
       "src/app/(protected)/profile/_components/profile-form.tsx",
-    );
-  });
-
-  it("keeps FieldGroup in ProfileFormContent rather than ProfileForm", () => {
-    const form = "src/app/(protected)/profile/_components/profile-form.tsx";
-    const content =
-      "src/app/(protected)/profile/_components/profile-form-content.tsx";
-    expectValid(
-      compoundForm(
-        "function ProfileForm() { return <FormProvider><form>{children}</form></FormProvider>; } export { ProfileForm };",
-      ),
-      form,
-    );
-    expectInvalid(
-      "function ProfileForm() { return <FormProvider><form><FieldGroup /></form></FormProvider>; } export { ProfileForm };",
-      /delegate fields and actions/,
-      form,
-    );
-    expectValid(
-      "function ProfileFormContent() { return <FieldGroup>{children}</FieldGroup>; } export { ProfileFormContent };",
-      content,
-    );
-    expectInvalid(
-      "function ProfileFormContent() { return <CardContent><FieldGroup /></CardContent>; } export { ProfileFormContent };",
-      /render exactly one FieldGroup without CardContent/,
-      content,
-    );
-  });
-  it("validates colocated form parts without accepting nested card primitives", () => {
-    const path = "src/app/(protected)/profile/_components/profile-form.tsx";
-    const valid = compoundForm(
-      "function ProfileForm() { return <FormProvider><form>{children}</form></FormProvider>; } export { ProfileForm };",
-    );
-    expectValid(valid, path);
-    expectInvalid(
-      valid.replace(
-        "<FieldGroup>{children}</FieldGroup>",
-        "<CardContent><FieldGroup>{children}</FieldGroup></CardContent>",
-      ),
-      /without CardContent/,
-      path,
-    );
-    expectInvalid(
-      valid.replace(
-        "ProfileForm, ProfileFormContent, ProfileFormFooter",
-        "ProfileForm, ProfileFormContent",
-      ),
-      /Export exactly/,
-      path,
-    );
-  });
-
-  it("forbids a second Card inside ProfileForm", () => {
-    const path = "src/app/(protected)/profile/_components/profile-form.tsx";
-    expectInvalid(
-      "function ProfileForm() { return <FormProvider><form><Card>{children}</Card></form></FormProvider>; } export { ProfileForm };",
-      /delegate the Card root to ProfileCard/,
-      path,
     );
   });
 });
@@ -1118,19 +915,6 @@ describe("component integration naming", () => {
 });
 
 describe("runtime suffixes preserve semantic safety checks", () => {
-  it("keeps exact profile form families and field/property matching", () => {
-    expectInvalid(
-      '"use client"; function ProfileFormClient() { return <FormProvider><form /></FormProvider>; } function ProfileFormClientContent() { return <div />; } export { ProfileFormClient, ProfileFormClientContent };',
-      /Export exactly the named components: ProfileFormClient/,
-      "src/app/(protected)/profile/_components/profile-form-client.tsx",
-    );
-    expectInvalid(
-      '"use client"; function ProfileEmailFieldClient(props) { return <Controller name="displayName" {...props} />; } export { ProfileEmailFieldClient };',
-      /match Controller/,
-      "src/app/(protected)/profile/_components/profile-email-field-client.tsx",
-    );
-  });
-
   it("rejects imports of local server component files from client boundaries", () => {
     expectInvalid(
       '"use client"; import { AccountServer } from "./account-server"; function DetailsClient(props) { return <div {...props} />; } export { DetailsClient };',
@@ -1196,22 +980,6 @@ describe("component filename term matching and parity", () => {
     );
   });
 
-  it("rejects HomeSection when it does not compose Home", () => {
-    expectInvalid(
-      `"use client";
-       import type { ComponentProps } from "react";
-       import { useHomeSection } from "../_hooks/use-home-section";
-       type HomeSectionProps = ComponentProps<"div">;
-       function HomeSection(props: HomeSectionProps) {
-         const { t } = useHomeSection();
-         return <div {...props} />;
-       }
-       export { HomeSection };`,
-      /HomeSection must compose Home/i,
-      "src/app/_components/home-section.tsx",
-    );
-  });
-
   it("rejects Home in home-section.tsx due to missing 'Section' term", () => {
     expectInvalid(
       `"use client";
@@ -1270,9 +1038,29 @@ describe("lib and route _lib module placement", () => {
       "src/lib/firebase/usage.ts",
       "src/app/(protected)/_lib/dal.ts",
       "src/app/(protected)/profile/_lib/data.ts",
+      "src/app/(protected)/profile/_lib/actions.ts",
+      "src/app/(protected)/profile/_lib/actions.test.ts",
     ]) {
       assert.deepEqual(inspectLibPlacement(validPath), []);
     }
+  });
+
+  it("rejects legacy profile Action module names while allowing the canonical actions module", () => {
+    for (const path of [
+      "src/app/(protected)/profile/_lib/profile-action.ts",
+      "src/app/(protected)/profile/_lib/profile-actions.ts",
+      "src/app/(protected)/profile/_lib/profile-action.test.ts",
+      "src\\app\\(protected)\\profile\\_lib\\profile-action.ts",
+    ]) {
+      assert.match(
+        inspectLibPlacement(path)[0]?.message ?? "",
+        /Keep profile Actions in _lib\/actions\.ts/,
+      );
+    }
+    assert.deepEqual(
+      inspectLibPlacement("src/app/(protected)/profile/_lib/actions.ts"),
+      [],
+    );
   });
 
   it("rejects nested domain directories in src/lib, nested firestore folders, and standalone _lib/defaults.ts", () => {

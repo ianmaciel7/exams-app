@@ -1,36 +1,37 @@
 import { useTranslations } from "next-intl";
-import { useFormContext, useWatch } from "react-hook-form";
-import { getAvatarSource } from "../_lib/avatar";
-import type { ProfileFormValues } from "../_lib/definitions";
-import { useProfileAvatar } from "./use-profile-avatar";
-import { useProfileContext } from "./use-profile-context";
+import { useSession } from "@/hooks/use-session";
+import { getAvatarFallbackInitial, getAvatarSource } from "../_lib/avatar";
+import { useProfileAvatarInput } from "./use-profile-avatar-input";
+import { useProfileAvatarPreview } from "./use-profile-avatar-preview";
 
-export function useProfileAvatarFieldClient() {
+type UseProfileAvatarFieldClientOptions = {
+  file: File | null;
+  onPick: (file: File) => void;
+  pending: boolean;
+  savedCount: number;
+};
+
+export function useProfileAvatarFieldClient({
+  file,
+  onPick,
+  pending,
+  savedCount,
+}: UseProfileAvatarFieldClientOptions) {
   const t = useTranslations("Auth");
-  const { user, photoURL, avatarVersion } = useProfileContext();
-  const { control, setValue, formState } = useFormContext<ProfileFormValues>();
-  const avatarFile = useWatch({ control, name: "avatarFile" });
-  const { avatarPreview, fileInputRef, handleAvatarChange } = useProfileAvatar(
-    avatarFile,
-    (file) => setValue("avatarFile", file, { shouldDirty: true }),
+  const { user } = useSession();
+  const preview = useProfileAvatarPreview(file);
+  const { fileInputRef, handleAvatarChange } = useProfileAvatarInput(
+    file,
+    onPick,
   );
   const displayName = user?.displayName ?? null;
-  const email = user?.email ?? null;
-  const disabled = formState.disabled || formState.isSubmitting;
-  const avatarSrc = getAvatarSource(avatarPreview, photoURL, avatarVersion);
-  const fallbackInitial = (
-    displayName?.charAt(0) ||
-    email?.charAt(0) ||
-    "U"
-  ).toUpperCase();
 
-  const avatarAlt = displayName ?? t("profileTitle");
   return {
     t,
-    disabled,
-    avatarSrc,
-    avatarAlt,
-    fallbackInitial,
+    disabled: pending,
+    avatarSrc: getAvatarSource(preview, user?.photoURL ?? null, savedCount),
+    avatarAlt: displayName ?? t("profileTitle"),
+    fallbackInitial: getAvatarFallbackInitial(displayName, user?.email ?? null),
     fileInputRef,
     handleAvatarChange,
   };

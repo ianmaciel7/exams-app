@@ -8,8 +8,8 @@ function HomeHero({ className, ...props }: HomeHeroProps) {
   return (
     <div
       data-slot="home-hero"
-      {...props}
       className={cn("flex flex-col gap-8", className)}
+      {...props}
     />
   );
 }
@@ -25,6 +25,7 @@ function HomeHeroHeader({ className, ...props }: HomeHeroHeaderProps) {
         "flex flex-col items-center gap-6 text-center sm:items-start sm:text-left",
         className,
       )}
+      {...props}
     />
   );
 }
@@ -35,11 +36,11 @@ function HomeHeroTitle({ className, ...props }: HomeHeroTitleProps) {
   return (
     <h1
       data-slot="home-hero-title"
-      {...props}
       className={cn(
         "max-w-xs text-3xl font-semibold leading-10 tracking-tight text-foreground",
         className,
       )}
+      {...props}
     />
   );
 }
@@ -53,11 +54,11 @@ function HomeHeroDescription({
   return (
     <p
       data-slot="home-hero-description"
-      {...props}
       className={cn(
         "max-w-md text-lg leading-8 text-muted-foreground",
         className,
       )}
+      {...props}
     />
   );
 }
@@ -68,11 +69,11 @@ function HomeHeroActions({ className, ...props }: HomeHeroActionsProps) {
   return (
     <div
       data-slot="home-hero-actions"
-      {...props}
       className={cn(
         "flex flex-col gap-4 text-base font-medium sm:flex-row w-full sm:w-auto",
         className,
       )}
+      {...props}
     />
   );
 }

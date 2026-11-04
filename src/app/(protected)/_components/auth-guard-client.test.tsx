@@ -1,0 +1,234 @@
+import {
+  act,
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+} from "@testing-library/react";
+import { type PropsWithChildren, StrictMode, useState } from "react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { SessionProviderClient } from "@/components/ui/extensions/session-provider-client";
+import { useSession } from "@/hooks/use-session";
+import { AuthGuardClient } from "./auth-guard-client";
+
+const mocks = vi.hoisted(() => ({
+  router: { replace: vi.fn() },
+  subscribe: vi.fn(),
+  unsubscribe: vi.fn(),
+  getUI: vi.fn(),
+  pendingSignOut: null as Promise<void> | null,
+  recordUsage: vi.fn(),
+  pathname: "/profile",
+}));
+
+vi.mock("next/navigation", () => ({
+  useRouter: () => mocks.router,
+  usePathname: () => mocks.pathname,
+}));
+vi.mock("@/lib/firebase/usage", () => ({ recordUsage: mocks.recordUsage }));
+vi.mock("next-intl", () => ({
+  useTranslations: () => (key: string) => key,
+}));
+vi.mock("firebase/auth", () => ({ onAuthStateChanged: mocks.subscribe }));
+vi.mock("@/lib/firebase/client", () => ({ getFirebaseUI: mocks.getUI }));
+vi.mock("@/lib/auth", () => ({
+  getPendingSignOut: () => mocks.pendingSignOut,
+}));
+
+/** The gate reads the root session provider, as it does in the app. */
+function SessionGate({ children }: PropsWithChildren) {
+  return (
+    <SessionProviderClient>
+      <AuthGuardClient>{children}</AuthGuardClient>
+    </SessionProviderClient>
+  );
+}
+
+function ProtectedContent() {
+  const { user } = useSession();
+  return <div>{`Protected Content ${user?.uid}`}</div>;
+}
+
+function emit(user: { uid: string } | null) {
+  act(() => mocks.subscribe.mock.calls[0][1](user));
+}
+
+/** Firebase loads on demand; wait for it so the gate has subscribed. */
+async function settle() {
+  await act(() => vi.dynamicImportSettled());
+}
+
+async function renderGate() {
+  const rendered = render(
+    <SessionGate>
+      <ProtectedContent />
+    </SessionGate>,
+  );
+  await settle();
+  return rendered;
+}
+
+describe("AuthGuardClient", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mocks.pendingSignOut = null;
+    mocks.pathname = "/profile";
+    mocks.recordUsage.mockResolvedValue(undefined);
+    mocks.getUI.mockReturnValue({ get: () => ({ auth: {} }) });
+    mocks.subscribe.mockReturnValue(mocks.unsubscribe);
+  });
+
+  afterEach(() => {
+    cleanup();
+    window.history.replaceState(null, "", "/");
+  });
+
+  it("renders a loading indicator before auth resolves", async () => {
+    await renderGate();
+    expect(
+      document.querySelector('[data-slot="loading-status"]'),
+    ).not.toBeNull();
+    expect(screen.queryByText(/Protected Content/)).toBeNull();
+    expect(mocks.router.replace).not.toHaveBeenCalled();
+  });
+
+  it("redirects once with the return destination, including the query", async () => {
+    window.history.replaceState(null, "", "/profile?tab=security");
+    await renderGate();
+    emit(null);
+    emit(null);
+    expect(mocks.router.replace).toHaveBeenCalledOnce();
+    expect(mocks.router.replace).toHaveBeenCalledWith(
+      `/sign-in?next=${encodeURIComponent("/profile?tab=security")}`,
+    );
+    expect(screen.queryByText(/Protected Content/)).toBeNull();
+    expect(
+      document.querySelector('[data-slot="loading-status"]'),
+    ).not.toBeNull();
+  });
+
+  it("provides the authenticated user to its subtree", async () => {
+    await renderGate();
+    emit({ uid: "user-123" });
+    expect(screen.getByText("Protected Content user-123")).toBeTruthy();
+  });
+
+  it("hides protected content as soon as the session ends", async () => {
+    await renderGate();
+    emit({ uid: "user-123" });
+    emit(null);
+    expect(screen.queryByText(/Protected Content/)).toBeNull();
+    expect(mocks.router.replace).toHaveBeenCalledOnce();
+  });
+
+  it("does not redirect until a pending sign-out has settled", async () => {
+    await renderGate();
+    emit({ uid: "user-123" });
+    const deferred = Promise.withResolvers<void>();
+    mocks.pendingSignOut = deferred.promise;
+    emit(null);
+    expect(mocks.router.replace).not.toHaveBeenCalled();
+    await act(async () => {
+      deferred.resolve();
+      await deferred.promise;
+    });
+    expect(mocks.router.replace).toHaveBeenCalledOnce();
+  });
+
+  it("remounts the subtree when the account changes", async () => {
+    function RetainedState() {
+      const { user } = useSession();
+      const [initialUid] = useState(user?.uid);
+      return <div>{initialUid}</div>;
+    }
+    render(
+      <SessionGate>
+        <RetainedState />
+      </SessionGate>,
+    );
+    await settle();
+    emit({ uid: "user-a" });
+    emit({ uid: "user-b" });
+    expect(screen.getByText("user-b")).toBeTruthy();
+    expect(screen.queryByText("user-a")).toBeNull();
+  });
+
+  it("offers recovery when Firebase cannot initialize", async () => {
+    mocks.getUI.mockImplementation(() => {
+      throw new Error("missing config");
+    });
+    const log = vi.spyOn(console, "error").mockImplementation(() => {});
+    const reload = vi.fn();
+    vi.stubGlobal("location", { ...window.location, reload });
+    await renderGate();
+    expect(screen.getByRole("alert").textContent).toBe("configurationError");
+    expect(document.querySelector('[data-slot="loading-status"]')).toBeNull();
+    expect(mocks.router.replace).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole("button", { name: "tryAgain" }));
+    expect(reload).toHaveBeenCalledOnce();
+    vi.unstubAllGlobals();
+    log.mockRestore();
+  });
+
+  it("does not treat a subscription failure as a signed-out visitor", async () => {
+    const log = vi.spyOn(console, "error").mockImplementation(() => {});
+    await renderGate();
+    act(() => mocks.subscribe.mock.calls[0][2](new Error("network")));
+    expect(screen.getByRole("alert").textContent).toBe("configurationError");
+    expect(mocks.router.replace).not.toHaveBeenCalled();
+    log.mockRestore();
+  });
+
+  it("leaves no active subscription behind under Strict Mode", async () => {
+    const { unmount } = render(
+      <StrictMode>
+        <SessionGate>
+          <ProtectedContent />
+        </SessionGate>
+      </StrictMode>,
+    );
+    await settle();
+    expect(mocks.subscribe).toHaveBeenCalled();
+    unmount();
+    expect(mocks.unsubscribe).toHaveBeenCalledTimes(
+      mocks.subscribe.mock.calls.length,
+    );
+  });
+
+  it("records the route without blocking content, even when logging fails", async () => {
+    mocks.recordUsage.mockRejectedValue(new Error("offline"));
+    await renderGate();
+    expect(mocks.recordUsage).not.toHaveBeenCalled();
+    emit({ uid: "user-123" });
+    await act(async () => {});
+    expect(mocks.recordUsage).toHaveBeenCalledOnce();
+    expect(mocks.recordUsage).toHaveBeenCalledWith({
+      type: "screen_view",
+      name: "/profile",
+    });
+    expect(screen.getByText("Protected Content user-123")).toBeTruthy();
+  });
+
+  it("records a new view on navigation and on an account switch only", async () => {
+    const { rerender } = await renderGate();
+    emit({ uid: "user-123" });
+    rerender(
+      <SessionGate>
+        <ProtectedContent />
+      </SessionGate>,
+    );
+    expect(mocks.recordUsage).toHaveBeenCalledOnce();
+    mocks.pathname = "/profile/security";
+    rerender(
+      <SessionGate>
+        <ProtectedContent />
+      </SessionGate>,
+    );
+    expect(mocks.recordUsage).toHaveBeenLastCalledWith({
+      type: "screen_view",
+      name: "/profile/security",
+    });
+    emit({ uid: "user-456" });
+    expect(mocks.recordUsage).toHaveBeenCalledTimes(3);
+  });
+});

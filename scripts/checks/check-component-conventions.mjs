@@ -100,18 +100,6 @@ function checkFileName(source, stem, report) {
   }
 }
 
-const profileCardParts = [
-  "ProfileCard",
-  "ProfileCardHeader",
-  "ProfileCardAction",
-  "ProfileCardTitle",
-  "ProfileCardDescription",
-  "ProfileCardContent",
-  "ProfileCardFooter",
-];
-
-const profileFormParts = ["ProfileFormClient"];
-
 function tokenizeKebab(stem) {
   return stem.toLowerCase().split("-").filter(Boolean);
 }
@@ -161,16 +149,6 @@ function checkStemComponentTermParity(source, fileStem, report) {
 }
 
 function expectedComponentNames(source, _stem) {
-  const path = source.fileName.replaceAll("\\", "/");
-  if (path.endsWith("/profile/_components/profile-card.tsx")) {
-    return profileCardParts;
-  }
-  if (path.endsWith("/profile/_components/profile-form-client.tsx")) {
-    return profileFormParts;
-  }
-  if (path.endsWith("/profile/_components/profile-form.tsx")) {
-    return ["ProfileForm", "ProfileFormContent", "ProfileFormFooter"];
-  }
   const fileStem = basename(source.fileName.replaceAll("\\", "/"), ".tsx");
   const root = pascalCase(fileStem);
   const parts = componentExports(source).filter(
@@ -500,7 +478,9 @@ function integrationKinds(integration, clientBoundary) {
 
 function integrationNameMessages(stem, client, server) {
   const messages = [];
-  if (client && !stem.endsWith("-client"))
+  // A form component owns its Action and the integrations it needs, as in the
+  // Next.js and shadcn form guides, so `-form.tsx` is exempt from `-client`.
+  if (client && !stem.endsWith("-client") && !stem.endsWith("-form"))
     messages.push(
       "Browser integration components must use a -client.tsx filename.",
     );
@@ -614,7 +594,7 @@ function checkProfilePropDrilling(source, report) {
   function visit(node) {
     if (
       (ts.isJsxSelfClosingElement(node) || ts.isJsxOpeningElement(node)) &&
-      /^(ProfileFormClient|ProfileAvatarFieldClient|ProfileSignOutButton)$/.test(
+      /^(ProfileForm|ProfileAvatarFieldClient|ProfileSignOutButton)$/.test(
         node.tagName.getText(source),
       )
     ) {
@@ -652,348 +632,6 @@ function jsxEntries(source, root = source) {
 
   visit(root);
   return elements;
-}
-
-function normalizeProfileTag(name) {
-  // Normalize colocated compound form variants for composition checks.
-  return name.replace(/^ProfileFormClient/, "ProfileForm");
-}
-
-function profileElements(elements, name) {
-  return elements.filter(
-    (element) =>
-      normalizeProfileTag(element.name) === normalizeProfileTag(name),
-  );
-}
-
-function isInsideProfile(element, ancestors) {
-  const parents = element.ancestors.slice(-ancestors.length).reverse();
-  return (
-    parents.length === ancestors.length &&
-    ancestors.every(
-      (name, index) =>
-        normalizeProfileTag(parents[index]) === normalizeProfileTag(name),
-    )
-  );
-}
-
-function requireProfilePlacement(source, elements, name, parents, report) {
-  const matching = profileElements(elements, name);
-  if (
-    matching.length !== 1 ||
-    !matching.every((element) => isInsideProfile(element, parents))
-  ) {
-    report(source, `${name} must be inside ${parents.join(" and ")}.`);
-  }
-}
-
-function checkProfileCardSafety(source, elements, report) {
-  const cards = profileElements(elements, "Card");
-  if (cards.length !== 1 || cards[0].ancestors.length > 0) {
-    report(source, "ProfileCard must render one native Card as its root.");
-  }
-  if (profileElements(elements, "ProfileFormClient").length) {
-    report(
-      source,
-      "ProfileCard must accept children; compose profile UI in the profile page.",
-    );
-  }
-  for (const primitive of [
-    "CardHeader",
-    "CardAction",
-    "CardTitle",
-    "CardDescription",
-    "CardContent",
-    "CardFooter",
-  ]) {
-    if (profileElements(elements, primitive).length !== 1) {
-      report(source, `ProfileCard must wrap exactly one ${primitive}.`);
-    }
-  }
-  const fieldGroups = profileElements(elements, "FieldGroup");
-  if (
-    fieldGroups.length !== 1 ||
-    !isInsideProfile(fieldGroups[0], ["CardContent"])
-  ) {
-    report(
-      source,
-      "ProfileCardContent must render exactly one FieldGroup inside CardContent.",
-    );
-  }
-}
-
-function checkProfileSectionAction(source, elements, action, report) {
-  const buttons = profileElements(elements, action);
-  if (action === "ProfileSignOutButton" && buttons.length === 0) return;
-
-  requireProfilePlacement(
-    source,
-    elements,
-    action,
-    ["ProfileCardFooter", "ProfileFormClient", "ProfileCard"],
-    report,
-  );
-  for (const button of buttons) {
-    const typeProp = button.node.attributes.properties.find(
-      (attribute) =>
-        ts.isJsxAttribute(attribute) && attribute.name.text === "type",
-    );
-    if (typeProp) {
-      report(
-        typeProp,
-        `${action} must not accept an override of its fixed type.`,
-      );
-    }
-  }
-}
-
-function checkProfilePageSafety(source, elements, report) {
-  if (profileElements(elements, "ProfileCard").length === 0) {
-    report(source, "The profile page must compose ProfileCard.");
-  }
-  requireProfilePlacement(
-    source,
-    elements,
-    "ProfileFormClient",
-    ["ProfileCard"],
-    report,
-  );
-  requireProfilePlacement(
-    source,
-    elements,
-    "ProfileCardHeader",
-    ["ProfileFormClient", "ProfileCard"],
-    report,
-  );
-  for (const part of ["ProfileCardTitle", "ProfileCardDescription"]) {
-    requireProfilePlacement(
-      source,
-      elements,
-      part,
-      ["ProfileCardHeader", "ProfileFormClient", "ProfileCard"],
-      report,
-    );
-  }
-  requireProfilePlacement(
-    source,
-    elements,
-    "ProfileDisplayNameField",
-    ["ProfileCardContent", "ProfileFormClient", "ProfileCard"],
-    report,
-  );
-  if (profileElements(elements, "FieldGroup").length) {
-    report(
-      source,
-      "The profile page must delegate FieldGroup to ProfileCardContent.",
-    );
-  }
-  requireProfilePlacement(
-    source,
-    elements,
-    "ProfileCardFooter",
-    ["ProfileFormClient", "ProfileCard"],
-    report,
-  );
-  for (const action of ["ProfileSaveButton", "ProfileSignOutButton"]) {
-    checkProfileSectionAction(source, elements, action, report);
-  }
-  if (
-    profileElements(elements, "form").length ||
-    profileElements(elements, "Card").length
-  ) {
-    report(
-      source,
-      "The profile page must delegate native Card and form roots.",
-    );
-  }
-}
-
-function checkProfileProviderSafety(source, elements, report) {
-  // `Form` is the Base UI wrapper from ui/extensions/form, which renders the <form>.
-  const nativeForms = [
-    ...profileElements(elements, "form"),
-    ...profileElements(elements, "Form"),
-  ];
-  if (
-    nativeForms.length !== 1 ||
-    !isInsideProfile(nativeForms[0], ["FormProvider"])
-  ) {
-    report(
-      source,
-      "ProfileFormClient must provide exactly one HTML form inside FormProvider.",
-    );
-  }
-  if (profileElements(elements, "Card").length > 0) {
-    report(
-      source,
-      "ProfileFormClient must delegate the Card root to ProfileCard.",
-    );
-  }
-  if (
-    profileElements(elements, "FieldGroup").length ||
-    profileElements(elements, "Button").length
-  ) {
-    report(
-      source,
-      "ProfileFormClient must delegate fields and actions to its children.",
-    );
-  }
-}
-
-function checkProfileContentSafety(source, elements, report) {
-  if (
-    profileElements(elements, "FieldGroup").length !== 1 ||
-    profileElements(elements, "CardContent").length ||
-    profileElements(elements, "form").length
-  ) {
-    report(
-      source,
-      "ProfileFormClientContent must render exactly one FieldGroup without CardContent or a nested form.",
-    );
-  }
-}
-
-function checkProfileFooterSafety(source, elements, report) {
-  if (
-    profileElements(elements, "div").length !== 1 ||
-    profileElements(elements, "CardFooter").length > 0
-  ) {
-    report(
-      source,
-      "ProfileFormClientFooter must render a layout div inside ProfileCardFooter.",
-    );
-  }
-}
-
-function attributePosition(attributes, name) {
-  return attributes.findIndex(
-    (attribute) => ts.isJsxAttribute(attribute) && attribute.name.text === name,
-  );
-}
-
-function spreadAfter(attributes, position) {
-  return attributes.slice(position + 1).some(ts.isJsxSpreadAttribute);
-}
-
-function checkFixedProfileButtonType(
-  button,
-  attributes,
-  stem,
-  expected,
-  report,
-) {
-  const typeIndex = attributePosition(attributes, "type");
-  const typeAttribute = attributes[typeIndex];
-  const typeValue = typeAttribute?.initializer;
-  if (
-    !typeValue ||
-    !ts.isStringLiteral(typeValue) ||
-    typeValue.text !== expected ||
-    spreadAfter(attributes, typeIndex)
-  ) {
-    report(
-      button.node,
-      `${stem} must enforce type="${expected}" after any spread props.`,
-    );
-  }
-}
-
-function checkFixedProfileButtonDisabled(button, attributes, stem, report) {
-  const disabledIndex = attributePosition(attributes, "disabled");
-  if (disabledIndex < 0 || spreadAfter(attributes, disabledIndex)) {
-    report(
-      button.node,
-      `${stem} must preserve disabled state after spread props.`,
-    );
-  }
-}
-
-function checkProfileButtonSafety(source, elements, report, stem) {
-  const expected = stem === "profile-save-button" ? "submit" : "button";
-  const buttons = profileElements(elements, "Button");
-  if (buttons.length !== 1) {
-    report(source, `${stem} must render exactly one Button.`);
-    return;
-  }
-  const button = buttons[0];
-  const attributes = button.node.attributes.properties;
-  checkFixedProfileButtonType(button, attributes, stem, expected, report);
-  checkFixedProfileButtonDisabled(button, attributes, stem, report);
-}
-
-function checkProfileFormSafety(source, stem, report) {
-  const checks = {
-    "profile-card": checkProfileCardSafety,
-    "profile-form-client": checkProfileProviderSafety,
-    "profile-form": checkProfileProviderSafety,
-    "profile-form-content": checkProfileContentSafety,
-    "profile-form-footer": checkProfileFooterSafety,
-    "profile-save-button": (file, elements, addIssue) =>
-      checkProfileButtonSafety(file, elements, addIssue, stem),
-    "profile-sign-out-button": (file, elements, addIssue) =>
-      checkProfileButtonSafety(file, elements, addIssue, stem),
-  };
-  const check = checks[stem];
-  if (
-    !check ||
-    !source.fileName.replaceAll("\\", "/").includes("/profile/_components/")
-  ) {
-    return;
-  }
-  if (stem === "profile-form-client" || stem === "profile-form") {
-    const namePrefix =
-      stem === "profile-form-client" ? "ProfileFormClient" : "ProfileForm";
-    const checks = [
-      [namePrefix, checkProfileProviderSafety],
-      [`${namePrefix}Content`, checkProfileContentSafety],
-      [`${namePrefix}Footer`, checkProfileFooterSafety],
-    ];
-    for (const [name, partCheck] of stem === "profile-form-client"
-      ? checks.slice(0, 1)
-      : checks) {
-      const declaration = source.statements.find(
-        (statement) =>
-          ts.isFunctionDeclaration(statement) && statement.name?.text === name,
-      );
-      if (declaration)
-        partCheck(source, jsxEntries(source, declaration), report);
-    }
-    return;
-  }
-  check(source, jsxEntries(source), report);
-}
-
-/** The profile page composes the profile form; Next.js owns its boundaries. */
-export function inspectProfilePage(content, filename) {
-  if (!filename.replaceAll("\\", "/").endsWith("/profile/page.tsx")) return [];
-  const source = ts.createSourceFile(
-    filename,
-    content,
-    ts.ScriptTarget.Latest,
-    true,
-    ts.ScriptKind.TSX,
-  );
-  const findings = [];
-  checkProfilePageSafety(source, jsxEntries(source), (node, message) => {
-    const position = source.getLineAndCharacterOfPosition(
-      node.getStart(source),
-    );
-    findings.push({
-      file: filename,
-      line: position.line + 1,
-      column: position.character + 1,
-      message,
-    });
-  });
-  return findings;
-}
-
-function checkHomeSafety(source, stem, report) {
-  if (stem !== "home-section") return;
-  const elements = jsxEntries(source);
-  if (!elements.some((element) => element.name === "Home")) {
-    report(source, "HomeSection must compose Home.");
-  }
 }
 
 const statefulHooks = new Set([
@@ -1104,6 +742,7 @@ function checkComponentHook(component, source, report) {
     "useFormatter",
     "useId",
     "useFormContext",
+    "useFormStatus",
     "useWatch",
     "useRender",
   ]);
@@ -1346,7 +985,43 @@ export function inspectLibPlacement(filename) {
       },
     ];
   }
+  if (
+    /^src\/app\/\(protected\)\/profile\/_lib\/profile-actions?(?:\.test)?\.ts$/.test(
+      path,
+    )
+  ) {
+    return [
+      {
+        file: filename,
+        line: 1,
+        column: 1,
+        message:
+          "Keep profile Actions in _lib/actions.ts, not profile-action.ts or profile-actions.ts.",
+      },
+    ];
+  }
   return [];
+}
+
+/**
+ * A `*-form.tsx` component renders its fields inline and submits through a
+ * React form Action (Next.js forms guide, shadcn Next.js form). Its hooks are
+ * still delegated to `use<Component>` like any component, so the Action,
+ * effects and state live in `_hooks/`. It renders exactly one form root and
+ * shares state through the Action, not React Hook Form's `FormProvider`.
+ */
+function checkFormComponent(source, report) {
+  const names = jsxEntries(source).map((element) => element.name);
+  const roots = names.filter((name) => name === "form" || name === "Form");
+  if (roots.length !== 1) {
+    report(source, "A form component must render exactly one form root.");
+  }
+  if (names.includes("FormProvider")) {
+    report(
+      source,
+      "Form components submit through a React form Action (useActionState); do not use FormProvider.",
+    );
+  }
 }
 
 export function inspectComponent(content, filename) {
@@ -1383,11 +1058,10 @@ export function inspectComponent(content, filename) {
     expectedComponentNames(source, stem),
     report,
   );
+  if (stem.endsWith("-form")) checkFormComponent(source, report);
   checkHookResponsibilities(source, report);
   checkFieldControllerNames(source, stem, report);
   checkProfilePropDrilling(source, report);
-  checkProfileFormSafety(source, stem, report);
-  checkHomeSafety(source, stem, report);
   return findings;
 }
 
@@ -1688,7 +1362,6 @@ export function checkComponents(root) {
       ...inspectHookFilename(content, path),
       ...inspectUiPhaseStatus(content, path),
       ...inspectComponent(content, path),
-      ...inspectProfilePage(content, path),
     ];
   });
 }

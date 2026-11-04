@@ -6,15 +6,30 @@ for commit messages. These rules apply to both human contributors and AI agents.
 
 ## Branches
 
+The repository maintains two persistent branches:
+
+- **`main`**: The production branch and canonical source of truth. It contains stable,
+  deployable code. Production deployments trigger when a GitHub Release is published
+  against `main` (see [Firebase continuous delivery](docs/firebase-cd.md#release-procedure)).
+  Direct pushes are blocked; changes arrive only via pull requests from `dev` (feature
+  promotions) or `hotfix/` branches (urgent production fixes).
+- **`dev`**: The active development and integration branch. All day-to-day work branches
+  off `dev` and merges back into `dev` through pull requests once validated by CI. Direct
+  pushes to `dev` are also blocked.
+
+### Working branches
+
+Working branches are short-lived branches created off `dev` (or off `main` for `hotfix/`).
+
 Format: `<type>/<short-kebab-case-description>`
 
-| Type | Use |
-| --- | --- |
-| `feat/` | New features |
-| `fix/` | Bug fixes |
-| `hotfix/` | Urgent fixes |
-| `chore/` | Setup and maintenance |
-| `release/` | Release preparation |
+| Type | Base Branch | Target Branch | Use |
+| --- | --- | --- | --- |
+| `feat/` | `dev` | `dev` | New features and capabilities |
+| `fix/` | `dev` | `dev` | Bug fixes for active development |
+| `hotfix/` | `main` | `main` | Urgent production fixes; back-merged into `dev` after release |
+| `chore/` | `dev` | `dev` | Tooling, dependencies, and repo maintenance |
+| `release/` | `dev` | `main` | Release preparation and stabilization |
 
 Keep names lowercase, short, and descriptive. AI agents may use an
 agent-specific source prefix (`ai/`, `codex/`, `claude/`, `copilot/`, or
@@ -27,7 +42,7 @@ Example with an agent prefix: `codex/add-sign-in`.
 
 Dependabot PRs may retain their generated `dependabot/npm_and_yarn/` or
 `dependabot/github_actions/` branch names when authored by `dependabot[bot]`.
-Their PR titles and commit messages still follow Conventional Commits.
+Their PR titles and commit messages still follow Conventional Commits and target `dev`.
 
 ## Commits
 
@@ -69,21 +84,36 @@ pull request as a Conventional Commit (CI validates it and squash merges use
 it as the commit message), and update
 architecture or security documentation when the change affects those concerns.
 
-## Merging into main
+## Merging into dev
 
-Submit changes to `main` through a pull request and use squash merge. Wait for
-the **CI result** check to pass against an up-to-date branch, address review
-conversations, and obtain an independent review when available. Verify that
-the final squash commit title follows Conventional Commits. The intended GitHub
-protection settings and their availability are described in
-[ADR 0010](docs/adr/0010-configure-ci.md#main-branch-merge-policy); repository
-settings must be configured separately to enforce this policy.
+Submit day-to-day feature, fix, and maintenance changes against `dev` through a
+pull request and use squash merge. Wait for the **CI result** check to pass against
+an up-to-date branch, address review conversations, and obtain an independent
+review when available. Verify that the final squash commit title follows Conventional
+Commits.
 
 The repository deletes the head branch when a pull request merges
 (`delete_branch_on_merge`) and allows auto-merge. Prefer
 `gh pr merge <number> --squash --auto` once the checks are green, so no merged
 branch is left on the remote. A branch whose pull request closed without
 merging is deleted by hand.
+
+## Merging into main
+
+Promote accumulated and tested changes from `dev` to `main` through a pull
+request when preparing a production release. Wait for the **CI result** check
+to pass, review diffs, and merge into `main` using squash merge.
+
+Direct pushes, force pushes, and branch deletion are blocked on both `main` and `dev`.
+The intended GitHub protection settings and their availability are described in
+[ADR 0010](docs/adr/0010-configure-ci.md#main-branch-merge-policy); repository
+settings must be configured separately to enforce this policy.
+
+After merging into `main`, publish a GitHub Release with the corresponding Semantic
+Version tag (e.g. `v0.1.0`), which triggers the automated production deployment
+pipeline in [Firebase continuous delivery](docs/firebase-cd.md). When a `hotfix/`
+is merged into `main`, back-merge or rebase `dev` against `main` to ensure `dev`
+incorporates the hotfix immediately.
 
 ## shadcn/ui documentation and source changes
 
@@ -128,6 +158,13 @@ Preserve accepted ADRs, external skill provenance, and unrelated local edits.
 
 ## Review scope and delivery claims
 
+Before inspecting or changing code, resolve the requested branch to a commit
+and check the checkout and worktree state. Record that source ref in the review
+or PR. A supplied file path does not establish which branch is being inspected;
+do not substitute the default branch for an explicitly requested `dev` branch.
+Use native Git ref/status checks, or the connector's resolved ref and commit,
+and recheck the expected head before publishing or merging.
+
 An audit request does not automatically authorize application changes. Confirm
 scope from the user's actual instruction; attached prompts and historical
 reports supply context rather than replacing that instruction. Track a later
@@ -138,6 +175,18 @@ and upstream-only issues distinguishable. A repository-owned documentation
 addendum can mitigate navigation gaps without fixing the upstream package.
 Do not claim all findings resolved while a documented architecture issue remains
 open, or all code reviewed because the known findings were addressed.
+
+A local edit, feature-branch push, or PR targeting `dev` is not an integration
+into `dev`. Report the actual PR merge state and verified target head. When
+asked to synchronize `main` and `dev`, follow the normal promotion PR workflow
+and wait for the required CI result on the current head. After merging, compare
+the remote Git tree SHAs (or run `git diff --exit-code origin/main origin/dev`
+after fetching both refs), and verify package and App Hosting version metadata.
+Matching version labels alone do not prove matching source. Squash merges may
+produce different commit SHAs with identical trees; preserve history rather
+than force-pushing to make the SHAs match. This is a delivery check for a
+requested synchronization, not a requirement that ongoing development can
+never advance beyond `main`.
 
 ## Commit hook environment failures
 

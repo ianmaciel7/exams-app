@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { buttonVariants } from "@/components/ui/button";
 import { routes } from "@/lib/navigation";
 
-export default function NotFound() {
-  const t = useTranslations("App");
+export default async function NotFound() {
+  const t = await getTranslations("App");
 
   return (
     <main className="flex min-h-svh flex-1 flex-col items-center justify-center p-6 text-center">

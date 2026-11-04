@@ -18,35 +18,38 @@ Owned components keep rendering, translations, primitive prop forwarding and sim
 - Expose explicit session flags (`isLoading`, `isHidden`, `isError`) and an
   already resolved error message. Components render the applicable flag rather
   than deriving readiness from user, authentication and preferences flags.
-- Keep responsibilities local: `useProfilePreferences` suspends on the
-  profile read; `useProfileFormClient` owns the React Hook Form lifecycle
-  and uses `formState.isSubmitting` rather than a parallel saving flag;
-  `useProfileAvatarFieldClient` handles avatar field data. Do not mirror
-  derived state in additional `useState` variables.
+- Keep responsibilities local: `useProfileClient` owns the browser read;
+  `useProfileForm` owns the form Action (`useActionState`), using its pending
+  value rather than a parallel saving flag; `useProfileAvatarFieldClient`
+  handles avatar field data. Do not mirror derived state in additional
+  `useState` variables.
 - `check:components` rejects React state/effect imports (including aliases), namespace state/effect calls, Firebase value imports, async workflow functions, compound `if` conditions/derived locals and error fallbacks inside owned component functions. Async Server Components, simple discriminated-state branches, translations, form context and presentation props such as `disabled={disabled || pending}` remain valid.
 - The guard checks syntax, not arbitrary semantic equivalence or the ideal number of hooks. Generated Firebase/UI registries and Next.js special files retain their existing scope exclusions. Module-level setup is outside component branch analysis.
 
 ## Component-named orchestration hooks
 
 A component coordinating application behavior must use the imported
-`use<ComponentName>` hook in a separate module. For example,
-`ProfileFormClient` calls `useProfileFormClient`, which composes
-`useProfile`, `useProfileSubmit`, and React Hook Form, and resolves
-conditional properties (such as `userId`) so component JSX remains free of
-inline `in` operator guards or ternary expressions. Stateful avatar
-fields, save actions, and auth flows use focused hooks; simple display name,
-email, locale, and theme fields do **not** need one-line wrappers around
-standard hooks. This is a stricter project policy, not a React rule.
+`use<ComponentName>` hook in a separate module, which resolves conditional
+properties so component JSX remains free of inline `in` operator guards or
+ternary expressions. Stateful avatar fields and auth flows use focused hooks.
+This is a stricter project policy, not a React rule.
+
+Form components (`*-form.tsx`, such as `ProfileForm`) render their fields inline,
+as in the Next.js and shadcn form guides, but delegate `useActionState`
+and sibling hooks to `use<Component>` like any component (`useProfileForm`,
+ADRs 0018 and 0019). `useProfileForm` also returns the `Auth` translator `t`, so
+`ProfileForm` calls no hook of its own; this refines ADR 0018, which kept
+`useTranslations` in the component.
 
 `check:components` checks the imported orchestration hook's canonical name,
 including aliased imports, and rejects unrelated application orchestration
 hooks alongside it. Any number of supported presentation hooks
 (`useId`, `useTranslations`, `useFormatter`, `useFormContext`,
-`useWatch`) may be used directly without a wrapper, including alongside
+`useFormStatus`, `useWatch`) may be used directly without a wrapper, including alongside
 the one named application hook. The current AST implementation recognizes
 specific syntax; it is not a proof of all React hook semantics. Scope
-exclusions still apply. For example, `HomeSection` delegates
-application orchestration to `useHomeSection`.
+exclusions still apply. For example, `HomeWelcomeHero` delegates
+application orchestration to `useHomeWelcomeHero`.
 
 ## Private hook module support declarations
 
@@ -54,9 +57,7 @@ Route-private `_hooks/**/*.ts` and `.tsx` modules contain hook implementations,
 imports, exports and types. Move module-level support functions and values to
 that route's `_lib/`: this includes constants, lookup collections and React
 context objects. A filename starting with `use-` does not make helpers inside
-that module part of the hook. `getAvatarSource` and avatar limits live in
-`profile/_lib/avatar.ts`; the profile context object lives in
-`profile/_lib/profile-context.ts`.
+that module part of the hook. `getAvatarSource` and avatar limits live in `profile/_lib/avatar.ts`.
 
 The hook itself may be a named `useX` function declaration or a `useX` variable
 initialized directly with an arrow/function expression. Local constants,
@@ -86,6 +87,24 @@ orchestrators and their support modules. Those syntactic budgets do not establis
 that a function has a single responsibility; review its dependencies and lifecycle
 as well. Preserve cancellation, stale-result checks and authorization checks at
 asynchronous boundaries during refactoring.
+
+Splitting pattern for a hook that mixes concerns:
+
+- Pure decisions (validation, derived display values such as a fallback initial
+  or a versioned URL) go to the route's `_lib/` as plain functions with unit
+  tests; hooks only call them. `isValidAvatarFile` and
+  `getAvatarFallbackInitial` live in `profile/_lib/avatar.ts`.
+- Each effect with its own lifecycle gets its own `useX` hook: the avatar
+  preview object URL (`useProfileAvatarPreview`) and the hidden file input
+  (`useProfileAvatarInput`) are separate from the form binding in
+  `useProfileAvatarFieldClient`. In `useAuthGuardClient`, redirecting and
+  usage recording are separate hooks.
+- Module-level hooks in a `_hooks` file are allowed when they are `useX`
+  declarations; do not introduce a component when the hook split already keeps
+  the component free of behavior.
+- No mechanical check can prove a hook has one responsibility. The existing
+  safeguards (`no-module-support-in-hooks`, Biome complexity budgets,
+  `check:components`) stay the gate; the split itself is a review item.
 
 For every hook change, inventory the affected responsibility tree and validate all
 owned hook directories and support modules. Do not finish with only the named

@@ -20,9 +20,11 @@ This section covers component dimensions and file contracts; see also [Component
 
 | Dimension | Convention | Examples |
 | --- | --- | --- |
-| Runtime | Import graphs determine membership; `"use client"` declares a boundary, while a shared module can compile in both graphs | `ProfileCard` may participate in a client subtree without its own directive |
-| Responsibility | Describe the composition or behavior, not its runtime | `ProfileCard`, `ProfileFormClient`, `ProfileAvatarFieldClient`, `AuthProviderClient`, `AuthGateClient`, `SignInClient` |
+| Runtime | Import graphs determine membership; `"use client"` declares a boundary, while a shared module can compile in both graphs | `AccountCard` may participate in a client subtree without its own directive |
+| Responsibility | Describe the composition or behavior, not its runtime | `ProfileForm`, `ProfileAvatarFieldClient`, `AuthProviderClient`, `AuthGuardClient`, `SignInFormClient` |
 | Placement | Colocate route components in private `_components/`, hooks in `_hooks/` and shared components in `src/components/ui/extensions/` | App Router private folders do not become routes |
+
+Route composition roots that render an auth form carry `Form` in the name (`SignInFormClient`, `RegisterFormClient`, `ForgotPasswordFormClient`) and their hooks and files follow it (`use-sign-in-form-client.ts`, `sign-in-form-client.tsx`).
 
 The shadcn primitives live under `src/components/ui/`; Firebase registry output
 lives under `src/components/firebase/`; generated AI Elements live under
@@ -33,9 +35,9 @@ and does not transfer maintenance ownership to vendors. Application-owned extens
 
 ## Component file contracts
 
-- Use `kebab-case.tsx` and a matching PascalCase family root. Every owned component module may also export related parts prefixed by the root name, such as `AccountCardHeader` in `account-card.tsx`. Declare each as a local named function and export the parts together. Simple components retain one export. The profile Card and Form families have additional exact-part safety checks. Do not use `export default` or `export function` in owned reusable components.
+- Use `kebab-case.tsx` and a matching PascalCase family root. Every owned component module may also export related parts prefixed by the root name, such as `AccountCardHeader` in `account-card.tsx`. Declare each as a local named function and export the parts together. Simple components retain one export. Do not use `export default` or `export function` in owned reusable components.
 - Component value exports must preserve the local function name. Aliases such as `OtherCard as AccountCard` and component re-exports cannot satisfy the filename contract, even when an unused matching local function exists. Type-only exports are exempt.
-- Use `ProfileCardProps` for props of `ProfileCard`; inherit React/HTML
+- Use `AccountCardProps` for props of `AccountCard`; inherit React/HTML
   component props according to the existing component-props rule.
 - Prefer semantic roles: `*-field`, `*-fields`, `*-form`, `*-card`,
   `*-dialog`, `*-header`, `*-button`, `*-table`, `*-list`, `*-provider`,
@@ -48,8 +50,8 @@ and does not transfer maintenance ownership to vendors. Application-owned extens
   presentation that declares `"use client"`. Owned component exports and
   props types must match their complete filename stem, including `Client`
   or `Server`. The checker no longer defines a legacy semantic suffix
-  exception. For example, `HomeSection` uses
-  `HomeSectionProps` in `home-section.tsx`.
+  exception. For example, `HomeWelcomeHero` uses
+  `HomeWelcomeHeroProps` in `home-welcome-hero.tsx`.
 - Integrations own application data, persistence, authentication, navigation or
   platform access, directly or through focused hooks/helpers. Examples include
   Firebase, browser storage, object URLs, theme persistence and external fetches.
@@ -81,15 +83,12 @@ stem and component identifiers:
 - **Term-for-term matching**: The kebab-case filename stem and PascalCase component identifiers are tokenized into semantic terms (e.g., `home-section-client` -> `["home", "section", "client"]`). Every term present in the filename stem must exist in the component name, and no extraneous terms may appear.
 - **No missing terms**: Declaring a component that drops terms from the filename (such as declaring `HomeSection` in `home-section-client.tsx`, which omits `Client`) triggers an error: `missing term(s): "client"`.
 - **No unexpected terms**: Declaring a component with terms absent from the filename (such as `HomeViewClient` or `HomeSectionViewClient` in `home-section-client.tsx`) triggers an error: `unexpected term(s): "view"`.
-- **Reference implementation (`HomeSection`)**: `src/app/_components/home-section.tsx` enforces exact 1:1 term parity:
-  - Component declaration and named export: `HomeSection`
-  - Prop type declaration: `HomeSectionProps` (`HomeProps` is rejected)
-  - Hook coordination: `useHomeSection` in `src/app/_hooks/use-home-section.ts` (`useHome` is rejected)
-  - Companion UI component: `src/app/_components/home.tsx` exports `Home` and its compound presentation parts (`HomeContent`, `HomeLogo`, `HomeHeading`, `HomeFooter`). `HomeSection` coordinates state/hooks and composes `Home`.
-- **Profile example:** `profile-form-client.tsx` exports
-  `ProfileFormClient`, with compound parts sharing the same root. This
-  naming contract enforces exact filename-stem parity while preserving integration
-  versus presentation placement. See
+- **Reference implementation (`HomeWelcomeHero`)**: `src/app/_components/home-welcome-hero.tsx` enforces exact 1:1 term parity:
+  - Component declaration and named export: `HomeWelcomeHero`
+  - Prop type declaration: `HomeWelcomeHeroProps` (`HomeProps` is rejected)
+  - Hook coordination: `useHomeWelcomeHero` in `src/app/_hooks/use-home-welcome-hero.ts` (`useHome` is rejected)
+  - Companion UI component: `src/app/_components/home.tsx` exports `Home` and its compound presentation parts (`HomeContent`, `HomeLogo`, `HomeHeading`, `HomeFooter`). The home `page.tsx` composes them around `HomeWelcomeHero`.
+- **Profile example:** `profile-form.tsx` exports `ProfileForm`. A `*-form.tsx` component is exempt from the `-client` suffix because it owns its Action and integrations through `useProfileForm` (ADRs 0017 and 0018); `profile-avatar-field-client.tsx` keeps the suffix for its browser object URLs. See
   [ADR 0006](../../docs/adr/0006-document-project-standards.md).
 
 ## UI companion components for integration boundaries (Client and Server)
@@ -99,7 +98,6 @@ Every Client (`*-client.tsx` / `*Client`) or Server (`*-server.tsx` / `*Server`)
 - The companion UI component owns markup, HTML elements, styled layout containers, and presentation compound parts (`Home`, `HomeContent`, `HomeLogo`, `HomeHeading`, `HomeFooter`).
 - Integration components must not declare presentation parts with `Client` or `Server` suffixes (such as `HomeClientLogo` or `HomeClientHeading`).
 - The integration component coordinates hooks, browser/server data, and passes slots by composing the companion UI component.
-- `pnpm check:components` enforces that `HomeSection` composes `Home`.
 
 Simple presentation hooks such as `useId`, `useTranslations`, and React Hook
 Form's `useFormContext` and `useWatch` may be called directly in a field.
@@ -142,7 +140,7 @@ exact term parity (`checkStemComponentTermParity`), and existing composition/for
 
 ## Banned generic naming terms
 
-Do not use `View` or `Screen` as words in owned component, hook, type, variable, parameter, import-binding or file names. Use the responsibility instead (`ProfileFormClient`, `useProfileFormClient`, `ProfileCardHeader`, `AuthContent`, `AuthFlow`).
+Do not use `View` or `Screen` as words in owned component, hook, type, variable, parameter, import-binding or file names. Use the responsibility instead (`ProfileAvatarFieldClient`, `useProfileAvatarFieldClient`, `AuthCardHeader`, `AuthContent`, `AuthFlow`).
 
 `check:components` scans owned `.ts` and `.tsx` files throughout `src`, including hooks and library modules. CamelCase, kebab-case and numbered words are checked, so `AccountScreenState`, `AccountScreen2` and `use-account-view.ts` fail; unrelated words such as `Viewport` and `preview` remain valid. Generated registries and test/story files retain their exclusions. Preserve external API export names, but alias their local bindings (`SignInAuthScreen as SignInAuthContent`).
 
@@ -152,7 +150,7 @@ Export aliases, named function/class expressions, enums and type parameters also
 
 Place shared application components in `src/components/ui/extensions/` and
 route-private components in `src/app/**/_components/`. For example,
-`LoadingState` belongs in `ui/extensions` because both
+`LoadingStatus` belongs in `ui/extensions` because both
 route components and Firebase UI consume it. Do not create parallel application
 component folders such as `src/components/loading/`.
 

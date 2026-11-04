@@ -20,9 +20,9 @@ Agents CLI are host tools; `next-devtools-mcp` is a project dependency.
 
 ## Installed skills
 
-The repository contains fifteen skills: `ask-matt`, `code-review`, `context7-cli`,
+The repository contains sixteen skills: `ask-matt`, `code-review`, `context7-cli`,
 `emulator-test`, `firebase-basics`, `firebase-auth-basics`, `firebase-rules-review`,
-`impeccable`, `vercel-react-best-practices`, `project-new-component`, `project-save`,
+`impeccable`, `nextjs-docs`, `vercel-react-best-practices`, `project-new-component`, `project-save`,
 `setup-matt-pocock-skills`, `shadcn`, `retro`, and `project-verify`. See the
 [skill inventory](skills/README.md) for entrypoints and provenance.
 

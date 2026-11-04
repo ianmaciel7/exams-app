@@ -1,7 +1,7 @@
 # Authentication
 
 The application uses Firebase Authentication for identity and Firebase custom
-claims for roles. The client auth gate guides navigation but does not authorize
+claims for roles. The client auth guard guides navigation but does not authorize
 protected data or operations; server-side token verification, callable functions, and
 Firebase Security Rules are the authorization boundaries.
 
@@ -18,7 +18,7 @@ flowchart TD
   ServerSession --> AdminSDK[Admin SDK token verification]
   AdminSDK -->|Rejected token| SignIn
   AdminSDK --> Layout[Protected layout]
-  Layout --> Gate[AuthGateClient]
+  Layout --> Gate[AuthGuardClient]
   Provider[SessionProviderClient in root layout] --> Gate
   Gate -->|Signed out| SignIn
   Gate -->|Signed in| Protected[Protected route]
@@ -47,9 +47,7 @@ below and the split between them are choices of this repository.
 | --- | --- | --- |
 | `SessionProviderClient` | The single client Firebase Auth subscription, mounted once in the root layout; `isLoading`, `isError`, and `user` cannot contradict each other, and sign-out stays pending until the worker acknowledges it | No |
 | `useSession` | Reads the global session from any client component; never subscribes again | No |
-| `AuthGateClient` | Presentation boundary of protected routes: loading, recoverable error, the single sign-in redirect, and the user context | No |
-| `useAuthenticatedUser` | Reads the gate's user; descendants never subscribe again | No |
-| `RouteUsageClient` | Fire-and-forget usage telemetry, outside the gate | No |
+| `AuthGuardClient` | Presentation boundary of protected routes: loading, recoverable error, the single sign-in redirect, the user context, and fire-and-forget route usage telemetry | No |
 | `rejectInvalidBridgeSession()` | Navigation check in the protected layout: tolerates a missing bridge and rejects only a failed token | No |
 | `verifySession()` | Fails closed and returns the verified identity | Authentication |
 | `verifyRole()` | `verifySession()` plus the required role | Authorization |

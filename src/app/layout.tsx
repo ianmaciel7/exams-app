@@ -6,7 +6,7 @@ import { CspProviderServer } from "@/components/ui/extensions/csp-provider-serve
 import { FirebaseAuthSessionBridgeClient } from "@/components/ui/extensions/firebase-auth-session-bridge-client";
 import { IntlDocumentServer } from "@/components/ui/extensions/intl-document-server";
 import { IntlProviderServer } from "@/components/ui/extensions/intl-provider-server";
-import { LoadingState } from "@/components/ui/extensions/loading-state";
+import { LoadingStatus } from "@/components/ui/extensions/loading-status";
 import { SessionProviderClient } from "@/components/ui/extensions/session-provider-client";
 import { ThemeProviderServer } from "@/components/ui/extensions/theme-provider-server";
 import { Toaster } from "@/components/ui/toast";
@@ -46,7 +46,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <Suspense fallback={null}>
       <IntlDocumentServer className={fontClassName}>
-        <Suspense fallback={<LoadingState boundary="root-provider" />}>
+        <Suspense fallback={<LoadingStatus />}>
           <IntlProviderServer>
             <CspProviderServer>
               <FirebaseAuthSessionBridgeClient />

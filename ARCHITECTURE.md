@@ -70,12 +70,12 @@ files, and `public/` remain at the repository root, as required by the Next.js
     `/forgot-password`) under a shared layout and redirects authenticated visitors
     to `/profile`.
   - `(protected)` isolates authenticated routes (e.g. `/profile`) behind
-    `AuthGateClient`, which observes `onAuthStateChanged` and redirects
+    `AuthGuardClient`, which observes `onAuthStateChanged` and redirects
     unauthenticated visitors to `/sign-in`.
 
 ## Authentication navigation
 
-When an unauthenticated user requests a protected route, the client auth gate redirects to `/sign-in?next=<encoded-path-and-query>`. Only `AuthGateClient` (`src/app/(protected)/_hooks/use-auth-gate-client.ts`) and the server session check in `src/app/(protected)/_lib/` send a signed-out visitor to sign-in. Pages and hooks inside `(protected)` read the session via `useAuthenticatedUser` and do not subscribe or redirect: Firebase notifies observers in subscription order, so a descendant redirect would drop the `?next=` destination. The ast-grep rules `no-protected-descendant-sign-in-redirect-ts` and `-tsx` enforce this. Once authenticated, the public authentication provider sends the user to that destination, or the home page if no valid destination was supplied. The return URL validator accepts only application-relative paths and rejects external URLs and authentication-screen loops; query strings are preserved. Route protection in the UI is not a substitute for Firebase Security Rules or authorization at the data source.
+When an unauthenticated user requests a protected route, the client auth guard redirects to `/sign-in?next=<encoded-path-and-query>`. Only `AuthGuardClient` (`src/app/(protected)/_hooks/use-auth-guard-client.ts`) and the server session check in `src/app/(protected)/_lib/` send a signed-out visitor to sign-in. Pages and hooks inside `(protected)` read the session via `useSession` and do not subscribe or redirect: Firebase notifies observers in subscription order, so a descendant redirect would drop the `?next=` destination. The ast-grep rules `no-protected-descendant-sign-in-redirect-ts` and `-tsx` enforce this. Once authenticated, the public authentication provider sends the user to that destination, or the home page if no valid destination was supplied. The return URL validator accepts only application-relative paths and rejects external URLs and authentication-screen loops; query strings are preserved. Route protection in the UI is not a substitute for Firebase Security Rules or authorization at the data source.
 
 ## Test boundaries
 
@@ -165,7 +165,7 @@ client-guarded protected routes (`(protected)/profile`); see [ADR 0009](docs/adr
 `firebase-auth-sw.js` worker. The worker refreshes an ID token and attaches it
 only to same-origin Next navigation and RSC requests; `src/lib/firebase/server.ts`
 verifies that bridged token with the Admin SDK. Until the worker controls a tab,
-the browser auth gate remains the first-load fallback. The development worker receives
+the browser auth guard remains the first-load fallback. The development worker receives
 the existing public Auth Emulator host, so it shares the local emulator session.
 The authentication modules intentionally remain flat under `src/lib`:
 `auth.ts`, `session.ts`, and `return-url.ts`; consumers should import them as
@@ -175,17 +175,18 @@ The security and HTTP header modules also remain flat under `src/lib`:
 and `csp.ts` (pure Content Security Policy directive builder); consumers should
 import them as `@/lib/headers` and `@/lib/csp`.
 Firebase Web SDK initialization lives in `src/lib/firebase/client.ts`. The
-profile route's `useProfilePreferences` and `useProfileSubmit` hooks coordinate
-the load and save workflows; `readProfile`, `readUserPreferences`,
+profile route's `ProfileClient` loads data before mounting `ProfileForm`;
+`createProfileAction` coordinates saves. `readProfile`, `readUserPreferences`,
 `writeUserPreferences`, and `saveProfile` in
 `src/app/(protected)/profile/_lib/data.ts` handle Firestore/Storage/Auth
 persistence and inject typed Firebase adapters for independent tests.
-`useProfileFormClient` owns the React Hook Form lifecycle and uses the
-native submitting state and shares the loaded profile through
-`ProfileContext`. The route's `page.tsx` composes Card and Form
-parts, including the Card header; `ProfileCardContent` renders the one
-`FieldGroup`. The segment's `loading.tsx` and `error.tsx`
-cover the suspended read and its failure. Profile value types live in
+`useProfileClient` owns the read lifecycle, timeout and initial preferences;
+abandoned reads cannot change the UI. `useProfileForm` owns the form Action
+(`useActionState`) and composes `useSession`; `ProfileForm` renders its fields
+inline (ADR 0019). `page.tsx` resolves headings and renders `ProfileClient`, which
+renders the loaded Card and form. The client loading state uses `LoadingStatus`;
+`loading.tsx` covers server rendering and `error.tsx` handles read failures.
+`dto.ts` maps form submissions. Profile value types and field names live in
 `src/app/(protected)/profile/_lib/definitions.ts`, alongside the route-private profile
 workflow. The canonical profile
 responsibilities live in
@@ -193,9 +194,10 @@ responsibilities live in
 Firestore at `users/{uid}` with owner and field/value validation rules. Avatar
 Storage rules restrict `users/{uid}/avatar` to its owner and enforce accepted
 image types and the 2 MiB upload limit. These browser SDK modules are not a
-Next.js server-side DAL. Next.js documentation uses `data.ts` for server-side
-data access and `actions.ts` for Server Actions; we reserve those patterns for
-server code, rather than using those names for Firebase client modules
+Next.js server-side DAL. The local `data.ts` filename describes persistence;
+it does not establish a server boundary. The profile's `actions.ts` declares
+`"use client"` and contains client Actions. Server Functions require `"use server"`,
+and the authorization guard checks that directive rather than the filename
 ([Fetching Data](https://nextjs.org/docs/app/getting-started/fetching-data),
 [Mutating Data](https://nextjs.org/docs/app/getting-started/mutating-data),
 [Data Security](https://nextjs.org/docs/app/guides/data-security)). See
@@ -280,8 +282,8 @@ that flag does not establish compiler transformation in the Vite-based test or
 Ladle pipeline.
 
 Browser Firebase subscriptions stay in focused hooks behind the existing
-component-named orchestration seams. The profile form uses React Hook Form and
-its providers, not React form Actions or a server mutation layer. Avatar object
+component-named orchestration seams. The loaded profile form uses a React client
+Action, and `ProfileClient` owns its browser read lifecycle. Avatar object
 URLs are created in an Effect with replacement/unmount cleanup. The viewport
 hook uses `useSyncExternalStore` with a matching initial server/hydration
 snapshot. These are external-system contracts, not redundant derived state.
@@ -298,7 +300,7 @@ and stable/experimental boundaries.
 
 Place shared application components in `src/components/ui/extensions/` and
 route-private components in `src/app/**/_components/`. For example,
-`LoadingState` belongs in `ui/extensions` because both
+`LoadingStatus` belongs in `ui/extensions` because both
 route components and Firebase UI consume it. Do not create parallel application
 component folders such as `src/components/loading/`.
 
@@ -319,8 +321,8 @@ and [the integration convention](CODING_STANDARDS.md#integration-filename-conven
 
 ## Usage records
 
-`RouteUsageClient` calls `recordUsage` on pathname changes without delaying
-protected content. Profile saves call `withUsageGuard` before starting the operation.
+`useAuthGuardClient` calls `recordUsage` once per signed-in user and pathname
+without delaying protected content. Profile saves call `withUsageGuard` before starting the operation.
 The Firebase callable validates authentication and an allowlist of screen and
 functionality names, then emits structured `INFO` entries using the native
 `firebase-functions/logger` SDK. Cloud Logging supplies the timestamp and

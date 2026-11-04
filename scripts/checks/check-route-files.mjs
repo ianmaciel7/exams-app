@@ -3,7 +3,8 @@ import { basename, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import ts from "typescript";
 
-const entrypointPattern = /^(page|layout|template)\.[jt]sx?$/;
+const entrypointPattern =
+  /^(page|layout|template|not-found|loading|default)\.[jt]sx?$/;
 const permittedNextFunctions = new Set([
   "generateMetadata",
   "generateViewport",
@@ -19,6 +20,7 @@ const messages = {
   function:
     "Extract helper functions; allow only the default route component and Next.js generators.",
   callback: "Extract inline functions and callbacks into focused modules.",
+  hook: "Route entrypoints are Server Components: use `await getTranslations()` from `next-intl/server` for copy, and move other hooks into a Client Component.",
 };
 
 const controlFlowKinds = new Set([
@@ -118,7 +120,18 @@ function checkNamedFunction(node) {
   if (!isDefault && !isNextFunction) return messages.function;
 }
 
+function checkHookCall(node) {
+  if (!ts.isCallExpression(node)) return;
+  const callee = ts.isPropertyAccessExpression(node.expression)
+    ? node.expression.name
+    : node.expression;
+  if (ts.isIdentifier(callee) && /^use[A-Z]/.test(callee.text)) {
+    return messages.hook;
+  }
+}
+
 const checks = [
+  checkHookCall,
   checkControlFlow,
   checkBinaryLogic,
   checkUpdateExpression,

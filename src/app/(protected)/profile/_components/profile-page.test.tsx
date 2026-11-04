@@ -6,10 +6,10 @@ import {
   screen,
   waitFor,
 } from "@testing-library/react";
-import { Component, type ReactNode, Suspense } from "react";
+import { Activity, Component, type ReactNode, Suspense } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { SessionProviderClient } from "@/components/ui/extensions/session-provider-client";
-import { AuthGateClient } from "../../_components/auth-gate-client";
+import { AuthGuardClient } from "../../_components/auth-guard-client";
 import ProfileError from "../error";
 import ProfileLoading from "../loading";
 import ProfilePage from "../page";
@@ -34,9 +34,11 @@ const mocks = vi.hoisted(() => ({
 
 vi.mock("next/navigation", () => ({
   useRouter: () => mocks.router,
+  usePathname: () => "/profile",
 }));
 
 vi.mock("@/lib/firebase/usage", () => ({
+  recordUsage: async () => {},
   withUsageGuard: async (_event: unknown, operation: () => Promise<unknown>) =>
     operation(),
 }));
@@ -48,6 +50,10 @@ vi.mock("next-intl", () => ({
     typeof value === "string" && locales.includes(value),
   useTranslations: () => translate,
   useLocale: () => mocks.locale,
+}));
+
+vi.mock("next-intl/server", () => ({
+  getTranslations: async () => translate,
 }));
 
 vi.mock("next-themes", () => ({
@@ -123,24 +129,30 @@ class SegmentErrorBoundary extends Component<
 
 /** Firebase loads on demand; wait for it so the gate has subscribed. */
 async function renderProfile() {
-  const rendered = render(
+  // The route entrypoint is an async Server Component: resolve it first.
+  const page = await ProfilePage();
+  const tree = (mode: "visible" | "hidden") => (
     <SessionProviderClient>
-      <AuthGateClient>
+      <AuthGuardClient>
         <SegmentErrorBoundary>
-          <Suspense fallback={<ProfileLoading />}>
-            <ProfilePage />
-          </Suspense>
+          <Activity mode={mode}>
+            <Suspense fallback={<ProfileLoading />}>{page}</Suspense>
+          </Activity>
         </SegmentErrorBoundary>
-      </AuthGateClient>
-    </SessionProviderClient>,
+      </AuthGuardClient>
+    </SessionProviderClient>
   );
+  const rendered = render(tree("visible"));
   await act(() => vi.dynamicImportSettled());
-  return rendered;
+  return {
+    ...rendered,
+    setVisibility: (mode: "visible" | "hidden") =>
+      rendered.rerender(tree(mode)),
+  };
 }
 
 /**
- * Runs an update that suspends on the profile read and lets the read settle in
- * the same act scope, so React's retry of the suspended render is flushed.
+ * Flushes session changes and the asynchronous profile read in one act scope.
  */
 async function settleAfter(update: () => void) {
   await act(async () => {
@@ -282,8 +294,7 @@ describe("ProfilePage", () => {
     expect(screen.queryByText("preferencesTitle")).toBeNull();
   });
 
-  it("suspends into the segment loading state while preferences load", async () => {
-    // A unique uid: the never-settling read stays cached for this session.
+  it("shows the loading state while preferences load", async () => {
     mocks.currentUser = { uid: "user-pending" };
     mocks.readPreferences.mockReturnValue(new Promise(() => {}));
 
@@ -291,9 +302,7 @@ describe("ProfilePage", () => {
 
     await vi.waitFor(() =>
       expect(
-        container.querySelector(
-          '[data-loading-boundary="profile-preferences"]',
-        ),
+        container.querySelector('[data-slot="loading-status"]'),
       ).not.toBeNull(),
     );
     expect(container.querySelector('[data-slot="card"]')).toBeNull();
@@ -327,7 +336,7 @@ describe("ProfilePage", () => {
     }
   });
 
-  it("keeps form fields in CardContent and buttons in CardFooter", async () => {
+  it("renders the fields and buttons in one form inside CardContent", async () => {
     mocks.currentUser = { uid: "user-123", email: "user@example.com" };
     await renderProfile();
 
@@ -335,20 +344,11 @@ describe("ProfilePage", () => {
       name: "saveProfile",
     });
     const displayName = screen.getByLabelText("displayNameLabel");
-
-    expect(displayName.closest('[data-slot="card-content"]')).toBeTruthy();
-    expect(document.querySelectorAll('[data-slot="field-group"]')).toHaveLength(
-      1,
-    );
-    expect(saveButton.closest('[data-slot="card-footer"]')).toBeTruthy();
     const form = saveButton.closest("form");
+
     expect(form).toBeTruthy();
     expect(displayName.closest("form")).toBe(form);
-    expect(
-      displayName
-        .closest('[data-slot="field-group"]')
-        ?.closest('[data-slot="card-content"]'),
-    ).toBeTruthy();
+    expect(form?.closest('[data-slot="card-content"]')).toBeTruthy();
     expect(form?.querySelectorAll("form")).toHaveLength(0);
     expect(saveButton.getAttribute("type")).toBe("submit");
   });
@@ -406,7 +406,7 @@ describe("ProfilePage", () => {
     expect(mocks.readPreferences).toHaveBeenCalledWith("user-123");
   });
 
-  it("synchronizes the locale without leaving the profile suspended", async () => {
+  it("synchronizes the locale and renders the loaded profile", async () => {
     mocks.currentUser = { uid: "user-locale-sync" };
     mocks.readPreferences.mockResolvedValue({ locale: "pt-BR" });
 
@@ -416,6 +416,121 @@ describe("ProfilePage", () => {
     expect(document.cookie).toContain("NEXT_LOCALE=pt-BR");
     expect(await screen.findByLabelText("languageLabel")).toBeTruthy();
     expect(container.querySelector('[data-slot="card"]')).not.toBeNull();
+  });
+
+  it("does not apply preferences from a read abandoned before mounting", async () => {
+    mocks.currentUser = { uid: "abandoned-profile" };
+    let finish!: (value: object) => void;
+    mocks.readPreferences.mockReturnValueOnce(
+      new Promise((resolve) => {
+        finish = resolve;
+      }),
+    );
+    const view = await renderProfile();
+    view.unmount();
+    const cookie = document.cookie;
+
+    await settleAfter(() => finish({ locale: "es", theme: "dark" }));
+
+    expect(mocks.setTheme).not.toHaveBeenCalled();
+    expect(mocks.router.refresh).not.toHaveBeenCalled();
+    expect(document.cookie).toBe(cookie);
+  });
+
+  it("times out a stalled read, ignores its late result and supports retry", async () => {
+    vi.useFakeTimers();
+    const log = vi.spyOn(console, "error").mockImplementation(() => {});
+    mocks.currentUser = { uid: "profile-timeout", displayName: "Ada" };
+    let finish!: (value: object) => void;
+    mocks.readPreferences.mockReturnValueOnce(
+      new Promise((resolve) => {
+        finish = resolve;
+      }),
+    );
+    try {
+      await renderProfile();
+      await act(() => vi.advanceTimersByTimeAsync(15_000));
+      expect(screen.getByRole("alert").textContent).toBe("profileLoadError");
+
+      await act(async () => finish({ locale: "es", theme: "dark" }));
+      expect(mocks.setTheme).not.toHaveBeenCalled();
+      expect(mocks.router.refresh).not.toHaveBeenCalled();
+
+      await act(async () => {
+        fireEvent.click(screen.getByRole("button", { name: "tryAgain" }));
+      });
+      expect(screen.getByDisplayValue("Ada")).toBeTruthy();
+      expect(mocks.readPreferences).toHaveBeenCalledTimes(2);
+      expect(screen.queryByRole("alert")).toBeNull();
+    } finally {
+      vi.useRealTimers();
+      log.mockRestore();
+    }
+  });
+
+  it("reads fresh data on the next visit without keeping a browser cache", async () => {
+    mocks.currentUser = { uid: "revisited-profile", displayName: "Before" };
+    const first = await renderProfile();
+    expect(await screen.findByDisplayValue("Before")).toBeTruthy();
+    first.unmount();
+
+    mocks.currentUser = { uid: "revisited-profile", displayName: "After" };
+    await renderProfile();
+    expect(await screen.findByDisplayValue("After")).toBeTruthy();
+    expect(mocks.readPreferences).toHaveBeenCalledTimes(2);
+  });
+
+  it("recovers when returning to an account whose pending read lost its session", async () => {
+    const firstUser = { uid: "interrupted-account", displayName: "First" };
+    mocks.currentUser = firstUser;
+    let changeSession!: (user: unknown) => void;
+    mocks.subscribe.mockImplementation((_auth, callback) => {
+      changeSession = callback;
+      callback(mocks.currentUser);
+      return () => {};
+    });
+    let finish!: (value: object) => void;
+    mocks.readPreferences.mockReturnValueOnce(
+      new Promise((resolve) => {
+        finish = resolve;
+      }),
+    );
+    await renderProfile();
+
+    mocks.currentUser = { uid: "other-account", displayName: "Other" };
+    await settleAfter(() => changeSession(mocks.currentUser));
+    await screen.findByDisplayValue("Other");
+    await settleAfter(() => finish({ theme: "dark" }));
+
+    mocks.currentUser = firstUser;
+    await settleAfter(() => changeSession(firstUser));
+    expect(await screen.findByDisplayValue("First")).toBeTruthy();
+    expect(screen.queryByRole("alert")).toBeNull();
+    expect(mocks.readPreferences).toHaveBeenCalledTimes(3);
+  });
+
+  it("preserves saved preferences when Activity hides and reveals the form", async () => {
+    mocks.currentUser = { uid: "activity-profile", email: "ada@example.test" };
+    mocks.readPreferences.mockResolvedValue({ theme: "light" });
+    const view = await renderProfile();
+    fireEvent.click(await screen.findByLabelText("themeLabel"));
+    const dark = await screen.findByRole("option", {
+      name: "themeOptions.dark",
+    });
+    fireEvent.pointerDown(dark);
+    fireEvent.pointerUp(dark);
+    fireEvent.click(dark);
+    fireEvent.click(screen.getByRole("button", { name: "saveProfile" }));
+    await waitFor(() =>
+      expect(mocks.setTheme).toHaveBeenLastCalledWith("dark"),
+    );
+    await screen.findByRole("button", { name: "saveProfile" });
+
+    view.setVisibility("hidden");
+    view.setVisibility("visible");
+
+    expect(mocks.setTheme).toHaveBeenLastCalledWith("dark");
+    expect(mocks.readPreferences).toHaveBeenCalledTimes(1);
   });
 
   it("saves a changed theme preference and shows success toast", async () => {

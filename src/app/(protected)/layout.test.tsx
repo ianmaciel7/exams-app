@@ -5,14 +5,9 @@ import ProtectedLayout from "./layout";
 const mocks = vi.hoisted(() => ({ reject: vi.fn() }));
 
 vi.mock("./_lib/dal", () => ({ rejectInvalidBridgeSession: mocks.reject }));
-vi.mock("./_components/auth-gate-client", () => ({
-  AuthGateClient: ({ children }: { children: React.ReactNode }) => (
-    <section data-testid="auth-gate">{children}</section>
-  ),
-}));
-vi.mock("./_components/route-usage-client", () => ({
-  RouteUsageClient: ({ children }: { children: React.ReactNode }) => (
-    <section data-testid="route-usage">{children}</section>
+vi.mock("./_components/auth-guard-client", () => ({
+  AuthGuardClient: ({ children }: { children: React.ReactNode }) => (
+    <section data-testid="auth-guard">{children}</section>
   ),
 }));
 
@@ -27,8 +22,7 @@ describe("ProtectedLayout", () => {
       }),
     );
     expect(mocks.reject).toHaveBeenCalledOnce();
-    expect(screen.getByTestId("auth-gate")).toBeTruthy();
-    expect(screen.getByTestId("route-usage")).toBeTruthy();
+    expect(screen.getByTestId("auth-guard")).toBeTruthy();
     expect(screen.getByText("Protected Content")).toBeTruthy();
   });
 });
