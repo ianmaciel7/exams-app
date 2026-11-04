@@ -988,14 +988,6 @@ export function inspectProfilePage(content, filename) {
   return findings;
 }
 
-function checkHomeSafety(source, stem, report) {
-  if (stem !== "home-section") return;
-  const elements = jsxEntries(source);
-  if (!elements.some((element) => element.name === "Home")) {
-    report(source, "HomeSection must compose Home.");
-  }
-}
-
 const statefulHooks = new Set([
   "useState",
   "useReducer",
@@ -1389,7 +1381,6 @@ export function inspectComponent(content, filename) {
   checkFieldControllerNames(source, stem, report);
   checkProfilePropDrilling(source, report);
   checkProfileFormSafety(source, stem, report);
-  checkHomeSafety(source, stem, report);
   return findings;
 }
 

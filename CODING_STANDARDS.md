@@ -300,7 +300,7 @@ See the installed Next.js boundary guide and the
 components, without restricting the scan to files with `"use client"`.
 It enforces semantic filenames, a matching family root, locally declared named
 parts with the root prefix, matching props names, separate named exports, and
-exact term parity (`checkStemComponentTermParity`) between filenames and component declarations for non-legacy modules (such as `HomeWelcomeHero` in `src/app/_components/home-welcome-hero.tsx` requiring a 1:1 term match across component name and orchestration hook, while the Server Component `HomeSection` composes its companion UI component `Home`).
+exact term parity (`checkStemComponentTermParity`) between filenames and component declarations for non-legacy modules (such as `HomeWelcomeHero` in `src/app/_components/home-welcome-hero.tsx` requiring a 1:1 term match across component name and orchestration hook, while the Server Component `src/app/page.tsx` composes the companion UI component `Home`).
 It rejects static component-property assignment and direct `Object.assign`,
 `Object.defineProperty`, or `Object.defineProperties` on a component family.
 

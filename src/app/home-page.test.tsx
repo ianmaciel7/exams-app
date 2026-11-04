@@ -9,7 +9,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { SessionProviderClient } from "@/components/ui/extensions/session-provider-client";
 import en from "@/messages/en.json";
-import { HomeSection } from "./home-section";
+import HomePage from "./page";
 
 const mocks = vi.hoisted(() => ({
   subscribe: vi.fn(),
@@ -34,7 +34,7 @@ function renderHome() {
   return render(
     <NextIntlClientProvider locale="en" messages={en}>
       <SessionProviderClient>
-        <HomeSection />
+        <HomePage />
       </SessionProviderClient>
     </NextIntlClientProvider>,
   );
