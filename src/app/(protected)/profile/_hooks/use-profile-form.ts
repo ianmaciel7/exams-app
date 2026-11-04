@@ -11,7 +11,8 @@ import { useProfileSaveFeedback } from "./use-profile-save-feedback";
 
 /**
  * Coordinates the profile form: the suspended profile read, the form Action
- * (`useActionState`) and the avatar picked since the last Action result.
+ * (`useActionState`) and the avatar picked since the last Action result. It
+ * also returns the `Auth` translator so the form renders its labels from it.
  */
 export function useProfileForm() {
   const t = useTranslations("Auth");
@@ -58,6 +59,7 @@ export function useProfileForm() {
   };
 
   return {
+    t,
     state,
     pending,
     formAction,

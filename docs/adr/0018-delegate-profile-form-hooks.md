@@ -10,8 +10,8 @@ ADR 0017 exempted `*-form.tsx` components from the custom-hook delegation rules 
 
 ## Decision
 
-- `useProfileForm` (`profile/_hooks/use-profile-form.ts`) owns the profile read, the effect that forgets the cached read, `useActionState`, the picked avatar and the form action. It returns `state`, `pending`, `formAction`, `avatarFile` and `pickAvatar`.
-- `ProfileForm` keeps `useTranslations` and renders the fields inline, as in the Next.js and shadcn form guides.
+- `useProfileForm` (`profile/_hooks/use-profile-form.ts`) owns the profile read, the effect that forgets the cached read, `useActionState`, the picked avatar and the form action. It returns `t`, `state`, `pending`, `formAction`, `avatarFile` and `pickAvatar`.
+- `useProfileForm` also returns the `Auth` translator `t`, so `ProfileForm` calls no hook except `useProfileForm` and renders the fields inline, as in the Next.js and shadcn form guides.
 - `check:components` no longer exempts `*-form.tsx` from the custom-hook delegation rules: a form component calls only `use<Component>` plus presentation hooks. It stays exempt from the `-client` suffix, still needs exactly one form root and rejects `FormProvider`.
 - The Biome override for `noExcessiveLinesPerFunction` on `_components/*-form.tsx` stays, because the fields are declarative markup; the cognitive-complexity budget applies.
 
