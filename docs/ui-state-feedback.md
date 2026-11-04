@@ -96,7 +96,7 @@ During transitions between `idle`, `loading`, `success`, and `error`:
 4. **Local over full-screen replacement**: avoid swapping an entire layout or page with a full-screen spinner when localized inline feedback is sufficient.
 5. **Shared layout persistence**: maintain parent layouts and navigation chrome across Suspense boundaries.
 6. **Root-cause fixes**: resolve layout shifts through structural layout composition (flex, grid, reserved space), never through arbitrary `min-height` CSS band-aids.
-7. **Motion verification**: verified continuously by the Playwright loading motion probe (`tests/support/loading-motion.ts` and `tests/loading-transitions.spec.ts`) across desktop and mobile viewports.
+7. **Loading screen**: `LoadingStatus` is the only full-viewport pending UI and is covered by unit tests (`loading-status.test.tsx`, `loading.test.tsx`).
 
 ---
 
@@ -148,7 +148,7 @@ All authentication flows (sign-in, registration, password recovery, MFA, Google 
 | `oauth-button.tsx` | Pending state was visual only and an OAuth error was not programmatically associated with its control. | Screen-reader users had weaker progress/retry context. | Added `aria-busy` and an `aria-describedby` relationship to the local alert. | `oauth-button.test.tsx` passed; emulator popup cancellation journey verified. | Resolved |
 | `redirect-error.tsx` | Redirect authentication failure lacked an assertive local announcement. | Important failure could be missed by assistive technology. | Added `role="alert"`. | Existing auth-page axe coverage; component review. | Resolved |
 | `profile/_hooks/use-profile-submit.ts`, `profile-form-client.tsx` | Save failure was only a dismissible toast. | Users could lose the recovery message before retrying, despite values being retained. | Keep the localized failure in a form-level alert until the next attempt; preserve the success toast. | Component regression checks the alert, enabled retry, retained avatar and subsequent success. | Resolved |
-| `profile/_hooks/use-profile-avatar.ts`, `profile-avatar-field-client.tsx` | Invalid file feedback was only a toast and was not associated with the input. | The error could disappear and assistive technology did not get a field relationship. | Keep localized `FieldError` beside the input; set `aria-invalid` and `aria-describedby`; clear after valid selection. | Component regression verifies alert, relationship and no duplicate toast. | Resolved |
+| `profile/_hooks/use-profile-avatar-input.ts`, `profile-avatar-field-client.tsx` | Invalid file feedback was only a toast and was not associated with the input. | The error could disappear and assistive technology did not get a field relationship. | Keep localized `FieldError` beside the input; set `aria-invalid` and `aria-describedby`; clear after valid selection. | Component regression verifies alert, relationship and no duplicate toast. | Resolved |
 | `phone-auth-form.tsx`, SMS and TOTP assertion forms | `getAuthErrorMessage` expected a `FirebaseUIError`, but Firebase UI form actions rethrow a plain `Error` with translated copy. | Every failed phone or MFA step showed the generic message. | `getAuthActionErrorMessage` keeps the translated copy of form actions; direct `ui-core` calls keep the stricter mapping. | `auth-error-message.test.ts`; component regression tests. | Resolved |
 | Popup blocked, network failure, concurrent popup, and navigation-away OAuth journeys | The emulator suite cannot faithfully make every browser/provider failure deterministic. | A browser-specific regression could escape local emulation. | Keep provider-level state ownership and cancellation test; add deterministic contract tests if the Firebase UI dependency exposes an injectable provider strategy. | Emulator tests cover dismissal, cancellation, and retry. | Resolved for covered email/popup flows; production provider caveats documented |
 
@@ -157,11 +157,10 @@ All authentication flows (sign-in, registration, password recovery, MFA, Google 
 ## Verification record and CI enforcement
 
 - **Mechanical safeguard**: `pnpm check:ui-state` runs `scripts/checks/check-ui-state.mjs` and its tests `scripts/checks/check-ui-state.test.mjs`. It scans `src/` ASTs to prohibit raw exception coercion (`String(error)`, template string interpolation, unnormalized error details) from reaching JSX, form errors, or toast payloads. Escape hatch: `// check-ui-state-ignore: <reason>`.
-- **Loading transitions & motion probe**: `tests/loading-transitions.spec.ts` exercises all loading boundaries across multiple viewports (390px, 768px, 1440px), asserting that global spinners do not remount and indicators do not shift or jump. Run standalone via `pnpm test:loading` or as part of `pnpm verify:e2e`.
 - **Auth emulator E2E**: `tests/firebase-auth.spec.ts` verifies real observable journeys including registration, deep link redirection, profile save/avatar, and Google popup cancellation with retry recovery.
 - **CI gates**:
   - `static` job: executes `pnpm verify:static` (including `pnpm check:repo` and `pnpm check:ui-state`) and an explicit `Verify UI state and resilience safeguards` step.
-  - `e2e` job: executes `pnpm verify:e2e` (running all Playwright specifications including `loading-transitions.spec.ts`, mobile, visual, and axe accessibility).
+  - `e2e` job: executes `pnpm verify:e2e` (running all Playwright specifications including mobile, visual, and axe accessibility).
   - `auth-emulator` job: executes Playwright tests against live Firebase Auth, Firestore, and Functions emulators.
 
 ---

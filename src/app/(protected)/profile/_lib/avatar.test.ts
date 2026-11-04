@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 import {
   ACCEPTED_AVATAR_TYPES,
+  getAvatarFallbackInitial,
   getAvatarSource,
+  isValidAvatarFile,
   MAX_AVATAR_SIZE,
 } from "./avatar";
 
@@ -36,5 +38,27 @@ describe("avatar source selection", () => {
       "image/png",
       "image/webp",
     ]);
+  });
+});
+
+describe("avatar file validation", () => {
+  it("accepts supported types within the size limit", () => {
+    expect(
+      isValidAvatarFile({ type: "image/png", size: MAX_AVATAR_SIZE }),
+    ).toBe(true);
+  });
+  it("rejects unsupported types and oversized files", () => {
+    expect(isValidAvatarFile({ type: "image/gif", size: 1 })).toBe(false);
+    expect(
+      isValidAvatarFile({ type: "image/png", size: MAX_AVATAR_SIZE + 1 }),
+    ).toBe(false);
+  });
+});
+
+describe("avatar fallback initial", () => {
+  it("prefers the display name, then the email, then U", () => {
+    expect(getAvatarFallbackInitial("ana", "z@x.test")).toBe("A");
+    expect(getAvatarFallbackInitial(null, "z@x.test")).toBe("Z");
+    expect(getAvatarFallbackInitial("", null)).toBe("U");
   });
 });

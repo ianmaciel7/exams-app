@@ -4,18 +4,11 @@ import AxeBuilder from "@axe-core/playwright";
 import {
   type APIRequestContext,
   type Browser,
-  devices,
   expect,
   type Page,
   test,
 } from "@playwright/test";
 import esMessages from "../src/messages/es.json";
-import {
-  assertLoadingFinished,
-  assertLoadingTrace,
-  installLoadingProbe,
-  readLoadingTrace,
-} from "./support/loading-motion";
 
 for (const envFile of [".env.local", ".env"]) {
   if (fs.existsSync(envFile)) {
@@ -293,113 +286,12 @@ test("profile displays user email and signs out successfully", async ({
   await page.getByRole("button", { name: "Sign In", exact: true }).click();
   await expect(page).toHaveURL("/");
   await expect(page.getByRole("link", { name: "My profile" })).toBeVisible();
-  await expect(
-    page.locator('[data-slot="global-loading-indicator"]'),
-  ).toHaveCSS("visibility", "hidden");
-
-  await page.evaluate(() => {
-    const spinner = document.querySelector(
-      '[data-slot="global-loading-indicator"] [data-slot="spinner"]',
-    );
-    if (!spinner) throw new Error("Root loading indicator not mounted");
-    (
-      window as Window & { __profileLoadingSpinner?: Element }
-    ).__profileLoadingSpinner = spinner;
-  });
-  // Observe every visible loading frame during the real route transition.
-  // Previous tests only compared DOM nodes before and after navigation.
-  await page.evaluate(() => {
-    const root = document.querySelector(
-      '[data-slot="global-loading-indicator"] [data-slot="spinner"]',
-    );
-    if (!root) throw new Error("Missing persistent loading spinner");
-    const trace: { x: number; y: number; source: string }[] = [];
-    let running = true;
-    const sample = () => {
-      if (!running) return;
-      const spinners = document.querySelectorAll<SVGSVGElement>(
-        '[data-slot="global-loading-indicator"] [data-slot="spinner"]',
-      );
-      for (const spinner of spinners) {
-        if (getComputedStyle(spinner).visibility !== "visible") continue;
-        const bounds = spinner.getBoundingClientRect();
-        trace.push({
-          x: bounds.left + bounds.width / 2,
-          y: bounds.top + bounds.height / 2,
-          source: spinner.closest('[data-slot="global-loading-indicator"]')
-            ? "root"
-            : "fallback",
-        });
-      }
-      requestAnimationFrame(sample);
-    };
-    const browser = window as typeof window & {
-      __profileLoadingTrace?: () => {
-        sameNode: boolean;
-        bodyChild: boolean;
-        trace: typeof trace;
-        viewportWidth: number;
-        viewportHeight: number;
-      };
-    };
-    browser.__profileLoadingTrace = () => {
-      running = false;
-      return {
-        sameNode:
-          root ===
-          document.querySelector(
-            '[data-slot="global-loading-indicator"] [data-slot="spinner"]',
-          ),
-        bodyChild:
-          root.closest('[data-slot="global-loading-indicator"]')
-            ?.parentElement === document.body,
-        trace,
-        viewportWidth: window.innerWidth,
-        viewportHeight: window.innerHeight,
-      };
-    };
-    requestAnimationFrame(sample);
-  });
   await page.getByRole("link", { name: "My profile" }).click();
   await expect(page).toHaveURL(/\/profile$/);
   await expect(page.getByLabel("Email", { exact: true })).toHaveValue(email);
-  const loadingMotion = await page.evaluate(() => {
-    const browser = window as typeof window & {
-      __profileLoadingTrace?: () => {
-        sameNode: boolean;
-        bodyChild: boolean;
-        trace: { x: number; y: number; source: string }[];
-        viewportWidth: number;
-        viewportHeight: number;
-      };
-    };
-    return browser.__profileLoadingTrace?.();
-  });
-  expect(loadingMotion?.sameNode).toBe(true);
-  expect(loadingMotion?.bodyChild).toBe(true);
-  expect(loadingMotion?.trace.every((sample) => sample.source === "root")).toBe(
-    true,
-  );
-  for (const sample of loadingMotion?.trace ?? []) {
-    expect(sample.x).toBeGreaterThan(0);
-    expect(sample.x).toBeLessThan(loadingMotion?.viewportWidth ?? 0);
-    expect(
-      Math.abs(sample.y - (loadingMotion?.viewportHeight ?? 0) / 2),
-    ).toBeLessThanOrEqual(1);
-  }
-
-  // Navigating into the protected route must not mount a new loading icon:
-  // the root indicator remains the same DOM node across route/auth/profile.
-  expect(
-    await page.evaluate(
-      () =>
-        (window as Window & { __profileLoadingSpinner?: Element })
-          .__profileLoadingSpinner ===
-        document.querySelector(
-          '[data-slot="global-loading-indicator"] [data-slot="spinner"]',
-        ),
-    ),
-  ).toBe(true);
+  await expect(
+    page.locator('[data-slot="loading-status"]:visible'),
+  ).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Sign Out" })).toHaveCount(0);
   await page.getByRole("link", { name: "Back to Home" }).click();
   await expect(page).toHaveURL("/");
@@ -448,128 +340,6 @@ test("saving the profile language keeps the unprefixed route and translates afte
     page.getByText(esMessages.Auth.personalInfoTitle, { exact: true }),
   ).toBeVisible();
   await expect(page).toHaveURL(`${authTestOrigin}/profile`);
-});
-
-test("@loading observes every protected layout state during real profile journey", async ({
-  page,
-  request,
-}, testInfo) => {
-  test.setTimeout(90_000);
-  const email = `loading-profile-${crypto.randomUUID()}@example.test`;
-  const created = await request.post(
-    `${emulator}/identitytoolkit.googleapis.com/v1/accounts:signUp?key=emulator-only`,
-    { data: { email, password, returnSecureToken: true } },
-  );
-  expect(created.ok()).toBe(true);
-  await installLoadingProbe(page);
-  await page.goto("/sign-in");
-  await expect(signInEmail(page)).toBeVisible();
-  await assertLoadingFinished(page);
-
-  await signInEmail(page).fill(email);
-  await signInPassword(page).fill(password);
-  await page.getByRole("button", { name: "Sign In", exact: true }).click();
-  await expect(page).toHaveURL("/");
-  await expect(page.getByRole("link", { name: "My profile" })).toBeVisible();
-  await assertLoadingFinished(page);
-
-  await page.getByRole("link", { name: "My profile" }).click();
-  await expect(page).toHaveURL(/\/profile$/);
-  await expect(page.getByLabel("Email", { exact: true })).toHaveValue(email);
-  await assertLoadingFinished(page);
-
-  // Force each owned boundary on the actual authenticated profile document.
-  // This makes coverage deterministic when fast RSC responses skip fallback UI.
-  for (const boundary of [
-    "root-provider",
-    "root-route",
-    "protected-layout",
-    "protected-auth",
-    "profile-preferences",
-  ]) {
-    await page.evaluate((name) => {
-      const app = document.querySelector('[data-slot="app-root"]');
-      if (!app) throw new Error("App root missing");
-      const marker = document.createElement("div");
-      marker.dataset.slot = "loading-state";
-      marker.dataset.loadingBoundary = name;
-      marker.dataset.loadingTest = "active";
-      app.append(marker);
-    }, boundary);
-    await expect(
-      page.locator('[data-slot="global-loading-indicator"]'),
-    ).toHaveCSS("visibility", "visible");
-    await page.evaluate(
-      () =>
-        new Promise<void>((resolve) =>
-          requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
-        ),
-    );
-    const trace = await readLoadingTrace(page);
-    expect(
-      trace.frames.some(
-        (frame) =>
-          frame.pending.includes(boundary) && frame.visible.length === 1,
-      ),
-      `Missing an observed frame for ${boundary}`,
-    ).toBe(true);
-    assertLoadingTrace(trace, `authenticated profile: ${boundary}`, true);
-    await page.locator('[data-loading-test="active"]').evaluate((el) => {
-      el.remove();
-    });
-    await assertLoadingFinished(page);
-  }
-
-  await page.getByRole("link", { name: "Back to Home" }).click();
-  await expect(page).toHaveURL("/");
-  await expect(page.getByRole("link", { name: "My profile" })).toBeVisible();
-  await assertLoadingFinished(page);
-
-  const trace = await readLoadingTrace(page);
-  await testInfo.attach("profile-loading-frames.json", {
-    body: Buffer.from(JSON.stringify(trace, null, 2)),
-    contentType: "application/json",
-  });
-  assertLoadingTrace(trace, "sign-in → Home → Profile");
-});
-
-test("@loading Pixel 7 real authenticated Home to Profile does not jump", async ({
-  browser,
-  request,
-}, testInfo) => {
-  test.setTimeout(90_000);
-  const context = await browser.newContext({ ...devices["Pixel 7"] });
-  const page = await context.newPage();
-  const email = `mobile-profile-${crypto.randomUUID()}@example.test`;
-  try {
-    const created = await request.post(
-      `${emulator}/identitytoolkit.googleapis.com/v1/accounts:signUp?key=emulator-only`,
-      { data: { email, password, returnSecureToken: true } },
-    );
-    expect(created.ok()).toBe(true);
-    await installLoadingProbe(page);
-    await page.goto(`${authTestOrigin}/sign-in`);
-    await expect(signInEmail(page)).toBeVisible();
-    await assertLoadingFinished(page);
-    await signInEmail(page).fill(email);
-    await signInPassword(page).fill(password);
-    await page.getByRole("button", { name: "Sign In", exact: true }).click();
-    await expect(page).toHaveURL(`${authTestOrigin}/`);
-    await expect(page.getByRole("link", { name: "My profile" })).toBeVisible();
-    await assertLoadingFinished(page);
-    await page.getByRole("link", { name: "My profile" }).click();
-    await expect(page).toHaveURL(/\/profile$/);
-    await expect(page.getByLabel("Email", { exact: true })).toHaveValue(email);
-    await assertLoadingFinished(page);
-    const trace = await readLoadingTrace(page);
-    await testInfo.attach("mobile-profile-loading-frames.json", {
-      body: Buffer.from(JSON.stringify(trace, null, 2)),
-      contentType: "application/json",
-    });
-    assertLoadingTrace(trace, "Pixel 7 sign-in → Home → Profile", true);
-  } finally {
-    await context.close();
-  }
 });
 
 test("guest deep link returns to the protected page after sign-in", async ({

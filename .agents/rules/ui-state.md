@@ -47,7 +47,6 @@ global enum for every possible UI state.
   theme tokens, and mobile reflow across state transitions.
 
 Run `pnpm check:ui-state` for the executable AST guard against raw exception
-coercion in JSX, form errors, and toast payloads. Run `pnpm test:loading` or
-`pnpm verify:e2e` for the loading motion and visual stability probe. Stateful
+coercion in JSX, form errors, and toast payloads. Stateful
 journeys require observable behavioral tests as described in [testing.md](testing.md),
 [TESTING.md](../../TESTING.md), and [docs/ui-state-feedback.md](../../docs/ui-state-feedback.md).

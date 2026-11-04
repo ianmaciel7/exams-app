@@ -16,4 +16,21 @@ function getAvatarSource(
   return `${photoURL}${photoURL.includes("?") ? "&" : "?"}v=${version}`;
 }
 
-export { ACCEPTED_AVATAR_TYPES, getAvatarSource, MAX_AVATAR_SIZE };
+function isValidAvatarFile(file: Pick<File, "size" | "type">) {
+  return ACCEPTED_AVATAR_TYPES.has(file.type) && file.size <= MAX_AVATAR_SIZE;
+}
+
+function getAvatarFallbackInitial(
+  displayName: string | null,
+  email: string | null,
+) {
+  return (displayName?.charAt(0) || email?.charAt(0) || "U").toUpperCase();
+}
+
+export {
+  ACCEPTED_AVATAR_TYPES,
+  getAvatarFallbackInitial,
+  getAvatarSource,
+  isValidAvatarFile,
+  MAX_AVATAR_SIZE,
+};

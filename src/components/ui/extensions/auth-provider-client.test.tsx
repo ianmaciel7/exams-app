@@ -45,7 +45,7 @@ describe("AuthProviderClient", () => {
       </AuthProviderClient>,
     );
     expect(
-      document.querySelector('[data-loading-boundary="public-auth"]'),
+      document.querySelector('[data-slot="loading-status"]'),
     ).not.toBeNull();
     expect(screen.queryByText("Screen")).toBeNull();
     expect(mocks.setLocale).toHaveBeenCalled();
