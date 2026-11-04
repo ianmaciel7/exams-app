@@ -29,7 +29,7 @@ active Firebase session, and `return-url.ts` owns safe post-auth navigation.
 - `rejectInvalidBridgeSession` is a navigation check that tolerates a missing bridge. Never use it for authorization, and never give its redirect a protected return path.
 - `SessionProviderClient` in the root layout owns the only client session subscription; client components read it with `useSession`. `AuthGuardClient` owns the protected sign-in redirect, and its descendants use `useAuthenticatedUser`; do not subscribe or redirect again.
 - The Firebase Auth service worker bridge keeps its own subscription: sign-out waits for the worker to acknowledge `uid: null`, while `useSession` holds the signed-out state until sign-out completes, so the bridge must not read `useSession`.
-- Keep telemetry out of the guard and never let it delay protected content.
+- Guard telemetry is fire-and-forget: `useAuthGuardClient` records screen usage in its own hook, only for a signed-in user, and it never delays or fails protected content.
 - Never read the session inside a `use cache` scope. Resolve it first, then pass only the user id to an unexported cached function; keep tokens and email addresses out of cache keys and tags.
 - Authorize Admin SDK access in application code; it bypasses Firebase Security Rules.
 - Do not add session cookies, Proxy auth checks, or `authInterrupts` without a new ADR; see [ADR 0009](../../docs/adr/0009-integrate-firebase-authentication.md).
