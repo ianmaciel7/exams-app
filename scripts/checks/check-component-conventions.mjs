@@ -989,10 +989,10 @@ export function inspectProfilePage(content, filename) {
 }
 
 function checkHomeSafety(source, stem, report) {
-  if (stem !== "home-client") return;
+  if (stem !== "home-section") return;
   const elements = jsxEntries(source);
   if (!elements.some((element) => element.name === "Home")) {
-    report(source, "HomeClient must compose Home.");
+    report(source, "HomeSection must compose Home.");
   }
 }
 

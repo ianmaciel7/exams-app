@@ -299,7 +299,7 @@ See the installed Next.js boundary guide and the
 components, without restricting the scan to files with `"use client"`.
 It enforces semantic filenames, a matching family root, locally declared named
 parts with the root prefix, matching props names, separate named exports, and
-exact term parity (`checkStemComponentTermParity`) between filenames and component declarations for non-legacy modules (such as `HomeClient` in `src/app/_components/home-client.tsx` requiring a 1:1 term match across component name, props type, and orchestration hook, and composing its companion UI component `Home`).
+exact term parity (`checkStemComponentTermParity`) between filenames and component declarations for non-legacy modules (such as `HomeSection` in `src/app/_components/home-section.tsx` requiring a 1:1 term match across component name, props type, and orchestration hook, and composing its companion UI component `Home`).
 It rejects static component-property assignment and direct `Object.assign`,
 `Object.defineProperty`, or `Object.defineProperties` on a component family.
 
@@ -902,8 +902,8 @@ without a suffix and compatible with either graph.
 
 Owned component exports, props types, and component-named orchestration hooks
 use the complete filename stem, including `Client` or `Server` where present.
-For example, `home-client.tsx` exports `HomeClient` and uses
-`useHomeClient`. Colocated tests and stories follow the component stem. A fetch alone does not determine
+For example, `home-section.tsx` exports `HomeSection` and uses
+`useHomeSection`. Colocated tests and stories follow the component stem. A fetch alone does not determine
 runtime: the component boundary determines where that request executes.
 Composing an integration component does not make presentation an integration.
 Mandatory Next.js filenames, registry output, hooks and non-component modules

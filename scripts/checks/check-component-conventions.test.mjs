@@ -1180,47 +1180,47 @@ describe("UI phase flags", () => {
 });
 
 describe("component filename term matching and parity", () => {
-  it("accepts HomeClient with matching filename, props, orchestration hook, and Home composition", () => {
+  it("accepts HomeSection with matching filename, props, orchestration hook, and Home composition", () => {
     expectValid(
       `"use client";
        import type { ComponentProps } from "react";
-       import { useHomeClient } from "../_hooks/use-home-client";
+       import { useHomeSection } from "../_hooks/use-home-section";
        import { Home } from "./home";
-       type HomeClientProps = ComponentProps<"div">;
-       function HomeClient(props: HomeClientProps) {
-         const { t } = useHomeClient();
+       type HomeSectionProps = ComponentProps<"div">;
+       function HomeSection(props: HomeSectionProps) {
+         const { t } = useHomeSection();
          return <Home {...props} />;
        }
-       export { HomeClient };`,
-      "src/app/_components/home-client.tsx",
+       export { HomeSection };`,
+      "src/app/_components/home-section.tsx",
     );
   });
 
-  it("rejects HomeClient when it does not compose Home", () => {
+  it("rejects HomeSection when it does not compose Home", () => {
     expectInvalid(
       `"use client";
        import type { ComponentProps } from "react";
-       import { useHomeClient } from "../_hooks/use-home-client";
-       type HomeClientProps = ComponentProps<"div">;
-       function HomeClient(props: HomeClientProps) {
-         const { t } = useHomeClient();
+       import { useHomeSection } from "../_hooks/use-home-section";
+       type HomeSectionProps = ComponentProps<"div">;
+       function HomeSection(props: HomeSectionProps) {
+         const { t } = useHomeSection();
          return <div {...props} />;
        }
-       export { HomeClient };`,
-      /HomeClient must compose Home/i,
-      "src/app/_components/home-client.tsx",
+       export { HomeSection };`,
+      /HomeSection must compose Home/i,
+      "src/app/_components/home-section.tsx",
     );
   });
 
-  it("rejects Home in home-client.tsx due to missing 'Client' term", () => {
+  it("rejects Home in home-section.tsx due to missing 'Section' term", () => {
     expectInvalid(
       `"use client";
        import type { ComponentProps } from "react";
        type HomeProps = ComponentProps<"div">;
        function Home(props: HomeProps) { return <div {...props} />; }
        export { Home };`,
-      /missing term\(s\): "client"/i,
-      "src/app/_components/home-client.tsx",
+      /missing term\(s\): "section"/i,
+      "src/app/_components/home-section.tsx",
     );
   });
 
@@ -1230,21 +1230,21 @@ describe("component filename term matching and parity", () => {
        function HomeViewClient() { return <div />; }
        export { HomeViewClient };`,
       /unexpected term\(s\): "view"/i,
-      "src/app/_components/home-client.tsx",
+      "src/app/_components/home-section.tsx",
     );
   });
 
-  it("rejects HomeClient delegating to useHome instead of useHomeClient", () => {
+  it("rejects HomeSection delegating to useHome instead of useHomeSection", () => {
     expectInvalid(
       `"use client";
        import { useHome } from "../_hooks/use-home";
-       function HomeClient() {
+       function HomeSection() {
          useHome();
          return <div />;
        }
-       export { HomeClient };`,
-      /must delegate hook coordination to useHomeClient/i,
-      "src/app/_components/home-client.tsx",
+       export { HomeSection };`,
+      /must delegate hook coordination to useHomeSection/i,
+      "src/app/_components/home-section.tsx",
     );
   });
 
@@ -1252,10 +1252,10 @@ describe("component filename term matching and parity", () => {
     expectInvalid(
       `"use client";
        type HomeProps = { id: string };
-       function HomeClient() { return <div />; }
-       export { HomeClient };`,
-      /Props type must be named one of: HomeClientProps/i,
-      "src/app/_components/home-client.tsx",
+       function HomeSection() { return <div />; }
+       export { HomeSection };`,
+      /Props type must be named one of: HomeSectionProps/i,
+      "src/app/_components/home-section.tsx",
     );
   });
 });
