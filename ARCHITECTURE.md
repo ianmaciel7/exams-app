@@ -175,16 +175,18 @@ The security and HTTP header modules also remain flat under `src/lib`:
 and `csp.ts` (pure Content Security Policy directive builder); consumers should
 import them as `@/lib/headers` and `@/lib/csp`.
 Firebase Web SDK initialization lives in `src/lib/firebase/client.ts`. The
-profile route's `ProfileForm` component coordinates the load and save
-workflows through `createProfileAction`; `readProfile`, `readUserPreferences`,
+profile route's `ProfileClient` loads data before mounting `ProfileForm`;
+`createProfileAction` coordinates saves. `readProfile`, `readUserPreferences`,
 `writeUserPreferences`, and `saveProfile` in
 `src/app/(protected)/profile/_lib/data.ts` handle Firestore/Storage/Auth
 persistence and inject typed Firebase adapters for independent tests.
-`useProfileForm` owns the form Action (`useActionState`), reads the suspended
-profile with `use()` and composes `useSession`; `ProfileForm` renders its
-fields inline (ADRs 0017 and 0018). The route's `page.tsx` composes a Card with the header around
-`<ProfileForm />`, which renders the one `FieldGroup`. The segment's `loading.tsx` and `error.tsx`
-cover the suspended read and its failure. Profile value types live in
+`useProfileClient` owns the read lifecycle, timeout and initial preferences;
+abandoned reads cannot change the UI. `useProfileForm` owns the form Action
+(`useActionState`) and composes `useSession`; `ProfileForm` renders its fields
+inline (ADR 0019). `page.tsx` resolves headings and renders `ProfileClient`, which
+renders the loaded Card and form. The client loading state uses `LoadingStatus`;
+`loading.tsx` covers server rendering and `error.tsx` handles read failures.
+`dto.ts` maps form submissions. Profile value types and field names live in
 `src/app/(protected)/profile/_lib/definitions.ts`, alongside the route-private profile
 workflow. The canonical profile
 responsibilities live in
@@ -192,9 +194,9 @@ responsibilities live in
 Firestore at `users/{uid}` with owner and field/value validation rules. Avatar
 Storage rules restrict `users/{uid}/avatar` to its owner and enforce accepted
 image types and the 2 MiB upload limit. These browser SDK modules are not a
-Next.js server-side DAL. Next.js documentation uses `data.ts` for server-side
-data access and `actions.ts` for Server Actions; we reserve those patterns for
-server code, rather than using those names for Firebase client modules
+Next.js server-side DAL. The local `data.ts` filename describes persistence;
+it does not establish a server boundary. `profile-action.ts` is a client Action;
+`actions.ts` is reserved by repository guards for Server Actions
 ([Fetching Data](https://nextjs.org/docs/app/getting-started/fetching-data),
 [Mutating Data](https://nextjs.org/docs/app/getting-started/mutating-data),
 [Data Security](https://nextjs.org/docs/app/guides/data-security)). See
@@ -279,8 +281,8 @@ that flag does not establish compiler transformation in the Vite-based test or
 Ladle pipeline.
 
 Browser Firebase subscriptions stay in focused hooks behind the existing
-component-named orchestration seams. The profile form uses React Hook Form and
-its providers, not React form Actions or a server mutation layer. Avatar object
+component-named orchestration seams. The loaded profile form uses a React client
+Action, and `ProfileClient` owns its browser read lifecycle. Avatar object
 URLs are created in an Effect with replacement/unmount cleanup. The viewport
 hook uses `useSyncExternalStore` with a matching initial server/hydration
 snapshot. These are external-system contracts, not redundant derived state.

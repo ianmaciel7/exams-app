@@ -30,7 +30,7 @@ transition examples; these are optional capabilities, not mandatory UI features.
 
 The app has one loading UI, `LoadingStatus` from `ui/extensions`: a fixed,
 full-viewport, labeled spinner. Render it from `loading.tsx` (root and the
-`profile` segment, the only one that suspends), Suspense fallbacks, and client
+`profile` segment for server rendering), Suspense fallbacks, and client
 guards that wait. Every use sits at the same position, so swapping one for
 another does not move the spinner. For content with a known shape (such as the
 home actions), use `Skeleton` blocks that share the final size constant so

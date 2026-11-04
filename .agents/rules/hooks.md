@@ -18,8 +18,8 @@ Owned components keep rendering, translations, primitive prop forwarding and sim
 - Expose explicit session flags (`isLoading`, `isHidden`, `isError`) and an
   already resolved error message. Components render the applicable flag rather
   than deriving readiness from user, authentication and preferences flags.
-- Keep responsibilities local: `useProfileForm` suspends on the
-  profile read and owns the form Action (`useActionState`), using its pending
+- Keep responsibilities local: `useProfileClient` owns the browser read;
+  `useProfileForm` owns the form Action (`useActionState`), using its pending
   value rather than a parallel saving flag; `useProfileAvatarFieldClient`
   handles avatar field data. Do not mirror derived state in additional
   `useState` variables.
@@ -35,9 +35,9 @@ ternary expressions. Stateful avatar fields and auth flows use focused hooks.
 This is a stricter project policy, not a React rule.
 
 Form components (`*-form.tsx`, such as `ProfileForm`) render their fields inline,
-as in the Next.js and shadcn form guides, but delegate `useActionState`, `use()`
+as in the Next.js and shadcn form guides, but delegate `useActionState`
 and sibling hooks to `use<Component>` like any component (`useProfileForm`,
-ADR 0018). `useProfileForm` also returns the `Auth` translator `t`, so
+ADRs 0018 and 0019). `useProfileForm` also returns the `Auth` translator `t`, so
 `ProfileForm` calls no hook of its own; this refines ADR 0018, which kept
 `useTranslations` in the component.
 

@@ -6,7 +6,7 @@ import type {
   ProfileValues,
   SavedProfile,
 } from "./definitions";
-import { parseProfileFormData } from "./form-data";
+import { parseProfileFormData } from "./dto";
 
 type ProfileActionOptions = {
   user: User;

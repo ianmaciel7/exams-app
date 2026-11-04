@@ -25,17 +25,18 @@ import { routes } from "@/lib/navigation";
 import { isThemePreference, themePreferences } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 import { useProfileForm } from "../_hooks/use-profile-form";
-import { profileFieldNames } from "../_lib/form-data";
+import { type ProfileValues, profileFieldNames } from "../_lib/definitions";
 import { ProfileAvatarFieldClient } from "./profile-avatar-field-client";
 
-type ProfileFormProps = Omit<
-  ComponentProps<typeof Form>,
-  "action" | "onSubmit"
->;
+type ProfileFormProps = ComponentProps<typeof Form> & {
+  initialValues: ProfileValues;
+  action?: never;
+  onSubmit?: never;
+};
 
-function ProfileForm({ className, ...props }: ProfileFormProps) {
+function ProfileForm({ initialValues, className, ...props }: ProfileFormProps) {
   const { t, state, pending, formAction, avatarFile, pickAvatar } =
-    useProfileForm();
+    useProfileForm(initialValues);
 
   // Edits made while a save is pending would be reset with the form.
   return (

@@ -1,6 +1,15 @@
 import type { Locale } from "@/lib/locale";
 import type { ThemePreference } from "@/lib/theme";
 
+/** Field names are part of the profile form's data contract. */
+export const profileFieldNames = {
+  avatar: "avatar",
+  displayName: "displayName",
+  email: "email",
+  locale: "locale",
+  theme: "theme",
+} as const;
+
 export type UserPreferences = {
   locale: Locale;
   theme: ThemePreference;
@@ -14,6 +23,16 @@ export type ProfileValues = {
 };
 
 export type ProfileFormValues = ProfileValues & { avatarFile: File | null };
+
+export type ProfileLoadState =
+  | { isLoading: true; isError: false }
+  | {
+      isLoading: false;
+      isError: false;
+      values: ProfileValues;
+      theme?: ThemePreference;
+    }
+  | { isLoading: false; isError: true; error: unknown };
 
 /**
  * Result of the profile form Action (`useActionState`). `values` is what the

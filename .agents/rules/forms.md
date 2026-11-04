@@ -19,7 +19,7 @@ These are project conventions aligned with the current shadcn/ui and React Hook 
 
 - The profile form submits through a React form Action: `ProfileForm` (`profile-form.tsx`) renders one Base UI `Form` with `action={formAction}` from `useProfileForm` (which wraps `useActionState`), not React Hook Form. A `*-form.tsx` component is exempt from the `-client` suffix only and delegates its hooks to `use<Component>` (see ADRs 0017 and 0018). Do not add `FormProvider`, `useForm` or `onSubmit` to it; `pnpm check:components` rejects `FormProvider` there. The Action is a client function because every write is a browser Firebase SDK call (see CODING_STANDARDS "Form and Field Architecture").
 - Name a client Action module after its form (`_lib/profile-action.ts`), never `actions.ts` or `_actions/`: `require-session-check-in-server-action` reserves those paths for Server Actions and fails the scan on a client Action.
-- The Action has the `(prevState, formData)` signature and returns `ProfileActionState` (`values`, pending `avatarFile`, `error`). It parses `FormData` in `_lib/form-data.ts`, which is the only place that reads field names, and falls back to the previous value for anything unknown.
+- The Action has the `(prevState, formData)` signature and returns `ProfileActionState` (`values`, pending `avatarFile`, `error`). It maps `FormData` in `_lib/dto.ts` using field names from `_lib/definitions.ts`, and falls back to the previous value for anything unknown.
 - Fields are uncontrolled: `name` (from `profileFieldNames`) plus `defaultValue` from `state.values` of the Action, written inline in `ProfileForm`. React resets the form after an Action, so a failed save returns the submitted values; a `Select` uses `key` on its value so it picks up the new default.
 - `ProfileForm` reads pending state from the third value of `useActionState` and passes it to child components that need it; never keep a second saving flag. `useFormStatus()` remains valid in a component rendered inside a form.
 - A reusable form that is not profile-like may still use React Hook Form (the Firebase UI auth forms do) with one `useForm`, `FormProvider` and `form.handleSubmit`; `require-form-provider` guards those.
@@ -31,17 +31,18 @@ These are project conventions aligned with the current shadcn/ui and React Hook 
 
 ## Profile behavior ownership
 
-- The profile segment owns load states: `ProfileForm` suspends
-  with `use()` on the read cached in `_lib/profile-resource.ts`, so
-  `profile/loading.tsx` renders the pending state and a rejection reaches
-  `profile/error.tsx`. Its retry evicts the failed read before calling
-  `retry()`. A 15-second deadline terminates stalled reads and a locale refresh
-  no longer deliberately pins the screen to a never-settling Promise.
-  Components render only loaded data; there is no status guard.
-- `useProfileController` and `useProfile` are removed. `ProfileForm`
-  reads session directly via `useSession()` and the profile read via `use()`;
-  there is no form context. User identity always comes from `useSession()`
-  (see ADR 0014 to 0017).
+- `ProfileClient` owns the browser load state through `useProfileClient`.
+  Render `LoadingStatus` while reading and mount `ProfileForm` only with loaded
+  `initialValues`. The Effect cancels its lifecycle on cleanup and rejects late
+  results after its 15-second deadline. Errors reach `profile/error.tsx`; retry
+  remounts the loader and reads again, without cache eviction. `loading.tsx`
+  remains the route's server-rendering fallback (ADR 0019).
+- Keep reads and writes in `data.ts`, transferred form values in `dto.ts`, and
+  contracts and field names in `definitions.ts`. There is no profile Promise
+  registry or cache module. Initial theme and locale apply once per mounted
+  visit, preserving saved values across Activity reconnects.
+- User identity comes from `useSession()`; there is no form context or extra
+  authentication subscription.
 - `ProfileForm` owns its Action lifecycle; the Action is created by
   `createProfileAction` in `_lib/profile-action.ts` and successful UI feedback goes
   through `useProfileSaveFeedback`. Use the pending value of `useActionState`
@@ -52,11 +53,11 @@ These are project conventions aligned with the current shadcn/ui and React Hook 
   `saveProfile` accepts typed `ProfileDependencies` with default Firebase
   adapters to test persistence without production services.
 - `ProfileAvatarFieldClient` uses `useProfileAvatarFieldClient` for field state and avatar display data, with `useProfileAvatarInput` handling validation and `useProfileAvatarPreview` the preview. Only the picked `File` lives in `ProfileForm` state (and in the Action result after a failure) so submission can upload it; preview URLs are released on replacement, successful reset and unmount. Failed saves retain the selection for retry.
-- `ProfileForm` renders the **one** `FieldGroup`: do not wrap the individual profile fields in another `FieldGroup`, and keep `page.tsx` to a plain `Card` around `<ProfileForm />`.
+- `ProfileForm` renders the **one** `FieldGroup`: do not wrap individual fields in another `FieldGroup`. `page.tsx` resolves translated headings; `ProfileClient` renders the loaded Card and form.
 
 ## Profile form action safety (repository guard)
 
-- `profile/page.tsx` renders a shadcn `Card` with the header and `<ProfileForm />` in `CardContent`. `ProfileForm` owns the only HTML `<form>` and the save button, which has `type="submit"`; do not render a second Card or form.
+- `ProfileClient` renders one shadcn `Card` with the header and `<ProfileForm />` in `CardContent`. `ProfileForm` owns the only HTML `<form>` and the save button, which has `type="submit"`; do not render a second Card or form.
 - `pnpm check:components` enforces that a `*-form.tsx` component renders exactly one form root and no `FormProvider`. This is a **UI action-safety guard**, not a substitute for Firebase security rules, authorization or server-side validation.
 
 ## Accessibility and Next.js

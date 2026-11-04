@@ -1,15 +1,10 @@
 import { isLocale } from "@/lib/locale";
 import { isThemePreference } from "@/lib/theme";
-import type { ProfileFormValues, ProfileValues } from "./definitions";
-
-/** Field names shared by the form controls and the Action. */
-export const profileFieldNames = {
-  avatar: "avatar",
-  displayName: "displayName",
-  email: "email",
-  locale: "locale",
-  theme: "theme",
-} as const;
+import {
+  type ProfileFormValues,
+  type ProfileValues,
+  profileFieldNames,
+} from "./definitions";
 
 function readText(formData: FormData, name: string, fallback: string) {
   const value = formData.get(name);
