@@ -48,7 +48,6 @@ below and the split between them are choices of this repository.
 | `SessionProviderClient` | The single client Firebase Auth subscription, mounted once in the root layout; `isLoading`, `isError`, and `user` cannot contradict each other, and sign-out stays pending until the worker acknowledges it | No |
 | `useSession` | Reads the global session from any client component; never subscribes again | No |
 | `AuthGuardClient` | Presentation boundary of protected routes: loading, recoverable error, the single sign-in redirect, the user context, and fire-and-forget route usage telemetry | No |
-| `useAuthenticatedUser` | Reads the gate's user; descendants never subscribe again | No |
 | `rejectInvalidBridgeSession()` | Navigation check in the protected layout: tolerates a missing bridge and rejects only a failed token | No |
 | `verifySession()` | Fails closed and returns the verified identity | Authentication |
 | `verifyRole()` | `verifySession()` plus the required role | Authorization |

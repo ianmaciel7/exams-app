@@ -8,7 +8,7 @@ import {
 import { type PropsWithChildren, StrictMode, useState } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { SessionProviderClient } from "@/components/ui/extensions/session-provider-client";
-import { useAuthenticatedUser } from "../_hooks/use-authenticated-user";
+import { useSession } from "@/hooks/use-session";
 import { AuthGuardClient } from "./auth-guard-client";
 
 const mocks = vi.hoisted(() => ({
@@ -45,8 +45,8 @@ function SessionGate({ children }: PropsWithChildren) {
 }
 
 function ProtectedContent() {
-  const { uid } = useAuthenticatedUser();
-  return <div>{`Protected Content ${uid}`}</div>;
+  const { user } = useSession();
+  return <div>{`Protected Content ${user?.uid}`}</div>;
 }
 
 function emit(user: { uid: string } | null) {
@@ -137,8 +137,8 @@ describe("AuthGuardClient", () => {
 
   it("remounts the subtree when the account changes", async () => {
     function RetainedState() {
-      const { uid } = useAuthenticatedUser();
-      const [initialUid] = useState(uid);
+      const { user } = useSession();
+      const [initialUid] = useState(user?.uid);
       return <div>{initialUid}</div>;
     }
     render(
