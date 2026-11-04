@@ -5,8 +5,9 @@ import {
   render,
   screen,
 } from "@testing-library/react";
-import { StrictMode, useState } from "react";
+import { type PropsWithChildren, StrictMode, useState } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { SessionProviderClient } from "@/components/ui/extensions/session-provider-client";
 import { useAuthenticatedUser } from "../_hooks/use-authenticated-user";
 import { AuthGateClient } from "./auth-gate-client";
 
@@ -28,6 +29,15 @@ vi.mock("@/lib/auth", () => ({
   getPendingSignOut: () => mocks.pendingSignOut,
 }));
 
+/** The gate reads the root session provider, as it does in the app. */
+function SessionGate({ children }: PropsWithChildren) {
+  return (
+    <SessionProviderClient>
+      <AuthGateClient>{children}</AuthGateClient>
+    </SessionProviderClient>
+  );
+}
+
 function ProtectedContent() {
   const { uid } = useAuthenticatedUser();
   return <div>{`Protected Content ${uid}`}</div>;
@@ -44,9 +54,9 @@ async function settle() {
 
 async function renderGate() {
   const rendered = render(
-    <AuthGateClient>
+    <SessionGate>
       <ProtectedContent />
-    </AuthGateClient>,
+    </SessionGate>,
   );
   await settle();
   return rendered;
@@ -124,9 +134,9 @@ describe("AuthGateClient", () => {
       return <div>{initialUid}</div>;
     }
     render(
-      <AuthGateClient>
+      <SessionGate>
         <RetainedState />
-      </AuthGateClient>,
+      </SessionGate>,
     );
     await settle();
     emit({ uid: "user-a" });
@@ -166,9 +176,9 @@ describe("AuthGateClient", () => {
   it("leaves no active subscription behind under Strict Mode", async () => {
     const { unmount } = render(
       <StrictMode>
-        <AuthGateClient>
+        <SessionGate>
           <ProtectedContent />
-        </AuthGateClient>
+        </SessionGate>
       </StrictMode>,
     );
     await settle();

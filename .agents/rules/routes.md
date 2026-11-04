@@ -77,7 +77,10 @@ which permits data access in pages/layouts and Client Components in templates.
 ## Navigation and locale
 
 Use App Router `next/navigation`, `next/link`, and the Metadata API rather than
-Pages Router imports. Follow [cache.md](cache.md) for prefetch and streaming rules.
+Pages Router imports. Client-side navigation goes through `useNavigation`
+(`src/hooks/use-navigation.ts`), the only module that calls `useRouter`;
+Biome `noRestrictedImports` rejects `useRouter` everywhere else. Add a
+named destination to that hook instead of calling `push` with a literal. Follow [cache.md](cache.md) for prefetch and streaming rules.
 For locale behavior, read [Architecture](../../ARCHITECTURE.md#internationalization)
 and [Coding standards](../../CODING_STANDARDS.md): preserve the existing cookie-only,
 unprefixed locale decision and accepted ADR history.

@@ -14,16 +14,16 @@ vi.mock("@/lib/session", () => ({
   subscribeToSession: mocks.subscribeToSession,
 }));
 
-import { useAuthSession } from "./use-auth-session";
+import { useSessionProviderClient } from "./use-session-provider-client";
 
 /** Firebase loads on demand, so wait for the hook to subscribe. */
 async function renderSubscribed() {
-  const rendered = renderHook(() => useAuthSession());
+  const rendered = renderHook(() => useSessionProviderClient());
   await vi.waitFor(() => expect(mocks.subscribeToSession).toHaveBeenCalled());
   return rendered;
 }
 
-describe("useAuthSession sign-out transition", () => {
+describe("useSessionProviderClient sign-out transition", () => {
   let notify: (user: User | null) => void;
 
   beforeEach(() => {
@@ -76,7 +76,7 @@ describe("useAuthSession sign-out transition", () => {
   });
 
   it("moves from loading to one explicit session state", async () => {
-    const { result } = renderHook(() => useAuthSession());
+    const { result } = renderHook(() => useSessionProviderClient());
     expect(result.current).toEqual({
       isError: false,
       isLoading: true,
@@ -105,7 +105,7 @@ describe("useAuthSession sign-out transition", () => {
       throw new Error("missing config");
     });
     const log = vi.spyOn(console, "error").mockImplementation(() => {});
-    const { result } = renderHook(() => useAuthSession());
+    const { result } = renderHook(() => useSessionProviderClient());
     await vi.waitFor(() => expect(result.current.isError).toBe(true));
     expect(result.current).toEqual({
       isError: true,

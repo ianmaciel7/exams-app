@@ -1,5 +1,5 @@
-import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { useNavigation } from "@/hooks/use-navigation";
 import { toast } from "@/lib/toast";
 import type {
   ProfileFormValues,
@@ -24,7 +24,7 @@ export function useProfileSaveFeedback({
   setTheme,
 }: UseProfileSaveFeedbackOptions) {
   const t = useTranslations("Auth");
-  const router = useRouter();
+  const { refresh } = useNavigation();
   const onSaved = (
     savedProfile: SavedProfile,
     values: ProfileFormValues,
@@ -40,7 +40,7 @@ export function useProfileSaveFeedback({
         : t("profileSaved"),
       type: "success",
     });
-    syncSavedLocale(savedProfile.values.locale, activeLocale, router.refresh);
+    syncSavedLocale(savedProfile.values.locale, activeLocale, refresh);
   };
   return { onSaved };
 }

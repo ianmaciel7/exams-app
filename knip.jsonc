@@ -10,6 +10,9 @@
     "src/**/*.stories.{ts,tsx}"
   ],
   "project": ["src/**/*.{ts,tsx}"],
+  // Installed by the shadcn code-block registry item; keep them so registry
+  // updates stay clean even though nothing imports them yet.
+  "ignore": ["src/lib/highlighter.tsx", "src/hooks/use-highlighted-code.ts"],
   "ignoreIssues": {
     "src/i18n/routing.ts": ["exports"],
     // ADR 0004 specifies these path-based navigation helpers as part of the
