@@ -25,6 +25,7 @@ original date. Read current operational details in the
 | [0014](0014-eliminate-profile-context-for-root-session.md) | Accepted; amends ADR 0013 | Elimination of redundant ProfileContext and useProfile; profile components and avatar read the root useSession directly and React Hook Form manages form state |
 | [0015](0015-submit-profile-form-with-react-action.md) | Accepted; amends ADR 0014 | Profile form submits through a client React form Action (`useActionState`, `useFormStatus`, `FormData`) instead of React Hook Form; form-scoped `ProfileFormContext` |
 | [0016](0016-read-profile-with-use-and-drop-wrapper-hooks.md) | Accepted; amends ADR 0015 | `useProfilePreferences`, `savedValuesRef` and `useProfileFormContext` removed; the profile read and the form context use `use()`, and the last saved values live in the Action state |
+| [0017](0017-structure-profile-as-one-form-component.md) | Accepted; amends ADRs 0015 and 0016 | `ProfileForm` is one client form component with inline fields; no form context, wrapper hooks or `ProfileCard*`; `check:components` exempts `*-form.tsx` from the `-client` and hook-delegation rules |
 
 ## Consolidation of 2026-11-01
 

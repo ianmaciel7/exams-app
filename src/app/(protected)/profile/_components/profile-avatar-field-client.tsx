@@ -7,10 +7,19 @@ import { Field, FieldContent, FieldTitle } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 import { useProfileAvatarFieldClient } from "../_hooks/use-profile-avatar-field-client";
 
-type ProfileAvatarFieldClientProps = ComponentProps<typeof Field>;
+type ProfileAvatarFieldClientProps = ComponentProps<typeof Field> & {
+  file: File | null;
+  onPick: (file: File) => void;
+  pending: boolean;
+  savedCount: number;
+};
 
 function ProfileAvatarFieldClient({
   className,
+  file,
+  onPick,
+  pending,
+  savedCount,
   ...props
 }: ProfileAvatarFieldClientProps) {
   const titleId = useId();
@@ -22,7 +31,7 @@ function ProfileAvatarFieldClient({
     fallbackInitial,
     fileInputRef,
     handleAvatarChange,
-  } = useProfileAvatarFieldClient();
+  } = useProfileAvatarFieldClient({ file, onPick, pending, savedCount });
 
   return (
     <Field

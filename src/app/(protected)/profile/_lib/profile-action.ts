@@ -1,19 +1,23 @@
 import type { User } from "firebase/auth";
-import { useTranslations } from "next-intl";
 import { withUsageGuard } from "@/lib/firebase/usage";
-import { saveProfile } from "../_lib/data";
+import { saveProfile } from "./data";
 import type {
   ProfileActionState,
   ProfileValues,
   SavedProfile,
-} from "../_lib/definitions";
-import { parseProfileFormData } from "../_lib/form-data";
-import { useProfileSaveFeedback } from "./use-profile-save-feedback";
+} from "./definitions";
+import { parseProfileFormData } from "./form-data";
 
-type UseProfileActionOptions = {
-  activeLocale: string;
-  setTheme: (theme: ProfileValues["theme"]) => void;
+type ProfileActionOptions = {
   user: User;
+  /** Message shown when saving fails. */
+  errorMessage: string;
+  /** Called after a successful save, for toast, theme and locale updates. */
+  onSaved: (
+    savedProfile: SavedProfile,
+    values: ProfileValues,
+    previous: ProfileValues,
+  ) => void;
 };
 
 /**
@@ -22,18 +26,12 @@ type UseProfileActionOptions = {
  * goes through the browser Firebase SDK (see CODING_STANDARDS "Form and Field
  * Architecture"), so there is no Server Function to call.
  */
-export function useProfileAction({
-  activeLocale,
-  setTheme,
+export function createProfileAction({
   user,
-}: UseProfileActionOptions) {
-  const t = useTranslations("Auth");
-  const { onSaved } = useProfileSaveFeedback({
-    activeLocale,
-    setTheme,
-  });
-
-  async function submitProfile(
+  errorMessage,
+  onSaved,
+}: ProfileActionOptions) {
+  return async function submitProfile(
     state: ProfileActionState,
     formData: FormData,
   ): Promise<ProfileActionState> {
@@ -44,7 +42,7 @@ export function useProfileAction({
     );
 
     try {
-      const savedProfile: SavedProfile = await withUsageGuard(
+      const savedProfile = await withUsageGuard(
         { type: "function_use", name: "profile.update" },
         () => saveProfile({ user, previous: state.saved, values, avatarFile }),
       );
@@ -58,14 +56,7 @@ export function useProfileAction({
       };
     } catch (cause) {
       console.error(cause);
-      return {
-        ...state,
-        values,
-        avatarFile,
-        error: t("profileSaveError"),
-      };
+      return { ...state, values, avatarFile, error: errorMessage };
     }
-  }
-
-  return { submitProfile };
+  };
 }
