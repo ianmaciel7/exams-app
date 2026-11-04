@@ -86,7 +86,7 @@ describe("AuthGateClient", () => {
   it("renders a loading indicator before auth resolves", async () => {
     await renderGate();
     expect(
-      document.querySelector('[data-slot="loading-screen"]'),
+      document.querySelector('[data-slot="loading-status"]'),
     ).not.toBeNull();
     expect(screen.queryByText(/Protected Content/)).toBeNull();
     expect(mocks.router.replace).not.toHaveBeenCalled();
@@ -103,7 +103,7 @@ describe("AuthGateClient", () => {
     );
     expect(screen.queryByText(/Protected Content/)).toBeNull();
     expect(
-      document.querySelector('[data-slot="loading-screen"]'),
+      document.querySelector('[data-slot="loading-status"]'),
     ).not.toBeNull();
   });
 
@@ -162,7 +162,7 @@ describe("AuthGateClient", () => {
     vi.stubGlobal("location", { ...window.location, reload });
     await renderGate();
     expect(screen.getByRole("alert").textContent).toBe("configurationError");
-    expect(document.querySelector('[data-slot="loading-screen"]')).toBeNull();
+    expect(document.querySelector('[data-slot="loading-status"]')).toBeNull();
     expect(mocks.router.replace).not.toHaveBeenCalled();
     fireEvent.click(screen.getByRole("button", { name: "tryAgain" }));
     expect(reload).toHaveBeenCalledOnce();

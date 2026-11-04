@@ -1,7 +1,7 @@
 "use client";
 
 import type { PropsWithChildren } from "react";
-import { LoadingScreen } from "@/components/ui/extensions/loading-screen";
+import { LoadingStatus } from "@/components/ui/extensions/loading-status";
 import { useAuthGateClient } from "../_hooks/use-auth-gate-client";
 import { AuthGate, AuthGateError } from "./auth-gate";
 
@@ -27,7 +27,7 @@ function AuthGateClient({ children }: AuthGateClientProps) {
       </AuthGate>
     );
 
-  if (!user) return <LoadingScreen />;
+  if (!user) return <LoadingStatus />;
 
   return <AuthGate key={user.uid}>{children}</AuthGate>;
 }

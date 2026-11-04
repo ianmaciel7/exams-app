@@ -1,5 +1,5 @@
-import { LoadingScreen } from "@/components/ui/extensions/loading-screen";
+import { LoadingStatus } from "@/components/ui/extensions/loading-status";
 
 export default function Loading() {
-  return <LoadingScreen />;
+  return <LoadingStatus />;
 }

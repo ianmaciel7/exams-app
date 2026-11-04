@@ -28,7 +28,7 @@ transition examples; these are optional capabilities, not mandatory UI features.
 
 ## Loading boundaries
 
-The app has one loading UI, `LoadingScreen` from `ui/extensions`: a fixed,
+The app has one loading UI, `LoadingStatus` from `ui/extensions`: a fixed,
 full-viewport, labeled spinner. Render it from `loading.tsx` (root and the
 `profile` segment, the only one that suspends), Suspense fallbacks, and client
 guards that wait. Every use sits at the same position, so swapping one for

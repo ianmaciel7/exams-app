@@ -214,7 +214,7 @@ layout, or lost the indicator across a root Suspense boundary. Pull requests 36,
 
 #### Decision (former ADR 0030)
 
-- One `LoadingScreen` component renders the only loading UI: a fixed,
+- One `LoadingStatus` component renders the only loading UI: a fixed,
   full-viewport, labeled spinner. `loading.tsx`, the protected guard, and client
   session waits render it directly, as the Next.js `loading.js` and React
   `Suspense` documentation describe. It always sits at the same position, so
@@ -227,6 +227,6 @@ layout, or lost the indicator across a root Suspense boundary. Pull requests 36,
 
 #### Consequences (former ADR 0030)
 
-- A new route adds a `loading.tsx` that renders `LoadingScreen` and gets the right feedback.
+- A new route adds a `loading.tsx` that renders `LoadingStatus` and gets the right feedback.
 - Loading looks the same everywhere, and the indicator does not shift the layout.
 - The state inventory lives in [docs/ui-state-feedback.md](../ui-state-feedback.md).

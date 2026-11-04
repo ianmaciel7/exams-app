@@ -96,7 +96,7 @@ During transitions between `idle`, `loading`, `success`, and `error`:
 4. **Local over full-screen replacement**: avoid swapping an entire layout or page with a full-screen spinner when localized inline feedback is sufficient.
 5. **Shared layout persistence**: maintain parent layouts and navigation chrome across Suspense boundaries.
 6. **Root-cause fixes**: resolve layout shifts through structural layout composition (flex, grid, reserved space), never through arbitrary `min-height` CSS band-aids.
-7. **Loading screen**: `LoadingScreen` is the only full-viewport pending UI and is covered by unit tests (`loading-screen.test.tsx`, `loading.test.tsx`).
+7. **Loading screen**: `LoadingStatus` is the only full-viewport pending UI and is covered by unit tests (`loading-status.test.tsx`, `loading.test.tsx`).
 
 ---
 

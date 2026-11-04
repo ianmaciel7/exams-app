@@ -9,12 +9,12 @@ import { cn } from "@/lib/utils";
  * viewport so mobile browser chrome does not shift it, so swapping one for
  * another does not move the spinner.
  */
-function LoadingScreen({ className, ...props }: ComponentProps<"div">) {
+function LoadingStatus({ className, ...props }: ComponentProps<"div">) {
   const t = useTranslations("App");
   return (
     <div
       {...props}
-      data-slot="loading-screen"
+      data-slot="loading-status"
       role="status"
       aria-live="polite"
       className={cn(
@@ -33,4 +33,4 @@ function LoadingScreen({ className, ...props }: ComponentProps<"div">) {
   );
 }
 
-export { LoadingScreen };
+export { LoadingStatus };

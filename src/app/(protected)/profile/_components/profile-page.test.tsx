@@ -293,7 +293,7 @@ describe("ProfilePage", () => {
 
     await vi.waitFor(() =>
       expect(
-        container.querySelector('[data-slot="loading-screen"]'),
+        container.querySelector('[data-slot="loading-status"]'),
       ).not.toBeNull(),
     );
     expect(container.querySelector('[data-slot="card"]')).toBeNull();

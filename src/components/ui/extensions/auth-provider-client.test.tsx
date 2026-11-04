@@ -45,7 +45,7 @@ describe("AuthProviderClient", () => {
       </AuthProviderClient>,
     );
     expect(
-      document.querySelector('[data-slot="loading-screen"]'),
+      document.querySelector('[data-slot="loading-status"]'),
     ).not.toBeNull();
     expect(screen.queryByText("Screen")).toBeNull();
     expect(mocks.setLocale).toHaveBeenCalled();

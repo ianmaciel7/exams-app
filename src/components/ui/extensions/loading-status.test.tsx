@@ -1,7 +1,7 @@
 import { cleanup, render, screen } from "@testing-library/react";
 import { NextIntlClientProvider } from "next-intl";
 import { afterEach, expect, it } from "vitest";
-import { LoadingScreen } from "./loading-screen";
+import { LoadingStatus } from "./loading-status";
 
 afterEach(cleanup);
 
@@ -11,7 +11,7 @@ it("announces the translated label once and hides the decorative spinner", () =>
       locale="en"
       messages={{ App: { loading: "Loading…" } }}
     >
-      <LoadingScreen />
+      <LoadingStatus />
     </NextIntlClientProvider>,
   );
   const status = screen.getByRole("status");
