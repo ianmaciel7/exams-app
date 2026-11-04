@@ -1,6 +1,6 @@
 import { useNavigation } from "@/hooks/use-navigation";
 
-export function useRegisterClient() {
+export function useForgotPasswordFormClient() {
   const { goToSignIn } = useNavigation();
   return { goToSignIn };
 }
