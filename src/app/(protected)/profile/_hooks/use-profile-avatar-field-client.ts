@@ -1,15 +1,16 @@
 import { useTranslations } from "next-intl";
+import { use } from "react";
 import { useFormStatus } from "react-dom";
 import { useSession } from "@/hooks/use-session";
 import { getAvatarFallbackInitial, getAvatarSource } from "../_lib/avatar";
+import { ProfileFormContext } from "../_lib/profile-form-context";
 import { useProfileAvatarInput } from "./use-profile-avatar-input";
 import { useProfileAvatarPreview } from "./use-profile-avatar-preview";
-import { useProfileFormContext } from "./use-profile-form-context";
 
 export function useProfileAvatarFieldClient() {
   const t = useTranslations("Auth");
   const { user } = useSession();
-  const { avatar, submission } = useProfileFormContext();
+  const { avatar, submission } = use(ProfileFormContext);
   const { pending } = useFormStatus();
   const preview = useProfileAvatarPreview(avatar.file);
   const { fileInputRef, handleAvatarChange } = useProfileAvatarInput(

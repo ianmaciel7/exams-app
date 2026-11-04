@@ -12,7 +12,6 @@ import { useProfileSaveFeedback } from "./use-profile-save-feedback";
 
 type UseProfileActionOptions = {
   activeLocale: string;
-  savedValuesRef: { current: ProfileValues | null };
   setTheme: (theme: ProfileValues["theme"]) => void;
   user: User;
 };
@@ -25,14 +24,12 @@ type UseProfileActionOptions = {
  */
 export function useProfileAction({
   activeLocale,
-  savedValuesRef,
   setTheme,
   user,
 }: UseProfileActionOptions) {
   const t = useTranslations("Auth");
   const { onSaved } = useProfileSaveFeedback({
     activeLocale,
-    savedValuesRef,
     setTheme,
   });
 
@@ -40,9 +37,6 @@ export function useProfileAction({
     state: ProfileActionState,
     formData: FormData,
   ): Promise<ProfileActionState> {
-    const previous = savedValuesRef.current;
-    if (!previous) return state;
-
     const { avatarFile, ...values } = parseProfileFormData(
       formData,
       state.values,
@@ -52,10 +46,11 @@ export function useProfileAction({
     try {
       const savedProfile: SavedProfile = await withUsageGuard(
         { type: "function_use", name: "profile.update" },
-        () => saveProfile({ user, previous, values, avatarFile }),
+        () => saveProfile({ user, previous: state.saved, values, avatarFile }),
       );
-      onSaved(savedProfile, values, previous);
+      onSaved(savedProfile, values, state.saved);
       return {
+        saved: savedProfile.values,
         values: savedProfile.values,
         avatarFile: null,
         error: null,

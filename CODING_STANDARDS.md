@@ -688,7 +688,7 @@ state/callbacks. A sub-hook owns one cohesive lifecycle or workflow, not one lin
 of code. For example, `useAuthProviderClient` composes `useAuthUiStore`,
 `useFirebaseUiReturnNavigation` and `useAuthUiLocale`; it does not initialize Firebase,
 subscribe to authentication and synchronize locale inside one monolithic Effect.
-`useSession` delegates preference loading to `useProfilePreferences`, and
+`useProfileFormClient` reads the suspended profile through `loadProfile`, and
 `useProfileAction` delegates successful UI feedback to `useProfileSaveFeedback`.
 Pure transformations, constants and subscription support functions remain in the
 route's `_lib`, following the hook support placement contract.

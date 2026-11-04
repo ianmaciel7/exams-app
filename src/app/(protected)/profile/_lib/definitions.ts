@@ -22,6 +22,8 @@ export type ProfileFormValues = ProfileValues & { avatarFile: File | null };
  * `avatarFile` is the pending upload kept across a failed save.
  */
 export type ProfileActionState = {
+  /** Last values persisted; the base `saveProfile` diffs the submission against. */
+  saved: ProfileValues;
   values: ProfileValues;
   avatarFile: File | null;
   error: string | null;

@@ -1097,7 +1097,6 @@ function checkComponentHook(component, source, report) {
     "useId",
     "useFormContext",
     "useFormStatus",
-    "useProfileFormContext",
     "useWatch",
     "useRender",
   ]);
