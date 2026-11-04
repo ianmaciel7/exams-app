@@ -1,11 +1,7 @@
 import { useTranslations } from "next-intl";
 import { useNavigation } from "@/hooks/use-navigation";
 import { toast } from "@/lib/toast";
-import type {
-  ProfileFormValues,
-  ProfileValues,
-  SavedProfile,
-} from "../_lib/definitions";
+import type { ProfileValues, SavedProfile } from "../_lib/definitions";
 import { syncSavedLocale } from "../_lib/locale-sync";
 
 type UseProfileSaveFeedbackOptions = {
@@ -23,7 +19,7 @@ export function useProfileSaveFeedback({
   const { refresh } = useNavigation();
   const onSaved = (
     savedProfile: SavedProfile,
-    values: ProfileFormValues,
+    values: ProfileValues,
     previous: ProfileValues,
   ) => {
     if (values.theme !== previous.theme) setTheme(values.theme);

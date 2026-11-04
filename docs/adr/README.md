@@ -23,6 +23,7 @@ original date. Read current operational details in the
 | [0012](0012-configure-cd.md) | Accepted; incorporates former 0015, 0016, 0018 and 0022; manual provisioning superseded by 0011 | Release-driven Firebase production delivery, App Hosting, OIDC federation, `us-central1`, budget alerts, callable Function access, and browser-check gates |
 | [0013](0013-share-one-client-session.md) | Accepted; amends ADR 0009 (former 0025) | One root `SessionProviderClient` subscription read through `useSession`, the worker bridge's separate subscription, and the profile form state renamed to `useProfile` |
 | [0014](0014-eliminate-profile-context-for-root-session.md) | Accepted; amends ADR 0013 | Elimination of redundant ProfileContext and useProfile; profile components and avatar read the root useSession directly and React Hook Form manages form state |
+| [0015](0015-submit-profile-form-with-react-action.md) | Accepted; amends ADR 0014 | Profile form submits through a client React form Action (`useActionState`, `useFormStatus`, `FormData`) instead of React Hook Form; form-scoped `ProfileFormContext` |
 
 ## Consolidation of 2026-11-01
 

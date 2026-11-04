@@ -1,30 +1,30 @@
 import { useTranslations } from "next-intl";
-import { useFormContext, useWatch } from "react-hook-form";
+import { useFormStatus } from "react-dom";
 import { useSession } from "@/hooks/use-session";
 import { getAvatarFallbackInitial, getAvatarSource } from "../_lib/avatar";
-import type { ProfileFormValues } from "../_lib/definitions";
 import { useProfileAvatarInput } from "./use-profile-avatar-input";
 import { useProfileAvatarPreview } from "./use-profile-avatar-preview";
+import { useProfileFormContext } from "./use-profile-form-context";
 
 export function useProfileAvatarFieldClient() {
   const t = useTranslations("Auth");
   const { user } = useSession();
-  const { control, setValue, formState } = useFormContext<ProfileFormValues>();
-  const avatarFile = useWatch({ control, name: "avatarFile" });
-  const preview = useProfileAvatarPreview(avatarFile);
+  const { avatar, submission } = useProfileFormContext();
+  const { pending } = useFormStatus();
+  const preview = useProfileAvatarPreview(avatar.file);
   const { fileInputRef, handleAvatarChange } = useProfileAvatarInput(
-    avatarFile,
-    (file) => setValue("avatarFile", file, { shouldDirty: true }),
+    avatar.file,
+    avatar.pick,
   );
   const displayName = user?.displayName ?? null;
 
   return {
     t,
-    disabled: formState.disabled || formState.isSubmitting,
+    disabled: pending,
     avatarSrc: getAvatarSource(
       preview,
       user?.photoURL ?? null,
-      formState.submitCount,
+      submission.savedCount,
     ),
     avatarAlt: displayName ?? t("profileTitle"),
     fallbackInitial: getAvatarFallbackInitial(displayName, user?.email ?? null),

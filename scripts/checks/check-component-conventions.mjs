@@ -814,13 +814,13 @@ function checkProfileProviderSafety(source, elements, report) {
     ...profileElements(elements, "form"),
     ...profileElements(elements, "Form"),
   ];
-  if (
-    nativeForms.length !== 1 ||
-    !isInsideProfile(nativeForms[0], ["FormProvider"])
-  ) {
+  if (nativeForms.length !== 1) {
+    report(source, "ProfileFormClient must render exactly one HTML form.");
+  }
+  if (profileElements(elements, "FormProvider").length) {
     report(
       source,
-      "ProfileFormClient must provide exactly one HTML form inside FormProvider.",
+      "ProfileFormClient submits through a React form Action (useActionState); share state through ProfileFormContext, not FormProvider.",
     );
   }
   if (profileElements(elements, "Card").length > 0) {
@@ -1104,6 +1104,8 @@ function checkComponentHook(component, source, report) {
     "useFormatter",
     "useId",
     "useFormContext",
+    "useFormStatus",
+    "useProfileFormContext",
     "useWatch",
     "useRender",
   ]);

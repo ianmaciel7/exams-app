@@ -802,10 +802,20 @@ describe("owned component conventions", () => {
     );
   });
 
+  it("rejects FormProvider in the profile form, which submits through a React form Action", () => {
+    expectInvalid(
+      compoundForm(
+        "function ProfileForm() { return <FormProvider><Form>{children}</Form></FormProvider>; } export { ProfileForm };",
+      ),
+      /React form Action/,
+      "src/app/(protected)/profile/_components/profile-form.tsx",
+    );
+  });
+
   it("accepts the Base UI Form wrapper as the profile form root", () => {
     expectValid(
       compoundForm(
-        "function ProfileForm() { return <FormProvider><Form>{children}</Form></FormProvider>; } export { ProfileForm };",
+        "function ProfileForm() { return <Form>{children}</Form>; } export { ProfileForm };",
       ),
       "src/app/(protected)/profile/_components/profile-form.tsx",
     );
@@ -817,12 +827,12 @@ describe("owned component conventions", () => {
       "src/app/(protected)/profile/_components/profile-form-content.tsx";
     expectValid(
       compoundForm(
-        "function ProfileForm() { return <FormProvider><form>{children}</form></FormProvider>; } export { ProfileForm };",
+        "function ProfileForm() { return <form>{children}</form>; } export { ProfileForm };",
       ),
       form,
     );
     expectInvalid(
-      "function ProfileForm() { return <FormProvider><form><FieldGroup /></form></FormProvider>; } export { ProfileForm };",
+      "function ProfileForm() { return <form><FieldGroup /></form>; } export { ProfileForm };",
       /delegate fields and actions/,
       form,
     );
@@ -839,7 +849,7 @@ describe("owned component conventions", () => {
   it("validates colocated form parts without accepting nested card primitives", () => {
     const path = "src/app/(protected)/profile/_components/profile-form.tsx";
     const valid = compoundForm(
-      "function ProfileForm() { return <FormProvider><form>{children}</form></FormProvider>; } export { ProfileForm };",
+      "function ProfileForm() { return <form>{children}</form>; } export { ProfileForm };",
     );
     expectValid(valid, path);
     expectInvalid(
@@ -863,7 +873,7 @@ describe("owned component conventions", () => {
   it("forbids a second Card inside ProfileForm", () => {
     const path = "src/app/(protected)/profile/_components/profile-form.tsx";
     expectInvalid(
-      "function ProfileForm() { return <FormProvider><form><Card>{children}</Card></form></FormProvider>; } export { ProfileForm };",
+      "function ProfileForm() { return <form><Card>{children}</Card></form>; } export { ProfileForm };",
       /delegate the Card root to ProfileCard/,
       path,
     );
@@ -1120,7 +1130,7 @@ describe("component integration naming", () => {
 describe("runtime suffixes preserve semantic safety checks", () => {
   it("keeps exact profile form families and field/property matching", () => {
     expectInvalid(
-      '"use client"; function ProfileFormClient() { return <FormProvider><form /></FormProvider>; } function ProfileFormClientContent() { return <div />; } export { ProfileFormClient, ProfileFormClientContent };',
+      '"use client"; function ProfileFormClient() { return <form />; } function ProfileFormClientContent() { return <div />; } export { ProfileFormClient, ProfileFormClientContent };',
       /Export exactly the named components: ProfileFormClient/,
       "src/app/(protected)/profile/_components/profile-form-client.tsx",
     );
