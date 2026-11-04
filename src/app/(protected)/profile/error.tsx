@@ -12,10 +12,10 @@ import { forgetFailedProfiles } from "./_lib/profile-resource";
 
 export default function ProfileError({
   error,
-  retry,
+  reset,
 }: {
   error: Error & { digest?: string };
-  retry: () => void;
+  reset: () => void;
 }) {
   const t = useTranslations("Auth");
   const app = useTranslations("App");
@@ -26,7 +26,7 @@ export default function ProfileError({
 
   function handleRetry() {
     forgetFailedProfiles();
-    retry();
+    reset();
   }
 
   return (

@@ -115,7 +115,7 @@ class SegmentErrorBoundary extends Component<
     return (
       <ProfileError
         error={error}
-        retry={() => this.setState({ error: null })}
+        reset={() => this.setState({ error: null })}
       />
     );
   }

@@ -20,9 +20,6 @@ type ProfileRequest = {
 const profiles = new Map<string, Promise<ProfileValues>>();
 const failed = new Set<string>();
 
-// A locale sync or a superseded session never reveals the profile: the
-// refresh or the gate's uid-keyed remount replaces this subtree instead.
-const superseded = new Promise<never>(() => {});
 
 function profileKey(uid: string, activeLocale: Locale) {
   return `${uid}:${activeLocale}`;
@@ -35,9 +32,10 @@ async function fetchProfile({
   setTheme,
 }: ProfileRequest) {
   const result = await readProfile(uid, activeLocale, () => true);
-  if (!result || syncSavedLocale(result.values.locale, activeLocale, refresh))
-    return superseded;
+  if (!result) throw new Error("Profile session changed while loading");
   if (result.theme) setTheme(result.theme);
+  // Refresh the locale without pinning the UI to a never-settling promise.
+  syncSavedLocale(result.values.locale, activeLocale, refresh);
   return result.values;
 }
 

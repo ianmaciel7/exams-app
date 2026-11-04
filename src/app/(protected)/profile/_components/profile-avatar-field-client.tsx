@@ -1,11 +1,16 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { type ComponentProps, useId } from "react";
+import { useFormContext, useWatch } from "react-hook-form";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Field, FieldContent, FieldTitle } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
-import { useProfileAvatarFieldClient } from "../_hooks/use-profile-avatar-field-client";
+import { useProfileAvatar } from "../_hooks/use-profile-avatar";
+import { useProfileContext } from "../_hooks/use-profile-context";
+import { getAvatarSource } from "../_lib/avatar";
+import type { ProfileFormValues } from "../_lib/definitions";
 
 type ProfileAvatarFieldClientProps = ComponentProps<typeof Field>;
 
@@ -13,16 +18,24 @@ function ProfileAvatarFieldClient({
   className,
   ...props
 }: ProfileAvatarFieldClientProps) {
+  const t = useTranslations("Auth");
   const titleId = useId();
-  const {
-    t,
-    disabled,
-    avatarSrc,
-    avatarAlt,
-    fallbackInitial,
-    fileInputRef,
-    handleAvatarChange,
-  } = useProfileAvatarFieldClient();
+  const { user, photoURL, avatarVersion } = useProfileContext();
+  const { control, setValue, formState } = useFormContext<ProfileFormValues>();
+  const avatarFile = useWatch({ control, name: "avatarFile" });
+  const { avatarPreview, fileInputRef, handleAvatarChange } = useProfileAvatar(
+    avatarFile,
+    (file) => setValue("avatarFile", file, { shouldDirty: true }),
+  );
+
+  const disabled = formState.disabled || formState.isSubmitting;
+  const avatarSrc = getAvatarSource(avatarPreview, photoURL, avatarVersion);
+  const fallbackInitial = (
+    user.displayName?.charAt(0) ||
+    user.email?.charAt(0) ||
+    "U"
+  ).toUpperCase();
+  const avatarAlt = user.displayName ?? t("profileTitle");
 
   return (
     <Field
