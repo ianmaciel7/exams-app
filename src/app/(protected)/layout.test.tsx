@@ -10,11 +10,6 @@ vi.mock("./_components/auth-gate-client", () => ({
     <section data-testid="auth-gate">{children}</section>
   ),
 }));
-vi.mock("./_components/route-usage-client", () => ({
-  RouteUsageClient: ({ children }: { children: React.ReactNode }) => (
-    <section data-testid="route-usage">{children}</section>
-  ),
-}));
 
 afterEach(cleanup);
 
@@ -28,7 +23,6 @@ describe("ProtectedLayout", () => {
     );
     expect(mocks.reject).toHaveBeenCalledOnce();
     expect(screen.getByTestId("auth-gate")).toBeTruthy();
-    expect(screen.getByTestId("route-usage")).toBeTruthy();
     expect(screen.getByText("Protected Content")).toBeTruthy();
   });
 });

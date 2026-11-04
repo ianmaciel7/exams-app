@@ -17,9 +17,15 @@ const mocks = vi.hoisted(() => ({
   unsubscribe: vi.fn(),
   getUI: vi.fn(),
   pendingSignOut: null as Promise<void> | null,
+  recordUsage: vi.fn(),
+  pathname: "/profile",
 }));
 
-vi.mock("next/navigation", () => ({ useRouter: () => mocks.router }));
+vi.mock("next/navigation", () => ({
+  useRouter: () => mocks.router,
+  usePathname: () => mocks.pathname,
+}));
+vi.mock("@/lib/firebase/usage", () => ({ recordUsage: mocks.recordUsage }));
 vi.mock("next-intl", () => ({
   useTranslations: () => (key: string) => key,
 }));
@@ -66,6 +72,8 @@ describe("AuthGateClient", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mocks.pendingSignOut = null;
+    mocks.pathname = "/profile";
+    mocks.recordUsage.mockResolvedValue(undefined);
     mocks.getUI.mockReturnValue({ get: () => ({ auth: {} }) });
     mocks.subscribe.mockReturnValue(mocks.unsubscribe);
   });
@@ -187,5 +195,42 @@ describe("AuthGateClient", () => {
     expect(mocks.unsubscribe).toHaveBeenCalledTimes(
       mocks.subscribe.mock.calls.length,
     );
+  });
+
+  it("records the route without blocking content, even when logging fails", async () => {
+    mocks.recordUsage.mockRejectedValue(new Error("offline"));
+    await renderGate();
+    expect(mocks.recordUsage).not.toHaveBeenCalled();
+    emit({ uid: "user-123" });
+    await act(async () => {});
+    expect(mocks.recordUsage).toHaveBeenCalledOnce();
+    expect(mocks.recordUsage).toHaveBeenCalledWith({
+      type: "screen_view",
+      name: "/profile",
+    });
+    expect(screen.getByText("Protected Content user-123")).toBeTruthy();
+  });
+
+  it("records a new view on navigation and on an account switch only", async () => {
+    const { rerender } = await renderGate();
+    emit({ uid: "user-123" });
+    rerender(
+      <SessionGate>
+        <ProtectedContent />
+      </SessionGate>,
+    );
+    expect(mocks.recordUsage).toHaveBeenCalledOnce();
+    mocks.pathname = "/profile/security";
+    rerender(
+      <SessionGate>
+        <ProtectedContent />
+      </SessionGate>,
+    );
+    expect(mocks.recordUsage).toHaveBeenLastCalledWith({
+      type: "screen_view",
+      name: "/profile/security",
+    });
+    emit({ uid: "user-456" });
+    expect(mocks.recordUsage).toHaveBeenCalledTimes(3);
   });
 });
