@@ -16,11 +16,16 @@ valid:
       return <main>{children}</main>;
     }
   - |
+    export default async function Page() {
+      const t = await getTranslations("Home");
+      return <h1>{t("title")}</h1>;
+    }
+invalid:
+  - |
     export default function Page() {
       const t = useTranslations("Home");
       return <h1>{t("title")}</h1>;
     }
-invalid:
   - |
     export default function Page() {
       const [count, setCount] = useState(0);

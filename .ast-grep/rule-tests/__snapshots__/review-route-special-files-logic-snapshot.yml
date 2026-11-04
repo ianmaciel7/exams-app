@@ -1,5 +1,15 @@
 id: review-route-special-files-logic
 snapshots:
+  "export default function Page() {\n  React.useEffect(() => connect(), []);\n  return <div />;\n}\n":
+    labels:
+    - source: React.useEffect(() => connect(), [])
+      style: primary
+      start: 35
+      end: 71
+    - source: React.useEffect
+      style: secondary
+      start: 35
+      end: 50
   "export default function Page() {\n  const [count, setCount] = useState(0);\n  return <div>{count}</div>;\n}\n":
     labels:
     - source: useState(0)
@@ -20,13 +30,13 @@ snapshots:
       style: secondary
       start: 50
       end: 59
-  "export default function Page() {\n  React.useEffect(() => connect(), []);\n  return <div />;\n}\n":
+  "export default function Page() {\n  const t = useTranslations(\"Home\");\n  return <h1>{t(\"title\")}</h1>;\n}\n":
     labels:
-    - source: React.useEffect(() => connect(), [])
+    - source: useTranslations("Home")
       style: primary
-      start: 35
-      end: 71
-    - source: React.useEffect
+      start: 45
+      end: 68
+    - source: useTranslations
       style: secondary
-      start: 35
-      end: 50
+      start: 45
+      end: 60

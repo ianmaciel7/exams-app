@@ -52,6 +52,10 @@ vi.mock("next-intl", () => ({
   useLocale: () => mocks.locale,
 }));
 
+vi.mock("next-intl/server", () => ({
+  getTranslations: async () => translate,
+}));
+
 vi.mock("next-themes", () => ({
   useTheme: () => ({ theme: "system", setTheme: mocks.setTheme }),
 }));
@@ -125,13 +129,13 @@ class SegmentErrorBoundary extends Component<
 
 /** Firebase loads on demand; wait for it so the gate has subscribed. */
 async function renderProfile() {
+  // The route entrypoint is an async Server Component: resolve it first.
+  const page = await ProfilePage();
   const rendered = render(
     <SessionProviderClient>
       <AuthGuardClient>
         <SegmentErrorBoundary>
-          <Suspense fallback={<ProfileLoading />}>
-            <ProfilePage />
-          </Suspense>
+          <Suspense fallback={<ProfileLoading />}>{page}</Suspense>
         </SegmentErrorBoundary>
       </AuthGuardClient>
     </SessionProviderClient>,

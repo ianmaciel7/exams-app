@@ -13,8 +13,10 @@ Read when changing route entrypoints, handlers, navigation, metadata, or viewpor
 
 ## Next.js Route Special Files Logic
 
-Repository policy: `page.tsx`, `layout.tsx`, and `template.tsx` stay as
-thin **Server Component** entrypoints. This is stricter than the Next.js API,
+Repository policy: `page.tsx`, `layout.tsx`, `template.tsx`, `not-found.tsx`,
+`loading.tsx`, and `default.tsx` stay as thin **Server Component** entrypoints.
+Use `await getTranslations()` from `next-intl/server` for copy instead of the
+`useTranslations` hook. This is stricter than the Next.js API,
 which permits data access in pages/layouts and Client Components in templates.
 
 ## Thin entrypoint guardrails
@@ -51,13 +53,15 @@ which permits data access in pages/layouts and Client Components in templates.
 
 ## Route special files, boundaries, and handlers
 
-- `loading.tsx`, `error.tsx`, and `not-found.tsx` retain their individual Next.js
-  conventions and are outside the three-file thin entrypoint check.
+- `loading.tsx` and `not-found.tsx` follow the thin entrypoint check like
+  `page.tsx`. `error.tsx` must be a Client Component, so it retains its own
+  Next.js convention (hooks allowed) and is outside the check.
 - `global-error.tsx` acts as the root error boundary for unhandled errors in root
   `layout.tsx`; it must render its own `<html>` and `<body>` tags.
 - `forbidden.tsx` and `unauthorized.tsx` handle 403 and 401 exceptions triggered by
   `forbidden()` and `unauthorized()`.
-- `default.tsx` provides fallback rendering for unmatched parallel route slots (`@slot`).
+- `default.tsx` provides fallback rendering for unmatched parallel route slots (`@slot`)
+  and is covered by the thin entrypoint check.
 - **Route Handlers (`route.ts`)**:
   - Export HTTP verb functions (`GET`, `POST`, `PUT`, `PATCH`, `DELETE`) as thin
     server endpoints returning standard Web `Response` or `Response.json()`.

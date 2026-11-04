@@ -1,4 +1,4 @@
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import {
   Card,
   CardContent,
@@ -10,8 +10,8 @@ import { ProfileForm } from "./_components/profile-form";
 
 export const instant = false;
 
-export default function ProfilePage() {
-  const t = useTranslations("Auth");
+export default async function ProfilePage() {
+  const t = await getTranslations("Auth");
 
   return (
     <Card className="mx-auto w-full max-w-sm shadow-md ring-foreground/20 sm:max-w-md lg:max-w-lg">
