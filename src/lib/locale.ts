@@ -1,7 +1,7 @@
 import { enUs, esEs, ptBr } from "@firebase-oss/ui-translations";
+import { locales } from "./locale-config.mjs";
 
-export const locales = ["en", "pt-BR", "es"] as const;
-export const defaultLocale = "en" satisfies (typeof locales)[number];
+export { defaultLocale, locales } from "./locale-config.mjs";
 
 export type Locale = (typeof locales)[number];
 

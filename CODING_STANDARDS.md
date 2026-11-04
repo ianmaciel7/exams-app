@@ -704,6 +704,15 @@ composes `useProfileAvatarDraft` for draft lifecycle handling and
 Pure transformations, constants and subscription support functions remain in the
 route's `_lib`, following the hook support placement contract.
 
+Each owned hook module defines exactly one custom hook with a filename-matching
+export. Focused hooks live in separate files and are imported by their
+orchestrator. `pnpm check:components` rejects additional local implementations,
+even when they are unexported, nested, or assigned to arrow/function-expression
+variables. Imported hook calls and ordinary local callbacks remain valid;
+overload signatures do not count as additional implementations. This applies
+to private `_hooks/` and shared `src/hooks/`, including nested directories,
+with the existing test/spec/story and `use-mobile.ts` registry exclusions.
+
 The native Biome budget for owned runtime source is cognitive complexity **8**,
 function body size **40 lines excluding blanks**, and callback nesting **2**. Values at
 the limit are allowed; the next value is an error. These checks include focused

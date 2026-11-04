@@ -1,5 +1,8 @@
 import ts from "typescript";
 
+// Invoked by check-component-conventions, never as a standalone CLI.
+export const checkMode = "helper";
+
 function primitiveImportBindings(statement) {
   if (!ts.isImportDeclaration(statement)) return undefined;
   if (!ts.isStringLiteral(statement.moduleSpecifier)) return undefined;

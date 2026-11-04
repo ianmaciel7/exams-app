@@ -3,6 +3,9 @@ import { mkdirSync, readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+// Requires a production build and a browser; run through check:lighthouse.
+export const checkMode = "manual";
+
 // Lighthouse runs with its default mobile profile: a Moto G Power sized
 // screen, simulated slow 4G and a 4x CPU slowdown.
 export const defaultBudget = {

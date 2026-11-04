@@ -30,6 +30,35 @@ Vitest Browser Mode binds its local API on port 4174. Keep this separate from
 the Playwright production E2E server on 4173 and outside Windows' commonly
 reserved high-port range; Vite may advance to the next available port if needed.
 
+`pnpm check:repo` automatically discovers `scripts/checks/check-*.mjs` and
+their `*.test.mjs` regression suites through `scripts/run-checks.mjs`. Adding
+a guard and its tests does not require editing the package script chain.
+Runner regressions verify discovery, execution order, failure propagation,
+missing suites, and exclusion of manual/helper CLIs. Offline regression tests
+for Lighthouse and production smoke still run; their live commands remain
+separate. See [automatic checks](TOOLING.md#automatic-repository-checks).
+
+The Firebase rules guard and `tests/rules/helpers.mjs` share the rules-path
+reader for `firebase.json`. Regression cases include renamed files, missing
+files, invalid configuration, and multiple database entries. The structural
+guard does not establish permission coverage; emulator allow/deny tests do.
+The helper requires an explicit target selector when a service has multiple
+entries instead of silently choosing the first file.
+
+Hook contract regressions cover exactly one implementation per owned hook
+file, including unexported functions, arrow/function-expression variables,
+nested declarations, shared and nested directories, and Windows paths.
+Imported calls, ordinary callbacks, overload signatures, and existing registry
+and test exclusions remain valid. Run `pnpm check:components` and the complete
+Biome/structural scans when moving hooks; component behavior tests must still
+verify profile cancellation/timeouts and server-owned protected navigation after extraction.
+
+Production smoke regressions use the supported locales and cookie name from
+`src/lib/locale-config.mjs`, also consumed by application locale modules.
+They validate the HTTP request cookie and pinned DNS address without making
+network requests. Deployment smoke and emulator execution remain integration
+checks and are not implied by these offline regressions.
+
 `pnpm check:ui-state` runs positive and negative AST fixtures, then scans
 application TypeScript and TSX for direct `String(error|cause|err)` coercion
 that reaches JSX, React Hook Form error sinks, or toast payloads. It runs in
@@ -160,14 +189,14 @@ transition matrix with the feature's requirements and actual UX.
 
 ### Protected session transition contract
 
-The route gate owns these transitions. An emulator suite cannot reproduce every
+The server DAL and client session provider own these transitions. An emulator suite cannot reproduce every
 one, so the last column names the layer that does.
 
 | Initial state | Event | Expected observable state | Verification |
 | --- | --- | --- | --- |
-| Loading | Session resolves signed in | Protected content, one subscription | `auth-guard-client.test.tsx`, emulator E2E |
-| Loading | Session resolves signed out | One redirect that keeps path and query | `auth-guard-client.test.tsx`, emulator E2E |
-| Loading | Firebase fails | Alert with a retry control, no redirect | `auth-guard-client.test.tsx` |
+| Request | Server session resolves signed in | Protected layout renders after verification | `layout.test.tsx`, `dal.test.ts` |
+| Request | Server session is missing | DAL redirects to sign-in | `dal.test.ts` |
+| Request | Session verification fails unexpectedly | Infrastructure error propagates without a redirect | `dal.test.ts` |
 | Signed in | Sign-out | Content hidden; history cannot restore it | Emulator E2E |
 | Signed in | Account changes | Subtree remounts with no prior account data | Component test, emulator E2E |
 | Signed in, worker active | Token refresh fails | Navigation continues on the client session | Emulator E2E |
@@ -229,12 +258,13 @@ or shared service code; do not replace them with source-text assertions.
 - Do not write a test only to make a tool report success. When a tool has no
   suitable subject yet, leave it unused and say so.
 
-Seven Vitest suites verify configuration rather than application behavior:
+The following Vitest suites verify configuration rather than application behavior:
 `src/messages/messages.test.ts` checks locale catalog keys and ICU arguments,
-alongside the 6 rule-configuration suites (`.biome/rules/nextjs/rules.test.ts`,
+alongside the rule-configuration suites (`.biome/rules/nextjs/rules.test.ts`,
 `.biome/rules/dom/rules.test.ts`, `.biome/rules/nextjs/app-router-imports.test.ts`,
 `.biome/rules/react/native-rules.test.ts`, `.biome/rules/complexity/native-rules.test.ts`,
-and `.ast-grep/rules/react/hook-module-scope.test.ts`):
+`.ast-grep/rules/react/hook-module-scope.test.ts`, and
+`.ast-grep/rules/nextjs/protected-redirect-scope.test.ts`):
 `.biome/rules/nextjs/rules.test.ts` and `.biome/rules/dom/rules.test.ts`
 verify valid and invalid Grit fixtures.
 `.biome/rules/nextjs/app-router-imports.test.ts` verifies the native App
@@ -247,6 +277,9 @@ when a component exposes loading, hidden, or error state.
 function length, and callback nesting depth limits.
 `.ast-grep/rules/react/hook-module-scope.test.ts` verifies private hook module
 scope and path exclusions.
+`.ast-grep/rules/nextjs/protected-redirect-scope.test.ts` verifies that the
+server boundary remains the only redirect exemption and protected client hook
+paths remain blocked, including former guard hook names.
 Semgrep rules are tested with `semgrep --test` (`pnpm check:security:rules`) and
 ast-grep rules with `ast-grep test`.
 

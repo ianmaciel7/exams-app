@@ -30,7 +30,7 @@ repository. It is not a catalog of every runtime library; `package.json` and
 | Architecture boundaries | dependency-cruiser | 18.6.0 | Enforces layering rules and forbids dependency cycles. | `.dependency-cruiser.cjs` |
 | Structural rules | ast-grep | 0.51.0 | Enforces form, prop, Tailwind, route, and Base UI component conventions, with warning-level React review hints. Rules have snapshot tests. Runs on staged `ts` and `tsx` files through lint-staged and on the whole tree in `check:structure`. | `sgconfig.yml`, `.ast-grep/rules/<domain>/`, `.ast-grep/rule-tests/<domain>/` |
 | Route entrypoint contracts | TypeScript compiler API | Uses the existing TypeScript dependency | Enforces thin `page.tsx`, `layout.tsx`, and `template.tsx` entrypoints through `pnpm check:routes`. | `scripts/checks/check-route-files.mjs`, `scripts/checks/check-route-files.test.mjs`, `package.json` |
-| Hook naming contracts | TypeScript compiler API | Uses the existing TypeScript dependency | Enforces exact file/export parity for every owned `src/app/**/_hooks/use-*.ts` hook, including `Client`/`Server` suffixes; verifies real exports and rejects aliased/re-exported hook names. `src/hooks/use-mobile.ts` is a shadcn-provided convention and stays out of this app-private policy. | `scripts/checks/check-component-conventions.mjs`, `scripts/checks/check-component-conventions.test.mjs` |
+| Hook naming contracts | TypeScript compiler API | Uses the existing TypeScript dependency | Enforces exactly one local hook implementation and exact filename/export parity in owned private `_hooks/` and shared `src/hooks/`, including nested directories. Counts unexported and nested hooks, accepts imported calls and overload signatures, and rejects aliases/re-exports. Test/spec/story files and shadcn's `src/hooks/use-mobile.ts` stay excluded. | `scripts/checks/check-component-conventions.mjs`, `scripts/checks/check-component-conventions.test.mjs` |
 | React state ownership | React state + React Hook Form | React 19 / RHF 7 | Groups authentication and preference phases as discriminated states and uses the pending value of the React form Action's `useActionState` (profile) or RHF's `formState.isSubmitting` (auth forms), avoiding duplicated flags. `Suspense` is reserved for data sources that actually suspend. | `src/app/(protected)/profile/_components/profile-form.tsx` |
 | Form component exemption | React + TypeScript compiler API | React 19 | A `*-form.tsx` component such as `ProfileForm` renders its fields inline and delegates `useActionState` and sibling hooks to `useProfileForm`; `ProfileCardClient` owns loading before the form mounts (ADR 0019). It is exempt from the `-client` suffix only, and `pnpm check:components` still requires one form root and rejects `FormProvider`; Biome lifts `noExcessiveLinesPerFunction` for `_components/*-form.tsx`. Like every component, it delegates business coordination to a custom hook. | `src/app/(protected)/profile/_components/`, `scripts/checks/check-component-conventions.mjs` |
 | Profile persistence ports | TypeScript function-based dependency injection | Existing TypeScript | `saveProfile` accepts a small typed dependency interface; default Firebase adapters remain in one place and test doubles can exercise the orchestration. | `src/app/(protected)/profile/_lib/data.ts`, `src/app/(protected)/profile/_lib/data.test.ts` |
@@ -151,12 +151,12 @@ project skills are tracked in `.agents/skills/` and `skills-lock.json`.
 | `pnpm check:release` | Validate that the package version and the App Hosting release tag agree; includes regression tests and runs in fast/static verification. |
 | `pnpm check:app-hosting-auth-iam` | Validate that the App Hosting runtime account retains its least-privilege Firebase Auth Viewer binding, required by revocation-aware Firebase Admin token verification. Includes valid and invalid Terraform fixtures and runs in fast/static verification. |
 | `pnpm check:emulator-snapshot` | Validate `demo-test` emulator commands, exported directories, and fictional Auth seed identities; includes valid and invalid fixtures and runs in fast/static verification. |
-| `pnpm check:firebase-rules` | Fail when a rules file has no emulator test, a matched path is never named in its test, a rule allows everything, or CI stops running `tests/rules`; includes valid and invalid fixtures and runs in fast/static verification. |
+| `pnpm check:firebase-rules` | Read rules paths from `firebase.json` (including per-database arrays); fail on missing configured files, missing emulator tests, unnamed matched paths, unconditional access, or missing CI execution. Text matching is a structural hint, not behavioral coverage. The emulator helper uses the same path reader. |
 | `pnpm check:spelling` / `pnpm check:markdown` | CSpell / markdownlint. |
 | `pnpm check:security` / `pnpm check:security:rules` | Semgrep scan of `src` (fails on findings) / tests of the Semgrep rules. Run inside a Git work tree. |
 | `pnpm check:secrets` / `pnpm check:secrets:staged` | Gitleaks repository history audit / staged pre-commit scanner. |
 | `pnpm check:package-scripts` | Reject package scripts that alias another script's command and `pnpm <script>` calls (in scripts or `.github/workflows`) to scripts that do not exist; includes valid and invalid fixtures. |
-| `pnpm check:repo` | Repository guards shared by `verify:fast` and `verify:static`: structure, routes, components, responsiveness, English, docs, ADR, release, App Hosting IAM, emulator snapshot, secret guard, and package scripts. |
+| `pnpm check:repo` | Run structural tools, runner regressions, then discover `scripts/checks/check-*.mjs` and their colocated regression suites automatically. Static guards run in filename order after all offline suites pass. New guards need no package-script or aggregate-list registration. |
 | `pnpm check:secret-guard` | Validate that `.husky/pre-commit` wires in Gitleaks and `.vscode/launch.json` has no hardcoded secrets without exemptions; includes regression tests. |
 | `pnpm audit` | Root dependency audit. |
 | `pnpm audit:functions` | Audit the independent npm lockfile in `functions/`, including optional backend dependencies. |
@@ -249,7 +249,7 @@ valid and invalid tests, before registering a new custom rule.
 | `thin-route-entrypoints` | TypeScript AST (`scripts/checks/check-route-files.mjs`) | error | App Router entrypoints (page.tsx, layout.tsx, template.tsx) | Next.js allows arbitrary state and branch logic inside route files. This enforces thin entrypoints where client state, effects, and mutation logic are extracted into semantic `_components` or `_hooks` modules. |
 | `responsiveness-contracts` | TypeScript AST (`scripts/checks/check-responsiveness.mjs`) | error | Root layout, App Router routes, and owned components (`src/app/**`, `src/components/**`) | Next.js and TypeScript allow arbitrary viewport configs, rigid pixel widths, and tiny interactive controls. This enforces WCAG 1.4.4 viewport scalability, WCAG 1.4.10 reflow at 320px, and WCAG 2.2 SC 2.5.8 touch target minimums (24x24px). Tests live in `scripts/checks/check-responsiveness.test.mjs`. |
 | `owned-component-composition` | TypeScript AST (`scripts/checks/check-component-composition.mjs`) | error | All owned component modules, Server and Client, through `pnpm check:components` | TypeScript permits dropping inherited props and constructing static compound APIs; this enforces our separate-named-export and adapter-forwarding contract. Checks matching direct JSX roots, remaining props and extracted children/className. Tests live in `scripts/checks/check-component-composition.test.mjs`. [Coverage and limits](CODING_STANDARDS.md#composition-guard-coverage). |
-| `no-protected-descendant-sign-in-redirect-ts` / `-tsx` | ast-grep (`.ast-grep/rules/nextjs/`) | error | `src/app/(protected)/**` `.ts` and `.tsx`, excluding the gate hook `_hooks/use-auth-guard-client.ts`, the server session check in `_lib/`, and test files | Rejects `router.replace`/`router.push` (or the `useNavigation` `replace`/`push`) to `routes.signIn` or `getSignInUrl(...)`, `replaceWithSignIn(...)`, `goToSignIn()`, `redirect(...)` to sign-in, and `redirectToSignIn(...)` below the protected guard. Firebase notifies auth observers in subscription order, so a descendant redirect runs after the guard and drops the `?next=` destination. Behavior is also covered by `auth-guard-client.test.tsx` and `profile-page.test.tsx`. |
+| `no-protected-descendant-sign-in-redirect-ts` / `-tsx` | ast-grep (`.ast-grep/rules/nextjs/`) | error | `src/app/(protected)/**` `.ts` and `.tsx`, excluding the server session check in `_lib/` and test files | Rejects sign-in redirects from protected client code; authentication redirects remain owned by the server DAL (ADR 0021). Native path regressions verify that former guard hook names and descendant hooks receive no client-side exemption. Profile behavior is covered by `profile-page.test.tsx`. |
 | `no-module-support-in-hooks-ts` / `-tsx` | ast-grep | error | `src/app/**/_hooks/**/*.ts` and `.tsx`, excluding test/spec/story files | Rejects top-level support functions, constants and contexts; extract them to the route's `_lib/`. Direct `useX` hook declarations, imports, types and hook-local callbacks/values remain valid. Native YAML fixtures and `.ast-grep/rules/react/hook-module-scope.test.ts` verify matches and real path exclusions. This is a project contract, not a React requirement or purity analysis. |
 | `base-ui/no-radix-primitive-import` | ast-grep (`.ast-grep/rules/base-ui/`) | error | `src/components/**` and `src/app/**/_components/**` `.tsx`, including `ui/extensions`, excluding shadcn copies in `src/components/ui/*.tsx` and test/story files | Rejects Radix UI primitives and Sonner so overlays and toasts keep one focus, portal and dismissal owner. Standalone `@radix-ui/react-use-*` hooks stay allowed. No dependency rule distinguishes primitives from hooks. |
 | `base-ui/no-base-ui-primitive-import` | ast-grep (`.ast-grep/rules/base-ui/`) | error | `src/components/**` and `src/app/**/_components/**` `.tsx`, including `ui/extensions`, excluding shadcn copies in `src/components/ui/*.tsx` and test/story files | Owned components compose the `@/components/ui` wrappers instead of raw `@base-ui/react` parts; only `use-render` and `merge-props` may be imported. A path-level dependency-cruiser rule cannot express the utility allowlist with fixtures. |
@@ -808,6 +808,28 @@ semantics; they do not establish that every check is implemented in the
 project's linter. Enable compatible checks at their intended severity and use
 Compiler diagnostics, existing guards, and tests for their actual scopes. Do not
 install a second lint stack or add duplicate custom syntax parsers.
+
+## Automatic repository checks
+
+`scripts/run-checks.mjs` uses native Node.js file discovery and executes child
+processes with `process.execPath`, without shell glob expansion. It resolves
+the repository root from its own file and normalizes Windows paths. Existing
+individual `check:*` commands remain available as shortcuts.
+
+Add `scripts/checks/check-<name>.mjs` and `check-<name>.test.mjs` to participate
+in `pnpm check:repo`, `verify:fast`, and `verify:static` automatically. Modules
+must be safe to import and guard their CLI entrypoint. Default mode is `repo`;
+`checkMode = "manual"` excludes a server/deployment-dependent CLI, and
+`checkMode = "helper"` excludes a supporting library. Offline tests for both
+modes still run. Unknown modes, missing regression suites, empty discovery,
+and failed subprocesses fail the command. External tools remain owned by
+their existing commands; discovery does not execute production smoke or
+Lighthouse against a live service.
+
+`src/lib/locale-config.mjs` owns the supported locales, default locale, and
+cookie name for the application and production HTML smoke test. It has no
+framework or translation-package dependencies. The smoke test retains its
+public-origin validation and pinned DNS address.
 
 ## Documentation integrity
 

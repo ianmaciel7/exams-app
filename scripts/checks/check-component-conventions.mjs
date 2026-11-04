@@ -1155,9 +1155,9 @@ export function inspectNaming(content, filename) {
 export function isOwnedHookModule(filename) {
   const path = filename.replaceAll("\\", "/");
   return (
-    /^(?:src\/app\/(?:.*\/)?_hooks\/|src\/hooks\/(?!use-mobile\.))[^/]+\.tsx?$/.test(
-      path,
-    ) && !/\.(test|spec|stories)\.tsx?$/.test(path)
+    /^(?:src\/app\/(?:.*\/)?_hooks\/|src\/hooks\/).+\.tsx?$/.test(path) &&
+    path !== "src/hooks/use-mobile.ts" &&
+    !/\.(test|spec|stories)\.tsx?$/.test(path)
   );
 }
 
@@ -1209,6 +1209,55 @@ function namedHookExports(statement, report) {
   return statement.exportClause.elements.flatMap((specifier) =>
     exportedHookSpecifier(specifier, statement, report),
   );
+}
+
+function localHookDefinition(node) {
+  if (
+    (ts.isFunctionDeclaration(node) || ts.isFunctionExpression(node)) &&
+    node.body
+  ) {
+    return { name: node.name, implementation: node };
+  }
+  if (!ts.isVariableDeclaration(node) || !node.initializer) return;
+  const implementation = ts.skipOuterExpressions(node.initializer);
+  if (
+    ts.isArrowFunction(implementation) ||
+    ts.isFunctionExpression(implementation)
+  ) {
+    return { name: node.name, implementation };
+  }
+}
+
+function checkHookDefinitions(source, expected, report) {
+  const definitions = new Map();
+  function visit(node) {
+    const definition = localHookDefinition(node);
+    if (
+      definition?.name &&
+      ts.isIdentifier(definition.name) &&
+      /^use[A-Z]/.test(definition.name.text) &&
+      !definitions.has(definition.implementation)
+    ) {
+      definitions.set(definition.implementation, definition.name);
+    }
+    ts.forEachChild(node, visit);
+  }
+  visit(source);
+  if (definitions.size === 0 && expected) {
+    report(
+      source,
+      "Hook files must define exactly one hook; no local hook implementation was found.",
+    );
+  }
+  if (definitions.size <= 1) return;
+  const names = [...definitions.values()];
+  const primary = names.find((name) => name.text === expected) ?? names[0];
+  for (const name of names.filter((name) => name !== primary)) {
+    report(
+      name,
+      `Hook files must define exactly one hook; move "${name.text}" to its own use-<semantic-name>.ts file. Imported hooks and ordinary callbacks remain allowed.`,
+    );
+  }
 }
 
 function validateHookExports(
@@ -1272,6 +1321,7 @@ export function inspectHookFilename(content, filename) {
     ...namedHookExports(statement, report),
   ]);
   validateHookExports(source, filename, stem, expected, exports, report);
+  checkHookDefinitions(source, expected, report);
   return findings;
 }
 
