@@ -1,7 +1,7 @@
-import { SignInClient } from "./_components/sign-in-client";
+import { SignInFormClient } from "./_components/sign-in-form-client";
 
 export const instant = false;
 
 export default function SignInPage() {
-  return <SignInClient />;
+  return <SignInFormClient />;
 }

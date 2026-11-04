@@ -3,12 +3,12 @@
 import type { ComponentProps } from "react";
 import { GoogleSignInButton } from "@/components/firebase/google-sign-in-button";
 import { SignUpAuthScreen as SignUpAuthContent } from "@/components/firebase/sign-up-auth-screen";
-import { useRegisterClient } from "../_hooks/use-register-client";
+import { useRegisterFormClient } from "../_hooks/use-register-form-client";
 
-type RegisterClientProps = ComponentProps<"div">;
+type RegisterFormClientProps = ComponentProps<"div">;
 
-function RegisterClient(props: RegisterClientProps) {
-  const { goToSignIn } = useRegisterClient();
+function RegisterFormClient(props: RegisterFormClientProps) {
+  const { goToSignIn } = useRegisterFormClient();
   return (
     <div {...props}>
       <SignUpAuthContent onSignInClick={goToSignIn}>
@@ -20,4 +20,4 @@ function RegisterClient(props: RegisterClientProps) {
   );
 }
 
-export { RegisterClient };
+export { RegisterFormClient };
