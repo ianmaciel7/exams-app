@@ -2,8 +2,8 @@ import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import ProfilePage from "./profile/page";
 
-vi.mock("next-intl", () => ({
-  useTranslations: () => (key: string) => key,
+vi.mock("next-intl/server", () => ({
+  getTranslations: async () => (key: string) => key,
 }));
 
 vi.mock("./profile/_components/profile-form", () => ({
@@ -13,8 +13,8 @@ vi.mock("./profile/_components/profile-form", () => ({
 afterEach(cleanup);
 
 describe("protected routes", () => {
-  it("renders profile route composition root", () => {
-    render(<ProfilePage />);
+  it("renders profile route composition root", async () => {
+    render(await ProfilePage());
     expect(screen.getByTestId("profile-form")).toBeTruthy();
   });
 });
