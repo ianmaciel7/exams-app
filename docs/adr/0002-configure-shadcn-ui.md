@@ -214,17 +214,19 @@ layout, or lost the indicator across a root Suspense boundary. Pull requests 36,
 
 #### Decision (former ADR 0030)
 
-- One `GlobalLoadingIndicator` renders the only visible, labeled loading state.
-- Each loading boundary (`loading.tsx`, the protected guard, and client session
-  waits) renders an empty `LoadingState` marker that tells the indicator a
-  transition is pending. A boundary never draws its own spinner.
-- The ast-grep rule `no-inline-loading-state` blocks a hand-made loading state.
-- Playwright records every visible spinner frame across real App Router and
-  Firebase auth transitions on a viewport matrix, so a second indicator or a
-  layout shift fails the suite.
+- One `LoadingScreen` component renders the only loading UI: a fixed,
+  full-viewport, labeled spinner. `loading.tsx`, the protected guard, and client
+  session waits render it directly, as the Next.js `loading.js` and React
+  `Suspense` documentation describe. It always sits at the same position, so
+  swapping one fallback for another does not move the spinner.
+- Only the root and `profile` segments have a `loading.tsx`; the other segments
+  do not suspend.
+- Later simplification: the `GlobalLoadingIndicator`, `LoadingState` marker, the
+  CSS `:has()` reveal, the `no-inline-loading-state` ast-grep rule, and the
+  Playwright frame probe were removed as more machinery than a spinner needs.
 
 #### Consequences (former ADR 0030)
 
-- A new route only adds a marker and gets the right feedback.
+- A new route adds a `loading.tsx` that renders `LoadingScreen` and gets the right feedback.
 - Loading looks the same everywhere, and the indicator does not shift the layout.
 - The state inventory lives in [docs/ui-state-feedback.md](../ui-state-feedback.md).

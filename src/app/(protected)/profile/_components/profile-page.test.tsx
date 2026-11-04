@@ -293,9 +293,7 @@ describe("ProfilePage", () => {
 
     await vi.waitFor(() =>
       expect(
-        container.querySelector(
-          '[data-loading-boundary="profile-preferences"]',
-        ),
+        container.querySelector('[data-slot="loading-screen"]'),
       ).not.toBeNull(),
     );
     expect(container.querySelector('[data-slot="card"]')).toBeNull();

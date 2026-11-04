@@ -298,7 +298,7 @@ and stable/experimental boundaries.
 
 Place shared application components in `src/components/ui/extensions/` and
 route-private components in `src/app/**/_components/`. For example,
-`LoadingState` belongs in `ui/extensions` because both
+`LoadingScreen` belongs in `ui/extensions` because both
 route components and Firebase UI consume it. Do not create parallel application
 component folders such as `src/components/loading/`.
 

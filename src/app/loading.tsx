@@ -1,5 +1,5 @@
-import { LoadingState } from "@/components/ui/extensions/loading-state";
+import { LoadingScreen } from "@/components/ui/extensions/loading-screen";
 
 export default function Loading() {
-  return <LoadingState boundary="root-route" />;
+  return <LoadingScreen />;
 }
