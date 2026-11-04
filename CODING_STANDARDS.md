@@ -675,7 +675,7 @@ of code. For example, `useAuthProviderClient` composes `useAuthUiStore`,
 `useFirebaseUiReturnNavigation` and `useAuthUiLocale`; it does not initialize Firebase,
 subscribe to authentication and synchronize locale inside one monolithic Effect.
 `useSession` delegates preference loading to `useProfilePreferences`, and
-`useProfileSubmit` performs the save and success feedback in one place.
+`useProfileSubmit` delegates successful UI feedback to `useProfileSaveFeedback`.
 Pure transformations, constants and subscription support functions remain in the
 route's `_lib`, following the hook support placement contract.
 

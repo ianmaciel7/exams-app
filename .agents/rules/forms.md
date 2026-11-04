@@ -23,7 +23,8 @@ These are project conventions aligned with the current shadcn/ui and React Hook 
 - A reusable form can accept strongly typed `UseFormProps<Values>`, but
   never pass DOM attributes or `onSubmit` into `useForm`: they are not
   `UseFormProps` options. The current `ProfileFormClient` receives only
-  DOM form props; it owns `useForm` options and the submit callback.
+  DOM form props, while `useProfileFormClient` owns `useForm` options and
+  the submit callback.
 - A screen/controller owns asynchronous data loading; only mount a form with prepared defaults or deliberately use RHF `values` / `reset` to synchronize subsequent changes. After successful client Firebase mutations, reset the form to the persisted values without clobbering unsaved edits.
 - Avatar file selection and preview remain a separate field, since `File` / `FileList` need application-level lifecycle handling.
 - The profile follows native shadcn/ui composition: `ProfileCard` is a
@@ -47,19 +48,19 @@ These are project conventions aligned with the current shadcn/ui and React Hook 
   with `use()` on the read cached in `_lib/profile-resource.ts`, so
   `profile/loading.tsx` renders the pending state and a rejection reaches
   `profile/error.tsx`. Its retry evicts the failed read before calling
-  `retry()`. Reads have a 15-second deadline, and a locale refresh does not
-  intentionally keep a Promise pending forever. Components render only loaded data.
-- `ProfileFormClient` reads `useProfile` directly and shares the result through
-  `ProfileContext`. Do not add pass-through hooks just to forward other hooks.
-- `ProfileFormClient` owns the React Hook Form lifecycle and calls
-  `useProfileSubmit` for persistence and success feedback.
+  `retry()`. Components render only loaded data; there is no status guard.
+- `useProfileController` is removed. `useProfileFormClient` reads
+  `useProfile`, and `ProfileFormClient` shares it through
+  `ProfileContext`; it does not assemble field or button props.
+- `ProfileFormClient` delegates its React Hook Form lifecycle to
+  `useProfileFormClient`, which calls `useProfileSubmit` for persistence.
   Read `formState.isSubmitting` instead of keeping a second saving flag;
   `ProfileValues` and `ProfileFormValues` live in
   `src/app/(protected)/profile/_lib/definitions.ts`; persistence lives in the sibling
   `data.ts` module.
   `saveProfile` accepts typed `ProfileDependencies` with default Firebase
   adapters to test persistence without production services.
-- `ProfileAvatarFieldClient` reads field state directly, with `useProfileAvatar` handling the file validation and object URL preview. Only the selected `File` lives in React Hook Form so submission can upload it; preview URLs are released on replacement, successful reset and unmount. Failed saves retain the selection for retry.
+- `ProfileAvatarFieldClient` uses `useProfileAvatarFieldClient` for field state and avatar display data, with `useProfileAvatar` handling validation and preview. Only the selected `File` lives in React Hook Form so submission can upload it; preview URLs are released on replacement, successful reset and unmount. Failed saves retain the selection for retry.
 - `ProfileCardContent` owns the **one** `FieldGroup`: do not wrap the
   individual profile fields in another `FieldGroup` in `page.tsx`.
 

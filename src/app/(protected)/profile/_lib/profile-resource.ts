@@ -20,19 +20,17 @@ type ProfileRequest = {
 const profiles = new Map<string, Promise<ProfileValues>>();
 const failed = new Set<string>();
 
-
 function profileKey(uid: string, activeLocale: Locale) {
   return `${uid}:${activeLocale}`;
 }
 
-async function fetchProfile({
-  uid,
-  activeLocale,
-  refresh,
-  setTheme,
-}: ProfileRequest, isActive: () => boolean) {
+async function fetchProfile(
+  { uid, activeLocale, refresh, setTheme }: ProfileRequest,
+  isActive: () => boolean,
+) {
   const result = await readProfile(uid, activeLocale, isActive);
-  if (!result || !isActive()) throw new Error("Profile session changed while loading");
+  if (!result || !isActive())
+    throw new Error("Profile session changed while loading");
   if (result.theme) setTheme(result.theme);
   // Refresh the locale without pinning the UI to a never-settling promise.
   syncSavedLocale(result.values.locale, activeLocale, refresh);
@@ -52,8 +50,10 @@ export function loadProfile(request: ProfileRequest) {
       reject(new Error("Profile loading timed out"));
     }, 15_000);
   });
-  const profile = Promise.race([fetchProfile(request, () => active), deadline])
-    .finally(() => clearTimeout(timeout));
+  const profile = Promise.race([
+    fetchProfile(request, () => active),
+    deadline,
+  ]).finally(() => clearTimeout(timeout));
   profile.catch(() => failed.add(key));
   profiles.set(key, profile);
   return profile;

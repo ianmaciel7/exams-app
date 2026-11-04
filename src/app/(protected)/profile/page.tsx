@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { ProfileAvatarFieldClient } from "./_components/profile-avatar-field-client";
 import { ProfileBackToHomeButton } from "./_components/profile-back-to-home-button";
 import {
@@ -12,7 +13,6 @@ import { ProfileDisplayNameField } from "./_components/profile-display-name-fiel
 import { ProfileEmailField } from "./_components/profile-email-field";
 import { ProfileFormClient } from "./_components/profile-form-client";
 import { ProfileLocaleField } from "./_components/profile-locale-field";
-import { useTranslations } from "next-intl";
 import { ProfileSaveButton } from "./_components/profile-save-button";
 import { ProfileThemeField } from "./_components/profile-theme-field";
 
