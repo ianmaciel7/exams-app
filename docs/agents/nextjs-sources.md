@@ -4,11 +4,13 @@ Read this guide when looking up Next.js documentation or verifying evidence.
 
 ## Order of consultation
 
-1. **Installed documentation** in `node_modules/next/dist/docs/` (resolved from the
-   repository root). It matches the installed version and is the authority for
-   version-specific behavior. It is organized as `01-app`, `02-pages`,
-   `03-architecture`, and `04-community`, with an `index.md`. Use `01-app` for this
-   repository; `02-pages` is reference for requested migrations only.
+1. **Installed documentation and server runtime** in `node_modules/next/dist/docs/`
+   and `node_modules/next/dist/server/lib/` (resolved from repository root). Use the
+   [nextjs-docs](../../.agents/skills/nextjs-docs/SKILL.md) skill and lookup CLI
+   to query installed guides and server internals. It matches the installed version
+   and is the authority for version-specific behavior. It is organized as `01-app`,
+   `02-pages`, `03-architecture`, and `04-community`, with an `index.md`. Use `01-app`
+   for this repository; `02-pages` is reference for requested migrations only.
 2. **Context7** (`/vercel/next.js`) for upstream examples and navigation. Its corpus
    includes canary material and may not advertise the exact installed snapshot, so
    confirm any API against the installed documentation before using it.
