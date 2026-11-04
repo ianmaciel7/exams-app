@@ -180,9 +180,9 @@ the load and save workflows; `readProfile`, `readUserPreferences`,
 `writeUserPreferences`, and `saveProfile` in
 `src/app/(protected)/profile/_lib/data.ts` handle Firestore/Storage/Auth
 persistence and inject typed Firebase adapters for independent tests.
-`useProfileFormClient` owns the React Hook Form lifecycle and uses the
-native submitting state and shares the loaded profile through
-`ProfileContext`. The route's `page.tsx` composes Card and Form
+`useProfileFormClient` owns the React Hook Form lifecycle, uses the
+native submitting state, and composes `useSession` and
+`useProfilePreferences`. The route's `page.tsx` composes Card and Form
 parts, including the Card header; `ProfileCardContent` renders the one
 `FieldGroup`. The segment's `loading.tsx` and `error.tsx`
 cover the suspended read and its failure. Profile value types live in
