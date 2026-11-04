@@ -349,7 +349,7 @@ forms, and the guide's other points are met as follows:
 
 - Profile form (the reference): `<Form action={formAction}>` where `formAction`
   comes from `useActionState(createProfileAction(...), initialState)`. The
-  Action (`_lib/profile-action.ts`) is a client function that parses `FormData`
+  Action (`_lib/actions.ts`) is a client function that parses `FormData`
   (`_lib/dto.ts`), writes through Firebase and returns the next state
   (`values`, pending `avatarFile`, `error`). Fields are uncontrolled inputs with
   `name` and `defaultValue` from that state. After an Action React resets the

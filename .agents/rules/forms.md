@@ -18,7 +18,7 @@ These are project conventions aligned with the current shadcn/ui and React Hook 
 ## Compound forms
 
 - The profile form submits through a React form Action: `ProfileForm` (`profile-form.tsx`) renders one Base UI `Form` with `action={formAction}` from `useProfileForm` (which wraps `useActionState`), not React Hook Form. A `*-form.tsx` component is exempt from the `-client` suffix only and delegates its hooks to `use<Component>` (see ADRs 0017 and 0018). Do not add `FormProvider`, `useForm` or `onSubmit` to it; `pnpm check:components` rejects `FormProvider` there. The Action is a client function because every write is a browser Firebase SDK call (see CODING_STANDARDS "Form and Field Architecture").
-- Name a client Action module after its form (`_lib/profile-action.ts`), never `actions.ts` or `_actions/`: `require-session-check-in-server-action` reserves those paths for Server Actions and fails the scan on a client Action.
+- Keep profile Actions in `_lib/actions.ts`. Its `"use client"` boundary preserves the browser Firebase workflow. A filename does not make a Server Function; `require-session-check-in-server-action` checks exported function declarations with module-level or inline `"use server"` directives.
 - The Action has the `(prevState, formData)` signature and returns `ProfileActionState` (`values`, pending `avatarFile`, `error`). It maps `FormData` in `_lib/dto.ts` using field names from `_lib/definitions.ts`, and falls back to the previous value for anything unknown.
 - Fields are uncontrolled: `name` (from `profileFieldNames`) plus `defaultValue` from `state.values` of the Action, written inline in `ProfileForm`. React resets the form after an Action, so a failed save returns the submitted values; a `Select` uses `key` on its value so it picks up the new default.
 - `ProfileForm` reads pending state from the third value of `useActionState` and passes it to child components that need it; never keep a second saving flag. `useFormStatus()` remains valid in a component rendered inside a form.
@@ -44,7 +44,7 @@ These are project conventions aligned with the current shadcn/ui and React Hook 
 - User identity comes from `useSession()`; there is no form context or extra
   authentication subscription.
 - `ProfileForm` owns its Action lifecycle; the Action is created by
-  `createProfileAction` in `_lib/profile-action.ts` and successful UI feedback goes
+  `createProfileAction` in `_lib/actions.ts` and successful UI feedback goes
   through `useProfileSaveFeedback`. Use the pending value of `useActionState`
   instead of keeping a second saving flag;
   `ProfileValues` and `ProfileFormValues` live in

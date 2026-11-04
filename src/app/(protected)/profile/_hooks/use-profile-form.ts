@@ -3,8 +3,8 @@ import { useTheme } from "next-themes";
 import { useActionState, useState } from "react";
 import { useSession } from "@/hooks/use-session";
 import { defaultLocale, isLocale } from "@/i18n/routing";
+import { createProfileAction } from "../_lib/actions";
 import { type ProfileValues, profileFieldNames } from "../_lib/definitions";
-import { createProfileAction } from "../_lib/profile-action";
 import { useProfileSaveFeedback } from "./use-profile-save-feedback";
 
 /**

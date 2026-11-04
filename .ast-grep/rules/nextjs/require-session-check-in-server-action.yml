@@ -1,8 +1,7 @@
 id: require-session-check-in-server-action
 language: ts
 files:
-  - src/**/actions.ts
-  - src/**/_actions/**/*.ts
+  - src/**/*.ts
 ignores:
   - "**/*.test.ts"
 severity: error
@@ -14,12 +13,25 @@ note: |
   each Server Action (https://nextjs.org/docs/app/guides/forms and
   https://nextjs.org/docs/app/guides/authentication). The app has no Server
   Actions today because every mutation uses the browser Firebase SDK
-  (ARCHITECTURE.md); this rule guards the first one. Validate the FormData
-  with a schema after the check.
+  (ARCHITECTURE.md); this rule guards the first one. Match exported function
+  declarations marked by a module-level or inline "use server" directive,
+  regardless of filename. Client Actions in actions.ts are not Server Functions.
+  Validate the FormData with a schema after the check.
 rule:
   kind: function_declaration
   inside:
     kind: export_statement
+  any:
+    - inside:
+        kind: program
+        stopBy: end
+        has:
+          matches: server-directive
+    - has:
+        field: body
+        kind: statement_block
+        has:
+          matches: server-directive
   has:
     field: body
     kind: statement_block
@@ -29,3 +41,9 @@ rule:
       any:
         - pattern: await verifySession($$$)
         - pattern: await verifyRole($$$)
+utils:
+  server-directive:
+    kind: expression_statement
+    has:
+      kind: string
+      regex: ^["']use server["']$

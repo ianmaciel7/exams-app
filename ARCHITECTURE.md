@@ -195,8 +195,9 @@ Firestore at `users/{uid}` with owner and field/value validation rules. Avatar
 Storage rules restrict `users/{uid}/avatar` to its owner and enforce accepted
 image types and the 2 MiB upload limit. These browser SDK modules are not a
 Next.js server-side DAL. The local `data.ts` filename describes persistence;
-it does not establish a server boundary. `profile-action.ts` is a client Action;
-`actions.ts` is reserved by repository guards for Server Actions
+it does not establish a server boundary. The profile's `actions.ts` declares
+`"use client"` and contains client Actions. Server Functions require `"use server"`,
+and the authorization guard checks that directive rather than the filename
 ([Fetching Data](https://nextjs.org/docs/app/getting-started/fetching-data),
 [Mutating Data](https://nextjs.org/docs/app/getting-started/mutating-data),
 [Data Security](https://nextjs.org/docs/app/guides/data-security)). See

@@ -1,3 +1,5 @@
+"use client";
+
 import type { User } from "firebase/auth";
 import { withUsageGuard } from "@/lib/firebase/usage";
 import { saveProfile } from "./data";
