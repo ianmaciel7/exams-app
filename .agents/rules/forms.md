@@ -48,7 +48,9 @@ These are project conventions aligned with the current shadcn/ui and React Hook 
   with `use()` on the read cached in `_lib/profile-resource.ts`, so
   `profile/loading.tsx` renders the pending state and a rejection reaches
   `profile/error.tsx`. Its retry evicts the failed read before calling
-  `retry()`. Components render only loaded data; there is no status guard.
+  `retry()`. A 15-second deadline terminates stalled reads and a locale refresh
+  no longer deliberately pins the screen to a never-settling Promise.
+  Components render only loaded data; there is no status guard.
 - `useProfileController` is removed. `useProfileFormClient` reads
   `useProfile`, and `ProfileFormClient` shares it through
   `ProfileContext`; it does not assemble field or button props.
