@@ -2,34 +2,34 @@
 
 import type { PropsWithChildren } from "react";
 import { LoadingStatus } from "@/components/ui/extensions/loading-status";
-import { useAuthGateClient } from "../_hooks/use-auth-gate-client";
-import { AuthGate, AuthGateError } from "./auth-gate";
+import { useAuthGuardClient } from "../_hooks/use-auth-guard-client";
+import { AuthGuard, AuthGuardError } from "./auth-guard";
 
-type AuthGateClientProps = PropsWithChildren;
+type AuthGuardClientProps = PropsWithChildren;
 
 /**
  * Presentation boundary for protected routes, not authorization: it owns the
  * session subscription and the sign-in redirect for its subtree. The uid key
  * remounts that subtree, so no state survives an account switch.
  */
-function AuthGateClient({ children }: AuthGateClientProps) {
+function AuthGuardClient({ children }: AuthGuardClientProps) {
   const { errorMessage, isError, onRetry, retryLabel, user } =
-    useAuthGateClient();
+    useAuthGuardClient();
 
   if (isError)
     return (
-      <AuthGate>
-        <AuthGateError
+      <AuthGuard>
+        <AuthGuardError
           message={errorMessage}
           onRetry={onRetry}
           retryLabel={retryLabel}
         />
-      </AuthGate>
+      </AuthGuard>
     );
 
   if (!user) return <LoadingStatus />;
 
-  return <AuthGate key={user.uid}>{children}</AuthGate>;
+  return <AuthGuard key={user.uid}>{children}</AuthGuard>;
 }
 
-export { AuthGateClient };
+export { AuthGuardClient };
