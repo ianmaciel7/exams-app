@@ -47,4 +47,4 @@ exports instead of static properties on the root function.
 
 ## UI companion composition
 
-Integration modules (`*-client.tsx` / `*-server.tsx`) must compose their companion UI presentation component (without suffix, e.g. `HomeClient` composes `Home`). Presentation compound parts belong to the presentation UI family without suffixes (`HomeContent`, `HomeLogo`, `HomeHeading`, `HomeFooter`), while the integration boundary orchestrates state, hooks, and actions.
+Integration modules (`*-client.tsx` / `*-server.tsx`) must compose their companion UI presentation component (without suffix, e.g. `HomeSection` composes `Home`). Presentation compound parts belong to the presentation UI family without suffixes (`HomeContent`, `HomeLogo`, `HomeHeading`, `HomeFooter`), while the integration boundary orchestrates state, hooks, and actions.

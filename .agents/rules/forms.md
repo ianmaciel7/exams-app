@@ -29,10 +29,13 @@ These are project conventions aligned with the current shadcn/ui and React Hook 
 - Avatar file selection and preview remain a separate field, since `File` / `FileList` need application-level lifecycle handling.
 - The profile follows native shadcn/ui composition: `ProfileCard` is a
   thin `Card` adapter forwarding primitive props and children, without
-  loading data. `ProfileSectionClient` composes `ProfileCard` with
-  `ProfileFormClient`, Card header/content/footer, and Form content/footer.
-  `ProfileFormClientContent` provides one `FieldGroup` with the avatar,
-  display name, email, locale, and theme fields as direct children.
+  loading data. The route's `page.tsx` composes `ProfileCard` with
+  `ProfileFormClient` and the Card header (`ProfileCardHeader` with
+  `ProfileCardTitle` and `ProfileCardDescription`), content, and footer
+  directly; there is no separate heading component.
+  `ProfileCardContent` wraps its children in one `FieldGroup`, so the
+  avatar, display name, email, locale, and theme fields are its direct
+  children.
   `ProfileFormClient` owns `FormProvider` and one native `<form>`;
   the form uses `--card-spacing` to preserve the Card layout.
 - UI primitives already provided by shadcn/ui (`FieldGroup`, `FieldSet`, `FieldLegend`) are preferable to splitting basic fields into arbitrary grouping components without a semantic responsibility.
@@ -41,12 +44,14 @@ These are project conventions aligned with the current shadcn/ui and React Hook 
 
 ## Profile behavior ownership
 
-- `useProfileStatus` returns `isLoading`, `isHidden`, and `isError` flags,
-  plus resolved `message` and `userId` payloads. The section renders the
-  applicable branch from these flags without completing error messages itself.
-- `useProfileController` is removed. `ProfileSectionClient` uses
-  `useProfileSectionClient` to compose session and status hooks with
-  translations; it does not assemble field or button props.
+- The profile segment owns load states: `useProfilePreferences` suspends
+  with `use()` on the read cached in `_lib/profile-resource.ts`, so
+  `profile/loading.tsx` renders the pending state and a rejection reaches
+  `profile/error.tsx`. Its retry evicts the failed read before calling
+  `retry()`. Components render only loaded data; there is no status guard.
+- `useProfileController` is removed. `useProfileFormClient` reads
+  `useProfile`, and `ProfileFormClient` shares it through
+  `ProfileContext`; it does not assemble field or button props.
 - `ProfileFormClient` delegates its React Hook Form lifecycle to
   `useProfileFormClient`, which calls `useProfileSubmit` for persistence.
   Read `formState.isSubmitting` instead of keeping a second saving flag;
@@ -56,26 +61,25 @@ These are project conventions aligned with the current shadcn/ui and React Hook 
   `saveProfile` accepts typed `ProfileDependencies` with default Firebase
   adapters to test persistence without production services.
 - `ProfileAvatarFieldClient` uses `useProfileAvatarFieldClient` for field state and avatar display data, with `useProfileAvatar` handling validation and preview. Only the selected `File` lives in React Hook Form so submission can upload it; preview URLs are released on replacement, successful reset and unmount. Failed saves retain the selection for retry.
-- `ProfileFormClientContent` and `ProfileFormClientFooter` are colocated
-  exports in `profile-form-client.tsx`; AST safety checks inspect each
-  function independently. The content owns the **one** `FieldGroup`:
-  do not wrap the individual profile fields in another `FieldGroup`.
+- `ProfileCardContent` owns the **one** `FieldGroup`: do not wrap the
+  individual profile fields in another `FieldGroup` in `page.tsx`.
 
 ## Profile form action safety (repository guard)
 
 - `ProfileCard` renders one native shadcn `Card` as its sole root and
-  forwards children and applicable primitive props. `ProfileSectionClient`
-  composes its header, content, and footer, renders the discriminated status,
-  and shares loaded session data through `ProfileSessionContext`.
+  forwards children and applicable primitive props. `profile/page.tsx`
+  composes the Card header, content, and footer; `ProfileFormClient`
+  shares loaded profile data through `ProfileContext`.
   `ProfileFormClient` owns the only HTML `<form>` inside the Card under
   `FormProvider`; do not render a second Card.
 - `ProfileCardHeader`, `ProfileCardTitle`, `ProfileCardDescription`,
   `ProfileCardContent`, and `ProfileCardFooter` share
   `profile-card.tsx` and forward their native primitive props.
-  `ProfileCardContent` owns `CardContent`; `ProfileFormClientContent`
-  owns the **only** `FieldGroup`. `ProfileCardFooter` owns the one
-  native `CardFooter`; `ProfileFormClientFooter` owns only the action
-  layout. Both are inside the same native form from `ProfileFormClient`.
+  `ProfileCardContent` owns `CardContent` and the **only** `FieldGroup`
+  directly inside it. `ProfileCardFooter` owns the one native
+  `CardFooter`. Both are inside the same native form from
+  `ProfileFormClient`, and the Card title and description sit inside
+  `ProfileCardHeader` on the page.
 - `ProfileSaveButton` is the only form action and must force `type="submit"`.
 - Spread caller attributes **before** fixed `type` and computed `disabled`, so even if a caller supplies a conflicting `type` the component enforces its intended action. A late `...props` may silently override both safeguards. The separate AST guard also disallows explicit `type` overrides at profile call sites.
 - `pnpm check:components` enforces these concrete profile invariants through TypeScript AST tests. This is a **UI action-safety guard**, not a substitute for Firebase security rules, authorization or server-side validation.
@@ -100,7 +104,7 @@ The profile components were compared with all maintained UI component modules un
 - Preserve native slots: `ProfileCard`, `ProfileCardHeader`,
   `ProfileCardTitle`, `ProfileCardDescription`, `ProfileCardContent`,
   and `ProfileCardFooter` are exported together from
-  `profile-card.tsx`. `ProfileSectionClient` composes the content;
+  `profile-card.tsx`. `profile/page.tsx` composes the content;
   `ProfileFormClient` adds `data-slot="profile-form"` and uses
   `gap-(--card-spacing)` for spacing.
 - Follow `ComponentProps<typeof Primitive>`, native children, `cn()` overrides and named exports for component adapters.

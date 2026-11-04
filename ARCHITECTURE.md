@@ -75,7 +75,7 @@ files, and `public/` remain at the repository root, as required by the Next.js
 
 ## Authentication navigation
 
-When an unauthenticated user requests a protected route, the client auth gate redirects to `/sign-in?next=<encoded-path-and-query>`. Only `AuthGateClient` (`src/app/(protected)/_hooks/use-auth-gate-client.ts`) and the server session check in `src/app/(protected)/_lib/` send a signed-out visitor to sign-in. Pages and hooks inside `(protected)` read the session from context via `useAuthenticatedUser` and do not subscribe or redirect: Firebase notifies observers in subscription order, so a descendant redirect would drop the `?next=` destination. The ast-grep rules `no-protected-descendant-sign-in-redirect-ts` and `-tsx` enforce this. Once authenticated, the public authentication provider sends the user to that destination, or the home page if no valid destination was supplied. The return URL validator accepts only application-relative paths and rejects external URLs and authentication-screen loops; query strings are preserved. Route protection in the UI is not a substitute for Firebase Security Rules or authorization at the data source.
+When an unauthenticated user requests a protected route, the client auth gate redirects to `/sign-in?next=<encoded-path-and-query>`. Only `AuthGateClient` (`src/app/(protected)/_hooks/use-auth-gate-client.ts`) and the server session check in `src/app/(protected)/_lib/` send a signed-out visitor to sign-in. Pages and hooks inside `(protected)` read the session via `useAuthenticatedUser` and do not subscribe or redirect: Firebase notifies observers in subscription order, so a descendant redirect would drop the `?next=` destination. The ast-grep rules `no-protected-descendant-sign-in-redirect-ts` and `-tsx` enforce this. Once authenticated, the public authentication provider sends the user to that destination, or the home page if no valid destination was supplied. The return URL validator accepts only application-relative paths and rejects external URLs and authentication-screen loops; query strings are preserved. Route protection in the UI is not a substitute for Firebase Security Rules or authorization at the data source.
 
 ## Test boundaries
 
@@ -181,10 +181,11 @@ the load and save workflows; `readProfile`, `readUserPreferences`,
 `src/app/(protected)/profile/_lib/data.ts` handle Firestore/Storage/Auth
 persistence and inject typed Firebase adapters for independent tests.
 `useProfileFormClient` owns the React Hook Form lifecycle and uses the
-native submitting state. `useProfileSectionClient` composes session,
-status, and translation hooks; `ProfileSectionClient` renders a
-discriminated `status` and composes Card and Form parts with one
-`FieldGroup`. Profile value types live in
+native submitting state and shares the loaded profile through
+`ProfileContext`. The route's `page.tsx` composes Card and Form
+parts, including the Card header; `ProfileCardContent` renders the one
+`FieldGroup`. The segment's `loading.tsx` and `error.tsx`
+cover the suspended read and its failure. Profile value types live in
 `src/app/(protected)/profile/_lib/definitions.ts`, alongside the route-private profile
 workflow. The canonical profile
 responsibilities live in
