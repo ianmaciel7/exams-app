@@ -70,12 +70,12 @@ files, and `public/` remain at the repository root, as required by the Next.js
     `/forgot-password`) under a shared layout and redirects authenticated visitors
     to `/profile`.
   - `(protected)` isolates authenticated routes (e.g. `/profile`) behind
-    `AuthGuardClient`, which observes `onAuthStateChanged` and redirects
-    unauthenticated visitors to `/sign-in`.
+    the server Data Access Layer (DAL) in `layout.tsx`, which verifies the session
+    cookie and redirects unauthenticated visitors to `/sign-in`.
 
 ## Authentication navigation
 
-When an unauthenticated user requests a protected route, the client auth guard redirects to `/sign-in?next=<encoded-path-and-query>`. Only `AuthGuardClient` (`src/app/(protected)/_hooks/use-auth-guard-client.ts`) and the server session check in `src/app/(protected)/_lib/` send a signed-out visitor to sign-in. Pages and hooks inside `(protected)` read the session via `useSession` and do not subscribe or redirect: Firebase notifies observers in subscription order, so a descendant redirect would drop the `?next=` destination. The ast-grep rules `no-protected-descendant-sign-in-redirect-ts` and `-tsx` enforce this. Once authenticated, the public authentication provider sends the user to that destination, or the home page if no valid destination was supplied. The return URL validator accepts only application-relative paths and rejects external URLs and authentication-screen loops; query strings are preserved. Route protection in the UI is not a substitute for Firebase Security Rules or authorization at the data source.
+When an unauthenticated user requests a protected route, the server Data Access Layer (DAL) redirects to `/sign-in?next=<encoded-path-and-query>`. Only the server session check in `src/app/(protected)/_lib/dal.ts` sends a signed-out visitor to sign-in. Pages and hooks inside `(protected)` read the session via `useSession` and do not redirect: Firebase notifies observers in subscription order, so a descendant redirect would drop the `?next=` destination. The ast-grep rules `no-protected-descendant-sign-in-redirect-ts` and `-tsx` enforce this. Once authenticated, the public authentication provider sends the user to that destination, or the home page if no valid destination was supplied. The return URL validator accepts only application-relative paths and rejects external URLs and authentication-screen loops; query strings are preserved. Route protection in the UI is not a substitute for Firebase Security Rules or authorization at the data source.
 
 ## Test boundaries
 
@@ -175,15 +175,16 @@ The security and HTTP header modules also remain flat under `src/lib`:
 and `csp.ts` (pure Content Security Policy directive builder); consumers should
 import them as `@/lib/headers` and `@/lib/csp`.
 Firebase Web SDK initialization lives in `src/lib/firebase/client.ts`. The
-profile route's `ProfileClient` loads data before mounting `ProfileForm`;
+profile route's `ProfileCardClient` loads data before mounting `ProfileForm`;
 `createProfileAction` coordinates saves. `readProfile`, `readUserPreferences`,
 `writeUserPreferences`, and `saveProfile` in
 `src/app/(protected)/profile/_lib/data.ts` handle Firestore/Storage/Auth
 persistence and inject typed Firebase adapters for independent tests.
-`useProfileClient` owns the read lifecycle, timeout and initial preferences;
+`useProfileCardClient` owns the read lifecycle, timeout and initial preferences;
 abandoned reads cannot change the UI. `useProfileForm` owns the form Action
-(`useActionState`) and composes `useSession`; `ProfileForm` renders its fields
-inline (ADR 0019). `page.tsx` resolves headings and renders `ProfileClient`, which
+(`useActionState`), composes `useSession`, and delegates avatar draft handling to
+`useProfileAvatarDraft` and feedback to `useProfileSaveFeedback`; `ProfileForm` renders its fields
+inline (ADR 0019). `page.tsx` resolves headings and renders `ProfileCardClient`, which
 renders the loaded Card and form. The client loading state uses `LoadingStatus`;
 `loading.tsx` covers server rendering and `error.tsx` handles read failures.
 `dto.ts` maps form submissions. Profile value types and field names live in
@@ -283,7 +284,7 @@ Ladle pipeline.
 
 Browser Firebase subscriptions stay in focused hooks behind the existing
 component-named orchestration seams. The loaded profile form uses a React client
-Action, and `ProfileClient` owns its browser read lifecycle. Avatar object
+Action, and `ProfileCardClient` owns its browser read lifecycle. Avatar object
 URLs are created in an Effect with replacement/unmount cleanup. The viewport
 hook uses `useSyncExternalStore` with a matching initial server/hydration
 snapshot. These are external-system contracts, not redundant derived state.
@@ -321,7 +322,7 @@ and [the integration convention](CODING_STANDARDS.md#integration-filename-conven
 
 ## Usage records
 
-`useAuthGuardClient` calls `recordUsage` once per signed-in user and pathname
+`RouteUsageBridgeClient` calls `recordUsage` once per signed-in user and pathname
 without delaying protected content. Profile saves call `withUsageGuard` before starting the operation.
 The Firebase callable validates authentication and an allowlist of screen and
 functionality names, then emits structured `INFO` entries using the native

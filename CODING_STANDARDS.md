@@ -698,8 +698,9 @@ of code. For example, `usePublicGuardClient` composes `useAuthUiStore`,
 subscribe to authentication and synchronize locale inside one monolithic Effect.
 `ProfileCardClient` delegates the browser read lifecycle to `useProfileCardClient` and
 mounts `ProfileForm` only with loaded values. `ProfileForm` renders its fields
-inline and delegates its Action and picked avatar to `useProfileForm`, which
-delegates successful UI feedback to `useProfileSaveFeedback` (ADR 0019).
+inline and delegates its Action, avatar draft, and feedback to `useProfileForm`, which
+composes `useProfileAvatarDraft` for draft lifecycle handling and
+`useProfileSaveFeedback` for UI feedback (ADRs 0018 and 0019).
 Pure transformations, constants and subscription support functions remain in the
 route's `_lib`, following the hook support placement contract.
 
@@ -757,7 +758,13 @@ conditions and loops, but still belongs inside a component or hook and cannot
 be wrapped in a local `try/catch`. Preserve the stricter route-entrypoint and
 component orchestration policies where they apply.
 
-Calculate derived state during render when possible. Put work caused by a user
+Calculate derived state during render when possible. For transient user drafts
+between Action dispatches (such as an avatar file picked before form submission),
+prefer pure state derivation storing `{ baseState, file }` over calling `setState`
+during render (the "adjusting state during render" pattern) or synchronizing through
+an Effect. Pure derivation executes in a single render cycle, avoids render abort/restart
+cycles, and eliminates infinite loop hazards from unstable object references.
+Put work caused by a user
 action in that action's handler. Use an Effect to synchronize with an external
 system: Firebase subscriptions, browser listeners, and the current avatar
 preview lifecycle are legitimate examples. A custom hook encapsulates this

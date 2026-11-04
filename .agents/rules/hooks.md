@@ -18,7 +18,7 @@ Owned components keep rendering, translations, primitive prop forwarding and sim
 - Expose explicit session flags (`isLoading`, `isHidden`, `isError`) and an
   already resolved error message. Components render the applicable flag rather
   than deriving readiness from user, authentication and preferences flags.
-- Keep responsibilities local: `useProfileClient` owns the browser read;
+- Keep responsibilities local: `useProfileCardClient` owns the browser read;
   `useProfileForm` owns the form Action (`useActionState`), using its pending
   value rather than a parallel saving flag; `useProfileAvatarFieldClient`
   handles avatar field data. Do not mirror derived state in additional
@@ -97,8 +97,9 @@ Splitting pattern for a hook that mixes concerns:
 - Each effect with its own lifecycle gets its own `useX` hook: the avatar
   preview object URL (`useProfileAvatarPreview`) and the hidden file input
   (`useProfileAvatarInput`) are separate from the form binding in
-  `useProfileAvatarFieldClient`. In `useAuthGuardClient`, redirecting and
-  usage recording are separate hooks.
+  `useProfileAvatarFieldClient`. In `useProfileForm`, avatar draft selection
+  across Action dispatches is delegated to `useProfileAvatarDraft`, using pure
+  state derivation (`{ baseState, file }`) rather than render-phase state adjustments.
 - Module-level hooks in a `_hooks` file are allowed when they are `useX`
   declarations; do not introduce a component when the hook split already keeps
   the component free of behavior.
