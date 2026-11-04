@@ -1,26 +1,25 @@
 import { useTranslations } from "next-intl";
-import { useFormContext, useWatch } from "react-hook-form";
+import { useFormStatus } from "react-dom";
 import { useSession } from "@/hooks/use-session";
 import { getAvatarSource } from "../_lib/avatar";
-import type { ProfileFormValues } from "../_lib/definitions";
 import { useProfileAvatar } from "./use-profile-avatar";
+import { useProfileFormContext } from "./use-profile-form-context";
 
 export function useProfileAvatarFieldClient() {
   const t = useTranslations("Auth");
   const { user } = useSession();
-  const { control, setValue, formState } = useFormContext<ProfileFormValues>();
-  const avatarFile = useWatch({ control, name: "avatarFile" });
+  const { avatar, submission } = useProfileFormContext();
+  const { pending } = useFormStatus();
   const { avatarPreview, fileInputRef, handleAvatarChange } = useProfileAvatar(
-    avatarFile,
-    (file) => setValue("avatarFile", file, { shouldDirty: true }),
+    avatar.file,
+    avatar.pick,
   );
   const displayName = user?.displayName ?? null;
   const email = user?.email ?? null;
-  const disabled = formState.disabled || formState.isSubmitting;
   const avatarSrc = getAvatarSource(
     avatarPreview,
     user?.photoURL ?? null,
-    formState.submitCount,
+    submission.savedCount,
   );
   const fallbackInitial = (
     displayName?.charAt(0) ||
@@ -31,7 +30,7 @@ export function useProfileAvatarFieldClient() {
   const avatarAlt = displayName ?? t("profileTitle");
   return {
     t,
-    disabled,
+    disabled: pending,
     avatarSrc,
     avatarAlt,
     fallbackInitial,

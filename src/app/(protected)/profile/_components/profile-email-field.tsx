@@ -2,47 +2,38 @@
 
 import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
-import { Controller, useFormContext } from "react-hook-form";
 import {
   FormField,
   FormFieldError,
   FormFieldLabel,
 } from "@/components/ui/extensions/form-field";
 import { Input } from "@/components/ui/input";
-import type { ProfileValues } from "../_lib/definitions";
+import { useProfileFormContext } from "../_hooks/use-profile-form-context";
+import { profileFieldNames } from "../_lib/form-data";
 
 type ProfileEmailFieldProps = ComponentProps<typeof FormField>;
 
 function ProfileEmailField(props: ProfileEmailFieldProps) {
   const t = useTranslations("Auth");
-  const { control } = useFormContext<ProfileValues>();
+  const { submission } = useProfileFormContext();
 
   return (
-    <Controller
-      name="email"
-      control={control}
-      render={({ field }) => (
-        <FormField {...props} name={field.name}>
-          <FormFieldLabel>{t("emailLabel")}</FormFieldLabel>
-          <Input
-            {...field}
-            type="email"
-            inputMode="email"
-            autoComplete="email"
-            autoCapitalize="none"
-            spellCheck={false}
-            required
-            maxLength={254}
-          />
-          <FormFieldError match="valueMissing">
-            {t("emailRequired")}
-          </FormFieldError>
-          <FormFieldError match="typeMismatch">
-            {t("emailInvalid")}
-          </FormFieldError>
-        </FormField>
-      )}
-    />
+    <FormField {...props} name={profileFieldNames.email}>
+      <FormFieldLabel>{t("emailLabel")}</FormFieldLabel>
+      <Input
+        name={profileFieldNames.email}
+        defaultValue={submission.values.email}
+        type="email"
+        inputMode="email"
+        autoComplete="email"
+        autoCapitalize="none"
+        spellCheck={false}
+        required
+        maxLength={254}
+      />
+      <FormFieldError match="valueMissing">{t("emailRequired")}</FormFieldError>
+      <FormFieldError match="typeMismatch">{t("emailInvalid")}</FormFieldError>
+    </FormField>
   );
 }
 

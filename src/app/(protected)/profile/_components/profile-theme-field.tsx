@@ -2,7 +2,6 @@
 
 import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
-import { Controller, useFormContext } from "react-hook-form";
 import {
   FormField,
   FormFieldLabel,
@@ -16,51 +15,42 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { isThemePreference, themePreferences } from "@/lib/theme";
-import type { ProfileValues } from "../_lib/definitions";
+import { useProfileFormContext } from "../_hooks/use-profile-form-context";
+import { profileFieldNames } from "../_lib/form-data";
 
 type ProfileThemeFieldProps = ComponentProps<typeof FormField>;
 
 function ProfileThemeField(props: ProfileThemeFieldProps) {
   const t = useTranslations("Auth");
-  const { control } = useFormContext<ProfileValues>();
+  const { submission } = useProfileFormContext();
+  const current = submission.values.theme;
 
   return (
-    <Controller
-      name="theme"
-      control={control}
-      render={({ field }) => (
-        <FormField {...props} name={field.name}>
-          <FormFieldLabel>{t("themeLabel")}</FormFieldLabel>
-          <Select
-            name={field.name}
-            value={field.value}
-            disabled={field.disabled}
-            onValueChange={(value) => {
-              if (isThemePreference(value)) field.onChange(value);
-            }}
-          >
-            <SelectTrigger className="w-full" onBlur={field.onBlur}>
-              <SelectValue>
-                {(value) =>
-                  isThemePreference(value)
-                    ? t(`themeOptions.${value}`)
-                    : undefined
-                }
-              </SelectValue>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                {themePreferences.map((option) => (
-                  <SelectItem key={option} value={option}>
-                    {t(`themeOptions.${option}`)}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </FormField>
-      )}
-    />
+    <FormField {...props} name={profileFieldNames.theme}>
+      <FormFieldLabel>{t("themeLabel")}</FormFieldLabel>
+      <Select
+        key={current}
+        name={profileFieldNames.theme}
+        defaultValue={current}
+      >
+        <SelectTrigger className="w-full">
+          <SelectValue>
+            {(value) =>
+              isThemePreference(value) ? t(`themeOptions.${value}`) : undefined
+            }
+          </SelectValue>
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            {themePreferences.map((option) => (
+              <SelectItem key={option} value={option}>
+                {t(`themeOptions.${option}`)}
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+    </FormField>
   );
 }
 

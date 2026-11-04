@@ -2,7 +2,6 @@
 
 import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
-import { Controller, useFormContext } from "react-hook-form";
 import {
   FormField,
   FormFieldLabel,
@@ -16,49 +15,42 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { isLocale, locales } from "@/i18n/routing";
-import type { ProfileValues } from "../_lib/definitions";
+import { useProfileFormContext } from "../_hooks/use-profile-form-context";
+import { profileFieldNames } from "../_lib/form-data";
 
 type ProfileLocaleFieldProps = ComponentProps<typeof FormField>;
 
 function ProfileLocaleField(props: ProfileLocaleFieldProps) {
   const t = useTranslations("Auth");
-  const { control } = useFormContext<ProfileValues>();
+  const { submission } = useProfileFormContext();
+  const current = submission.values.locale;
 
   return (
-    <Controller
-      name="locale"
-      control={control}
-      render={({ field }) => (
-        <FormField {...props} name={field.name}>
-          <FormFieldLabel>{t("languageLabel")}</FormFieldLabel>
-          <Select
-            name={field.name}
-            value={field.value}
-            disabled={field.disabled}
-            onValueChange={(value) => {
-              if (isLocale(value)) field.onChange(value);
-            }}
-          >
-            <SelectTrigger className="w-full" onBlur={field.onBlur}>
-              <SelectValue>
-                {(value) =>
-                  isLocale(value) ? t(`languageOptions.${value}`) : undefined
-                }
-              </SelectValue>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                {locales.map((option) => (
-                  <SelectItem key={option} value={option}>
-                    {t(`languageOptions.${option}`)}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </FormField>
-      )}
-    />
+    <FormField {...props} name={profileFieldNames.locale}>
+      <FormFieldLabel>{t("languageLabel")}</FormFieldLabel>
+      <Select
+        key={current}
+        name={profileFieldNames.locale}
+        defaultValue={current}
+      >
+        <SelectTrigger className="w-full">
+          <SelectValue>
+            {(value) =>
+              isLocale(value) ? t(`languageOptions.${value}`) : undefined
+            }
+          </SelectValue>
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            {locales.map((option) => (
+              <SelectItem key={option} value={option}>
+                {t(`languageOptions.${option}`)}
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+    </FormField>
   );
 }
 

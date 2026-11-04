@@ -15,6 +15,20 @@ export type ProfileValues = {
 
 export type ProfileFormValues = ProfileValues & { avatarFile: File | null };
 
+/**
+ * Result of the profile form Action (`useActionState`). `values` is what the
+ * fields show next: the saved values, or the submitted ones after a failure so
+ * React's post-Action form reset does not discard the user's input.
+ * `avatarFile` is the pending upload kept across a failed save.
+ */
+export type ProfileActionState = {
+  values: ProfileValues;
+  avatarFile: File | null;
+  error: string | null;
+  /** Number of saved submissions; busts the cached avatar image. */
+  savedCount: number;
+};
+
 export type SavedProfile = {
   values: ProfileValues;
   photoURL: string | null;

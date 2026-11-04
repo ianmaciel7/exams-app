@@ -17,27 +17,13 @@ These are project conventions aligned with the current shadcn/ui and React Hook 
 
 ## Compound forms
 
-- A composite form with nested field components (as with `ProfileFormClient`) uses exactly one `useForm` instance, wraps its content in `FormProvider {...form}`, and submits through `form.handleSubmit(onSubmit)`.
-- Child fields access `control` with `useFormContext<ProfileValues>()`; they compose `FormField`, `FormFieldLabel`, `Input` / `Select`, and `FormFieldError` (Base UI Field, from `ui/extensions/form-field`) with React Hook Form `Controller`; `ProfileFormClient` renders the Base UI `Form`.
-- Match each independently named `*-field.tsx` to its literal React Hook Form `Controller name`. For example `name="displayName"` is implemented by `ProfileDisplayNameField`, while the label may simply read "Name".
-- A reusable form can accept strongly typed `UseFormProps<Values>`, but
-  never pass DOM attributes or `onSubmit` into `useForm`: they are not
-  `UseFormProps` options. The current `ProfileFormClient` receives only
-  DOM form props, while `useProfileFormClient` owns `useForm` options and
-  the submit callback.
-- A screen/controller owns asynchronous data loading; only mount a form with prepared defaults or deliberately use RHF `values` / `reset` to synchronize subsequent changes. After successful client Firebase mutations, reset the form to the persisted values without clobbering unsaved edits.
-- Avatar file selection and preview remain a separate field, since `File` / `FileList` need application-level lifecycle handling.
-- The profile follows native shadcn/ui composition: `ProfileCard` is a
-  thin `Card` adapter forwarding primitive props and children, without
-  loading data. The route's `page.tsx` composes `ProfileCard` with
-  `ProfileFormClient` and the Card header (`ProfileCardHeader` with
-  `ProfileCardTitle` and `ProfileCardDescription`), content, and footer
-  directly; there is no separate heading component.
-  `ProfileCardContent` wraps its children in one `FieldGroup`, so the
-  avatar, display name, email, locale, and theme fields are its direct
-  children.
-  `ProfileFormClient` owns `FormProvider` and one native `<form>`;
-  the form uses `--card-spacing` to preserve the Card layout.
+- The profile form submits through a React form Action: `ProfileFormClient` renders one Base UI `Form` with `action={formAction}` from `useActionState` (in `useProfileFormClient`), not React Hook Form. Do not add `FormProvider`, `useForm` or `onSubmit` to it; `pnpm check:components` rejects `FormProvider` there. The Action is a client function because every write is a browser Firebase SDK call (see CODING_STANDARDS "Form and Field Architecture").
+- The Action has the `(prevState, formData)` signature and returns `ProfileActionState` (`values`, pending `avatarFile`, `error`). It parses `FormData` in `_lib/form-data.ts`, which is the only place that reads field names, and falls back to the previous value for anything unknown.
+- Fields are uncontrolled: `name` (from `profileFieldNames`) plus `defaultValue` from `submission.values` in `ProfileFormContext`. React resets the form after an Action, so a failed save returns the submitted values; a `Select` uses `key` on its value so it picks up the new default.
+- Fields read pending state with `useFormStatus()` (only valid in a component rendered inside the form), never a second saving flag.
+- A reusable form that is not profile-like may still use React Hook Form (the Firebase UI auth forms do) with one `useForm`, `FormProvider` and `form.handleSubmit`; `require-form-provider` guards those.
+- A screen/controller owns asynchronous data loading; only mount a form with prepared defaults. The Action's state seeds from the loaded profile.
+- Avatar file selection and preview remain a separate field, since `File` / `FileList` need application-level lifecycle handling. The picked file is added to the `FormData` in `formAction`, because the browser clears the file input when React resets the form.
 - UI primitives already provided by shadcn/ui (`FieldGroup`, `FieldSet`, `FieldLegend`) are preferable to splitting basic fields into arbitrary grouping components without a semantic responsibility.
 - `InputGroup` requires `InputGroupInput` or `InputGroupTextarea`, never raw `Input` or `Textarea`. Interactive buttons or text inside inputs use `InputGroupAddon`.
 - Option sets containing 2 to 7 choices use `ToggleGroup` + `ToggleGroupItem` rather than multiple `Button` elements with manual active state.
@@ -53,16 +39,18 @@ These are project conventions aligned with the current shadcn/ui and React Hook 
   Components render only loaded data; there is no status guard.
 - `useProfileController` and `useProfile` are removed. `useProfileFormClient`
   reads session directly via `useSession()` and `useProfilePreferences()`;
-  it does not assemble field or button props.
-- `ProfileFormClient` delegates its React Hook Form lifecycle to
-  `useProfileFormClient`, which calls `useProfileSubmit` for persistence.
-  Read `formState.isSubmitting` instead of keeping a second saving flag;
+  it does not assemble field or button props. User identity always comes from
+  `useSession()`; `ProfileFormContext` carries only the form Action state
+  (see ADR 0015).
+- `ProfileFormClient` delegates its Action lifecycle to
+  `useProfileFormClient`, which calls `useProfileAction` for persistence.
+  Read `useFormStatus().pending` instead of keeping a second saving flag;
   `ProfileValues` and `ProfileFormValues` live in
   `src/app/(protected)/profile/_lib/definitions.ts`; persistence lives in the sibling
   `data.ts` module.
   `saveProfile` accepts typed `ProfileDependencies` with default Firebase
   adapters to test persistence without production services.
-- `ProfileAvatarFieldClient` uses `useProfileAvatarFieldClient` for field state and avatar display data, with `useProfileAvatar` handling validation and preview. Only the selected `File` lives in React Hook Form so submission can upload it; preview URLs are released on replacement, successful reset and unmount. Failed saves retain the selection for retry.
+- `ProfileAvatarFieldClient` uses `useProfileAvatarFieldClient` for field state and avatar display data, with `useProfileAvatar` handling validation and preview. Only the picked `File` lives in `useProfileFormClient` state (and in the Action result after a failure) so submission can upload it; preview URLs are released on replacement, successful reset and unmount. Failed saves retain the selection for retry.
 - `ProfileCardContent` owns the **one** `FieldGroup`: do not wrap the
   individual profile fields in another `FieldGroup` in `page.tsx`.
 
@@ -72,7 +60,7 @@ These are project conventions aligned with the current shadcn/ui and React Hook 
   forwards children and applicable primitive props. `profile/page.tsx`
   composes the Card header, content, and footer.
   `ProfileFormClient` owns the only HTML `<form>` inside the Card under
-  `FormProvider`; do not render a second Card.
+  the profile context; do not render a second Card.
 - `ProfileCardHeader`, `ProfileCardTitle`, `ProfileCardDescription`,
   `ProfileCardContent`, and `ProfileCardFooter` share
   `profile-card.tsx` and forward their native primitive props.
@@ -122,9 +110,9 @@ footer is directly in Card footer. Action buttons are direct Form footer
 children. Additional wrappers at these boundaries fail the guard because
 they change the intended slot layout.
 
-## React Form Actions are not a migration
+## React Form Actions
 
-Preserve the React Hook Form and Firebase profile architecture. Upstream React `<form action>` examples are explanatory, not a request to migrate. Preserve controlled and React Hook Form-owned values when using `requestFormReset`.
+The profile uses React `<form action>` with `useActionState` and `useFormStatus` (Ian, 2026-11-04: the React Hook Form `handleSubmit` plus a `useProfileSubmit` hook was not the Next.js recommended structure). Client Actions are the pattern for Firebase-SDK mutations; Server Actions are for server mutations only. The Firebase UI auth forms still use React Hook Form and migrate separately.
 
 ## Official references
 

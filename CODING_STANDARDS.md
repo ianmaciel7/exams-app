@@ -71,12 +71,13 @@ When standards conflict, apply them in this order:
   profile controller. Dependency injection is a design choice, not a rule
   to create an interface for every helper.
 - **Form Architecture and State Propagation**:
-  - Compound forms composed with field-component `children` use one
-    `useForm` and `<FormProvider {...form}>`; fields obtain `control`
-    with `useFormContext()`. `ProfileCardContent` already renders
+  - The profile form is a React form Action (`<Form action>` +
+    `useActionState`); its uncontrolled fields read their `defaultValue`
+    from the profile context, and `useFormStatus().pending` replaces a
+    separate saving flag. `ProfileCardContent` already renders
     one `FieldGroup`, so do not introduce a second group in the
-    profile `page.tsx`. Read native RHF `formState.isSubmitting`
-    rather than synchronizing a separate saving flag. The Provider
+    profile `page.tsx`. Other compound forms that still use React Hook
+    Form use one `useForm` and `<FormProvider {...form}>`; that Provider
     requirement is a repository convention, not universal shadcn/ui policy.
   - Name standalone field components after their React Hook Form data property (for example `ProfileDisplayNameField` for `Controller name="displayName"`). Prefer built-in `FieldGroup`/`FieldSet` over arbitrary wrapper components.
   - Allow React Hook Form `UseFormProps<Values>` as an appropriate form component contract. Extract `onSubmit` and component presentation props before passing only RHF options into `useForm`.
@@ -332,24 +333,37 @@ behavior/accessibility tests remain responsible for their respective contracts.
 #### Next.js form recommendations: what applies here
 
 The [Next.js forms guide](https://nextjs.org/docs/app/guides/forms) builds forms
-on Server Functions (`action={fn}`, `useActionState`, `useFormStatus`,
-validation with a schema on the server). That fits mutations that run on the
-server. Every form in this app writes through the browser Firebase SDK, which
-needs the signed-in client: sign-in, sign-up, password reset, email link, phone
-and SMS or TOTP second factors (reCAPTCHA and the reCAPTCHA verifier are browser
+on `<form action={fn}>`, `FormData`, `useActionState` and `useFormStatus`. In
+React 19 the Action does not have to be a Server Function: a client function
+works the same way, with the same `(prevState, formData)` signature, pending
+state and automatic form reset. The guide's Server Function part (`'use server'`,
+`verifySession()`, schema parsing on the server) is what does not apply here.
+Every mutation in this app writes through the browser Firebase SDK, which needs
+the signed-in client: sign-in, sign-up, password reset, email link, phone and
+SMS or TOTP second factors (reCAPTCHA and the reCAPTCHA verifier are browser
 only), and the profile (`updateProfile`, `verifyBeforeUpdateEmail`, Storage
 upload and Firestore writes are client calls checked by security rules). A
 Server Action would need the Admin SDK, would drop `verifyBeforeUpdateEmail`,
 and would move authorization from rules to code. So these forms stay client
 forms, and the guide's other points are met as follows:
 
-- Pending state: `formState.isSubmitting` drives the button and its spinner, and
-  the save button uses `focusableWhenDisabled`.
+- Profile form (the reference): `<Form action={formAction}>` where `formAction`
+  comes from `useActionState(submitProfile, initialState)`. `submitProfile`
+  (`use-profile-action.ts`) is a client Action that parses `FormData`
+  (`_lib/form-data.ts`), writes through Firebase and returns the next state
+  (`values`, pending `avatarFile`, `error`). Fields are uncontrolled inputs with
+  `name` and `defaultValue` from that state. After an Action React resets the
+  form, so a failed save returns the submitted values to keep the user's input.
+- Pending state: `useFormStatus().pending` in the submit button and the avatar
+  field (they sit inside the form), and the save button uses
+  `focusableWhenDisabled`. The Firebase UI auth forms still use
+  `formState.isSubmitting` from React Hook Form until they migrate.
 - Validation: HTML constraints (`required`, `type`, `maxLength`) through the
   Base UI Form, and the Firebase UI schemas for auth. Firestore and Storage
-  rules validate on the server (`tests/rules`).
+  rules validate on the server (`tests/rules`). Unknown `FormData` values fall
+  back to the previous ones instead of reaching the SDK.
 - Errors: `aria-describedby` and `aria-invalid` on the control, a focused first
-  invalid field, and `FormError` (`role="alert"`) for a failed submit.
+  invalid field, and a `role="alert"` message for a failed submit.
 - Server forms render nothing before hydration: the sign-in and profile forms
   are not in the server HTML, so no submit can fall back to a GET with the
   password in the query string.
@@ -675,7 +689,7 @@ of code. For example, `useAuthProviderClient` composes `useAuthUiStore`,
 `useFirebaseUiReturnNavigation` and `useAuthUiLocale`; it does not initialize Firebase,
 subscribe to authentication and synchronize locale inside one monolithic Effect.
 `useSession` delegates preference loading to `useProfilePreferences`, and
-`useProfileSubmit` delegates successful UI feedback to `useProfileSaveFeedback`.
+`useProfileAction` delegates successful UI feedback to `useProfileSaveFeedback`.
 Pure transformations, constants and subscription support functions remain in the
 route's `_lib`, following the hook support placement contract.
 
@@ -893,7 +907,7 @@ do not establish an integration. A filename without a suffix does not guarantee 
 can run on the server. Shared presentation is the subset compatible with both.
 
 Integrations may delegate their environment access to focused hooks/helpers;
-review those implementations. `ProfileFormClient` persists through `useProfileSubmit`,
+review those implementations. `ProfileFormClient` persists through `useProfileAction`,
 so it remains in `profile-form-client.tsx`. `ProfileEmailField` uses only form
 context and translations, so it lives in `profile-email-field.tsx` while keeping
 `"use client"`. `ProfileAvatarFieldClient` accesses browser object URLs through its
