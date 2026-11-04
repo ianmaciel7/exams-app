@@ -34,8 +34,8 @@ These are project conventions aligned with the current shadcn/ui and React Hook 
 
 - `ProfileClient` owns the browser load state through `useProfileClient`.
   Render `LoadingStatus` while reading and mount `ProfileForm` only with loaded
-  `initialValues`. The Effect cancels its lifecycle on cleanup and rejects late
-  results after its 15-second deadline. Errors reach `profile/error.tsx`; retry
+  `initialValues`. Cleanup stops accepting results from that lifecycle, and the
+  15-second deadline ends its UI wait. Errors reach `profile/error.tsx`; retry
   remounts the loader and reads again, without cache eviction. `loading.tsx`
   remains the route's server-rendering fallback (ADR 0019).
 - Keep reads and writes in `data.ts`, transferred form values in `dto.ts`, and
@@ -78,14 +78,19 @@ These are project conventions aligned with the current shadcn/ui and React Hook 
 The profile components were compared with all maintained UI component modules under `src/components/ui` (excluding story/test fixtures), including `card.tsx`, `field.tsx`, `input.tsx`, `select.tsx`, `avatar.tsx`, `button.tsx` and the compound patterns used by `dialog.tsx`, `item.tsx` and `tabs.tsx`.
 
 - Keep application-owned components in private `_components/`, importing rather than modifying the registry.
-- Use the shadcn `Card` parts directly in `page.tsx`; do not add application wrappers that only forward props to a Card primitive.
+- Use the shadcn `Card` parts directly in the screen composition owner (`ProfileClient` for the profile); do not add application wrappers that only forward props to a Card primitive.
 - Follow `ComponentProps<typeof Primitive>`, native children, `cn()` overrides and named exports for component adapters.
 - Use `useId()` for reusable field label/control pairs; do not hard-code duplicate `id` values when a profile form might mount more than once.
 - Keep `type="submit"` on the save button. This is an explicit repository convention, not a mandatory official shadcn file structure.
 
 ## React Form Actions
 
-The profile uses React `<form action>` with `useActionState` and `useFormStatus` (Ian, 2026-11-04: the React Hook Form `handleSubmit` plus a `useProfileSubmit` hook was not the Next.js recommended structure). Client Actions are the pattern for Firebase-SDK mutations; Server Actions are for server mutations only. The Firebase UI auth forms still use React Hook Form and migrate separately.
+The profile uses React `<form action>` with `useActionState` and `useFormStatus`
+as a repository choice. Official Action examples do not establish a general
+Next.js prohibition on React Hook Form. Client Actions are the pattern for
+Firebase-SDK mutations here; server mutations use Server Functions. The Firebase
+UI auth forms still use React Hook Form and migrate separately. The component
+convention guard and profile integration tests protect the implemented boundary.
 
 ## Official references
 
