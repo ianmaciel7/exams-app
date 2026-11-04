@@ -45,8 +45,8 @@ hooks alongside it. Any number of supported presentation hooks
 `useWatch`) may be used directly without a wrapper, including alongside
 the one named application hook. The current AST implementation recognizes
 specific syntax; it is not a proof of all React hook semantics. Scope
-exclusions still apply. For example, `HomeSection` delegates
-application orchestration to `useHomeSection`.
+exclusions still apply. For example, `HomeWelcomeHero` delegates
+application orchestration to `useHomeWelcomeHero`.
 
 ## Private hook module support declarations
 
