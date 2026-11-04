@@ -1,16 +1,17 @@
 import "server-only";
 
-import { headers } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { connection } from "next/server";
 import { cache } from "react";
 import { readUserRole, type UserRole } from "@/lib/role";
 import { getAdminAuth } from "./admin";
 
-type FirebaseServerSession = {
-  isBridgeActive: boolean;
+export type FirebaseServerSession = {
   role: UserRole;
   userId: string | null;
 };
+
+const SESSION_COOKIE_NAME = "__session";
 
 function readBearerToken(requestHeaders: Headers) {
   const authorization = requestHeaders.get("authorization");
@@ -19,11 +20,13 @@ function readBearerToken(requestHeaders: Headers) {
     : undefined;
 }
 
-// Codes `verifyIdToken` uses when the token itself is the problem.
+// Codes used when the token or session cookie itself is the problem.
 const TOKEN_REJECTION_CODES = new Set([
   "auth/argument-error",
   "auth/id-token-expired",
   "auth/id-token-revoked",
+  "auth/session-cookie-expired",
+  "auth/session-cookie-revoked",
   "auth/user-disabled",
   "auth/user-not-found",
 ]);
@@ -44,7 +47,7 @@ function logVerificationFailure(error: unknown) {
 
   // Log the reason, never the token, so a server-side misconfiguration is
   // not mistaken for an expired session.
-  console.error("Firebase ID token verification failed", {
+  console.error("Firebase session verification failed", {
     code,
     message,
     ...(causeMessage ? { cause: causeMessage } : {}),
@@ -63,13 +66,16 @@ function logVerificationFailure(error: unknown) {
   }
 }
 
-async function verifyIdToken(authIdToken: string) {
+async function verifyToken(token: string, isCookie: boolean) {
   // Dynamic rendering errors must not be interpreted as invalid user tokens.
   await connection();
   try {
+    const adminAuth = getAdminAuth();
     // checkRevoked rejects tokens of disabled users and revoked sessions, so a
     // demoted role stops working as soon as its refresh tokens are revoked.
-    const claims = await getAdminAuth().verifyIdToken(authIdToken, true);
+    const claims = isCookie
+      ? await adminAuth.verifySessionCookie(token, true)
+      : await adminAuth.verifyIdToken(token, true);
     return { role: readUserRole(claims), userId: claims.uid };
   } catch (error) {
     logVerificationFailure(error);
@@ -83,25 +89,25 @@ async function verifyIdToken(authIdToken: string) {
 }
 
 /**
- * Reads only a worker-injected, refreshed ID token. An absent worker is not an
- * unauthenticated verdict: the worker covers only navigation and RSC requests,
- * and the browser gate remains the first-load fallback until it controls the
- * tab. Authorization must use `verifySession` or `verifyRole` under
- * `src/app/(protected)/_lib/dal.ts`, which fail closed.
+ * Reads and verifies the HTTP-only Firebase session cookie (`__session`), or an
+ * authorization bearer token fallback.
  *
- * `cache` shares one revocation-aware verification across a render pass. It has
- * no effect in Server Functions and Route Handlers, which verify on every call.
+ * `cache` shares one revocation-aware verification across a render pass.
  */
 export const getFirebaseServerSession = cache(
   async (): Promise<FirebaseServerSession> => {
-    const requestHeaders = await headers();
-    const isBridgeActive = requestHeaders.get("x-firebase-auth-bridge") === "1";
-    const authIdToken = readBearerToken(requestHeaders);
-
-    if (!isBridgeActive || !authIdToken) {
-      return { isBridgeActive, role: readUserRole({}), userId: null };
+    const cookieStore = await cookies();
+    const sessionCookie = cookieStore.get(SESSION_COOKIE_NAME)?.value;
+    if (sessionCookie) {
+      return await verifyToken(sessionCookie, true);
     }
 
-    return { isBridgeActive, ...(await verifyIdToken(authIdToken)) };
+    const requestHeaders = await headers();
+    const authIdToken = readBearerToken(requestHeaders);
+    if (authIdToken) {
+      return await verifyToken(authIdToken, false);
+    }
+
+    return { role: readUserRole({}), userId: null };
   },
 );

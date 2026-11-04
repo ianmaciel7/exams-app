@@ -11,7 +11,7 @@ import type { ProfileLoadState } from "../_lib/definitions";
 import { syncSavedLocale } from "../_lib/locale-sync";
 
 /** Own the browser read for this visit, without a shared Promise cache. */
-export function useProfileClient() {
+export function useProfileCardClient() {
   const session = useSession();
   const locale = useLocale();
   const activeLocale = isLocale(locale) ? locale : defaultLocale;
@@ -19,6 +19,12 @@ export function useProfileClient() {
   const { setTheme } = useTheme();
   const profile = useProfileLoad(session, activeLocale);
   const initialized = useRef(false);
+  const [lastUid, setLastUid] = useState(session.user?.uid);
+
+  if (session.user?.uid !== lastUid) {
+    setLastUid(session.user?.uid);
+    initialized.current = false;
+  }
 
   useEffect(() => {
     if (profile.isLoading || profile.isError || initialized.current) return;
@@ -33,10 +39,16 @@ export function useProfileClient() {
 
 /** Discard stale results and stop waiting when this visit ends or times out. */
 function useProfileLoad(session: Session, activeLocale: Locale) {
+  const [currentUid, setCurrentUid] = useState(session.user?.uid);
   const [profile, setProfile] = useState<ProfileLoadState>({
     isLoading: true,
     isError: false,
   });
+
+  if (session.user?.uid !== currentUid) {
+    setCurrentUid(session.user?.uid);
+    setProfile({ isLoading: true, isError: false });
+  }
 
   useEffect(() => {
     if (!profile.isLoading || !session.user) return;

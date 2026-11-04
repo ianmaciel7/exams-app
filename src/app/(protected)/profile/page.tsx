@@ -1,13 +1,15 @@
 import { getTranslations } from "next-intl/server";
-import { ProfileClient } from "./_components/profile-client";
+import { verifySession } from "../_lib/dal";
+import { ProfileCardClient } from "./_components/profile-card-client";
 
 export const instant = false;
 
 export default async function ProfilePage() {
+  await verifySession();
   const t = await getTranslations("Auth");
 
   return (
-    <ProfileClient
+    <ProfileCardClient
       title={t("personalInfoTitle")}
       description={t("personalInfoDescription")}
     />

@@ -9,6 +9,8 @@ const kebabCase = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/;
 const environmentSuffix = /-(component|ui|presentation)$/;
 const screenStem = /(^|-)(screen|view|page)$/;
 const semanticStem = (stem) => stem.replace(/-(client|server)$/, "");
+const semanticRoleSuffix =
+  /(^|-)(card|form|field|fields|dialog|header|button|table|list|provider|guard|flow|hero|section|content|bridge|document|bar|nav|menu|panel|sheet|drawer|modal|popover|tooltip|alert|status|badge|input|select)$/;
 const serverImports =
   /^(next\/(headers|cache|server)|next-intl\/server|server-only|firebase-admin)(\/|$)/;
 const uiPhaseStatuses = new Set(["loading", "hidden", "error", "ready"]);
@@ -96,6 +98,15 @@ function checkFileName(source, stem, report) {
     report(
       source,
       `Component name "${stem}" must not end with a screen or page term (-screen, -view, -page); name by semantic role such as -section, -card, -form, -flow, or -hero.`,
+    );
+  }
+  if (
+    (stem.endsWith("-client") || stem.endsWith("-server")) &&
+    !semanticRoleSuffix.test(semantic)
+  ) {
+    report(
+      source,
+      `Integration component name "${stem}" must include a concrete component role / type (such as -card, -form, -field, -button, -guard, -provider, or -section); bare domain integration names without a component type are forbidden.`,
     );
   }
 }

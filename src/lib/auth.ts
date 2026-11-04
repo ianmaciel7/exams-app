@@ -1,12 +1,36 @@
 import { signOut } from "firebase/auth";
 import { getFirebaseUI } from "@/lib/firebase/client";
 
-// Keep the guest UI blocked until both Firebase and the server-auth bridge
-// have observed sign-out, avoiding a stale token on the next navigation.
+// Keep the guest UI blocked until both Firebase and the server session cookie
+// have observed sign-out, avoiding a stale session on the next navigation.
 let pendingSignOut: Promise<void> | null = null;
 
 export function getPendingSignOut() {
   return pendingSignOut;
+}
+
+export async function syncSessionCookie(user: {
+  getIdToken: () => Promise<string>;
+}) {
+  if (typeof fetch !== "function") return;
+  try {
+    const idToken = await user.getIdToken();
+    await fetch("/api/auth/session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ idToken }),
+    });
+  } catch {
+    // Best-effort session cookie sync
+  }
+}
+
+async function clearSessionCookie() {
+  try {
+    await fetch("/api/auth/session", { method: "DELETE" });
+  } catch {
+    // Best-effort cookie clearing
+  }
 }
 
 async function synchronizeSignedOutWorker() {
@@ -44,13 +68,15 @@ async function synchronizeSignedOutWorker() {
   }
 }
 
-/** Sign out from the shared Auth instance and invalidate the SSR bridge. */
+/** Sign out from the shared Auth instance and invalidate the server session. */
 export function signOutUser() {
   if (pendingSignOut) return pendingSignOut;
 
-  const pending = signOut(getFirebaseUI().get().auth).then(
-    synchronizeSignedOutWorker,
-  );
+  const pending = Promise.all([
+    signOut(getFirebaseUI().get().auth).then(synchronizeSignedOutWorker),
+    clearSessionCookie(),
+  ]).then(() => undefined);
+
   pendingSignOut = pending;
   const clearPending = () => {
     if (pendingSignOut === pending) pendingSignOut = null;

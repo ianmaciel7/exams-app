@@ -43,8 +43,8 @@ below and the split between them are choices of this repository.
 | --- | --- | --- |
 | `SessionProviderClient` | The single client Firebase Auth subscription, mounted once in the root layout; `isLoading`, `isError`, and `user` cannot contradict each other | No |
 | `useSession` | Reads the global session from any client component; never subscribes again | No |
-| `AuthGuard` | Semantic Server layout container for protected routes | No |
-| `RouteUsageClient` | Fire-and-forget route usage telemetry; never gates content | No |
+| `ProtectedGuard` | Semantic Server layout container for protected routes | No |
+| `RouteUsageBridgeClient` | Fire-and-forget route usage telemetry; never gates content | No |
 | `verifySession()` | Server DAL boundary: fails closed and returns the verified identity | Authentication |
 | `verifyRole()` | `verifySession()` plus the required role | Authorization |
 | Security Rules | Every Client SDK read and write | Authorization |
@@ -52,27 +52,12 @@ below and the split between them are choices of this repository.
 Protected data and privileged server operations must use `verifyRole()` or
 `verifySession()` and check ownership. Insufficient roles return `notFound()` so
 privileged routes are not disclosed. See
-[ADR 0009](adr/0009-integrate-firebase-authentication.md).
+[ADR 0009](adr/0009-integrate-firebase-authentication.md) and
+[ADR 0021](adr/0021-adopt-official-nextjs-server-auth-dal.md).
 
-The layout check is not authorization. Layouts do not re-render on client
-navigation, and the check passes when the bridge is absent. It sends a rejected
-token to sign-in with a return to the home page: the client may still hold a
-session, and returning to the protected route would loop. `/profile` sets
-`instant = false`, so the layout's top-level session read still blocks on the
-server; move that read into a nested `<Suspense>` before adopting instant
-navigation there.
+The protected layout calls `verifySession()` in `src/app/(protected)/_lib/dal.ts`, which verifies the HTTP-only `__session` cookie. Unauthenticated requests are redirected to sign-in on the server before child route segments or RSC payloads evaluate.
 
-No protected route renders server data today, so `verifySession()` and
-`verifyRole()` have no production caller. All protected data goes through the
-Client SDK and Security Rules. Do not add `FirebaseServerApp`, cookies, Proxy, Data
-Transfer Objects, or Route Handlers until a real data path needs them.
-
-`getFirebaseServerSession()` is wrapped in React `cache`, so a render pass makes
-one Admin verification. Each verification still costs a network round trip for
-the revocation check. The worker also force-refreshes the ID token on every
-navigation and RSC request; keep that behavior until a change has its own
-emulator coverage, because `setUserRole` revokes tokens and a cached token could
-then bounce between the server redirect and the signed-in client.
+`getFirebaseServerSession()` is wrapped in React `cache`, so duplicate calls across `layout.tsx` and Server Component pages (such as `ProfilePage`) during a single render pass execute the Admin SDK revocation check only once. Session cookies are synchronized upon sign-in and sign-out via the `/api/auth/session` Route Handler.
 
 ## Server entry points
 

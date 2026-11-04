@@ -293,24 +293,24 @@ describe("owned component conventions", () => {
   });
 
   it("requires exact component names, including client and server suffixes", () => {
-    const client = "src/app/_components/account-client.tsx";
-    const server = "src/app/_components/account-server.tsx";
+    const client = "src/app/_components/account-card-client.tsx";
+    const server = "src/app/_components/account-card-server.tsx";
     expectInvalid(
-      '"use client"; function Account(props) { return <div {...props} />; } export { Account };',
+      '"use client"; function AccountCard(props) { return <div {...props} />; } export { AccountCard };',
       /missing term/,
       client,
     );
     expectValid(
-      '"use client"; function AccountClient(props) { return <div {...props} />; } export { AccountClient };',
+      '"use client"; function AccountCardClient(props) { return <div {...props} />; } export { AccountCardClient };',
       client,
     );
     expectInvalid(
-      'import "server-only"; function Account(props) { return <div {...props} />; } export { Account };',
+      'import "server-only"; function AccountCard(props) { return <div {...props} />; } export { AccountCard };',
       /missing term/,
       server,
     );
     expectValid(
-      'import "server-only"; function AccountServer(props) { return <div {...props} />; } export { AccountServer };',
+      'import "server-only"; function AccountCardServer(props) { return <div {...props} />; } export { AccountCardServer };',
       server,
     );
     expectInvalid(
@@ -375,6 +375,16 @@ describe("owned component conventions", () => {
       'import "server-only"; function CheckoutPage() { return <div />; } export { CheckoutPage };',
       /must not end with a screen or page term/,
       "src/app/_components/checkout-page-server.tsx",
+    );
+    expectInvalid(
+      '"use client"; function ProfileClient() { return <div />; } export { ProfileClient };',
+      /bare domain integration names without a component type are forbidden/,
+      "src/app/_components/profile-client.tsx",
+    );
+    expectInvalid(
+      'import "server-only"; function SettingsServer() { return <div />; } export { SettingsServer };',
+      /bare domain integration names without a component type are forbidden/,
+      "src/app/_components/settings-server.tsx",
     );
   });
 

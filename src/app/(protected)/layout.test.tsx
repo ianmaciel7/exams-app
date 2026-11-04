@@ -2,27 +2,27 @@ import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import ProtectedLayout from "./layout";
 
-const mocks = vi.hoisted(() => ({ reject: vi.fn() }));
+const mocks = vi.hoisted(() => ({ verify: vi.fn() }));
 
-vi.mock("./_lib/dal", () => ({ rejectInvalidBridgeSession: mocks.reject }));
-vi.mock("./_components/auth-guard-client", () => ({
-  AuthGuardClient: ({ children }: { children: React.ReactNode }) => (
-    <section data-testid="auth-guard">{children}</section>
-  ),
+vi.mock("./_lib/dal", () => ({ verifySession: mocks.verify }));
+vi.mock("./_components/route-usage-bridge-client", () => ({
+  RouteUsageBridgeClient: () => <div data-testid="route-usage" />,
 }));
 
 afterEach(cleanup);
 
 describe("ProtectedLayout", () => {
-  it("rejects a failed bridge session, then composes the gate around its children", async () => {
+  it("verifies the session via the DAL before rendering the layout and children", async () => {
+    mocks.verify.mockResolvedValue({ role: "user", userId: "u1" });
+
     render(
       await ProtectedLayout({
         params: Promise.resolve({}),
         children: <p>{"Protected Content"}</p>,
       }),
     );
-    expect(mocks.reject).toHaveBeenCalledOnce();
-    expect(screen.getByTestId("auth-guard")).toBeTruthy();
+    expect(mocks.verify).toHaveBeenCalledOnce();
+    expect(screen.getByTestId("route-usage")).toBeTruthy();
     expect(screen.getByText("Protected Content")).toBeTruthy();
   });
 });

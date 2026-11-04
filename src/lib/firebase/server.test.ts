@@ -2,8 +2,10 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
   headers: new Headers(),
+  cookies: new Map<string, { value: string }>(),
   connection: vi.fn(),
   verifyIdToken: vi.fn(),
+  verifySessionCookie: vi.fn(),
   renderScope: null as { session?: unknown } | null,
 }));
 
@@ -18,10 +20,18 @@ vi.mock("react", async (importOriginal) => ({
       return mocks.renderScope.session as T;
     },
 }));
-vi.mock("next/headers", () => ({ headers: async () => mocks.headers }));
+vi.mock("next/headers", () => ({
+  headers: async () => mocks.headers,
+  cookies: async () => ({
+    get: (name: string) => mocks.cookies.get(name),
+  }),
+}));
 vi.mock("next/server", () => ({ connection: mocks.connection }));
 vi.mock("./admin", () => ({
-  getAdminAuth: () => ({ verifyIdToken: mocks.verifyIdToken }),
+  getAdminAuth: () => ({
+    verifyIdToken: mocks.verifyIdToken,
+    verifySessionCookie: mocks.verifySessionCookie,
+  }),
 }));
 
 import { getFirebaseServerSession } from "./server";
@@ -30,65 +40,76 @@ function setHeaders(values: Record<string, string>) {
   mocks.headers = new Headers(values);
 }
 
+function setCookie(name: string, value: string) {
+  mocks.cookies.set(name, { value });
+}
+
 describe("getFirebaseServerSession", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mocks.headers = new Headers();
+    mocks.cookies.clear();
     mocks.renderScope = null;
   });
 
   it("verifies once per render pass", async () => {
-    setHeaders({ "x-firebase-auth-bridge": "1", authorization: "Bearer t" });
-    mocks.verifyIdToken.mockResolvedValue({ uid: "a1", role: "admin" });
+    setCookie("__session", "session-cookie-1");
+    mocks.verifySessionCookie.mockResolvedValue({ uid: "a1", role: "admin" });
     mocks.renderScope = {};
     await getFirebaseServerSession();
     await getFirebaseServerSession();
-    expect(mocks.verifyIdToken).toHaveBeenCalledOnce();
+    expect(mocks.verifySessionCookie).toHaveBeenCalledOnce();
   });
 
-  it("does not verify without the worker bridge or a bearer token", async () => {
-    setHeaders({ authorization: "Bearer t" });
-    expect(await getFirebaseServerSession()).toEqual({
-      isBridgeActive: false,
-      role: "user",
-      userId: null,
-    });
-    setHeaders({ "x-firebase-auth-bridge": "1" });
-    expect((await getFirebaseServerSession()).userId).toBeNull();
-    expect(mocks.verifyIdToken).not.toHaveBeenCalled();
-    expect(mocks.connection).not.toHaveBeenCalled();
-  });
-
-  it("verifies with revocation checks and exposes the role claim", async () => {
-    setHeaders({ "x-firebase-auth-bridge": "1", authorization: "Bearer t" });
-    mocks.verifyIdToken.mockResolvedValue({ uid: "a1", role: "admin" });
-    expect(await getFirebaseServerSession()).toEqual({
-      isBridgeActive: true,
-      role: "admin",
-      userId: "a1",
-    });
-    expect(mocks.verifyIdToken).toHaveBeenCalledWith("t", true);
+  it("verifies the __session cookie with revocation checks", async () => {
+    setCookie("__session", "session-cookie-1");
+    mocks.verifySessionCookie.mockResolvedValue({ uid: "u1", role: "user" });
+    const session = await getFirebaseServerSession();
+    expect(session).toEqual({ role: "user", userId: "u1" });
+    expect(mocks.verifySessionCookie).toHaveBeenCalledWith(
+      "session-cookie-1",
+      true,
+    );
     expect(mocks.connection).toHaveBeenCalledOnce();
   });
 
+  it("falls back to bearer authorization token when cookie is absent", async () => {
+    setHeaders({ authorization: "Bearer id-token-1" });
+    mocks.verifyIdToken.mockResolvedValue({ uid: "u2", role: "admin" });
+    const session = await getFirebaseServerSession();
+    expect(session).toEqual({ role: "admin", userId: "u2" });
+    expect(mocks.verifyIdToken).toHaveBeenCalledWith("id-token-1", true);
+  });
+
+  it("returns unauthenticated without credentials", async () => {
+    expect(await getFirebaseServerSession()).toEqual({
+      role: "user",
+      userId: null,
+    });
+    expect(mocks.verifySessionCookie).not.toHaveBeenCalled();
+    expect(mocks.verifyIdToken).not.toHaveBeenCalled();
+  });
+
   it.each([
+    "auth/session-cookie-expired",
+    "auth/session-cookie-revoked",
     "auth/id-token-revoked",
     "auth/id-token-expired",
     "auth/argument-error",
     "auth/user-disabled",
     "auth/user-not-found",
   ])("treats a %s token as unauthenticated", async (code) => {
-    setHeaders({ "x-firebase-auth-bridge": "1", authorization: "Bearer t" });
-    mocks.verifyIdToken.mockRejectedValue(
+    setCookie("__session", "bad-cookie");
+    mocks.verifySessionCookie.mockRejectedValue(
       Object.assign(new Error(code), { code }),
     );
     const logged = vi.spyOn(console, "error").mockImplementation(() => {});
     expect(await getFirebaseServerSession()).toEqual({
-      isBridgeActive: true,
       role: "user",
       userId: null,
     });
     expect(logged).toHaveBeenCalledWith(
-      "Firebase ID token verification failed",
+      "Firebase session verification failed",
       expect.objectContaining({ code }),
     );
     logged.mockRestore();
@@ -101,9 +122,9 @@ describe("getFirebaseServerSession", () => {
   ])(
     "surfaces a %s server fault instead of a sign-in redirect",
     async (code) => {
-      setHeaders({ "x-firebase-auth-bridge": "1", authorization: "Bearer t" });
+      setCookie("__session", "err-cookie");
       const fault = Object.assign(new Error(code), { code });
-      mocks.verifyIdToken.mockRejectedValue(fault);
+      mocks.verifySessionCookie.mockRejectedValue(fault);
       await expect(getFirebaseServerSession()).rejects.toBe(fault);
     },
   );
