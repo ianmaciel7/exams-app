@@ -1,8 +1,7 @@
-import { useContext } from "react";
-import { AuthenticatedUserContext } from "../_lib/authenticated-user";
+import { useSession } from "@/hooks/use-session";
 
 export function useAuthenticatedUser() {
-  const user = useContext(AuthenticatedUserContext);
+  const { user } = useSession();
   if (!user) throw new Error("Protected components require AuthGateClient");
   return user;
 }

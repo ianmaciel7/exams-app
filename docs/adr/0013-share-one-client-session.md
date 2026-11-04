@@ -29,8 +29,9 @@ a hook.
 - Client components read the session with `useSession()` from
   `src/hooks/use-session.ts`. `useAuthSession` is removed.
 - `AuthGateClient` reads `useSession()` and remains the single owner of the
-  protected sign-in redirect, the recoverable error, and the `uid`-keyed user
-  context that `useAuthenticatedUser` reads.
+  protected sign-in redirect, the recoverable error, and the `uid`-keyed
+  subtree that remounts on account switch. Descendants read the user with
+  `useAuthenticatedUser`.
 - The Firebase Auth service worker bridge keeps its own subscription. Sign-out
   waits for the worker to acknowledge `uid: null`, while `useSession` holds the
   signed-out state until sign-out completes, so the bridge reading `useSession`
