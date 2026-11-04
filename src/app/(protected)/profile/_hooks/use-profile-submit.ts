@@ -13,8 +13,6 @@ import { useProfileSaveFeedback } from "./use-profile-save-feedback";
 type UseProfileSubmitOptions = {
   activeLocale: string;
   savedValuesRef: { current: ProfileValues | null };
-  setAvatarVersion: (version: number) => void;
-  setPhotoURL: (photoURL: string | null) => void;
   setTheme: (theme: ProfileValues["theme"]) => void;
   user: User;
 };
@@ -22,8 +20,6 @@ type UseProfileSubmitOptions = {
 export function useProfileSubmit({
   activeLocale,
   savedValuesRef,
-  setAvatarVersion,
-  setPhotoURL,
   setTheme,
   user,
 }: UseProfileSubmitOptions) {
@@ -32,8 +28,6 @@ export function useProfileSubmit({
   const { onSaved } = useProfileSaveFeedback({
     activeLocale,
     savedValuesRef,
-    setAvatarVersion,
-    setPhotoURL,
     setTheme,
   });
 
