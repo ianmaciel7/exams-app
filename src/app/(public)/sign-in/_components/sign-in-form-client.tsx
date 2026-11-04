@@ -3,12 +3,12 @@
 import type { ComponentProps } from "react";
 import { GoogleSignInButton } from "@/components/firebase/google-sign-in-button";
 import { SignInAuthScreen as SignInAuthContent } from "@/components/firebase/sign-in-auth-screen";
-import { useSignInClient } from "../_hooks/use-sign-in-client";
+import { useSignInFormClient } from "../_hooks/use-sign-in-form-client";
 
-type SignInClientProps = ComponentProps<"div">;
+type SignInFormClientProps = ComponentProps<"div">;
 
-function SignInClient(props: SignInClientProps) {
-  const { goToRegister, goToForgotPassword } = useSignInClient();
+function SignInFormClient(props: SignInFormClientProps) {
+  const { goToRegister, goToForgotPassword } = useSignInFormClient();
   return (
     <div {...props}>
       <SignInAuthContent
@@ -23,4 +23,4 @@ function SignInClient(props: SignInClientProps) {
   );
 }
 
-export { SignInClient };
+export { SignInFormClient };

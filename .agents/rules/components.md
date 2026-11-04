@@ -21,8 +21,10 @@ This section covers component dimensions and file contracts; see also [Component
 | Dimension | Convention | Examples |
 | --- | --- | --- |
 | Runtime | Import graphs determine membership; `"use client"` declares a boundary, while a shared module can compile in both graphs | `ProfileCard` may participate in a client subtree without its own directive |
-| Responsibility | Describe the composition or behavior, not its runtime | `ProfileCard`, `ProfileFormClient`, `ProfileAvatarFieldClient`, `AuthProviderClient`, `AuthGuardClient`, `SignInClient` |
+| Responsibility | Describe the composition or behavior, not its runtime | `ProfileCard`, `ProfileFormClient`, `ProfileAvatarFieldClient`, `AuthProviderClient`, `AuthGuardClient`, `SignInFormClient` |
 | Placement | Colocate route components in private `_components/`, hooks in `_hooks/` and shared components in `src/components/ui/extensions/` | App Router private folders do not become routes |
+
+Route composition roots that render an auth form carry `Form` in the name (`SignInFormClient`, `RegisterFormClient`, `ForgotPasswordFormClient`) and their hooks and files follow it (`use-sign-in-form-client.ts`, `sign-in-form-client.tsx`).
 
 The shadcn primitives live under `src/components/ui/`; Firebase registry output
 lives under `src/components/firebase/`; generated AI Elements live under
