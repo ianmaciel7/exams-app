@@ -7,13 +7,18 @@ files:
 ignores:
   - "**/*.test.tsx"
 severity: error
-message: Route entrypoints must not call React, Next.js or application hooks; move client behavior into private components or hooks.
+message: Route entrypoints must not use stateful or navigation hooks; useTranslations is allowed for server-rendered copy.
 note: |
   This is a project policy requiring thin route entrypoints, not a restriction
   imposed by Next.js on every page or layout.
   Prefer server-side data loading and framework generators in route files.
 rule:
-  kind: call_expression
-  has:
-    field: function
-    regex: '(^|\.)use[A-Z]'
+  all:
+    - kind: call_expression
+    - has:
+        field: function
+        regex: '(^|\.)use[A-Z]'
+    - not:
+        has:
+          field: function
+          pattern: useTranslations
