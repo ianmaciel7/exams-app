@@ -70,12 +70,12 @@ files, and `public/` remain at the repository root, as required by the Next.js
     `/forgot-password`) under a shared layout and redirects authenticated visitors
     to `/profile`.
   - `(protected)` isolates authenticated routes (e.g. `/profile`) behind
-    `AuthGateClient`, which observes `onAuthStateChanged` and redirects
+    `AuthGuardClient`, which observes `onAuthStateChanged` and redirects
     unauthenticated visitors to `/sign-in`.
 
 ## Authentication navigation
 
-When an unauthenticated user requests a protected route, the client auth gate redirects to `/sign-in?next=<encoded-path-and-query>`. Only `AuthGateClient` (`src/app/(protected)/_hooks/use-auth-gate-client.ts`) and the server session check in `src/app/(protected)/_lib/` send a signed-out visitor to sign-in. Pages and hooks inside `(protected)` read the session via `useAuthenticatedUser` and do not subscribe or redirect: Firebase notifies observers in subscription order, so a descendant redirect would drop the `?next=` destination. The ast-grep rules `no-protected-descendant-sign-in-redirect-ts` and `-tsx` enforce this. Once authenticated, the public authentication provider sends the user to that destination, or the home page if no valid destination was supplied. The return URL validator accepts only application-relative paths and rejects external URLs and authentication-screen loops; query strings are preserved. Route protection in the UI is not a substitute for Firebase Security Rules or authorization at the data source.
+When an unauthenticated user requests a protected route, the client auth guard redirects to `/sign-in?next=<encoded-path-and-query>`. Only `AuthGuardClient` (`src/app/(protected)/_hooks/use-auth-guard-client.ts`) and the server session check in `src/app/(protected)/_lib/` send a signed-out visitor to sign-in. Pages and hooks inside `(protected)` read the session via `useAuthenticatedUser` and do not subscribe or redirect: Firebase notifies observers in subscription order, so a descendant redirect would drop the `?next=` destination. The ast-grep rules `no-protected-descendant-sign-in-redirect-ts` and `-tsx` enforce this. Once authenticated, the public authentication provider sends the user to that destination, or the home page if no valid destination was supplied. The return URL validator accepts only application-relative paths and rejects external URLs and authentication-screen loops; query strings are preserved. Route protection in the UI is not a substitute for Firebase Security Rules or authorization at the data source.
 
 ## Test boundaries
 
@@ -165,7 +165,7 @@ client-guarded protected routes (`(protected)/profile`); see [ADR 0009](docs/adr
 `firebase-auth-sw.js` worker. The worker refreshes an ID token and attaches it
 only to same-origin Next navigation and RSC requests; `src/lib/firebase/server.ts`
 verifies that bridged token with the Admin SDK. Until the worker controls a tab,
-the browser auth gate remains the first-load fallback. The development worker receives
+the browser auth guard remains the first-load fallback. The development worker receives
 the existing public Auth Emulator host, so it shares the local emulator session.
 The authentication modules intentionally remain flat under `src/lib`:
 `auth.ts`, `session.ts`, and `return-url.ts`; consumers should import them as
@@ -319,8 +319,8 @@ and [the integration convention](CODING_STANDARDS.md#integration-filename-conven
 
 ## Usage records
 
-`RouteUsageClient` calls `recordUsage` on pathname changes without delaying
-protected content. Profile saves call `withUsageGuard` before starting the operation.
+`useAuthGuardClient` calls `recordUsage` once per signed-in user and pathname
+without delaying protected content. Profile saves call `withUsageGuard` before starting the operation.
 The Firebase callable validates authentication and an allowlist of screen and
 functionality names, then emits structured `INFO` entries using the native
 `firebase-functions/logger` SDK. Cloud Logging supplies the timestamp and

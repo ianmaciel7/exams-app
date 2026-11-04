@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, dev]
   pull_request:
     # `edited` re-runs the title check after a title fix; the other jobs of a
     # superseded run are cancelled by the concurrency group.
@@ -203,7 +203,7 @@ jobs:
           distribution: temurin
           java-version: "21"
       - run: pnpm install --frozen-lockfile
-      # Profile saves await the recordUsage callable, and RouteUsageClient calls
+      # Profile saves await the recordUsage callable, and the auth guard calls
       # it on every protected route; both need the Functions emulator.
       - name: Install Cloud Functions dependencies
         run: npm ci --prefix functions --ignore-scripts

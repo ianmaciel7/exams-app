@@ -2,9 +2,9 @@ import type { ComponentProps } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-type AuthGateProps = ComponentProps<"main">;
+type AuthGuardProps = ComponentProps<"main">;
 
-function AuthGate({ className, ...props }: AuthGateProps) {
+function AuthGuard({ className, ...props }: AuthGuardProps) {
   return (
     <main
       className={cn(
@@ -16,19 +16,19 @@ function AuthGate({ className, ...props }: AuthGateProps) {
   );
 }
 
-type AuthGateErrorProps = ComponentProps<"div"> & {
+type AuthGuardErrorProps = ComponentProps<"div"> & {
   message: string;
   onRetry: () => void;
   retryLabel: string;
 };
 
-function AuthGateError({
+function AuthGuardError({
   className,
   message,
   onRetry,
   retryLabel,
   ...props
-}: AuthGateErrorProps) {
+}: AuthGuardErrorProps) {
   return (
     <div
       className={cn("flex flex-col items-center gap-4 text-center", className)}
@@ -40,4 +40,4 @@ function AuthGateError({
   );
 }
 
-export { AuthGate, AuthGateError };
+export { AuthGuard, AuthGuardError };

@@ -165,9 +165,9 @@ one, so the last column names the layer that does.
 
 | Initial state | Event | Expected observable state | Verification |
 | --- | --- | --- | --- |
-| Loading | Session resolves signed in | Protected content, one subscription | `auth-gate-client.test.tsx`, emulator E2E |
-| Loading | Session resolves signed out | One redirect that keeps path and query | `auth-gate-client.test.tsx`, emulator E2E |
-| Loading | Firebase fails | Alert with a retry control, no redirect | `auth-gate-client.test.tsx` |
+| Loading | Session resolves signed in | Protected content, one subscription | `auth-guard-client.test.tsx`, emulator E2E |
+| Loading | Session resolves signed out | One redirect that keeps path and query | `auth-guard-client.test.tsx`, emulator E2E |
+| Loading | Firebase fails | Alert with a retry control, no redirect | `auth-guard-client.test.tsx` |
 | Signed in | Sign-out | Content hidden; history cannot restore it | Emulator E2E |
 | Signed in | Account changes | Subtree remounts with no prior account data | Component test, emulator E2E |
 | Signed in, worker active | Token refresh fails | Navigation continues on the client session | Emulator E2E |
@@ -768,7 +768,7 @@ normal configuration disables them, so these regressions use normal lint rules.
 
 Auth-provider tests cover initialization errors, first-session loading, safe
 post-auth redirects, locale updates without resubscribing, and cleanup ignoring
-late callbacks. Auth gate regressions preserve the single redirect, the pending
+late callbacks. Auth guard regressions preserve the single redirect, the pending
 sign-out, subscription cleanup, and account-switch remounting. Profile defaults
 tests cover stored/default preferences, lifecycle cancellation and a changed user;
 profile save tests keep session rechecks after every asynchronous write boundary.

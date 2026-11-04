@@ -9,7 +9,7 @@ import {
 import { Component, type ReactNode, Suspense } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { SessionProviderClient } from "@/components/ui/extensions/session-provider-client";
-import { AuthGateClient } from "../../_components/auth-gate-client";
+import { AuthGuardClient } from "../../_components/auth-guard-client";
 import ProfileError from "../error";
 import ProfileLoading from "../loading";
 import ProfilePage from "../page";
@@ -34,9 +34,11 @@ const mocks = vi.hoisted(() => ({
 
 vi.mock("next/navigation", () => ({
   useRouter: () => mocks.router,
+  usePathname: () => "/profile",
 }));
 
 vi.mock("@/lib/firebase/usage", () => ({
+  recordUsage: async () => {},
   withUsageGuard: async (_event: unknown, operation: () => Promise<unknown>) =>
     operation(),
 }));
@@ -125,13 +127,13 @@ class SegmentErrorBoundary extends Component<
 async function renderProfile() {
   const rendered = render(
     <SessionProviderClient>
-      <AuthGateClient>
+      <AuthGuardClient>
         <SegmentErrorBoundary>
           <Suspense fallback={<ProfileLoading />}>
             <ProfilePage />
           </Suspense>
         </SegmentErrorBoundary>
-      </AuthGateClient>
+      </AuthGuardClient>
     </SessionProviderClient>,
   );
   await act(() => vi.dynamicImportSettled());
