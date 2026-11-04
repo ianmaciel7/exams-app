@@ -193,7 +193,7 @@ was changed.
 | Tool | Change |
 | --- | --- |
 | Biome (and so `lint-staged`) | `!src/components/firebase` in `files.includes` |
-| TypeScript | `src/components/firebase` excluded in `tsconfig.build.json`, but included in the editor's `tsconfig.json` |
+| TypeScript | `src/components/firebase` stays in `tsconfig.json`, so the editor, `tsc`, and Next.js check it |
 | CSpell | `src/components/firebase` in `ignorePaths` |
 | jscpd | `**/components/firebase/**` in `ignore` |
 | Knip | `unresolved` ignored for `src/components/firebase/**` only |
@@ -207,14 +207,9 @@ the file is immutable. GritQL rules apply through Biome, which skips the directo
 the directory from TypeScript does not make its code safe to import: TypeScript
 still checks any file the application imports.
 
-The root `tsconfig.json` includes the Firebase files so the editor applies the
-project's `@/*` alias and reports their actual type errors. The separate root
-`tsconfig.build.json` extends it and excludes the reference layer. Next.js uses
-that build configuration through `typescript.tsconfigPath` in `next.config.ts`,
-and `pnpm typecheck` passes it explicitly to `tsc`. Exclusion only affects root
-files: imported Firebase files are still checked. Next.js watches only
-`tsconfig.json` during development, so restart the dev server after changing
-`tsconfig.build.json`.
+The root `tsconfig.json` includes the Firebase files so the editor, `pnpm typecheck`,
+and Next.js apply the project's `@/*` alias and report their actual type errors.
+There is no separate build configuration.
 
 ### Reproducing this setup in another repository
 
@@ -242,13 +237,9 @@ result is not guaranteed when versions, layout, registry metadata or tools diffe
    the generated manifest and reference files. Ensure none are Git-ignored.
    Apply equivalent formatter, lint and other tool exclusions where appropriate;
    verify the guard fails for a changed, added or deleted file.
-6. Configure TypeScript for the target project. For a Next.js project matching
-   this one, include the Firebase directory in the root `tsconfig.json` for the
-   editor; create `tsconfig.build.json` extending it and exclude the directory
-   there. Set `typescript.tsconfigPath` in `next.config.ts` and pass
-   `-p tsconfig.build.json` to the typecheck command. Preserve all other existing
-   exclusions. Check the target Next.js version's documentation first. A project
-   using different tooling must integrate an equivalent build configuration.
+6. Configure TypeScript for the target project. Keep the Firebase directory in the root
+   `tsconfig.json` so the editor, typecheck and build use the same project and `@/*` alias.
+   Check the target Next.js version's documentation first.
 7. Run the target project's lint, typecheck, integrity test, build and relevant CI
    checks. Check editor diagnostics and test actual imports before using any
    component. Record results and unresolved compatibility errors in that project.

@@ -40,9 +40,6 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-  typescript: {
-    tsconfigPath: "tsconfig.build.json",
-  },
   turbopack: {
     rules: {
       "*.css": {

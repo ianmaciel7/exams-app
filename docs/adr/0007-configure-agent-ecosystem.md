@@ -86,8 +86,6 @@ We establish a unified agent architecture centered in `.agents/`, governed by `A
     `.github/workflows/review-validation.yml` is a manual (`workflow_dispatch`)
     job that runs `verify:fast`, `check:docs`, `check:spelling`, and
     `check:markdown` for current-state review; it is not a required status check.
-    `knip.runtime-audit.jsonc` is a narrower Knip configuration scoped to App Router
-    entrypoints for runtime reachability audits; `knip.jsonc` remains the default.
 
 *Client-Facing Generative UI*: User-facing AI chat, code blocks, canvas flows, and streaming components in `src/components/ai-elements/` are distributed via the shadcn CLI registry and governed by [ADR 0002: Configure shadcn/ui](0002-configure-shadcn-ui.md).
 
