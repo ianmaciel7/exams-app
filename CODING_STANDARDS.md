@@ -95,6 +95,15 @@ When standards conflict, apply them in this order:
 
 ## Next.js App Router
 
+- Separate framework requirements, supported alternatives, and repository choices
+  when reviewing structure against the official documentation for the installed
+  version. Next.js permits route-local support files; `_lib` excludes its subtree
+  from routing and does not need to move outside `app`. The module taxonomy above
+  is this repository's responsibility split, not a mandatory Next.js filename
+  scheme. Keep cohesive helpers separate when they own different concerns;
+  moving every helper into `data.ts` does not simplify the data boundary. Review
+  these decisions alongside the existing route, component, and dependency checks.
+  See [Next.js project structure](https://nextjs.org/docs/app/getting-started/project-structure).
 - Keep route entrypoints and Next.js special files in `src/app`.
 - **Server and Client boundary separation**: Route entrypoints (`page.tsx`, `layout.tsx`) cannot be simultaneously Server and Client Components. In the React Server Components model:
   - Adding `"use client"` transforms the entire module into a Client Component boundary, rendering it and all its imports in the client bundle.
@@ -808,6 +817,19 @@ not automatically activate it. Use the framework's supported data mechanisms,
 not a fresh Promise created on each client render. Rejected resources need an
 error boundary; async callbacks and event-handler failures need their own
 appropriate error handling.
+
+Creating the Promise with `useState` or `useMemo` inside a component that
+suspends before its first mount does not establish a stable resource: React
+can discard that initial render. For a screen-owned browser SDK read, prefer
+the existing Effect lifecycle and local loading/error state. Do not introduce
+a module-level Promise registry solely to activate `loading.tsx`. If shared
+client caching becomes a requirement, evaluate an established cache library;
+for server-owned data, consider passing a Promise from a Server Component.
+Keep preference, cookie, and navigation effects out of render-time reads and
+apply them through the mounted owner. Review this ownership with the lifecycle
+coverage described in [TESTING.md](TESTING.md).
+See [React's client Promise guidance](https://react.dev/reference/react/use#caching-promises-for-client-components)
+and [fetching data with Effects](https://react.dev/reference/react/useEffect#fetching-data-with-effects).
 
 A React Action is transition-coordinated work and may run on the client.
 A Server Function is a separate network-callable server surface. `useTransition`

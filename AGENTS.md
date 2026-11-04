@@ -68,7 +68,7 @@ external lookups ad hoc.
 
 ## Workflow
 
-1. **Pre-flight & Memory Check**: Check Serena memory (`list_memories`, `read_memory("core")`) and codebase graph (Graphify) before starting research or modifications.
+1. **Pre-flight & Memory Check**: Resolve the requested source ref using [review scope and delivery checks](CONTRIBUTING.md#review-scope-and-delivery-claims). Check Serena memory (`list_memories`, `read_memory("core")`) and codebase graph (Graphify) before starting research or modifications.
 2. **Plan briefly**: Formulate an action plan and select appropriate tools.
 3. **Implement minimal viable change**: Use semantic tools for symbol edits and targeted file changes.
 4. **Validate**: Run relevant verification tiers (`project-verify`, `verify:fast`, `verify:static`, `verify:e2e`, or auth emulator).

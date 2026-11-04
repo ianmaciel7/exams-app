@@ -85,7 +85,12 @@ The profile components were compared with all maintained UI component modules un
 
 ## React Form Actions
 
-The profile uses React `<form action>` with `useActionState` and `useFormStatus` (Ian, 2026-11-04: the React Hook Form `handleSubmit` plus a `useProfileSubmit` hook was not the Next.js recommended structure). Client Actions are the pattern for Firebase-SDK mutations; Server Actions are for server mutations only. The Firebase UI auth forms still use React Hook Form and migrate separately.
+The profile uses React `<form action>` with `useActionState` and `useFormStatus`
+as a repository choice. Official Action examples do not establish a general
+Next.js prohibition on React Hook Form. Client Actions are the pattern for
+Firebase-SDK mutations here; server mutations use Server Functions. The Firebase
+UI auth forms still use React Hook Form and migrate separately. The component
+convention guard and profile integration tests protect the implemented boundary.
 
 ## Official references
 

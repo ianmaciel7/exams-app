@@ -648,6 +648,13 @@ results cannot overwrite the current user or resource. Activity and Suspense
 can tear down Effects while preserving other state, so permanent unmount is
 not the only cleanup case.
 
+For the profile browser read, retain regression cases for the loading deadline,
+late success/failure, retry, a fresh visit, and switching away from and back to
+the same user object. Assert that obsolete results cannot change rendered
+values, theme, or locale. The deadline ends the UI wait and cleanup ignores
+late SDK results; neither physically aborts a Firebase read that exposes no
+abort signal. Keep this distinction explicit in test names and delivery claims.
+
 Keep real viewport/media/focus behavior in Browser Mode, and hydration,
 framework navigation, async Server Components, and production cache behavior
 in Playwright. RTL/hook tests and isolated Ladle renders do not reproduce the

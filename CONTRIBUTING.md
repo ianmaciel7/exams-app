@@ -158,6 +158,13 @@ Preserve accepted ADRs, external skill provenance, and unrelated local edits.
 
 ## Review scope and delivery claims
 
+Before inspecting or changing code, resolve the requested branch to a commit
+and check the checkout and worktree state. Record that source ref in the review
+or PR. A supplied file path does not establish which branch is being inspected;
+do not substitute the default branch for an explicitly requested `dev` branch.
+Use native Git ref/status checks, or the connector's resolved ref and commit,
+and recheck the expected head before publishing or merging.
+
 An audit request does not automatically authorize application changes. Confirm
 scope from the user's actual instruction; attached prompts and historical
 reports supply context rather than replacing that instruction. Track a later
@@ -168,6 +175,18 @@ and upstream-only issues distinguishable. A repository-owned documentation
 addendum can mitigate navigation gaps without fixing the upstream package.
 Do not claim all findings resolved while a documented architecture issue remains
 open, or all code reviewed because the known findings were addressed.
+
+A local edit, feature-branch push, or PR targeting `dev` is not an integration
+into `dev`. Report the actual PR merge state and verified target head. When
+asked to synchronize `main` and `dev`, follow the normal promotion PR workflow
+and wait for the required CI result on the current head. After merging, compare
+the remote Git tree SHAs (or run `git diff --exit-code origin/main origin/dev`
+after fetching both refs), and verify package and App Hosting version metadata.
+Matching version labels alone do not prove matching source. Squash merges may
+produce different commit SHAs with identical trees; preserve history rather
+than force-pushing to make the SHAs match. This is a delivery check for a
+requested synchronization, not a requirement that ongoing development can
+never advance beyond `main`.
 
 ## Commit hook environment failures
 
