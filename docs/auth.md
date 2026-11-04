@@ -13,43 +13,39 @@ flowchart TD
   PublicAuth --> FirebaseAuth[Firebase Authentication]
   FirebaseAuth -->|Signed in| Profile[/profile]
   FirebaseAuth -->|No session| SignIn[Sign-in flow]
-  FirebaseAuth --> Worker[Firebase Auth service worker]
-  Worker -->|Refreshed ID token| ServerSession[getFirebaseServerSession]
-  ServerSession --> AdminSDK[Admin SDK token verification]
-  AdminSDK -->|Rejected token| SignIn
-  AdminSDK --> Layout[Protected layout]
-  Layout --> Gate[AuthGuardClient]
-  Provider[SessionProviderClient in root layout] --> Gate
-  Gate -->|Signed out| SignIn
-  Gate -->|Signed in| Protected[Protected route]
+  FirebaseAuth -->|Session Cookie| SessionAPI[/api/auth/session]
+  SessionAPI -->|Set __session| ServerSession[getFirebaseServerSession]
+  ServerSession --> AdminSDK[Admin SDK session verification]
+  AdminSDK -->|Rejected session| SignIn
+  AdminSDK --> Layout[Protected layout: verifySession in DAL]
+  Layout -->|Unauthenticated| SignIn
+  Layout -->|Authenticated| Protected[Protected route: AuthGuard]
   Protected --> Rules[Firebase Security Rules and callable authorization]
 ```
 
-`AuthProviderClient` observes the shared Firebase Auth instance on public
+`PublicGuardClient` observes the shared Firebase Auth instance on public
 authentication routes. Signed-in visitors are sent to the validated `next`
 destination, or to the home page.
 
-The Firebase Auth service worker attaches a refreshed ID token to same-origin
-navigation and RSC requests only. Server Function and Route Handler requests do
-not carry it: a new endpoint of that kind must extend the worker and its tests.
-`getFirebaseServerSession()` verifies the token with the Admin SDK, including
-revocation checks. A missing bridge is not proof of a signed-out visitor: besides
-the first load, the worker can lag a sign-in briefly while it polls IndexedDB.
+Session management uses HTTP-only `__session` cookies (ADR 0021). The client exchanges
+a refreshed ID token with `/api/auth/session` upon sign-in.
+`getFirebaseServerSession()` verifies the session cookie with the Admin SDK, including
+revocation checks.
 
 ## Responsibilities
 
 Next.js separates authentication, session management, and authorization. This
-application maps them as follows. Firebase Authentication, the service worker,
-`verifyIdToken`, and Security Rules are documented Firebase mechanisms; the names
+application maps them as follows. Firebase Authentication, session cookies,
+`verifySessionCookie`, and Security Rules are documented Firebase mechanisms; the names
 below and the split between them are choices of this repository.
 
 | Module | Responsibility | Grants access? |
 | --- | --- | --- |
-| `SessionProviderClient` | The single client Firebase Auth subscription, mounted once in the root layout; `isLoading`, `isError`, and `user` cannot contradict each other, and sign-out stays pending until the worker acknowledges it | No |
+| `SessionProviderClient` | The single client Firebase Auth subscription, mounted once in the root layout; `isLoading`, `isError`, and `user` cannot contradict each other | No |
 | `useSession` | Reads the global session from any client component; never subscribes again | No |
-| `AuthGuardClient` | Presentation boundary of protected routes: loading, recoverable error, the single sign-in redirect, the user context, and fire-and-forget route usage telemetry | No |
-| `rejectInvalidBridgeSession()` | Navigation check in the protected layout: tolerates a missing bridge and rejects only a failed token | No |
-| `verifySession()` | Fails closed and returns the verified identity | Authentication |
+| `AuthGuard` | Semantic Server layout container for protected routes | No |
+| `RouteUsageClient` | Fire-and-forget route usage telemetry; never gates content | No |
+| `verifySession()` | Server DAL boundary: fails closed and returns the verified identity | Authentication |
 | `verifyRole()` | `verifySession()` plus the required role | Authorization |
 | Security Rules | Every Client SDK read and write | Authorization |
 

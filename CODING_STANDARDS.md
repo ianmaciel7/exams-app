@@ -133,8 +133,7 @@ When standards conflict, apply them in this order:
 - The owned-component naming and Next.js Client/Server boundary guard is enforced by `pnpm check:components` (included in CI); registry-generated UI is excluded. See [agent rules](.agents/rules/components.md#component-architecture-dimensions-and-file-contracts).
 - Follow the component taxonomy and file naming conventions in
   [agent rules](.agents/rules/components.md#component-architecture-dimensions-and-file-contracts) for UI
-  and feature components (such as `*-field.tsx`, `*-fields.tsx`, `*-form.tsx`,
-  `*-card.tsx`, `*-dialog.tsx`, and `*-header.tsx`).
+  and feature components. Every owned component identifier and filename MUST include a concrete component role / type describing its composition (such as `*-field.tsx`, `*-fields.tsx`, `*-form.tsx`, `*-card.tsx`, `*-dialog.tsx`, `*-header.tsx`, `*-button.tsx`, `*-table.tsx`, `*-list.tsx`, `*-provider.tsx`, `*-guard.tsx`, `*-flow.tsx`, `*-hero.tsx`, `*-section.tsx`, or `*-content.tsx`). Bare `<Domain>Client` or `<Domain>Server` names that omit the component type are explicitly forbidden; `Client` and `Server` specify runtime environments, not component types.
 - Biome disables formatting and import organization for vendored UI and AI
   Elements files, with targeted lint exceptions. `ui/extensions` remains
   application code; do not extend vendor exceptions to it.
@@ -694,10 +693,10 @@ install upstream agent skills simply because a guide mentions them.
 
 Main component hooks coordinate focused sub-hooks and expose rendering-ready
 state/callbacks. A sub-hook owns one cohesive lifecycle or workflow, not one line
-of code. For example, `useAuthProviderClient` composes `useAuthUiStore`,
+of code. For example, `usePublicGuardClient` composes `useAuthUiStore`,
 `useFirebaseUiReturnNavigation` and `useAuthUiLocale`; it does not initialize Firebase,
 subscribe to authentication and synchronize locale inside one monolithic Effect.
-`ProfileClient` delegates the browser read lifecycle to `useProfileClient` and
+`ProfileCardClient` delegates the browser read lifecycle to `useProfileCardClient` and
 mounts `ProfileForm` only with loaded values. `ProfileForm` renders its fields
 inline and delegates its Action and picked avatar to `useProfileForm`, which
 delegates successful UI feedback to `useProfileSaveFeedback` (ADR 0019).
@@ -920,9 +919,11 @@ validates the complete module graph.
 
 | Responsibility | Owned component filename | Actual runtime boundary | Examples |
 | --- | --- | --- | --- |
-| Browser integration | `name-client.tsx` | `"use client"` | Firebase Auth, browser storage, navigation, theme persistence, browser requests |
-| Server integration | `name-server.tsx` | `import "server-only"` | Server requests, database access, secrets, Firebase Admin |
-| Presentation | `name.tsx` | `"use client"` when interactive; otherwise follows its dependencies | Fields, cards, loading UI, stateful controls and form context adapters |
+| Browser integration | `<domain>-<role>-client.tsx` | `"use client"` | Firebase Auth, browser storage, navigation, theme persistence, browser requests |
+| Server integration | `<domain>-<role>-server.tsx` | `import "server-only"` | Server requests, database access, secrets, Firebase Admin |
+| Presentation | `<domain>-<role>.tsx` | `"use client"` when interactive; otherwise follows its dependencies | Fields, cards, loading UI, stateful controls and form context adapters |
+
+All integration components must include a concrete semantic component role / type describing their composition (e.g. `*-card-client.tsx`, `*-form-client.tsx`, `*-button-client.tsx`, `*-guard-client.tsx`, `*-provider-client.tsx`, `*-section-client.tsx`, `*-hero-client.tsx`). Bare feature or domain integration names like `<Domain>Client` or `<Domain>Server` (such as `ProfileClient`, `SettingsClient`, `HomeServer`) without a component type are explicitly forbidden. The `Client` and `Server` suffixes specify the runtime environment, NOT the component type. Omitting the component type creates ambiguous components with no clear composition role.
 
 These are integration-versus-presentation responsibilities, not three exclusive
 React runtimes. Presentation components can be Client Components without a
@@ -961,6 +962,10 @@ Owned source (`src/`, `scripts/`, `functions/`, `tests/`) follows one style:
 - Components declare a local `function` and export it with a trailing
   `export { ... }`. Hooks live in `use-<stem>.ts` and export `use<Stem>` inline
   with `export function`.
+- Every owned component identifier and filename must include a concrete semantic
+  role or type describing its composition (such as `*-card`, `*-form`, `*-button`,
+  `*-guard`, `*-provider`, `*-hero`, `*-section`). Bare domain names with only runtime
+  suffixes (`<Domain>Client`, `<Domain>Server`) are forbidden.
 - Use `type` aliases, not `interface`. Props are named `<ComponentName>Props`.
 - Only module-level constants use `SCREAMING_CASE`.
 - Message files (`en`, `es`, `pt-BR`) keep an identical key set.

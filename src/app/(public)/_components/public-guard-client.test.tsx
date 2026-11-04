@@ -1,7 +1,7 @@
 import { enUs, esEs, ptBr } from "@firebase-oss/ui-translations";
 import { act, cleanup, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { AuthProviderClient } from "./auth-provider-client";
+import { PublicGuardClient } from "./public-guard-client";
 
 const mocks = vi.hoisted(() => ({
   router: { replace: vi.fn() },
@@ -24,7 +24,7 @@ vi.mock("@firebase-oss/ui-react", () => ({
   FirebaseUIProvider: ({ children }: { children: React.ReactNode }) => children,
 }));
 
-describe("AuthProviderClient", () => {
+describe("PublicGuardClient", () => {
   afterEach(() => {
     cleanup();
     window.history.replaceState(null, "", "/");
@@ -40,9 +40,9 @@ describe("AuthProviderClient", () => {
 
   it("waits for the first auth state and renders the screen for a signed-out user", () => {
     render(
-      <AuthProviderClient>
+      <PublicGuardClient>
         <p>{"Screen"}</p>
-      </AuthProviderClient>,
+      </PublicGuardClient>,
     );
     expect(
       document.querySelector('[data-slot="loading-status"]'),
@@ -55,9 +55,9 @@ describe("AuthProviderClient", () => {
 
   it("redirects a signed-in user without displaying the screen", () => {
     render(
-      <AuthProviderClient>
+      <PublicGuardClient>
         <p>{"Screen"}</p>
-      </AuthProviderClient>,
+      </PublicGuardClient>,
     );
     act(() => mocks.subscribe.mock.calls[0][1]({ uid: "user" }));
     expect(mocks.router.replace).toHaveBeenCalledWith("/");
@@ -65,19 +65,19 @@ describe("AuthProviderClient", () => {
   });
 
   it("syncs locale changes without recreating the store or subscription", () => {
-    const view = render(<AuthProviderClient>{"Screen"}</AuthProviderClient>);
+    const view = render(<PublicGuardClient>{"Screen"}</PublicGuardClient>);
     expect(mocks.setLocale).toHaveBeenLastCalledWith(ptBr);
     mocks.locale = "es";
-    view.rerender(<AuthProviderClient>{"Screen"}</AuthProviderClient>);
+    view.rerender(<PublicGuardClient>{"Screen"}</PublicGuardClient>);
     expect(mocks.setLocale).toHaveBeenLastCalledWith(esEs);
     mocks.locale = "unsupported";
-    view.rerender(<AuthProviderClient>{"Screen"}</AuthProviderClient>);
+    view.rerender(<PublicGuardClient>{"Screen"}</PublicGuardClient>);
     expect(mocks.setLocale).toHaveBeenLastCalledWith(enUs);
     expect(mocks.subscribe).toHaveBeenCalledOnce();
   });
 
   it("unsubscribes and ignores session callbacks after unmount", () => {
-    const view = render(<AuthProviderClient>{"Screen"}</AuthProviderClient>);
+    const view = render(<PublicGuardClient>{"Screen"}</PublicGuardClient>);
     const onSession = mocks.subscribe.mock.calls[0][1];
     view.unmount();
     expect(mocks.unsubscribe).toHaveBeenCalledOnce();
@@ -91,9 +91,9 @@ describe("AuthProviderClient", () => {
     });
     const log = vi.spyOn(console, "error").mockImplementation(() => {});
     render(
-      <AuthProviderClient>
+      <PublicGuardClient>
         <p>{"Screen"}</p>
-      </AuthProviderClient>,
+      </PublicGuardClient>,
     );
     expect(screen.getByRole("alert").textContent).toBe("configurationError");
     log.mockRestore();
@@ -110,9 +110,9 @@ describe("AuthProviderClient", () => {
       `/sign-in?next=${encodeURIComponent(next)}`,
     );
     render(
-      <AuthProviderClient>
+      <PublicGuardClient>
         <p>{"Screen"}</p>
-      </AuthProviderClient>,
+      </PublicGuardClient>,
     );
     act(() => mocks.subscribe.mock.calls[0][1]({ uid: "user" }));
     expect(mocks.router.replace).toHaveBeenCalledWith(destination);

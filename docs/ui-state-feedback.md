@@ -117,13 +117,13 @@ All authentication flows (sign-in, registration, password recovery, MFA, Google 
 | Flow | States and feedback | Evidence |
 | --- | --- | --- |
 | Route navigation | Segment `loading.tsx` uses the shared labelled loading primitive; rendering failures use `app/error.tsx`; missing routes use `not-found.tsx`. | `src/app/{loading,error,not-found}.tsx`, route tests |
-| Auth provider initialization | Loading until Firebase UI and the first auth-state event are ready; configuration failure is an alert; a signed-in visitor is redirected safely. | `AuthProviderClient` unit tests |
+| Public guard initialization | Loading until Firebase UI and the first auth-state event are ready; configuration failure is an alert; a signed-in visitor is redirected safely. | `PublicGuardClient` unit tests |
 | Email/password sign-in and registration | Field-level schema errors, disabled pending submit, inline root error, successful session navigation. | Firebase emulator tests |
 | Password reset and email link | Validation and inline failure; successful reset/link is an in-place terminal confirmation. | Firebase emulator tests and component source |
 | Google OAuth popup | Shared `idle`/`pending` state prevents overlapping attempts. Closing the popup returns to idle and leaves the form editable; another attempt is possible. | Firebase emulator `Google popup cancellation restores sign-in and supports retry` |
 | MFA (SMS/TOTP) and phone verification | Per-step field errors and the Firebase UI operation state; recovery keeps the entered step. | Firebase component tests and source |
-| Protected session | `AuthGuardClient`: loading, a single sign-in redirect, and a recoverable alert with a retry control; telemetry never gates content. | `auth-guard-client.test.tsx`, Firebase emulator tests |
-| Protected profile load/save | `ProfileClient` displays `LoadingStatus` until its browser read finishes. Failure or the 15-second deadline reaches `profile/error.tsx`; retry mounts a fresh read. Cleanup discards late results, and Activity reconnects preserve saved preferences. The form mounts with loaded values, uses the React Action's pending state, and retains an avatar after failure. | `profile-page.test.tsx` |
+| Protected session | Protected layout & DAL: fail-closed server redirect to sign-in via verifySession(); telemetry never gates content. | `layout.test.tsx`, `dal.test.ts`, Firebase emulator tests |
+| Protected profile load/save | `ProfileCardClient` displays `LoadingStatus` until its browser read finishes. Failure or the 15-second deadline reaches `profile/error.tsx`; retry mounts a fresh read. Cleanup discards late results, and Activity reconnects preserve saved preferences. The form mounts with loaded values, uses the React Action's pending state, and retains an avatar after failure. | `profile-page.test.tsx` |
 | Profile avatar selection | Valid files update the preview and remain selected through recoverable save failures; unsupported or oversized files show an associated inline error. | profile component tests |
 | Sign-out | `idle`, `pending`, `error`; request de-duplication and a recoverable inline alert. | home component/unit tests |
 

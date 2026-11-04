@@ -21,8 +21,10 @@ This section covers component dimensions and file contracts; see also [Component
 | Dimension | Convention | Examples |
 | --- | --- | --- |
 | Runtime | Import graphs determine membership; `"use client"` declares a boundary, while a shared module can compile in both graphs | `AccountCard` may participate in a client subtree without its own directive |
-| Responsibility | Describe the composition or behavior, not its runtime | `ProfileForm`, `ProfileAvatarFieldClient`, `AuthProviderClient`, `AuthGuardClient`, `SignInFormClient` |
+| Responsibility | Every component must specify a concrete component type or semantic role describing its composition or behavior, not its runtime environment. Bare domain or runtime labels are prohibited | `ProfileForm`, `ProfileAvatarFieldClient`, `PublicGuardClient`, `RouteUsageClient`, `SignInFormClient` |
 | Placement | Colocate route components in private `_components/`, hooks in `_hooks/` and shared components in `src/components/ui/extensions/` | App Router private folders do not become routes |
+
+Every owned component must specify a concrete component type or semantic role describing its composition or behavior (such as `*-field`, `*-form`, `*-card`, `*-dialog`, `*-hero`, `*-button`, `*-provider`, or `*-guard`). A component name must never describe only its feature domain or runtime environment without a concrete role.
 
 Route composition roots that render an auth form carry `Form` in the name (`SignInFormClient`, `RegisterFormClient`, `ForgotPasswordFormClient`) and their hooks and files follow it (`use-sign-in-form-client.ts`, `sign-in-form-client.tsx`).
 
@@ -39,10 +41,8 @@ and does not transfer maintenance ownership to vendors. Application-owned extens
 - Component value exports must preserve the local function name. Aliases such as `OtherCard as AccountCard` and component re-exports cannot satisfy the filename contract, even when an unused matching local function exists. Type-only exports are exempt.
 - Use `AccountCardProps` for props of `AccountCard`; inherit React/HTML
   component props according to the existing component-props rule.
-- Prefer semantic roles: `*-field`, `*-fields`, `*-form`, `*-card`,
-  `*-dialog`, `*-header`, `*-button`, `*-table`, `*-list`, `*-provider`,
-  `*-guard`, `*-flow`, `*-hero`, `*-section`, or `*-content`. This is **not** a closed list.
-  `Flow` specifically denotes navigation or application flow wiring.
+- Every owned component identifier and filename MUST include a concrete component role / type describing its composition (e.g. `*-field`, `*-fields`, `*-form`, `*-card`, `*-dialog`, `*-header`, `*-button`, `*-table`, `*-list`, `*-provider`, `*-guard`, `*-flow`, `*-hero`, `*-section`, or `*-content`). This is a mandatory contract, not an optional preference; omitting the component type is prohibited. This list of semantic roles is **not** closed. `Flow` specifically denotes navigation or application flow wiring.
+- Bare feature/domain integration names like `<Domain>Client` or `<Domain>Server` (e.g. `ProfileClient`, `SettingsClient`, `HomeServer`) that omit the component type are explicitly forbidden. The `Client` and `Server` suffixes specify the runtime environment, NOT the component type. Omitting the component type creates ambiguous components with no clear composition role. All integration components must pair their domain with a concrete semantic role before any runtime suffix (e.g. `ProfileCardClient`, `SettingsSectionClient`, `HomeHeroClient`, `RouteUsageClient`).
 - Do not name route-private components after screen or page terms (`-page`, `-screen`, `-view`);
   name by semantic role. Prohibit generic implementation terms (`View`, `Screen`, `Presentation`) in component identifiers.
 - Reserve `-client.tsx` for browser integrations and `-server.tsx` for server
@@ -93,10 +93,10 @@ stem and component identifiers:
 
 ## UI companion components for integration boundaries (Client and Server)
 
-Every Client (`*-client.tsx` / `*Client`) or Server (`*-server.tsx` / `*Server`) integration component must be paired with an equivalent UI presentation component (without integration suffixes, e.g. `Home` in `home.tsx` for `HomeClient` in `home-client.tsx`).
+Every Client (`*-client.tsx` / `*Client`) or Server (`*-server.tsx` / `*Server`) integration component must be paired with an equivalent UI presentation component (without integration suffixes, e.g. `HomeSection` in `home-section.tsx` for `HomeSectionClient` in `home-section-client.tsx`).
 
-- The companion UI component owns markup, HTML elements, styled layout containers, and presentation compound parts (`Home`, `HomeContent`, `HomeLogo`, `HomeHeading`, `HomeFooter`).
-- Integration components must not declare presentation parts with `Client` or `Server` suffixes (such as `HomeClientLogo` or `HomeClientHeading`).
+- The companion UI component owns markup, HTML elements, styled layout containers, and presentation compound parts (such as `HomeSection`, `HomeSectionContent`, `HomeSectionHeader`, `HomeSectionFooter`).
+- Integration components must not declare presentation parts with `Client` or `Server` suffixes (such as `HomeSectionClientHeader` or `HomeSectionClientFooter`).
 - The integration component coordinates hooks, browser/server data, and passes slots by composing the companion UI component.
 
 Simple presentation hooks such as `useId`, `useTranslations`, and React Hook
