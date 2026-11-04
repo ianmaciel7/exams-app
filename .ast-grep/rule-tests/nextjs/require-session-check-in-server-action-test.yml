@@ -1,6 +1,23 @@
 id: require-session-check-in-server-action
 valid:
   - |
+    "use client";
+    export function createProfileAction(options: Options) {
+      return async function submitProfile(state: State, formData: FormData) {
+        return saveProfile(options.user, formData);
+      };
+    }
+  - |
+    export async function submitProfile(state: State, formData: FormData) {
+      return saveProfile(formData);
+    }
+  - |
+    "use server";
+    export async function updateName(formData: FormData) {
+      await verifySession();
+      return saveProfile(formData);
+    }
+  - |
     export async function updateName(formData: FormData) {
       "use server";
       const session = await verifySession();
@@ -12,6 +29,16 @@ valid:
       await verifyRole("admin");
     }
 invalid:
+  - |
+    "use server";
+    export async function updateName(formData: FormData) {
+      return formData.get("name");
+    }
+  - |
+    'use server';
+    export async function updateName(formData: FormData) {
+      return formData.get('name');
+    }
   - |
     export async function updateName(formData: FormData) {
       "use server";

@@ -1,44 +1,31 @@
 import { useLocale, useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
-import { use, useActionState, useEffect, useState } from "react";
-import { useNavigation } from "@/hooks/use-navigation";
+import { useActionState, useState } from "react";
 import { useSession } from "@/hooks/use-session";
 import { defaultLocale, isLocale } from "@/i18n/routing";
-import { profileFieldNames } from "../_lib/form-data";
-import { createProfileAction } from "../_lib/profile-action";
-import { forgetProfile, loadProfile } from "../_lib/profile-resource";
+import { createProfileAction } from "../_lib/actions";
+import { type ProfileValues, profileFieldNames } from "../_lib/definitions";
 import { useProfileSaveFeedback } from "./use-profile-save-feedback";
 
 /**
- * Coordinates the profile form: the suspended profile read, the form Action
+ * Coordinates the loaded profile form: the form Action
  * (`useActionState`) and the avatar picked since the last Action result. It
  * also returns the `Auth` translator so the form renders its labels from it.
  */
-export function useProfileForm() {
+export function useProfileForm(initialValues: ProfileValues) {
   const t = useTranslations("Auth");
   const locale = useLocale();
   const activeLocale = isLocale(locale) ? locale : defaultLocale;
   const { setTheme } = useTheme();
-  const { refresh } = useNavigation();
   const { user } = useSession();
   if (!user) throw new Error("Protected components require AuthGuardClient");
-
-  // State pins the read once mounted; until then the shared cache keeps the
-  // promise stable across suspended render attempts.
-  const [profile] = useState(() =>
-    loadProfile({ uid: user.uid, activeLocale, refresh, setTheme }),
-  );
-  const loaded = use(profile);
-  useEffect(() => {
-    forgetProfile(user.uid, activeLocale);
-  }, [user.uid, activeLocale]);
 
   const { onSaved } = useProfileSaveFeedback({ activeLocale, setTheme });
   const [state, dispatch, pending] = useActionState(
     createProfileAction({ user, errorMessage: t("profileSaveError"), onSaved }),
     {
-      saved: loaded,
-      values: loaded,
+      saved: initialValues,
+      values: initialValues,
       avatarFile: null,
       error: null,
       savedCount: 0,

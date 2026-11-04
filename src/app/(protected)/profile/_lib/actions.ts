@@ -1,3 +1,5 @@
+"use client";
+
 import type { User } from "firebase/auth";
 import { withUsageGuard } from "@/lib/firebase/usage";
 import { saveProfile } from "./data";
@@ -6,7 +8,7 @@ import type {
   ProfileValues,
   SavedProfile,
 } from "./definitions";
-import { parseProfileFormData } from "./form-data";
+import { parseProfileFormData } from "./dto";
 
 type ProfileActionOptions = {
   user: User;

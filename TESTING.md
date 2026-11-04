@@ -564,6 +564,12 @@ The [coverage contract](CODING_STANDARDS.md#composition-guard-coverage) records
 what the guard can prove. It does not resolve arbitrary component anatomy or
 transitive RSC imports; builds and behavior tests still validate those paths.
 
+The same suite accepts the profile's `actions.ts` and `actions.test.ts` paths and
+rejects the legacy `profile-action.ts` and `profile-actions.ts` names, including
+Windows path separators. The ast-grep Server Action fixtures separately verify
+client Actions and module-level/inline `"use server"` declarations with and without
+session checks. Naming and server authorization remain distinct contracts.
+
 ## Responsiveness guard regression tests
 
 `pnpm check:responsiveness` executes `scripts/checks/check-responsiveness.test.mjs` before scanning

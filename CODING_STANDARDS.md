@@ -349,8 +349,8 @@ forms, and the guide's other points are met as follows:
 
 - Profile form (the reference): `<Form action={formAction}>` where `formAction`
   comes from `useActionState(createProfileAction(...), initialState)`. The
-  Action (`_lib/profile-action.ts`) is a client function that parses `FormData`
-  (`_lib/form-data.ts`), writes through Firebase and returns the next state
+  Action (`_lib/actions.ts`) is a client function that parses `FormData`
+  (`_lib/dto.ts`), writes through Firebase and returns the next state
   (`values`, pending `avatarFile`, `error`). Fields are uncontrolled inputs with
   `name` and `defaultValue` from that state. After an Action React resets the
   form, so a failed save returns the submitted values to keep the user's input.
@@ -688,9 +688,10 @@ state/callbacks. A sub-hook owns one cohesive lifecycle or workflow, not one lin
 of code. For example, `useAuthProviderClient` composes `useAuthUiStore`,
 `useFirebaseUiReturnNavigation` and `useAuthUiLocale`; it does not initialize Firebase,
 subscribe to authentication and synchronize locale inside one monolithic Effect.
-`ProfileForm` renders its fields inline and delegates the suspended profile read,
-its Action and the picked avatar to `useProfileForm`, which delegates successful
-UI feedback to `useProfileSaveFeedback` (ADR 0018).
+`ProfileClient` delegates the cancellable browser read to `useProfileClient` and
+mounts `ProfileForm` only with loaded values. `ProfileForm` renders its fields
+inline and delegates its Action and picked avatar to `useProfileForm`, which
+delegates successful UI feedback to `useProfileSaveFeedback` (ADR 0019).
 Pure transformations, constants and subscription support functions remain in the
 route's `_lib`, following the hook support placement contract.
 

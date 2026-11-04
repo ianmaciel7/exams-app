@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { ProfileValues } from "./definitions";
-import { parseProfileFormData } from "./form-data";
+import { parseProfileFormData } from "./dto";
 
 const fallback: ProfileValues = {
   displayName: "Ada",
