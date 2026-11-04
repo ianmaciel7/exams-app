@@ -1,7 +1,7 @@
 "use client";
 
 import type { PropsWithChildren } from "react";
-import { LoadingState } from "@/components/ui/extensions/loading-state";
+import { LoadingStatus } from "@/components/ui/extensions/loading-status";
 import { useAuthGuardClient } from "../_hooks/use-auth-guard-client";
 import { AuthGuard, AuthGuardError } from "./auth-guard";
 
@@ -27,7 +27,7 @@ function AuthGuardClient({ children }: AuthGuardClientProps) {
       </AuthGuard>
     );
 
-  if (!user) return <LoadingState boundary="protected-auth" />;
+  if (!user) return <LoadingStatus />;
 
   return <AuthGuard key={user.uid}>{children}</AuthGuard>;
 }

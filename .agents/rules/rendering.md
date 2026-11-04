@@ -28,14 +28,13 @@ transition examples; these are optional capabilities, not mandatory UI features.
 
 ## Loading boundaries
 
-The app has one visible loading UI, `GlobalLoadingIndicator`, mounted once in
-the root document. Every `loading.tsx`, Suspense fallback, and client guard that
-waits renders `<LoadingState boundary="..." />` from `ui/extensions`, an empty
-marker that makes `globals.css` reveal the indicator. Do not add a spinner,
-overlay, or text to a boundary. For content with a known shape (such as the home
-actions), use `Skeleton` blocks that share the final size constant so nothing
-shifts. `ast-grep` rule `components/no-inline-loading-state` blocks hand-written
-markers.
+The app has one loading UI, `LoadingStatus` from `ui/extensions`: a fixed,
+full-viewport, labeled spinner. Render it from `loading.tsx` (root and the
+`profile` segment, the only one that suspends), Suspense fallbacks, and client
+guards that wait. Every use sits at the same position, so swapping one for
+another does not move the spinner. For content with a known shape (such as the
+home actions), use `Skeleton` blocks that share the final size constant so
+nothing shifts.
 
 ## Identity, composition, and Error Boundaries
 

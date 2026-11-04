@@ -86,7 +86,7 @@ describe("AuthGuardClient", () => {
   it("renders a loading indicator before auth resolves", async () => {
     await renderGate();
     expect(
-      document.querySelector('[data-loading-boundary="protected-auth"]'),
+      document.querySelector('[data-slot="loading-status"]'),
     ).not.toBeNull();
     expect(screen.queryByText(/Protected Content/)).toBeNull();
     expect(mocks.router.replace).not.toHaveBeenCalled();
@@ -103,7 +103,7 @@ describe("AuthGuardClient", () => {
     );
     expect(screen.queryByText(/Protected Content/)).toBeNull();
     expect(
-      document.querySelector('[data-loading-boundary="protected-auth"]'),
+      document.querySelector('[data-slot="loading-status"]'),
     ).not.toBeNull();
   });
 
@@ -162,9 +162,7 @@ describe("AuthGuardClient", () => {
     vi.stubGlobal("location", { ...window.location, reload });
     await renderGate();
     expect(screen.getByRole("alert").textContent).toBe("configurationError");
-    expect(
-      document.querySelector('[data-loading-boundary="protected-auth"]'),
-    ).toBeNull();
+    expect(document.querySelector('[data-slot="loading-status"]')).toBeNull();
     expect(mocks.router.replace).not.toHaveBeenCalled();
     fireEvent.click(screen.getByRole("button", { name: "tryAgain" }));
     expect(reload).toHaveBeenCalledOnce();
