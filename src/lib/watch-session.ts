@@ -2,7 +2,7 @@ import type { User } from "firebase/auth";
 import type { loadAuth, loadSession } from "@/lib/firebase-loaders";
 
 /** A settled session with no user is a signed-out visitor, never a failure. */
-export type AuthSession =
+export type Session =
   | { isError: false; isLoading: true; user: null }
   | { isError: false; isLoading: false; user: User | null }
   | { isError: true; isLoading: false; user: null };
@@ -15,7 +15,7 @@ export type SessionModules = [
 export type SessionWatch = {
   fail: (cause: unknown) => void;
   revision: { current: number };
-  setSession: (session: AuthSession) => void;
+  setSession: (session: Session) => void;
   signal: AbortSignal;
 };
 
@@ -26,7 +26,7 @@ export function watchSession(
 ) {
   const settle = (user: User | null) => {
     const current = ++revision.current;
-    const next: AuthSession = { isError: false, isLoading: false, user };
+    const next: Session = { isError: false, isLoading: false, user };
     const pending = user ? null : getPendingSignOut();
     if (!pending) return setSession(next);
 

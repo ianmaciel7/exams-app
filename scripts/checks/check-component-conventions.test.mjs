@@ -8,6 +8,7 @@ import {
   inspectHookFilename,
   inspectLibPlacement,
   inspectNaming,
+  inspectProfilePage,
   inspectUiPhaseStatus,
   isOwnedComponent,
   isOwnedHookModule,
@@ -32,12 +33,24 @@ function expectInvalid(content, pattern, file) {
   assert.match(inspect(content, file).join(" "), pattern);
 }
 
+const profilePage = "src/app/(protected)/profile/page.tsx";
+const inspectPage = (content) =>
+  inspectProfilePage(content, profilePage).map((issue) => issue.message);
+
+function expectPageValid(content) {
+  assert.deepEqual(inspectPage(content), []);
+}
+
+function expectPageInvalid(content, pattern) {
+  assert.match(inspectPage(content).join(" "), pattern);
+}
+
 const compoundParts = [
   "function ProfileCardAction(props) { return <CardAction {...props} />; }",
   "function ProfileCardHeader(props) { return <CardHeader {...props} />; }",
   "function ProfileCardTitle(props) { return <CardTitle {...props} />; }",
   "function ProfileCardDescription(props) { return <CardDescription {...props} />; }",
-  "function ProfileCardContent(props) { return <CardContent {...props} />; }",
+  "function ProfileCardContent({ children, ...props }) { return <CardContent {...props}><FieldGroup>{children}</FieldGroup></CardContent>; }",
   "function ProfileCardFooter(props) { return <CardFooter {...props} />; }",
 ].join(" ");
 
@@ -258,11 +271,6 @@ describe("owned component conventions", () => {
       "function ProfileForm(props) { return <form {...props} />; } export { ProfileForm };",
       /ProfileFormClient/,
       "src/app/(protected)/profile/_components/profile-form-client.tsx",
-    );
-    expectInvalid(
-      "function ProfileSection(props) { return <div {...props} />; } export { ProfileSection };",
-      /ProfileSectionClient/,
-      "src/app/(protected)/profile/_components/profile-section-client.tsx",
     );
   });
 
@@ -655,61 +663,78 @@ describe("owned component conventions", () => {
     );
   });
 
-  it("keeps ProfileCard compound parts inside ProfileSection", () => {
-    const section =
-      "src/app/(protected)/profile/_components/profile-section.tsx";
-    expectValid(
-      "function ProfileSection() { return <ProfileCard><ProfileForm><ProfileCardHeader><ProfileCardTitle /><ProfileCardDescription /></ProfileCardHeader><ProfileCardContent><FieldGroup><ProfileDisplayNameField /></FieldGroup></ProfileCardContent><ProfileCardFooter><ProfileSaveButton /><ProfileSignOutButton /></ProfileCardFooter></ProfileForm></ProfileCard>; } export { ProfileSection };",
-      section,
+  it("keeps the profile heading inside one ProfileCardHeader on the page", () => {
+    const page = (header) =>
+      `export default function ProfilePage() { return <ProfileCard><ProfileForm>${header}<ProfileCardContent><ProfileDisplayNameField /></ProfileCardContent><ProfileCardFooter><ProfileSaveButton /></ProfileCardFooter></ProfileForm></ProfileCard>; }`;
+    expectPageValid(
+      page(
+        "<ProfileCardHeader><ProfileCardTitle /><ProfileCardDescription /></ProfileCardHeader>",
+      ),
     );
-    expectInvalid(
-      'function ProfileSection() { return <ProfileCard><ProfileForm><ProfileCardHeader><ProfileCardTitle /><ProfileCardDescription /></ProfileCardHeader><ProfileCardContent><ProfileDisplayNameField /></ProfileCardContent><ProfileCardFooter><ProfileSaveButton type="submit" /><ProfileSignOutButton /></ProfileCardFooter></ProfileForm></ProfileCard>; } export { ProfileSection };',
+    expectPageInvalid(
+      page("<ProfileCardHeader><ProfileCardTitle /></ProfileCardHeader>"),
+      /ProfileCardDescription must be inside ProfileCardHeader/,
+    );
+    expectPageInvalid(
+      page(
+        "<ProfileCardHeader /><ProfileCardTitle /><ProfileCardDescription />",
+      ),
+      /ProfileCardTitle must be inside ProfileCardHeader/,
+    );
+    expectPageInvalid(
+      page("<ProfileCardTitle /><ProfileCardDescription />"),
+      /ProfileCardHeader must be inside/,
+    );
+  });
+
+  it("keeps ProfileCard compound parts inside the profile page", () => {
+    expectPageValid(
+      "export default function ProfilePage() { return <ProfileCard><ProfileForm><ProfileCardHeader><ProfileCardTitle /><ProfileCardDescription /></ProfileCardHeader><ProfileCardContent><ProfileDisplayNameField /></ProfileCardContent><ProfileCardFooter><ProfileSaveButton /><ProfileSignOutButton /></ProfileCardFooter></ProfileForm></ProfileCard>; }",
+    );
+    expectPageInvalid(
+      'export default function ProfilePage() { return <ProfileCard><ProfileForm><ProfileCardHeader><ProfileCardTitle /><ProfileCardDescription /></ProfileCardHeader><ProfileCardContent><ProfileDisplayNameField /></ProfileCardContent><ProfileCardFooter><ProfileSaveButton type="submit" /><ProfileSignOutButton /></ProfileCardFooter></ProfileForm></ProfileCard>; }',
       /ProfileSaveButton must not accept an override/,
-      section,
     );
-    expectInvalid(
-      "function ProfileSection() { return <ProfileCard><ProfileForm><ProfileCardHeader><ProfileCardTitle /><ProfileCardDescription /></ProfileCardHeader><ProfileCardContent><ProfileDisplayNameField /></ProfileCardContent><form /><ProfileCardFooter><ProfileSaveButton /><ProfileSignOutButton /></ProfileCardFooter></ProfileForm></ProfileCard>; } export { ProfileSection };",
+    expectPageInvalid(
+      "export default function ProfilePage() { return <ProfileCard><ProfileForm><ProfileCardHeader><ProfileCardTitle /><ProfileCardDescription /></ProfileCardHeader><ProfileCardContent><ProfileDisplayNameField /></ProfileCardContent><form /><ProfileCardFooter><ProfileSaveButton /><ProfileSignOutButton /></ProfileCardFooter></ProfileForm></ProfileCard>; }",
       /delegate native Card and form roots/,
-      section,
     );
-    expectInvalid(
-      "function ProfileSection() { return <ProfileForm><ProfileCard><ProfileCardHeader><ProfileCardTitle /><ProfileCardDescription /></ProfileCardHeader><ProfileCardContent><ProfileDisplayNameField /></ProfileCardContent><ProfileCardFooter><ProfileSaveButton /><ProfileSignOutButton /></ProfileCardFooter></ProfileCard></ProfileForm>; } export { ProfileSection };",
+    expectPageInvalid(
+      "export default function ProfilePage() { return <ProfileForm><ProfileCard><ProfileCardHeader><ProfileCardTitle /><ProfileCardDescription /></ProfileCardHeader><ProfileCardContent><ProfileDisplayNameField /></ProfileCardContent><ProfileCardFooter><ProfileSaveButton /><ProfileSignOutButton /></ProfileCardFooter></ProfileCard></ProfileForm>; }",
       /ProfileFormClient must be inside ProfileCard/,
-      section,
     );
-    expectInvalid(
-      "function ProfileSection() { return <ProfileCard><ProfileForm><ProfileCardHeader><ProfileCardTitle /><ProfileCardDescription /></ProfileCardHeader><ProfileCardContent><ProfileDisplayNameField /></ProfileCardContent><ProfileSaveButton /><ProfileCardFooter><ProfileSignOutButton /></ProfileCardFooter></ProfileForm></ProfileCard>; } export { ProfileSection };",
+    expectPageInvalid(
+      "export default function ProfilePage() { return <ProfileCard><ProfileForm><ProfileCardHeader><ProfileCardTitle /><ProfileCardDescription /></ProfileCardHeader><ProfileCardContent><ProfileDisplayNameField /></ProfileCardContent><ProfileSaveButton /><ProfileCardFooter><ProfileSignOutButton /></ProfileCardFooter></ProfileForm></ProfileCard>; }",
       /ProfileSaveButton must be inside ProfileCardFooter/,
-      section,
     );
-    expectInvalid(
-      "function ProfileSection() { return <ProfileCard><ProfileForm><ProfileCardHeader><ProfileCardTitle /><ProfileCardDescription /></ProfileCardHeader><ProfileDisplayNameField /><ProfileCardFooter><ProfileSaveButton /><ProfileSignOutButton /></ProfileCardFooter></ProfileForm></ProfileCard>; } export { ProfileSection };",
+    expectPageInvalid(
+      "export default function ProfilePage() { return <ProfileCard><ProfileForm><ProfileCardHeader><ProfileCardTitle /><ProfileCardDescription /></ProfileCardHeader><ProfileDisplayNameField /><ProfileCardFooter><ProfileSaveButton /><ProfileSignOutButton /></ProfileCardFooter></ProfileForm></ProfileCard>; }",
       /ProfileDisplayNameField must be inside/,
-      section,
+    );
+    expectPageInvalid(
+      "export default function ProfilePage() { return <ProfileCard><ProfileForm><ProfileCardHeader><ProfileCardTitle /><ProfileCardDescription /></ProfileCardHeader><ProfileCardContent><FieldGroup><ProfileDisplayNameField /></FieldGroup></ProfileCardContent><ProfileCardFooter><ProfileSaveButton /><ProfileSignOutButton /></ProfileCardFooter></ProfileForm></ProfileCard>; }",
+      /delegate FieldGroup to ProfileCardContent/,
     );
   });
 
   it("rejects wrappers between profile regions and their direct parents", () => {
-    const path = "src/app/(protected)/profile/_components/profile-section.tsx";
     const valid =
-      "function ProfileSection() { return <ProfileCard><ProfileForm><ProfileCardHeader><ProfileCardTitle /><ProfileCardDescription /></ProfileCardHeader><ProfileCardContent><FieldGroup><ProfileDisplayNameField /></FieldGroup></ProfileCardContent><ProfileCardFooter><ProfileSaveButton /><ProfileSignOutButton /></ProfileCardFooter></ProfileForm></ProfileCard>; } export { ProfileSection };";
-    expectValid(valid, path);
+      "export default function ProfilePage() { return <ProfileCard><ProfileForm><ProfileCardHeader><ProfileCardTitle /><ProfileCardDescription /></ProfileCardHeader><ProfileCardContent><ProfileDisplayNameField /></ProfileCardContent><ProfileCardFooter><ProfileSaveButton /><ProfileSignOutButton /></ProfileCardFooter></ProfileForm></ProfileCard>; }";
+    expectPageValid(valid);
     const regions = [
       "<ProfileCardHeader><ProfileCardTitle /><ProfileCardDescription /></ProfileCardHeader>",
-      "<ProfileCardContent><FieldGroup><ProfileDisplayNameField /></FieldGroup></ProfileCardContent>",
-      "<FieldGroup><ProfileDisplayNameField /></FieldGroup>",
-      "<ProfileCardFooter><ProfileSaveButton /><ProfileSignOutButton /></ProfileCardFooter>",
       "<ProfileCardTitle />",
       "<ProfileCardDescription />",
+      "<ProfileCardContent><ProfileDisplayNameField /></ProfileCardContent>",
+      "<ProfileCardFooter><ProfileSaveButton /><ProfileSignOutButton /></ProfileCardFooter>",
       "<ProfileDisplayNameField />",
       "<ProfileSaveButton />",
       "<ProfileSignOutButton />",
     ];
     for (const region of regions) {
-      expectInvalid(
+      expectPageInvalid(
         valid.replace(region, `<div>${region}</div>`),
         /must be inside/,
-        path,
       );
     }
   });
@@ -723,7 +748,6 @@ describe("owned component conventions", () => {
       "CardHeader",
       "CardTitle",
       "CardDescription",
-      "CardContent",
       "CardFooter",
     ]) {
       expectInvalid(
@@ -731,6 +755,23 @@ describe("owned component conventions", () => {
         /must wrap exactly one/,
       );
     }
+    const content =
+      "<CardContent {...props}><FieldGroup>{children}</FieldGroup></CardContent>";
+    expectInvalid(valid.replace(content, "<div />"), /must wrap exactly one/);
+    expectInvalid(
+      valid.replace(
+        content,
+        "<CardContent {...props}>{children}</CardContent>",
+      ),
+      /exactly one FieldGroup inside CardContent/,
+    );
+    expectInvalid(
+      valid.replace(
+        content,
+        "<CardContent {...props}><div><FieldGroup>{children}</FieldGroup></div></CardContent>",
+      ),
+      /exactly one FieldGroup inside CardContent/,
+    );
     expectInvalid(
       valid.replace(
         "ProfileCardDescription, ProfileCardContent, ProfileCardFooter };",
@@ -1139,47 +1180,47 @@ describe("UI phase flags", () => {
 });
 
 describe("component filename term matching and parity", () => {
-  it("accepts HomeClient with matching filename, props, orchestration hook, and Home composition", () => {
+  it("accepts HomeSection with matching filename, props, orchestration hook, and Home composition", () => {
     expectValid(
       `"use client";
        import type { ComponentProps } from "react";
-       import { useHomeClient } from "../_hooks/use-home-client";
+       import { useHomeSection } from "../_hooks/use-home-section";
        import { Home } from "./home";
-       type HomeClientProps = ComponentProps<"div">;
-       function HomeClient(props: HomeClientProps) {
-         const { t } = useHomeClient();
+       type HomeSectionProps = ComponentProps<"div">;
+       function HomeSection(props: HomeSectionProps) {
+         const { t } = useHomeSection();
          return <Home {...props} />;
        }
-       export { HomeClient };`,
-      "src/app/_components/home-client.tsx",
+       export { HomeSection };`,
+      "src/app/_components/home-section.tsx",
     );
   });
 
-  it("rejects HomeClient when it does not compose Home", () => {
+  it("rejects HomeSection when it does not compose Home", () => {
     expectInvalid(
       `"use client";
        import type { ComponentProps } from "react";
-       import { useHomeClient } from "../_hooks/use-home-client";
-       type HomeClientProps = ComponentProps<"div">;
-       function HomeClient(props: HomeClientProps) {
-         const { t } = useHomeClient();
+       import { useHomeSection } from "../_hooks/use-home-section";
+       type HomeSectionProps = ComponentProps<"div">;
+       function HomeSection(props: HomeSectionProps) {
+         const { t } = useHomeSection();
          return <div {...props} />;
        }
-       export { HomeClient };`,
-      /HomeClient must compose Home/i,
-      "src/app/_components/home-client.tsx",
+       export { HomeSection };`,
+      /HomeSection must compose Home/i,
+      "src/app/_components/home-section.tsx",
     );
   });
 
-  it("rejects Home in home-client.tsx due to missing 'Client' term", () => {
+  it("rejects Home in home-section.tsx due to missing 'Section' term", () => {
     expectInvalid(
       `"use client";
        import type { ComponentProps } from "react";
        type HomeProps = ComponentProps<"div">;
        function Home(props: HomeProps) { return <div {...props} />; }
        export { Home };`,
-      /missing term\(s\): "client"/i,
-      "src/app/_components/home-client.tsx",
+      /missing term\(s\): "section"/i,
+      "src/app/_components/home-section.tsx",
     );
   });
 
@@ -1189,21 +1230,21 @@ describe("component filename term matching and parity", () => {
        function HomeViewClient() { return <div />; }
        export { HomeViewClient };`,
       /unexpected term\(s\): "view"/i,
-      "src/app/_components/home-client.tsx",
+      "src/app/_components/home-section.tsx",
     );
   });
 
-  it("rejects HomeClient delegating to useHome instead of useHomeClient", () => {
+  it("rejects HomeSection delegating to useHome instead of useHomeSection", () => {
     expectInvalid(
       `"use client";
        import { useHome } from "../_hooks/use-home";
-       function HomeClient() {
+       function HomeSection() {
          useHome();
          return <div />;
        }
-       export { HomeClient };`,
-      /must delegate hook coordination to useHomeClient/i,
-      "src/app/_components/home-client.tsx",
+       export { HomeSection };`,
+      /must delegate hook coordination to useHomeSection/i,
+      "src/app/_components/home-section.tsx",
     );
   });
 
@@ -1211,10 +1252,10 @@ describe("component filename term matching and parity", () => {
     expectInvalid(
       `"use client";
        type HomeProps = { id: string };
-       function HomeClient() { return <div />; }
-       export { HomeClient };`,
-      /Props type must be named one of: HomeClientProps/i,
-      "src/app/_components/home-client.tsx",
+       function HomeSection() { return <div />; }
+       export { HomeSection };`,
+      /Props type must be named one of: HomeSectionProps/i,
+      "src/app/_components/home-section.tsx",
     );
   });
 });

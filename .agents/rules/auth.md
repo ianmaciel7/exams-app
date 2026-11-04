@@ -27,7 +27,8 @@ active Firebase session, and `return-url.ts` owns safe post-auth navigation.
 - Follow [SECURITY.md](../../SECURITY.md) and the actual Firebase rules and token-verification implementation.
 - Call `verifyRole` or `verifySession` inside every Server Function and Route Handler, and check resource ownership; the auth gate, the layout check, and React `cache` do not cover them. The service worker forwards tokens only on navigation and RSC requests, so extend it with any new endpoint type.
 - `rejectInvalidBridgeSession` is a navigation check that tolerates a missing bridge. Never use it for authorization, and never give its redirect a protected return path.
-- `AuthGateClient` owns the protected session subscription and sign-in redirect. Descendants use `useAuthenticatedUser`; do not subscribe or redirect again.
+- `SessionProviderClient` in the root layout owns the only client session subscription; client components read it with `useSession`. `AuthGateClient` owns the protected sign-in redirect, and its descendants use `useAuthenticatedUser`; do not subscribe or redirect again.
+- The Firebase Auth service worker bridge keeps its own subscription: sign-out waits for the worker to acknowledge `uid: null`, while `useSession` holds the signed-out state until sign-out completes, so the bridge must not read `useSession`.
 - Keep telemetry out of the gate and never let it delay protected content.
 - Never read the session inside a `use cache` scope. Resolve it first, then pass only the user id to an unexported cached function; keep tokens and email addresses out of cache keys and tags.
 - Authorize Admin SDK access in application code; it bypasses Firebase Security Rules.

@@ -8,6 +8,10 @@ valid:
     router.replace(routes.home);
   - |
     router.refresh();
+  - |
+    replace(routes.home);
+  - |
+    refresh();
 invalid:
   - |
     subscribeToSession((user) => {
@@ -19,3 +23,13 @@ invalid:
     redirect(routes.signIn);
   - |
     redirectToSignIn("/profile");
+  - |
+    replaceWithSignIn("/profile");
+  - |
+    navigation.replaceWithSignIn("/profile");
+  - |
+    replace(getSignInUrl("/profile"));
+  - |
+    push(routes.signIn);
+  - |
+    goToSignIn();
