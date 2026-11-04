@@ -161,3 +161,12 @@ colocated tests and barrel files) outside the `ui`, `firebase`, and `ai-elements
 registry trees under `src/components`. Existing registry trees remain allowed;
 their generated source retains its existing exclusions. This is repository
 policy, not a Next.js requirement.
+
+## Unused vendored components
+
+Do not keep vendored Firebase UI components that no route imports (extra
+OAuth provider buttons, email-link, enrollment screens). Re-add them from the
+registry when a flow needs them. Never delete shadcn-native files in
+`src/components/ui/*.tsx`: they stay as upstream copies. Owned wrappers must
+add behavior; do not nest extra containers or slot attributes that no style or
+test uses. `pnpm check:unused` (Knip) is the mechanical safeguard for unused files.
