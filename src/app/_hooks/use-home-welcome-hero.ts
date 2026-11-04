@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useSession } from "@/hooks/use-session";
 
-export function useHomeWelcome() {
+export function useHomeWelcomeHero() {
   const t = useTranslations("Home");
   const session = useSession();
 

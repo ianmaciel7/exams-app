@@ -4,7 +4,7 @@ import Link from "next/link";
 import type { ComponentProps } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { routes } from "@/lib/navigation";
-import { useHomeWelcome } from "../_hooks/use-home-welcome";
+import { useHomeWelcomeHero } from "../_hooks/use-home-welcome-hero";
 import { HomeHeading } from "./home";
 import {
   HomeHero,
@@ -14,10 +14,10 @@ import {
 } from "./home-hero";
 import { HomeSignOutButtonClient } from "./home-sign-out-button-client";
 
-type HomeWelcomeProps = ComponentProps<typeof HomeHero>;
+type HomeWelcomeHeroProps = ComponentProps<typeof HomeHero>;
 
-function HomeWelcome(props: HomeWelcomeProps) {
-  const { t, session, title, description } = useHomeWelcome();
+function HomeWelcomeHero(props: HomeWelcomeHeroProps) {
+  const { t, session, title, description } = useHomeWelcomeHero();
   const user = session.user;
 
   return (
@@ -68,4 +68,4 @@ function HomeWelcome(props: HomeWelcomeProps) {
   );
 }
 
-export { HomeWelcome };
+export { HomeWelcomeHero };

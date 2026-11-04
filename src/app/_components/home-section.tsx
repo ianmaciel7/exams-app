@@ -2,7 +2,7 @@ import type { ComponentProps } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Version } from "@/components/ui/extensions/version";
 import { Home, HomeContent, HomeFooter, HomeLogo } from "./home";
-import { HomeWelcome } from "./home-welcome";
+import { HomeWelcomeHero } from "./home-welcome-hero";
 
 type HomeSectionProps = ComponentProps<"main">;
 
@@ -13,7 +13,7 @@ function HomeSection({ className, ...props }: HomeSectionProps) {
     <Home className={className} {...props}>
       <HomeContent>
         <HomeLogo />
-        <HomeWelcome />
+        <HomeWelcomeHero />
       </HomeContent>
       <HomeFooter>
         <Version
