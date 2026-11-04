@@ -20,24 +20,20 @@ type ProfileRequest = {
 const profiles = new Map<string, Promise<ProfileValues>>();
 const failed = new Set<string>();
 
-// A locale sync or a superseded session never reveals the profile: the
-// refresh or the gate's uid-keyed remount replaces this subtree instead.
-const superseded = new Promise<never>(() => {});
-
 function profileKey(uid: string, activeLocale: Locale) {
   return `${uid}:${activeLocale}`;
 }
 
-async function fetchProfile({
-  uid,
-  activeLocale,
-  refresh,
-  setTheme,
-}: ProfileRequest) {
-  const result = await readProfile(uid, activeLocale, () => true);
-  if (!result || syncSavedLocale(result.values.locale, activeLocale, refresh))
-    return superseded;
+async function fetchProfile(
+  { uid, activeLocale, refresh, setTheme }: ProfileRequest,
+  isActive: () => boolean,
+) {
+  const result = await readProfile(uid, activeLocale, isActive);
+  if (!result || !isActive())
+    throw new Error("Profile session changed while loading");
   if (result.theme) setTheme(result.theme);
+  // Refresh the locale without pinning the UI to a never-settling promise.
+  syncSavedLocale(result.values.locale, activeLocale, refresh);
   return result.values;
 }
 
@@ -45,7 +41,19 @@ export function loadProfile(request: ProfileRequest) {
   const key = profileKey(request.uid, request.activeLocale);
   const cached = profiles.get(key);
   if (cached) return cached;
-  const profile = fetchProfile(request);
+  // Every read settles within a deadline. Late responses cannot mutate the UI.
+  let active = true;
+  let timeout: ReturnType<typeof setTimeout> | undefined;
+  const deadline = new Promise<never>((_, reject) => {
+    timeout = setTimeout(() => {
+      active = false;
+      reject(new Error("Profile loading timed out"));
+    }, 15_000);
+  });
+  const profile = Promise.race([
+    fetchProfile(request, () => active),
+    deadline,
+  ]).finally(() => clearTimeout(timeout));
   profile.catch(() => failed.add(key));
   profiles.set(key, profile);
   return profile;

@@ -15,16 +15,16 @@ valid:
     export default function Layout({ children }: { children: React.ReactNode }) {
       return <main>{children}</main>;
     }
+  - |
+    export default function Page() {
+      const t = useTranslations("Home");
+      return <h1>{t("title")}</h1>;
+    }
 invalid:
   - |
     export default function Page() {
       const [count, setCount] = useState(0);
       return <div>{count}</div>;
-    }
-  - |
-    export default function Page() {
-      const t = useTranslations("Home");
-      return <h1>{t("title")}</h1>;
     }
   - |
     export default function Page() {

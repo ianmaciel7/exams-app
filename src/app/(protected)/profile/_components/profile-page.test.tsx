@@ -406,8 +406,7 @@ describe("ProfilePage", () => {
     expect(mocks.readPreferences).toHaveBeenCalledWith("user-123");
   });
 
-  it("synchronizes a saved Portuguese locale before revealing the profile", async () => {
-    // A unique uid: the read stays pending until the refresh changes locale.
+  it("synchronizes the locale without leaving the profile suspended", async () => {
     mocks.currentUser = { uid: "user-locale-sync" };
     mocks.readPreferences.mockResolvedValue({ locale: "pt-BR" });
 
@@ -415,7 +414,8 @@ describe("ProfilePage", () => {
 
     await waitFor(() => expect(mocks.router.refresh).toHaveBeenCalledOnce());
     expect(document.cookie).toContain("NEXT_LOCALE=pt-BR");
-    expect(container.querySelector('[data-slot="card"]')).toBeNull();
+    expect(await screen.findByLabelText("languageLabel")).toBeTruthy();
+    expect(container.querySelector('[data-slot="card"]')).not.toBeNull();
   });
 
   it("saves a changed theme preference and shows success toast", async () => {

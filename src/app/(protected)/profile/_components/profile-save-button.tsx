@@ -1,10 +1,12 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
+import { useFormContext } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
-import { useProfileSaveButton } from "../_hooks/use-profile-save-button";
+import type { ProfileFormValues } from "../_lib/definitions";
 
 type ProfileSaveButtonProps = Omit<
   ComponentProps<typeof Button>,
@@ -17,14 +19,16 @@ function ProfileSaveButton({
   children,
   ...props
 }: ProfileSaveButtonProps) {
-  const { t, isSubmitting, isDisabled } = useProfileSaveButton();
+  const t = useTranslations("Auth");
+  const { formState } = useFormContext<ProfileFormValues>();
+  const isSubmitting = formState.isSubmitting;
 
   return (
     <Button
       {...props}
       type="submit"
       className={cn("w-full", className)}
-      disabled={disabled || isDisabled}
+      disabled={disabled || formState.disabled || isSubmitting}
       focusableWhenDisabled
     >
       {isSubmitting && <Spinner data-icon="inline-start" aria-hidden="true" />}
