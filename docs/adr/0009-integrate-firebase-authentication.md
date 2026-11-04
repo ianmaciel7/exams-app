@@ -334,7 +334,7 @@ and is unchanged by this decision.
 - `rejectInvalidBridgeSession()` is the separate navigation check for the protected
   layout. It tolerates a missing bridge, and it redirects a rejected token to
   sign-in with a return to home, so it cannot loop a signed-in client.
-- `AuthGuardClient` is the single owner of the session subscription and the sign-in
+- `AuthGateClient` is the single owner of the session subscription and the sign-in
   redirect for protected routes. Descendants read the user from context instead of
   subscribing, and a change of `uid` remounts the subtree.
 - Usage telemetry is a separate `RouteUsageClient`.

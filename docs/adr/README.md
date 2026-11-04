@@ -10,7 +10,7 @@ original date. Read current operational details in the
 | Record | Status | Subject |
 | --- | --- | --- |
 | [0001](0001-configure-nextjs.md) | Accepted; incorporates former 0023 and 0026 | Next.js App Router, TypeScript, React Compiler, pnpm, server error instrumentation, the nonce-based CSP Proxy, and on-demand Firebase on the home page |
-| [0002](0002-configure-shadcn-ui.md) | Accepted; incorporates former 0027, 0029 and 0030 | Base UI primitives, locally owned components, Form and Field forms, Base UI ast-grep rules, the single loading indicator, pointer cursor, cn utility, typography, and AI Elements |
+| [0002](0002-configure-shadcn-ui.md) | Accepted; incorporates former 0027, 0029 and 0030; loading-indicator decision superseded by 0020 | Base UI primitives, locally owned components, Form and Field forms, Base UI ast-grep rules, the single loading indicator, pointer cursor, cn utility, typography, and AI Elements |
 | [0003](0003-configure-theming.md) | Accepted | Class-based light, dark, and system themes |
 | [0004](0004-configure-internationalization.md) | Accepted; incorporates former 0021; the no-Proxy rule is amended by ADR 0001 | Cookie and `Accept-Language` locale resolution without `[locale]` routes, catalogs, providers, typed messages |
 | [0005](0005-configure-testing.md) | Accepted; incorporates former 0028 | Colocated Vitest tests, Vitest Browser Mode, Playwright suites, coverage thresholds, mutation testing, and emulator tests for security rules and auth journeys |
@@ -28,6 +28,7 @@ original date. Read current operational details in the
 | [0017](0017-structure-profile-as-one-form-component.md) | Accepted; amends ADRs 0015 and 0016 | `ProfileForm` is one client form component with inline fields; no form context, wrapper hooks or `ProfileCard*`; `check:components` exempts `*-form.tsx` from the `-client` and hook-delegation rules |
 | [0018](0018-delegate-profile-form-hooks.md) | Accepted; amends ADR 0017 | `useProfileForm` owns the profile form's read, Action and avatar state; `check:components` applies the hook-delegation rule to `*-form.tsx` again |
 | [0019](0019-scope-profile-loading-to-the-screen.md) | Accepted; amends ADRs 0016, 0017 and 0018 | Screen-owned browser loading with cleanup, timeout and retry; no Promise registry; form mapping in `dto.ts` |
+| [0020](0020-render-loading-status-at-each-boundary.md) | Accepted; supersedes the loading-indicator scope of 0002 | Direct shared `LoadingStatus` fallbacks replace the global indicator, markers, CSS reveal and frame probe |
 
 ## Consolidation of 2026-11-01
 
@@ -50,6 +51,11 @@ earlier files stay in Git history. Reference the new home in new work.
 | 0034 amendments cross-reference | Dropped: the merge makes it unnecessary |
 
 ## Current operational clarifications
+
+- **ADRs 0009 and 0013: Protected guard naming**:
+  - The current implementation is named `AuthGuardClient`; the historical records
+    retain the original `AuthGateClient` name. Current session ownership is
+    documented in [ARCHITECTURE.md](../../ARCHITECTURE.md).
 
 - **ADR 0001: Server error instrumentation**:
   - `src/instrumentation.ts` uses Next.js native `onRequestError` to emit structured
