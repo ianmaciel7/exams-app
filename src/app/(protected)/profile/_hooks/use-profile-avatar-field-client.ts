@@ -1,8 +1,9 @@
 import { useTranslations } from "next-intl";
 import { useFormContext, useWatch } from "react-hook-form";
-import { getAvatarSource } from "../_lib/avatar";
+import { getAvatarFallbackInitial, getAvatarSource } from "../_lib/avatar";
 import type { ProfileFormValues } from "../_lib/definitions";
-import { useProfileAvatar } from "./use-profile-avatar";
+import { useProfileAvatarInput } from "./use-profile-avatar-input";
+import { useProfileAvatarPreview } from "./use-profile-avatar-preview";
 import { useProfileContext } from "./use-profile-context";
 
 export function useProfileAvatarFieldClient() {
@@ -10,27 +11,19 @@ export function useProfileAvatarFieldClient() {
   const { user, photoURL, avatarVersion } = useProfileContext();
   const { control, setValue, formState } = useFormContext<ProfileFormValues>();
   const avatarFile = useWatch({ control, name: "avatarFile" });
-  const { avatarPreview, fileInputRef, handleAvatarChange } = useProfileAvatar(
+  const preview = useProfileAvatarPreview(avatarFile);
+  const { fileInputRef, handleAvatarChange } = useProfileAvatarInput(
     avatarFile,
     (file) => setValue("avatarFile", file, { shouldDirty: true }),
   );
-  const displayName = user?.displayName ?? null;
-  const email = user?.email ?? null;
-  const disabled = formState.disabled || formState.isSubmitting;
-  const avatarSrc = getAvatarSource(avatarPreview, photoURL, avatarVersion);
-  const fallbackInitial = (
-    displayName?.charAt(0) ||
-    email?.charAt(0) ||
-    "U"
-  ).toUpperCase();
+  const displayName = user.displayName ?? null;
 
-  const avatarAlt = displayName ?? t("profileTitle");
   return {
     t,
-    disabled,
-    avatarSrc,
-    avatarAlt,
-    fallbackInitial,
+    disabled: formState.disabled || formState.isSubmitting,
+    avatarSrc: getAvatarSource(preview, photoURL, avatarVersion),
+    avatarAlt: displayName ?? t("profileTitle"),
+    fallbackInitial: getAvatarFallbackInitial(displayName, user.email),
     fileInputRef,
     handleAvatarChange,
   };
