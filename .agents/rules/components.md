@@ -88,7 +88,7 @@ stem and component identifiers:
   - Prop type declaration: `HomeWelcomeHeroProps` (`HomeProps` is rejected)
   - Hook coordination: `useHomeWelcomeHero` in `src/app/_hooks/use-home-welcome-hero.ts` (`useHome` is rejected)
   - Companion UI component: `src/app/_components/home.tsx` exports `Home` and its compound presentation parts (`HomeContent`, `HomeLogo`, `HomeHeading`, `HomeFooter`). The home `page.tsx` composes them around `HomeWelcomeHero`.
-- **Profile example:** `profile-form.tsx` exports `ProfileForm`. A `*-form.tsx` component is exempt from the `-client` suffix because it owns its Action and integrations (ADR 0017); `profile-avatar-field-client.tsx` keeps the suffix for its browser object URLs. See
+- **Profile example:** `profile-form.tsx` exports `ProfileForm`. A `*-form.tsx` component is exempt from the `-client` suffix because it owns its Action and integrations through `useProfileForm` (ADRs 0017 and 0018); `profile-avatar-field-client.tsx` keeps the suffix for its browser object URLs. See
   [ADR 0006](../../docs/adr/0006-document-project-standards.md).
 
 ## UI companion components for integration boundaries (Client and Server)
