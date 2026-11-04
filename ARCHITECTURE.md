@@ -319,8 +319,8 @@ and [the integration convention](CODING_STANDARDS.md#integration-filename-conven
 
 ## Usage records
 
-`RouteUsageClient` calls `recordUsage` on pathname changes without delaying
-protected content. Profile saves call `withUsageGuard` before starting the operation.
+`useAuthGateClient` calls `recordUsage` once per signed-in user and pathname
+without delaying protected content. Profile saves call `withUsageGuard` before starting the operation.
 The Firebase callable validates authentication and an allowlist of screen and
 functionality names, then emits structured `INFO` entries using the native
 `firebase-functions/logger` SDK. Cloud Logging supplies the timestamp and

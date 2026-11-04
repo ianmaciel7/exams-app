@@ -34,9 +34,11 @@ const mocks = vi.hoisted(() => ({
 
 vi.mock("next/navigation", () => ({
   useRouter: () => mocks.router,
+  usePathname: () => "/profile",
 }));
 
 vi.mock("@/lib/firebase/usage", () => ({
+  recordUsage: async () => {},
   withUsageGuard: async (_event: unknown, operation: () => Promise<unknown>) =>
     operation(),
 }));
