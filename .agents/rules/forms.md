@@ -62,7 +62,7 @@ These are project conventions aligned with the current shadcn/ui and React Hook 
   `data.ts` module.
   `saveProfile` accepts typed `ProfileDependencies` with default Firebase
   adapters to test persistence without production services.
-- `ProfileAvatarFieldClient` uses `useProfileAvatarFieldClient` for field state and avatar display data, with `useProfileAvatar` handling validation and preview. Only the selected `File` lives in React Hook Form so submission can upload it; preview URLs are released on replacement, successful reset and unmount. Failed saves retain the selection for retry.
+- `ProfileAvatarFieldClient` uses `useProfileAvatarFieldClient` for field state and avatar display data, with `useProfileAvatarInput` handling validation and `useProfileAvatarPreview` the preview. Only the selected `File` lives in React Hook Form so submission can upload it; preview URLs are released on replacement, successful reset and unmount. Failed saves retain the selection for retry.
 - `ProfileCardContent` owns the **one** `FieldGroup`: do not wrap the
   individual profile fields in another `FieldGroup` in `page.tsx`.
 

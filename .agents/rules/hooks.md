@@ -85,6 +85,24 @@ that a function has a single responsibility; review its dependencies and lifecyc
 as well. Preserve cancellation, stale-result checks and authorization checks at
 asynchronous boundaries during refactoring.
 
+Splitting pattern for a hook that mixes concerns:
+
+- Pure decisions (validation, derived display values such as a fallback initial
+  or a versioned URL) go to the route's `_lib/` as plain functions with unit
+  tests; hooks only call them. `isValidAvatarFile` and
+  `getAvatarFallbackInitial` live in `profile/_lib/avatar.ts`.
+- Each effect with its own lifecycle gets its own `useX` hook: the avatar
+  preview object URL (`useProfileAvatarPreview`) and the hidden file input
+  (`useProfileAvatarInput`) are separate from the form binding in
+  `useProfileAvatarFieldClient`. In `useAuthGuardClient`, redirecting and
+  usage recording are separate hooks.
+- Module-level hooks in a `_hooks` file are allowed when they are `useX`
+  declarations; do not introduce a component when the hook split already keeps
+  the component free of behavior.
+- No mechanical check can prove a hook has one responsibility. The existing
+  safeguards (`no-module-support-in-hooks`, Biome complexity budgets,
+  `check:components`) stay the gate; the split itself is a review item.
+
 For every hook change, inventory the affected responsibility tree and validate all
 owned hook directories and support modules. Do not finish with only the named
 example or a changed-file lint result. Run the full Biome source/configured project
