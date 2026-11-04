@@ -8,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { FieldGroup } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 
 type ProfileCardProps = ComponentProps<typeof Card>;
@@ -56,7 +57,7 @@ function ProfileCardContent({
       className={cn("flex w-full flex-col gap-4", className)}
       {...props}
     >
-      {children}
+      <FieldGroup className="gap-4">{children}</FieldGroup>
     </CardContent>
   );
 }

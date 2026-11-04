@@ -1,7 +1,5 @@
 import { act, cleanup, render, screen } from "@testing-library/react";
-import type { User } from "firebase/auth";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { AuthenticatedUserContext } from "../_lib/authenticated-user";
 import { RouteUsageClient } from "./route-usage-client";
 
 const mocks = vi.hoisted(() => ({
@@ -14,11 +12,11 @@ vi.mock("@/lib/firebase/usage", () => ({ recordUsage: mocks.recordUsage }));
 
 function Usage({ uid = "user-123" }: { uid?: string }) {
   return (
-    <AuthenticatedUserContext key={uid} value={{ uid } as User}>
+    <div key={uid}>
       <RouteUsageClient>
         <div>{"Protected Content"}</div>
       </RouteUsageClient>
-    </AuthenticatedUserContext>
+    </div>
   );
 }
 

@@ -19,6 +19,7 @@ flowchart TD
   AdminSDK -->|Rejected token| SignIn
   AdminSDK --> Layout[Protected layout]
   Layout --> Gate[AuthGateClient]
+  Provider[SessionProviderClient in root layout] --> Gate
   Gate -->|Signed out| SignIn
   Gate -->|Signed in| Protected[Protected route]
   Protected --> Rules[Firebase Security Rules and callable authorization]
@@ -44,7 +45,8 @@ below and the split between them are choices of this repository.
 
 | Module | Responsibility | Grants access? |
 | --- | --- | --- |
-| `useAuthSession` | One subscription per client surface; `isLoading`, `isError`, and `user` cannot contradict each other, and sign-out stays pending until the worker acknowledges it | No |
+| `SessionProviderClient` | The single client Firebase Auth subscription, mounted once in the root layout; `isLoading`, `isError`, and `user` cannot contradict each other, and sign-out stays pending until the worker acknowledges it | No |
+| `useSession` | Reads the global session from any client component; never subscribes again | No |
 | `AuthGateClient` | Presentation boundary of protected routes: loading, recoverable error, the single sign-in redirect, and the user context | No |
 | `useAuthenticatedUser` | Reads the gate's user; descendants never subscribe again | No |
 | `RouteUsageClient` | Fire-and-forget usage telemetry, outside the gate | No |
