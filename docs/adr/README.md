@@ -24,6 +24,7 @@ original date. Read current operational details in the
 | [0013](0013-share-one-client-session.md) | Accepted; amends ADR 0009 (former 0025) | One root `SessionProviderClient` subscription read through `useSession`, the worker bridge's separate subscription, and the profile form state renamed to `useProfile` |
 | [0014](0014-eliminate-profile-context-for-root-session.md) | Accepted; amends ADR 0013 | Elimination of redundant ProfileContext and useProfile; profile components and avatar read the root useSession directly and React Hook Form manages form state |
 | [0015](0015-submit-profile-form-with-react-action.md) | Accepted; amends ADR 0014 | Profile form submits through a client React form Action (`useActionState`, `useFormStatus`, `FormData`) instead of React Hook Form; form-scoped `ProfileFormContext` |
+| [0016](0016-read-profile-with-use-and-drop-wrapper-hooks.md) | Accepted; amends ADR 0015 | `useProfilePreferences`, `savedValuesRef` and `useProfileFormContext` removed; the profile read and the form context use `use()`, and the last saved values live in the Action state |
 
 ## Consolidation of 2026-11-01
 

@@ -6,13 +6,11 @@ import { syncSavedLocale } from "../_lib/locale-sync";
 
 type UseProfileSaveFeedbackOptions = {
   activeLocale: string;
-  savedValuesRef: { current: ProfileValues | null };
   setTheme: (theme: ProfileValues["theme"]) => void;
 };
 
 export function useProfileSaveFeedback({
   activeLocale,
-  savedValuesRef,
   setTheme,
 }: UseProfileSaveFeedbackOptions) {
   const t = useTranslations("Auth");
@@ -23,7 +21,6 @@ export function useProfileSaveFeedback({
     previous: ProfileValues,
   ) => {
     if (values.theme !== previous.theme) setTheme(values.theme);
-    savedValuesRef.current = savedProfile.values;
     toast.add({
       title: savedProfile.emailChanged
         ? t("emailVerificationSent")

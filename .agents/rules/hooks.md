@@ -18,9 +18,9 @@ Owned components keep rendering, translations, primitive prop forwarding and sim
 - Expose explicit session flags (`isLoading`, `isHidden`, `isError`) and an
   already resolved error message. Components render the applicable flag rather
   than deriving readiness from user, authentication and preferences flags.
-- Keep responsibilities local: `useProfilePreferences` suspends on the
-  profile read; `useProfileFormClient` owns the React Hook Form lifecycle
-  and uses `formState.isSubmitting` rather than a parallel saving flag;
+- Keep responsibilities local: `useProfileFormClient` suspends on the
+  profile read and owns the form Action (`useActionState`), and fields read
+  `useFormStatus().pending` rather than a parallel saving flag;
   `useProfileAvatarFieldClient` handles avatar field data. Do not mirror
   derived state in additional `useState` variables.
 - `check:components` rejects React state/effect imports (including aliases), namespace state/effect calls, Firebase value imports, async workflow functions, compound `if` conditions/derived locals and error fallbacks inside owned component functions. Async Server Components, simple discriminated-state branches, translations, form context and presentation props such as `disabled={disabled || pending}` remain valid.
@@ -31,7 +31,7 @@ Owned components keep rendering, translations, primitive prop forwarding and sim
 A component coordinating application behavior must use the imported
 `use<ComponentName>` hook in a separate module. For example,
 `ProfileFormClient` calls `useProfileFormClient`, which composes
-`useSession`, `useProfilePreferences`, `useProfileSubmit`, and React Hook Form, and resolves
+`useSession`, the profile read (`loadProfile` with `use()`), and `useProfileAction` with `useActionState`, and resolves
 conditional properties (such as `userId`) so component JSX remains free of
 inline `in` operator guards or ternary expressions. Stateful avatar
 fields, save actions, and auth flows use focused hooks; simple display name,
@@ -42,7 +42,7 @@ standard hooks. This is a stricter project policy, not a React rule.
 including aliased imports, and rejects unrelated application orchestration
 hooks alongside it. Any number of supported presentation hooks
 (`useId`, `useTranslations`, `useFormatter`, `useFormContext`,
-`useWatch`) may be used directly without a wrapper, including alongside
+`useFormStatus`, `useWatch`) may be used directly without a wrapper, including alongside
 the one named application hook. The current AST implementation recognizes
 specific syntax; it is not a proof of all React hook semantics. Scope
 exclusions still apply. For example, `HomeWelcomeHero` delegates

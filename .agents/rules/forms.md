@@ -30,7 +30,7 @@ These are project conventions aligned with the current shadcn/ui and React Hook 
 
 ## Profile behavior ownership
 
-- The profile segment owns load states: `useProfilePreferences` suspends
+- The profile segment owns load states: `useProfileFormClient` suspends
   with `use()` on the read cached in `_lib/profile-resource.ts`, so
   `profile/loading.tsx` renders the pending state and a rejection reaches
   `profile/error.tsx`. Its retry evicts the failed read before calling
@@ -38,10 +38,10 @@ These are project conventions aligned with the current shadcn/ui and React Hook 
   no longer deliberately pins the screen to a never-settling Promise.
   Components render only loaded data; there is no status guard.
 - `useProfileController` and `useProfile` are removed. `useProfileFormClient`
-  reads session directly via `useSession()` and `useProfilePreferences()`;
+  reads session directly via `useSession()` and the profile read via `use()`;
   it does not assemble field or button props. User identity always comes from
-  `useSession()`; `ProfileFormContext` carries only the form Action state
-  (see ADR 0015).
+  `useSession()`; `ProfileFormContext` carries only the form Action state and is read with
+  `use(ProfileFormContext)`, with no wrapper hook (see ADR 0015 and 0016).
 - `ProfileFormClient` delegates its Action lifecycle to
   `useProfileFormClient`, which calls `useProfileAction` for persistence.
   Read `useFormStatus().pending` instead of keeping a second saving flag;
