@@ -138,7 +138,7 @@ earlier files stay in Git history. Reference the new home in new work.
     loading state, then "Manage account" (to `/profile`) with `HomeSignOutButtonClient` for
     authenticated users, or "Sign in" and "Get started" links for visitors. This supersedes
     the single `auth-nav-button-client.tsx` control described in ADR 0009.
-  - The `(protected)` route group guards client-rendered UI through `AuthGateClient`, the single
+  - The `(protected)` route group guards client-rendered UI through `AuthGuardClient`, the single
     session subscription and sign-in redirect (with `?next=`), as ADR 0009 records.
   - The `/profile` landing page presents authenticated user details (`email`, `displayName`,
     `uid`) and provides sign-out controls invoking `signOut(auth)`; it does not redirect itself.

@@ -5,7 +5,7 @@ import { useNavigation } from "@/hooks/use-navigation";
 import { useSession } from "@/hooks/use-session";
 import { recordUsage } from "@/lib/firebase/usage";
 
-export function useAuthGateClient() {
+export function useAuthGuardClient() {
   const t = useTranslations("Auth");
   const app = useTranslations("App");
   const { replaceWithSignIn } = useNavigation();

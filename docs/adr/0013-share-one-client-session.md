@@ -6,7 +6,7 @@
 
 ## Context
 
-[ADR 0009](0009-integrate-firebase-authentication.md) made `AuthGateClient` the
+[ADR 0009](0009-integrate-firebase-authentication.md) made `AuthGuardClient` the
 single owner of the session subscription for protected routes. The home page
 needed the same session, so the `useAuthSession` hook was called by both the gate
 and the home client, and each call opened its own Firebase Auth subscription.
@@ -28,7 +28,7 @@ a hook.
   the pending sign-out hold.
 - Client components read the session with `useSession()` from
   `src/hooks/use-session.ts`. `useAuthSession` is removed.
-- `AuthGateClient` reads `useSession()` and remains the single owner of the
+- `AuthGuardClient` reads `useSession()` and remains the single owner of the
   protected sign-in redirect, the recoverable error, and the `uid`-keyed
   subtree that remounts on account switch. Descendants read the user with
   `useAuthenticatedUser`.

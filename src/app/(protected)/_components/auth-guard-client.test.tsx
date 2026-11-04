@@ -9,7 +9,7 @@ import { type PropsWithChildren, StrictMode, useState } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { SessionProviderClient } from "@/components/ui/extensions/session-provider-client";
 import { useAuthenticatedUser } from "../_hooks/use-authenticated-user";
-import { AuthGateClient } from "./auth-gate-client";
+import { AuthGuardClient } from "./auth-guard-client";
 
 const mocks = vi.hoisted(() => ({
   router: { replace: vi.fn() },
@@ -39,7 +39,7 @@ vi.mock("@/lib/auth", () => ({
 function SessionGate({ children }: PropsWithChildren) {
   return (
     <SessionProviderClient>
-      <AuthGateClient>{children}</AuthGateClient>
+      <AuthGuardClient>{children}</AuthGuardClient>
     </SessionProviderClient>
   );
 }
@@ -68,7 +68,7 @@ async function renderGate() {
   return rendered;
 }
 
-describe("AuthGateClient", () => {
+describe("AuthGuardClient", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mocks.pendingSignOut = null;
