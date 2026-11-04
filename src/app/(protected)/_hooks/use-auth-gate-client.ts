@@ -1,22 +1,20 @@
-import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useEffect } from "react";
-import { useAuthSession } from "@/hooks/use-auth-session";
-import { getSignInUrl } from "@/lib/navigation";
+import { useNavigation } from "@/hooks/use-navigation";
+import { useSession } from "@/hooks/use-session";
 
 export function useAuthGateClient() {
   const t = useTranslations("Auth");
   const app = useTranslations("App");
-  const router = useRouter();
-  const session = useAuthSession();
+  const { replaceWithSignIn } = useNavigation();
+  const session = useSession();
   const isUnauthenticated =
     !session.isLoading && !session.isError && !session.user;
 
   useEffect(() => {
     if (!isUnauthenticated) return;
-    const destination = window.location.pathname + window.location.search;
-    router.replace(getSignInUrl(destination));
-  }, [isUnauthenticated, router]);
+    replaceWithSignIn(window.location.pathname + window.location.search);
+  }, [isUnauthenticated, replaceWithSignIn]);
 
   return {
     errorMessage: t("configurationError"),

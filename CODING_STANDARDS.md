@@ -58,8 +58,8 @@ When standards conflict, apply them in this order:
   All conditional identifiers and resolved properties must be derived inside the
   component-named orchestration hook and exposed as clean, ready-to-consume values
   (for example, exposing `userId` so JSX can simply pass `key={userId}`).
-- **Self-contained fallback components**: Status and fallback wrapper components
-  (such as `ProfileGuard`) must encapsulate their internal presentation logic,
+- **Self-contained fallback components**: Status and fallback components
+  (such as the profile segment's `error.tsx`) must encapsulate their internal presentation logic,
   localized spinner text, and error card structures directly using local translations,
   rather than requiring callers to pass down redundant presentation labels (for example,
   avoid passing `loadingLabel={t("loading")}`).
@@ -73,9 +73,9 @@ When standards conflict, apply them in this order:
 - **Form Architecture and State Propagation**:
   - Compound forms composed with field-component `children` use one
     `useForm` and `<FormProvider {...form}>`; fields obtain `control`
-    with `useFormContext()`. `ProfileFormClientContent` already renders
-    one `FieldGroup`, so do not introduce a second group in
-    `ProfileSectionClient`. Read native RHF `formState.isSubmitting`
+    with `useFormContext()`. `ProfileCardContent` already renders
+    one `FieldGroup`, so do not introduce a second group in the
+    profile `page.tsx`. Read native RHF `formState.isSubmitting`
     rather than synchronizing a separate saving flag. The Provider
     requirement is a repository convention, not universal shadcn/ui policy.
   - Name standalone field components after their React Hook Form data property (for example `ProfileDisplayNameField` for `Controller name="displayName"`). Prefer built-in `FieldGroup`/`FieldSet` over arbitrary wrapper components.
@@ -99,7 +99,7 @@ When standards conflict, apply them in this order:
   - Adding `"use client"` transforms the entire module into a Client Component boundary, rendering it and all its imports in the client bundle.
   - Framework server exports such as `metadata`, `generateMetadata`, and `generateStaticParams` cannot be exported from a `"use client"` route module. Ordinary browser data-fetching functions are different; their allowed APIs depend on the import graph.
   - Server Components cannot use client state/effect/navigation hooks (`useState`, `useEffect`, `useRouter`) or DOM event handlers (`onClick`). This does not prohibit every API whose name begins with `use`; for example, React supports `use` in synchronous Server Components.
-  - Therefore, keep route entrypoint files (`page.tsx`) as Server Components by default. Whenever interactivity or client hooks are required, never create a generic `*-page-client.tsx` at the route root. Instead, extract the client logic into a semantically named UI component in a private `_components/` directory (e.g., following shadcn conventions such as `_components/register-auth-flow-client.tsx`, `_components/sign-in-auth-flow-client.tsx`, or `_components/forgot-password-auth-flow-client.tsx`) and render it from the server `page.tsx`.
+  - Therefore, keep route entrypoint files (`page.tsx`) as Server Components by default. Whenever interactivity or client hooks are required, never create a generic `*-page-client.tsx` at the route root. Instead, extract the client logic into a semantically named UI component in a private `_components/` directory (e.g., following shadcn conventions such as `_components/register-client.tsx`, `_components/sign-in-client.tsx`, or `_components/forgot-password-client.tsx`) and render it from the server `page.tsx`.
 - Use the generated `PageProps`, `LayoutProps`, and `RouteContext` helpers for
   route parameters rather than hand-written equivalents:
   - **Route entrypoint parameters (`page.tsx`)**: When a page does not consume `params`
@@ -299,7 +299,7 @@ See the installed Next.js boundary guide and the
 components, without restricting the scan to files with `"use client"`.
 It enforces semantic filenames, a matching family root, locally declared named
 parts with the root prefix, matching props names, separate named exports, and
-exact term parity (`checkStemComponentTermParity`) between filenames and component declarations for non-legacy modules (such as `HomeClient` in `src/app/_components/home-client.tsx` requiring a 1:1 term match across component name, props type, and orchestration hook, and composing its companion UI component `Home`).
+exact term parity (`checkStemComponentTermParity`) between filenames and component declarations for non-legacy modules (such as `HomeSection` in `src/app/_components/home-section.tsx` requiring a 1:1 term match across component name, props type, and orchestration hook, and composing its companion UI component `Home`).
 It rejects static component-property assignment and direct `Object.assign`,
 `Object.defineProperty`, or `Object.defineProperties` on a component family.
 
@@ -463,7 +463,7 @@ Components throughout the application—regardless of whether they are Server Co
   - Do not hardcode high-level infrastructure, application routing (`useRouter`, `redirect`, `Link`), external API clients, or environment-dependent SDKs inside reusable or presentation components.
   - Presentational and domain UI components must receive their actions, dynamic slots, and data abstractions via props (e.g., explicit callbacks, `children`, or injected interfaces) rather than instantiating or coupling to concrete implementations directly.
 - **Zero route coupling in presentation screens**: Screen and auth form components must remain purely presentational and never import Next.js navigation hooks (`useRouter`, `redirect`, `Link`) or hardcode application routes (such as `/register`, `/sign-in`, or `/forgot-password`). Decouple them by defining explicit callback props (e.g., `onSignUpClick?: () => void`, `onForgotPasswordClick?: () => void`, `onSignIn?: (credential: UserCredential) => void`).
-- **Route-private composition roots**: Route-level private components (such as `src/app/(public)/sign-in/_components/sign-in-auth-flow-client.tsx` and `src/app/(public)/register/_components/register-auth-flow-client.tsx`) act as composition roots. They connect Next.js navigation hooks (`router.push(...)`) to the screen's callback props and assemble feature-specific dependencies.
+- **Route-private composition roots**: Route-level private components (such as `src/app/(public)/sign-in/_components/sign-in-client.tsx` and `src/app/(public)/register/_components/register-client.tsx`) act as composition roots. They connect Next.js navigation hooks (`router.push(...)`) to the screen's callback props and assemble feature-specific dependencies.
 - **Provider and addon injection via `children` slots**: Presentation screens and shared surfaces must not hardcode third-party identity providers (e.g., Google, GitHub, or SAML) or concrete third-party services. Instead, expose extensible `children` slots so that provider buttons (e.g., `<GoogleSignInButton />`) or custom actions can be injected at the composition root, conditioned on environment variables (such as `NEXT_PUBLIC_FIREBASE_GOOGLE_ENABLED`).
 - **Logic abstraction via custom hooks or service interfaces**: Isolate business logic, validation schemas, and lifecycle effects behind specialized hooks or pure service functions (such as `useUI()`, `useSignInAuthFormSchema()`, `useSignInAuthFormAction()`, and `useOnUserAuthenticated()`). This keeps presentation components focused on rendering state, layout, and event propagation without direct coupling to underlying SDK operations.
 
@@ -584,8 +584,17 @@ imports and re-exports are checked; this is not a complete transitive graph
 analysis. Keep the current unprefixed locale URLs and use the existing safe
 return-URL validator for user-controlled redirect destinations.
 
-Import `Link` from `next/link` and router hooks from `next/navigation`
-directly. Do not add a re-export shim such as `@/i18n/navigation`: the locale
+Navigate on the client through `useNavigation` from
+`src/hooks/use-navigation.ts`. It is the only module that calls `useRouter`
+and exposes `push`, `replace`, `refresh`, `back`, the auth destinations
+(`goToSignIn`, `goToRegister`, `goToForgotPassword`, which keep the `?next=`
+query), and `replaceWithSignIn(destination)`. Its callbacks keep a stable
+identity so effects can depend on them. Biome `noRestrictedImports` rejects
+`useRouter` from `next/navigation` in every other owned module; other
+`next/navigation` hooks such as `usePathname` stay allowed.
+
+Import `Link` from `next/link` and the remaining router hooks from
+`next/navigation` directly. Do not add a re-export shim such as `@/i18n/navigation`: the locale
 lives in a cookie, not in the path, so a wrapper changes nothing and splits the
 import path. Biome `noRestrictedImports` rejects `@/i18n/navigation`.
 
@@ -665,7 +674,7 @@ state/callbacks. A sub-hook owns one cohesive lifecycle or workflow, not one lin
 of code. For example, `useAuthProviderClient` composes `useAuthUiStore`,
 `useFirebaseUiReturnNavigation` and `useAuthUiLocale`; it does not initialize Firebase,
 subscribe to authentication and synchronize locale inside one monolithic Effect.
-`useProfileSession` delegates preference loading to `useProfilePreferences`, and
+`useSession` delegates preference loading to `useProfilePreferences`, and
 `useProfileSubmit` delegates successful UI feedback to `useProfileSaveFeedback`.
 Pure transformations, constants and subscription support functions remain in the
 route's `_lib`, following the hook support placement contract.
@@ -893,8 +902,8 @@ without a suffix and compatible with either graph.
 
 Owned component exports, props types, and component-named orchestration hooks
 use the complete filename stem, including `Client` or `Server` where present.
-For example, `home-client.tsx` exports `HomeClient` and uses
-`useHomeClient`. Colocated tests and stories follow the component stem. A fetch alone does not determine
+For example, `home-section.tsx` exports `HomeSection` and uses
+`useHomeSection`. Colocated tests and stories follow the component stem. A fetch alone does not determine
 runtime: the component boundary determines where that request executes.
 Composing an integration component does not make presentation an integration.
 Mandatory Next.js filenames, registry output, hooks and non-component modules

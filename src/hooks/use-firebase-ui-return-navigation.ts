@@ -1,5 +1,5 @@
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useNavigation } from "@/hooks/use-navigation";
 import type { getFirebaseUI } from "@/lib/firebase/client";
 import { getSafeReturnUrl } from "@/lib/return-url";
 import { subscribeToSession } from "@/lib/session";
@@ -7,7 +7,7 @@ import { subscribeToSession } from "@/lib/session";
 export function useFirebaseUiReturnNavigation(
   ui: ReturnType<typeof getFirebaseUI> | undefined,
 ) {
-  const router = useRouter();
+  const { replace } = useNavigation();
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -23,13 +23,13 @@ export function useFirebaseUiReturnNavigation(
       const destination = getSafeReturnUrl(
         new URLSearchParams(window.location.search).get("next"),
       );
-      router.replace(destination);
+      replace(destination);
     });
     return () => {
       active = false;
       unsubscribe();
     };
-  }, [ui, router]);
+  }, [ui, replace]);
 
   return { ready };
 }

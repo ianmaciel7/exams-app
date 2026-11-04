@@ -18,8 +18,8 @@ Owned components keep rendering, translations, primitive prop forwarding and sim
 - Expose explicit session flags (`isLoading`, `isHidden`, `isError`) and an
   already resolved error message. Components render the applicable flag rather
   than deriving readiness from user, authentication and preferences flags.
-- Keep responsibilities local: `useProfileStatus` derives the profile session
-  flags; `useProfileFormClient` owns the React Hook Form lifecycle
+- Keep responsibilities local: `useProfilePreferences` suspends on the
+  profile read; `useProfileFormClient` owns the React Hook Form lifecycle
   and uses `formState.isSubmitting` rather than a parallel saving flag;
   `useProfileAvatarFieldClient` handles avatar field data. Do not mirror
   derived state in additional `useState` variables.
@@ -30,8 +30,8 @@ Owned components keep rendering, translations, primitive prop forwarding and sim
 
 A component coordinating application behavior must use the imported
 `use<ComponentName>` hook in a separate module. For example,
-`ProfileSectionClient` calls `useProfileSectionClient`, which composes
-`useProfileSession`, `useProfileStatus`, and translations, and resolves
+`ProfileFormClient` calls `useProfileFormClient`, which composes
+`useProfile`, `useProfileSubmit`, and React Hook Form, and resolves
 conditional properties (such as `userId`) so component JSX remains free of
 inline `in` operator guards or ternary expressions. Stateful avatar
 fields, save actions, and auth flows use focused hooks; simple display name,
@@ -45,8 +45,8 @@ hooks alongside it. Any number of supported presentation hooks
 `useWatch`) may be used directly without a wrapper, including alongside
 the one named application hook. The current AST implementation recognizes
 specific syntax; it is not a proof of all React hook semantics. Scope
-exclusions still apply. For example, `HomeClient` delegates
-application orchestration to `useHomeClient`.
+exclusions still apply. For example, `HomeSection` delegates
+application orchestration to `useHomeSection`.
 
 ## Private hook module support declarations
 
@@ -55,8 +55,8 @@ imports, exports and types. Move module-level support functions and values to
 that route's `_lib/`: this includes constants, lookup collections and React
 context objects. A filename starting with `use-` does not make helpers inside
 that module part of the hook. `getAvatarSource` and avatar limits live in
-`profile/_lib/avatar.ts`; the session context object lives in
-`profile/_lib/profile-session-context.ts`.
+`profile/_lib/avatar.ts`; the profile context object lives in
+`profile/_lib/profile-context.ts`.
 
 The hook itself may be a named `useX` function declaration or a `useX` variable
 initialized directly with an arrow/function expression. Local constants,

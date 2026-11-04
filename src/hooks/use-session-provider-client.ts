@@ -1,12 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { loadAuth, loadSession } from "@/lib/firebase-loaders";
-import { type AuthSession, watchSession } from "@/lib/watch-auth-session";
+import { type Session, watchSession } from "@/lib/watch-session";
 
-export type { AuthSession };
-
-/** The Firebase session of one client surface; pass the user down, do not subscribe again. */
-export function useAuthSession() {
-  const [session, setSession] = useState<AuthSession>({
+/** The single Firebase Auth subscription behind `SessionProviderClient`. */
+export function useSessionProviderClient() {
+  const [session, setSession] = useState<Session>({
     isError: false,
     isLoading: true,
     user: null,

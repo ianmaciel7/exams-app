@@ -123,7 +123,7 @@ All authentication flows (sign-in, registration, password recovery, MFA, Google 
 | Google OAuth popup | Shared `idle`/`pending` state prevents overlapping attempts. Closing the popup returns to idle and leaves the form editable; another attempt is possible. | Firebase emulator `Google popup cancellation restores sign-in and supports retry` |
 | MFA (SMS/TOTP) and phone verification | Per-step field errors and the Firebase UI operation state; recovery keeps the entered step. | Firebase component tests and source |
 | Protected session | `AuthGateClient`: loading, a single sign-in redirect, and a recoverable alert with a retry control; telemetry never gates content. | `auth-gate-client.test.tsx`, Firebase emulator tests |
-| Protected profile load/save | Loading and error branches inside the gate; preference reads ignore obsolete effects; save uses React Hook Form submission state and retains an avatar after failure. | profile unit/component tests |
+| Protected profile load/save | The read suspends into `profile/loading.tsx`; a failure reaches `profile/error.tsx`, whose retry evicts the failed read; a saved locale that differs keeps the read pending until the refresh. Save uses React Hook Form submission state and retains an avatar after failure. | `profile-page.test.tsx` |
 | Profile avatar selection | Valid files update the preview and remain selected through recoverable save failures; unsupported or oversized files show an associated inline error. | profile component tests |
 | Sign-out | `idle`, `pending`, `error`; request de-duplication and a recoverable inline alert. | home component/unit tests |
 
