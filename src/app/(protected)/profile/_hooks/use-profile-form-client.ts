@@ -1,14 +1,33 @@
+import { useLocale } from "next-intl";
+import { useTheme } from "next-themes";
 import { useForm } from "react-hook-form";
+import { useSession } from "@/hooks/use-session";
+import { defaultLocale, isLocale } from "@/i18n/routing";
 import type { ProfileFormValues } from "../_lib/definitions";
-import { useProfile } from "./use-profile";
+import { useProfilePreferences } from "./use-profile-preferences";
 import { useProfileSubmit } from "./use-profile-submit";
 
 export function useProfileFormClient() {
-  const profile = useProfile();
-  const { onSubmit, saveError } = useProfileSubmit(profile);
+  const locale = useLocale();
+  const activeLocale = isLocale(locale) ? locale : defaultLocale;
+  const { setTheme } = useTheme();
+  const { user } = useSession();
+  if (!user) throw new Error("Protected components require AuthGuardClient");
+
+  const { defaultValues, savedValuesRef } = useProfilePreferences(
+    user.uid,
+    activeLocale,
+    setTheme,
+  );
+  const { onSubmit, saveError } = useProfileSubmit({
+    activeLocale,
+    savedValuesRef,
+    setTheme,
+    user,
+  });
   const form = useForm<ProfileFormValues>({
-    defaultValues: { ...profile.defaultValues, avatarFile: null },
-    values: { ...profile.defaultValues, avatarFile: null },
+    defaultValues: { ...defaultValues, avatarFile: null },
+    values: { ...defaultValues, avatarFile: null },
     resetOptions: { keepDirtyValues: true },
   });
 
@@ -22,5 +41,5 @@ export function useProfileFormClient() {
     }
   }
 
-  return { form, handleSubmit, saveError, profile };
+  return { form, handleSubmit, saveError };
 }

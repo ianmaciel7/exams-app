@@ -1,13 +1,13 @@
 import { useTranslations } from "next-intl";
 import { useFormContext, useWatch } from "react-hook-form";
+import { useSession } from "@/hooks/use-session";
 import { getAvatarSource } from "../_lib/avatar";
 import type { ProfileFormValues } from "../_lib/definitions";
 import { useProfileAvatar } from "./use-profile-avatar";
-import { useProfileContext } from "./use-profile-context";
 
 export function useProfileAvatarFieldClient() {
   const t = useTranslations("Auth");
-  const { user, photoURL, avatarVersion } = useProfileContext();
+  const { user } = useSession();
   const { control, setValue, formState } = useFormContext<ProfileFormValues>();
   const avatarFile = useWatch({ control, name: "avatarFile" });
   const { avatarPreview, fileInputRef, handleAvatarChange } = useProfileAvatar(
@@ -17,7 +17,11 @@ export function useProfileAvatarFieldClient() {
   const displayName = user?.displayName ?? null;
   const email = user?.email ?? null;
   const disabled = formState.disabled || formState.isSubmitting;
-  const avatarSrc = getAvatarSource(avatarPreview, photoURL, avatarVersion);
+  const avatarSrc = getAvatarSource(
+    avatarPreview,
+    user?.photoURL ?? null,
+    formState.submitCount,
+  );
   const fallbackInitial = (
     displayName?.charAt(0) ||
     email?.charAt(0) ||

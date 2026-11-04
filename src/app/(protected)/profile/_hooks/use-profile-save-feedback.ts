@@ -11,16 +11,12 @@ import { syncSavedLocale } from "../_lib/locale-sync";
 type UseProfileSaveFeedbackOptions = {
   activeLocale: string;
   savedValuesRef: { current: ProfileValues | null };
-  setAvatarVersion: (version: number) => void;
-  setPhotoURL: (photoURL: string | null) => void;
   setTheme: (theme: ProfileValues["theme"]) => void;
 };
 
 export function useProfileSaveFeedback({
   activeLocale,
   savedValuesRef,
-  setAvatarVersion,
-  setPhotoURL,
   setTheme,
 }: UseProfileSaveFeedbackOptions) {
   const t = useTranslations("Auth");
@@ -30,8 +26,6 @@ export function useProfileSaveFeedback({
     values: ProfileFormValues,
     previous: ProfileValues,
   ) => {
-    setPhotoURL(savedProfile.photoURL);
-    if (savedProfile.avatarChanged) setAvatarVersion(Date.now());
     if (values.theme !== previous.theme) setTheme(values.theme);
     savedValuesRef.current = savedProfile.values;
     toast.add({

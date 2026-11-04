@@ -163,11 +163,12 @@ with regression cases for both boundary and directive-free modules.
 
 ## Next.js documentation workflow
 
-Before Next.js changes, read [agent rules](.agents/rules/cache.md)
-and the relevant installed `node_modules/next/dist/docs/` guide, consulting Context7 (`/vercel/next.js`)
-for verified upstream documentation. Match guidance to installed
-Next.js 16.4.3, App Router, Cache Components, and Partial Prefetching.
-See [Next.js sources](docs/agents/nextjs-sources.md) and
+Before Next.js changes, use the [nextjs-docs](.agents/skills/nextjs-docs/SKILL.md)
+skill to consult installed guides in `node_modules/next/dist/docs/` and runtime
+internals in `node_modules/next/dist/server/lib/`, read [agent rules](.agents/rules/cache.md),
+and consult Context7 (`/vercel/next.js`) for verified upstream documentation. Match
+guidance to installed Next.js 16.4.3, App Router, Cache Components, and Partial
+Prefetching. See [Next.js sources](docs/agents/nextjs-sources.md) and
 [Next.js versions](docs/agents/nextjs-versions.md).
 
 Use native Next.js, TypeScript, and Biome diagnostics before adding custom

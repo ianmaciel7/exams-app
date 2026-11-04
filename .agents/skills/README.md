@@ -1,6 +1,6 @@
 # Project skills
 
-This directory contains fifteen installed skills. `skills-lock.json` at the
+This directory contains sixteen installed skills. `skills-lock.json` at the
 repository root records upstream sources, paths, and computed hashes for external
 skills.
 
@@ -14,6 +14,7 @@ skills.
 | firebase-auth-basics | [SKILL.md](firebase-auth-basics/SKILL.md) | `firebase/agent-skills` | Firebase Authentication concepts, integration, and security rules |
 | firebase-rules-review | [SKILL.md](firebase-rules-review/SKILL.md) | Project-local | Review Firestore rules, Cloud Functions, and auth boundaries for security gaps |
 | impeccable | [SKILL.md](impeccable/SKILL.md) | `pbakaus/impeccable` | Design, audit, critique, shape, and polish frontend UI/UX |
+| nextjs-docs | [SKILL.md](nextjs-docs/SKILL.md) | Project-local | Inspect installed Next.js documentation and server runtime internals |
 | project-new-component | [SKILL.md](project-new-component/SKILL.md) | Project-local | Scaffold components that follow the naming and boundary contracts |
 | project-save | [SKILL.md](project-save/SKILL.md) | Project-local | Persist knowledge, rules, decisions, and conventions to canonical documentation |
 | retro | [SKILL.md](retro/SKILL.md) | Not recorded in lock metadata | Review completed work and capture improvements |
