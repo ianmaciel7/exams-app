@@ -7,6 +7,7 @@ import { FirebaseAuthSessionBridgeClient } from "@/components/ui/extensions/fire
 import { IntlDocumentServer } from "@/components/ui/extensions/intl-document-server";
 import { IntlProviderServer } from "@/components/ui/extensions/intl-provider-server";
 import { LoadingState } from "@/components/ui/extensions/loading-state";
+import { SessionProviderClient } from "@/components/ui/extensions/session-provider-client";
 import { ThemeProviderServer } from "@/components/ui/extensions/theme-provider-server";
 import { Toaster } from "@/components/ui/toast";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -49,15 +50,17 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <IntlProviderServer>
             <CspProviderServer>
               <FirebaseAuthSessionBridgeClient />
-              <ThemeProviderServer
-                attribute="class"
-                defaultTheme="system"
-                enableSystem
-                disableTransitionOnChange
-              >
-                <TooltipProvider>{children}</TooltipProvider>
-                <Toaster />
-              </ThemeProviderServer>
+              <SessionProviderClient>
+                <ThemeProviderServer
+                  attribute="class"
+                  defaultTheme="system"
+                  enableSystem
+                  disableTransitionOnChange
+                >
+                  <TooltipProvider>{children}</TooltipProvider>
+                  <Toaster />
+                </ThemeProviderServer>
+              </SessionProviderClient>
             </CspProviderServer>
           </IntlProviderServer>
         </Suspense>

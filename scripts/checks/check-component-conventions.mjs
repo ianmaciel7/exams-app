@@ -695,7 +695,7 @@ function checkProfileCardSafety(source, elements, report) {
   if (profileElements(elements, "ProfileFormClient").length) {
     report(
       source,
-      "ProfileCard must accept children; compose profile UI in ProfileSectionClient.",
+      "ProfileCard must accept children; compose profile UI in the profile page.",
     );
   }
   for (const primitive of [
@@ -709,6 +709,16 @@ function checkProfileCardSafety(source, elements, report) {
     if (profileElements(elements, primitive).length !== 1) {
       report(source, `ProfileCard must wrap exactly one ${primitive}.`);
     }
+  }
+  const fieldGroups = profileElements(elements, "FieldGroup");
+  if (
+    fieldGroups.length !== 1 ||
+    !isInsideProfile(fieldGroups[0], ["CardContent"])
+  ) {
+    report(
+      source,
+      "ProfileCardContent must render exactly one FieldGroup inside CardContent.",
+    );
   }
 }
 
@@ -737,9 +747,9 @@ function checkProfileSectionAction(source, elements, action, report) {
   }
 }
 
-function checkProfileSectionSafety(source, elements, report) {
+function checkProfilePageSafety(source, elements, report) {
   if (profileElements(elements, "ProfileCard").length === 0) {
-    report(source, "ProfileSectionClient must compose ProfileCard.");
+    report(source, "The profile page must compose ProfileCard.");
   }
   requireProfilePlacement(
     source,
@@ -768,9 +778,15 @@ function checkProfileSectionSafety(source, elements, report) {
     source,
     elements,
     "ProfileDisplayNameField",
-    ["FieldGroup", "ProfileCardContent", "ProfileFormClient", "ProfileCard"],
+    ["ProfileCardContent", "ProfileFormClient", "ProfileCard"],
     report,
   );
+  if (profileElements(elements, "FieldGroup").length) {
+    report(
+      source,
+      "The profile page must delegate FieldGroup to ProfileCardContent.",
+    );
+  }
   requireProfilePlacement(
     source,
     elements,
@@ -787,7 +803,7 @@ function checkProfileSectionSafety(source, elements, report) {
   ) {
     report(
       source,
-      "ProfileSectionClient must delegate native Card and form roots.",
+      "The profile page must delegate native Card and form roots.",
     );
   }
 }
@@ -908,8 +924,6 @@ function checkProfileButtonSafety(source, elements, report, stem) {
 function checkProfileFormSafety(source, stem, report) {
   const checks = {
     "profile-card": checkProfileCardSafety,
-    "profile-section-client": checkProfileSectionSafety,
-    "profile-section": checkProfileSectionSafety,
     "profile-form-client": checkProfileProviderSafety,
     "profile-form": checkProfileProviderSafety,
     "profile-form-content": checkProfileContentSafety,
@@ -949,11 +963,36 @@ function checkProfileFormSafety(source, stem, report) {
   check(source, jsxEntries(source), report);
 }
 
+/** The profile page composes the profile form; Next.js owns its boundaries. */
+export function inspectProfilePage(content, filename) {
+  if (!filename.replaceAll("\\", "/").endsWith("/profile/page.tsx")) return [];
+  const source = ts.createSourceFile(
+    filename,
+    content,
+    ts.ScriptTarget.Latest,
+    true,
+    ts.ScriptKind.TSX,
+  );
+  const findings = [];
+  checkProfilePageSafety(source, jsxEntries(source), (node, message) => {
+    const position = source.getLineAndCharacterOfPosition(
+      node.getStart(source),
+    );
+    findings.push({
+      file: filename,
+      line: position.line + 1,
+      column: position.character + 1,
+      message,
+    });
+  });
+  return findings;
+}
+
 function checkHomeSafety(source, stem, report) {
-  if (stem !== "home-client") return;
+  if (stem !== "home-section") return;
   const elements = jsxEntries(source);
   if (!elements.some((element) => element.name === "Home")) {
-    report(source, "HomeClient must compose Home.");
+    report(source, "HomeSection must compose Home.");
   }
 }
 
@@ -1649,6 +1688,7 @@ export function checkComponents(root) {
       ...inspectHookFilename(content, path),
       ...inspectUiPhaseStatus(content, path),
       ...inspectComponent(content, path),
+      ...inspectProfilePage(content, path),
     ];
   });
 }

@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Version } from "@/components/ui/extensions/version";
 import { Skeleton } from "@/components/ui/skeleton";
 import { routes } from "@/lib/navigation";
-import { useHomeClient } from "../_hooks/use-home-client";
+import { useHomeSection } from "../_hooks/use-home-section";
 import { Home, HomeContent, HomeFooter, HomeHeading, HomeLogo } from "./home";
 import {
   HomeHero,
@@ -16,10 +16,10 @@ import {
 } from "./home-hero";
 import { HomeSignOutButtonClient } from "./home-sign-out-button-client";
 
-type HomeClientProps = ComponentProps<"main">;
+type HomeSectionProps = ComponentProps<"main">;
 
-function HomeClient({ className, ...props }: HomeClientProps) {
-  const { t, session, title, description } = useHomeClient();
+function HomeSection({ className, ...props }: HomeSectionProps) {
+  const { t, session, title, description } = useHomeSection();
   const user = session.user;
 
   return (
@@ -85,4 +85,4 @@ function HomeClient({ className, ...props }: HomeClientProps) {
   );
 }
 
-export { HomeClient };
+export { HomeSection };

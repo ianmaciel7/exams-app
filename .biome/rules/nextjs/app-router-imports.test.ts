@@ -84,6 +84,42 @@ describe("native App Router import policy", () => {
     );
   });
 
+  it.each([
+    'import { useRouter } from "next/navigation"; export { useRouter };',
+    'export { useRouter } from "next/navigation";',
+  ])("rejects direct useRouter outside useNavigation: %s", (source) => {
+    const files = directories.map((directory) => {
+      const file = join(directory, "router.ts");
+      writeFileSync(file, source);
+      return file;
+    });
+    const result = lintJson(files, restrictedRuleFlag);
+    for (const file of files) {
+      expect(diagnosticsForFile(result, file)).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            category: "lint/style/noRestrictedImports",
+          }),
+        ]),
+      );
+    }
+  });
+
+  it("accepts other next/navigation hooks", () => {
+    const output = lintSingle(
+      join(directories[0], "pathname.ts"),
+      'import { usePathname, useSearchParams } from "next/navigation"; export { usePathname, useSearchParams };',
+    );
+    expect(output).not.toContain("lint/style/noRestrictedImports");
+  });
+
+  it("lets only useNavigation call useRouter", () => {
+    const file = join(root, "src/hooks/use-navigation.ts");
+    expect(lintText(file, restrictedRuleFlag)).not.toContain(
+      "lint/style/noRestrictedImports",
+    );
+  });
+
   it("rejects re-exports of the legacy router", () => {
     expect(
       lintSingle(

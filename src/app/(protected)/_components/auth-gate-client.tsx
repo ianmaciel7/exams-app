@@ -3,7 +3,6 @@
 import type { PropsWithChildren } from "react";
 import { LoadingState } from "@/components/ui/extensions/loading-state";
 import { useAuthGateClient } from "../_hooks/use-auth-gate-client";
-import { AuthenticatedUserContext } from "../_lib/authenticated-user";
 import { AuthGate, AuthGateError } from "./auth-gate";
 
 type AuthGateClientProps = PropsWithChildren;
@@ -30,13 +29,7 @@ function AuthGateClient({ children }: AuthGateClientProps) {
 
   if (!user) return <LoadingState boundary="protected-auth" />;
 
-  return (
-    <AuthGate>
-      <AuthenticatedUserContext key={user.uid} value={user}>
-        {children}
-      </AuthenticatedUserContext>
-    </AuthGate>
-  );
+  return <AuthGate key={user.uid}>{children}</AuthGate>;
 }
 
 export { AuthGateClient };
