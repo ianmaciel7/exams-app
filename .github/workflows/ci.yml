@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, dev]
   pull_request:
     # `edited` re-runs the title check after a title fix; the other jobs of a
     # superseded run are cancelled by the concurrency group.
