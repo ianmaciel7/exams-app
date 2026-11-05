@@ -1,0 +1,30 @@
+id: no-template-literal-classname
+language: tsx
+files:
+  - src/app/**/*.tsx
+  - src/components/**/*.tsx
+  - src/hooks/**/*.tsx
+ignores:
+  - "**/*.test.tsx"
+  - "**/*.stories.tsx"
+  - "src/components/ui/[!e]*.tsx"
+  - "src/components/ui/e[!x]*.tsx"
+  - src/components/ai-elements/**
+severity: error
+message: Build `className` with `cn()` from @/lib/utils instead of a template literal.
+note: |
+  shadcn/ui rule: conditional and merged classes go through `cn()`, which
+  resolves Tailwind conflicts with tailwind-merge. A template literal
+  concatenates conflicting utilities (`p-2 p-4`) and leaves both. Static
+  strings stay as plain strings.
+rule:
+  kind: template_string
+  not:
+    regex: '^`[^`$]*`$'
+  inside:
+    kind: jsx_expression
+    inside:
+      kind: jsx_attribute
+      has:
+        kind: property_identifier
+        regex: ^className$

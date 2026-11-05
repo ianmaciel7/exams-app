@@ -1,0 +1,68 @@
+id: prefer-alert
+snapshots:
+  "const a = <div role=\"alert\" className=\"text-sm text-destructive\">{message}</div>;":
+    labels:
+    - source: <div role="alert" className="text-sm text-destructive">
+      style: primary
+      start: 10
+      end: 65
+    - source: role
+      style: secondary
+      start: 15
+      end: 19
+    - source: alert
+      style: secondary
+      start: 21
+      end: 26
+    - source: role="alert"
+      style: secondary
+      start: 15
+      end: 27
+    - source: div
+      style: secondary
+      start: 11
+      end: 14
+  "const a = <p role=\"alert\">{message}</p>;":
+    labels:
+    - source: <p role="alert">
+      style: primary
+      start: 10
+      end: 26
+    - source: role
+      style: secondary
+      start: 13
+      end: 17
+    - source: alert
+      style: secondary
+      start: 19
+      end: 24
+    - source: role="alert"
+      style: secondary
+      start: 13
+      end: 25
+    - source: p
+      style: secondary
+      start: 11
+      end: 12
+  const a = <span role="alert" />;:
+    labels:
+    - source: <span role="alert" />
+      style: primary
+      start: 10
+      end: 31
+    - source: role
+      style: secondary
+      start: 16
+      end: 20
+    - source: alert
+      style: secondary
+      start: 22
+      end: 27
+    - source: role="alert"
+      style: secondary
+      start: 16
+      end: 28
+    - source: span
+      style: secondary
+      start: 11
+      end: 15

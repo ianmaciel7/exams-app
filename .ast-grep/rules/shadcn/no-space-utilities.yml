@@ -1,0 +1,33 @@
+id: no-space-utilities
+language: tsx
+files:
+  - src/app/**/*.tsx
+  - src/components/**/*.tsx
+  - src/hooks/**/*.tsx
+ignores:
+  - "**/*.test.tsx"
+  - "**/*.stories.tsx"
+  - "src/components/ui/[!e]*.tsx"
+  - "src/components/ui/e[!x]*.tsx"
+  - src/components/ai-elements/**
+severity: error
+message: Use `flex flex-col gap-*` (or `flex gap-*`) instead of `space-x-*` or `space-y-*`.
+note: |
+  shadcn/ui styling rule: spacing between children uses `gap-*`, never
+  `space-x-*` or `space-y-*` (https://ui.shadcn.com/docs). The space utilities
+  select children with margins, which breaks with RTL, `hidden` children and
+  wrapped layouts. Negative `-space-x-*` is allowed for overlapping groups.
+rule:
+  kind: string_fragment
+  regex: '(^|[\s:!])space-[xy]-'
+  inside:
+    stopBy: end
+    any:
+      - kind: jsx_attribute
+        has:
+          kind: property_identifier
+          regex: ^className$
+      - kind: call_expression
+        has:
+          field: function
+          regex: ^(cn|clsx|cva)$

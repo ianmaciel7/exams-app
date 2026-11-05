@@ -1,0 +1,46 @@
+id: require-focusable-when-disabled
+language: tsx
+files:
+  - src/app/**/*.tsx
+  - src/components/**/*.tsx
+ignores:
+  - "**/*.test.tsx"
+  - "**/*.stories.tsx"
+  - "src/components/ui/[!e]*.tsx"
+  - src/components/ai-elements/**
+severity: error
+message: A Button that shows a pending Spinner and is disabled needs `focusableWhenDisabled`.
+note: |
+  Base UI Button docs (Button > "loading state"): a button disabled while it
+  submits stays in the tab order with `focusableWhenDisabled`, so keyboard and
+  screen reader focus is not lost when the request starts (WCAG 2.4.3). Pair it
+  with `aria-busy` while pending.
+rule:
+  kind: jsx_element
+  has:
+    field: open_tag
+    has:
+      field: name
+      regex: ^Button$
+  all:
+    - has:
+        field: open_tag
+        has:
+          kind: jsx_attribute
+          has:
+            kind: property_identifier
+            regex: ^disabled$
+    - not:
+        has:
+          field: open_tag
+          has:
+            kind: jsx_attribute
+            has:
+              kind: property_identifier
+              regex: ^focusableWhenDisabled$
+    - has:
+        stopBy: end
+        kind: jsx_self_closing_element
+        has:
+          field: name
+          regex: ^Spinner$

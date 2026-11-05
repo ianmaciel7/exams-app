@@ -1,5 +1,6 @@
 "use client";
 
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useRedirectError } from "@firebase-oss/ui-react";
 
 export function RedirectError() {
@@ -10,8 +11,8 @@ export function RedirectError() {
   }
 
   return (
-    <div role="alert" className="text-sm text-destructive">
-      {error}
-    </div>
+    <Alert variant="destructive">
+      <AlertDescription>{error}</AlertDescription>
+    </Alert>
   );
 }

@@ -2,6 +2,7 @@
 
 import { FirebaseUIProvider } from "@firebase-oss/ui-react";
 import type { PropsWithChildren } from "react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { LoadingStatus } from "@/components/ui/extensions/loading-status";
 import { usePublicGuardClient } from "../_hooks/use-public-guard-client";
 
@@ -13,12 +14,9 @@ function PublicGuardClient({ children }: PublicGuardClientProps) {
 
   if (state.isError)
     return (
-      <p
-        role="alert"
-        className="text-center text-sm font-medium text-destructive"
-      >
-        {t("configurationError")}
-      </p>
+      <Alert variant="destructive">
+        <AlertDescription>{t("configurationError")}</AlertDescription>
+      </Alert>
     );
   if (state.isLoading) return <LoadingStatus />;
   if (!state.ui) return null;

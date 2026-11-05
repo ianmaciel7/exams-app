@@ -4,6 +4,7 @@ import { type ComponentProps, useId } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Field, FieldContent, FieldTitle } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useProfileAvatarFieldClient } from "../_hooks/use-profile-avatar-field-client";
 
@@ -67,11 +68,12 @@ function ProfileAvatarFieldClient({
           {t("profilePhotoChange")}
         </Button>
       </FieldContent>
-      <input
+      <Input
         ref={fileInputRef}
         type="file"
+        autoComplete="off"
         accept="image/jpeg,image/png,image/webp"
-        hidden
+        className="hidden"
         tabIndex={-1}
         disabled={disabled}
         onChange={handleAvatarChange}

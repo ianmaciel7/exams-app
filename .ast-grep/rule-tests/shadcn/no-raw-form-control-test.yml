@@ -1,0 +1,10 @@
+id: no-raw-form-control
+valid:
+  - const a = <Input type="file" className="hidden" autoComplete="off" />;
+  - const a = <FormFieldLabel>Name</FormFieldLabel>;
+  - const a = <Textarea name="bio" />;
+invalid:
+  - const a = <input type="file" hidden />;
+  - const a = <textarea name="bio" />;
+  - const a = <select name="locale" />;
+  - const a = <label htmlFor="name">Name</label>;

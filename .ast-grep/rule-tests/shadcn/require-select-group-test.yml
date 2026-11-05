@@ -1,0 +1,27 @@
+id: require-select-group
+valid:
+  - |
+    const a = (
+      <SelectContent>
+        <SelectGroup>
+          {items.map((i) => (
+            <SelectItem key={i} value={i}>{i}</SelectItem>
+          ))}
+        </SelectGroup>
+      </SelectContent>
+    );
+invalid:
+  - |
+    const a = (
+      <SelectContent>
+        <SelectItem value="a">A</SelectItem>
+      </SelectContent>
+    );
+  - |
+    const a = (
+      <SelectContent>
+        {items.map((i) => (
+          <SelectItem key={i} value={i}>{i}</SelectItem>
+        ))}
+      </SelectContent>
+    );

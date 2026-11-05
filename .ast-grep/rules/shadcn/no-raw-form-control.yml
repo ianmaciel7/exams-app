@@ -1,0 +1,27 @@
+id: no-raw-form-control
+language: tsx
+files:
+  - src/app/**/*.tsx
+  - src/components/**/*.tsx
+  - src/hooks/**/*.tsx
+ignores:
+  - "**/*.test.tsx"
+  - "**/*.stories.tsx"
+  - "src/components/ui/[!e]*.tsx"
+  - "src/components/ui/e[!x]*.tsx"
+  - src/components/ai-elements/**
+severity: error
+message: Use `Input`, `Textarea`, `Select` or `Label` from @/components/ui instead of a raw `<input>`, `<textarea>`, `<select>` or `<label>`.
+note: |
+  The shadcn wrappers carry the focus ring, `aria-invalid` styling, the 44 px
+  touch target (`pointer-coarse`) and the 16 px font that stops iOS zoom
+  (.agents/rules/mobile.md). A hidden file input still uses `Input`
+  (`type="file"` with `className="hidden"`). Labels inside forms use
+  `FormFieldLabel`.
+rule:
+  any:
+    - kind: jsx_opening_element
+    - kind: jsx_self_closing_element
+  has:
+    field: name
+    regex: ^(input|textarea|select|label)$

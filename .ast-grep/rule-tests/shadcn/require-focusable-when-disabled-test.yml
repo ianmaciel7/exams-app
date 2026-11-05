@@ -1,0 +1,27 @@
+id: require-focusable-when-disabled
+valid:
+  - |
+    const a = (
+      <Button disabled={pending} focusableWhenDisabled>
+        {pending && <Spinner data-icon="inline-start" />}
+        Save
+      </Button>
+    );
+  - |
+    const a = <Button disabled={!ready}>Save</Button>;
+  - |
+    const a = <Button>{pending && <Spinner />}Save</Button>;
+invalid:
+  - |
+    const a = (
+      <Button disabled={pending}>
+        {pending && <Spinner data-icon="inline-start" />}
+        Save
+      </Button>
+    );
+  - |
+    const a = (
+      <Button type="submit" disabled={ui.state !== "idle"}>
+        {ui.state !== "idle" ? <><Spinner />Go</> : "Go"}
+      </Button>
+    );

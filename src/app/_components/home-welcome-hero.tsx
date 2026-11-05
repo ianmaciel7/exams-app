@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { ComponentProps } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { routes } from "@/lib/navigation";
+import { cn } from "@/lib/utils";
 import { useHomeWelcomeHero } from "../_hooks/use-home-welcome-hero";
 import { HomeHeading } from "./home";
 import {
@@ -36,11 +37,11 @@ function HomeWelcomeHero(props: HomeWelcomeHeroProps) {
             <span className="sr-only">{t("loading")}</span>
             <Skeleton
               aria-hidden="true"
-              className={`${homeHeroActionSize} motion-reduce:animate-none`}
+              className={cn(homeHeroActionSize, "motion-reduce:animate-none")}
             />
             <Skeleton
               aria-hidden="true"
-              className={`${homeHeroActionSize} motion-reduce:animate-none`}
+              className={cn(homeHeroActionSize, "motion-reduce:animate-none")}
             />
           </div>
         ) : user ? (

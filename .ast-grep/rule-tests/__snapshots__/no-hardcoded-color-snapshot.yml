@@ -1,0 +1,72 @@
+id: no-hardcoded-color
+snapshots:
+  const a = <p className="bg-white" />;:
+    labels:
+    - source: bg-white
+      style: primary
+      start: 24
+      end: 32
+    - source: className
+      style: secondary
+      start: 13
+      end: 22
+    - source: className="bg-white"
+      style: secondary
+      start: 13
+      end: 33
+  "const a = <p className=\"p-2 dark:bg-input/30\" />;":
+    labels:
+    - source: p-2 dark:bg-input/30
+      style: primary
+      start: 24
+      end: 44
+    - source: className
+      style: secondary
+      start: 13
+      end: 22
+    - source: className="p-2 dark:bg-input/30"
+      style: secondary
+      start: 13
+      end: 45
+  "const a = <p className=\"text-green-600 dark:text-green-400\" />;":
+    labels:
+    - source: text-green-600 dark:text-green-400
+      style: primary
+      start: 24
+      end: 58
+    - source: className
+      style: secondary
+      start: 13
+      end: 22
+    - source: className="text-green-600 dark:text-green-400"
+      style: secondary
+      start: 13
+      end: 59
+  const a = <p className="text-green-600" />;:
+    labels:
+    - source: text-green-600
+      style: primary
+      start: 24
+      end: 38
+    - source: className
+      style: secondary
+      start: 13
+      end: 22
+    - source: className="text-green-600"
+      style: secondary
+      start: 13
+      end: 39
+  "const a = cn(\"p-2\", ok && \"border-red-500/50\");":
+    labels:
+    - source: border-red-500/50
+      style: primary
+      start: 27
+      end: 44
+    - source: cn
+      style: secondary
+      start: 10
+      end: 12
+    - source: cn("p-2", ok && "border-red-500/50")
+      style: secondary
+      start: 10
+      end: 46

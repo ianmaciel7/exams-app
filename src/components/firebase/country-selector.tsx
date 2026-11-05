@@ -1,5 +1,6 @@
 "use client";
 
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { forwardRef, useCallback, useImperativeHandle, useState } from "react";
 import type { CountryCode, CountryData } from "@firebase-oss/ui-core";
 import {
@@ -9,7 +10,7 @@ import {
   useDefaultCountry,
 } from "@firebase-oss/ui-react";
 
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export type { CountrySelectorRef };
 
@@ -48,11 +49,13 @@ export const CountrySelector = forwardRef<CountrySelectorRef, CountrySelectorPro
         </SelectValue>
       </SelectTrigger>
       <SelectContent>
-        {countries.map((country) => (
-          <SelectItem key={country.code} value={country.code}>
-            {country.dialCode} ({country.name})
-          </SelectItem>
-        ))}
+        <SelectGroup>
+          {countries.map((country) => (
+            <SelectItem key={country.code} value={country.code}>
+              {country.dialCode} ({country.name})
+            </SelectItem>
+          ))}
+        </SelectGroup>
       </SelectContent>
     </Select>
   );

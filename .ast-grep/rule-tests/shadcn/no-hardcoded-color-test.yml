@@ -1,0 +1,12 @@
+id: no-hardcoded-color
+valid:
+  - const a = <p className="text-destructive" />;
+  - const a = <p className="bg-muted text-muted-foreground" />;
+  - const a = <img className="dark:invert" />;
+  - const a = <p className="border-input/50" />;
+invalid:
+  - const a = <p className="text-green-600" />;
+  - const a = <p className="text-green-600 dark:text-green-400" />;
+  - const a = <p className="bg-white" />;
+  - const a = <p className="p-2 dark:bg-input/30" />;
+  - const a = cn("p-2", ok && "border-red-500/50");

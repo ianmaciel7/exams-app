@@ -1,4 +1,5 @@
 import type { ComponentProps } from "react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -34,7 +35,9 @@ function ProtectedGuardError({
       className={cn("flex flex-col items-center gap-4 text-center", className)}
       {...props}
     >
-      <p role="alert">{message}</p>
+      <Alert variant="destructive">
+        <AlertDescription>{message}</AlertDescription>
+      </Alert>
       <Button onClick={onRetry}>{retryLabel}</Button>
     </div>
   );
