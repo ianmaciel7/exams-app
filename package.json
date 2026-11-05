@@ -75,6 +75,7 @@
     "analyze:health": "pnpm test:coverage && pnpm analyze:fallow",
     "check:routes": "node --test scripts/checks/check-route-files.test.mjs && node scripts/checks/check-route-files.mjs",
     "check:components": "node --test scripts/checks/check-component-conventions.test.mjs scripts/checks/check-component-composition.test.mjs && node scripts/checks/check-component-conventions.mjs",
+    "check:component-structure": "node --test scripts/checks/check-component-structure.test.mjs && node scripts/checks/check-component-structure.mjs",
     "check:ui-state": "node --test scripts/checks/check-ui-state.test.mjs && node scripts/checks/check-ui-state.mjs",
     "check:english": "node --test scripts/checks/check-english.test.mjs && node scripts/checks/check-english.mjs",
     "check:responsiveness": "node --test scripts/checks/check-responsiveness.test.mjs && node scripts/checks/check-responsiveness.mjs",

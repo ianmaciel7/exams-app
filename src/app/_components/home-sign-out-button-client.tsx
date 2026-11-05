@@ -21,6 +21,7 @@ function HomeSignOutButtonClient({
 
   return (
     <div
+      data-slot="home-sign-out-button"
       {...props}
       className={cn("flex w-full flex-col gap-2 sm:w-auto", className)}
     >

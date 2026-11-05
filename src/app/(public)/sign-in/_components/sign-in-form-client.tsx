@@ -10,7 +10,7 @@ type SignInFormClientProps = ComponentProps<"div">;
 function SignInFormClient(props: SignInFormClientProps) {
   const { goToRegister, goToForgotPassword } = useSignInFormClient();
   return (
-    <div {...props}>
+    <div data-slot="sign-in-form" {...props}>
       <SignInAuthContent
         onSignUpClick={goToRegister}
         onForgotPasswordClick={goToForgotPassword}
