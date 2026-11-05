@@ -15,4 +15,4 @@ After ADR 0019, `ProfileCardClient` was a client component that received `title`
 ## Consequences
 
 - Less client code and a page that shows the whole screen structure.
-- `use-profile-card-client.ts` becomes `use-profile-form-client.ts`; behavior (15-second deadline, error boundary, locale and theme sync) is unchanged.
+- The forgot-password route also loses its `ForgotPasswordFormClient` Middle Man: `ForgotPasswordAuthScreen` reads navigation itself. `use-profile-card-client.ts` becomes `use-profile-form-client.ts`; behavior (15-second deadline, error boundary, locale and theme sync) is unchanged.

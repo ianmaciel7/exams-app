@@ -27,7 +27,7 @@ This section covers component dimensions and file contracts; see also [Component
 
 Every owned component must specify a concrete component type or semantic role describing its composition or behavior (such as `*-field`, `*-form`, `*-card`, `*-dialog`, `*-hero`, `*-button`, `*-provider`, or `*-guard`). A component name must never describe only its feature domain or runtime environment without a concrete role.
 
-Route composition roots that render an auth form carry `Form` in the name (`SignInFormClient`, `RegisterFormClient`, `ForgotPasswordFormClient`) and their hooks and files follow it (`use-sign-in-form-client.ts`, `sign-in-form-client.tsx`).
+Route composition roots that render an auth form carry `Form` in the name (`SignInFormClient`, `RegisterFormClient`) and their hooks and files follow it (`use-sign-in-form-client.ts`, `sign-in-form-client.tsx`). The forgot-password page renders `ForgotPasswordAuthScreen` directly: the screen owns its navigation, so no wrapper exists.
 
 The shadcn primitives live under `src/components/ui/`; Firebase registry output
 lives under `src/components/firebase/`; generated AI Elements live under

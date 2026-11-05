@@ -339,6 +339,20 @@ describe("owned component conventions", () => {
     );
   });
 
+  it("rejects a Middle Man that only delegates to one owned component", () => {
+    const file =
+      "src/app/(public)/forgot-password/_components/forgot-password-form-client.tsx";
+    expectInvalid(
+      '"use client"; import { ForgotPasswordAuthScreen } from "@/components/firebase/forgot-password-auth-screen"; function ForgotPasswordFormClient(props) { return <div {...props}><ForgotPasswordAuthScreen /></div>; } export { ForgotPasswordFormClient };',
+      /Middle Man/,
+      file,
+    );
+    expectValid(
+      '"use client"; import { ForgotPasswordAuthScreen } from "@/components/firebase/forgot-password-auth-screen"; function ForgotPasswordFormClient(props) { return props.ready ? <ForgotPasswordAuthScreen /> : null; } export { ForgotPasswordFormClient };',
+      file,
+    );
+  });
+
   it("keeps client leaves free of Card parts (direct page composition)", () => {
     const file =
       "src/app/(protected)/profile/_components/profile-form-client.tsx";
@@ -1056,7 +1070,7 @@ describe("component filename term matching and parity", () => {
        type HomeSectionProps = ComponentProps<"div">;
        function HomeSection(props: HomeSectionProps) {
          const { t } = useHomeSection();
-         return <Home {...props} />;
+         return t ? <Home {...props} /> : null;
        }
        export { HomeSection };`,
       "src/app/_components/home-section.tsx",

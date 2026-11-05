@@ -1063,6 +1063,88 @@ function checkClientLeafRendersNoCard(source, stem, report) {
   }
 }
 
+function collectOwnedImports(source) {
+  const names = new Set();
+  for (const statement of source.statements) {
+    if (
+      !ts.isImportDeclaration(statement) ||
+      !ts.isStringLiteral(statement.moduleSpecifier) ||
+      !/^(\.|@\/components\/(?!ui\/))/.test(statement.moduleSpecifier.text)
+    ) {
+      continue;
+    }
+    const clause = statement.importClause;
+    if (clause?.name) names.add(clause.name.text);
+    const bindings = clause?.namedBindings;
+    if (bindings && ts.isNamedImports(bindings)) {
+      for (const element of bindings.elements) names.add(element.name.text);
+    }
+  }
+  return names;
+}
+
+const logicalOperators = new Set([
+  ts.SyntaxKind.AmpersandAmpersandToken,
+  ts.SyntaxKind.BarBarToken,
+  ts.SyntaxKind.QuestionQuestionToken,
+]);
+
+function isRenderingLogic(node, source) {
+  if (ts.isConditionalExpression(node) || ts.isIfStatement(node)) return true;
+  if (ts.isBinaryExpression(node))
+    return logicalOperators.has(node.operatorToken.kind);
+  return (
+    ts.isCallExpression(node) &&
+    node.expression.getText(source).endsWith(".map")
+  );
+}
+
+function analyzeDelegation(statement, ownedImports, source) {
+  const delegates = [];
+  let hasLogic = false;
+  const visit = (node) => {
+    if (ts.isJsxOpeningElement(node) || ts.isJsxSelfClosingElement(node)) {
+      const name = node.tagName.getText(source);
+      if (ownedImports.has(name)) delegates.push(name);
+    }
+    if (isRenderingLogic(node, source)) hasLogic = true;
+    ts.forEachChild(node, visit);
+  };
+  visit(statement);
+  return { delegates, hasLogic };
+}
+
+/**
+ * Middle Man (Fowler, "Remove Middle Man"): a route-private component that only
+ * delegates to a single owned component, with no conditional or list rendering
+ * of its own, adds a layer without behavior. Applies to every component kind.
+ * Adapters over third-party primitives in `ui/extensions` are exempt.
+ */
+function checkMiddleManComponent(source, filename, report) {
+  if (!filename.replaceAll("\\", "/").startsWith("src/app/")) return;
+  const ownedImports = collectOwnedImports(source);
+  for (const statement of source.statements) {
+    if (
+      !ts.isFunctionDeclaration(statement) ||
+      !statement.name ||
+      !/^[A-Z]/.test(statement.name.text)
+    ) {
+      continue;
+    }
+    const { delegates, hasLogic } = analyzeDelegation(
+      statement,
+      ownedImports,
+      source,
+    );
+    if (delegates.length === 1 && !hasLogic) {
+      report(
+        statement.name,
+        `Component "${statement.name.text}" only delegates to <${delegates[0]}> (Middle Man). Render it from the Server Component page, or give this component its own behavior (see .agents/rules/composition.md).`,
+      );
+    }
+  }
+}
+
 export function inspectComponent(content, filename) {
   if (!isOwnedComponent(filename)) return [];
   const source = ts.createSourceFile(
@@ -1099,6 +1181,7 @@ export function inspectComponent(content, filename) {
   );
   if (stem.endsWith("-form")) checkFormComponent(source, report);
   checkClientLeafRendersNoCard(source, stem, report);
+  checkMiddleManComponent(source, filename, report);
   checkHookResponsibilities(source, report);
   checkFieldControllerNames(source, stem, report);
   checkProfilePropDrilling(source, report);

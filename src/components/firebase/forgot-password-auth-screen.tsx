@@ -13,11 +13,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useNavigation } from "@/hooks/use-navigation";
 
 export type { ForgotPasswordAuthScreenProps };
 
 export function ForgotPasswordAuthScreen(props: ForgotPasswordAuthScreenProps) {
   const ui = useUI();
+  const { goToSignIn } = useNavigation();
 
   const titleText = getTranslation(ui, "labels", "resetPassword");
   const subtitleText = getTranslation(ui, "prompts", "enterEmailToReset");
@@ -32,7 +34,7 @@ export function ForgotPasswordAuthScreen(props: ForgotPasswordAuthScreenProps) {
           <CardDescription>{subtitleText}</CardDescription>
         </CardHeader>
         <CardContent>
-          <ForgotPasswordAuthForm {...props} />
+          <ForgotPasswordAuthForm onBackToSignInClick={goToSignIn} {...props} />
         </CardContent>
       </Card>
     </div>
