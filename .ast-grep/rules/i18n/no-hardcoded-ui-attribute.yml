@@ -26,4 +26,4 @@ rule:
   all:
     - has:
         kind: string
-        regex: '[A-Za-z]'
+        regex: "[A-Za-z]"

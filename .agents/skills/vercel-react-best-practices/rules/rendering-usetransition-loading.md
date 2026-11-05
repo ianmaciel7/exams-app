@@ -1,4 +1,5 @@
 ---
+
 title: Use useTransition Over Manual Loading States
 impact: LOW
 impactDescription: reduces re-renders and improves code clarity
@@ -13,17 +14,17 @@ Use `useTransition` instead of manual `useState` for loading states. This provid
 
 ```tsx
 function SearchResults() {
-  const [query, setQuery] = useState('')
-  const [results, setResults] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSearch = async (value: string) => {
-    setIsLoading(true)
-    setQuery(value)
-    const data = await fetchResults(value)
-    setResults(data)
-    setIsLoading(false)
-  }
+    setIsLoading(true);
+    setQuery(value);
+    const data = await fetchResults(value);
+    setResults(data);
+    setIsLoading(false);
+  };
 
   return (
     <>
@@ -31,29 +32,29 @@ function SearchResults() {
       {isLoading && <Spinner />}
       <ResultsList results={results} />
     </>
-  )
+  );
 }
 ```
 
 **Correct (useTransition with built-in pending state):**
 
 ```tsx
-import { useTransition, useState } from 'react'
+import { useTransition, useState } from "react";
 
 function SearchResults() {
-  const [query, setQuery] = useState('')
-  const [results, setResults] = useState([])
-  const [isPending, startTransition] = useTransition()
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState([]);
+  const [isPending, startTransition] = useTransition();
 
   const handleSearch = (value: string) => {
-    setQuery(value) // Update input immediately
-    
+    setQuery(value); // Update input immediately
+
     startTransition(async () => {
       // Fetch and update results
-      const data = await fetchResults(value)
-      setResults(data)
-    })
-  }
+      const data = await fetchResults(value);
+      setResults(data);
+    });
+  };
 
   return (
     <>
@@ -61,7 +62,7 @@ function SearchResults() {
       {isPending && <Spinner />}
       <ResultsList results={results} />
     </>
-  )
+  );
 }
 ```
 

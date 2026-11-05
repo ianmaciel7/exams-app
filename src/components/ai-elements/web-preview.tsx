@@ -197,7 +197,10 @@ const WebPreviewUrl = ({
   );
 };
 
-type WebPreviewBodyProps = Omit<ComponentProps<"iframe">, "sandbox" | "srcDoc"> & {
+type WebPreviewBodyProps = Omit<
+  ComponentProps<"iframe">,
+  "sandbox" | "srcDoc"
+> & {
   loading?: ReactNode;
 };
 
@@ -303,16 +306,16 @@ const WebPreviewConsole = ({
 
 export {
   WebPreview,
+  WebPreviewBody,
+  type WebPreviewBodyProps,
+  WebPreviewConsole,
+  type WebPreviewConsoleProps,
+  type WebPreviewContextValue,
   WebPreviewNavigation,
   WebPreviewNavigationButton,
-  WebPreviewUrl,
-  WebPreviewBody,
-  WebPreviewConsole,
-  type WebPreviewContextValue,
-  type WebPreviewProps,
-  type WebPreviewNavigationProps,
   type WebPreviewNavigationButtonProps,
+  type WebPreviewNavigationProps,
+  type WebPreviewProps,
+  WebPreviewUrl,
   type WebPreviewUrlProps,
-  type WebPreviewBodyProps,
-  type WebPreviewConsoleProps,
 };

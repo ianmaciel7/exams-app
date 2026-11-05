@@ -11,6 +11,8 @@ describe("CodeBlockCopyButton", () => {
         <CodeBlockCopyButton value="sample code" />
       </form>,
     );
-    expect(screen.getByRole("button", { name: "Copy" }).getAttribute("type")).toBe("button");
+    expect(
+      screen.getByRole("button", { name: "Copy" }).getAttribute("type"),
+    ).toBe("button");
   });
 });

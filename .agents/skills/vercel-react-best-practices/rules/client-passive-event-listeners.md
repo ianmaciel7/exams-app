@@ -1,4 +1,5 @@
 ---
+
 title: Use Passive Event Listeners for Scrolling Performance
 impact: MEDIUM
 impactDescription: eliminates scroll delay caused by event listeners
@@ -13,34 +14,34 @@ Add `{ passive: true }` to touch and wheel event listeners to enable immediate s
 
 ```typescript
 useEffect(() => {
-  const handleTouch = (e: TouchEvent) => console.log(e.touches[0].clientX)
-  const handleWheel = (e: WheelEvent) => console.log(e.deltaY)
-  
-  document.addEventListener('touchstart', handleTouch)
-  document.addEventListener('wheel', handleWheel)
-  
+  const handleTouch = (e: TouchEvent) => console.log(e.touches[0].clientX);
+  const handleWheel = (e: WheelEvent) => console.log(e.deltaY);
+
+  document.addEventListener("touchstart", handleTouch);
+  document.addEventListener("wheel", handleWheel);
+
   return () => {
-    document.removeEventListener('touchstart', handleTouch)
-    document.removeEventListener('wheel', handleWheel)
-  }
-}, [])
+    document.removeEventListener("touchstart", handleTouch);
+    document.removeEventListener("wheel", handleWheel);
+  };
+}, []);
 ```
 
 **Correct:**
 
 ```typescript
 useEffect(() => {
-  const handleTouch = (e: TouchEvent) => console.log(e.touches[0].clientX)
-  const handleWheel = (e: WheelEvent) => console.log(e.deltaY)
-  
-  document.addEventListener('touchstart', handleTouch, { passive: true })
-  document.addEventListener('wheel', handleWheel, { passive: true })
-  
+  const handleTouch = (e: TouchEvent) => console.log(e.touches[0].clientX);
+  const handleWheel = (e: WheelEvent) => console.log(e.deltaY);
+
+  document.addEventListener("touchstart", handleTouch, { passive: true });
+  document.addEventListener("wheel", handleWheel, { passive: true });
+
   return () => {
-    document.removeEventListener('touchstart', handleTouch)
-    document.removeEventListener('wheel', handleWheel)
-  }
-}, [])
+    document.removeEventListener("touchstart", handleTouch);
+    document.removeEventListener("wheel", handleWheel);
+  };
+}, []);
 ```
 
 **Use passive when:** tracking/analytics, logging, any listener that doesn't call `preventDefault()`.

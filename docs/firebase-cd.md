@@ -13,12 +13,12 @@ configured release branch is rejected.
 Create a GitHub Environment named `production`. Add these environment-scoped
 variables there; do not commit their concrete values to the repository:
 
-| Variable | Purpose |
-| --- | --- |
-| `FIREBASE_PROJECT_ID` | Firebase production project identifier. |
-| `FIREBASE_APP_HOSTING_BACKEND_ID` | App Hosting backend that serves the Next.js application. |
-| `FIREBASE_RELEASE_BRANCH` | Branch whose reachable commits are eligible for release. |
-| `GOOGLE_SERVICE_ACCOUNT` | Deployment service-account email. |
+| Variable                            | Purpose                                                     |
+| ----------------------------------- | ----------------------------------------------------------- |
+| `FIREBASE_PROJECT_ID`               | Firebase production project identifier.                     |
+| `FIREBASE_APP_HOSTING_BACKEND_ID`   | App Hosting backend that serves the Next.js application.    |
+| `FIREBASE_RELEASE_BRANCH`           | Branch whose reachable commits are eligible for release.    |
+| `GOOGLE_SERVICE_ACCOUNT`            | Deployment service-account email.                           |
 | `GOOGLE_WORKLOAD_IDENTITY_PROVIDER` | Full Google Cloud Workload Identity Provider resource name. |
 
 The workflow uses GitHub OIDC and Workload Identity Federation. Do not create

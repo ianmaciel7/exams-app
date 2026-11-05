@@ -278,7 +278,8 @@ jobs:
   ci-result:
     name: CI result
     if: ${{ always() }}
-    needs: [static, build, e2e, auth-emulator, rules, security, production-smoke]
+    needs:
+      [static, build, e2e, auth-emulator, rules, security, production-smoke]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:

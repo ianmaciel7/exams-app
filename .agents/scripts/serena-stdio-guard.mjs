@@ -20,10 +20,14 @@ function terminateChildTree() {
   if (child.exitCode !== null || child.signalCode !== null) return;
 
   if (process.platform === "win32") {
-    const killer = spawn("taskkill.exe", ["/PID", String(child.pid), "/T", "/F"], {
-      stdio: "ignore",
-      windowsHide: true,
-    });
+    const killer = spawn(
+      "taskkill.exe",
+      ["/PID", String(child.pid), "/T", "/F"],
+      {
+        stdio: "ignore",
+        windowsHide: true,
+      },
+    );
     killer.on("error", () => child.kill("SIGKILL"));
     return;
   }

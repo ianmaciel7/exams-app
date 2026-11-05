@@ -49,4 +49,4 @@ const Suggestion = ({
   );
 };
 
-export { Suggestions, Suggestion, type SuggestionsProps, type SuggestionProps };
+export { Suggestion, type SuggestionProps, Suggestions, type SuggestionsProps };

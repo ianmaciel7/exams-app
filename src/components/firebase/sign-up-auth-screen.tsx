@@ -1,18 +1,31 @@
 "use client";
 
 import { getTranslation } from "@firebase-oss/ui-core";
-import { useUI, type SignUpAuthScreenProps, useOnUserAuthenticated } from "@firebase-oss/ui-react";
+import {
+  type SignUpAuthScreenProps,
+  useOnUserAuthenticated,
+  useUI,
+} from "@firebase-oss/ui-react";
+import type { User } from "firebase/auth";
 import { useCallback, useRef } from "react";
-
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { SignUpAuthForm } from "@/components/firebase/sign-up-auth-form";
 import { MultiFactorAuthAssertionScreen } from "@/components/firebase/multi-factor-auth-assertion-screen";
-import { type User } from "firebase/auth";
+import { SignUpAuthForm } from "@/components/firebase/sign-up-auth-form";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 
 export type { SignUpAuthScreenProps };
 
-export function SignUpAuthScreen({ children, onSignUp, ...props }: SignUpAuthScreenProps) {
+export function SignUpAuthScreen({
+  children,
+  onSignUp,
+  ...props
+}: SignUpAuthScreenProps) {
   const ui = useUI();
   const handledUserIdRef = useRef<string | null>(null);
 
@@ -28,12 +41,14 @@ export function SignUpAuthScreen({ children, onSignUp, ...props }: SignUpAuthScr
       handledUserIdRef.current = user.uid;
       onSignUp?.(user);
     },
-    [onSignUp]
+    [onSignUp],
   );
 
   // Mirror the React package behavior: the built-in form reports success from the
   // resolved credential, while auth-state remains the fallback for child actions and MFA.
-  useOnUserAuthenticated(children || ui.multiFactorResolver ? handleSignUp : undefined);
+  useOnUserAuthenticated(
+    children || ui.multiFactorResolver ? handleSignUp : undefined,
+  );
 
   if (ui.multiFactorResolver) {
     return <MultiFactorAuthAssertionScreen />;
@@ -43,7 +58,9 @@ export function SignUpAuthScreen({ children, onSignUp, ...props }: SignUpAuthScr
     <div className="max-w-sm mx-auto">
       <Card>
         <CardHeader>
-          <CardTitle role="heading" aria-level={1}>{titleText}</CardTitle>
+          <CardTitle role="heading" aria-level={1}>
+            {titleText}
+          </CardTitle>
           <CardDescription>{subtitleText}</CardDescription>
         </CardHeader>
         <CardContent>

@@ -199,7 +199,9 @@ const TerminalContent = ({
 
   useEffect(() => {
     if (autoScroll && containerRef.current) {
-      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+      containerRef.current.scrollTop = output.length
+        ? containerRef.current.scrollHeight
+        : 0;
     }
   }, [output, autoScroll]);
 
@@ -275,20 +277,20 @@ const Terminal = ({
 };
 
 export {
-  TerminalHeader,
-  TerminalTitle,
-  TerminalStatus,
-  TerminalActions,
-  TerminalCopyButton,
-  TerminalClearButton,
-  TerminalContent,
   Terminal,
-  type TerminalHeaderProps,
-  type TerminalTitleProps,
-  type TerminalStatusProps,
+  TerminalActions,
   type TerminalActionsProps,
-  type TerminalCopyButtonProps,
+  TerminalClearButton,
   type TerminalClearButtonProps,
+  TerminalContent,
   type TerminalContentProps,
+  TerminalCopyButton,
+  type TerminalCopyButtonProps,
+  TerminalHeader,
+  type TerminalHeaderProps,
   type TerminalProps,
+  TerminalStatus,
+  type TerminalStatusProps,
+  TerminalTitle,
+  type TerminalTitleProps,
 };

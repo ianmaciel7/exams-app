@@ -153,9 +153,7 @@ const ToolOutput = ({
   let Output = <div>{output as ReactNode}</div>;
 
   if (typeof output === "object" && !isValidElement(output)) {
-    Output = (
-      <CodeBlock code={formatToolValue(output)} language="json" />
-    );
+    Output = <CodeBlock code={formatToolValue(output)} language="json" />;
   } else if (typeof output === "string") {
     Output = <CodeBlock code={output} language="json" />;
   }
@@ -181,16 +179,16 @@ const ToolOutput = ({
 };
 
 export {
-  Tool,
   getStatusBadge,
-  ToolHeader,
+  Tool,
   ToolContent,
-  ToolInput,
-  ToolOutput,
-  type ToolProps,
-  type ToolPart,
-  type ToolHeaderProps,
   type ToolContentProps,
+  ToolHeader,
+  type ToolHeaderProps,
+  ToolInput,
   type ToolInputProps,
+  ToolOutput,
   type ToolOutputProps,
+  type ToolPart,
+  type ToolProps,
 };

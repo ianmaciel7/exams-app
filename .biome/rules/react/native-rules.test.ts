@@ -136,12 +136,12 @@ describe("native React guard configuration", () => {
     expect(output).not.toContain("parse");
   });
 
-  it("preserves registry exclusions for the newly configured policies", () => {
+  it("enforces React correctness in copied registry components", () => {
     const output = lintSingle(
       vendorFile,
       "export function Demo(props) { props.value = 1; function Child() { return <span />; } return <Child />; }",
     );
-    expect(output).not.toContain("/noReactPropAssignments");
-    expect(output).not.toContain("/noNestedComponentDefinitions");
+    expect(output).toContain("/noReactPropAssignments");
+    expect(output).toContain("/noNestedComponentDefinitions");
   });
 });

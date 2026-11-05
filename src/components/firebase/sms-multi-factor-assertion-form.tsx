@@ -1,26 +1,34 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { type UserCredential, type MultiFactorInfo } from "firebase/auth";
-
 import { getTranslation } from "@firebase-oss/ui-core";
 import {
   useMultiFactorPhoneAuthVerifyFormSchema,
   useRecaptchaVerifier,
-  useUI,
   useSmsMultiFactorAssertionPhoneFormAction,
   useSmsMultiFactorAssertionVerifyFormAction,
+  useUI,
 } from "@firebase-oss/ui-react";
-import { useForm, FormProvider, Controller } from "react-hook-form";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-
-import { Field, FieldLabel, FieldDescription, FieldError, FieldTitle } from "@/components/ui/field";
-import { Form } from "@/components/ui/extensions/form";
-import { FormError } from "@/components/ui/extensions/form-error";
+import type { MultiFactorInfo, UserCredential } from "firebase/auth";
+import { useRef, useState } from "react";
+import { Controller, FormProvider, useForm } from "react-hook-form";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { Form } from "@/components/ui/extensions/form";
+import { FormError } from "@/components/ui/extensions/form-error";
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldLabel,
+  FieldTitle,
+} from "@/components/ui/field";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
 import { Spinner } from "@/components/ui/spinner";
-import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { getAuthActionErrorMessage } from "./auth-error-message";
 
 type PhoneMultiFactorInfo = MultiFactorInfo & {
@@ -32,7 +40,9 @@ type SmsMultiFactorAssertionPhoneFormProps = {
   onSubmit: (verificationId: string) => void;
 };
 
-function SmsMultiFactorAssertionPhoneForm(props: SmsMultiFactorAssertionPhoneFormProps) {
+function SmsMultiFactorAssertionPhoneForm(
+  props: SmsMultiFactorAssertionPhoneFormProps,
+) {
   const ui = useUI();
   const recaptchaContainerRef = useRef<HTMLDivElement>(null);
   const recaptchaVerifier = useRecaptchaVerifier(recaptchaContainerRef);
@@ -42,7 +52,10 @@ function SmsMultiFactorAssertionPhoneForm(props: SmsMultiFactorAssertionPhoneFor
   const onSubmit = async () => {
     try {
       setError(null);
-      const verificationId = await action({ hint: props.hint, recaptchaVerifier: recaptchaVerifier! });
+      const verificationId = await action({
+        hint: props.hint,
+        recaptchaVerifier: recaptchaVerifier!,
+      });
       props.onSubmit(verificationId);
     } catch (error) {
       setError(getAuthActionErrorMessage(error, ui));
@@ -60,9 +73,17 @@ function SmsMultiFactorAssertionPhoneForm(props: SmsMultiFactorAssertionPhoneFor
         </FieldDescription>
       </Field>
       <div className="fui-recaptcha-container" ref={recaptchaContainerRef} />
-      <Button type="button" onClick={onSubmit} disabled={ui.state !== "idle"} focusableWhenDisabled>
+      <Button
+        type="button"
+        onClick={onSubmit}
+        disabled={ui.state !== "idle"}
+        focusableWhenDisabled
+      >
         {ui.state !== "idle" ? (
-          <><Spinner data-icon="inline-start" aria-hidden="true" />{getTranslation(ui, "labels", "sendCode")}</>
+          <>
+            <Spinner data-icon="inline-start" aria-hidden="true" />
+            {getTranslation(ui, "labels", "sendCode")}
+          </>
         ) : (
           getTranslation(ui, "labels", "sendCode")
         )}
@@ -81,7 +102,9 @@ type SmsMultiFactorAssertionVerifyFormProps = {
   onSuccess: (credential: UserCredential) => void;
 };
 
-function SmsMultiFactorAssertionVerifyForm(props: SmsMultiFactorAssertionVerifyFormProps) {
+function SmsMultiFactorAssertionVerifyForm(
+  props: SmsMultiFactorAssertionVerifyFormProps,
+) {
   const ui = useUI();
   const schema = useMultiFactorPhoneAuthVerifyFormSchema();
   const action = useSmsMultiFactorAssertionVerifyFormAction();
@@ -95,7 +118,10 @@ function SmsMultiFactorAssertionVerifyForm(props: SmsMultiFactorAssertionVerifyF
     },
   });
 
-  const onSubmit = async (values: { verificationId: string; verificationCode: string }) => {
+  const onSubmit = async (values: {
+    verificationId: string;
+    verificationCode: string;
+  }) => {
     try {
       const credential = await action({
         verificationId: values.verificationId,
@@ -109,15 +135,30 @@ function SmsMultiFactorAssertionVerifyForm(props: SmsMultiFactorAssertionVerifyF
 
   return (
     <FormProvider {...form}>
-      <Form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
+      <Form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col gap-y-4"
+      >
         <Controller
           control={form.control}
           name="verificationCode"
           render={({ field, fieldState }) => (
             <Field data-invalid={!!fieldState.error}>
-              <FieldLabel htmlFor="verificationCode">{getTranslation(ui, "labels", "verificationCode")}</FieldLabel>
-              <FieldDescription>{getTranslation(ui, "prompts", "smsVerificationPrompt")}</FieldDescription>
-              <InputOTP id="verificationCode" maxLength={6} {...field} aria-invalid={!!fieldState.error} aria-describedby={fieldState.error ? "verificationCode-error" : undefined}>
+              <FieldLabel htmlFor="verificationCode">
+                {getTranslation(ui, "labels", "verificationCode")}
+              </FieldLabel>
+              <FieldDescription>
+                {getTranslation(ui, "prompts", "smsVerificationPrompt")}
+              </FieldDescription>
+              <InputOTP
+                id="verificationCode"
+                maxLength={6}
+                {...field}
+                aria-invalid={!!fieldState.error}
+                aria-describedby={
+                  fieldState.error ? "verificationCode-error" : undefined
+                }
+              >
                 <InputOTPGroup>
                   <InputOTPSlot index={0} />
                   <InputOTPSlot index={1} />
@@ -127,18 +168,31 @@ function SmsMultiFactorAssertionVerifyForm(props: SmsMultiFactorAssertionVerifyF
                   <InputOTPSlot index={5} />
                 </InputOTPGroup>
               </InputOTP>
-              {fieldState.error && <FieldError id="verificationCode-error">{fieldState.error.message}</FieldError>}
+              {fieldState.error && (
+                <FieldError id="verificationCode-error">
+                  {fieldState.error.message}
+                </FieldError>
+              )}
             </Field>
           )}
         />
-        <Button type="submit" disabled={ui.state !== "idle"} focusableWhenDisabled>
+        <Button
+          type="submit"
+          disabled={ui.state !== "idle"}
+          focusableWhenDisabled
+        >
           {ui.state !== "idle" ? (
-            <><Spinner data-icon="inline-start" aria-hidden="true" />{getTranslation(ui, "labels", "verifyCode")}</>
+            <>
+              <Spinner data-icon="inline-start" aria-hidden="true" />
+              {getTranslation(ui, "labels", "verifyCode")}
+            </>
           ) : (
             getTranslation(ui, "labels", "verifyCode")
           )}
         </Button>
-        {form.formState.errors.root && <FormError>{form.formState.errors.root.message}</FormError>}
+        {form.formState.errors.root && (
+          <FormError>{form.formState.errors.root.message}</FormError>
+        )}
       </Form>
     </FormProvider>
   );
@@ -149,7 +203,9 @@ export type SmsMultiFactorAssertionFormProps = {
   onSuccess?: (credential: UserCredential) => void;
 };
 
-export function SmsMultiFactorAssertionForm(props: SmsMultiFactorAssertionFormProps) {
+export function SmsMultiFactorAssertionForm(
+  props: SmsMultiFactorAssertionFormProps,
+) {
   const [verification, setVerification] = useState<{
     verificationId: string;
   } | null>(null);

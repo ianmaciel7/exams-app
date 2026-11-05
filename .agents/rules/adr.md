@@ -1,4 +1,5 @@
 ---
+
 trigger: model_decision
 description: "Read when creating, superseding, or referencing architecture decision records."
 ---

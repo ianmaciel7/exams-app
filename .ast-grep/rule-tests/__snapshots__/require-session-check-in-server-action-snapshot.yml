@@ -2,121 +2,121 @@ id: require-session-check-in-server-action
 snapshots:
   "\"use server\";\nexport async function updateName(formData: FormData) {\n  return formData.get(\"name\");\n}\n":
     labels:
-    - source: |-
-        async function updateName(formData: FormData) {
-          return formData.get("name");
-        }
-      style: primary
-      start: 21
-      end: 101
-    - source: "\"use server\""
-      style: secondary
-      start: 0
-      end: 12
-    - source: "\"use server\";"
-      style: secondary
-      start: 0
-      end: 13
-    - source: |
-        "use server";
-        export async function updateName(formData: FormData) {
-          return formData.get("name");
-        }
-      style: secondary
-      start: 0
-      end: 102
-    - source: |-
-        export async function updateName(formData: FormData) {
-          return formData.get("name");
-        }
-      style: secondary
-      start: 14
-      end: 101
-    - source: |-
-        {
-          return formData.get("name");
-        }
-      style: secondary
-      start: 67
-      end: 101
+      - source: |-
+          async function updateName(formData: FormData) {
+            return formData.get("name");
+          }
+        style: primary
+        start: 21
+        end: 101
+      - source: '"use server"'
+        style: secondary
+        start: 0
+        end: 12
+      - source: '"use server";'
+        style: secondary
+        start: 0
+        end: 13
+      - source: |
+          "use server";
+          export async function updateName(formData: FormData) {
+            return formData.get("name");
+          }
+        style: secondary
+        start: 0
+        end: 102
+      - source: |-
+          export async function updateName(formData: FormData) {
+            return formData.get("name");
+          }
+        style: secondary
+        start: 14
+        end: 101
+      - source: |-
+          {
+            return formData.get("name");
+          }
+        style: secondary
+        start: 67
+        end: 101
   "'use server';\nexport async function updateName(formData: FormData) {\n  return formData.get('name');\n}\n":
     labels:
-    - source: |-
-        async function updateName(formData: FormData) {
-          return formData.get('name');
-        }
-      style: primary
-      start: 21
-      end: 101
-    - source: "'use server'"
-      style: secondary
-      start: 0
-      end: 12
-    - source: "'use server';"
-      style: secondary
-      start: 0
-      end: 13
-    - source: |
-        'use server';
-        export async function updateName(formData: FormData) {
-          return formData.get('name');
-        }
-      style: secondary
-      start: 0
-      end: 102
-    - source: |-
-        export async function updateName(formData: FormData) {
-          return formData.get('name');
-        }
-      style: secondary
-      start: 14
-      end: 101
-    - source: |-
-        {
-          return formData.get('name');
-        }
-      style: secondary
-      start: 67
-      end: 101
+      - source: |-
+          async function updateName(formData: FormData) {
+            return formData.get('name');
+          }
+        style: primary
+        start: 21
+        end: 101
+      - source: "'use server'"
+        style: secondary
+        start: 0
+        end: 12
+      - source: "'use server';"
+        style: secondary
+        start: 0
+        end: 13
+      - source: |
+          'use server';
+          export async function updateName(formData: FormData) {
+            return formData.get('name');
+          }
+        style: secondary
+        start: 0
+        end: 102
+      - source: |-
+          export async function updateName(formData: FormData) {
+            return formData.get('name');
+          }
+        style: secondary
+        start: 14
+        end: 101
+      - source: |-
+          {
+            return formData.get('name');
+          }
+        style: secondary
+        start: 67
+        end: 101
   "export async function updateName(formData: FormData) {\n  \"use server\";\n  return formData.get(\"name\");\n}\n":
     labels:
-    - source: |-
-        async function updateName(formData: FormData) {
-          "use server";
-          return formData.get("name");
-        }
-      style: primary
-      start: 7
-      end: 103
-    - source: "\"use server\""
-      style: secondary
-      start: 57
-      end: 69
-    - source: "\"use server\";"
-      style: secondary
-      start: 57
-      end: 70
-    - source: |-
-        {
-          "use server";
-          return formData.get("name");
-        }
-      style: secondary
-      start: 53
-      end: 103
-    - source: |-
-        export async function updateName(formData: FormData) {
-          "use server";
-          return formData.get("name");
-        }
-      style: secondary
-      start: 0
-      end: 103
-    - source: |-
-        {
-          "use server";
-          return formData.get("name");
-        }
-      style: secondary
-      start: 53
-      end: 103
+      - source: |-
+          async function updateName(formData: FormData) {
+            "use server";
+            return formData.get("name");
+          }
+        style: primary
+        start: 7
+        end: 103
+      - source: '"use server"'
+        style: secondary
+        start: 57
+        end: 69
+      - source: '"use server";'
+        style: secondary
+        start: 57
+        end: 70
+      - source: |-
+          {
+            "use server";
+            return formData.get("name");
+          }
+        style: secondary
+        start: 53
+        end: 103
+      - source: |-
+          export async function updateName(formData: FormData) {
+            "use server";
+            return formData.get("name");
+          }
+        style: secondary
+        start: 0
+        end: 103
+      - source: |-
+          {
+            "use server";
+            return formData.get("name");
+          }
+        style: secondary
+        start: 53
+        end: 103

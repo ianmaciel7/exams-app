@@ -1,4 +1,5 @@
 ---
+
 trigger: model_decision
 description: "Read when changing runtime import graphs, Server Components, Server Functions, or data crossing runtime boundaries."
 ---

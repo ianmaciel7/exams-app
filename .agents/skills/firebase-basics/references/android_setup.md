@@ -1,6 +1,6 @@
 # Firebase Android Setup Guide
 
-______________________________________________________________________
+---
 
 ## Prerequisites
 
@@ -9,7 +9,6 @@ ______________________________________________________________________
    For detailed instructions about the Firebase CLI, see
    `firebase_basics/references/local-env-setup`. Here are high-level
    instructions for setting up the Firebase CLI.
-
    1. Ensure the Firebase CLI is available:
 
       ```bash
@@ -17,7 +16,6 @@ ______________________________________________________________________
       ```
 
    1. Login to the CLI:
-
       - local:
 
         ```bash
@@ -33,7 +31,7 @@ ______________________________________________________________________
 1. **Android project**: Create or use an existing Android project in an
    Android-development IDE.
 
-______________________________________________________________________
+---
 
 ## 1. Check if the Android project is connected to a Firebase Project
 
@@ -50,7 +48,7 @@ that is missing:
 - The `google-services.json` file is in the **module (app-level)** root
   directory: `app/google-services.json`
 
-- The Google services Gradle plugin (`google-services`) is added to *both* the
+- The Google services Gradle plugin (`google-services`) is added to _both_ the
   project-level and module (app-level) Gradle build files. If it is missing from
   either file, add it by following step 5 below.
 
@@ -59,7 +57,7 @@ that is missing:
 If the Android project does NOT already have a `google-services.json` file, then
 proceed with the remaining steps in this guide.
 
-______________________________________________________________________
+---
 
 ## 2. Create a new Firebase project or use an existing one
 
@@ -82,13 +80,13 @@ npx -y firebase-tools@latest projects:list
   npx -y firebase-tools@latest projects:create <UNIQUE_PROJECT_ID> --display-name <PROJECT_DISPLAY_NAME>
   ```
 
-  *Example:*
+  _Example:_
 
   ```bash
   npx -y firebase-tools@latest projects:create my-cool-app-20260330 --display-name MyCoolApp
   ```
 
-______________________________________________________________________
+---
 
 ## 3. Register the Android project
 
@@ -99,17 +97,17 @@ project. Provide an optional APP_DISPLAY_NAME and required PACKAGE_NAME:
 npx -y firebase-tools@latest apps:create ANDROID <APP_DISPLAY_NAME> --package-name <PACKAGE_NAME> --project <PROJECT_ID>
 ```
 
-*Example:*
+_Example:_
 
 ```bash
 npx -y firebase-tools@latest apps:create ANDROID MyApplication --package-name com.example.myapplication --project my-cool-app-20260330
 ```
 
-NOTE: A package name is often referred to as an *application ID* within an
+NOTE: A package name is often referred to as an _application ID_ within an
 Android project. Find an app's package name in the module (app-level) Gradle
 file, usually `app/build.gradle.kts`.
 
-______________________________________________________________________
+---
 
 ## 4. Obtain and save `google-services.json`
 
@@ -124,7 +122,7 @@ ______________________________________________________________________
 1. Save the configuration file within the **module (app-level)** root directory
    of the Android project: `app/google-services.json`
 
-______________________________________________________________________
+---
 
 ## 5. Add the `google-services` plugin
 
@@ -165,7 +163,7 @@ plugins {
 }
 ```
 
-______________________________________________________________________
+---
 
 ## 6. App Check (Debug Token Persistence)
 
@@ -230,7 +228,7 @@ committing secrets:
    }
    ```
 
-______________________________________________________________________
+---
 
 ## Verification plan
 
@@ -244,4 +242,4 @@ npx -y firebase-tools@latest projects:list
 npx -y firebase-tools@latest apps:list --project <PROJECT_ID>
 ```
 
-______________________________________________________________________
+---

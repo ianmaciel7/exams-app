@@ -1,4 +1,5 @@
 ---
+
 trigger: model_decision
 description: "Read when changing React render logic, hook call order, API compatibility, or adopting experimental APIs."
 ---

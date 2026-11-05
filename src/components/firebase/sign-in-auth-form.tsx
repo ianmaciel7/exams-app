@@ -1,27 +1,30 @@
 "use client";
 
-import { Spinner } from "@/components/ui/spinner";
-
 import {
-  signInWithEmailAndPassword,
+  getTranslation,
   type SignInAuthFormSchema,
+  signInWithEmailAndPassword,
 } from "@firebase-oss/ui-core";
 import {
+  type SignInAuthFormProps,
   useSignInAuthFormSchema,
   useUI,
-  type SignInAuthFormProps,
 } from "@firebase-oss/ui-react";
-import { useForm, FormProvider, Controller } from "react-hook-form";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import { getTranslation } from "@firebase-oss/ui-core";
+import { Controller, FormProvider, useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
 
 import { Form } from "@/components/ui/extensions/form";
-import { FormField, FormFieldLabel, FormFieldError } from "@/components/ui/extensions/form-field";
 import { FormError } from "@/components/ui/extensions/form-error";
+import {
+  FormField,
+  FormFieldError,
+  FormFieldLabel,
+} from "@/components/ui/extensions/form-field";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Policies } from "./policies";
+import { Spinner } from "@/components/ui/spinner";
 import { getAuthErrorMessage } from "./auth-error-message";
+import { Policies } from "./policies";
 
 export type { SignInAuthFormProps };
 
@@ -55,15 +58,27 @@ export function SignInAuthForm(props: SignInAuthFormProps) {
 
   return (
     <FormProvider {...form}>
-      <Form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
+      <Form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col gap-y-4"
+      >
         <Controller
           control={form.control}
           name="email"
           render={({ field, fieldState }) => (
-            <FormField name={field.name} invalid={!!fieldState.error} touched={fieldState.isTouched} dirty={fieldState.isDirty}>
-              <FormFieldLabel>{getTranslation(ui, "labels", "emailAddress")}</FormFieldLabel>
+            <FormField
+              name={field.name}
+              invalid={!!fieldState.error}
+              touched={fieldState.isTouched}
+              dirty={fieldState.isDirty}
+            >
+              <FormFieldLabel>
+                {getTranslation(ui, "labels", "emailAddress")}
+              </FormFieldLabel>
               <Input {...field} type="email" autoComplete="username" />
-              <FormFieldError match={!!fieldState.error}>{fieldState.error?.message}</FormFieldError>
+              <FormFieldError match={!!fieldState.error}>
+                {fieldState.error?.message}
+              </FormFieldError>
             </FormField>
           )}
         />
@@ -71,17 +86,37 @@ export function SignInAuthForm(props: SignInAuthFormProps) {
           control={form.control}
           name="password"
           render={({ field, fieldState }) => (
-            <FormField name={field.name} invalid={!!fieldState.error} touched={fieldState.isTouched} dirty={fieldState.isDirty}>
+            <FormField
+              name={field.name}
+              invalid={!!fieldState.error}
+              touched={fieldState.isTouched}
+              dirty={fieldState.isDirty}
+            >
               <FormFieldLabel className="flex items-center gap-2">
-                <span className="grow">{getTranslation(ui, "labels", "password")}</span>
+                <span className="grow">
+                  {getTranslation(ui, "labels", "password")}
+                </span>
                 {props.onForgotPasswordClick ? (
-                  <Button type="button" variant="link" onClick={props.onForgotPasswordClick} size="sm">
-                    <span className="text-xs">{getTranslation(ui, "labels", "forgotPassword")}</span>
+                  <Button
+                    type="button"
+                    variant="link"
+                    onClick={props.onForgotPasswordClick}
+                    size="sm"
+                  >
+                    <span className="text-xs">
+                      {getTranslation(ui, "labels", "forgotPassword")}
+                    </span>
                   </Button>
                 ) : null}
               </FormFieldLabel>
-              <Input {...field} type="password" autoComplete="current-password" />
-              <FormFieldError match={!!fieldState.error}>{fieldState.error?.message}</FormFieldError>
+              <Input
+                {...field}
+                type="password"
+                autoComplete="current-password"
+              />
+              <FormFieldError match={!!fieldState.error}>
+                {fieldState.error?.message}
+              </FormFieldError>
             </FormField>
           )}
         />
@@ -92,17 +127,28 @@ export function SignInAuthForm(props: SignInAuthFormProps) {
           focusableWhenDisabled
         >
           {ui.state !== "idle" ? (
-            <><Spinner data-icon="inline-start" aria-hidden="true" />{getTranslation(ui, "labels", "signIn")}</>
+            <>
+              <Spinner data-icon="inline-start" aria-hidden="true" />
+              {getTranslation(ui, "labels", "signIn")}
+            </>
           ) : (
             getTranslation(ui, "labels", "signIn")
           )}
         </Button>
-        {form.formState.errors.root && <FormError>{form.formState.errors.root.message}</FormError>}
+        {form.formState.errors.root && (
+          <FormError>{form.formState.errors.root.message}</FormError>
+        )}
         {props.onSignUpClick ? (
           <>
-            <Button type="button" variant="link" size="sm" onClick={props.onSignUpClick}>
+            <Button
+              type="button"
+              variant="link"
+              size="sm"
+              onClick={props.onSignUpClick}
+            >
               <span className="text-xs">
-                {getTranslation(ui, "prompts", "noAccount")} {getTranslation(ui, "labels", "signUp")}
+                {getTranslation(ui, "prompts", "noAccount")}{" "}
+                {getTranslation(ui, "labels", "signUp")}
               </span>
             </Button>
           </>

@@ -1,4 +1,5 @@
 ---
+
 title: Cache Repeated Function Calls
 impact: MEDIUM
 impactDescription: avoid redundant computation
@@ -58,20 +59,20 @@ function ProjectList({ projects }: { projects: Project[] }) {
 **Simpler pattern for single-value functions:**
 
 ```typescript
-let isLoggedInCache: boolean | null = null
+let isLoggedInCache: boolean | null = null;
 
 function isLoggedIn(): boolean {
   if (isLoggedInCache !== null) {
-    return isLoggedInCache
+    return isLoggedInCache;
   }
-  
-  isLoggedInCache = document.cookie.includes('auth=')
-  return isLoggedInCache
+
+  isLoggedInCache = document.cookie.includes("auth=");
+  return isLoggedInCache;
 }
 
 // Clear cache when auth changes
 function onAuthChange() {
-  isLoggedInCache = null
+  isLoggedInCache = null;
 }
 ```
 

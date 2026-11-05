@@ -32,6 +32,7 @@ export async function Client() {
   // ruleid: no-unsafe-html-sinks
   document.body.innerHTML = "<b>x</b>";
   // ruleid: no-unsafe-html-sinks
+  // biome-ignore lint/plugin: This negative security fixture must exercise the forbidden sink.
   document.write("x");
   // ruleid: no-unsafe-html-sinks
   document.body.insertAdjacentHTML("beforeend", "<b>x</b>");
@@ -46,7 +47,16 @@ export async function Client() {
   // ruleid: no-dangerously-set-inner-html
   const bad = <div dangerouslySetInnerHTML={{ __html: a }} />;
   // ok: no-dangerously-set-inner-html
-  const good = <div>{b}{c}{f}{g}{k}{s}</div>;
+  const good = (
+    <div>
+      {b}
+      {c}
+      {f}
+      {g}
+      {k}
+      {s}
+    </div>
+  );
   const store = await cookies();
   // ruleid: session-cookie-must-be-http-only
   store.set("session", a, { path: "/" });

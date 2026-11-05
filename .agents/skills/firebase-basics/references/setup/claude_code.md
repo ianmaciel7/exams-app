@@ -29,10 +29,12 @@ Check if the plugins are already installed before proceeding:
      continuing to step 4.
 1. **Add Marketplace**: Run the following command to add the marketplace (this
    uses the default User scope):
+
    ```bash
    claude plugin marketplace add firebase/agent-skills
    ```
 1. **Install Plugins**: Run the following command to install the plugin:
+
    ```bash
    claude plugin install firebase@firebase
    ```

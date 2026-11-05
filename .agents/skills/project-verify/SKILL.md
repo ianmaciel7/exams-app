@@ -1,8 +1,9 @@
 ---
+
 name: project-verify
 description: Run the smallest repository verification tier that covers the current git diff and report failures with their owning command. Use when the user asks to verify, validate, or check changes before a commit or pull request.
 metadata:
-  disable-model-invocation: true
+disable-model-invocation: true
 ---
 
 # Verify the current diff
@@ -11,14 +12,14 @@ Pick the tier from `git status --short` and `git diff --name-only`, run it, and
 report results. The tiers are defined in [TESTING.md](../../../TESTING.md) and
 [TOOLING.md](../../../TOOLING.md); do not invent new commands.
 
-| Changed paths | Run |
-| --- | --- |
-| Only `*.md` | `pnpm check:markdown` and `pnpm check:spelling`, then verify links and referenced paths |
-| `src/**`, `functions/**`, config | `pnpm verify:fast` |
-| `src/app/**` pages or visual output | `pnpm verify:fast`, then `pnpm verify:e2e` |
-| Before a pull request | `pnpm verify:full` |
-| `package.json`, lockfiles, workflows, `.env*` | `pnpm verify:security` (needs the host tools in TOOLING.md) |
-| `.agents/**` | `agents sync --check` |
+| Changed paths                                 | Run                                                                                     |
+| --------------------------------------------- | --------------------------------------------------------------------------------------- |
+| Only `*.md`                                   | `pnpm check:markdown` and `pnpm check:spelling`, then verify links and referenced paths |
+| `src/**`, `functions/**`, config              | `pnpm verify:fast`                                                                      |
+| `src/app/**` pages or visual output           | `pnpm verify:fast`, then `pnpm verify:e2e`                                              |
+| Before a pull request                         | `pnpm verify:full`                                                                      |
+| `package.json`, lockfiles, workflows, `.env*` | `pnpm verify:security` (needs the host tools in TOOLING.md)                             |
+| `.agents/**`                                  | `agents sync --check`                                                                   |
 
 ## Rules
 

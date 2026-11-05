@@ -304,7 +304,9 @@ const EnvironmentVariableCopyButton = ({
   return (
     <Button
       className={cn("size-6 shrink-0", className)}
-      aria-label={isCopied ? "Copied environment variable" : "Copy environment variable"}
+      aria-label={
+        isCopied ? "Copied environment variable" : "Copy environment variable"
+      }
       onClick={copyToClipboard}
       size="icon"
       variant="ghost"
@@ -328,26 +330,26 @@ const EnvironmentVariableRequired = ({
 );
 
 export {
-  EnvironmentVariables,
-  EnvironmentVariablesHeader,
-  EnvironmentVariablesTitle,
-  EnvironmentVariablesToggle,
-  EnvironmentVariablesContent,
-  EnvironmentVariableGroup,
-  EnvironmentVariableName,
-  EnvironmentVariableValue,
   EnvironmentVariable,
   EnvironmentVariableCopyButton,
-  EnvironmentVariableRequired,
-  type EnvironmentVariablesProps,
-  type EnvironmentVariablesHeaderProps,
-  type EnvironmentVariablesTitleProps,
-  type EnvironmentVariablesToggleProps,
-  type EnvironmentVariablesContentProps,
-  type EnvironmentVariableGroupProps,
-  type EnvironmentVariableNameProps,
-  type EnvironmentVariableValueProps,
-  type EnvironmentVariableProps,
   type EnvironmentVariableCopyButtonProps,
+  EnvironmentVariableGroup,
+  type EnvironmentVariableGroupProps,
+  EnvironmentVariableName,
+  type EnvironmentVariableNameProps,
+  type EnvironmentVariableProps,
+  EnvironmentVariableRequired,
   type EnvironmentVariableRequiredProps,
+  EnvironmentVariables,
+  EnvironmentVariablesContent,
+  type EnvironmentVariablesContentProps,
+  EnvironmentVariablesHeader,
+  type EnvironmentVariablesHeaderProps,
+  type EnvironmentVariablesProps,
+  EnvironmentVariablesTitle,
+  type EnvironmentVariablesTitleProps,
+  EnvironmentVariablesToggle,
+  type EnvironmentVariablesToggleProps,
+  EnvironmentVariableValue,
+  type EnvironmentVariableValueProps,
 };

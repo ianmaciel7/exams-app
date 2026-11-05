@@ -1,5 +1,5 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
-import { PhoneMultiFactorGenerator, type MultiFactorInfo } from "firebase/auth";
+import { type MultiFactorInfo, PhoneMultiFactorGenerator } from "firebase/auth";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 const testHints = [

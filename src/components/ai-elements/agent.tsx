@@ -89,7 +89,10 @@ type AgentToolProps = ComponentProps<typeof AccordionItem> & {
 
 const AgentTool = memo(
   ({ className, tool, value, ...props }: AgentToolProps) => {
-    const [schema, setSchema] = useState<{ input: Tool["inputSchema"]; code: string } | null>(null);
+    const [schema, setSchema] = useState<{
+      input: Tool["inputSchema"];
+      code: string;
+    } | null>(null);
     useEffect(() => {
       let cancelled = false;
       const resolveSchema = async () => {
@@ -103,9 +106,12 @@ const AgentTool = memo(
         if (!cancelled) setSchema({ input: tool.inputSchema, code });
       };
       void resolveSchema();
-      return () => { cancelled = true; };
+      return () => {
+        cancelled = true;
+      };
     }, [tool.inputSchema]);
-    const code = schema?.input === tool.inputSchema ? schema.code : "Loading schema…";
+    const code =
+      schema?.input === tool.inputSchema ? schema.code : "Loading schema…";
 
     return (
       <AccordionItem
@@ -155,17 +161,17 @@ AgentOutput.displayName = "AgentOutput";
 
 export {
   Agent,
-  AgentHeader,
   AgentContent,
-  AgentInstructions,
-  AgentTools,
-  AgentTool,
-  AgentOutput,
-  type AgentProps,
-  type AgentHeaderProps,
   type AgentContentProps,
+  AgentHeader,
+  type AgentHeaderProps,
+  AgentInstructions,
   type AgentInstructionsProps,
-  type AgentToolsProps,
-  type AgentToolProps,
+  AgentOutput,
   type AgentOutputProps,
+  type AgentProps,
+  AgentTool,
+  type AgentToolProps,
+  AgentTools,
+  type AgentToolsProps,
 };

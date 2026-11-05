@@ -27,17 +27,17 @@ rule:
       all:
         - has:
             field: name
-            regex: 'ButtonProps$'
+            regex: "ButtonProps$"
         - not:
             has:
               field: value
-              regex: 'ComponentProps<'
+              regex: "ComponentProps<"
     - kind: interface_declaration
       all:
         - has:
             field: name
-            regex: 'ButtonProps$'
+            regex: "ButtonProps$"
         - not:
             has:
               kind: extends_type_clause
-              regex: 'ComponentProps<'
+              regex: "ComponentProps<"

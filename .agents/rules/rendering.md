@@ -1,4 +1,5 @@
 ---
+
 trigger: model_decision
 description: "Read when changing Suspense, loading/error boundaries, transitions, hydration, or component identity."
 ---
@@ -13,14 +14,14 @@ Read when changing Suspense, loading/error boundaries, transitions, hydration, o
 
 ## Built-in components
 
-| Component | Required implementation/review guidance |
-| --- | --- |
-| `Fragment` | Group nodes without extra DOM; use explicit `Fragment` syntax for keys/refs where needed. |
-| `StrictMode` | Use development diagnostics to find impure rendering and asymmetric resource setup/cleanup; do not interpret extra development cycles as production transactions. |
-| `Suspense` | Use a compatible suspended resource or `lazy` component; an arbitrary Effect fetch does not activate it. Provide separate render-error handling. |
-| `Profiler` | Use real render measurements to investigate performance; a configuration check is not a profiling session. |
-| `Activity` | Preserve hidden state/DOM while allowing Effect teardown and restart; verify hide/reveal behavior for forms, media, subscriptions, and focus. |
-| `ViewTransition` | Coordinate supported updates and `enter`, `exit`, `update`, `share`, and `default` behavior; verify browser support, reduced motion, and fallback presentation. |
+| Component        | Required implementation/review guidance                                                                                                                           |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Fragment`       | Group nodes without extra DOM; use explicit `Fragment` syntax for keys/refs where needed.                                                                         |
+| `StrictMode`     | Use development diagnostics to find impure rendering and asymmetric resource setup/cleanup; do not interpret extra development cycles as production transactions. |
+| `Suspense`       | Use a compatible suspended resource or `lazy` component; an arbitrary Effect fetch does not activate it. Provide separate render-error handling.                  |
+| `Profiler`       | Use real render measurements to investigate performance; a configuration check is not a profiling session.                                                        |
+| `Activity`       | Preserve hidden state/DOM while allowing Effect teardown and restart; verify hide/reveal behavior for forms, media, subscriptions, and focus.                     |
+| `ViewTransition` | Coordinate supported updates and `enter`, `exit`, `update`, `share`, and `default` behavior; verify browser support, reduced motion, and fallback presentation.   |
 
 Do not replace Error Boundaries with Suspense, Activity, or animation wrappers.
 The detailed reference includes lazy loading, preserved-tab state, and visual

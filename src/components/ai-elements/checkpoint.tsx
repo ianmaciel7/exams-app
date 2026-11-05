@@ -71,8 +71,8 @@ const CheckpointTrigger = ({
 export {
   Checkpoint,
   CheckpointIcon,
-  CheckpointTrigger,
-  type CheckpointProps,
   type CheckpointIconProps,
+  type CheckpointProps,
+  CheckpointTrigger,
   type CheckpointTriggerProps,
 };

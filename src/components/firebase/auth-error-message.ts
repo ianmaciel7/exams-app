@@ -1,7 +1,7 @@
 import {
+  type FirebaseUI,
   FirebaseUIError,
   getTranslation,
-  type FirebaseUI,
 } from "@firebase-oss/ui-core";
 
 /**

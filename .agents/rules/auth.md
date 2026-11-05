@@ -1,4 +1,5 @@
 ---
+
 trigger: model_decision
 description: "Read when changing identity, session cookies/tokens, protected access, or post-auth navigation."
 ---

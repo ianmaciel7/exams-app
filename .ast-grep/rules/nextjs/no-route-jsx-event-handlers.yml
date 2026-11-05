@@ -10,4 +10,4 @@ rule:
   kind: jsx_attribute
   has:
     kind: property_identifier
-    regex: '^on[A-Z]'
+    regex: "^on[A-Z]"

@@ -31,5 +31,3 @@ rule:
         - pattern: React.useEffect($$$)
         - has:
             regex: set[A-Z]\w*\(
-
-

@@ -52,11 +52,11 @@ Colors use OKLCH: `--primary: oklch(0.205 0 0)` where values are lightness (0–
 Class-based toggle via `.dark` on the root element. In Next.js, use `next-themes`:
 
 ```tsx
-import { ThemeProvider } from "next-themes"
+import { ThemeProvider } from "next-themes";
 
 <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
   {children}
-</ThemeProvider>
+</ThemeProvider>;
 ```
 
 ---
@@ -122,12 +122,12 @@ module.exports = {
       },
     },
   },
-}
+};
 ```
 
 ```tsx
 // 3. Use in components.
-<div className="bg-warning text-warning-foreground">Warning</div>
+<div className="bg-warning text-warning-foreground">Warning</div>;
 ```
 
 ---
@@ -151,13 +151,13 @@ Prefer these approaches in order:
 ```tsx
 <Button variant="outline" size="sm">
   Click
-</Button>
+</Button>;
 ```
 
 ### 2. Tailwind classes via `className`
 
 ```tsx
-<Card className="mx-auto max-w-md">...</Card>
+<Card className="mx-auto max-w-md">...</Card>;
 ```
 
 ### 3. Add a new variant
@@ -189,7 +189,7 @@ export function ConfirmDialog({ title, description, onConfirm, children }) {
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  )
+  );
 }
 ```
 

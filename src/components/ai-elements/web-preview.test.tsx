@@ -25,14 +25,24 @@ describe("WebPreviewBody", () => {
   });
 
   it("does not navigate to a non-HTTP scheme", () => {
-    render(<WebPreview><WebPreviewBody src="javascript:alert(1)" /></WebPreview>);
+    render(
+      <WebPreview>
+        <WebPreviewBody src="javascript:alert(1)" />
+      </WebPreview>,
+    );
     expect(screen.getByTitle("Preview").getAttribute("src")).toBeNull();
   });
 
   it("updates its input while forwarding custom onChange events", () => {
     const onChange = vi.fn();
-    render(<WebPreview><WebPreviewUrl onChange={onChange} /></WebPreview>);
-    const input = screen.getByPlaceholderText("Enter URL...") as HTMLInputElement;
+    render(
+      <WebPreview>
+        <WebPreviewUrl onChange={onChange} />
+      </WebPreview>,
+    );
+    const input = screen.getByPlaceholderText(
+      "Enter URL...",
+    ) as HTMLInputElement;
     fireEvent.change(input, { target: { value: "https://example.test/new" } });
     expect(input.value).toBe("https://example.test/new");
     expect(onChange).toHaveBeenCalledOnce();

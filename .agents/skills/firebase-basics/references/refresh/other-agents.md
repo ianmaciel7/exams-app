@@ -27,13 +27,12 @@ Replace `<AGENT_NAME>` with the actual agent name, which can be found in the
    npx -y skills list --agent <AGENT_NAME> --global
    ```
 
-   *Note: If a skill shows `Agents: not linked` in the output, it is installed
-   but not currently available to the agent.*
+   _Note: If a skill shows `Agents: not linked` in the output, it is installed
+   but not currently available to the agent._
 
 1. **Add Missing or Unlinked Skills:** Compare the results from Step 1 and Step
    2\. For each missing or unlinked skill, follow the appropriate conditional
    instruction below:
-
    - **IF any Firebase skills were found at the PROJECT level in Step 2:** Add
      the missing skill to the project level:
 

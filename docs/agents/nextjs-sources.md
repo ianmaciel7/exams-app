@@ -32,13 +32,13 @@ change depends on them.
 
 ## Local owners
 
-| Topic | Owner |
-| --- | --- |
-| Cache Components, revalidation, Partial Prefetching, streaming | [cache](../../.agents/rules/cache.md) |
-| Routes, metadata, viewport, navigation | [routes](../../.agents/rules/routes.md) |
-| Server and Client Component boundaries | [boundaries](../../.agents/rules/boundaries.md) |
-| Configuration decisions | [ADR 0001](../adr/0001-configure-nextjs.md), `next.config.ts` |
-| Topic-to-owner audit | [coverage](coverage.md) |
+| Topic                                                          | Owner                                                         |
+| -------------------------------------------------------------- | ------------------------------------------------------------- |
+| Cache Components, revalidation, Partial Prefetching, streaming | [cache](../../.agents/rules/cache.md)                         |
+| Routes, metadata, viewport, navigation                         | [routes](../../.agents/rules/routes.md)                       |
+| Server and Client Component boundaries                         | [boundaries](../../.agents/rules/boundaries.md)               |
+| Configuration decisions                                        | [ADR 0001](../adr/0001-configure-nextjs.md), `next.config.ts` |
+| Topic-to-owner audit                                           | [coverage](coverage.md)                                       |
 
 Follow [security guidance](../../SECURITY.md#nextjs-server-and-environment-boundaries)
 for environment and server boundaries. Documentation lookup does not authorize

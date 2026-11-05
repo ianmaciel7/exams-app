@@ -193,7 +193,7 @@ const MicSelector = ({
       value,
       width,
     }),
-    [devices, onOpenChange, onValueChange, open, setWidth, value, width],
+    [devices, onOpenChange, onValueChange, open, value, width],
   );
 
   return (
@@ -366,23 +366,23 @@ const MicSelectorValue = ({ className, ...props }: MicSelectorValueProps) => {
 };
 
 export {
-  useAudioDevices,
   MicSelector,
-  MicSelectorTrigger,
   MicSelectorContent,
-  MicSelectorInput,
-  MicSelectorList,
-  MicSelectorEmpty,
-  MicSelectorItem,
-  MicSelectorLabel,
-  MicSelectorValue,
-  type MicSelectorProps,
-  type MicSelectorTriggerProps,
   type MicSelectorContentProps,
-  type MicSelectorInputProps,
-  type MicSelectorListProps,
+  MicSelectorEmpty,
   type MicSelectorEmptyProps,
+  MicSelectorInput,
+  type MicSelectorInputProps,
+  MicSelectorItem,
   type MicSelectorItemProps,
+  MicSelectorLabel,
   type MicSelectorLabelProps,
+  MicSelectorList,
+  type MicSelectorListProps,
+  type MicSelectorProps,
+  MicSelectorTrigger,
+  type MicSelectorTriggerProps,
+  MicSelectorValue,
   type MicSelectorValueProps,
+  useAudioDevices,
 };

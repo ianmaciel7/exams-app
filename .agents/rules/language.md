@@ -1,4 +1,5 @@
 ---
+
 trigger: always_on
 description: "Read when writing source comments, documentation, agent artifacts, or commit messages."
 ---

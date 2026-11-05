@@ -6,27 +6,27 @@ language, as defined in `.agents/rules/language.md#language-policy`.
 
 ## Current guides
 
-| Document | Responsibility | Verify against |
-| --- | --- | --- |
-| [README](../README.md) | Setup and template adoption | `package.json`, routes, workflows |
-| [Architecture](../ARCHITECTURE.md) | Layout, boundaries, and locale behavior | `src/`, `next.config.ts`, `.dependency-cruiser.cjs` |
-| [Design](../DESIGN.md) | Implemented tokens, typography, providers, components | CSS, layout, `components.json`, `.ladle/` |
-| [Coding standards](../CODING_STANDARDS.md) | Source and test conventions | Biome, TypeScript, accepted decisions |
-| [Tooling](../TOOLING.md) | Tools, commands, configuration ownership | `package.json`, configuration, workflows |
-| [Testing](../TESTING.md) | Test layers, required Firebase Emulator E2E, CI limitations | Vitest, Playwright, Firebase, Stryker, workflows |
-| [Contributing](../CONTRIBUTING.md) | Branch, commit, and PR conventions | Commitlint, hooks, CI |
-| [Security](../SECURITY.md) | Reporting policy and accepted dependency risk | Audit configuration and security workflow |
-| [Quality standards](agents/quality-standards.md) | Applicability, evidence and limits for external engineering standards | Source inventory, tests, configuration and official references |
-| [Authentication](auth.md) | Sign-in, sessions, roles, allowlist, and emulator operations | Firebase modules, rules, Functions, and ADRs |
-| [UI state and feedback](ui-state-feedback.md) | Interaction states, recovery, accessibility feedback, and audit evidence | UI flows, component tests, emulator journeys |
-| [UI state rule](../.agents/rules/ui-state.md) | Persistent requirements for feedback and async recovery | `pnpm check:ui-state`, behavioral tests |
-| [Firebase continuous delivery](firebase-cd.md) | Production release configuration and prerequisites | `cd.yml`, GitHub Environment, Firebase project |
-| [Glossary](../GLOSSARY.md) | Agreed product vocabulary; currently pending | Adopted product terminology |
-| [Entity-relationship diagram](../DER.md) | Pending product model and existing technical Firebase stores | Current SDK modules, Security Rules, and adopted domain constraints |
-| [Agent instructions](../AGENTS.md) | Repository-wide contributor guidance | Current guides and agent configuration |
-| [React rules](../.agents/rules/react.md) | Focused React constraints; on-demand guides in `docs/agents/` | Installed React/DOM/Compiler, native Biome diagnostics |
-| [Next.js rules](../.agents/rules/cache.md) | Installed version-matched App Router and diagnostic rules | Installed Next.js, Context7, current config |
-| [shadcn/ui rules](../.agents/rules/shadcn.md#shadcnui-maintenance) | Base UI boundaries, component contracts, composition | Installed CLI, current component registry |
+| Document                                                           | Responsibility                                                           | Verify against                                                      |
+| ------------------------------------------------------------------ | ------------------------------------------------------------------------ | ------------------------------------------------------------------- |
+| [README](../README.md)                                             | Setup and template adoption                                              | `package.json`, routes, workflows                                   |
+| [Architecture](../ARCHITECTURE.md)                                 | Layout, boundaries, and locale behavior                                  | `src/`, `next.config.ts`, `.dependency-cruiser.cjs`                 |
+| [Design](../DESIGN.md)                                             | Implemented tokens, typography, providers, components                    | CSS, layout, `components.json`, `.ladle/`                           |
+| [Coding standards](../CODING_STANDARDS.md)                         | Source and test conventions                                              | Biome, TypeScript, accepted decisions                               |
+| [Tooling](../TOOLING.md)                                           | Tools, commands, configuration ownership                                 | `package.json`, configuration, workflows                            |
+| [Testing](../TESTING.md)                                           | Test layers, required Firebase Emulator E2E, CI limitations              | Vitest, Playwright, Firebase, Stryker, workflows                    |
+| [Contributing](../CONTRIBUTING.md)                                 | Branch, commit, and PR conventions                                       | Commitlint, hooks, CI                                               |
+| [Security](../SECURITY.md)                                         | Reporting policy and accepted dependency risk                            | Audit configuration and security workflow                           |
+| [Quality standards](agents/quality-standards.md)                   | Applicability, evidence and limits for external engineering standards    | Source inventory, tests, configuration and official references      |
+| [Authentication](auth.md)                                          | Sign-in, sessions, roles, allowlist, and emulator operations             | Firebase modules, rules, Functions, and ADRs                        |
+| [UI state and feedback](ui-state-feedback.md)                      | Interaction states, recovery, accessibility feedback, and audit evidence | UI flows, component tests, emulator journeys                        |
+| [UI state rule](../.agents/rules/ui-state.md)                      | Persistent requirements for feedback and async recovery                  | `pnpm check:ui-state`, behavioral tests                             |
+| [Firebase continuous delivery](firebase-cd.md)                     | Production release configuration and prerequisites                       | `cd.yml`, GitHub Environment, Firebase project                      |
+| [Glossary](../GLOSSARY.md)                                         | Agreed product vocabulary; currently pending                             | Adopted product terminology                                         |
+| [Entity-relationship diagram](../DER.md)                           | Pending product model and existing technical Firebase stores             | Current SDK modules, Security Rules, and adopted domain constraints |
+| [Agent instructions](../AGENTS.md)                                 | Repository-wide contributor guidance                                     | Current guides and agent configuration                              |
+| [React rules](../.agents/rules/react.md)                           | Focused React constraints; on-demand guides in `docs/agents/`            | Installed React/DOM/Compiler, native Biome diagnostics              |
+| [Next.js rules](../.agents/rules/cache.md)                         | Installed version-matched App Router and diagnostic rules                | Installed Next.js, Context7, current config                         |
+| [shadcn/ui rules](../.agents/rules/shadcn.md#shadcnui-maintenance) | Base UI boundaries, component contracts, composition                     | Installed CLI, current component registry                           |
 
 ## Application operations
 

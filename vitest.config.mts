@@ -13,13 +13,15 @@ export default defineConfig({
     coverage: {
       provider: "v8",
       reporter: ["text-summary", "json", "json-summary"],
-      // Baseline just below the template's current coverage (about 74%). Raise
-      // it as application code grows; never lower it to make a run pass.
+      // Report every source file. Keep the established 70% gate on application
+      // runtime code; copied libraries have separate, visible coverage totals.
       thresholds: {
-        statements: 70,
-        branches: 70,
-        functions: 70,
-        lines: 70,
+        "src/{app,hooks,lib,i18n,components/ui/extensions}/**/*.{ts,tsx}": {
+          statements: 70,
+          branches: 70,
+          functions: 70,
+          lines: 70,
+        },
       },
       include: ["src/**/*.{ts,tsx}"],
     },

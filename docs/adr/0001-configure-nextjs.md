@@ -46,6 +46,7 @@ Key architectural choices and core Next.js platform requirements:
    - **`reactCompiler: true`**: Enables the React Compiler out-of-the-box to automate memoization (`useMemo`, `useCallback`).
 
    The baseline Next.js configuration is:
+
    ```ts
    import type { NextConfig } from "next";
 
@@ -58,7 +59,7 @@ Key architectural choices and core Next.js platform requirements:
    export default nextConfig;
    ```
 
-   *Architectural Boundary*: Any downstream additions to `next.config.ts` belong strictly to their owning ADRs:
+   _Architectural Boundary_: Any downstream additions to `next.config.ts` belong strictly to their owning ADRs:
    - Turbopack CSS loaders for Tailwind CSS v4 are governed by [ADR 0003](0003-configure-theming.md).
    - The `withNextIntl` plugin wrapper is governed by [ADR 0004](0004-configure-internationalization.md).
    - Development proxy `rewrites()` for the Firebase Auth Emulator are governed by [ADR 0009](0009-integrate-firebase-authentication.md).

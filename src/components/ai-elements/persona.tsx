@@ -12,6 +12,15 @@ import type { FC, ReactNode } from "react";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
+// Rive exposes imperative inputs; mutations belong in this SDK adapter, called
+// only from an Effect, rather than mutating React data during render.
+function setRiveInput(
+  input: { value: boolean | number } | null,
+  active: boolean,
+) {
+  if (input) input.value = active;
+}
+
 // Delays Rive initialization by one frame so that React Strict Mode's
 // immediate unmount cycle never creates a WebGL2 context. Only the
 // second (real) mount will initialise, avoiding context exhaustion.
@@ -277,18 +286,10 @@ const Persona: FC<PersonaProps> = memo(
     // Rive state machine inputs are mutable objects that must be set via direct
     // property assignment — this is the intended Rive API, not a React anti-pattern.
     useEffect(() => {
-      if (listeningInput) {
-        listeningInput.value = state === "listening";
-      }
-      if (thinkingInput) {
-        thinkingInput.value = state === "thinking";
-      }
-      if (speakingInput) {
-        speakingInput.value = state === "speaking";
-      }
-      if (asleepInput) {
-        asleepInput.value = state === "asleep";
-      }
+      setRiveInput(listeningInput, state === "listening");
+      setRiveInput(thinkingInput, state === "thinking");
+      setRiveInput(speakingInput, state === "speaking");
+      setRiveInput(asleepInput, state === "asleep");
     }, [state, listeningInput, thinkingInput, speakingInput, asleepInput]);
 
     const Component = source.hasModel ? PersonaWithModel : PersonaWithoutModel;

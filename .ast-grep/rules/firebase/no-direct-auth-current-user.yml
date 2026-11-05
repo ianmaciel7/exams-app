@@ -19,4 +19,4 @@ rule:
   pattern: $AUTH.currentUser
   has:
     field: object
-    regex: 'auth$'
+    regex: "auth$"

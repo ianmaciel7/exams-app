@@ -1,4 +1,5 @@
 ---
+
 title: Use toSorted() Instead of sort() for Immutability
 impact: MEDIUM-HIGH
 impactDescription: prevents mutation bugs in React state
@@ -46,7 +47,7 @@ function UserList({ users }: { users: User[] }) {
 
 ```typescript
 // Fallback for older browsers
-const sorted = [...items].sort((a, b) => a.value - b.value)
+const sorted = [...items].sort((a, b) => a.value - b.value);
 ```
 
 **Other immutable array methods:**

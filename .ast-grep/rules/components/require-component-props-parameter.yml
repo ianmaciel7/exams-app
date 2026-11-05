@@ -18,4 +18,4 @@ rule:
     - pattern: async function $COMPONENT() { $$$BODY }
 constraints:
   COMPONENT:
-    regex: '^[A-Z][A-Za-z0-9]*$'
+    regex: "^[A-Z][A-Za-z0-9]*$"

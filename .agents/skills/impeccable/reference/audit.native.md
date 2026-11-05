@@ -67,21 +67,23 @@ Score against the loaded platform reference(s), including their slop tests. **Ch
 
 ### Audit Health Score
 
-| # | Dimension | Score | Key Finding |
-|---|-----------|-------|-------------|
-| 1 | Accessibility | ? | [most critical issue or "--"] |
-| 2 | Performance | ? | |
-| 3 | Appearance & Theming | ? | |
-| 4 | Platform Conformance | ? | |
-| 5 | Adaptivity | ? | |
-| **Total** | | **??/20** | **[Rating band]** |
+| #         | Dimension            | Score     | Key Finding                   |
+| --------- | -------------------- | --------- | ----------------------------- |
+| 1         | Accessibility        | ?         | [most critical issue or "--"] |
+| 2         | Performance          | ?         |                               |
+| 3         | Appearance & Theming | ?         |                               |
+| 4         | Platform Conformance | ?         |                               |
+| 5         | Adaptivity           | ?         |                               |
+| **Total** |                      | **??/20** | **[Rating band]**             |
 
 **Rating bands**: 18-20 Excellent (minor polish), 14-17 Good (address weak dimensions), 10-13 Acceptable (significant work needed), 6-9 Poor (major overhaul), 0-5 Critical (fundamental issues)
 
 ### Platform Conformance Verdict
+
 **Start here.** Pass/fail: does this read as a native app or a ported website? List specific violations. Be brutally honest.
 
 ### Executive Summary
+
 - Audit Health Score: **??/20** ([rating band])
 - Total issues found (count by severity: P0/P1/P2/P3)
 - Top 3-5 critical issues
@@ -118,8 +120,8 @@ Note what's working well: good practices to maintain and replicate.
 
 List recommended commands in priority order (P0 first, then P1, then P2):
 
-1. **[P?] `$command-name`**: Brief description (specific context from audit findings)
-2. **[P?] `$command-name`**: Brief description (specific context)
+1. **[P?]`$command-name`**: Brief description (specific context from audit findings)
+2. **[P?]`$command-name`**: Brief description (specific context)
 
 **Rules**: Only recommend commands from: $impeccable adapt, $impeccable animate, $impeccable audit, $impeccable bolder, $impeccable clarify, $impeccable colorize, $impeccable critique, $impeccable delight, $impeccable distill, $impeccable document, $impeccable harden, $impeccable layout, $impeccable onboard, $impeccable optimize, $impeccable overdrive, $impeccable polish, $impeccable quieter, $impeccable shape, $impeccable typeset. Map findings to the most appropriate command. End with `$impeccable polish` as the final step if any fixes were recommended.
 

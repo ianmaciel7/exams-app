@@ -8,7 +8,6 @@ using the FlutterFire CLI.
 1. **Flutter SDK**: Ensure Flutter is installed and available in the PATH.
 
    **Standard Setup (Manual):**
-
    1. **Determine Architecture**: Check if you are on Intel (`x64`) or Apple
       Silicon (`arm64`) using `uname -m`.
    1. **Download SDK**: Fetch the latest stable SDK from the
@@ -17,6 +16,7 @@ using the FlutterFire CLI.
       `~/development/flutter`).
    1. **Update PATH**: Add the `bin` folder to your shell configuration (e.g.,
       `~/.zshrc`).
+
       ```bash
       echo 'export PATH="$PATH:$HOME/development/flutter/bin"' >> ~/.zshrc
       source ~/.zshrc
@@ -25,12 +25,10 @@ using the FlutterFire CLI.
       initialized.
 
 1. **Firebase CLI**: Ensure the Firebase CLI is available.
-
    - Run `npx -y firebase-tools@latest --version`.
    - Login with `npx -y firebase-tools@latest login`.
 
 1. **FlutterFire CLI**: Install the official FlutterFire CLI globally.
-
    - Run `dart pub global activate flutterfire_cli`.
    - **Note**: Ensure `~/.pub-cache/bin` is also in your PATH if `flutterfire`
      is not found.
@@ -51,12 +49,13 @@ cd my_awesome_app
 >
 > 1. Create a new Firebase project, or
 > 1. Provide an existing Firebase Project ID.
-
 - If the developer provides an existing Project ID, run:
+
   ```bash
   flutterfire configure --project=<project_id>
   ```
 - If the developer prefers to create a new project interactively, run:
+
   ```bash
   flutterfire configure
   ```
@@ -137,7 +136,7 @@ flutter run -d chrome --web-hostname=localhost --web-port=5000
 ### 4. Elaborating on `WidgetsFlutterBinding.ensureInitialized()`
 
 In your `main.dart`, this call is mandatory before `Firebase.initializeApp()`.
-*Why?* Because Firebase initialization requires communication across Flutter's
+_Why?_ Because Firebase initialization requires communication across Flutter's
 native iOS/Android method channels. `ensureInitialized()` guarantees the Fluter
 engine is fully booted up and ready to handle these native platform calls before
 `runApp()` executes.

@@ -1,4 +1,4 @@
-import { FirebaseUIError, type FirebaseUI } from "@firebase-oss/ui-core";
+import { type FirebaseUI, FirebaseUIError } from "@firebase-oss/ui-core";
 import { enUs } from "@firebase-oss/ui-translations";
 import { FirebaseError } from "firebase/app";
 import { describe, expect, it, vi } from "vitest";

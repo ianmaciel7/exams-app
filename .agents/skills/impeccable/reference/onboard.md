@@ -30,27 +30,32 @@ Onboarding should get users to value as quickly as possible, not teach everythin
 Follow these core principles:
 
 ### Show, Don't Tell
+
 - Demonstrate with working examples, not just descriptions
 - Provide real functionality in onboarding, not separate tutorial mode
 - Use progressive disclosure, teach one thing at a time
 
 ### Make It Optional (When Possible)
+
 - Let experienced users skip onboarding
 - Don't block access to product
 - Provide "Skip" or "I'll explore on my own" options
 
 ### Time to Value
+
 - Get users to their "aha moment" ASAP
 - Front-load most important concepts
 - Teach 20% that delivers 80% of value
 - Save advanced features for contextual discovery
 
 ### Context Over Ceremony
+
 - Teach features when users need them, not upfront
 - Empty states are onboarding opportunities
 - Tooltips and hints at point of use
 
 ### Respect User Intelligence
+
 - Don't patronize or over-explain
 - Be concise and clear
 - Assume users can figure out standard patterns
@@ -170,18 +175,23 @@ Projects help you organize your work and collaborate with your team.
 Every empty state needs:
 
 ### What Will Be Here
+
 "Your recent projects will appear here"
 
 ### Why It Matters
+
 "Projects help you organize your work and collaborate with your team"
 
 ### How to Get Started
+
 [Create project] or [Import from template]
 
 ### Visual Interest
+
 Illustration or icon (not just text on blank page)
 
 ### Contextual Help
+
 "Need help getting started? [Watch 2-min tutorial]"
 
 **Empty state types**:
@@ -204,8 +214,8 @@ Illustration or icon (not just text on blank page)
 **Storage patterns**:
 ```javascript
 // Track which onboarding steps user has seen
-localStorage.setItem('onboarding-completed', 'true');
-localStorage.setItem('feature-tooltip-seen-reports', 'true');
+localStorage.setItem("onboarding-completed", "true");
+localStorage.setItem("feature-tooltip-seen-reports", "true");
 ```
 
 Show onboarding once: track completion and respect dismissals.
