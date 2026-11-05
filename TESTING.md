@@ -30,6 +30,11 @@ Vitest Browser Mode binds its local API on port 4174. Keep this separate from
 the Playwright production E2E server on 4173 and outside Windows' commonly
 reserved high-port range; Vite may advance to the next available port if needed.
 
+Browser tests pre-bundle React, the renderer and the dialog's Base UI/intl
+dependencies in `vitest.config.mts`, with React/React DOM deduplicated. Verify
+browser changes from a fresh Vite dependency cache: a warm cache can hide late
+dependency discoveries, page reloads and invalid-hook-call failures.
+
 `pnpm check:repo` automatically discovers `scripts/checks/check-*.mjs` and
 their `*.test.mjs` regression suites through `scripts/run-checks.mjs`. Adding
 a guard and its tests does not require editing the package script chain.

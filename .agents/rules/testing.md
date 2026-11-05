@@ -52,6 +52,11 @@ jscpd, Fallow, Knip, or CSpell. Follow the current tool exclusion policy in
 
 ## CI maintenance
 
+For new Browser Mode dependencies, pre-bundle their entrypoints in
+`vitest.config.mts` and verify the entire browser suite with a fresh cache.
+Keep React and React DOM deduplicated. Unexpected optimizer reloads invalidate
+the run; do not replace this check with only a warm-cache focused test.
+
 Keep shared setup in `.github/actions/` and suite ownership in `.github/workflows/ci.yml`. Preserve the fail-closed CI result gate and run `node --test scripts/ci/check-results.test.mjs` when changing its policy. Key download caches by tool version and inputs; never skip verification on a cache hit.
 
 ## Analysis categories

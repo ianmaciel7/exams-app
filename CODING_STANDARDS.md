@@ -70,6 +70,10 @@ When standards conflict, apply them in this order:
   dependent on form context, not on Firebase implementations or a passed
   profile controller. Dependency injection is a design choice, not a rule
   to create an interface for every helper.
+- **Framework-First Simplicity & Anti-Over-Engineering**:
+  - Favor official canonical patterns of Next.js App Router (Server Actions, direct utilities, shared root session providers). Avoid artificial Ports, Adapters, Gateways, or route-level React Context Providers where standard framework idioms suffice.
+  - Prioritize cohesion over hyper-fragmentation. Keep closely related logic together rather than fracturing into single-purpose micro-hooks (< 30-50 lines) merely for academic single-responsibility dogma.
+  - Proactively identify and surface over-engineering, code duplication, and unnecessary indirection rather than passively justifying them.
 - **Form Architecture and State Propagation**:
   - The profile form is a React form Action (`<Form action>` +
     `useActionState`); `ProfileForm` is one client component that renders

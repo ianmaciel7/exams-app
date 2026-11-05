@@ -435,6 +435,10 @@ these regressions specifically guard the observed failures.
 
 ## Controlled component behavior
 
+`vitest.config.mts` declares browser dependency pre-bundles and deduplicates
+React/React DOM. Run the full browser suite with a fresh Vite cache when adding
+new primitive imports; a cached focused run does not cover dependency discovery.
+
 The `middle-man-component` guard recognizes destructured `on*` handlers from
 owned hooks passed into controlled primitives (for example Dialog's
 `onOpenChange`). Its positive and negative component-convention fixtures cover
