@@ -57,7 +57,7 @@ Route-private `_hooks/**/*.ts` and `.tsx` modules contain hook implementations,
 imports, exports and types. Move module-level support functions and values to
 that route's `_lib/`: this includes constants, lookup collections and React
 context objects. A filename starting with `use-` does not make helpers inside
-that module part of the hook. `getAvatarSource` and avatar limits live in `profile/_lib/avatar.ts`.
+that module part of the hook. `getAvatarSource` and avatar limits live in `profile/_lib/utils.ts`.
 
 The hook itself may be a named `useX` function declaration or a `useX` variable
 initialized directly with an arrow/function expression. Local constants,
@@ -102,7 +102,7 @@ Splitting pattern for a hook that mixes concerns:
 - Pure decisions (validation, derived display values such as a fallback initial
   or a versioned URL) go to the route's `_lib/` as plain functions with unit
   tests; hooks only call them. `isValidAvatarFile` and
-  `getAvatarFallbackInitial` live in `profile/_lib/avatar.ts`.
+  `getAvatarFallbackInitial` live in `profile/_lib/utils.ts`.
 - Each effect with its own lifecycle gets its own `useX` hook: the avatar
   preview object URL (`useProfileAvatarPreview`) and the hidden file input
   (`useProfileAvatarInput`) are separate from the form binding in

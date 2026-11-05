@@ -796,7 +796,7 @@ constants inside hook bodies.
 on temporary source trees. It verifies root and nested private hook directories
 are scanned while `_lib`, shared/vendor directories and test/spec/story files
 are excluded. It runs in the existing unit project without adding a scanner or
-changing CI entry points. `profile/_lib/avatar.test.ts` preserves preview priority,
+changing CI entry points. `profile/_lib/utils.test.ts` preserves preview priority,
 missing-photo behavior, versioned URL query parameters and upload limits after
 extracting the support declarations. Existing profile component tests exercise
 the same context singleton from its `_lib` owner.

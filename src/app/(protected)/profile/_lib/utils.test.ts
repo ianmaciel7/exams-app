@@ -1,11 +1,12 @@
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   ACCEPTED_AVATAR_TYPES,
   getAvatarFallbackInitial,
   getAvatarSource,
   isValidAvatarFile,
   MAX_AVATAR_SIZE,
-} from "./avatar";
+  syncSavedLocale,
+} from "./utils";
 
 describe("avatar source selection", () => {
   it("prioritizes an unsaved preview over the stored avatar", () => {
@@ -60,5 +61,28 @@ describe("avatar fallback initial", () => {
     expect(getAvatarFallbackInitial("ana", "z@x.test")).toBe("A");
     expect(getAvatarFallbackInitial(null, "z@x.test")).toBe("Z");
     expect(getAvatarFallbackInitial("", null)).toBe("U");
+  });
+});
+
+describe("syncSavedLocale", () => {
+  beforeEach(() => {
+    // biome-ignore lint/suspicious/noDocumentCookie: Reset the cookie the helper writes.
+    document.cookie = "NEXT_LOCALE=; Path=/; Max-Age=0";
+  });
+
+  it("leaves the cookie alone when the saved locale is already active", () => {
+    const refresh = vi.fn();
+
+    expect(syncSavedLocale("en", "en", refresh)).toBe(false);
+    expect(document.cookie).not.toContain("NEXT_LOCALE=en");
+    expect(refresh).not.toHaveBeenCalled();
+  });
+
+  it("stores a differing saved locale and refreshes", () => {
+    const refresh = vi.fn();
+
+    expect(syncSavedLocale("pt-BR", "en", refresh)).toBe(true);
+    expect(document.cookie).toContain("NEXT_LOCALE=pt-BR");
+    expect(refresh).toHaveBeenCalledOnce();
   });
 });

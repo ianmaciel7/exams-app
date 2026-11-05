@@ -4,13 +4,13 @@ files:
   - src/**/*.ts
   - src/**/*.tsx
 ignores:
-  - src/app/(protected)/profile/_lib/locale-sync.ts
+  - src/app/(protected)/profile/_lib/utils.ts
   - "src/components/ui/[!e]*.tsx"
   - "src/components/ui/e[!x]*.tsx"
   - src/**/*.test.ts
   - src/**/*.test.tsx
 severity: error
-message: Write the locale cookie through syncSavedLocale() in profile/_lib/locale-sync.ts, not with document.cookie.
+message: Write the locale cookie through syncSavedLocale() in profile/_lib/utils.ts, not with document.cookie.
 note: |
   Biome's noDocumentCookie is suppressed in the one place that must write the
   NEXT_LOCALE cookie, so a second inline copy would also arrive with a
