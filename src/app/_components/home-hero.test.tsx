@@ -6,6 +6,7 @@ import {
   HomeHeroDescription,
   HomeHeroHeader,
   HomeHeroTitle,
+  homeHeroActionVariants,
 } from "./home-hero";
 
 describe("HomeHero", () => {
@@ -44,5 +45,19 @@ describe("HomeHero", () => {
 
     const actions = screen.getByTestId("home-hero-actions");
     expect(actions.getAttribute("data-slot")).toBe("home-hero-actions");
+  });
+
+  it("applies rounded-lg and h-12 to home hero actions", () => {
+    const defaultClasses = homeHeroActionVariants("default");
+    expect(defaultClasses).toContain("rounded-lg");
+    expect(defaultClasses).toContain("h-12");
+    expect(defaultClasses).not.toContain("rounded-full");
+    expect(defaultClasses).not.toMatch(/\bh-8\b/);
+
+    const outlineClasses = homeHeroActionVariants("outline");
+    expect(outlineClasses).toContain("rounded-lg");
+    expect(outlineClasses).toContain("h-12");
+    expect(outlineClasses).not.toContain("rounded-full");
+    expect(outlineClasses).not.toMatch(/\bh-8\b/);
   });
 });
