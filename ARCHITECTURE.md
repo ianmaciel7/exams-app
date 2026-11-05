@@ -335,6 +335,8 @@ The server derives `uid` from verified callable authentication. Event fields are
 values, email addresses, and tokens are excluded. A failed route record is
 ignored. For a profile save, the failure or the 15-second client timeout blocks
 the operation.
+The callable can also require App Check, which is off until the owner enables it
+(see [ADR 0026](docs/adr/0026-adopt-app-check-for-callable-functions.md)).
 Sign-out stays independent. Logging acknowledgment confirms handler execution,
 not durable ingestion into Cloud Logging.
 
