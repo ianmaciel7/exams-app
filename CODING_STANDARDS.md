@@ -717,8 +717,10 @@ The native Biome budget for owned runtime source is cognitive complexity **8**,
 function body size **40 lines excluding blanks**, and callback nesting **2**. Values at
 the limit are allowed; the next value is an error. These checks include focused
 sub-hooks and `_lib`/shared functions, so moving a large body to a helper does not
-remove its budget. The existing copied registry and test/spec/story exclusions
-remain; non-source scripts keep the existing cognitive limit of 15.
+remove its budget. All files remain analyzed. Test/spec/story and copied registry complexity
+findings are review-level warnings; application-owned runtime budgets remain
+blocking. Non-source scripts keep the cognitive limit of 15, with external
+skill bundles classified separately. See ADR 0023 for the category policy.
 
 Decompose along responsibilities, preserve cancellation and authorization checks,
 and test public behavior after extraction. Do not suppress diagnostics, raise a
