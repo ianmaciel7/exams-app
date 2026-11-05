@@ -19,11 +19,11 @@ This section covers component dimensions and file contracts; see also [Component
 
 ## Three independent dimensions
 
-| Dimension      | Convention                                                                                                                                                                                | Examples                                                                                                             |
-| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| Runtime        | Import graphs determine membership; `"use client"` declares a boundary, while a shared module can compile in both graphs                                                                  | `AccountCard` may participate in a client subtree without its own directive                                          |
-| Responsibility | Every component must specify a concrete component type or semantic role describing its composition or behavior, not its runtime environment. Bare domain or runtime labels are prohibited | `ProfileForm`, `ProfileAvatarFieldClient`, `PublicGuardClient`, `NavigationEventsRecorderClient`, `SignInFormClient` |
-| Placement      | Colocate route components in private `_components/`, hooks in `_hooks/` and shared components in `src/components/ui/extensions/`                                                          | App Router private folders do not become routes                                                                      |
+| Dimension      | Convention                                                                                                                                                                                | Examples                                                                           |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| Runtime        | Import graphs determine membership; `"use client"` declares a boundary, while a shared module can compile in both graphs                                                                  | `AccountCard` may participate in a client subtree without its own directive        |
+| Responsibility | Every component must specify a concrete component type or semantic role describing its composition or behavior, not its runtime environment. Bare domain or runtime labels are prohibited | `ProfileForm`, `ProfileAvatarFieldClient`, `PublicGuardClient`, `SignInFormClient` |
+| Placement      | Colocate route components in private `_components/`, hooks in `_hooks/` and shared components in `src/components/ui/extensions/`                                                          | App Router private folders do not become routes                                    |
 
 Every owned component must specify a concrete component type or semantic role describing its composition or behavior (such as `*-field`, `*-form`, `*-card`, `*-dialog`, `*-hero`, `*-button`, `*-provider`, or `*-guard`). A component name must never describe only its feature domain or runtime environment without a concrete role.
 
@@ -43,7 +43,13 @@ and does not transfer maintenance ownership to vendors. Application-owned extens
 - Use `AccountCardProps` for props of `AccountCard`; inherit React/HTML
   component props according to the existing component-props rule.
 - Every owned component identifier and filename MUST include a concrete component role / type describing its composition (e.g. `*-field`, `*-fields`, `*-form`, `*-card`, `*-dialog`, `*-header`, `*-button`, `*-table`, `*-list`, `*-provider`, `*-guard`, `*-flow`, `*-hero`, `*-section`, `*-content`, or `*-text`). This is a mandatory contract, not an optional preference; omitting the component type is prohibited. This list of semantic roles is **not** closed. `Flow` specifically denotes navigation or application flow wiring.
-- Bare feature/domain integration names like `<Domain>Client` or `<Domain>Server` (e.g. `ProfileClient`, `SettingsClient`, `HomeServer`) that omit the component type are explicitly forbidden. The `Client` and `Server` suffixes specify the runtime environment, NOT the component type. Omitting the component type creates ambiguous components with no clear composition role. All integration components must pair their domain with a concrete semantic role before any runtime suffix (e.g. `ProfileAvatarFieldClient`, `SettingsSectionClient`, `HomeHeroClient`, `NavigationEventsRecorderClient`).
+- Bare feature/domain integration names like `<Domain>Client` or `<Domain>Server` (e.g. `ProfileClient`, `SettingsClient`, `HomeServer`) that omit the component type are explicitly forbidden. The `Client` and `Server` suffixes specify the runtime environment, NOT the component type. Omitting the component type creates ambiguous components with no clear composition role. All integration components must pair their domain with a concrete semantic role before any runtime suffix (e.g. `ProfileAvatarFieldClient`, `SettingsSectionClient`, `HomeHeroClient`).
+- Effect-only client components that render nothing (`return null`) keep the
+  name from the official Next.js docs instead of a repository role and `-client`
+  suffix: `NavigationEvents` (route-change effects, `useRouter` guide) and
+  `WebVitals` (`useReportWebVitals`). `check:components` allows exactly these
+  stems (`nextjsDocComponentStems`); the hook follows the same name
+  (`useNavigationEvents`).
 - Do not name route-private components after screen or page terms (`-page`, `-screen`, `-view`);
   name by semantic role. Prohibit generic implementation terms (`View`, `Screen`, `Presentation`) in component identifiers.
 - Reserve `-client.tsx` for browser integrations and `-server.tsx` for server

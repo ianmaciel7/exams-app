@@ -1,4 +1,4 @@
-import { NavigationEventsRecorderClient } from "./_components/navigation-events-recorder-client";
+import { NavigationEvents } from "./_components/navigation-events";
 import { ProtectedGuard } from "./_components/protected-guard";
 import { verifySession } from "./_lib/dal";
 
@@ -7,7 +7,7 @@ export default async function ProtectedLayout({ children }: LayoutProps<"/">) {
 
   return (
     <ProtectedGuard>
-      <NavigationEventsRecorderClient />
+      <NavigationEvents />
       {children}
     </ProtectedGuard>
   );

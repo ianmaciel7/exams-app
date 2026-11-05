@@ -10,9 +10,13 @@ const environmentSuffix = /-(component|ui|presentation)$/;
 const screenStem = /(^|-)(screen|view|page)$/;
 const semanticStem = (stem) => stem.replace(/-(client|server)$/, "");
 const semanticRoleSuffix =
-  /(^|-)(card|form|field|fields|dialog|header|button|table|list|provider|guard|flow|hero|section|content|bridge|recorder|document|bar|nav|menu|panel|sheet|drawer|modal|popover|tooltip|alert|status|badge|input|select|text)$/;
+  /(^|-)(card|form|field|fields|dialog|header|button|table|list|provider|guard|flow|hero|section|content|bridge|document|bar|nav|menu|panel|sheet|drawer|modal|popover|tooltip|alert|status|badge|input|select|text)$/;
 const serverImports =
   /^(next\/(headers|cache|server)|next-intl\/server|server-only|firebase-admin)(\/|$)/;
+// Component names taken verbatim from the official Next.js docs for effect-only
+// client components that render nothing (`return null`). They keep the doc name
+// instead of the repository role and -client suffix.
+const nextjsDocComponentStems = new Set(["navigation-events", "web-vitals"]);
 const uiPhaseStatuses = new Set(["loading", "hidden", "error", "ready"]);
 
 export function isOwnedComponent(filename) {
@@ -491,7 +495,12 @@ function integrationNameMessages(stem, client, server) {
   const messages = [];
   // A form component owns its Action and the integrations it needs, as in the
   // Next.js and shadcn form guides, so `-form.tsx` is exempt from `-client`.
-  if (client && !stem.endsWith("-client") && !stem.endsWith("-form"))
+  if (
+    client &&
+    !stem.endsWith("-client") &&
+    !stem.endsWith("-form") &&
+    !nextjsDocComponentStems.has(stem)
+  )
     messages.push(
       "Browser integration components must use a -client.tsx filename.",
     );

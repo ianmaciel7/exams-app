@@ -62,7 +62,7 @@ race conditions and enabling zero-trust Server Component layout protection.
   layout is evaluated, and the layout renders the semantic `<ProtectedGuard>{children}</ProtectedGuard>`.
 - **Decouple usage telemetry**:
   Telemetry logging is decoupled from authentication gating into a non-gating client observer
-  component (`NavigationEventsRecorderClient`), preserving analytics without coupling them to access control.
+  component (`NavigationEvents`), preserving analytics without coupling them to access control.
 
 ## Consequences
 

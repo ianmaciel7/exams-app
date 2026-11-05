@@ -18,8 +18,8 @@ valid:
       return { status: "ready" };
     }
   - |
-    function NavigationEventsRecorderClient() {
-      useNavigationEventsRecorderClient();
+    function NavigationEvents() {
+      useNavigationEvents();
       return null;
     }
 invalid:
