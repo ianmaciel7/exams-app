@@ -12,10 +12,16 @@ note: |
   Owned components expose a consistent typed props interface using ComponentProps,
   PropsWithChildren or an equivalent native React type. Generated shadcn/Firebase
   registry components and Next.js route entrypoints are not governed by this rule.
+  A component that renders nothing (`return null`), such as the Next.js
+  `NavigationEvents` and `WebVitals` pattern, takes no props.
 rule:
   any:
     - pattern: function $COMPONENT() { $$$BODY }
     - pattern: async function $COMPONENT() { $$$BODY }
+  not:
+    has:
+      pattern: return null
+      stopBy: end
 constraints:
   COMPONENT:
     regex: "^[A-Z][A-Za-z0-9]*$"
