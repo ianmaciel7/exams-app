@@ -7,7 +7,7 @@ export type UsageEvent =
   | { type: "function_use"; name: "profile.update" };
 
 /** Ask the authenticated callable to emit a native Cloud Logging event. */
-export async function recordUsage(event: UsageEvent): Promise<void> {
+export async function trackEvent(event: UsageEvent): Promise<void> {
   const user = getSessionUser();
   if (!user) throw new Error("Authentication session unavailable");
   const logUsage = httpsCallable<UsageEvent, { eventId: string }>(
@@ -16,12 +16,4 @@ export async function recordUsage(event: UsageEvent): Promise<void> {
     { timeout: 15_000 },
   );
   await logUsage(event);
-}
-
-export async function withUsageGuard<T>(
-  event: UsageEvent,
-  operation: () => Promise<T>,
-): Promise<T> {
-  await recordUsage(event);
-  return operation();
 }
