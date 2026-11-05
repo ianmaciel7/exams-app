@@ -20,7 +20,7 @@ export function useProfileSaveFeedback() {
   return (saved: ProfileActionState) => {
     setTheme(saved.values.theme);
     toast.add({ title: t("profileSaved"), type: "success" });
-    void reloadSessionUser();
+    void reloadSessionUser().catch((cause: unknown) => console.error(cause));
     syncSavedLocale(saved.values.locale, activeLocale, refresh);
   };
 }

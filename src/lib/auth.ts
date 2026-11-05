@@ -2,7 +2,7 @@ import { signOut, verifyBeforeUpdateEmail } from "firebase/auth";
 import { getFirebaseUI } from "@/lib/firebase/client";
 import { trackEvent } from "@/lib/firebase/usage";
 import { getPendingSignOut, setPendingSignOut } from "@/lib/pending-sign-out";
-import { getSessionUser } from "@/lib/session";
+import { getActiveUser, getSessionUser } from "@/lib/session";
 
 export { getPendingSignOut } from "@/lib/pending-sign-out";
 
@@ -90,5 +90,5 @@ export async function sendEmailChangeVerification(
   const user = getSessionUser();
   if (!user) throw new Error("Authentication session unavailable");
   await trackEvent({ type: "function_use", name: "profile.update" });
-  return verifyBeforeUpdateEmail(user, email);
+  return verifyBeforeUpdateEmail(getActiveUser(user), email);
 }

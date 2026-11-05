@@ -1,4 +1,5 @@
 ---
+
 name: project-prompt-engineer
 description: Drafts concise, context-dense, actionable handoff prompts for another AI agent or session. Use when the user wants to generate, prepare, or save a prompt instructing another AI to execute a specific task, refactoring, or feature without generic project boilerplate.
 ---
@@ -75,6 +76,7 @@ Specific constraints the model must not violate:
 ### Final Implementation ("Como Vai Ficar")
 
 #### 1. `path/to/file-to-modify-or-create.tsx`
+
 [Brief note on what this file does, followed by the exact code snippet]
 
 ```tsx
@@ -82,11 +84,13 @@ Specific constraints the model must not violate:
 ```
 
 #### 2. `path/to/another-file.ts`
+
 ```ts
 // Complete or exact code showing how the file will look like
 ```
 
 #### 3. Obsolete Code Removal
+
 - `path/to/obsolete-file.tsx` (reason for deletion)
 - `path/to/obsolete-file.test.tsx`
 

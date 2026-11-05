@@ -16,6 +16,7 @@ This reference guide provides the canonical, ready-to-use markdown template for 
 ### Final Implementation ("Como Vai Ficar")
 
 #### 1. `path/to/target-file.tsx`
+
 [Brief description of file role]
 
 ```tsx
@@ -23,11 +24,13 @@ This reference guide provides the canonical, ready-to-use markdown template for 
 ```
 
 #### 2. `path/to/another-target-file.ts`
+
 ```ts
 // Exact final code snippet of how this file will look like
 ```
 
 #### 3. Obsolete Code Removal
+
 - `path/to/obsolete-file.tsx` (reason for deletion)
 - `path/to/obsolete-file.test.tsx`
 

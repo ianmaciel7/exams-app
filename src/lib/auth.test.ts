@@ -1,19 +1,18 @@
+import type { User } from "firebase/auth";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
-  auth: { id: "auth" },
+  auth: { id: "auth", currentUser: null as User | null },
   signOut: vi.fn(),
-  verifyBeforeUpdateEmail: vi.fn(),
+  verifyEmail: vi.fn(),
   trackEvent: vi.fn(),
-  getSessionUser: vi.fn(),
 }));
 
 vi.mock("firebase/auth", () => ({
   signOut: mocks.signOut,
-  verifyBeforeUpdateEmail: mocks.verifyBeforeUpdateEmail,
+  verifyBeforeUpdateEmail: mocks.verifyEmail,
 }));
 vi.mock("@/lib/firebase/usage", () => ({ trackEvent: mocks.trackEvent }));
-vi.mock("@/lib/session", () => ({ getSessionUser: mocks.getSessionUser }));
 vi.mock("@/lib/firebase/client", () => ({
   getFirebaseUI: () => ({ get: () => ({ auth: mocks.auth }) }),
 }));
@@ -23,6 +22,66 @@ import {
   sendEmailChangeVerification,
   signOutUser,
 } from "./auth";
+
+describe("sendEmailChangeVerification", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mocks.auth.currentUser = { uid: "user-1" } as User;
+    mocks.trackEvent.mockReset().mockResolvedValue(undefined);
+    mocks.verifyEmail.mockReset().mockResolvedValue(undefined);
+  });
+
+  it("waits for telemetry before asking Firebase to verify the new address", async () => {
+    const telemetry = Promise.withResolvers<void>();
+    mocks.trackEvent.mockReturnValue(telemetry.promise);
+    const pending = sendEmailChangeVerification("new@example.com");
+    expect(mocks.trackEvent).toHaveBeenCalledWith({
+      type: "function_use",
+      name: "profile.update",
+    });
+    expect(mocks.verifyEmail).not.toHaveBeenCalled();
+    telemetry.resolve();
+    await pending;
+    expect(mocks.verifyEmail).toHaveBeenCalledExactlyOnceWith(
+      mocks.auth.currentUser,
+      "new@example.com",
+    );
+  });
+
+  it("rejects a missing session before sending telemetry or verification", async () => {
+    mocks.auth.currentUser = null;
+    await expect(
+      sendEmailChangeVerification("new@example.com"),
+    ).rejects.toThrow("Authentication");
+    expect(mocks.trackEvent).not.toHaveBeenCalled();
+    expect(mocks.verifyEmail).not.toHaveBeenCalled();
+  });
+
+  it("preserves the telemetry failure policy without sending verification", async () => {
+    mocks.trackEvent.mockRejectedValue(new Error("offline"));
+    await expect(
+      sendEmailChangeVerification("new@example.com"),
+    ).rejects.toThrow("offline");
+    expect(mocks.verifyEmail).not.toHaveBeenCalled();
+  });
+
+  it("rejects an account switch while telemetry is pending", async () => {
+    const telemetry = Promise.withResolvers<void>();
+    mocks.trackEvent.mockReturnValue(telemetry.promise);
+    const pending = sendEmailChangeVerification("new@example.com");
+    mocks.auth.currentUser = { uid: "other-user" } as User;
+    telemetry.resolve();
+    await expect(pending).rejects.toThrow("Authentication");
+    expect(mocks.verifyEmail).not.toHaveBeenCalled();
+  });
+
+  it("propagates verification failures for localized dialog feedback", async () => {
+    mocks.verifyEmail.mockRejectedValue(new Error("recent-login-required"));
+    await expect(
+      sendEmailChangeVerification("new@example.com"),
+    ).rejects.toThrow("recent-login-required");
+  });
+});
 
 describe("signOutUser", () => {
   beforeEach(() => vi.clearAllMocks());
@@ -94,57 +153,16 @@ describe("signOutUser", () => {
     mocks.signOut.mockRejectedValue(new Error("network"));
     await expect(signOutUser()).rejects.toThrow("network");
   });
-});
 
-describe("sendEmailChangeVerification", () => {
-  const user = { uid: "u1" };
-  beforeEach(() => {
-    vi.clearAllMocks();
-    mocks.getSessionUser.mockReturnValue(user);
-    mocks.trackEvent.mockReset().mockResolvedValue(undefined);
-    mocks.verifyBeforeUpdateEmail.mockReset().mockResolvedValue(undefined);
-  });
-
-  it("waits for telemetry before sending verification", async () => {
+  it("shares one persistence promise across concurrent sign-outs", async () => {
     const deferred = Promise.withResolvers<void>();
-    mocks.trackEvent.mockReturnValue(deferred.promise);
-    const result = sendEmailChangeVerification("new@example.com");
-    expect(mocks.trackEvent).toHaveBeenCalledExactlyOnceWith({
-      type: "function_use",
-      name: "profile.update",
-    });
-    expect(mocks.verifyBeforeUpdateEmail).not.toHaveBeenCalled();
+    mocks.signOut.mockReturnValue(deferred.promise);
+    const first = signOutUser();
+    const second = signOutUser();
+    expect(second).toBe(first);
+    expect(mocks.signOut).toHaveBeenCalledOnce();
     deferred.resolve();
-    await result;
-    expect(mocks.verifyBeforeUpdateEmail).toHaveBeenCalledExactlyOnceWith(
-      user,
-      "new@example.com",
-    );
-  });
-
-  it("rejects without a session before tracking or sending", async () => {
-    mocks.getSessionUser.mockReturnValue(null);
-    await expect(
-      sendEmailChangeVerification("new@example.com"),
-    ).rejects.toThrow("Authentication session unavailable");
-    expect(mocks.trackEvent).not.toHaveBeenCalled();
-    expect(mocks.verifyBeforeUpdateEmail).not.toHaveBeenCalled();
-  });
-
-  it("does not send verification when telemetry fails", async () => {
-    mocks.trackEvent.mockRejectedValue(new Error("offline"));
-    await expect(
-      sendEmailChangeVerification("new@example.com"),
-    ).rejects.toThrow("offline");
-    expect(mocks.verifyBeforeUpdateEmail).not.toHaveBeenCalled();
-  });
-
-  it("propagates Firebase verification failures for retry", async () => {
-    mocks.verifyBeforeUpdateEmail.mockRejectedValue(
-      new Error("requires-recent-login"),
-    );
-    await expect(
-      sendEmailChangeVerification("new@example.com"),
-    ).rejects.toThrow("requires-recent-login");
+    await first;
+    expect(getPendingSignOut()).toBeNull();
   });
 });

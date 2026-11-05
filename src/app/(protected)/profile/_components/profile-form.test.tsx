@@ -108,6 +108,23 @@ describe("ProfileForm", () => {
     expect(mocks.reloadSessionUser).toHaveBeenCalled();
   });
 
+  it("keeps the successful save when browser session reload fails", async () => {
+    mocks.reloadSessionUser.mockRejectedValueOnce(new Error("reload failed"));
+    const log = vi.spyOn(console, "error").mockImplementation(() => {});
+    try {
+      renderForm(savingAction());
+      await clickSave();
+      await waitFor(() => expect(log).toHaveBeenCalledOnce());
+      expect(mocks.toastAdd).toHaveBeenCalledWith({
+        title: "profileSaved",
+        type: "success",
+      });
+      expect(screen.queryByRole("alert")).toBeNull();
+    } finally {
+      log.mockRestore();
+    }
+  });
+
   it("shows an alert and no toast when the Action fails", async () => {
     const action: ProfileAction = async (_previous, formData) => ({
       values: {

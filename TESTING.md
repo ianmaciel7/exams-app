@@ -590,6 +590,11 @@ mirroring third-party implementation details.
 
 ## Compound component guard regression tests
 
+Profile service regressions reject an account switch while email-change telemetry
+is pending and keep successful profile-save feedback when browser-user reload
+fails. Auth tests exercise the actual session identity helper and the shared
+sign-out promise, including concurrent sign-out calls.
+
 The profile form suite covers the email dialog's portal, labelled description,
 initial focus, cancellation, pending state, validation, failure/retry, success
 closure and focus restoration. Opening and submitting the email form must not
