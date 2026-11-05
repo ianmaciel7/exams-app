@@ -32,8 +32,12 @@ vi.mock("@/components/firebase/sign-up-auth-screen", () => ({
     </button>
   ),
 }));
-vi.mock("@/components/firebase/forgot-password-auth-screen", () => ({
-  ForgotPasswordAuthScreen: (props: { onBackToSignInClick: () => void }) => (
+vi.mock("@firebase-oss/ui-react", () => ({ useUI: () => ({}) }));
+vi.mock("@firebase-oss/ui-core", () => ({
+  getTranslation: (_ui: unknown, _group: string, key: string) => key,
+}));
+vi.mock("@/components/firebase/forgot-password-auth-form", () => ({
+  ForgotPasswordAuthForm: (props: { onBackToSignInClick: () => void }) => (
     <button type="button" onClick={props.onBackToSignInClick}>
       {"back"}
     </button>

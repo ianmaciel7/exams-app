@@ -34,6 +34,7 @@ original date. Read current operational details in the
 | [0022](0022-centralize-ci-setup-and-cache-downloads.md) | Accepted; amends ADR 0010 | Shared CI setup, download caches, title validation in static checks, and fail-closed result regression tests |
 
 | [0023](0023-classify-analysis-without-file-exclusions.md) | Accepted; amends ADRs 0010 and 0022 | Analyze every file with category-specific rules, application coverage gates, and real dependency inputs |
+| [0024](0024-compose-profile-card-in-page.md) | Accepted; amends ADR 0019 | `page.tsx` composes the shadcn `Card` directly; `ProfileFormClient` is the only client leaf ("direct page composition, client leaves") |
 
 ## Consolidation of 2026-11-01
 

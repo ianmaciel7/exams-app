@@ -33,7 +33,7 @@ These are project conventions aligned with the current shadcn/ui and React Hook 
 
 ## Profile behavior ownership
 
-- `ProfileCardClient` owns the browser load state through `useProfileCardClient`.
+- `ProfileFormClient` owns the browser load state through `useProfileFormClient`.
   Render `LoadingStatus` while reading and mount `ProfileForm` only with loaded
   `initialValues`. Cleanup stops accepting results from that lifecycle, and the
   15-second deadline ends its UI wait. Errors reach `profile/error.tsx`; retry
@@ -55,11 +55,11 @@ These are project conventions aligned with the current shadcn/ui and React Hook 
   `saveProfile` accepts typed `ProfileDependencies` with default Firebase
   adapters to test persistence without production services.
 - `ProfileAvatarFieldClient` uses `useProfileAvatarFieldClient` for field state and avatar display data, with `useProfileAvatarInput` handling validation and `useProfileAvatarPreview` the preview. In `useProfileForm`, avatar draft lifecycle is managed by `useProfileAvatarDraft` via pure derivation (`{ baseState, file }`), keeping the selection in sync with Action dispatches (cleared on success, preserved on failure for retry) so submission can upload it without DOM file-input dependencies or render-phase state adjustments; preview URLs are released on replacement, successful reset and unmount.
-- `ProfileForm` renders the **one** `FieldGroup`: do not wrap individual fields in another `FieldGroup`. `page.tsx` resolves translated headings; `ProfileCardClient` renders the loaded Card and form.
+- `ProfileForm` renders the **one** `FieldGroup`: do not wrap individual fields in another `FieldGroup`. `page.tsx` composes the shadcn `Card` parts and resolves translated headings; `ProfileFormClient` renders only the loaded form.
 
 ## Profile form action safety (repository guard)
 
-- `ProfileCardClient` renders one shadcn `Card` with the header and `<ProfileForm />` in `CardContent`. `ProfileForm` owns the only HTML `<form>` and the save button, which has `type="submit"`; do not render a second Card or form.
+- `page.tsx` renders one shadcn `Card` with the header and `<ProfileFormClient />` in `CardContent`, which mounts `<ProfileForm />` once loaded. `ProfileForm` owns the only HTML `<form>` and the save button, which has `type="submit"`; do not render a second Card or form.
 - `pnpm check:components` enforces that a `*-form.tsx` component renders exactly one form root and no `FormProvider`. This is a **UI action-safety guard**, not a substitute for Firebase security rules, authorization or server-side validation.
 
 ## Accessibility and Next.js
@@ -79,7 +79,7 @@ These are project conventions aligned with the current shadcn/ui and React Hook 
 The profile components were compared with all maintained UI component modules under `src/components/ui` (excluding story/test fixtures), including `card.tsx`, `field.tsx`, `input.tsx`, `select.tsx`, `avatar.tsx`, `button.tsx` and the compound patterns used by `dialog.tsx`, `item.tsx` and `tabs.tsx`.
 
 - Keep application-owned components in private `_components/`, importing rather than modifying the registry.
-- Use the shadcn `Card` parts directly in the screen composition owner (`ProfileCardClient` for the profile); do not add application wrappers that only forward props to a Card primitive.
+- Use the shadcn `Card` parts directly in the screen composition owner (`page.tsx` for the profile); do not add application wrappers that only forward props to a Card primitive.
 - Follow `ComponentProps<typeof Primitive>`, native children, `cn()` overrides and named exports for component adapters.
 - Use `useId()` for reusable field label/control pairs; do not hard-code duplicate `id` values when a profile form might mount more than once.
 - Keep `type="submit"` on the save button. This is an explicit repository convention, not a mandatory official shadcn file structure.

@@ -18,8 +18,8 @@ does not move persistence or authorization to a server DAL.
 
 ## Decision
 
-- Remove the profile Promise registry. `ProfileCardClient` owns the read through
-  `useProfileCardClient`, which starts it in an Effect, stops waiting after fifteen
+- Remove the profile Promise registry. `ProfileFormClient` owns the read through
+  `useProfileFormClient`, which starts it in an Effect, stops waiting after fifteen
   seconds and discards obsolete results during cleanup.
 - Mount `ProfileForm` only with loaded `initialValues`. Preserve `useActionState`,
   submitted values and the pending avatar after a failed save.

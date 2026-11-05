@@ -140,7 +140,7 @@ describe("owned hook filename/export parity", () => {
 
   it("rejects additional unexported function and variable hooks", () => {
     const file =
-      "src/app/(protected)/profile/_hooks/use-profile-card-client.ts";
+      "src/app/(protected)/profile/_hooks/use-profile-form-client.ts";
     for (const extra of [
       "function useProfileLoad() {}",
       "const useProfileLoad = () => {};",
@@ -148,7 +148,7 @@ describe("owned hook filename/export parity", () => {
       "const useProfileLoad = (function useProfileLoad() {});",
       "const useProfileLoad = (() => {}) satisfies (() => void);",
     ]) {
-      const code = `export function useProfileCardClient() {}\n${extra}`;
+      const code = `export function useProfileFormClient() {}\n${extra}`;
       const findings = inspectHookFilename(code, file);
       assert.equal(findings.length, 1, code);
       assert.match(findings[0].message, /exactly one hook.*useProfileLoad/);
@@ -336,6 +336,34 @@ describe("owned component conventions", () => {
     assert.equal(
       isOwnedComponent("src/components/ai-elements/message.tsx"),
       false,
+    );
+  });
+
+  it("rejects a Middle Man that only delegates to one owned component", () => {
+    const file =
+      "src/app/(public)/forgot-password/_components/forgot-password-form-client.tsx";
+    expectInvalid(
+      '"use client"; import { ForgotPasswordAuthScreen } from "@/components/firebase/forgot-password-auth-screen"; function ForgotPasswordFormClient(props) { return <div {...props}><ForgotPasswordAuthScreen /></div>; } export { ForgotPasswordFormClient };',
+      /Middle Man/,
+      file,
+    );
+    expectValid(
+      '"use client"; import { ForgotPasswordAuthScreen } from "@/components/firebase/forgot-password-auth-screen"; function ForgotPasswordFormClient(props) { return props.ready ? <ForgotPasswordAuthScreen /> : null; } export { ForgotPasswordFormClient };',
+      file,
+    );
+  });
+
+  it("keeps client leaves free of Card parts (direct page composition)", () => {
+    const file =
+      "src/app/(protected)/profile/_components/profile-form-client.tsx";
+    expectInvalid(
+      '"use client"; function ProfileFormClient(props) { return <Card {...props}><CardContent /></Card>; } export { ProfileFormClient };',
+      /must not render <Card>/,
+      file,
+    );
+    expectValid(
+      '"use client"; function ProfileFormClient(props) { return <ProfileForm {...props} />; } export { ProfileFormClient };',
+      file,
     );
   });
 
@@ -1042,7 +1070,7 @@ describe("component filename term matching and parity", () => {
        type HomeSectionProps = ComponentProps<"div">;
        function HomeSection(props: HomeSectionProps) {
          const { t } = useHomeSection();
-         return <Home {...props} />;
+         return t ? <Home {...props} /> : null;
        }
        export { HomeSection };`,
       "src/app/_components/home-section.tsx",

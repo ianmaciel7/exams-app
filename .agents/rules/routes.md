@@ -19,6 +19,7 @@ Repository policy: `page.tsx`, `layout.tsx`, `template.tsx`, `not-found.tsx`,
 Use `await getTranslations()` from `next-intl/server` for copy instead of the
 `useTranslations` hook. This is stricter than the Next.js API,
 which permits data access in pages/layouts and Client Components in templates.
+For simple messages without arguments, `page.tsx` may declare the text in JSX with `<TranslationTextServer message="Auth.personalInfoTitle" />` (alias `T`), which resolves the key on the server and is typed against the message catalog through `AppConfig`. Messages with arguments or rich text keep using `await getTranslations()` directly, and the helper is not for Client Components.
 
 ## Thin entrypoint guardrails
 

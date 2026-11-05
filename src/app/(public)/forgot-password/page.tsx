@@ -1,7 +1,7 @@
-import { ForgotPasswordFormClient } from "./_components/forgot-password-form-client";
+import { ForgotPasswordAuthScreen as ForgotPasswordAuthContent } from "@/components/firebase/forgot-password-auth-screen";
 
 export const instant = false;
 
 export default function ForgotPasswordPage() {
-  return <ForgotPasswordFormClient />;
+  return <ForgotPasswordAuthContent />;
 }

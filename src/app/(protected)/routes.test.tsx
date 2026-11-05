@@ -6,23 +6,14 @@ vi.mock("./_lib/dal", () => ({
   verifySession: async () => ({ role: "user", userId: "test-user" }),
 }));
 
-vi.mock("next-intl/server", () => ({
-  getTranslations: async () => (key: string) => key,
+// Async Server Components cannot render in jsdom; the stand-in echoes the key.
+vi.mock("@/components/ui/extensions/translation-text-server", () => ({
+  TranslationTextServer: ({ message }: { message: string }) =>
+    message.split(".").pop(),
 }));
 
-vi.mock("./profile/_components/profile-card-client", () => ({
-  ProfileCardClient: ({
-    title,
-    description,
-  }: {
-    title: string;
-    description: string;
-  }) => (
-    <main data-testid="profile-card-client">
-      <h1>{title}</h1>
-      <p>{description}</p>
-    </main>
-  ),
+vi.mock("./profile/_components/profile-form-client", () => ({
+  ProfileFormClient: () => <div data-testid="profile-form-client" />,
 }));
 
 afterEach(cleanup);
@@ -30,7 +21,7 @@ afterEach(cleanup);
 describe("protected routes", () => {
   it("renders profile route composition root", async () => {
     render(await ProfilePage());
-    expect(screen.getByTestId("profile-card-client")).toBeTruthy();
+    expect(screen.getByTestId("profile-form-client")).toBeTruthy();
     expect(
       screen.getByRole("heading", { name: "personalInfoTitle" }),
     ).toBeTruthy();

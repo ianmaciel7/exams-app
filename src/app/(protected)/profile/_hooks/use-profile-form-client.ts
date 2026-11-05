@@ -8,7 +8,7 @@ import { syncSavedLocale } from "../_lib/utils";
 import { useProfileLoad } from "./use-profile-load";
 
 /** Own the browser read for this visit, without a shared Promise cache. */
-export function useProfileCardClient() {
+export function useProfileFormClient() {
   const session = useSession();
   const locale = useLocale();
   const activeLocale = isLocale(locale) ? locale : defaultLocale;

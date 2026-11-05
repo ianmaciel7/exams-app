@@ -19,7 +19,7 @@ Owned components keep rendering, translations, primitive prop forwarding and sim
 - Expose explicit session flags (`isLoading`, `isHidden`, `isError`) and an
   already resolved error message. Components render the applicable flag rather
   than deriving readiness from user, authentication and preferences flags.
-- Keep responsibilities local: `useProfileCardClient` owns the browser read;
+- Keep responsibilities local: `useProfileFormClient` owns the browser read;
   `useProfileForm` owns the form Action (`useActionState`), using its pending
   value rather than a parallel saving flag; `useProfileAvatarFieldClient`
   handles avatar field data. Do not mirror derived state in additional
