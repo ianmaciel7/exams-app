@@ -5,14 +5,14 @@
 Run the checks relevant to a change before opening a pull request. See
 [TOOLING.md](TOOLING.md) for every command and the tools behind them.
 
-| Command | Use it for |
-| --- | --- |
-| `pnpm verify:fast` | Code changes: Biome CI, typecheck, unit tests, logging regressions, ast-grep structural rules, route-entrypoint guard, owned-component naming/boundary guard, UI feedback guard (`check:ui-state`), and responsiveness guard (`check:responsiveness`). Browser suites run separately. |
-| `pnpm verify:full` | Before a pull request: `verify:static` (adds coverage thresholds, architecture, unused code, duplication, ast-grep structural checks, route/component/responsiveness guards, spelling, Markdown, complexity, React diagnostics) plus `verify:build` (browser tests, production build with size budgets, Ladle build). |
-| `pnpm verify:e2e` | Changes that affect pages or visual output: functional, accessibility, and visual Playwright specs. |
-| `pnpm verify:security` | Dependency or configuration changes: Semgrep rule tests and scan, Gitleaks, workflow lint, `pnpm audit`, and the separate Functions lockfile audit. Needs the host tools in [TOOLING.md](TOOLING.md#host-prerequisites). |
-| `pnpm audit:functions` | Separate dependency audit of the deployed Cloud Functions npm lockfile; part of security verification and CI. |
-| `pnpm eval:tool-usage` | On-demand evaluation of Codex tool selection. Requires authenticated Codex plus configured MCP/plugin tools; saves JSONL traces and a report under ignored `reports/tool-usage-evals/`. It is intentionally outside CI because agent results and external tool availability are non-deterministic. |
+| Command                | Use it for                                                                                                                                                                                                                                                                                                            |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pnpm verify:fast`     | Code changes: Biome CI, typecheck, unit tests, logging regressions, ast-grep structural rules, route-entrypoint guard, owned-component naming/boundary guard, UI feedback guard (`check:ui-state`), and responsiveness guard (`check:responsiveness`). Browser suites run separately.                                 |
+| `pnpm verify:full`     | Before a pull request: `verify:static` (adds coverage thresholds, architecture, unused code, duplication, ast-grep structural checks, route/component/responsiveness guards, spelling, Markdown, complexity, React diagnostics) plus `verify:build` (browser tests, production build with size budgets, Ladle build). |
+| `pnpm verify:e2e`      | Changes that affect pages or visual output: functional, accessibility, and visual Playwright specs.                                                                                                                                                                                                                   |
+| `pnpm verify:security` | Dependency or configuration changes: Semgrep rule tests and scan, Gitleaks, workflow lint, `pnpm audit`, and the separate Functions lockfile audit. Needs the host tools in [TOOLING.md](TOOLING.md#host-prerequisites).                                                                                              |
+| `pnpm audit:functions` | Separate dependency audit of the deployed Cloud Functions npm lockfile; part of security verification and CI.                                                                                                                                                                                                         |
+| `pnpm eval:tool-usage` | On-demand evaluation of Codex tool selection. Requires authenticated Codex plus configured MCP/plugin tools; saves JSONL traces and a report under ignored `reports/tool-usage-evals/`. It is intentionally outside CI because agent results and external tool availability are non-deterministic.                    |
 
 For documentation-only changes, run `pnpm check:markdown` and
 `pnpm check:spelling`, then verify relative links, referenced paths, and
@@ -102,18 +102,18 @@ with the Firebase Auth, Firestore, and Functions emulators. Their assertions
 must verify **observable outcomes** and, where applicable, persisted records
 rather than only mocked calls or navigation.
 
-| Journey / security boundary | Executable evidence | Required outcome |
-| --- | --- | --- |
-| Registration and persisted login | `tests/firebase-auth.spec.ts` | Register in the browser and retain an authenticated session |
-| Guest protected deep link to sign-in | `tests/firebase-auth.spec.ts` | Preserve the requested protected path and query after login |
-| Profile preferences and identity | `tests/firebase-auth.spec.ts` | Save via the browser, read Firestore independently, reload, sign out and sign in again |
-| Cross-account preference isolation | `tests/firebase-auth.spec.ts` | Owner can read/write; a different user cannot read/write; anonymous access is denied |
-| Password recovery | `tests/firebase-auth.spec.ts` | Emulator issues a recovery code and the UI handles network failure |
-| Google sign-in | `tests/firebase-auth.spec.ts` | Emulated popup/redirect flows complete; production OAuth is a separate risk |
-| Google popup cancellation and retry | `tests/firebase-auth.spec.ts` | Closing an unauthenticated popup returns to usable sign-in and permits a second attempt |
+| Journey / security boundary                 | Executable evidence           | Required outcome                                                                                                                |
+| ------------------------------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| Registration and persisted login            | `tests/firebase-auth.spec.ts` | Register in the browser and retain an authenticated session                                                                     |
+| Guest protected deep link to sign-in        | `tests/firebase-auth.spec.ts` | Preserve the requested protected path and query after login                                                                     |
+| Profile preferences and identity            | `tests/firebase-auth.spec.ts` | Save via the browser, read Firestore independently, reload, sign out and sign in again                                          |
+| Cross-account preference isolation          | `tests/firebase-auth.spec.ts` | Owner can read/write; a different user cannot read/write; anonymous access is denied                                            |
+| Password recovery                           | `tests/firebase-auth.spec.ts` | Emulator issues a recovery code and the UI handles network failure                                                              |
+| Google sign-in                              | `tests/firebase-auth.spec.ts` | Emulated popup/redirect flows complete; production OAuth is a separate risk                                                     |
+| Google popup cancellation and retry         | `tests/firebase-auth.spec.ts` | Closing an unauthenticated popup returns to usable sign-in and permits a second attempt                                         |
 | Protected session and server token verdicts | `tests/firebase-auth.spec.ts` | First load without the worker, forwarded token, failed refresh, rejected tokens, no redirect loop, sign-out, and account switch |
-| Role claims in Security Rules | `tests/firebase-auth.spec.ts` | A refreshed token gains and loses access; an issued token keeps its claim in Rules until it expires |
-| Responsive, visual, and a11y | `tests/*.spec.ts` | Assert defined layouts and detectable issues; these are not substitutes for a completed journey |
+| Role claims in Security Rules               | `tests/firebase-auth.spec.ts` | A refreshed token gains and loses access; an issued token keeps its claim in Rules until it expires                             |
+| Responsive, visual, and a11y                | `tests/*.spec.ts`             | Assert defined layouts and detectable issues; these are not substitutes for a completed journey                                 |
 
 Playwright uses `failOnFlakyTests` in CI: a test that fails before passing on
 retry must fail the job. Investigate traces and classify the root cause rather
@@ -166,13 +166,13 @@ current implementation.
 
 The current example is `/sign-in` with Google OAuth. Its minimum model is:
 
-| Initial state | Event | Expected observable state | Verification |
-| --- | --- | --- | --- |
-| Idle | Open Google popup | Authentication pending; window appears | Playwright popup event |
-| Pending | Authenticate in popup | Signed-in destination shown | Emulator-backed browser E2E |
-| Pending | Close popup without authenticating | Sign-in is usable again; no indefinite spinner | Emulator-backed browser E2E |
-| Recovered after cancellation | Try Google again | A second popup can open, then cancel cleanly | Emulator-backed browser E2E |
-| Pending | Popup blocked, provider error or network failure | Recoverable error and usable controls | Add targeted tests when failure can be simulated reliably |
+| Initial state                | Event                                            | Expected observable state                      | Verification                                              |
+| ---------------------------- | ------------------------------------------------ | ---------------------------------------------- | --------------------------------------------------------- |
+| Idle                         | Open Google popup                                | Authentication pending; window appears         | Playwright popup event                                    |
+| Pending                      | Authenticate in popup                            | Signed-in destination shown                    | Emulator-backed browser E2E                               |
+| Pending                      | Close popup without authenticating               | Sign-in is usable again; no indefinite spinner | Emulator-backed browser E2E                               |
+| Recovered after cancellation | Try Google again                                 | A second popup can open, then cancel cleanly   | Emulator-backed browser E2E                               |
+| Pending                      | Popup blocked, provider error or network failure | Recoverable error and usable controls          | Add targeted tests when failure can be simulated reliably |
 
 The required cancellation/retry regression lives in
 `tests/firebase-auth.spec.ts`. The `auth-emulator` CI job runs it through
@@ -192,16 +192,16 @@ transition matrix with the feature's requirements and actual UX.
 The server DAL and client session provider own these transitions. An emulator suite cannot reproduce every
 one, so the last column names the layer that does.
 
-| Initial state | Event | Expected observable state | Verification |
-| --- | --- | --- | --- |
-| Request | Server session resolves signed in | Protected layout renders after verification | `layout.test.tsx`, `dal.test.ts` |
-| Request | Server session is missing | DAL redirects to sign-in | `dal.test.ts` |
-| Request | Session verification fails unexpectedly | Infrastructure error propagates without a redirect | `dal.test.ts` |
-| Signed in | Sign-out | Content hidden; history cannot restore it | Emulator E2E |
-| Signed in | Account changes | Subtree remounts with no prior account data | Component test, emulator E2E |
-| Signed in, worker active | Token refresh fails | Navigation continues on the client session | Emulator E2E |
-| Signed in | Server rejects the token | Sign-in, then home; the route is requested once | Emulator E2E |
-| Any | Admin SDK infrastructure fault | Error boundary, no sign-in redirect | `server.test.ts`, `dal.test.ts` only: the emulator cannot fail on demand |
+| Initial state            | Event                                   | Expected observable state                          | Verification                                                             |
+| ------------------------ | --------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------------------ |
+| Request                  | Server session resolves signed in       | Protected layout renders after verification        | `layout.test.tsx`, `dal.test.ts`                                         |
+| Request                  | Server session is missing               | DAL redirects to sign-in                           | `dal.test.ts`                                                            |
+| Request                  | Session verification fails unexpectedly | Infrastructure error propagates without a redirect | `dal.test.ts`                                                            |
+| Signed in                | Sign-out                                | Content hidden; history cannot restore it          | Emulator E2E                                                             |
+| Signed in                | Account changes                         | Subtree remounts with no prior account data        | Component test, emulator E2E                                             |
+| Signed in, worker active | Token refresh fails                     | Navigation continues on the client session         | Emulator E2E                                                             |
+| Signed in                | Server rejects the token                | Sign-in, then home; the route is requested once    | Emulator E2E                                                             |
+| Any                      | Admin SDK infrastructure fault          | Error boundary, no sign-in redirect                | `server.test.ts`, `dal.test.ts` only: the emulator cannot fail on demand |
 
 `verifySession`, `verifyRole`, 401/403 responses, and resource ownership on a
 server operation have no production caller, so they are unit-tested only. Do not
@@ -210,23 +210,23 @@ Firestore Rules.
 
 ## Test layers
 
-| Layer | Location and name | Runner | Command | Use for |
-| --- | --- | --- | --- | --- |
-| Unit and hook | `src/**/*.test.ts(x)` next to the source | Vitest `unit` project, `jsdom` | `pnpm test` | Functions, utilities, hooks, and business logic. |
-| Property-based | Inside unit tests, with `fast-check` | Vitest `unit` | `pnpm test` | Pure logic with a large input space, such as `isLocale`. |
-| Browser component | `src/**/*.browser.test.tsx` | Vitest `browser` project, Chromium | `pnpm test:browser` | Behavior that needs a real browser: responsive breakpoints, container queries (`@container`), focus, real events. |
-| End-to-end / Responsiveness | `tests/*.spec.ts`, `tests/responsive.spec.ts` | Playwright | `pnpm test:e2e` | User journeys and responsive layout against a production build. `tests/responsive.spec.ts` covers multi-viewport matrix (320px, 390px, 768px, 1280px), horizontal overflow prevention (`scrollWidth <= clientWidth`), and WCAG 2.2 SC 2.5.8 touch target compliance. |
-| Mobile device | `tests/mobile.spec.ts` | Playwright `mobile` project (Pixel 7: `isMobile`, `hasTouch`, coarse pointer) | `pnpm test:mobile` | Real mobile emulation of `/`, `/sign-in`, `/register`, and `/forgot-password`: meta viewport and manifest, axe WCAG A/AA, one `h1`, no horizontal scroll in portrait and landscape, WCAG 1.4.12 text spacing, 44x44px touch targets (Apple HIG, WCAG 2.5.5), form fields of at least 16px so iOS does not zoom, autofill tokens (WCAG 1.3.5), and `prefers-reduced-motion`. |
-| Platform best practices | `tests/best-practices.spec.ts` | Playwright | `pnpm test:e2e` | Security headers from the Next.js `headers` guide, the nonce CSP (fresh nonce per request, nonce on every script, no violations on public routes), no `X-Powered-By`, the web app manifest, `lang`, charset, and meta description. |
-| Lighthouse mobile budgets | `scripts/checks/check-lighthouse.mjs` | Lighthouse (default mobile profile) | `pnpm check:lighthouse` | Fails `/` or `/sign-in` below accessibility 95, best practices 90, SEO 90, performance 40 (a regression floor), CLS above 0.1, or a home LCP above 4.5 s (the CI runner measures about 4.0 s). Reports go to `reports/lighthouse/`. |
-| Accessibility | `tests/a11y.spec.ts`, titled `@a11y` | Playwright and axe-core | `pnpm test:a11y` | Automated WCAG 2.0, 2.1, and 2.2 A/AA scans (`wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`, `wcag22aa`) across desktop (`1280x800`) and mobile (`390x844`) viewports in light and dark mode. |
-| Visual regression | `tests/visual.spec.ts`, titled `@visual` | Playwright screenshots (CI only) | `pnpm test:visual` | Layout and theme changes in rendered pages. |
-| Firebase Auth and profile | `tests/firebase-auth.spec.ts` | Playwright with Firebase Auth, Firestore and Functions emulators | CI `auth-emulator` job | Sign-in, registration, recovery, profile, and authenticated axe checks, including the `recordUsage` callable guard. Not included in ordinary `verify:e2e`. |
-| Firebase security rules | `tests/rules/*.test.mjs` | `node:test` with `@firebase/rules-unit-testing` on the Firestore, Storage, and Realtime Database emulators | `pnpm test:rules`, CI `rules` job | Owner, other user, administrator claim, and anonymous cases for `users/{uid}`, `usageLogs`, the avatar path, deny-all defaults, field allow-lists, size and content-type limits. A rules change without a matching test fails review; `pnpm check:firebase-rules` blocks a rules file with no test. |
-| Sign-in allowlist | `functions/access-policy.test.cjs` | `node:test` | `pnpm test:logging` | Allowed and refused addresses, role claim, verified-email rule, fail-closed empty list, and the open emulator. The auth-emulator E2E runs with no list, so it exercises only the open path. |
-| CSP profile photos | `src/lib/csp.test.ts` | Vitest | `pnpm test`, `pnpm verify:static` | `img-src` must list exactly `'self'`, `blob:`, `data:`, Firebase Storage, and Google account photos, plus the Storage emulator in development only. Removing one fails the test, so profile photos cannot silently stop loading. |
-| Cloud Functions public surface | `functions/public-surface.test.cjs` | `node:test` | `pnpm test:logging`, `pnpm verify:static` | `functions/index.js` must not use `onRequest`: only callables and blocking triggers, which verify the caller. |
-| Mutation | `stryker.config.json` | Stryker | `pnpm test:mutation` | Command-runner mutation testing. Manual CI run until a hosted-run success is confirmed; see [TOOLING.md](TOOLING.md#known-limitations). |
+| Layer                          | Location and name                             | Runner                                                                                                     | Command                                   | Use for                                                                                                                                                                                                                                                                                                                                                                     |
+| ------------------------------ | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Unit and hook                  | `src/**/*.test.ts(x)` next to the source      | Vitest `unit` project, `jsdom`                                                                             | `pnpm test`                               | Functions, utilities, hooks, and business logic.                                                                                                                                                                                                                                                                                                                            |
+| Property-based                 | Inside unit tests, with `fast-check`          | Vitest `unit`                                                                                              | `pnpm test`                               | Pure logic with a large input space, such as `isLocale`.                                                                                                                                                                                                                                                                                                                    |
+| Browser component              | `src/**/*.browser.test.tsx`                   | Vitest `browser` project, Chromium                                                                         | `pnpm test:browser`                       | Behavior that needs a real browser: responsive breakpoints, container queries (`@container`), focus, real events.                                                                                                                                                                                                                                                           |
+| End-to-end / Responsiveness    | `tests/*.spec.ts`, `tests/responsive.spec.ts` | Playwright                                                                                                 | `pnpm test:e2e`                           | User journeys and responsive layout against a production build. `tests/responsive.spec.ts` covers multi-viewport matrix (320px, 390px, 768px, 1280px), horizontal overflow prevention (`scrollWidth <= clientWidth`), and WCAG 2.2 SC 2.5.8 touch target compliance.                                                                                                        |
+| Mobile device                  | `tests/mobile.spec.ts`                        | Playwright`mobile` project (Pixel 7: `isMobile`, `hasTouch`, coarse pointer)                               | `pnpm test:mobile`                        | Real mobile emulation of `/`, `/sign-in`, `/register`, and `/forgot-password`: meta viewport and manifest, axe WCAG A/AA, one `h1`, no horizontal scroll in portrait and landscape, WCAG 1.4.12 text spacing, 44x44px touch targets (Apple HIG, WCAG 2.5.5), form fields of at least 16px so iOS does not zoom, autofill tokens (WCAG 1.3.5), and `prefers-reduced-motion`. |
+| Platform best practices        | `tests/best-practices.spec.ts`                | Playwright                                                                                                 | `pnpm test:e2e`                           | Security headers from the Next.js `headers` guide, the nonce CSP (fresh nonce per request, nonce on every script, no violations on public routes), no `X-Powered-By`, the web app manifest, `lang`, charset, and meta description.                                                                                                                                          |
+| Lighthouse mobile budgets      | `scripts/checks/check-lighthouse.mjs`         | Lighthouse (default mobile profile)                                                                        | `pnpm check:lighthouse`                   | Fails `/` or `/sign-in` below accessibility 95, best practices 90, SEO 90, performance 40 (a regression floor), CLS above 0.1, or a home LCP above 4.5 s (the CI runner measures about 4.0 s). Reports go to `reports/lighthouse/`.                                                                                                                                         |
+| Accessibility                  | `tests/a11y.spec.ts`, titled `@a11y`          | Playwright and axe-core                                                                                    | `pnpm test:a11y`                          | Automated WCAG 2.0, 2.1, and 2.2 A/AA scans (`wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`, `wcag22aa`) across desktop (`1280x800`) and mobile (`390x844`) viewports in light and dark mode.                                                                                                                                                                                   |
+| Visual regression              | `tests/visual.spec.ts`, titled `@visual`      | Playwright screenshots (CI only)                                                                           | `pnpm test:visual`                        | Layout and theme changes in rendered pages.                                                                                                                                                                                                                                                                                                                                 |
+| Firebase Auth and profile      | `tests/firebase-auth.spec.ts`                 | Playwright with Firebase Auth, Firestore and Functions emulators                                           | CI `auth-emulator` job                    | Sign-in, registration, recovery, profile, and authenticated axe checks, including the `recordUsage` callable guard. Not included in ordinary `verify:e2e`.                                                                                                                                                                                                                  |
+| Firebase security rules        | `tests/rules/*.test.mjs`                      | `node:test` with `@firebase/rules-unit-testing` on the Firestore, Storage, and Realtime Database emulators | `pnpm test:rules`, CI `rules` job         | Owner, other user, administrator claim, and anonymous cases for `users/{uid}`, `usageLogs`, the avatar path, deny-all defaults, field allow-lists, size and content-type limits. A rules change without a matching test fails review; `pnpm check:firebase-rules` blocks a rules file with no test.                                                                         |
+| Sign-in allowlist              | `functions/access-policy.test.cjs`            | `node:test`                                                                                                | `pnpm test:logging`                       | Allowed and refused addresses, role claim, verified-email rule, fail-closed empty list, and the open emulator. The auth-emulator E2E runs with no list, so it exercises only the open path.                                                                                                                                                                                 |
+| CSP profile photos             | `src/lib/csp.test.ts`                         | Vitest                                                                                                     | `pnpm test`, `pnpm verify:static`         | `img-src` must list exactly `'self'`, `blob:`, `data:`, Firebase Storage, and Google account photos, plus the Storage emulator in development only. Removing one fails the test, so profile photos cannot silently stop loading.                                                                                                                                            |
+| Cloud Functions public surface | `functions/public-surface.test.cjs`           | `node:test`                                                                                                | `pnpm test:logging`, `pnpm verify:static` | `functions/index.js` must not use `onRequest`: only callables and blocking triggers, which verify the caller.                                                                                                                                                                                                                                                               |
+| Mutation                       | `stryker.config.json`                         | Stryker                                                                                                    | `pnpm test:mutation`                      | Command-runner mutation testing. Manual CI run until a hosted-run success is confirmed; see [TOOLING.md](TOOLING.md#known-limitations).                                                                                                                                                                                                                                     |
 
 Choose the lightest layer that can fail for the right reason. Keep a behavior
 in `jsdom` when a stub is enough, and move it to Browser Mode only when the real
@@ -341,13 +341,12 @@ colocated alongside their respective UI components:
 
 Playwright verifies production builds across a representative viewport matrix:
 
-| Viewport name | Dimensions | Focus |
-| --- | --- | --- |
-| `reflow-320` | 320x568 | WCAG 1.4.10 Reflow standard at 320 CSS pixels. Verifies horizontal overflow prevention (`scrollWidth <= clientWidth + 1`) and zero two-dimensional scrollbars. |
-| `mobile-390` | 390x844 | Modern mobile device layout, vertical button stacking, touch target sizing, and fluid hero sections. |
-| `tablet-768` | 768x1024 | Intermediate tablet viewport reflow and layout transitions. |
-| `desktop-1280` | 1280x800 | Full desktop multi-column layouts, side-by-side action alignment, and wide content containers. |
-
+| Viewport name  | Dimensions | Focus                                                                                                                                                          |
+| -------------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `reflow-320`   | 320x568    | WCAG 1.4.10 Reflow standard at 320 CSS pixels. Verifies horizontal overflow prevention (`scrollWidth <= clientWidth + 1`) and zero two-dimensional scrollbars. |
+| `mobile-390`   | 390x844    | Modern mobile device layout, vertical button stacking, touch target sizing, and fluid hero sections.                                                           |
+| `tablet-768`   | 768x1024   | Intermediate tablet viewport reflow and layout transitions.                                                                                                    |
+| `desktop-1280` | 1280x800   | Full desktop multi-column layouts, side-by-side action alignment, and wide content containers.                                                                 |
 - **Zero horizontal scrollbar**: Each route (`/`, `/sign-in`, `/register`) is verified
   to ensure content fits within the client viewport without horizontal overflow.
 - **Touch target compliance**: Iterates over all interactive controls (`button`, `a`,
@@ -418,15 +417,15 @@ Cover the variants and states a reviewer needs to see, not every prop.
 `.github/workflows/ci.yml` runs on pull requests, pushes to `main`, and manual
 `workflow_dispatch`. Jobs run in parallel:
 
-| Job | Runs | Local equivalent |
-| --- | --- | --- |
-| `static` | Biome 2.5, isolated Biome 2.6 plugin pilot, typecheck, coverage, architecture, Knip, jscpd, ast-grep, route/component/responsiveness guards, CSpell, markdownlint, Fallow, React Doctor | `pnpm verify:static` plus CI-only pilot |
-| `build` | Vitest Browser Mode, production build with size budgets, Ladle production build | `pnpm verify:build` |
-| `e2e` | Playwright functional, desktop and mobile (Pixel 7) projects, accessibility, and visual specs, then the Lighthouse mobile budgets, in the pinned Playwright container with a placeholder Firebase web config so the auth forms render | `pnpm verify:e2e && pnpm check:lighthouse` |
-| `auth-emulator` | Local demo Firebase Auth, Firestore, and Functions; auth/profile Playwright E2E and authenticated axe checks | `pnpm test:auth` after `npm ci --prefix functions --ignore-scripts` (with emulator environment variables) |
-| `security` | Semgrep rule tests and scan (`--error`), Gitleaks, actionlint, zizmor, `pnpm audit`, pre-commit | `pnpm verify:security` |
-| `pr-title` | Conventional Commit PR title (pull requests only) | `echo "feat: title" \| pnpm exec commitlint` |
-| `ci-result` | Aggregates all six jobs, including `auth-emulator`; any required failure blocks the PR | n/a |
+| Job             | Runs                                                                                                                                                                                                                                  | Local equivalent                                                                                          |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `static`        | Biome 2.5, isolated Biome 2.6 plugin pilot, typecheck, coverage, architecture, Knip, jscpd, ast-grep, route/component/responsiveness guards, CSpell, markdownlint, Fallow, React Doctor                                               | `pnpm verify:static` plus CI-only pilot                                                                   |
+| `build`         | Vitest Browser Mode, production build with size budgets, Ladle production build                                                                                                                                                       | `pnpm verify:build`                                                                                       |
+| `e2e`           | Playwright functional, desktop and mobile (Pixel 7) projects, accessibility, and visual specs, then the Lighthouse mobile budgets, in the pinned Playwright container with a placeholder Firebase web config so the auth forms render | `pnpm verify:e2e && pnpm check:lighthouse`                                                                |
+| `auth-emulator` | Local demo Firebase Auth, Firestore, and Functions; auth/profile Playwright E2E and authenticated axe checks                                                                                                                          | `pnpm test:auth` after `npm ci --prefix functions --ignore-scripts` (with emulator environment variables) |
+| `security`      | Semgrep rule tests and scan (`--error`), Gitleaks, actionlint, zizmor, `pnpm audit`, pre-commit                                                                                                                                       | `pnpm verify:security`                                                                                    |
+| `pr-title`      | Conventional Commit PR title (pull requests only)                                                                                                                                                                                     | `echo "feat: title" \| pnpm exec commitlint`                                                              |
+| `ci-result`     | Aggregates all six jobs, including `auth-emulator`; any required failure blocks the PR                                                                                                                                                | n/a                                                                                                       |
 
 Pull-request runs cancel superseded runs (including when the title is edited,
 which re-runs the title check); pushes to `main` each get their own
@@ -831,3 +830,11 @@ hooks, and the sign-in, register and forgot-password hook directories. The
 configured `src/**` scope also covers future owned directories and support modules.
 After hook changes, finish with a full source scan after fixture cleanup; checking
 one orchestrator or only staged files does not verify the rest of the hook tree.
+
+## Expanded analyzer coverage
+
+The current tool exclusion policy in `TOOLING.md` supersedes historical
+registry exclusion descriptions above. Coverage includes every TypeScript
+and TSX file under `src`, including registry components, stories, and tests.
+Unit and browser test discovery remain separate. Removing analyzer exclusions
+may expose existing diagnostics; do not suppress them to restore a green run.

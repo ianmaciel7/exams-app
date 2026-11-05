@@ -1,4 +1,5 @@
 ---
+
 trigger: model_decision
 description: "Read before testing or changing stateful user journeys, asynchronous interactions, external authentication, cancellation, or recovery."
 ---
@@ -37,3 +38,9 @@ presentation guidance. `pnpm check:ui-state` runs in `verify:fast`,
 `verify:static`, and the CI `static` job. It catches only direct raw exception
 coercion in JSX, form error, and toast sinks; it does not establish complete
 interaction coverage or accessibility conformance.
+
+## Analyzer exclusions
+
+Do not exempt copied registry components from Biome, React Doctor, coverage,
+jscpd, Fallow, Knip, or CSpell. Follow the current tool exclusion policy in
+`TOOLING.md`; Git tracking exclusions are independent of analyzer scope.

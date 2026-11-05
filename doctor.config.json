@@ -1,14 +1,3 @@
 {
-  "$schema": "https://react.doctor/schema/config.json",
-  "ignore": {
-    "files": [
-      "src/components/ai-elements/**",
-      "src/components/firebase/**",
-      "src/components/ui/*.tsx",
-      "reports/**",
-      ".next/**",
-      "coverage/**",
-      ".semgrep/**"
-    ]
-  }
+  "$schema": "https://react.doctor/schema/config.json"
 }

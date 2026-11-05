@@ -3,7 +3,7 @@
   "vcs": {
     "enabled": true,
     "clientKind": "git",
-    "useIgnoreFile": true
+    "useIgnoreFile": false
   },
   "plugins": [
     "./.biome/rules/dom/no-document-write.grit",
@@ -12,21 +12,8 @@
     "./.biome/rules/nextjs/prefer-route-context.grit"
   ],
   "files": {
-    "ignoreUnknown": true,
-    "includes": [
-      "**",
-      "!node_modules",
-      "!.next",
-      "!dist",
-      "!build",
-      "!.agents",
-      "!.claude",
-      "!.serena",
-      "!.semgrep",
-      "!graphify-out",
-      "!src/components/firebase",
-      "!public/*.svg"
-    ]
+    "ignoreUnknown": false,
+    "includes": ["**"]
   },
   "formatter": {
     "enabled": true,
@@ -62,7 +49,7 @@
       },
       "preset": "recommended",
       "correctness": {
-        "noComponentHookFactories": "off"
+        "noComponentHookFactories": "error"
       }
     },
     "domains": {
@@ -79,84 +66,7 @@
   },
   "overrides": [
     {
-      "includes": [
-        "src/components/ai-elements/**",
-        "src/components/ui/**",
-        "!src/components/ui/extensions/**",
-        "src/lib/highlighter.tsx"
-      ],
-      "formatter": {
-        "enabled": false
-      },
-      "assist": {
-        "enabled": false
-      },
-      "linter": {
-        "rules": {
-          "a11y": {
-            "useSemanticElements": "off",
-            "useFocusableInteractive": "off",
-            "useAriaPropsForRole": "off",
-            "useAnchorContent": "off",
-            "noLabelWithoutControl": "off",
-            "noNoninteractiveTabindex": "off",
-            "useKeyWithClickEvents": "off",
-            "noRedundantRoles": "off"
-          },
-          "suspicious": {
-            "noReactForwardRef": "off",
-            "noArrayIndexKey": "off",
-            "noDoubleEquals": "off",
-            "noDocumentCookie": "off"
-          },
-          "security": {
-            "noDangerouslySetInnerHtml": "off"
-          },
-          "correctness": {
-            "useExhaustiveDependencies": "off",
-            "noUnusedImports": "off"
-          },
-          "complexity": {
-            "noExcessiveCognitiveComplexity": "off"
-          },
-          "performance": {
-            "noImgElement": "off"
-          },
-          "style": {
-            "noDefaultExport": "error",
-            "noJsxLiterals": "off",
-            "useExportType": "error",
-            "useExportsLast": "error"
-          }
-        }
-      }
-    },
-    {
-      "includes": ["src/app/typeset.css"],
-      "formatter": {
-        "enabled": false
-      }
-    },
-    {
-      "includes": ["src/**/*.stories.tsx"],
-      "linter": {
-        "rules": {
-          "style": {
-            "noDefaultExport": "off",
-            "useExportsLast": "off"
-          }
-        }
-      }
-    },
-    {
-      "includes": [
-        "src/app/**",
-        "src/components/**",
-        "src/hooks/**",
-        "!src/components/ui/*.tsx",
-        "!src/components/ai-elements/**",
-        "!src/components/firebase/**"
-      ],
+      "includes": ["src/app/**", "src/components/**", "src/hooks/**"],
       "linter": {
         "rules": {
           "style": {
@@ -244,18 +154,7 @@
       }
     },
     {
-      "includes": [
-        "src/**",
-        "!src/components/ai-elements/**",
-        "!src/components/firebase/**",
-        "!src/components/ui/*.tsx",
-        "!src/**/*.test.ts",
-        "!src/**/*.test.tsx",
-        "!src/**/*.spec.ts",
-        "!src/**/*.spec.tsx",
-        "!src/**/*.stories.ts",
-        "!src/**/*.stories.tsx"
-      ],
+      "includes": ["src/**"],
       "linter": {
         "rules": {
           "complexity": {
@@ -282,32 +181,22 @@
           }
         }
       }
-    },
-    {
-      "includes": ["src/**/_components/*-form.tsx"],
-      "linter": {
-        "rules": {
-          "complexity": {
-            "noExcessiveLinesPerFunction": "off"
-          }
-        }
-      }
     }
   ],
   "yaml": {
     "formatter": {
-      "enabled": false
+      "enabled": true
     },
     "linter": {
-      "enabled": false
+      "enabled": true
     }
   },
   "markdown": {
     "formatter": {
-      "enabled": false
+      "enabled": true
     },
     "linter": {
-      "enabled": false
+      "enabled": true
     }
   }
 }
