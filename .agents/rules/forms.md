@@ -18,10 +18,10 @@ These are project conventions aligned with the current shadcn/ui and React Hook 
 
 ## Compound forms
 
-- The profile form submits through a React form Action: `ProfileForm` (`profile-form.tsx`) renders one Base UI `Form` with `action={formAction}` from `useProfileForm` (which wraps `useActionState`), not React Hook Form. A `*-form.tsx` component is exempt from the `-client` suffix only and delegates its hooks to `use<Component>` (see ADRs 0017 and 0018). Do not add `FormProvider`, `useForm` or `onSubmit` to it; `pnpm check:components` rejects `FormProvider` there. The Action is a client function because every write is a browser Firebase SDK call (see CODING_STANDARDS "Form and Field Architecture").
-- Keep profile Actions in `_lib/actions.ts`. Its `"use client"` boundary preserves the browser Firebase workflow. A filename does not make a Server Function; `require-session-check-in-server-action` checks exported function declarations with module-level or inline `"use server"` directives.
+- The profile form submits through a React form Action: `ProfileForm` (`profile-form.tsx`) renders one Base UI `Form` with `action={formAction}` from `useProfileForm` (which wraps `useActionState`), not React Hook Form. A `*-form.tsx` component is exempt from the `-client` suffix only and delegates its hooks to `use<Component>` (see ADRs 0017 and 0018). Do not add `FormProvider`, `useForm` or `onSubmit` to it; `pnpm check:components` rejects `FormProvider` there. The main Action is server-owned; the email form uses a separate browser Action backed by shared auth utilities (ADR 0029).
+- Keep profile writes in `_lib/actions.ts` with `"use server"`; the page injects the authenticated Action. Browser email verification uses `sendEmailChangeVerification` from `@/lib/auth`, not a route Gateway. A filename alone does not establish a Server Function.
 - `pnpm check:components` rejects the legacy `profile-action.ts` and `profile-actions.ts` module names, including colocated tests. Intentional naming changes must update the owning rule, guard and regression cases together.
-- The Action has the `(prevState, formData)` signature and returns `ProfileActionState` (`values`, pending `avatarFile`, `error`). It maps `FormData` in `_lib/dto.ts` using field names from `_lib/definitions.ts`, and falls back to the previous value for anything unknown.
+- The Action has the `(prevState, formData)` signature and returns `ProfileActionState` (`values`, `photoURL`, `hasError`, `savedCount`). It maps `FormData` in `_lib/dto.ts` using field names from `_lib/definitions.ts`, and falls back to the previous value for anything unknown.
 - Fields are uncontrolled: `name` (from `profileFieldNames`) plus `defaultValue` from `state.values` of the Action, written inline in `ProfileForm`. React resets the form after an Action, so a failed save returns the submitted values; a `Select` uses `key` on its value so it picks up the new default.
 - `ProfileForm` reads pending state from the third value of `useActionState` and passes it to child components that need it; never keep a second saving flag. `useFormStatus()` remains valid in a component rendered inside a form.
 - A reusable form that is not profile-like may still use React Hook Form (the Firebase UI auth forms do) with one `useForm`, `FormProvider` and `form.handleSubmit`; `require-form-provider` guards those.
@@ -36,7 +36,8 @@ These are project conventions aligned with the current shadcn/ui and React Hook 
 - The Server Component page reads the profile (`readOwnProfile`) and injects
   the Server Action: `<ProfileForm action={updateProfile} initialValues={profile} />`
   (ADR 0028). `ProfileForm` has no loading state of its own and never imports
-  Firebase, a gateway or `_lib/actions`. Errors reach `profile/error.tsx`;
+  Firebase SDK modules or `_lib/actions`. Focused browser hooks call shared
+  `@/lib/auth` and `@/lib/session` utilities directly. Errors reach `profile/error.tsx`;
   `loading.tsx` remains the route's server-rendering fallback.
 - Keep server reads and writes in `data.ts` (`server-only`, Admin SDK), the
   browser adapter in `gateway.ts`, transferred form values in `dto.ts`, and
@@ -61,10 +62,10 @@ These are project conventions aligned with the current shadcn/ui and React Hook 
 - E-mail changes use `ProfileEmailDialog` beside the read-only email field.
   Its portal renders `ProfileEmailForm` outside the profile form in the DOM;
   stop the email form's React submit event from bubbling to the profile Action.
-  The dialog injects `gateway.changeEmail`, closes only after a successful send,
+  The dialog injects the shared auth operation into its presentation form, closes only after a successful send,
   and keeps the address and localized error available for retry on failure.
 
-- `page.tsx` renders one shadcn `Card` with the header and `<ProfileForm />` in `CardContent`. `ProfileForm` owns the only HTML `<form>` and the save button, which has `type="submit"`; do not render a second Card or form.
+- `page.tsx` renders one shadcn `Card` with the header and `<ProfileForm />` in `CardContent`. `ProfileForm` owns the main HTML form and its `type="submit"` save button. The email dialog has an independent form in a portal; never nest the two forms in the DOM or add a second page-level Card/form.
 - `pnpm check:components` enforces that a `*-form.tsx` component renders exactly one form root and no `FormProvider`. This is a **UI action-safety guard**, not a substitute for Firebase security rules, authorization or server-side validation.
 
 ## Accessibility and Next.js

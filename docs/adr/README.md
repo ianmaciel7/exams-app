@@ -40,6 +40,8 @@ original date. Read current operational details in the
 | [0027](0027-invert-profile-data-dependency.md) | Accepted; amends ADRs 0019 and 0025 | `useProfileForm` depends on a `ProfileGateway` port injected by `ProfileGatewayProviderClient`; Biome forbids Firebase imports in route hooks and components |
 | [0028](0028-save-profile-with-a-server-action.md) | Accepted; amends ADRs 0019, 0025 and 0027 | `page.tsx` injects the `updateProfile` Server Action (Admin SDK) into a presentational `ProfileForm`; the e-mail change stays in the browser behind the port |
 
+| [0029](0029-use-shared-profile-auth-and-session-utilities.md) | Accepted; supersedes the browser Gateway scope of ADRs 0027 and 0028 | Shared auth/session utilities, direct telemetry and a provider-free profile page |
+
 ## Consolidation of 2026-11-01
 
 At the maintainer's direction, records 0013 to 0034 were merged into the

@@ -186,8 +186,11 @@ presentational client component: it only receives `action` and `initialValues`
 and keeps the Action state, the avatar draft and the browser feedback (toast,
 theme, locale, Auth reload) in `useProfileForm`. The e-mail change stays in the
 browser, because only the client SDK's `verifyBeforeUpdateEmail` sends the
-confirmation mail: `ProfileEmailFormContainer` injects it through the
-`ProfileGateway` port (ADR 0027) into `ProfileEmailForm`. `loading.tsx` covers
+confirmation mail: `ProfileEmailDialog` calls the shared
+`sendEmailChangeVerification` auth utility through its hook. Successful saves
+reload the browser user through `reloadSessionUser`. The route has no Gateway,
+context or provider; [ADR 0029](docs/adr/0029-use-shared-profile-auth-and-session-utilities.md)
+supersedes that scope of ADRs 0027 and 0028. `loading.tsx` covers
 server rendering and `error.tsx` handles read failures.
 `dto.ts` maps form submissions. Profile value types and field names live in
 `src/app/(protected)/profile/_lib/definitions.ts`, alongside the route-private profile
@@ -324,8 +327,10 @@ and [the integration convention](CODING_STANDARDS.md#integration-filename-conven
 
 ## Usage records
 
-`NavigationEvents` calls `recordUsage` once per signed-in user and pathname
-without delaying protected content. Profile saves call `withUsageGuard` before starting the operation.
+`NavigationEvents` calls the browser utility `trackEvent` once per signed-in user
+and pathname without delaying protected content. Email verification awaits
+`trackEvent` before calling the Firebase Auth SDK. The wire callable remains
+`recordUsage`; server profile saves use their authenticated Server Action.
 The Firebase callable validates authentication and an allowlist of screen and
 functionality names, then emits structured `INFO` entries using the native
 `firebase-functions/logger` SDK. Cloud Logging supplies the timestamp and
@@ -335,8 +340,8 @@ documents are denied to browser clients.
 The server derives `uid` from verified callable authentication. Event fields are
 `event`, `schemaVersion`, `eventId`, `uid`, `type`, and `name`; query strings, form
 values, email addresses, and tokens are excluded. A failed route record is
-ignored. For a profile save, the failure or the 15-second client timeout blocks
-the operation.
+ignored. For email verification, failure or the 15-second client timeout blocks
+the send, preserving the previous browser-operation policy.
 The callable can also require App Check, which is off until the owner enables it
 (see [ADR 0026](docs/adr/0026-adopt-app-check-for-callable-functions.md)).
 Sign-out stays independent. Logging acknowledgment confirms handler execution,
@@ -346,8 +351,9 @@ These remain client-reported usage attempts, not authoritative proof that a
 screen was viewed or a mutation succeeded. Modified clients can bypass the UI
 guard or submit permitted events for their own identity. Firebase resource rules
 still authorize profile data. Authoritative mutation auditing requires logging
-inside server-owned operations. New functionalities must use `withUsageGuard`
-and extend the server allowlist. Development remounts can generate duplicates.
+inside server-owned operations. New browser functionality records use
+`trackEvent` directly and extend the server allowlist. Development remounts can
+generate duplicates.
 The application emits structured logs for authentication and security-critical
 telemetry via Cloud Functions and Cloud Logging.
 

@@ -51,14 +51,3 @@ export type ProfileSnapshot = {
   values: ProfileValues;
   photoURL: string | null;
 };
-
-/**
- * Browser-only port for the parts that cannot run on the server: the e-mail
- * change (`verifyBeforeUpdateEmail` sends the confirmation mail) and the Auth
- * user refresh after a server save. `data.ts`/`gateway.ts` own the adapters and
- * `ProfileGatewayProviderClient` is the only UI module that wires them in.
- */
-export type ProfileGateway = {
-  changeEmail: (email: string) => Promise<void>;
-  refreshUser: () => Promise<void>;
-};

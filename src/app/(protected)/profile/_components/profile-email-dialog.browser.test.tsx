@@ -3,26 +3,25 @@ import { expect, test, vi } from "vitest";
 import { page, userEvent } from "vitest/browser";
 import { render } from "vitest-browser-react";
 import { Form } from "@/components/ui/extensions/form";
-import { ProfileGatewayContext } from "../_lib/gateway-context";
 import { ProfileEmailDialog } from "./profile-email-dialog";
 
 vi.mock("next-intl", () => ({ useTranslations: () => (key: string) => key }));
 vi.mock("@/lib/toast", () => ({ toast: { add: vi.fn() } }));
+const { changeEmail } = vi.hoisted(() => ({
+  changeEmail: vi.fn(async (_email: string) => {}),
+}));
+vi.mock("@/lib/auth", () => ({ sendEmailChangeVerification: changeEmail }));
 
 test.each([390, 1280])(
   "keeps email changes in a keyboard-accessible portal at %spx",
   async (width) => {
     await page.viewport(width, 844);
     const saveProfile = vi.fn();
-    const changeEmail = vi.fn(async () => {});
+    changeEmail.mockClear();
     await render(
-      <ProfileGatewayContext
-        value={{ changeEmail, refreshUser: async () => {} }}
-      >
-        <Form action={saveProfile}>
-          <ProfileEmailDialog email="ada@example.com" />
-        </Form>
-      </ProfileGatewayContext>,
+      <Form action={saveProfile}>
+        <ProfileEmailDialog email="ada@example.com" />
+      </Form>,
     );
     const trigger = page.getByRole("button", { name: "changeEmailButton" });
     trigger.element().focus();

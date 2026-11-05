@@ -1,12 +1,11 @@
 import { useTranslations } from "next-intl";
 import { useRef, useState } from "react";
+import { sendEmailChangeVerification } from "@/lib/auth";
 import { toast } from "@/lib/toast";
-import { useProfileGateway } from "./use-profile-gateway";
 
-/** Own the dialog and inject the browser-only e-mail change operation. */
+/** Own dialog state and send verification through the shared auth module. */
 export function useProfileEmailDialog() {
   const t = useTranslations("Auth");
-  const gateway = useProfileGateway();
   const [isOpen, setIsOpen] = useState(false);
   const opening = useRef(0);
 
@@ -18,7 +17,7 @@ export function useProfileEmailDialog() {
   const changeEmail = async (email: string) => {
     const submittedOpening = opening.current;
     try {
-      await gateway.changeEmail(email);
+      await sendEmailChangeVerification(email);
       toast.add({ title: t("emailVerificationSent"), type: "success" });
       // A request from a dismissed dialog must not close a newly opened one.
       if (submittedOpening === opening.current) setIsOpen(false);

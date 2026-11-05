@@ -400,8 +400,8 @@ describe("owned component conventions", () => {
 
   it("does not treat a context provider as a Middle Man (dependency injection)", () => {
     expectValid(
-      '"use client"; import { ProfileGatewayContext } from "../_lib/gateway-context"; function ProfileGatewayProviderClient(props) { return <ProfileGatewayContext value={props.gateway}>{props.children}</ProfileGatewayContext>; } export { ProfileGatewayProviderClient };',
-      "src/app/(protected)/profile/_components/profile-gateway-provider-client.tsx",
+      '"use client"; import { PreferencesContext } from "../_lib/preferences-context"; function PreferencesProviderClient(props) { return <PreferencesContext value={props.preferences}>{props.children}</PreferencesContext>; } export { PreferencesProviderClient };',
+      "src/app/(protected)/profile/_components/preferences-provider-client.tsx",
     );
   });
 
@@ -1001,6 +1001,34 @@ describe("component integration naming", () => {
         modules,
       ),
       "",
+    );
+  });
+
+  it("allows a form dialog to own its shared auth operation without a client suffix", () => {
+    const modules = new Map([
+      [
+        "src/lib/auth.ts",
+        'import { verifyBeforeUpdateEmail } from "firebase/auth";',
+      ],
+    ]);
+    const component =
+      '"use client"; import { sendEmailChangeVerification } from "@/lib/auth"; function ProfileEmailDialog(props) { return <Dialog><ProfileEmailForm changeEmail={sendEmailChangeVerification} /></Dialog>; } export { ProfileEmailDialog };';
+    assert.equal(messages(component, "profile-email-dialog", modules), "");
+    assert.match(
+      messages(
+        component.replaceAll("ProfileEmailForm", "section"),
+        "profile-email-dialog",
+        modules,
+      ),
+      /-client.tsx/,
+    );
+    assert.match(
+      messages(
+        component.replace('"use client";', ""),
+        "profile-email-dialog",
+        modules,
+      ),
+      /declare "use client"/,
     );
   });
 
