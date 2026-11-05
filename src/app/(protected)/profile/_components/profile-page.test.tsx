@@ -223,8 +223,8 @@ describe("ProfilePage", () => {
   it("leaves the sign-in redirect and its return path to the gate", async () => {
     mocks.currentUser = null;
     window.history.replaceState(null, "", "/profile?tab=security");
-    const { container } = await renderProfile();
-    expect(container.querySelector('[data-slot="card"]')).toBeNull();
+    await renderProfile();
+    expect(screen.queryByLabelText("displayNameLabel")).toBeNull();
     expect(mocks.router.replace).toHaveBeenCalledOnce();
     expect(mocks.router.replace).toHaveBeenCalledWith(
       `/sign-in?next=${encodeURIComponent("/profile?tab=security")}`,
@@ -329,7 +329,12 @@ describe("ProfilePage", () => {
         container.querySelector('[data-slot="loading-status"]'),
       ).not.toBeNull(),
     );
-    expect(container.querySelector('[data-slot="card"]')).toBeNull();
+    expect(
+      container.querySelector(
+        '[data-slot="card"] [data-slot="loading-status"]',
+      ),
+    ).not.toBeNull();
+    expect(screen.queryByLabelText("displayNameLabel")).toBeNull();
   });
 
   it("throws a failed read to the segment error boundary and retries it", async () => {

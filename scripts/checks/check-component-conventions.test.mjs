@@ -140,7 +140,7 @@ describe("owned hook filename/export parity", () => {
 
   it("rejects additional unexported function and variable hooks", () => {
     const file =
-      "src/app/(protected)/profile/_hooks/use-profile-card-client.ts";
+      "src/app/(protected)/profile/_hooks/use-profile-form-client.ts";
     for (const extra of [
       "function useProfileLoad() {}",
       "const useProfileLoad = () => {};",
@@ -148,7 +148,7 @@ describe("owned hook filename/export parity", () => {
       "const useProfileLoad = (function useProfileLoad() {});",
       "const useProfileLoad = (() => {}) satisfies (() => void);",
     ]) {
-      const code = `export function useProfileCardClient() {}\n${extra}`;
+      const code = `export function useProfileFormClient() {}\n${extra}`;
       const findings = inspectHookFilename(code, file);
       assert.equal(findings.length, 1, code);
       assert.match(findings[0].message, /exactly one hook.*useProfileLoad/);

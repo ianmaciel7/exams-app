@@ -1,5 +1,4 @@
 ---
-
 trigger: model_decision
 description: "Read when naming, placing, exporting, or defining props for owned components."
 ---
@@ -43,7 +42,7 @@ and does not transfer maintenance ownership to vendors. Application-owned extens
 - Use `AccountCardProps` for props of `AccountCard`; inherit React/HTML
   component props according to the existing component-props rule.
 - Every owned component identifier and filename MUST include a concrete component role / type describing its composition (e.g. `*-field`, `*-fields`, `*-form`, `*-card`, `*-dialog`, `*-header`, `*-button`, `*-table`, `*-list`, `*-provider`, `*-guard`, `*-flow`, `*-hero`, `*-section`, or `*-content`). This is a mandatory contract, not an optional preference; omitting the component type is prohibited. This list of semantic roles is **not** closed. `Flow` specifically denotes navigation or application flow wiring.
-- Bare feature/domain integration names like `<Domain>Client` or `<Domain>Server` (e.g. `ProfileClient`, `SettingsClient`, `HomeServer`) that omit the component type are explicitly forbidden. The `Client` and `Server` suffixes specify the runtime environment, NOT the component type. Omitting the component type creates ambiguous components with no clear composition role. All integration components must pair their domain with a concrete semantic role before any runtime suffix (e.g. `ProfileCardClient`, `SettingsSectionClient`, `HomeHeroClient`, `RouteUsageBridgeClient`).
+- Bare feature/domain integration names like `<Domain>Client` or `<Domain>Server` (e.g. `ProfileClient`, `SettingsClient`, `HomeServer`) that omit the component type are explicitly forbidden. The `Client` and `Server` suffixes specify the runtime environment, NOT the component type. Omitting the component type creates ambiguous components with no clear composition role. All integration components must pair their domain with a concrete semantic role before any runtime suffix (e.g. `ProfileFormClient`, `SettingsSectionClient`, `HomeHeroClient`, `RouteUsageBridgeClient`).
 - Do not name route-private components after screen or page terms (`-page`, `-screen`, `-view`);
   name by semantic role. Prohibit generic implementation terms (`View`, `Screen`, `Presentation`) in component identifiers.
 - Reserve `-client.tsx` for browser integrations and `-server.tsx` for server
