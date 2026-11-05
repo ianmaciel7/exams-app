@@ -23,6 +23,8 @@
     ".worktrees",
     ".agents/skills",
     ".agents/generated",
+    ".agents/teamwork",
+    ".agents/agents",
     ".claude",
     ".cursor",
     ".gemini",

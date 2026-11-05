@@ -14,7 +14,7 @@ repository. It is not a catalog of every runtime library; `package.json` and
 | Language | TypeScript | `^5`; inspect the installed version and lockfile | Provides type checking and the `@/*` import alias. | `package.json`, `tsconfig.json`, `pnpm-lock.yaml` |
 | Compiler | React Compiler | 1.0.0 | Optimizes React components through Next.js configuration. | `package.json`, `next.config.ts` |
 | Styling | Tailwind CSS | `^4` | Generates utility CSS and is loaded by Turbopack (and by Vite for Ladle). | `package.json`, `next.config.ts`, `.ladle/vite.config.mjs`, `src/app/globals.css` |
-| Code quality | Biome | 2.5.15 | Formats code, runs lint checks, and organizes imports. | `package.json`, `biome.json` |
+| Code quality | Biome | 2.6.3 | Formats code, runs lint checks, and organizes imports. | `package.json`, `biome.json` |
 | Custom code quality rules | GritQL | Executed by Biome; no standalone CLI | Supplies project-specific rules for Next.js props/context and banning deprecated DOM APIs (`document.write`). Regression-tested in `.biome/rules/nextjs/rules.test.ts` and `.biome/rules/dom/rules.test.ts`. | `.biome/rules/nextjs/*.grit`, `.biome/rules/dom/*.grit`, `biome.json` |
 | UI scaffolding | shadcn/ui CLI | 4.22.0 | Adds and maintains locally owned UI components using the configured aliases and style. | `package.json`, `components.json` |
 | Component workbench | Ladle | 5.1.1 | Develops and reviews components in isolation through colocated `*.stories.tsx` files. | `.ladle/`, `package.json` |
@@ -295,7 +295,7 @@ valid and invalid tests, before registering a new custom rule.
 | `review-route-special-files-logic` | ast-grep | error | App Router special files (`page.tsx`, `layout.tsx`, `template.tsx`, `not-found.tsx`, `loading.tsx`, `default.tsx`) under `src/app/` calling any hook, including `useTranslations` | Rejects every `use*` call in these Server Component entrypoints; localized copy must come from `await getTranslations()` in `next-intl/server`, as the `next-intl` docs recommend for async Server Components. `pnpm check:routes` enforces the same rule with AST tests, and `error.tsx` stays a Client Component. Route entry points should remain thin presentation/glue layers; state and effects must be extracted into semantic client components under `_components/` or private hooks under `_hooks/`. |
 | `noExcessiveCognitiveComplexity` | Biome native | error | Owned runtime `src/**`; existing copied registry/test exclusions remain | Maximum cognitive complexity 8 in owned runtime source; the global limit of 15 remains for other checked files. Cognitive complexity is not a cyclomatic metric. Real config regressions verify 8 accepted and 9 rejected. |
 | `noExcessiveLinesPerFunction` | Biome native | error | Same owned runtime source scope | Maximum function body size 40 lines, skipping blanks but checking IIFEs. Detects long straight-line functions that cognitive complexity misses; regressions verify 40 accepted and 41 rejected. |
-| `noExcessiveNestedCallbacks` | Biome native nursery rule in pinned 2.5.15 | error | Same owned runtime source scope | Maximum callback nesting depth 2; regressions verify 2 accepted and 3 rejected. Covered by normal `lint:ci`, `verify:fast` and `verify:static`; no second lint stack is installed. |
+| `noExcessiveNestedCallbacks` | Biome native complexity rule in pinned 2.6.3 | error | Same owned runtime source scope | Maximum callback nesting depth 2; regressions verify 2 accepted and 3 rejected. Covered by normal `lint:ci`, `verify:fast` and `verify:static`; no second lint stack is installed. |
 | `no-server-api-in-client-components` | Semgrep | error | `"use client"` files importing `next/headers` | Complements `no-server-only-in-client-components`; fails with a clear message before the framework build error. |
 | `session-cookie-must-be-http-only` | Semgrep | error | a `.set()` call whose cookie name contains session, token, auth or sid, without `httpOnly: true` and `secure: true` | [Next.js authentication guide](https://nextjs.org/docs/app/guides/authentication). Matches by cookie name only, so unrelated cookies (theme, locale) are never flagged. |
 | `no-ignored-build-errors` | Semgrep | error | `ignoreBuildErrors: true` in `src` and `next.config.ts` | Dangerous build configuration; no native rule. |
@@ -335,7 +335,7 @@ is reintroduced:
 ### Native Biome rule evaluation history
 
 The following evaluation was recorded against Biome 2.4.2. The repository now
-pins Biome 2.5.15; `biome.json` defines the enabled rules. Historical absence
+pins Biome 2.6.3; `biome.json` defines the enabled rules. Historical absence
 from 2.4.2 is not evidence that a rule is absent from the installed version.
 Recheck current documentation before adding a replacement rule.
 
@@ -343,7 +343,7 @@ Recheck current documentation before adding a replacement rule.
   passes `ref` as a prop; relaxed for vendored components), and the `next` and
   `react` domains, which include `noNestedComponentDefinitions`,
   `useHookAtTopLevel`, and `useExhaustiveDependencies`.
-- **Native async client-component check:** Biome 2.5.15 provides
+- **Native async client-component check:** Biome 2.6.3 provides
   `lint/correctness/noNextAsyncClientComponent`, enabled by the configured
   Next.js domain. Its diagnostics cover default exports, inline named exports,
   and local named functions exported separately. Keep this responsibility in

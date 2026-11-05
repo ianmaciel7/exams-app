@@ -38,6 +38,7 @@
     "actionlint",
     "zizmor",
     "firebase",
-    "terraform"
+    "terraform",
+    "taskkill.exe"
   ]
 }
