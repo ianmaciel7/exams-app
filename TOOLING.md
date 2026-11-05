@@ -532,6 +532,14 @@ from `require-component-props` HTML inheritance because Next.js supplies their
   `ci.yml` and `visual-baselines.yml`), to reduce rendering differences between baseline generation and comparison.
   Locally the visual specs are skipped. Keep the image tag and digest in step with
   the `@playwright/test` version in `package.json` when you upgrade Playwright.
+- **Next.js route types require generation before editor TypeScript resolution.**
+  When `.next/types/routes.d.ts` is absent (such as after a fresh clone, branch
+  switch, or cleaning `.next`), the TypeScript language server flags generated
+  route types (`LayoutProps`, `PageProps`, `RouteContext`) with `TS2304: Cannot find
+  name '<Type>'`. Running `pnpm typecheck` (or `pnpm exec next typegen`) populates
+  `.next/types/routes.d.ts`. In editors like VS Code, reload the TypeScript
+  language server (`TypeScript: Restart TS Server`) if diagnostics do not
+  refresh automatically.
 
 ### Managed-environment observations (2026-10-24)
 

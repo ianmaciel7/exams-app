@@ -35,6 +35,9 @@ For simple messages without arguments, `page.tsx` may declare the text in JSX wi
   - In `layout.tsx`, `params` is a promise, while `children` is received directly.
   - Use generated framework parameter types (`PageProps<Route>`, `LayoutProps<Route>`,
     `RouteContext<Route>`) produced by `next typegen` rather than hand-written prop signatures.
+    If the editor flags `TS2304: Cannot find name 'LayoutProps'` or `'PageProps'`, `.next/types`
+    has not been generated yet. Run `pnpm typecheck` (or `pnpm exec next typegen`) to produce
+    `.next/types/routes.d.ts`, then reload the TypeScript language server in the editor.
 - **Metadata and Viewport Separation**:
   - Viewport properties (`themeColor`, `width`, `initialScale`, `maximumScale`) must
     not be defined inside `export const metadata: Metadata` or `generateMetadata()`.
