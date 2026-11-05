@@ -353,21 +353,16 @@ test("guest deep link returns to the protected page after sign-in", async ({
   );
   expect(created.ok()).toBe(true);
 
+  // The server data access layer cannot see the query string, so the return
+  // destination is the protected route itself.
   await page.goto("/profile?tab=security");
-  await expect(page).toHaveURL(
-    (url) =>
-      url.pathname === "/sign-in" &&
-      url.searchParams.get("next") === "/profile?tab=security",
-  );
-  expect(new URL(page.url()).searchParams.get("next")).toBe(
-    "/profile?tab=security",
-  );
+  await expect(page).toHaveURL(`${authTestOrigin}${signInUrlTo("/profile")}`);
 
   await signInEmail(page).fill(email);
   await signInPassword(page).fill(password);
   await page.getByRole("button", { name: "Sign In", exact: true }).click();
 
-  await expect(page).toHaveURL(`${authTestOrigin}/profile?tab=security`);
+  await expect(page).toHaveURL(`${authTestOrigin}/profile`);
   await expect(page.getByLabel("Email", { exact: true })).toHaveValue(email);
 });
 
@@ -596,6 +591,7 @@ function expiredToken(uid: string) {
 async function openProfileWithBridgeToken(
   browser: Browser,
   token: string,
+  { expectSignIn = true }: { expectSignIn?: boolean } = {},
 ): Promise<URL> {
   const context = await browser.newContext({
     baseURL: authTestOrigin,
@@ -608,7 +604,7 @@ async function openProfileWithBridgeToken(
   try {
     const page = await context.newPage();
     await page.goto("/profile");
-    await expect(page).toHaveURL(/\/sign-in/);
+    if (expectSignIn) await expect(page).toHaveURL(/\/sign-in/);
     return new URL(page.url());
   } finally {
     await context.close();
@@ -618,18 +614,20 @@ async function openProfileWithBridgeToken(
 test.describe("server session verification", () => {
   // Without a client session, both verdicts end at sign-in. Only the client gate
   // knows the route, so `next` identifies which layer sent the visitor there.
-  test("accepts a valid token and leaves navigation to the client gate", async ({
+  test("accepts a valid token and serves the protected route", async ({
     browser,
     request,
   }) => {
     const account = await createAccount(request, "bridge-valid");
-    const url = await openProfileWithBridgeToken(browser, account.idToken);
-    expect(url.searchParams.get("next")).toBe("/profile");
+    const url = await openProfileWithBridgeToken(browser, account.idToken, {
+      expectSignIn: false,
+    });
+    expect(url.pathname).toBe("/profile");
   });
 
   test("rejects a malformed token", async ({ browser }) => {
     const url = await openProfileWithBridgeToken(browser, "not-a-token");
-    expect(url.searchParams.get("next")).toBe("/");
+    expect(url.searchParams.get("next")).toBe("/profile");
   });
 
   test("rejects an expired token", async ({ browser, request }) => {
@@ -638,7 +636,7 @@ test.describe("server session verification", () => {
       browser,
       expiredToken(account.localId),
     );
-    expect(url.searchParams.get("next")).toBe("/");
+    expect(url.searchParams.get("next")).toBe("/profile");
   });
 
   test("rejects a token issued before revocation", async ({
@@ -650,7 +648,7 @@ test.describe("server session verification", () => {
       validSince: String(Math.floor(Date.now() / 1000) + 60),
     });
     const url = await openProfileWithBridgeToken(browser, account.idToken);
-    expect(url.searchParams.get("next")).toBe("/");
+    expect(url.searchParams.get("next")).toBe("/profile");
   });
 
   test("rejects the token of a disabled account", async ({
@@ -660,7 +658,7 @@ test.describe("server session verification", () => {
     const account = await createAccount(request, "bridge-disabled");
     await updateAccount(request, account.localId, { disableUser: true });
     const url = await openProfileWithBridgeToken(browser, account.idToken);
-    expect(url.searchParams.get("next")).toBe("/");
+    expect(url.searchParams.get("next")).toBe("/profile");
   });
 
   test("rejects the token of a deleted account", async ({
@@ -674,10 +672,10 @@ test.describe("server session verification", () => {
     );
     expect(deleted.ok()).toBe(true);
     const url = await openProfileWithBridgeToken(browser, account.idToken);
-    expect(url.searchParams.get("next")).toBe("/");
+    expect(url.searchParams.get("next")).toBe("/profile");
   });
 
-  test("a rejected token cannot loop a client that is still signed in", async ({
+  test("the session cookie of a signed-in client wins over a rejected bearer token", async ({
     browser,
     request,
   }) => {
@@ -707,12 +705,11 @@ test.describe("server session verification", () => {
       });
       await page.goto("/profile");
 
-      await expect(page).toHaveURL(`${authTestOrigin}/`, { timeout: 15_000 });
-      await expect(
-        page.getByRole("link", { name: "My profile" }),
-      ).toBeVisible();
+      await expect(page.getByLabel("Email", { exact: true })).toHaveValue(
+        account.email,
+      );
       await page.waitForTimeout(1_500);
-      await expect(page).toHaveURL(`${authTestOrigin}/`);
+      await expect(page).toHaveURL(`${authTestOrigin}/profile`);
       expect(protectedLoads).toBe(1);
     } finally {
       await context.close();
@@ -822,12 +819,10 @@ test("sign-out ends protected access, including history navigation", async ({
     page.getByRole("link", { name: "Sign in", exact: true }),
   ).toBeVisible();
 
+  // Back may show the router cache, but the next server request must refuse it.
   await page.goBack();
-  await expect(page).toHaveURL(
-    (url) =>
-      url.pathname === "/sign-in" &&
-      url.searchParams.get("next") === "/profile",
-  );
+  await page.reload();
+  await expect(page).toHaveURL(`${authTestOrigin}${signInUrlTo("/profile")}`);
   await expect(page.getByLabel("Email", { exact: true })).toHaveCount(0);
 
   await page.goto("/profile");
