@@ -22,13 +22,6 @@ export default defineConfig({
         lines: 70,
       },
       include: ["src/**/*.{ts,tsx}"],
-      exclude: [
-        "src/**/*.{test,browser.test,stories}.{ts,tsx}",
-        "src/components/ai-elements/**",
-        "src/components/firebase/**",
-        "src/components/ui/*.tsx",
-        "src/types/**",
-      ],
     },
     projects: [
       {

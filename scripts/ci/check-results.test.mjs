@@ -24,7 +24,8 @@ const results = Object.fromEntries(
   ]),
 );
 function accepts(input) {
-  const run = spawnSync("jq", ["-e", expression], {
+  const run = spawnSync("bash", ["-c", 'jq -e "$CI_RESULT_EXPRESSION"'], {
+    env: { ...process.env, CI_RESULT_EXPRESSION: expression },
     input: JSON.stringify(input),
     encoding: "utf8",
   });
