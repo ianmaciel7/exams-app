@@ -1119,7 +1119,11 @@ function analyzeDelegation(statement, ownedImports, source) {
   const visit = (node) => {
     if (ts.isJsxOpeningElement(node) || ts.isJsxSelfClosingElement(node)) {
       const name = node.tagName.getText(source);
-      if (ownedImports.has(name)) delegates.push(name);
+      // A context provider injects a dependency (dependency inversion); it is
+      // composition-root wiring, not a pass-through wrapper.
+      if (ownedImports.has(name) && !name.endsWith("Context")) {
+        delegates.push(name);
+      }
     }
     if (isRenderingLogic(node, source)) hasLogic = true;
     ts.forEachChild(node, visit);

@@ -8,6 +8,7 @@ import {
 import { TranslationTextServer as T } from "@/components/ui/extensions/translation-text-server";
 import { verifySession } from "../_lib/dal";
 import { ProfileForm } from "./_components/profile-form";
+import { ProfileGatewayProviderClient } from "./_components/profile-gateway-provider-client";
 
 export const instant = false;
 
@@ -15,18 +16,20 @@ export default async function ProfilePage() {
   await verifySession();
 
   return (
-    <Card className="mx-auto w-full max-w-sm shadow-md ring-foreground/20 sm:max-w-md lg:max-w-lg">
-      <CardHeader>
-        <CardTitle role="heading" aria-level={1}>
-          <T message="Auth.personalInfoTitle" />
-        </CardTitle>
-        <CardDescription>
-          <T message="Auth.personalInfoDescription" />
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <ProfileForm />
-      </CardContent>
-    </Card>
+    <ProfileGatewayProviderClient>
+      <Card className="mx-auto w-full max-w-sm shadow-md ring-foreground/20 sm:max-w-md lg:max-w-lg">
+        <CardHeader>
+          <CardTitle role="heading" aria-level={1}>
+            <T message="Auth.personalInfoTitle" />
+          </CardTitle>
+          <CardDescription>
+            <T message="Auth.personalInfoDescription" />
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ProfileForm />
+        </CardContent>
+      </Card>
+    </ProfileGatewayProviderClient>
   );
 }

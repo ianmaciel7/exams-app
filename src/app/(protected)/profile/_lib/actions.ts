@@ -1,16 +1,17 @@
 "use client";
 
 import type { User } from "firebase/auth";
-import { withUsageGuard } from "@/lib/firebase/usage";
-import { saveProfile } from "./data";
 import type {
   ProfileActionState,
+  ProfileGateway,
   ProfileValues,
   SavedProfile,
 } from "./definitions";
 import { parseProfileFormData } from "./dto";
 
 type ProfileActionOptions = {
+  /** The persistence port; the Action never imports Firebase. */
+  gateway: ProfileGateway;
   /** Both are set once the form is shown; the Action only runs from the form. */
   user: User | null;
   /** Loaded values the form shows until the first submission. */
@@ -45,6 +46,7 @@ export function initialProfileActionState(
  * Architecture"), so there is no Server Function to call.
  */
 export function createProfileAction({
+  gateway,
   user,
   loaded,
   errorMessage,
@@ -63,10 +65,12 @@ export function createProfileAction({
     );
 
     try {
-      const savedProfile = await withUsageGuard(
-        { type: "function_use", name: "profile.update" },
-        () => saveProfile({ user, previous: state.saved, values, avatarFile }),
-      );
+      const savedProfile = await gateway.save({
+        user,
+        previous: state.saved,
+        values,
+        avatarFile,
+      });
       onSaved(savedProfile, values, state.saved);
       return {
         saved: savedProfile.values,

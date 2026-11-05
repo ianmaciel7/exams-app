@@ -9,11 +9,13 @@ import {
   getFirebaseFirestore,
   getFirebaseStorage,
 } from "@/lib/firebase/client";
+import { withUsageGuard } from "@/lib/firebase/usage";
 import { isLocale, type Locale } from "@/lib/locale";
 import { getActiveUser, getSessionUser } from "@/lib/session";
 import { isThemePreference } from "@/lib/theme";
 import type {
   ProfileDependencies,
+  ProfileGateway,
   ProfileValues,
   SavedProfile,
   SaveProfileInput,
@@ -148,3 +150,12 @@ export async function saveProfile(
     },
   };
 }
+
+/** The Firebase adapter for `ProfileGateway`, wired in by the route's provider. */
+export const firebaseProfileGateway: ProfileGateway = {
+  read: readProfile,
+  save: (input) =>
+    withUsageGuard({ type: "function_use", name: "profile.update" }, () =>
+      saveProfile(input),
+    ),
+};

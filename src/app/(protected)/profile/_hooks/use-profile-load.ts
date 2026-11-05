@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import type { Locale } from "@/lib/locale";
 import type { Session } from "@/lib/session-context";
-import { readProfile } from "../_lib/data";
-import type { ProfileLoadState } from "../_lib/definitions";
+import type { ProfileGateway, ProfileLoadState } from "../_lib/definitions";
 
 /** Discard stale results and stop waiting when this visit ends or times out. */
-export function useProfileLoad(session: Session, activeLocale: Locale) {
+export function useProfileLoad(
+  session: Session,
+  activeLocale: Locale,
+  gateway: ProfileGateway,
+) {
   const [currentUid, setCurrentUid] = useState(session.user?.uid);
   const [profile, setProfile] = useState<ProfileLoadState>({
     isLoading: true,
@@ -28,7 +31,8 @@ export function useProfileLoad(session: Session, activeLocale: Locale) {
         error: new Error("Profile loading timed out"),
       });
     }, 15_000);
-    void readProfile(session.user.uid, activeLocale, () => active)
+    void gateway
+      .read(session.user.uid, activeLocale, () => active)
       .then((result) => {
         if (!active) return;
         if (!result) throw new Error("Profile session changed while loading");
@@ -42,6 +46,6 @@ export function useProfileLoad(session: Session, activeLocale: Locale) {
       active = false;
       clearTimeout(timeout);
     };
-  }, [session, activeLocale, profile.isLoading]);
+  }, [session, activeLocale, gateway, profile.isLoading]);
   return profile;
 }

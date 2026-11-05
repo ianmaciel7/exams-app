@@ -1,4 +1,4 @@
-import { writeFileSync } from "node:fs";
+import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { afterAll, describe, expect, it } from "vitest";
 import {
@@ -192,5 +192,38 @@ describe("route-only Firebase import restrictions", () => {
       'import { useRouter } from "next/router"; export { useRouter };',
     );
     expect(output).toContain("lint/style/noRestrictedImports");
+  });
+});
+
+describe("dependency inversion in route hooks and components", () => {
+  const routeParent = "src/app";
+  const [appDirectory] = createTempDirs([routeParent], "port-");
+  const hooks = join(appDirectory, "_hooks");
+  const components = join(appDirectory, "_components");
+  mkdirSync(hooks);
+  mkdirSync(components);
+  afterAll(() => removeTempPaths([appDirectory]));
+
+  it.each([
+    'import { getAuth } from "firebase/auth"; export { getAuth };',
+    'import { app } from "@/lib/firebase/client"; export { app };',
+    'import { readProfile } from "../_lib/data"; export { readProfile };',
+  ])("rejects infrastructure imports in hooks and components: %s", (source) => {
+    for (const [directory, name] of [
+      [hooks, "use-port.ts"],
+      [components, "port-form.tsx"],
+    ] as const) {
+      expect(lintSingle(join(directory, name), source)).toContain(
+        "lint/style/noRestrictedImports",
+      );
+    }
+  });
+
+  it("lets a provider composition root import the adapter", () => {
+    const output = lintSingle(
+      join(components, "port-provider-client.tsx"),
+      'import { firebaseGateway } from "../_lib/data"; export { firebaseGateway };',
+    );
+    expect(output).not.toContain("lint/style/noRestrictedImports");
   });
 });

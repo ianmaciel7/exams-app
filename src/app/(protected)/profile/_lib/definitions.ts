@@ -78,3 +78,17 @@ export type ProfileDependencies = {
     preferences: Partial<UserPreferences>,
   ) => Promise<void>;
 };
+
+/**
+ * Port the profile UI depends on. `data.ts` owns the Firebase adapter and
+ * `ProfileGatewayProviderClient` is the only UI module that wires it in, so
+ * hooks and components never import Firebase and tests inject a fake.
+ */
+export type ProfileGateway = {
+  read: (
+    uid: string,
+    activeLocale: Locale,
+    isActive: () => boolean,
+  ) => Promise<{ values: ProfileValues; theme?: ThemePreference } | null>;
+  save: (input: SaveProfileInput) => Promise<SavedProfile>;
+};

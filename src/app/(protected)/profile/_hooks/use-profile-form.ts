@@ -9,6 +9,7 @@ import {
 } from "../_lib/actions";
 import { profileFieldNames } from "../_lib/definitions";
 import { useProfileAvatarDraft } from "./use-profile-avatar-draft";
+import { useProfileGateway } from "./use-profile-gateway";
 import { useProfileRead } from "./use-profile-read";
 import { useProfileSaveFeedback } from "./use-profile-save-feedback";
 
@@ -24,12 +25,14 @@ export function useProfileForm() {
   const activeLocale = isLocale(locale) ? locale : defaultLocale;
   const { setTheme } = useTheme();
   const { user } = useSession();
+  const gateway = useProfileGateway();
   const profile = useProfileRead();
   const loaded = profile.isLoading ? null : profile.values;
 
   const { onSaved } = useProfileSaveFeedback({ activeLocale, setTheme });
   const [submitted, dispatch, pending] = useActionState(
     createProfileAction({
+      gateway,
       user: user ?? null,
       loaded,
       errorMessage: t("profileSaveError"),

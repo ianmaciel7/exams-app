@@ -5,6 +5,7 @@ import { useNavigation } from "@/hooks/use-navigation";
 import { useSession } from "@/hooks/use-session";
 import { defaultLocale, isLocale } from "@/i18n/routing";
 import { syncSavedLocale } from "../_lib/utils";
+import { useProfileGateway } from "./use-profile-gateway";
 import { useProfileLoad } from "./use-profile-load";
 
 /**
@@ -18,7 +19,8 @@ export function useProfileRead() {
   const activeLocale = isLocale(locale) ? locale : defaultLocale;
   const { refresh } = useNavigation();
   const { setTheme } = useTheme();
-  const profile = useProfileLoad(session, activeLocale);
+  const gateway = useProfileGateway();
+  const profile = useProfileLoad(session, activeLocale, gateway);
   const uid = session.user?.uid ?? "";
   const initializedUid = useRef<string | null>(null);
 
