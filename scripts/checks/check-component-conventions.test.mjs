@@ -367,6 +367,13 @@ describe("owned component conventions", () => {
     );
   });
 
+  it("does not treat a context provider as a Middle Man (dependency injection)", () => {
+    expectValid(
+      '"use client"; import { ProfileGatewayContext } from "../_lib/gateway-context"; function ProfileGatewayProviderClient(props) { return <ProfileGatewayContext value={props.gateway}>{props.children}</ProfileGatewayContext>; } export { ProfileGatewayProviderClient };',
+      "src/app/(protected)/profile/_components/profile-gateway-provider-client.tsx",
+    );
+  });
+
   it("keeps client leaves free of Card parts (direct page composition)", () => {
     const file =
       "src/app/(protected)/profile/_components/profile-form-client.tsx";

@@ -154,6 +154,48 @@
       }
     },
     {
+      "includes": [
+        "src/app/**/_hooks/**",
+        "src/app/**/_components/**",
+        "!src/app/**/*-provider-client.tsx",
+        "!src/app/**/*.test.*"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "paths": {
+                  "next/router": "Use next/navigation in App Router code.",
+                  "next/head": "Use the App Router Metadata API.",
+                  "next/document": "Use the App Router root layout.",
+                  "next/app": "Use App Router layouts and providers.",
+                  "@/i18n/navigation": "Import Link from next/link and navigate through useNavigation from @/hooks/use-navigation; the locale lives in a cookie, so there is no navigation wrapper.",
+                  "next/navigation": {
+                    "importNames": ["useRouter"],
+                    "message": "Navigate through useNavigation from @/hooks/use-navigation; it is the only module that calls useRouter."
+                  },
+                  "firebase": "Hooks and components depend on a port (dependency inversion); only a *-provider-client.tsx composition root may import the Firebase SDK.",
+                  "@/lib/firebase/client": "Hooks and components depend on a port (dependency inversion); only a *-provider-client.tsx composition root may import the Firebase client."
+                },
+                "patterns": [
+                  {
+                    "group": ["firebase/*"],
+                    "message": "Hooks and components depend on a port (dependency inversion); only a *-provider-client.tsx composition root may import the Firebase SDK."
+                  },
+                  {
+                    "group": ["**/_lib/data"],
+                    "message": "The data adapter is injected through a provider; hooks and components use the port, not _lib/data."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
       "includes": ["src/**"],
       "linter": {
         "rules": {
