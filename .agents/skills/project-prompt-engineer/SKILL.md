@@ -1,4 +1,5 @@
 ---
+
 name: project-prompt-engineer
 description: Drafts concise, context-dense, actionable handoff prompts for another AI agent or session. Use when the user wants to generate, prepare, or save a prompt instructing another AI to execute a specific task, refactoring, or feature without generic project boilerplate.
 ---
@@ -24,104 +25,121 @@ This skill guides the creation of high-precision, actionable handoff prompts int
 Every generated task prompt must follow this structure:
 
 ### 1. Objective (`Objetivo` / `Objective`)
+
 A single, unambiguous paragraph stating what needs to be accomplished and the expected outcome.
 
 ### 2. Current State (`Estado Atual` / `Current State`)
-* Specific file paths (repository-relative, e.g., `src/app/(protected)/profile/page.tsx`).
-* Minimal code snippets showing how it currently works and the pain point / reason for the change.
+
+- Specific file paths (repository-relative, e.g., `src/app/(protected)/profile/page.tsx`).
+- Minimal code snippets showing how it currently works and the pain point / reason for the change.
 
 ### 3. Step-by-Step Action Items (`O Que Fazer` / `Action Plan`)
+
 Organized by file or component:
-* **Files to create**: exact path, component name, props type, required imports, and behavior.
-* **Files to modify**: exact changes, function signatures, and integration wiring.
-* **Files to delete / deprecate**: cleanup of obsolete files, hooks, or tests.
+- **Files to create**: exact path, component name, props type, required imports, and behavior.
+- **Files to modify**: exact changes, function signatures, and integration wiring.
+- **Files to delete / deprecate**: cleanup of obsolete files, hooks, or tests.
 
 ### 4. Repository Guardrails (`Guardrails do Repositório` / `Guardrails & Constraints`)
+
 Specific constraints the model must not violate:
-* AST & linter rules (e.g., kebab-case to PascalCase term parity, Middle Man smell, single form root, Server/Client component directives).
-* Layering & boundaries (e.g., Server Components vs Client Components, data access layer imports, gateway ports).
-* Language & naming policy: English for code, comments, and types; user-visible strings via translation catalogs.
+- AST & linter rules (e.g., kebab-case to PascalCase term parity, Middle Man smell, single form root, Server/Client component directives).
+- Layering & boundaries (e.g., Server Components vs Client Components, data access layer imports, gateway ports).
+- Language & naming policy: English for code, comments, and types; user-visible strings via translation catalogs.
 
 ### 5. Verification Checklist (`Verificações Necessárias` / `Verification`)
-* Tests to update or add (colocated `*.test.tsx`, route tests, unit tests).
-* Concrete validation commands:
-  * `pnpm typecheck`
-  * `pnpm test`
-  * Specialized linters or checks (e.g., `pnpm check:components`, `pnpm check:unused`, `pnpm check:repo`).
+
+- Tests to update or add (colocated `*.test.tsx`, route tests, unit tests).
+- Concrete validation commands:
+  - `pnpm typecheck`
+  - `pnpm test`
+  - Specialized linters or checks (e.g., `pnpm check:components`, `pnpm check:unused`, `pnpm check:repo`).
 
 ### 6. Git & Pull Request Delivery (`Fluxo de Git e PR` / `Branch & PR Delivery`)
-* Create a dedicated working branch off `dev`: `git checkout -b <type>/<description>`.
-* Commit with Conventional Commits (`type(scope): description`), ensuring commit body lines stay under 100 characters.
-* Push branch to origin: `git push -u origin <branch-name>`.
-* Open a Pull Request targeting `dev` via GitHub CLI: `gh pr create --base dev --title "..." --body "..."`.
+
+- Create a dedicated working branch off `dev`: `git checkout -b <type>/<description>`.
+- Commit with Conventional Commits (`type(scope): description`), ensuring commit body lines stay under 100 characters.
+- Push branch to origin: `git push -u origin <branch-name>`.
+- Open a Pull Request targeting `dev` via GitHub CLI: `gh pr create --base dev --title "..." --body "..."`.
 
 ---
 
 ## Canonical Template
 
-```markdown
+````markdown
 ### Objective
+
 [Single concise paragraph stating the goal, target outcome, and architectural standard to follow, without generic introductory fluff]
 
 ---
 
 ### Current State
-* `path/to/current-file.tsx`:
+
+- `path/to/current-file.tsx`:
+
   ```tsx
   // Minimal snippet illustrating the current baseline, code structure, or limitation
   ```
-* [Direct explanation of why the current approach is suboptimal, buggy, or requires refactoring]
+- [Direct explanation of why the current approach is suboptimal, buggy, or requires refactoring]
 
 ---
 
 ### Action Plan
 
 #### 1. Create [File / Component Name]
-* **File**: `path/to/new-file.tsx`
-* **Identifier**: `ComponentName` (props: `ComponentNameProps`)
-* **Details**:
-  * [Primitives, libraries, or base parts consumed]
-  * [Props, state orchestration, or hooks utilized]
-  * [DOM, event handling, or mutation flow]
+
+- **File**: `path/to/new-file.tsx`
+- **Identifier**: `ComponentName` (props: `ComponentNameProps`)
+- **Details**:
+  - [Primitives, libraries, or base parts consumed]
+  - [Props, state orchestration, or hooks utilized]
+  - [DOM, event handling, or mutation flow]
 
 #### 2. Modify [Existing Component / Module]
-* **File**: `path/to/existing-file.tsx`
-* [Modifications, replacements, or wiring required]
+
+- **File**: `path/to/existing-file.tsx`
+- [Modifications, replacements, or wiring required]
+
   ```tsx
   // Snippet showing how the new component or function is integrated
   ```
 
 #### 3. Obsolete Code Removal
-* [Specific files, functions, hooks, or dead exports to delete]
+
+- [Specific files, functions, hooks, or dead exports to delete]
 
 ---
 
 ### Repository Guardrails & Constraints
-* **1:1 Term Parity**: Kebab-case filename stem must match PascalCase identifiers term-for-term.
-* **AST & Linter Constraints**: [Relevant linter checks, e.g. no Middle Man delegation, single form root, no restricted imports].
-* **Runtime Boundaries**: [Server Components vs Client Components, serialization boundaries, server-only vs client-only constraints].
-* **Language & Localization**: Code, comments, types, and commits strictly in English. UI copy via i18n message catalogs.
+
+- **1:1 Term Parity**: Kebab-case filename stem must match PascalCase identifiers term-for-term.
+- **AST & Linter Constraints**: [Relevant linter checks, e.g. no Middle Man delegation, single form root, no restricted imports].
+- **Runtime Boundaries**: [Server Components vs Client Components, serialization boundaries, server-only vs client-only constraints].
+- **Language & Localization**: Code, comments, types, and commits strictly in English. UI copy via i18n message catalogs.
 
 ---
 
 ### Verification Checklist
-* [Unit or integration tests to add or update]
-* Required CLI checks to pass:
-  * `pnpm typecheck`
-  * `pnpm test`
-  * [Repository-specific checks, e.g. check-component-conventions, check:unused]
+
+- [Unit or integration tests to add or update]
+- Required CLI checks to pass:
+  - `pnpm typecheck`
+  - `pnpm test`
+  - [Repository-specific checks, e.g. check-component-conventions, check:unused]
 
 ---
 
 ### Git & Pull Request Delivery
-* Create a working branch off `dev`: `git checkout -b <type>/<short-description>`.
-* Commit changes using Conventional Commits (`type(scope): description`). Ensure body lines stay under 100 characters.
-* Push branch: `git push -u origin <branch-name>`.
-* Open a Pull Request targeting `dev`:
+
+- Create a working branch off `dev`: `git checkout -b <type>/<short-description>`.
+- Commit changes using Conventional Commits (`type(scope): description`). Ensure body lines stay under 100 characters.
+- Push branch: `git push -u origin <branch-name>`.
+- Open a Pull Request targeting `dev`:
+
   ```bash
   gh pr create --base dev --title "type(scope): description" --body "Summary of changes..."
   ```
-```
+````
 
 ---
 

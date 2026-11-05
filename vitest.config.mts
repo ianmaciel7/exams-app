@@ -8,6 +8,20 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: {
     tsconfigPaths: true,
+    dedupe: ["react", "react-dom"],
+  },
+  optimizeDeps: {
+    // Discover the dialog's dependencies before any browser test renders React.
+    include: [
+      "react",
+      "react-dom/client",
+      "react/jsx-runtime",
+      "vitest-browser-react",
+      "@base-ui/react/form",
+      "@base-ui/react/field",
+      "@base-ui/react/toast",
+      "next-intl",
+    ],
   },
   test: {
     coverage: {

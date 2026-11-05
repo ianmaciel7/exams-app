@@ -35,21 +35,12 @@ vi.mock("./profile/_components/profile-form", () => ({
   ),
 }));
 
-vi.mock("./profile/_components/profile-email-form-container", () => ({
-  ProfileEmailFormContainer: ({ email }: { email: string }) => (
-    <div data-testid="profile-email-form">{email}</div>
-  ),
-}));
-
 afterEach(cleanup);
 
 describe("protected routes", () => {
   it("renders profile route composition root", async () => {
     render(await ProfilePage());
     expect(screen.getByTestId("profile-form").textContent).toBe("Ada");
-    expect(screen.getByTestId("profile-email-form").textContent).toBe(
-      "ada@example.com",
-    );
     expect(
       screen.getByRole("heading", { name: "personalInfoTitle" }),
     ).toBeTruthy();

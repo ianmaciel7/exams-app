@@ -433,6 +433,17 @@ Use behavior tests rather than a syntax rule that merely looks for `cleanup`
 or a ref. No test suite guarantees that all future race conditions are absent;
 these regressions specifically guard the observed failures.
 
+## Controlled component behavior
+
+`vitest.config.mts` declares browser dependency pre-bundles and deduplicates
+React/React DOM. Run the full browser suite with a fresh Vite cache when adding
+new primitive imports; a cached focused run does not cover dependency discovery.
+
+The `middle-man-component` guard recognizes destructured `on*` handlers from
+owned hooks passed into controlled primitives (for example Dialog's
+`onOpenChange`). Its positive and negative component-convention fixtures cover
+aliased handlers and data-only forwarding; the latter remains prohibited.
+
 ## Inline component props
 
 `no-inline-component-props` runs through `pnpm check:structure` and lint-staged.

@@ -7,7 +7,6 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Form } from "@/components/ui/extensions/form";
 import {
   FormField,
-  FormFieldError,
   FormFieldLabel,
 } from "@/components/ui/extensions/form-field";
 import { FieldGroup } from "@/components/ui/field";
@@ -32,6 +31,7 @@ import {
   profileFieldNames,
 } from "../_lib/definitions";
 import { ProfileAvatarFieldClient } from "./profile-avatar-field-client";
+import { ProfileEmailDialog } from "./profile-email-dialog";
 
 type ProfileFormProps = Omit<
   ComponentProps<typeof Form>,
@@ -92,12 +92,16 @@ function ProfileForm({
 
         <FormField name={profileFieldNames.email}>
           <FormFieldLabel>{t("emailLabel")}</FormFieldLabel>
-          <Input
-            readOnly
-            value={state.values.email}
-            type="email"
-            autoComplete="email"
-          />
+          <div className="flex gap-2">
+            <Input
+              readOnly
+              value={state.values.email}
+              type="email"
+              autoComplete="email"
+              className="flex-1"
+            />
+            <ProfileEmailDialog email={state.values.email} />
+          </div>
         </FormField>
 
         <FormField name={profileFieldNames.locale}>

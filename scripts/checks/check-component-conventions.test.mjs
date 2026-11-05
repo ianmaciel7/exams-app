@@ -383,6 +383,21 @@ describe("owned component conventions", () => {
     );
   });
 
+  it("recognizes destructured controlled-dialog handlers, not forwarded data", () => {
+    const file =
+      "src/app/(protected)/profile/_components/profile-email-dialog.tsx";
+    const dialog =
+      '"use client"; import { Dialog } from "@/components/ui/dialog"; import { useProfileEmailDialog } from "../_hooks/use-profile-email-dialog"; import { ProfileEmailForm } from "./profile-email-form"; function ProfileEmailDialog(props) { const { isOpen, onOpenChange: handleOpenChange, changeEmail } = useProfileEmailDialog(); return <Dialog open={isOpen} onOpenChange={handleOpenChange}><ProfileEmailForm {...props} changeEmail={changeEmail} /></Dialog>; } export { ProfileEmailDialog };';
+    expectValid(dialog, file);
+    expectInvalid(
+      dialog
+        .replace("onOpenChange={handleOpenChange}", "")
+        .replace("changeEmail={changeEmail}", "email={isOpen}"),
+      /Middle Man/,
+      file,
+    );
+  });
+
   it("does not treat a context provider as a Middle Man (dependency injection)", () => {
     expectValid(
       '"use client"; import { ProfileGatewayContext } from "../_lib/gateway-context"; function ProfileGatewayProviderClient(props) { return <ProfileGatewayContext value={props.gateway}>{props.children}</ProfileGatewayContext>; } export { ProfileGatewayProviderClient };',

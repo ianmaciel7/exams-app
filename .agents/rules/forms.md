@@ -58,6 +58,12 @@ These are project conventions aligned with the current shadcn/ui and React Hook 
 
 ## Profile form action safety (repository guard)
 
+- E-mail changes use `ProfileEmailDialog` beside the read-only email field.
+  Its portal renders `ProfileEmailForm` outside the profile form in the DOM;
+  stop the email form's React submit event from bubbling to the profile Action.
+  The dialog injects `gateway.changeEmail`, closes only after a successful send,
+  and keeps the address and localized error available for retry on failure.
+
 - `page.tsx` renders one shadcn `Card` with the header and `<ProfileForm />` in `CardContent`. `ProfileForm` owns the only HTML `<form>` and the save button, which has `type="submit"`; do not render a second Card or form.
 - `pnpm check:components` enforces that a `*-form.tsx` component renders exactly one form root and no `FormProvider`. This is a **UI action-safety guard**, not a substitute for Firebase security rules, authorization or server-side validation.
 
