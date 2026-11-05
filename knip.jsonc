@@ -36,6 +36,7 @@
     "semgrep",
     "gitleaks",
     "actionlint",
+    "jq",
     "zizmor",
     "firebase",
     "terraform",

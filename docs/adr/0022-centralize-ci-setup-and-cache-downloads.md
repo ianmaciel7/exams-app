@@ -12,7 +12,7 @@ packages and pre-commit environments on each run.
 
 ## Decision
 
-Use local composite actions for the common project setup and Java/emulator
+Use self-repository `$/` references to local composite actions for the common project setup and Java/emulator
 cache setup. Keep checkout, permissions, timeouts and verification commands in
 the workflow so each job's boundary is visible. Validate PR titles in the static
 job using its existing Commitlint installation and environment-bound input.

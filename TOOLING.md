@@ -860,4 +860,7 @@ and emulator configuration are documented in
 
 ## CI setup and download caches
 
-The CI workflow uses `.github/actions/setup-project/action.yml` for pinned Node/pnpm and frozen installs, and `.github/actions/setup-emulators/action.yml` for Java and Firebase/npm download caches (CLI 15.34.2). Python downloads use setup-python caching; pre-commit environments are keyed by configuration. Cache hits never skip installs or checks. See [ADR 0022](docs/adr/0022-centralize-ci-setup-and-cache-downloads.md).
+The CI workflow uses self-repository `$/` references to `.github/actions/setup-project/action.yml` for pinned Node/pnpm and frozen installs, and `.github/actions/setup-emulators/action.yml` for Java and Firebase/npm download caches (CLI 15.34.2). Python downloads use setup-python caching; pre-commit environments are keyed by configuration. Cache hits never skip installs or checks. See [ADR 0022](docs/adr/0022-centralize-ci-setup-and-cache-downloads.md).
+
+The CI result regression suite uses the runner-provided `jq` executable, declared
+as a host binary in `knip.jsonc`; install it locally to run that suite.
