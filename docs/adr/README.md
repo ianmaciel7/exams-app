@@ -31,6 +31,8 @@ original date. Read current operational details in the
 | [0020](0020-render-loading-status-at-each-boundary.md) | Accepted; supersedes the loading-indicator scope of 0002 | Direct shared `LoadingStatus` fallbacks replace the global indicator, markers, CSS reveal and frame probe |
 | [0021](0021-adopt-official-nextjs-server-auth-dal.md) | Accepted; supersedes former 0024 and 0025 (incorporated in 0009) | Next.js Server Components authentication, Data Access Layer (DAL), HTTP-only Firebase Session Cookies (`__session`), `/api/auth/session` route handler, zero-trust server layout protection, and telemetry decoupling |
 
+| [0022](0022-centralize-ci-setup-and-cache-downloads.md) | Accepted; amends ADR 0010 | Shared CI setup, download caches, title validation in static checks, and fail-closed result regression tests |
+
 ## Consolidation of 2026-11-01
 
 At the maintainer's direction, records 0013 to 0034 were merged into the

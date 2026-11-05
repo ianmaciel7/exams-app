@@ -831,3 +831,7 @@ hooks, and the sign-in, register and forgot-password hook directories. The
 configured `src/**` scope also covers future owned directories and support modules.
 After hook changes, finish with a full source scan after fixture cleanup; checking
 one orchestrator or only staged files does not verify the rest of the hook tree.
+
+## CI job ownership
+
+The static job validates PR titles with Commitlint and runs `node --test scripts/ci/check-results.test.mjs` against the actual required-check predicate. It already covers UI state through `check:repo`. All build, E2E, auth, rules and security suites remain required. Only optional manual production smoke may be skipped. Emulator auth installs only Chromium headless shell. Compare cold and warm CI runs before claiming timing gains; caches never substitute for verification.

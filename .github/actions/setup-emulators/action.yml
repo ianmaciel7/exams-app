@@ -1,0 +1,19 @@
+name: Set up Firebase emulators
+description: Prepare Java and cache emulator downloads plus npm CLI packages
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+      with:
+        distribution: temurin
+        java-version: "21"
+    - name: Cache Firebase emulator binaries
+      uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
+      with:
+        path: ~/.cache/firebase/emulators
+        key: firebase-${{ runner.os }}-${{ runner.arch }}-15.34.2-${{ hashFiles('firebase.json') }}
+    - name: Cache npm downloads
+      uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
+      with:
+        path: ~/.npm
+        key: firebase-npm-${{ runner.os }}-${{ runner.arch }}-node22-15.34.2-${{ hashFiles('functions/package-lock.json') }}

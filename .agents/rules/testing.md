@@ -37,3 +37,7 @@ presentation guidance. `pnpm check:ui-state` runs in `verify:fast`,
 `verify:static`, and the CI `static` job. It catches only direct raw exception
 coercion in JSX, form error, and toast sinks; it does not establish complete
 interaction coverage or accessibility conformance.
+
+## CI maintenance
+
+Keep shared setup in `.github/actions/` and suite ownership in `.github/workflows/ci.yml`. Preserve the fail-closed CI result gate and run `node --test scripts/ci/check-results.test.mjs` when changing its policy. Key download caches by tool version and inputs; never skip verification on a cache hit.

@@ -857,3 +857,7 @@ missing/extra inventory entries.
 Historical ADR links use this entrypoint. Current commands, SDK boundaries,
 and emulator configuration are documented in
 [Firebase Web SDK and Authentication](#firebase-web-sdk-and-authentication).
+
+## CI setup and download caches
+
+The CI workflow uses `.github/actions/setup-project/action.yml` for pinned Node/pnpm and frozen installs, and `.github/actions/setup-emulators/action.yml` for Java and Firebase/npm download caches (CLI 15.34.2). Python downloads use setup-python caching; pre-commit environments are keyed by configuration. Cache hits never skip installs or checks. See [ADR 0022](docs/adr/0022-centralize-ci-setup-and-cache-downloads.md).
