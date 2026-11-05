@@ -40,7 +40,7 @@ jobs:
           persist-credentials: false
           # Fallow's hotspot analysis (analyze:fallow) reads commit history.
           fetch-depth: 0
-      - uses: $/.github/actions/setup-project
+      - uses: ./.github/actions/setup-project # zizmor: ignore[self-repository] -- actionlint 1.7.12 does not support $/ yet; checkout is explicit.
       # Reuse the static job's installed Commitlint rather than a separate runner.
       - name: Validate Conventional Commit title
         if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
@@ -91,7 +91,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: $/.github/actions/setup-project
+      - uses: ./.github/actions/setup-project # zizmor: ignore[self-repository] -- actionlint 1.7.12 does not support $/ yet; checkout is explicit.
       # Vitest Playwright uses the matching headless-shell binary.
       # Install only that browser; avoid slow apt packages from --with-deps.
       - run: pnpm exec playwright install --only-shell chromium
@@ -121,7 +121,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: $/.github/actions/setup-project
+      - uses: ./.github/actions/setup-project # zizmor: ignore[self-repository] -- actionlint 1.7.12 does not support $/ yet; checkout is explicit.
       # Desktop and real mobile emulation (Pixel 7) projects.
       - run: pnpm verify:e2e
       # Reuses the production build from the Playwright web server.
@@ -146,8 +146,8 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: $/.github/actions/setup-project
-      - uses: $/.github/actions/setup-emulators
+      - uses: ./.github/actions/setup-project # zizmor: ignore[self-repository] -- actionlint 1.7.12 does not support $/ yet; checkout is explicit.
+      - uses: ./.github/actions/setup-emulators # zizmor: ignore[self-repository] -- actionlint 1.7.12 does not support $/ yet; checkout is explicit.
       # Same demo project and pinned CLI as the auth emulator job; no production secrets.
       - name: Firestore, Storage and Realtime Database rules tests
         run: npx --yes firebase-tools@15.34.2 emulators:exec --project demo-rules --only firestore,storage,database "node --test tests/rules/*.test.mjs"
@@ -176,8 +176,8 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: $/.github/actions/setup-project
-      - uses: $/.github/actions/setup-emulators
+      - uses: ./.github/actions/setup-project # zizmor: ignore[self-repository] -- actionlint 1.7.12 does not support $/ yet; checkout is explicit.
+      - uses: ./.github/actions/setup-emulators # zizmor: ignore[self-repository] -- actionlint 1.7.12 does not support $/ yet; checkout is explicit.
       # Profile saves await the recordUsage callable, and the auth guard calls
       # it on every protected route; both need the Functions emulator.
       - name: Install Cloud Functions dependencies
@@ -210,7 +210,7 @@ jobs:
           persist-credentials: false
           # Gitleaks scans the whole commit history.
           fetch-depth: 0
-      - uses: $/.github/actions/setup-project
+      - uses: ./.github/actions/setup-project # zizmor: ignore[self-repository] -- actionlint 1.7.12 does not support $/ yet; checkout is explicit.
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: "3.13"

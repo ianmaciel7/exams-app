@@ -12,7 +12,7 @@ packages and pre-commit environments on each run.
 
 ## Decision
 
-Use self-repository `$/` references to local composite actions for the common project setup and Java/emulator
+Use checked-out local composite actions for the common project setup and Java/emulator
 cache setup. Keep checkout, permissions, timeouts and verification commands in
 the workflow so each job's boundary is visible. Validate PR titles in the static
 job using its existing Commitlint installation and environment-bound input.
@@ -28,6 +28,11 @@ Keep all verification suites and the fail-closed CI result gate. Only optional
 manual production smoke may be skipped. Test the actual gate predicate with
 success, failure, skipped and cancelled results. Keep PR cancellation and every
 main/dev push validation; do not trade protected-branch coverage for speed.
+
+GitHub now recommends `$/` self-repository references, but the latest released
+actionlint 1.7.12 rejects them. Keep explicit checkout and local `./` references
+with a per-use Zizmor self-repository compatibility annotation. Remove these
+annotations when the released validator supports the new syntax.
 
 ## Consequences
 
