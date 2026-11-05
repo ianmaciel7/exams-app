@@ -1,13 +1,10 @@
-import { signOut } from "firebase/auth";
+import { signOut, verifyBeforeUpdateEmail } from "firebase/auth";
 import { getFirebaseUI } from "@/lib/firebase/client";
+import { trackEvent } from "@/lib/firebase/usage";
+import { getPendingSignOut, setPendingSignOut } from "@/lib/pending-sign-out";
+import { getSessionUser } from "@/lib/session";
 
-// Keep the guest UI blocked until both Firebase and the server session cookie
-// have observed sign-out, avoiding a stale session on the next navigation.
-let pendingSignOut: Promise<void> | null = null;
-
-export function getPendingSignOut() {
-  return pendingSignOut;
-}
+export { getPendingSignOut } from "@/lib/pending-sign-out";
 
 export async function syncSessionCookie(user: {
   getIdToken: () => Promise<string>;
@@ -70,6 +67,7 @@ async function synchronizeSignedOutWorker() {
 
 /** Sign out from the shared Auth instance and invalidate the server session. */
 export function signOutUser() {
+  const pendingSignOut = getPendingSignOut();
   if (pendingSignOut) return pendingSignOut;
 
   const pending = Promise.all([
@@ -77,10 +75,20 @@ export function signOutUser() {
     clearSessionCookie(),
   ]).then(() => undefined);
 
-  pendingSignOut = pending;
+  setPendingSignOut(pending);
   const clearPending = () => {
-    if (pendingSignOut === pending) pendingSignOut = null;
+    if (getPendingSignOut() === pending) setPendingSignOut(null);
   };
   void pending.then(clearPending, clearPending);
   return pending;
+}
+
+/** Send confirmation before changing the signed-in user's email address. */
+export async function sendEmailChangeVerification(
+  email: string,
+): Promise<void> {
+  const user = getSessionUser();
+  if (!user) throw new Error("Authentication session unavailable");
+  await trackEvent({ type: "function_use", name: "profile.update" });
+  return verifyBeforeUpdateEmail(user, email);
 }

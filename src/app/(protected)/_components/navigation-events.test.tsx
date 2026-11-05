@@ -2,7 +2,7 @@ import { cleanup, render } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
-  recordUsage: vi.fn().mockResolvedValue(undefined),
+  trackEvent: vi.fn().mockResolvedValue(undefined),
   user: null as { uid: string } | null,
   pathname: "/profile",
 }));
@@ -16,7 +16,7 @@ vi.mock("@/hooks/use-session", () => ({
 }));
 
 vi.mock("@/lib/firebase/usage", () => ({
-  recordUsage: mocks.recordUsage,
+  trackEvent: mocks.trackEvent,
 }));
 
 import { NavigationEvents } from "./navigation-events";
@@ -32,13 +32,13 @@ describe("NavigationEvents", () => {
 
   it("does not record telemetry when there is no authenticated user", () => {
     render(<NavigationEvents />);
-    expect(mocks.recordUsage).not.toHaveBeenCalled();
+    expect(mocks.trackEvent).not.toHaveBeenCalled();
   });
 
   it("records screen view telemetry when a user is authenticated", () => {
     mocks.user = { uid: "user-1" };
     render(<NavigationEvents />);
-    expect(mocks.recordUsage).toHaveBeenCalledWith({
+    expect(mocks.trackEvent).toHaveBeenCalledWith({
       type: "screen_view",
       name: "/profile",
     });

@@ -1,5 +1,5 @@
 import { beforeEach, expect, it, vi } from "vitest";
-import { withUsageGuard } from "./usage";
+import { trackEvent } from "./usage";
 
 const mocks = vi.hoisted(() => ({
   logUsage: vi.fn(),
@@ -9,8 +9,8 @@ const mocks = vi.hoisted(() => ({
 vi.mock("firebase/functions", () => ({ httpsCallable: mocks.callable }));
 vi.mock("@/lib/firebase/client", () => ({
   getFirebaseFunctions: () => "functions",
-  getFirebaseUI: () => ({ get: () => ({ auth: { currentUser: mocks.user } }) }),
 }));
+vi.mock("@/lib/session", () => ({ getSessionUser: () => mocks.user }));
 beforeEach(() => {
   vi.clearAllMocks();
   mocks.user = { uid: "user-1" };
@@ -19,51 +19,44 @@ beforeEach(() => {
     .mockResolvedValue({ data: { eventId: "event-1" } });
   mocks.callable.mockReturnValue(mocks.logUsage);
 });
-it("calls the authenticated backend before executing the functionality", async () => {
-  const operation = vi.fn(async () => {
-    expect(mocks.logUsage).toHaveBeenCalledWith({
-      type: "function_use",
-      name: "profile.update",
+it.each([
+  { type: "function_use", name: "profile.update" },
+  { type: "screen_view", name: "/profile" },
+] as const)(
+  "sends the $type event to the authenticated callable",
+  async (event) => {
+    await expect(trackEvent(event)).resolves.toBeUndefined();
+    expect(mocks.logUsage).toHaveBeenCalledExactlyOnceWith(event);
+    expect(mocks.callable).toHaveBeenCalledWith("functions", "recordUsage", {
+      timeout: 15_000,
     });
-    return 42;
-  });
-  await expect(
-    withUsageGuard({ type: "function_use", name: "profile.update" }, operation),
-  ).resolves.toBe(42);
-  expect(mocks.callable).toHaveBeenCalledWith("functions", "recordUsage", {
-    timeout: 15_000,
-  });
-});
+  },
+);
 it("waits for the callable acknowledgment", async () => {
-  let acknowledge: (() => void) | undefined;
-  mocks.logUsage.mockReturnValue(
-    new Promise<void>((resolve) => {
-      acknowledge = resolve;
-    }),
-  );
-  const operation = vi.fn(async () => 42);
-  const result = withUsageGuard(
-    { type: "function_use", name: "profile.update" },
-    operation,
-  );
-  expect(operation).not.toHaveBeenCalled();
-  acknowledge?.();
-  await expect(result).resolves.toBe(42);
+  const deferred = Promise.withResolvers<void>();
+  mocks.logUsage.mockReturnValue(deferred.promise);
+  const settled = vi.fn();
+  const result = trackEvent({
+    type: "function_use",
+    name: "profile.update",
+  }).then(settled);
+  await Promise.resolve();
+  expect(settled).not.toHaveBeenCalled();
+  deferred.resolve();
+  await result;
+  expect(settled).toHaveBeenCalledOnce();
 });
-it("blocks the operation when the callable fails", async () => {
+it("propagates callable failures", async () => {
   mocks.logUsage.mockRejectedValue(new Error("offline"));
-  const operation = vi.fn();
   await expect(
-    withUsageGuard({ type: "function_use", name: "profile.update" }, operation),
+    trackEvent({ type: "function_use", name: "profile.update" }),
   ).rejects.toThrow("offline");
-  expect(operation).not.toHaveBeenCalled();
 });
-it("rejects unauthenticated usage", async () => {
+it("rejects unauthenticated usage before creating the callable", async () => {
   mocks.user = null;
-  const operation = vi.fn();
   await expect(
-    withUsageGuard({ type: "function_use", name: "profile.update" }, operation),
+    trackEvent({ type: "function_use", name: "profile.update" }),
   ).rejects.toThrow("Authentication");
+  expect(mocks.callable).not.toHaveBeenCalled();
   expect(mocks.logUsage).not.toHaveBeenCalled();
-  expect(operation).not.toHaveBeenCalled();
 });

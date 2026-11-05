@@ -31,7 +31,7 @@ import {
   profileFieldNames,
 } from "../_lib/definitions";
 import { ProfileAvatarFieldClient } from "./profile-avatar-field-client";
-import { ProfileEmailDialog } from "./profile-email-dialog";
+import { ProfileEmailDialogClient } from "./profile-email-dialog-client";
 
 type ProfileFormProps = Omit<
   ComponentProps<typeof Form>,
@@ -100,7 +100,7 @@ function ProfileForm({
               autoComplete="email"
               className="flex-1"
             />
-            <ProfileEmailDialog email={state.values.email} />
+            <ProfileEmailDialogClient email={state.values.email} />
           </div>
         </FormField>
 

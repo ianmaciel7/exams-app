@@ -1,7 +1,7 @@
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { useSession } from "@/hooks/use-session";
-import { recordUsage } from "@/lib/firebase/usage";
+import { trackEvent } from "@/lib/firebase/usage";
 
 /**
  * Fire-and-forget: screen-view telemetry records page visits for signed-in users.
@@ -14,6 +14,6 @@ export function useNavigationEvents() {
 
   useEffect(() => {
     if (!uid) return;
-    void recordUsage({ type: "screen_view", name: pathname }).catch(() => {});
+    void trackEvent({ type: "screen_view", name: pathname }).catch(() => {});
   }, [pathname, uid]);
 }
