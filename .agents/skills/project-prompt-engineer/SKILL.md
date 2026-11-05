@@ -1,5 +1,4 @@
 ---
-
 name: project-prompt-engineer
 description: Drafts concise, context-dense, actionable handoff prompts for another AI agent or session. Use when the user wants to generate, prepare, or save a prompt instructing another AI to execute a specific task, refactoring, or feature without generic project boilerplate.
 ---
@@ -11,43 +10,38 @@ This skill guides the creation of high-precision, actionable handoff prompts int
 ## Core Directives
 
 1. **Zero Generic Boilerplate**: The receiving AI already has project access or context. Never include generic introductions (e.g., "You are an expert full-stack developer...", "In this Next.js project...", generic framework definitions).
-2. **Context-Dense & High-Precision**: Focus exclusively on the **delta**: what exists right now, why it must change, and the exact steps to achieve the desired state.
-3. **Always Include Mechanical Guardrails**: An AI will fail if it does not know the repository's AST linters, naming conventions, import boundaries, and architectural patterns (e.g., 1:1 term parity, anti-Middle Man checks, single-form root rules).
-4. **Concrete Verification Checklist**: Always end with the exact CLI commands the receiving agent must run to verify their changes (`pnpm typecheck`, `pnpm test`, custom AST scripts).
-5. **Artifact Delivery**: Always provide the resulting prompt inside a Markdown artifact in the conversation artifact directory so the user can easily view, copy, or share it.
-6. **Language Alignment**: Draft the prompt in the language requested by the user (e.g., Portuguese when requested in Portuguese, English when requested in English), while keeping all code identifiers, file paths, and commit conventions strictly in English.
-7. **Mandatory Pull Request Delivery**: Never instruct or allow direct commits to `dev` or `main`. Always instruct the receiving AI to create a short-lived working branch off `dev`, commit following Conventional Commits, push to remote, and open a Pull Request targeting `dev` using `gh pr create`.
+2. **No "Current State" Overhead**: Do NOT spend context or space reproducing the current state or baseline code snippets. The receiving agent can already read the codebase and inspect existing files directly. Focus strictly and exclusively on the **target destination**.
+3. **Mandatory Final Code ("Como Vai Ficar")**: For EVERY file being created or modified, provide the EXACT, complete implementation of how the code will look like ("Como Vai Ficar"). Never leave signatures, JSX structure, imports, or wiring for the receiving model to guess.
+4. **Always Include Mechanical Guardrails**: An AI will fail if it does not know the repository's AST linters, naming conventions, import boundaries, and architectural patterns (e.g., 1:1 term parity, anti-Middle Man checks, single-form root rules).
+5. **Concrete Verification Checklist**: Always end with the exact CLI commands the receiving agent must run to verify their changes (`pnpm typecheck`, `pnpm test`, custom AST scripts).
+6. **Artifact Delivery**: Always provide the resulting prompt inside a Markdown artifact in the conversation artifact directory so the user can easily view, copy, or share it.
+7. **Language Alignment**: Draft the prompt in the language requested by the user (e.g., Portuguese when requested in Portuguese, English when requested in English), while keeping all code identifiers, file paths, and commit conventions strictly in English.
+8. **Mandatory Pull Request Delivery**: Never instruct or allow direct commits to `dev` or `main`. Always instruct the receiving AI to create a short-lived working branch off `dev`, commit following Conventional Commits, push to remote, and open a Pull Request targeting `dev` using `gh pr create`.
 
 ---
 
-## The 6 Pillars of an Effective Handoff Prompt
+## The 5 Pillars of an Effective Handoff Prompt
 
-Every generated task prompt must follow this structure:
+Every generated task prompt must follow this structure (omitting baseline/current state descriptions):
 
 ### 1. Objective (`Objetivo` / `Objective`)
 
 A single, unambiguous paragraph stating what needs to be accomplished and the expected outcome.
 
-### 2. Current State (`Estado Atual` / `Current State`)
+### 2. Final Implementation ("Como Vai Ficar")
 
-- Specific file paths (repository-relative, e.g., `src/app/(protected)/profile/page.tsx`).
-- Minimal code snippets showing how it currently works and the pain point / reason for the change.
+Organized clearly by file:
+- **Files to create or modify**: Exact path, component/function name, complete imports, types, and the **full, concrete code snippet** showing exactly how the final file will look like.
+- **Files to delete / clean up**: Specific list of obsolete files, hooks, or tests to remove.
 
-### 3. Step-by-Step Action Items (`O Que Fazer` / `Action Plan`)
-
-Organized by file or component:
-- **Files to create**: exact path, component name, props type, required imports, and behavior.
-- **Files to modify**: exact changes, function signatures, and integration wiring.
-- **Files to delete / deprecate**: cleanup of obsolete files, hooks, or tests.
-
-### 4. Repository Guardrails (`Guardrails do Repositório` / `Guardrails & Constraints`)
+### 3. Repository Guardrails (`Guardrails do Repositório` / `Guardrails & Constraints`)
 
 Specific constraints the model must not violate:
 - AST & linter rules (e.g., kebab-case to PascalCase term parity, Middle Man smell, single form root, Server/Client component directives).
 - Layering & boundaries (e.g., Server Components vs Client Components, data access layer imports, gateway ports).
 - Language & naming policy: English for code, comments, and types; user-visible strings via translation catalogs.
 
-### 5. Verification Checklist (`Verificações Necessárias` / `Verification`)
+### 4. Verification Checklist (`Verificações Necessárias` / `Verification`)
 
 - Tests to update or add (colocated `*.test.tsx`, route tests, unit tests).
 - Concrete validation commands:
@@ -55,7 +49,7 @@ Specific constraints the model must not violate:
   - `pnpm test`
   - Specialized linters or checks (e.g., `pnpm check:components`, `pnpm check:unused`, `pnpm check:repo`).
 
-### 6. Git & Pull Request Delivery (`Fluxo de Git e PR` / `Branch & PR Delivery`)
+### 5. Git & Pull Request Delivery (`Fluxo de Git e PR` / `Branch & PR Delivery`)
 
 - Create a dedicated working branch off `dev`: `git checkout -b <type>/<description>`.
 - Commit with Conventional Commits (`type(scope): description`), ensuring commit body lines stay under 100 characters.
@@ -73,40 +67,23 @@ Specific constraints the model must not violate:
 
 ---
 
-### Current State
+### Final Implementation ("Como Vai Ficar")
 
-- `path/to/current-file.tsx`:
+#### 1. `path/to/file-to-modify-or-create.tsx`
+[Brief note on what this file does, followed by the exact code snippet]
 
-  ```tsx
-  // Minimal snippet illustrating the current baseline, code structure, or limitation
-  ```
-- [Direct explanation of why the current approach is suboptimal, buggy, or requires refactoring]
+```tsx
+// Complete or exact code showing how the file will look like
+```
 
----
-
-### Action Plan
-
-#### 1. Create [File / Component Name]
-
-- **File**: `path/to/new-file.tsx`
-- **Identifier**: `ComponentName` (props: `ComponentNameProps`)
-- **Details**:
-  - [Primitives, libraries, or base parts consumed]
-  - [Props, state orchestration, or hooks utilized]
-  - [DOM, event handling, or mutation flow]
-
-#### 2. Modify [Existing Component / Module]
-
-- **File**: `path/to/existing-file.tsx`
-- [Modifications, replacements, or wiring required]
-
-  ```tsx
-  // Snippet showing how the new component or function is integrated
-  ```
+#### 2. `path/to/another-file.ts`
+```ts
+// Complete or exact code showing how the file will look like
+```
 
 #### 3. Obsolete Code Removal
-
-- [Specific files, functions, hooks, or dead exports to delete]
+- `path/to/obsolete-file.tsx` (reason for deletion)
+- `path/to/obsolete-file.test.tsx`
 
 ---
 
@@ -145,7 +122,7 @@ Specific constraints the model must not violate:
 
 ## Workflow When Activated
 
-1. **Analyze Context**: Inspect the relevant files, recent commits/ADRs, and AST conventions related to the user's request.
-2. **Draft Focused Prompt**: Fill in the 6 pillars without generic preamble. See [Reference Templates](references/template.md) for full templates with pre-flight checklists.
+1. **Analyze Context**: Inspect the target files and architectural requirements.
+2. **Draft Focused Prompt**: Fill in the 5 pillars. Omit current state descriptions and supply the exact destination code for every file.
 3. **Save Artifact**: Write the Markdown file to the conversation artifact directory using `write_file`.
 4. **Deliver**: Provide a concise response with a clickable link to the created artifact.
