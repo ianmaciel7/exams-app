@@ -17,10 +17,11 @@ This skill guides the creation of high-precision, actionable handoff prompts int
 6. **Artifact Delivery**: Always provide the resulting prompt inside a Markdown artifact in the conversation artifact directory so the user can easily view, copy, or share it.
 7. **Language Alignment**: Draft the prompt in the language requested by the user (e.g., Portuguese when requested in Portuguese, English when requested in English), while keeping all code identifiers, file paths, and commit conventions strictly in English.
 8. **Mandatory Pull Request Delivery**: Never instruct or allow direct commits to `dev` or `main`. Always instruct the receiving AI to create a short-lived working branch off `dev`, commit following Conventional Commits, push to remote, and open a Pull Request targeting `dev` using `gh pr create`.
+9. **Knowledge Persistence via `/project-save`**: Always instruct the receiving AI to execute `/project-save` (or follow `.agents/skills/project-save/SKILL.md`) after completing verification and delivery, whenever important conventions, architectural decisions, library quirks, or reusable patterns were established during the task.
 
 ---
 
-## The 5 Pillars of an Effective Handoff Prompt
+## The 6 Pillars of an Effective Handoff Prompt
 
 Every generated task prompt must follow this structure (omitting baseline/current state descriptions):
 
@@ -55,6 +56,10 @@ Specific constraints the model must not violate:
 - Commit with Conventional Commits (`type(scope): description`), ensuring commit body lines stay under 100 characters.
 - Push branch to origin: `git push -u origin <branch-name>`.
 - Open a Pull Request targeting `dev` via GitHub CLI: `gh pr create --base dev --title "..." --body "..."`.
+
+### 6. Knowledge Persistence (`Persistência de Conhecimento` / `/project-save`)
+
+- Instruct the agent to run `/project-save` (referencing `.agents/skills/project-save/SKILL.md`) upon completion to persist any critical conventions, ADR updates, domain learnings, or architectural decisions into canonical documentation.
 
 ---
 
@@ -116,6 +121,12 @@ Specific constraints the model must not violate:
   ```bash
   gh pr create --base dev --title "type(scope): description" --body "Summary of changes..."
   ```
+
+---
+
+### Knowledge Persistence & Project Save
+
+- If any new conventions, architectural decisions, reusable patterns, or important domain/library discoveries were established during this task, execute `/project-save` (or follow `.agents/skills/project-save/SKILL.md`) to persist them into canonical repository documentation.
 ````
 
 ---
@@ -123,6 +134,6 @@ Specific constraints the model must not violate:
 ## Workflow When Activated
 
 1. **Analyze Context**: Inspect the target files and architectural requirements.
-2. **Draft Focused Prompt**: Fill in the 5 pillars. Omit current state descriptions and supply the exact destination code for every file.
+2. **Draft Focused Prompt**: Fill in the 6 pillars. Omit current state descriptions, supply the exact destination code for every file, and include instructions for `/project-save` persistence.
 3. **Save Artifact**: Write the Markdown file to the conversation artifact directory using `write_file`.
 4. **Deliver**: Provide a concise response with a clickable link to the created artifact.

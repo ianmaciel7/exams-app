@@ -62,6 +62,12 @@ This reference guide provides the canonical, ready-to-use markdown template for 
   ```bash
   gh pr create --base dev --title "type(scope): description" --body "Summary of changes..."
   ```
+
+---
+
+### Knowledge Persistence & Project Save
+
+- If any new conventions, architectural decisions, reusable patterns, or important domain/library discoveries were established during this task, execute `/project-save` (or follow `.agents/skills/project-save/SKILL.md`) to persist them into canonical repository documentation.
 ````
 
 ---
@@ -78,4 +84,5 @@ Before saving or sending the prompt to the user, ensure:
 - [ ] **Specific Guardrails**: Repository gotchas that could cause CI failures (AST linters, naming rules, boundary violations) are stated upfront.
 - [ ] **Verification Commands Included**: The receiving agent is given executable commands to confirm their work.
 - [ ] **Pull Request Workflow Included**: Explicit instructions are included to create a branch off `dev`, commit, push, and open a PR via `gh pr create`.
+- [ ] **Knowledge Persistence Instruction Included**: Prompt instructs the receiving agent to execute `/project-save` (or follow `.agents/skills/project-save/SKILL.md`) to persist critical conventions or decisions.
 - [ ] **Delivered as Artifact**: The prompt is persisted as a Markdown file in the conversation artifact directory.
