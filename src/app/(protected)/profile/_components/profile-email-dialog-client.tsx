@@ -11,18 +11,22 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useProfileEmailDialog } from "../_hooks/use-profile-email-dialog";
+import { useProfileEmailDialogClient } from "../_hooks/use-profile-email-dialog-client";
 import { ProfileEmailForm } from "./profile-email-form";
 
-type ProfileEmailDialogProps = Omit<
+type ProfileEmailDialogClientProps = Omit<
   ComponentProps<typeof Dialog>,
   "open" | "defaultOpen" | "onOpenChange" | "children"
 > & {
   email: string;
 };
 
-function ProfileEmailDialog({ email, ...props }: ProfileEmailDialogProps) {
-  const { t, isOpen, onOpenChange, changeEmail } = useProfileEmailDialog();
+function ProfileEmailDialogClient({
+  email,
+  ...props
+}: ProfileEmailDialogClientProps) {
+  const { t, isOpen, onOpenChange, changeEmail } =
+    useProfileEmailDialogClient();
 
   return (
     <Dialog {...props} open={isOpen} onOpenChange={onOpenChange}>
@@ -46,4 +50,4 @@ function ProfileEmailDialog({ email, ...props }: ProfileEmailDialogProps) {
   );
 }
 
-export { ProfileEmailDialog };
+export { ProfileEmailDialogClient };

@@ -8,17 +8,14 @@ import {
   within,
 } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type {
-  ProfileAction,
-  ProfileGateway,
-  ProfileSnapshot,
-} from "../_lib/definitions";
+import type { ProfileAction, ProfileSnapshot } from "../_lib/definitions";
 import { ProfileEmailForm } from "./profile-email-form";
 import { ProfileForm } from "./profile-form";
-import { ProfileGatewayProviderClient } from "./profile-gateway-provider-client";
 
 const mocks = vi.hoisted(() => ({
   refresh: vi.fn(),
+  reloadSessionUser: vi.fn(async () => {}),
+  sendEmailChangeVerification: vi.fn(async () => {}),
   setTheme: vi.fn(),
   toastAdd: vi.fn(),
 }));
@@ -39,6 +36,13 @@ vi.mock("@/hooks/use-navigation", () => ({
 vi.mock("@/lib/toast", () => ({ toast: { add: mocks.toastAdd } }));
 vi.mock("@/components/ui/toast", () => ({ toast: { add: mocks.toastAdd } }));
 
+vi.mock("@/lib/session", () => ({
+  reloadSessionUser: mocks.reloadSessionUser,
+}));
+vi.mock("@/lib/auth", () => ({
+  sendEmailChangeVerification: mocks.sendEmailChangeVerification,
+}));
+
 const snapshot: ProfileSnapshot = {
   photoURL: null,
   values: {
@@ -47,11 +51,6 @@ const snapshot: ProfileSnapshot = {
     locale: "en",
     theme: "system",
   },
-};
-
-const gateway: ProfileGateway = {
-  changeEmail: vi.fn(async () => {}),
-  refreshUser: vi.fn(async () => {}),
 };
 
 /** Fake Action: the server result, with the submitted values saved. */
@@ -72,11 +71,7 @@ function savingAction() {
 }
 
 function renderForm(action: ProfileAction) {
-  return render(
-    <ProfileGatewayProviderClient gateway={gateway}>
-      <ProfileForm action={action} initialValues={snapshot} />
-    </ProfileGatewayProviderClient>,
-  );
+  return render(<ProfileForm action={action} initialValues={snapshot} />);
 }
 
 async function clickSave() {
@@ -110,7 +105,7 @@ describe("ProfileForm", () => {
       title: "profileSaved",
       type: "success",
     });
-    expect(gateway.refreshUser).toHaveBeenCalled();
+    expect(mocks.reloadSessionUser).toHaveBeenCalled();
   });
 
   it("shows an alert and no toast when the Action fails", async () => {
@@ -134,15 +129,13 @@ describe("ProfileForm", () => {
 
   it("applies the stored theme and locale when the form mounts", () => {
     render(
-      <ProfileGatewayProviderClient gateway={gateway}>
-        <ProfileForm
-          action={savingAction()}
-          initialValues={{
-            ...snapshot,
-            values: { ...snapshot.values, theme: "dark", locale: "es" },
-          }}
-        />
-      </ProfileGatewayProviderClient>,
+      <ProfileForm
+        action={savingAction()}
+        initialValues={{
+          ...snapshot,
+          values: { ...snapshot.values, theme: "dark", locale: "es" },
+        }}
+      />,
     );
     expect(mocks.setTheme).toHaveBeenCalledWith("dark");
     expect(mocks.refresh).toHaveBeenCalled();
@@ -228,10 +221,12 @@ describe("ProfileEmailForm", () => {
   });
 });
 
-describe("ProfileEmailDialog in ProfileForm", () => {
+describe("ProfileEmailDialogClient in ProfileForm", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(gateway.changeEmail).mockReset().mockResolvedValue(undefined);
+    vi.mocked(mocks.sendEmailChangeVerification)
+      .mockReset()
+      .mockResolvedValue(undefined);
   });
   afterEach(cleanup);
 
@@ -273,7 +268,9 @@ describe("ProfileEmailDialog in ProfileForm", () => {
     );
 
     await waitFor(() =>
-      expect(gateway.changeEmail).toHaveBeenCalledWith("new@example.com"),
+      expect(mocks.sendEmailChangeVerification).toHaveBeenCalledWith(
+        "new@example.com",
+      ),
     );
     await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
     await waitFor(() => expect(document.activeElement).toBe(trigger));
@@ -287,7 +284,9 @@ describe("ProfileEmailDialog in ProfileForm", () => {
   });
 
   it("keeps the dialog and submitted address on failure, then supports retry", async () => {
-    vi.mocked(gateway.changeEmail).mockRejectedValueOnce(new Error("network"));
+    vi.mocked(mocks.sendEmailChangeVerification).mockRejectedValueOnce(
+      new Error("network"),
+    );
     const log = vi.spyOn(console, "error").mockImplementation(() => {});
     try {
       const action = savingAction();
@@ -313,7 +312,7 @@ describe("ProfileEmailDialog in ProfileForm", () => {
         within(dialog).getByRole("button", { name: "changeEmail" }),
       );
       await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
-      expect(gateway.changeEmail).toHaveBeenCalledTimes(2);
+      expect(mocks.sendEmailChangeVerification).toHaveBeenCalledTimes(2);
       expect(action).not.toHaveBeenCalled();
     } finally {
       log.mockRestore();
@@ -322,7 +321,7 @@ describe("ProfileEmailDialog in ProfileForm", () => {
 
   it("announces pending and prevents duplicate requests", async () => {
     let finish: () => void = () => {};
-    vi.mocked(gateway.changeEmail).mockImplementationOnce(
+    vi.mocked(mocks.sendEmailChangeVerification).mockImplementationOnce(
       () =>
         new Promise<void>((resolve) => {
           finish = resolve;
@@ -345,7 +344,7 @@ describe("ProfileEmailDialog in ProfileForm", () => {
       "true",
     );
     fireEvent.click(pending);
-    expect(gateway.changeEmail).toHaveBeenCalledTimes(1);
+    expect(mocks.sendEmailChangeVerification).toHaveBeenCalledTimes(1);
     await act(async () => finish());
     await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
     expect(action).not.toHaveBeenCalled();
@@ -353,7 +352,7 @@ describe("ProfileEmailDialog in ProfileForm", () => {
 
   it("does not close a reopened dialog when an earlier request finishes", async () => {
     let finish: () => void = () => {};
-    vi.mocked(gateway.changeEmail).mockImplementationOnce(
+    vi.mocked(mocks.sendEmailChangeVerification).mockImplementationOnce(
       () =>
         new Promise<void>((resolve) => {
           finish = resolve;
@@ -386,7 +385,7 @@ describe("ProfileEmailDialog in ProfileForm", () => {
         "emailInvalid",
       ),
     );
-    expect(gateway.changeEmail).not.toHaveBeenCalled();
+    expect(mocks.sendEmailChangeVerification).not.toHaveBeenCalled();
     fireEvent.click(
       within(dialog).getByRole("button", { name: "cancelEmailChange" }),
     );

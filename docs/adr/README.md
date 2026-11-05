@@ -39,6 +39,7 @@ original date. Read current operational details in the
 | [0026](0026-adopt-app-check-for-callable-functions.md) | Accepted; extends ADR 0009 | Optional App Check for the `recordUsage` callable, off by default |
 | [0027](0027-invert-profile-data-dependency.md) | Accepted; amends ADRs 0019 and 0025 | `useProfileForm` depends on a `ProfileGateway` port injected by `ProfileGatewayProviderClient`; Biome forbids Firebase imports in route hooks and components |
 | [0028](0028-save-profile-with-a-server-action.md) | Accepted; amends ADRs 0019, 0025 and 0027 | `page.tsx` injects the `updateProfile` Server Action (Admin SDK) into a presentational `ProfileForm`; the e-mail change stays in the browser behind the port |
+| [0029](0029-simplify-profile-client-services.md) | Accepted; amends ADRs 0027 and 0028 | Canonical auth/session helpers replace the profile gateway; explicit client telemetry uses `trackEvent` |
 
 ## Consolidation of 2026-11-01
 
