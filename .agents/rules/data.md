@@ -65,8 +65,8 @@ See [auth.md](auth.md) for authentication/session placement and authorization.
 ## Route-private support modules
 
 `_lib/` also owns route-private non-hook support declarations, not just persistence
-operations. Use descriptive modules such as `avatar.ts` for avatar URL selection
-and upload limits, and `session.ts` for the shared context object.
+operations. Use a route-level `utils.ts` for avatar URL selection, the locale cookie sync
+and upload limits, and descriptive modules such as `session.ts` for the shared context object.
 Do not place these helpers in hook modules or force them into `data.ts` merely
 because they are under `_lib`. Keep actual hooks in `_hooks`; a type-only reference
 to a hook return type does not execute that hook or create a runtime dependency.

@@ -1,7 +1,7 @@
 id: no-module-support-in-hooks-tsx
 valid:
   - |
-    import { getAvatarSource, MAX_AVATAR_SIZE } from "../_lib/avatar";
+    import { getAvatarSource, MAX_AVATAR_SIZE } from "../_lib/utils";
     export function useAvatar() {
       const source = getAvatarSource(null, null, 0);
       function onChange(file) { return file.size < MAX_AVATAR_SIZE; }

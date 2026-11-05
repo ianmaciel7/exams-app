@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl";
 import { useSession } from "@/hooks/use-session";
-import { getAvatarFallbackInitial, getAvatarSource } from "../_lib/avatar";
+import { getAvatarFallbackInitial, getAvatarSource } from "../_lib/utils";
 import { useProfileAvatarInput } from "./use-profile-avatar-input";
 import { useProfileAvatarPreview } from "./use-profile-avatar-preview";
 

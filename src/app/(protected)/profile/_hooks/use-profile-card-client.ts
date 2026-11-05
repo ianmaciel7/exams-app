@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { useNavigation } from "@/hooks/use-navigation";
 import { useSession } from "@/hooks/use-session";
 import { defaultLocale, isLocale } from "@/i18n/routing";
-import { syncSavedLocale } from "../_lib/locale-sync";
+import { syncSavedLocale } from "../_lib/utils";
 import { useProfileLoad } from "./use-profile-load";
 
 /** Own the browser read for this visit, without a shared Promise cache. */
