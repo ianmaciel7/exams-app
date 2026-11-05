@@ -19,9 +19,9 @@ vi.mock("@/lib/firebase/usage", () => ({
   recordUsage: mocks.recordUsage,
 }));
 
-import { UsageRecorderClient } from "./usage-recorder-client";
+import { NavigationEventsRecorderClient } from "./navigation-events-recorder-client";
 
-describe("UsageRecorderClient", () => {
+describe("NavigationEventsRecorderClient", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mocks.user = null;
@@ -31,13 +31,13 @@ describe("UsageRecorderClient", () => {
   afterEach(cleanup);
 
   it("does not record telemetry when there is no authenticated user", () => {
-    render(<UsageRecorderClient />);
+    render(<NavigationEventsRecorderClient />);
     expect(mocks.recordUsage).not.toHaveBeenCalled();
   });
 
   it("records screen view telemetry when a user is authenticated", () => {
     mocks.user = { uid: "user-1" };
-    render(<UsageRecorderClient />);
+    render(<NavigationEventsRecorderClient />);
     expect(mocks.recordUsage).toHaveBeenCalledWith({
       type: "screen_view",
       name: "/profile",

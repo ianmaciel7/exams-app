@@ -5,8 +5,8 @@ import ProtectedLayout from "./layout";
 const mocks = vi.hoisted(() => ({ verify: vi.fn() }));
 
 vi.mock("./_lib/dal", () => ({ verifySession: mocks.verify }));
-vi.mock("./_components/usage-recorder-client", () => ({
-  UsageRecorderClient: () => <div data-testid="route-usage" />,
+vi.mock("./_components/navigation-events-recorder-client", () => ({
+  NavigationEventsRecorderClient: () => <div data-testid="route-usage" />,
 }));
 
 afterEach(cleanup);
