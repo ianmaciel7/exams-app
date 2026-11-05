@@ -20,7 +20,7 @@ language, as defined in `.agents/rules/language.md#language-policy`.
 | [Authentication](auth.md) | Sign-in, sessions, roles, allowlist, and emulator operations | Firebase modules, rules, Functions, and ADRs |
 | [UI state and feedback](ui-state-feedback.md) | Interaction states, recovery, accessibility feedback, and audit evidence | UI flows, component tests, emulator journeys |
 | [UI state rule](../.agents/rules/ui-state.md) | Persistent requirements for feedback and async recovery | `pnpm check:ui-state`, behavioral tests |
-| [Firebase continuous delivery](firebase-cd.md) | Production release configuration and prerequisites | `firebase-cd.yml`, GitHub Environment, Firebase project |
+| [Firebase continuous delivery](firebase-cd.md) | Production release configuration and prerequisites | `cd.yml`, GitHub Environment, Firebase project |
 | [Glossary](../GLOSSARY.md) | Agreed product vocabulary; currently pending | Adopted product terminology |
 | [Entity-relationship diagram](../DER.md) | Pending product model and existing technical Firebase stores | Current SDK modules, Security Rules, and adopted domain constraints |
 | [Agent instructions](../AGENTS.md) | Repository-wide contributor guidance | Current guides and agent configuration |

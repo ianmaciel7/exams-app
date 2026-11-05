@@ -2,7 +2,7 @@
 
 # Firebase continuous delivery
 
-The Firebase CD workflow in `.github/workflows/firebase-cd.yml` deploys to the GitHub
+The Firebase CD workflow in `.github/workflows/cd.yml` deploys to the GitHub
 `production` environment when a stable GitHub Release (`vX.Y.Z`) is published
 ([ADR 0012](adr/0012-configure-cd.md)). Draft releases and
 prereleases do not deploy, and a release whose commit is not reachable from the

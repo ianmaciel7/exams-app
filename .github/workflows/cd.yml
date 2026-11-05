@@ -1,4 +1,4 @@
-name: Firebase CD
+name: CD
 
 on:
   release:

@@ -41,7 +41,7 @@ then apply again so the repository link and backend can finish.
 
 ## 3. After apply
 
-- The `production` environment variables used by `.github/workflows/firebase-cd.yml` are managed here (see [ADR 0011](../docs/adr/0011-configure-terraform-infrastructure.md)); applying needs `GITHUB_TOKEN` or a logged in `gh` CLI.
+- The `production` environment variables used by `.github/workflows/cd.yml` are managed here (see [ADR 0011](../docs/adr/0011-configure-terraform-infrastructure.md)); applying needs `GITHUB_TOKEN` or a logged in `gh` CLI.
 - Copy `firebase_web_config` into `apphosting.yaml` (public values, not secrets), except the API key:
   `apphosting.yaml` references the Secret Manager secret `firebase-web-api-key`, and `check:secret-guard`
   rejects any key literal in that file. Add the value once, from a key restricted to your domains and the
