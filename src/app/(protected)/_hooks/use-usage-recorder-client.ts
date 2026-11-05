@@ -7,7 +7,7 @@ import { recordUsage } from "@/lib/firebase/usage";
  * Fire-and-forget: screen-view telemetry records page visits for signed-in users.
  * Decoupled from authorization: it never gates or delays protected content.
  */
-export function useRouteUsageReporterClient() {
+export function useUsageRecorderClient() {
   const pathname = usePathname();
   const session = useSession();
   const uid = session.user?.uid;

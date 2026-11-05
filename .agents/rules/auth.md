@@ -29,7 +29,7 @@ active Firebase session, and `return-url.ts` owns safe post-auth navigation.
 - Call `verifyRole` or `verifySession` inside every Server Function and Route Handler, and check resource ownership; React `cache` shares checks within a render pass.
 - `src/app/(protected)/layout.tsx` calls `await verifySession()` in the Data Access Layer (DAL) to fail closed on unauthenticated requests before streaming protected routes.
 - `SessionProviderClient` in the root layout owns the only client session subscription; client components read it with `useSession`.
-- Route telemetry is fire-and-forget: `RouteUsageReporterClient` records screen usage in its own component, only for a signed-in user, and it never delays or fails protected content.
+- Route telemetry is fire-and-forget: `UsageRecorderClient` records screen usage in its own component, only for a signed-in user, and it never delays or fails protected content.
 - Never read the session inside a `use cache` scope. Resolve it first, then pass only the user id to an unexported cached function; keep tokens and email addresses out of cache keys and tags.
 - Authorize Admin SDK access in application code; it bypasses Firebase Security Rules.
 - Session cookies (`__session`) are the server session transport per [ADR 0021](../../docs/adr/0021-adopt-official-nextjs-server-auth-dal.md). Do not add Proxy auth checks or `authInterrupts` without a new ADR.

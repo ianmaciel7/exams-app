@@ -1,5 +1,5 @@
 import { ProtectedGuard } from "./_components/protected-guard";
-import { RouteUsageReporterClient } from "./_components/route-usage-reporter-client";
+import { UsageRecorderClient } from "./_components/usage-recorder-client";
 import { verifySession } from "./_lib/dal";
 
 export default async function ProtectedLayout({ children }: LayoutProps<"/">) {
@@ -7,7 +7,7 @@ export default async function ProtectedLayout({ children }: LayoutProps<"/">) {
 
   return (
     <ProtectedGuard>
-      <RouteUsageReporterClient />
+      <UsageRecorderClient />
       {children}
     </ProtectedGuard>
   );
