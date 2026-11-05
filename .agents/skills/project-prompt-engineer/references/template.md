@@ -57,6 +57,17 @@ This reference guide provides the canonical, ready-to-use markdown template for 
   * `pnpm typecheck`
   * `pnpm test`
   * [Repository-specific checks, e.g. check-component-conventions, check:unused]
+
+---
+
+### Git & Pull Request Delivery
+* Create a working branch off `dev`: `git checkout -b <type>/<short-description>`.
+* Commit changes following Conventional Commits (`type(scope): description`), keeping commit body lines under 100 characters.
+* Push branch to origin: `git push -u origin <branch-name>`.
+* Open a Pull Request targeting `dev` via GitHub CLI:
+  ```bash
+  gh pr create --base dev --title "type(scope): description" --body "Summary of changes..."
+  ```
 ```
 
 ---
@@ -70,4 +81,5 @@ Before saving or sending the prompt to the user, ensure:
 - [ ] **Exact Identifiers**: Component names, hook names, and prop types are explicitly defined.
 - [ ] **Specific Guardrails**: Repository gotchas that could cause CI failures (AST linters, naming rules, boundary violations) are stated upfront.
 - [ ] **Verification Commands Included**: The receiving agent is given executable commands to confirm their work.
+- [ ] **Pull Request Workflow Included**: Explicit instructions are included to create a branch off `dev`, commit, push, and open a PR via `gh pr create`.
 - [ ] **Delivered as Artifact**: The prompt is persisted as a Markdown file in the conversation artifact directory.

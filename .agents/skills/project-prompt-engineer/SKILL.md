@@ -15,10 +15,11 @@ This skill guides the creation of high-precision, actionable handoff prompts int
 4. **Concrete Verification Checklist**: Always end with the exact CLI commands the receiving agent must run to verify their changes (`pnpm typecheck`, `pnpm test`, custom AST scripts).
 5. **Artifact Delivery**: Always provide the resulting prompt inside a Markdown artifact in the conversation artifact directory so the user can easily view, copy, or share it.
 6. **Language Alignment**: Draft the prompt in the language requested by the user (e.g., Portuguese when requested in Portuguese, English when requested in English), while keeping all code identifiers, file paths, and commit conventions strictly in English.
+7. **Mandatory Pull Request Delivery**: Never instruct or allow direct commits to `dev` or `main`. Always instruct the receiving AI to create a short-lived working branch off `dev`, commit following Conventional Commits, push to remote, and open a Pull Request targeting `dev` using `gh pr create`.
 
 ---
 
-## The 5 Pillars of an Effective Handoff Prompt
+## The 6 Pillars of an Effective Handoff Prompt
 
 Every generated task prompt must follow this structure:
 
@@ -47,6 +48,12 @@ Specific constraints the model must not violate:
   * `pnpm typecheck`
   * `pnpm test`
   * Specialized linters or checks (e.g., `pnpm check:components`, `pnpm check:unused`, `pnpm check:repo`).
+
+### 6. Git & Pull Request Delivery (`Fluxo de Git e PR` / `Branch & PR Delivery`)
+* Create a dedicated working branch off `dev`: `git checkout -b <type>/<description>`.
+* Commit with Conventional Commits (`type(scope): description`), ensuring commit body lines stay under 100 characters.
+* Push branch to origin: `git push -u origin <branch-name>`.
+* Open a Pull Request targeting `dev` via GitHub CLI: `gh pr create --base dev --title "..." --body "..."`.
 
 ---
 
@@ -103,6 +110,17 @@ Specific constraints the model must not violate:
   * `pnpm typecheck`
   * `pnpm test`
   * [Repository-specific checks, e.g. check-component-conventions, check:unused]
+
+---
+
+### Git & Pull Request Delivery
+* Create a working branch off `dev`: `git checkout -b <type>/<short-description>`.
+* Commit changes using Conventional Commits (`type(scope): description`). Ensure body lines stay under 100 characters.
+* Push branch: `git push -u origin <branch-name>`.
+* Open a Pull Request targeting `dev`:
+  ```bash
+  gh pr create --base dev --title "type(scope): description" --body "Summary of changes..."
+  ```
 ```
 
 ---
@@ -110,6 +128,6 @@ Specific constraints the model must not violate:
 ## Workflow When Activated
 
 1. **Analyze Context**: Inspect the relevant files, recent commits/ADRs, and AST conventions related to the user's request.
-2. **Draft Focused Prompt**: Fill in the 5 pillars without generic preamble. See [Reference Templates](references/template.md) for full Portuguese and English templates with pre-flight checklists.
+2. **Draft Focused Prompt**: Fill in the 6 pillars without generic preamble. See [Reference Templates](references/template.md) for full templates with pre-flight checklists.
 3. **Save Artifact**: Write the Markdown file to the conversation artifact directory using `write_file`.
 4. **Deliver**: Provide a concise response with a clickable link to the created artifact.
