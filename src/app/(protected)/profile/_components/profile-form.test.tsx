@@ -14,7 +14,7 @@ import { ProfileForm } from "./profile-form";
 
 const mocks = vi.hoisted(() => ({
   refresh: vi.fn(),
-  reloadSessionUser: vi.fn(async () => {}),
+  reloadFirebaseAuthUser: vi.fn(async () => {}),
   sendEmailChangeVerification: vi.fn(async () => {}),
   setTheme: vi.fn(),
   toastAdd: vi.fn(),
@@ -36,10 +36,8 @@ vi.mock("@/hooks/use-navigation", () => ({
 vi.mock("@/lib/toast", () => ({ toast: { add: mocks.toastAdd } }));
 vi.mock("@/components/ui/toast", () => ({ toast: { add: mocks.toastAdd } }));
 
-vi.mock("@/lib/session", () => ({
-  reloadSessionUser: mocks.reloadSessionUser,
-}));
 vi.mock("@/lib/auth", () => ({
+  reloadFirebaseAuthUser: mocks.reloadFirebaseAuthUser,
   sendEmailChangeVerification: mocks.sendEmailChangeVerification,
 }));
 
@@ -105,11 +103,13 @@ describe("ProfileForm", () => {
       title: "profileSaved",
       type: "success",
     });
-    expect(mocks.reloadSessionUser).toHaveBeenCalled();
+    expect(mocks.reloadFirebaseAuthUser).toHaveBeenCalled();
   });
 
   it("keeps the successful save when browser session reload fails", async () => {
-    mocks.reloadSessionUser.mockRejectedValueOnce(new Error("reload failed"));
+    mocks.reloadFirebaseAuthUser.mockRejectedValueOnce(
+      new Error("reload failed"),
+    );
     const log = vi.spyOn(console, "error").mockImplementation(() => {});
     try {
       renderForm(savingAction());

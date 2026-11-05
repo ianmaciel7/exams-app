@@ -2,6 +2,7 @@ import "server-only";
 
 import { getLocale } from "next-intl/server";
 import { defaultLocale, isLocale } from "@/i18n/routing";
+import { verifySession } from "@/lib/dal";
 import {
   getAdminAuth,
   getAdminBucket,
@@ -9,7 +10,6 @@ import {
 } from "@/lib/firebase/admin";
 import type { Locale } from "@/lib/locale";
 import { isThemePreference } from "@/lib/theme";
-import { verifySession } from "../../_lib/dal";
 import type {
   ProfileSnapshot,
   ProfileValues,

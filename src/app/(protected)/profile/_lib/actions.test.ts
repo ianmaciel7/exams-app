@@ -7,7 +7,7 @@ const mocks = vi.hoisted(() => ({
   saveProfile: vi.fn(),
 }));
 
-vi.mock("../../_lib/dal", () => ({ verifySession: mocks.verifySession }));
+vi.mock("@/lib/dal", () => ({ verifySession: mocks.verifySession }));
 vi.mock("./data", () => ({
   readOwnProfile: mocks.readOwnProfile,
   saveProfile: mocks.saveProfile,

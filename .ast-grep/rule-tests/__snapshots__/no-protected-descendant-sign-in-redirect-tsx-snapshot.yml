@@ -48,9 +48,9 @@ snapshots:
         style: primary
         start: 0
         end: 37
-  "subscribeToSession((user) => {\n  if (!user) router.replace(routes.signIn);\n});\n":
+  "subscribeToAuth((user) => {\n  if (!user) router.replace(routes.signIn);\n});\n":
     labels:
       - source: router.replace(routes.signIn)
         style: primary
-        start: 44
-        end: 73
+        start: 41
+        end: 70

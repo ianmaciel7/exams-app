@@ -1,9 +1,9 @@
 import type { User } from "firebase/auth";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-const mocks = vi.hoisted(() => ({ subscribeToSession: vi.fn() }));
-vi.mock("@/lib/session", () => ({
-  subscribeToSession: mocks.subscribeToSession,
+const mocks = vi.hoisted(() => ({ subscribeToAuth: vi.fn() }));
+vi.mock("@/lib/firebase/client", () => ({
+  subscribeToAuth: mocks.subscribeToAuth,
 }));
 
 import { subscribeToWorkerSession } from "./worker-session-subscription";
@@ -15,7 +15,7 @@ describe("subscribeToWorkerSession", () => {
   it("reports a settled user and the signed-out state", () => {
     let notify: (user: User | null) => void = () => {};
     const unsubscribe = vi.fn();
-    mocks.subscribeToSession.mockImplementation((listener) => {
+    mocks.subscribeToAuth.mockImplementation((listener) => {
       notify = listener;
       return unsubscribe;
     });
@@ -35,7 +35,7 @@ describe("subscribeToWorkerSession", () => {
     const consoleError = vi
       .spyOn(console, "error")
       .mockImplementation(() => {});
-    mocks.subscribeToSession.mockImplementation(() => {
+    mocks.subscribeToAuth.mockImplementation(() => {
       throw new Error("missing Firebase configuration");
     });
     const onChange = vi.fn();

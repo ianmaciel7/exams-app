@@ -17,17 +17,17 @@ const mocks = vi.hoisted(() => ({
   getUI: vi.fn(),
   signOut: vi.fn(),
 }));
-vi.mock("firebase/auth", () => ({
-  onAuthStateChanged: mocks.subscribe,
-  signOut: mocks.signOut,
+vi.mock("firebase/auth", () => ({ signOut: mocks.signOut }));
+vi.mock("@/lib/firebase/client", () => ({
+  getFirebaseUI: mocks.getUI,
+  subscribeToAuth: mocks.subscribe,
 }));
-vi.mock("@/lib/firebase/client", () => ({ getFirebaseUI: mocks.getUI }));
 
 // The home imports Firebase after hydration, so the session subscription
 // starts asynchronously.
 async function resolveSession(user: unknown) {
   await vi.waitFor(() => expect(mocks.subscribe).toHaveBeenCalled());
-  act(() => mocks.subscribe.mock.calls[0][1](user));
+  act(() => mocks.subscribe.mock.calls[0][0](user));
 }
 
 function renderHome() {
@@ -113,7 +113,7 @@ describe("home session", () => {
   });
   it("only offers profile and sign out when authenticated and restores visitor home after logout", async () => {
     mocks.signOut.mockImplementation(async () => {
-      mocks.subscribe.mock.calls[0][1](null);
+      mocks.subscribe.mock.calls[0][0](null);
     });
     renderHome();
     await resolveSession({
@@ -173,9 +173,10 @@ describe("home session", () => {
   });
 
   it("keeps visitor access available if Firebase configuration is missing", async () => {
-    mocks.getUI.mockImplementation(() => {
+    mocks.subscribe.mockImplementation(() => {
       throw new Error("missing configuration");
     });
+    vi.spyOn(console, "error").mockImplementation(() => {});
     renderHome();
     expect(
       (await screen.findByRole("link", { name: en.Home.signIn })).getAttribute(

@@ -1,8 +1,11 @@
 import { signOut, verifyBeforeUpdateEmail } from "firebase/auth";
-import { getFirebaseUI } from "@/lib/firebase/client";
+import {
+  getActiveFirebaseAuthUser,
+  getFirebaseAuthUser,
+  getFirebaseUI,
+} from "@/lib/firebase/client";
 import { trackEvent } from "@/lib/firebase/usage";
 import { getPendingSignOut, setPendingSignOut } from "@/lib/pending-sign-out";
-import { getActiveUser, getSessionUser } from "@/lib/session";
 
 export { getPendingSignOut } from "@/lib/pending-sign-out";
 
@@ -87,8 +90,15 @@ export function signOutUser() {
 export async function sendEmailChangeVerification(
   email: string,
 ): Promise<void> {
-  const user = getSessionUser();
+  const user = getFirebaseAuthUser();
   if (!user) throw new Error("Authentication session unavailable");
   await trackEvent({ type: "function_use", name: "profile.update" });
-  return verifyBeforeUpdateEmail(getActiveUser(user), email);
+  return verifyBeforeUpdateEmail(getActiveFirebaseAuthUser(user), email);
+}
+
+/** Reload the signed-in user after a server-side profile update. */
+export async function reloadFirebaseAuthUser(): Promise<void> {
+  const user = getFirebaseAuthUser();
+  if (!user) throw new Error("Authentication session unavailable");
+  return user.reload();
 }

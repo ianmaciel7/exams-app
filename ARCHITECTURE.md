@@ -75,7 +75,7 @@ files, and `public/` remain at the repository root, as required by the Next.js
 
 ## Authentication navigation
 
-When an unauthenticated user requests a protected route, the server Data Access Layer (DAL) redirects to `/sign-in?next=<encoded-path-and-query>`. Only the server session check in `src/app/(protected)/_lib/dal.ts` sends a signed-out visitor to sign-in. Pages and hooks inside `(protected)` read the session via `useSession` and do not redirect: Firebase notifies observers in subscription order, so a descendant redirect would drop the `?next=` destination. The ast-grep rules `no-protected-descendant-sign-in-redirect-ts` and `-tsx` enforce this. Once authenticated, the public authentication provider sends the user to that destination, or the home page if no valid destination was supplied. The return URL validator accepts only application-relative paths and rejects external URLs and authentication-screen loops; query strings are preserved. Route protection in the UI is not a substitute for Firebase Security Rules or authorization at the data source.
+When an unauthenticated user requests a protected route, the server Data Access Layer (DAL) redirects to `/sign-in?next=<encoded-path-and-query>`. Only the server Data Access Layer in `src/lib/dal.ts` (`verifySession`) sends a signed-out visitor to sign-in. Pages and hooks inside `(protected)` read the session via `useSession` and do not redirect: Firebase notifies observers in subscription order, so a descendant redirect would drop the `?next=` destination. The ast-grep rules `no-protected-descendant-sign-in-redirect-ts` and `-tsx` enforce this. Once authenticated, the public authentication provider sends the user to that destination, or the home page if no valid destination was supplied. The return URL validator accepts only application-relative paths and rejects external URLs and authentication-screen loops; query strings are preserved. Route protection in the UI is not a substitute for Firebase Security Rules or authorization at the data source.
 
 ## Test boundaries
 
@@ -168,8 +168,9 @@ verifies that bridged token with the Admin SDK. Until the worker controls a tab,
 the browser auth guard remains the first-load fallback. The development worker receives
 the existing public Auth Emulator host, so it shares the local emulator session.
 The authentication modules intentionally remain flat under `src/lib`:
-`auth.ts`, `session.ts`, and `return-url.ts`; consumers should import them as
-`@/lib/auth`, `@/lib/session`, and `@/lib/return-url`.
+`auth.ts`, `session.ts` (server-only), `dal.ts` (server-only), and `return-url.ts`;
+consumers should import them as `@/lib/auth`, `@/lib/session`, `@/lib/dal`, and
+`@/lib/return-url`. Browser Firebase Auth helpers live in `@/lib/firebase/client`.
 The security and HTTP header modules also remain flat under `src/lib`:
 `headers.ts` (canonical header names, baseline security headers, and `getNonce`)
 and `csp.ts` (pure Content Security Policy directive builder); consumers should
@@ -188,7 +189,7 @@ theme, locale, Auth reload) in `useProfileForm`. The e-mail change stays in the
 browser, because only the client SDK's `verifyBeforeUpdateEmail` sends the
 confirmation mail: `useProfileEmailDialogClient` calls
 `sendEmailChangeVerification` from `@/lib/auth`, and save feedback calls
-`reloadSessionUser` from `@/lib/session`. These helpers replace the route-private
+`reloadFirebaseAuthUser` from `@/lib/auth`. These helpers replace the route-private
 gateway and provider (ADR 0029). Shared pending sign-out state lives in
 `pending-sign-out.ts` so auth and session imports remain acyclic. `loading.tsx` covers
 server rendering and `error.tsx` handles read failures.

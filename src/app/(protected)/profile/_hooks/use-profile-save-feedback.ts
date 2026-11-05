@@ -2,7 +2,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import { useNavigation } from "@/hooks/use-navigation";
 import { defaultLocale, isLocale } from "@/i18n/routing";
-import { reloadSessionUser } from "@/lib/session";
+import { reloadFirebaseAuthUser } from "@/lib/auth";
 import { toast } from "@/lib/toast";
 import type { ProfileActionState } from "../_lib/definitions";
 import { syncSavedLocale } from "../_lib/utils";
@@ -20,7 +20,9 @@ export function useProfileSaveFeedback() {
   return (saved: ProfileActionState) => {
     setTheme(saved.values.theme);
     toast.add({ title: t("profileSaved"), type: "success" });
-    void reloadSessionUser().catch((cause: unknown) => console.error(cause));
+    void reloadFirebaseAuthUser().catch((cause: unknown) =>
+      console.error(cause),
+    );
     syncSavedLocale(saved.values.locale, activeLocale, refresh);
   };
 }

@@ -15,10 +15,19 @@ vi.mock("firebase/auth", () => ({
 vi.mock("@/lib/firebase/usage", () => ({ trackEvent: mocks.trackEvent }));
 vi.mock("@/lib/firebase/client", () => ({
   getFirebaseUI: () => ({ get: () => ({ auth: mocks.auth }) }),
+  getFirebaseAuthUser: () => mocks.auth.currentUser,
+  getActiveFirebaseAuthUser: (expected: User) => {
+    const current = mocks.auth.currentUser;
+    if (!current || current.uid !== expected.uid) {
+      throw new Error("Authentication session unavailable");
+    }
+    return current;
+  },
 }));
 
 import {
   getPendingSignOut,
+  reloadFirebaseAuthUser,
   sendEmailChangeVerification,
   signOutUser,
 } from "./auth";
@@ -164,5 +173,29 @@ describe("signOutUser", () => {
     deferred.resolve();
     await first;
     expect(getPendingSignOut()).toBeNull();
+  });
+});
+
+describe("reloadFirebaseAuthUser", () => {
+  it("reloads the signed-in user", async () => {
+    const reload = vi.fn().mockResolvedValue(undefined);
+    mocks.auth.currentUser = { uid: "u1", reload } as unknown as User;
+    await reloadFirebaseAuthUser();
+    expect(reload).toHaveBeenCalledOnce();
+  });
+
+  it("rejects without a session", async () => {
+    mocks.auth.currentUser = null;
+    await expect(reloadFirebaseAuthUser()).rejects.toThrow(
+      "Authentication session unavailable",
+    );
+  });
+
+  it("propagates reload failures", async () => {
+    mocks.auth.currentUser = {
+      uid: "u1",
+      reload: vi.fn().mockRejectedValue(new Error("offline")),
+    } as unknown as User;
+    await expect(reloadFirebaseAuthUser()).rejects.toThrow("offline");
   });
 });

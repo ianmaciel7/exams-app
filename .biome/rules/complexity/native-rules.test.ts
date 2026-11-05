@@ -12,7 +12,6 @@ import {
 const locations = [
   "src/app/_hooks",
   "src/app/(protected)/_hooks",
-  "src/app/(protected)/_lib",
   "src/app/(protected)/profile/_hooks",
   "src/app/(protected)/profile/_lib",
   "src/app/(public)/register/_hooks",

@@ -3,10 +3,10 @@ import "server-only";
 import { cookies } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
 import { getAdminAuth } from "@/lib/firebase/admin";
+import { deleteSession, SESSION_COOKIE_NAME } from "@/lib/session";
 
 const FIVE_DAYS_MS = 5 * 24 * 60 * 60 * 1000;
 const FIVE_DAYS_SEC = 5 * 24 * 60 * 60;
-const SESSION_COOKIE_NAME = "__session";
 
 export async function POST(request: NextRequest) {
   try {
@@ -40,7 +40,6 @@ export async function POST(request: NextRequest) {
 }
 
 export async function DELETE() {
-  const cookieStore = await cookies();
-  cookieStore.delete(SESSION_COOKIE_NAME);
+  await deleteSession();
   return NextResponse.json({ status: "success" });
 }

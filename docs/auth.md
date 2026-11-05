@@ -19,13 +19,15 @@ flowchart TD
   AdminSDK -->|Rejected session| SignIn
   AdminSDK --> Layout[Protected layout: verifySession in DAL]
   Layout -->|Unauthenticated| SignIn
-  Layout -->|Authenticated| Protected[Protected route: ProtectedGuard]
+  Layout -->|Authenticated| Protected[Protected route: protected layout]
   Protected --> Rules[Firebase Security Rules and callable authorization]
 ```
 
-`PublicGuardClient` observes the shared Firebase Auth instance on public
-authentication routes. Signed-in visitors are sent to the validated `next`
-destination, or to the home page.
+The sign-in and register pages read `getSession()` on the server and redirect a
+signed-in visitor to the validated `next` destination, or to the home page.
+`PublicUiProviderClient` only provides the Firebase UI context on public
+authentication routes; after an interactive sign-in it creates the session cookie
+and navigates to the same destination.
 
 Session management uses HTTP-only `__session` cookies (ADR 0021). The client exchanges
 a refreshed ID token with `/api/auth/session` upon sign-in.
@@ -39,15 +41,16 @@ application maps them as follows. Firebase Authentication, session cookies,
 `verifySessionCookie`, and Security Rules are documented Firebase mechanisms; the names
 below and the split between them are choices of this repository.
 
-| Module                  | Responsibility                                                                                                                                 | Grants access? |
-| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | -------------- |
-| `SessionProviderClient` | The single client Firebase Auth subscription, mounted once in the root layout; `isLoading`, `isError`, and `user` cannot contradict each other | No             |
-| `useSession`            | Reads the global session from any client component; never subscribes again                                                                     | No             |
-| `ProtectedGuard`        | Semantic Server layout container for protected routes                                                                                          | No             |
-| `NavigationEvents`      | Fire-and-forget route usage telemetry; never gates content                                                                                     | No             |
-| `verifySession()`       | Server DAL boundary: fails closed and returns the verified identity                                                                            | Authentication |
-| `verifyRole()`          | `verifySession()` plus the required role                                                                                                       | Authorization  |
-| Security Rules          | Every Client SDK read and write                                                                                                                | Authorization  |
+| Module                   | Responsibility                                                                                                                                 | Grants access? |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- | -------------- |
+| `SessionProviderClient`  | The single client Firebase Auth subscription, mounted once in the root layout; `isLoading`, `isError`, and `user` cannot contradict each other | No             |
+| `useSession`             | Reads the global session from any client component; never subscribes again                                                                     | No             |
+| `getSession()`           | Server session read in `src/lib/session.ts`; never redirects, so public routes can branch on it; `deleteSession()` clears the cookie           | No             |
+| `PublicUiProviderClient` | Client Firebase UI context for public authentication routes; never gates a route                                                               | No             |
+| `NavigationEvents`       | Fire-and-forget route usage telemetry; never gates content                                                                                     | No             |
+| `verifySession()`        | Server DAL boundary: fails closed and returns the verified identity                                                                            | Authentication |
+| `verifyRole()`           | `verifySession()` plus the required role                                                                                                       | Authorization  |
+| Security Rules           | Every Client SDK read and write                                                                                                                | Authorization  |
 
 Protected data and privileged server operations must use `verifyRole()` or
 `verifySession()` and check ownership. Insufficient roles return `notFound()` so
@@ -55,9 +58,9 @@ privileged routes are not disclosed. See
 [ADR 0009](adr/0009-integrate-firebase-authentication.md) and
 [ADR 0021](adr/0021-adopt-official-nextjs-server-auth-dal.md).
 
-The protected layout calls `verifySession()` in `src/app/(protected)/_lib/dal.ts`, which verifies the HTTP-only `__session` cookie. Unauthenticated requests are redirected to sign-in on the server before child route segments or RSC payloads evaluate.
+The protected layout calls `verifySession()` in `src/lib/dal.ts` (the Data Access Layer on top of `getSession()` in `src/lib/session.ts`), which verifies the HTTP-only `__session` cookie. Unauthenticated requests are redirected to sign-in on the server before child route segments or RSC payloads evaluate.
 
-`getFirebaseServerSession()` is wrapped in React `cache`, so duplicate calls across `layout.tsx` and Server Component pages (such as `ProfilePage`) during a single render pass execute the Admin SDK revocation check only once. Session cookies are synchronized upon sign-in and sign-out via the `/api/auth/session` Route Handler.
+`getSession()` and the DAL functions are wrapped in React `cache`, so duplicate calls across `layout.tsx` and Server Component pages (such as `ProfilePage`) during a single render pass execute the Admin SDK revocation check only once. Session cookies are synchronized upon sign-in and sign-out via the `/api/auth/session` Route Handler.
 
 ## Server entry points
 

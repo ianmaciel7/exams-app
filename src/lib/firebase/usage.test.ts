@@ -9,8 +9,8 @@ const mocks = vi.hoisted(() => ({
 vi.mock("firebase/functions", () => ({ httpsCallable: mocks.callable }));
 vi.mock("@/lib/firebase/client", () => ({
   getFirebaseFunctions: () => "functions",
+  getFirebaseAuthUser: () => mocks.user,
 }));
-vi.mock("@/lib/session", () => ({ getSessionUser: () => mocks.user }));
 beforeEach(() => {
   vi.clearAllMocks();
   mocks.user = { uid: "user-1" };

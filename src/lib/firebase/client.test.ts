@@ -1,9 +1,14 @@
+import type { User } from "firebase/auth";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
   app: { name: "[DEFAULT]" },
   apps: [] as { name: string }[],
-  auth: { currentUser: null },
+  auth: {
+    currentUser: null as { uid: string; reload?: () => Promise<void> } | null,
+  },
+  getPendingSignOut: vi.fn(),
+  onAuthStateChanged: vi.fn(),
   store: { id: "firebase-ui" },
   getApp: vi.fn(),
   getApps: vi.fn(),
@@ -37,6 +42,10 @@ vi.mock("firebase/app-check", () => ({
 vi.mock("firebase/auth", () => ({
   connectAuthEmulator: mocks.connectAuthEmulator,
   getAuth: mocks.getAuth,
+  onAuthStateChanged: mocks.onAuthStateChanged,
+}));
+vi.mock("@/lib/pending-sign-out", () => ({
+  getPendingSignOut: mocks.getPendingSignOut,
 }));
 vi.mock("@firebase-oss/ui-core", () => ({
   initializeUI: mocks.initializeUI,
@@ -270,5 +279,134 @@ describe("getFirebaseUI", () => {
     getFirebaseFunctions();
 
     expect(mocks.initializeAppCheck).not.toHaveBeenCalled();
+  });
+});
+
+describe("Firebase Auth browser helpers", () => {
+  const stop = vi.fn();
+  let emit: (user: User | null) => void;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.resetModules();
+    vi.stubEnv("NEXT_PUBLIC_FIREBASE_API_KEY", "api-key");
+    vi.stubEnv("NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN", "example.firebaseapp.com");
+    vi.stubEnv("NEXT_PUBLIC_FIREBASE_PROJECT_ID", "example");
+    vi.stubEnv("NEXT_PUBLIC_FIREBASE_APP_ID", "app-id");
+    delete process.env.NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_HOST;
+    mocks.apps = [];
+    mocks.getApps.mockImplementation(() => mocks.apps);
+    mocks.initializeApp.mockReturnValue(mocks.app);
+    mocks.getAuth.mockReturnValue(mocks.auth);
+    mocks.initializeUI.mockReturnValue({ get: () => ({ auth: mocks.auth }) });
+    mocks.getPendingSignOut.mockReturnValue(null);
+    mocks.onAuthStateChanged.mockImplementation(
+      (_auth: unknown, callback: (user: User | null) => void) => {
+        emit = callback;
+        return stop;
+      },
+    );
+    globalThis.firebaseUIStore = undefined;
+    globalThis.firebaseAuthEmulatorConnected = false;
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    globalThis.firebaseUIStore = undefined;
+  });
+
+  it("getFirebaseAuthUser returns the current user, or null when signed out", async () => {
+    const { getFirebaseAuthUser } = await import("./client");
+    mocks.auth.currentUser = { uid: "u1" };
+    expect(getFirebaseAuthUser()).toBe(mocks.auth.currentUser);
+    mocks.auth.currentUser = null;
+    expect(getFirebaseAuthUser()).toBeNull();
+  });
+
+  it("subscribeToAuth forwards users and unsubscribes from Firebase", async () => {
+    const { subscribeToAuth } = await import("./client");
+    const onChange = vi.fn();
+    const user = { uid: "u1" } as User;
+    const unsubscribe = subscribeToAuth(onChange);
+    expect(mocks.onAuthStateChanged).toHaveBeenCalledWith(
+      mocks.auth,
+      expect.any(Function),
+    );
+
+    emit(user);
+    emit(null);
+    expect(onChange).toHaveBeenNthCalledWith(1, user);
+    expect(onChange).toHaveBeenNthCalledWith(2, null);
+
+    unsubscribe();
+    expect(stop).toHaveBeenCalledOnce();
+  });
+
+  it("subscribeToAuth holds sign-out until persistence completes", async () => {
+    const { subscribeToAuth } = await import("./client");
+    const onChange = vi.fn();
+    subscribeToAuth(onChange);
+    const deferred = Promise.withResolvers<void>();
+    mocks.getPendingSignOut.mockReturnValue(deferred.promise);
+
+    emit(null);
+    expect(onChange).not.toHaveBeenCalled();
+    deferred.resolve();
+    await deferred.promise;
+    expect(onChange).toHaveBeenCalledExactlyOnceWith(null);
+  });
+
+  it("subscribeToAuth ignores a held sign-out once a newer session arrives", async () => {
+    const { subscribeToAuth } = await import("./client");
+    const onChange = vi.fn();
+    const next = { uid: "u2" } as User;
+    subscribeToAuth(onChange);
+    const deferred = Promise.withResolvers<void>();
+    mocks.getPendingSignOut.mockReturnValue(deferred.promise);
+
+    emit(null);
+    emit(next);
+    deferred.resolve();
+    await deferred.promise;
+    expect(onChange).toHaveBeenCalledExactlyOnceWith(next);
+  });
+
+  it("subscribeToAuth drops a held sign-out after unsubscribing", async () => {
+    const { subscribeToAuth } = await import("./client");
+    const onChange = vi.fn();
+    const unsubscribe = subscribeToAuth(onChange);
+    const deferred = Promise.withResolvers<void>();
+    mocks.getPendingSignOut.mockReturnValue(deferred.promise);
+
+    emit(null);
+    unsubscribe();
+    deferred.resolve();
+    await deferred.promise;
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it("subscribeToAuth still settles when sign-out persistence fails", async () => {
+    const { subscribeToAuth } = await import("./client");
+    const onChange = vi.fn();
+    subscribeToAuth(onChange);
+    mocks.getPendingSignOut.mockReturnValue(Promise.reject(new Error("x")));
+
+    emit(null);
+    await vi.waitFor(() => expect(onChange).toHaveBeenCalledWith(null));
+  });
+
+  it("getActiveFirebaseAuthUser requires a current user with the expected uid", async () => {
+    const { getActiveFirebaseAuthUser } = await import("./client");
+    const expected = { uid: "u1" } as User;
+    mocks.auth.currentUser = { uid: "u1" };
+    expect(getActiveFirebaseAuthUser(expected)).toBe(mocks.auth.currentUser);
+    mocks.auth.currentUser = null;
+    expect(() => getActiveFirebaseAuthUser(expected)).toThrow(
+      "Authentication session unavailable",
+    );
+    mocks.auth.currentUser = { uid: "other" };
+    expect(() => getActiveFirebaseAuthUser(expected)).toThrow(
+      "Authentication session unavailable",
+    );
   });
 });
