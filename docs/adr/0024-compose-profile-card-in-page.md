@@ -11,6 +11,7 @@ After ADR 0019, `ProfileCardClient` was a client component that received `title`
 - `page.tsx` composes `Card`, `CardHeader`, `CardTitle`, `CardDescription` and `CardContent` directly as a Server Component.
 - `ProfileCardClient` is replaced by `ProfileFormClient`, which owns the browser read through `useProfileFormClient` and renders `LoadingStatus` or `ProfileForm`. The Card header is therefore visible while the profile loads.
 - The convention is named **direct page composition, client leaves** and is recorded in `.agents/rules/composition.md`.
+- Simple page texts use the async Server Component `TranslationTextServer` (`<T message="Auth.personalInfoTitle" />`), so the page declares what to show and the component resolves it with `getTranslations`.
 
 ## Consequences
 

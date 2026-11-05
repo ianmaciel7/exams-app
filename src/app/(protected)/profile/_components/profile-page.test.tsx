@@ -71,6 +71,12 @@ vi.mock("next-intl/server", () => ({
   getTranslations: async () => translate,
 }));
 
+// Async Server Components cannot render in jsdom; the stand-in echoes the key.
+vi.mock("@/components/ui/extensions/translation-text-server", () => ({
+  TranslationTextServer: ({ message }: { message: string }) =>
+    message.split(".").pop(),
+}));
+
 vi.mock("next-themes", () => ({
   useTheme: () => ({ theme: "system", setTheme: mocks.setTheme }),
 }));
