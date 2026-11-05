@@ -102,9 +102,10 @@ new claims when its ID token refreshes. Security Rules do not check revocation:
 an issued token keeps its claims there until it expires, and only
 `verifyIdToken(token, true)` rejects it earlier.
 
-`restrictSignIn` writes the role derived from `ADMIN_USER_EMAILS` on every sign-in,
-which replaces a role set by `setUserRole`. Treat the allowlist as the lasting
-source of an administrator role until that conflict is resolved.
+`restrictSignIn` is promote-only: it raises an allowlisted, verified address to
+`admin` and otherwise keeps the existing role, so a role set by `setUserRole`
+survives sign-in. Removing an address from `ADMIN_USER_EMAILS` does not demote an
+existing administrator; use `setUserRole`.
 
 The Auth blocking functions `restrictSignUp` and `restrictSignIn` enforce the
 deployment allowlist. Configure these server-side parameters outside source
