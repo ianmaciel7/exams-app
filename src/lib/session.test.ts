@@ -3,7 +3,11 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
   auth: { currentUser: null as { uid: string } | null },
+  getPendingSignOut: vi.fn(),
   onAuthStateChanged: vi.fn(),
+}));
+vi.mock("@/lib/auth", () => ({
+  getPendingSignOut: mocks.getPendingSignOut,
 }));
 
 vi.mock("firebase/auth", () => ({
@@ -25,20 +29,85 @@ describe("getSessionUser", () => {
 });
 
 describe("subscribeToSession", () => {
-  beforeEach(() => vi.clearAllMocks());
+  let emit: (user: User | null) => void;
+  const stop = vi.fn();
 
-  it("forwards callbacks and returns the unsubscribe function", () => {
-    const unsubscribe = vi.fn();
-    mocks.onAuthStateChanged.mockReturnValue(unsubscribe);
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mocks.getPendingSignOut.mockReturnValue(null);
+    mocks.onAuthStateChanged.mockImplementation(
+      (_auth: unknown, callback: (user: User | null) => void) => {
+        emit = callback;
+        return stop;
+      },
+    );
+  });
+
+  it("forwards users and unsubscribes from Firebase", () => {
     const onChange = vi.fn();
-    const onError = vi.fn();
-
-    expect(subscribeToSession(onChange, onError)).toBe(unsubscribe);
+    const user = { uid: "u1" } as User;
+    const unsubscribe = subscribeToSession(onChange);
     expect(mocks.onAuthStateChanged).toHaveBeenCalledWith(
       mocks.auth,
-      onChange,
-      onError,
+      expect.any(Function),
     );
+
+    emit(user);
+    emit(null);
+    expect(onChange).toHaveBeenNthCalledWith(1, user);
+    expect(onChange).toHaveBeenNthCalledWith(2, null);
+
+    unsubscribe();
+    expect(stop).toHaveBeenCalledOnce();
+  });
+
+  it("holds sign-out until persistence completes", async () => {
+    const onChange = vi.fn();
+    subscribeToSession(onChange);
+    const deferred = Promise.withResolvers<void>();
+    mocks.getPendingSignOut.mockReturnValue(deferred.promise);
+
+    emit(null);
+    expect(onChange).not.toHaveBeenCalled();
+    deferred.resolve();
+    await deferred.promise;
+    expect(onChange).toHaveBeenCalledExactlyOnceWith(null);
+  });
+
+  it("ignores a held sign-out once a newer session arrives", async () => {
+    const onChange = vi.fn();
+    const next = { uid: "u2" } as User;
+    subscribeToSession(onChange);
+    const deferred = Promise.withResolvers<void>();
+    mocks.getPendingSignOut.mockReturnValue(deferred.promise);
+
+    emit(null);
+    emit(next);
+    deferred.resolve();
+    await deferred.promise;
+    expect(onChange).toHaveBeenCalledExactlyOnceWith(next);
+  });
+
+  it("drops a held sign-out after unsubscribing", async () => {
+    const onChange = vi.fn();
+    const unsubscribe = subscribeToSession(onChange);
+    const deferred = Promise.withResolvers<void>();
+    mocks.getPendingSignOut.mockReturnValue(deferred.promise);
+
+    emit(null);
+    unsubscribe();
+    deferred.resolve();
+    await deferred.promise;
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it("still settles when sign-out persistence fails", async () => {
+    const onChange = vi.fn();
+    subscribeToSession(onChange);
+    mocks.getPendingSignOut.mockReturnValue(Promise.reject(new Error("x")));
+
+    emit(null);
+    await vi.waitFor(() => expect(onChange).toHaveBeenCalledWith(null));
   });
 });
 
