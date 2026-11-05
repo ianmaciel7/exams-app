@@ -202,7 +202,11 @@ const QuestionOptions = ({ className, ...props }: QuestionOptionsProps) => {
   useQuestion();
 
   return (
-    <div className={cn("flex flex-wrap gap-2", className)} role="group" {...props} />
+    <div
+      className={cn("flex flex-wrap gap-2", className)}
+      role="group"
+      {...props}
+    />
   );
 };
 
@@ -311,21 +315,21 @@ const QuestionSubmit = ({
 
 export {
   Question,
-  QuestionPrompt,
-  QuestionDescription,
-  QuestionOptions,
-  QuestionOption,
-  QuestionInput,
   QuestionActions,
-  QuestionSubmit,
-  type QuestionValue,
-  type QuestionResponse,
-  type QuestionProps,
-  type QuestionPromptProps,
-  type QuestionDescriptionProps,
-  type QuestionOptionsProps,
-  type QuestionOptionProps,
-  type QuestionInputProps,
   type QuestionActionsProps,
+  QuestionDescription,
+  type QuestionDescriptionProps,
+  QuestionInput,
+  type QuestionInputProps,
+  QuestionOption,
+  type QuestionOptionProps,
+  QuestionOptions,
+  type QuestionOptionsProps,
+  QuestionPrompt,
+  type QuestionPromptProps,
+  type QuestionProps,
+  type QuestionResponse,
+  QuestionSubmit,
   type QuestionSubmitProps,
+  type QuestionValue,
 };

@@ -182,8 +182,8 @@ for branch protection.
      job. The `mutation` job (Stryker) is strictly gated on manual dispatch
      (`if: ${{ github.event_name == 'workflow_dispatch' }}`) to avoid recurring
      heavy compute overhead on derived repositories until hosted performance is validated.
-   Deployment workflows remain out of scope for the template; derived projects
-   add their own provider-specific CD.
+     Deployment workflows remain out of scope for the template; derived projects
+     add their own provider-specific CD.
 
 9. **Standardized runner environment and parallel CI jobs**:
    Pipelines run on `ubuntu-latest` with standardized runtimes:

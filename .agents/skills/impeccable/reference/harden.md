@@ -116,16 +116,16 @@ border-inline-end: 1px solid; /* Not border-right */
 
 ```javascript
 // ✅ Locale-aware digit formatting
-new Intl.NumberFormat('fa-IR').format(1234); // ۱٬۲۳۴
-new Intl.NumberFormat('ar-SA').format(1234); // ١٬٢٣٤
+new Intl.NumberFormat("fa-IR").format(1234); // ۱٬۲۳۴
+new Intl.NumberFormat("ar-SA").format(1234); // ١٬٢٣٤
 ```
 
 - Respect calendar systems. Persian users expect the Solar Hijri (Jalali) calendar; many Arabic-speaking users expect the Hijri (Islamic) calendar. Use `Intl.DateTimeFormat` with the appropriate locale or calendar parameter.
 
 ```javascript
 // ✅ Locale-appropriate calendar
-new Intl.DateTimeFormat('fa-IR').format(new Date());
-new Intl.DateTimeFormat('ar-SA-u-ca-islamic').format(new Date());
+new Intl.DateTimeFormat("fa-IR").format(new Date());
+new Intl.DateTimeFormat("ar-SA-u-ca-islamic").format(new Date());
 ```
 
 **Character set support**:
@@ -137,22 +137,22 @@ new Intl.DateTimeFormat('ar-SA-u-ca-islamic').format(new Date());
 **Date/Time formatting**:
 ```javascript
 // ✅ Use Intl API for proper formatting
-new Intl.DateTimeFormat('en-US').format(date); // 1/15/2024
-new Intl.DateTimeFormat('de-DE').format(date); // 15.1.2024
+new Intl.DateTimeFormat("en-US").format(date); // 1/15/2024
+new Intl.DateTimeFormat("de-DE").format(date); // 15.1.2024
 
-new Intl.NumberFormat('en-US', { 
-  style: 'currency', 
-  currency: 'USD' 
+new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
 }).format(1234.56); // $1,234.56
 ```
 
 **Pluralization**:
 ```javascript
 // ❌ Bad: Assumes English pluralization
-`${count} item${count !== 1 ? 's' : ''}`
+`${count} item${count !== 1 ? "s" : ""}`;
 
 // ✅ Good: Use proper i18n library
-t('items', { count }) // Handles complex plural rules
+t("items", { count }); // Handles complex plural rules
 ```
 
 ### Error Handling
@@ -166,12 +166,14 @@ t('items', { count }) // Handles complex plural rules
 
 ```jsx
 // Error states with recovery
-{error && (
-  <ErrorMessage>
-    <p>Failed to load data. {error.message}</p>
-    <button onClick={retry}>Try again</button>
-  </ErrorMessage>
-)}
+{
+  error && (
+    <ErrorMessage>
+      <p>Failed to load data. {error.message}</p>
+      <button onClick={retry}>Try again</button>
+    </ErrorMessage>
+  );
+}
 ```
 
 **Form validation errors**:

@@ -31,7 +31,7 @@
     "check:spelling": "cspell lint \"**/*.{ts,tsx,md,json}\" --no-progress",
     "check:markdown": "markdownlint-cli2 \"**/*.md\" \"#node_modules\" \"#.next\"",
     "check:security": "semgrep scan --config .semgrep/rules.yml --error --metrics=off --disable-version-check src next.config.ts",
-    "check:security:rules": "semgrep --test .semgrep",
+    "check:security:rules": "semgrep --test --config .semgrep/rules.yml .semgrep/rules.tsx",
     "check:secrets": "gitleaks git --no-banner --redact",
     "check:secrets:staged": "gitleaks protect --staged --no-banner --redact",
     "check:secret-guard": "node --test scripts/checks/check-secret-guard.test.mjs && node scripts/checks/check-secret-guard.mjs",

@@ -1,4 +1,5 @@
 ---
+
 title: Rule Title Here
 impact: MEDIUM
 impactDescription: Optional description of impact (e.g., "20-50% improvement")
@@ -15,14 +16,14 @@ Brief explanation of the rule and why it matters. This should be clear and conci
 
 ```typescript
 // Bad code example here
-const bad = example()
+const bad = example();
 ```
 
 **Correct (description of what's right):**
 
 ```typescript
 // Good code example here
-const good = example()
+const good = example();
 ```
 
 Reference: [Link to documentation or resource](https://example.com)

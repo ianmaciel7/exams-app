@@ -1,4 +1,5 @@
 ---
+
 trigger: model_decision
 description: "Read before external documentation research or when caching and promoting research findings."
 ---

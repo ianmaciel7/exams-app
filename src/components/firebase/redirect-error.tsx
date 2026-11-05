@@ -1,7 +1,7 @@
 "use client";
 
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useRedirectError } from "@firebase-oss/ui-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export function RedirectError() {
   const error = useRedirectError();

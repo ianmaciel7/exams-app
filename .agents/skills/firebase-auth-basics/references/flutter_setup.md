@@ -58,8 +58,8 @@ platform-specific quirks.
 
 ## 4. Prototyping Workaround: Bypassing Firestore Composite Indices
 
-*Note: This is a Firestore consideration frequently encountered while fetching
-user-specific auth data.*
+_Note: This is a Firestore consideration frequently encountered while fetching
+user-specific auth data._
 
 When querying data via `FirebaseFirestore.instance`, using
 `.where('userId', isEqualTo: uid)` combined with a sort on a different field

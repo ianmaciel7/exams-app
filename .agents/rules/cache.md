@@ -1,4 +1,5 @@
 ---
+
 trigger: model_decision
 description: "Read when changing Next.js caches, invalidation, streaming, prefetching, or request lifetimes."
 ---

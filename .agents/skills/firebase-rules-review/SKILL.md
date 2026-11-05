@@ -1,4 +1,5 @@
 ---
+
 name: firebase-rules-review
 description: Review changes to firestore.rules, functions/, and Firebase auth or session code for authorization gaps, over-broad access, and missing emulator coverage. Use when the user asks to review Firebase security, rules, or Cloud Functions changes.
 ---

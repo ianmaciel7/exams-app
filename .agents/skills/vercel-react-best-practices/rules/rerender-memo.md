@@ -1,4 +1,5 @@
 ---
+
 title: Extract to Memoized Components
 impact: MEDIUM
 impactDescription: enables early returns
@@ -14,12 +15,12 @@ Extract expensive work into memoized components to enable early returns before c
 ```tsx
 function Profile({ user, loading }: Props) {
   const avatar = useMemo(() => {
-    const id = computeAvatarId(user)
-    return <Avatar id={id} />
-  }, [user])
+    const id = computeAvatarId(user);
+    return <Avatar id={id} />;
+  }, [user]);
 
-  if (loading) return <Skeleton />
-  return <div>{avatar}</div>
+  if (loading) return <Skeleton />;
+  return <div>{avatar}</div>;
 }
 ```
 
@@ -27,17 +28,17 @@ function Profile({ user, loading }: Props) {
 
 ```tsx
 const UserAvatar = memo(function UserAvatar({ user }: { user: User }) {
-  const id = useMemo(() => computeAvatarId(user), [user])
-  return <Avatar id={id} />
-})
+  const id = useMemo(() => computeAvatarId(user), [user]);
+  return <Avatar id={id} />;
+});
 
 function Profile({ user, loading }: Props) {
-  if (loading) return <Skeleton />
+  if (loading) return <Skeleton />;
   return (
     <div>
       <UserAvatar user={user} />
     </div>
-  )
+  );
 }
 ```
 

@@ -1,4 +1,5 @@
 ---
+
 name: context7-cli
 description: Use the ctx7 CLI to fetch library documentation and configure Context7 MCP. Activate when the user mentions "ctx7" or "context7", needs current docs for any library, or needs to set up Context7 for their AI coding agent.
 ---

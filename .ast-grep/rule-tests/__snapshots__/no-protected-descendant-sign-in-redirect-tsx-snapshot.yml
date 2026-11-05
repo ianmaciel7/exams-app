@@ -2,55 +2,55 @@ id: no-protected-descendant-sign-in-redirect-tsx
 snapshots:
   "goToSignIn();\n":
     labels:
-    - source: goToSignIn()
-      style: primary
-      start: 0
-      end: 12
+      - source: goToSignIn()
+        style: primary
+        start: 0
+        end: 12
   "navigation.replaceWithSignIn(\"/profile\");\n":
     labels:
-    - source: navigation.replaceWithSignIn("/profile")
-      style: primary
-      start: 0
-      end: 40
+      - source: navigation.replaceWithSignIn("/profile")
+        style: primary
+        start: 0
+        end: 40
   "push(routes.signIn);\n":
     labels:
-    - source: push(routes.signIn)
-      style: primary
-      start: 0
-      end: 19
+      - source: push(routes.signIn)
+        style: primary
+        start: 0
+        end: 19
   "redirect(routes.signIn);\n":
     labels:
-    - source: redirect(routes.signIn)
-      style: primary
-      start: 0
-      end: 23
+      - source: redirect(routes.signIn)
+        style: primary
+        start: 0
+        end: 23
   "redirectToSignIn(\"/profile\");\n":
     labels:
-    - source: redirectToSignIn("/profile")
-      style: primary
-      start: 0
-      end: 28
+      - source: redirectToSignIn("/profile")
+        style: primary
+        start: 0
+        end: 28
   "replace(getSignInUrl(\"/profile\"));\n":
     labels:
-    - source: replace(getSignInUrl("/profile"))
-      style: primary
-      start: 0
-      end: 33
+      - source: replace(getSignInUrl("/profile"))
+        style: primary
+        start: 0
+        end: 33
   "replaceWithSignIn(\"/profile\");\n":
     labels:
-    - source: replaceWithSignIn("/profile")
-      style: primary
-      start: 0
-      end: 29
+      - source: replaceWithSignIn("/profile")
+        style: primary
+        start: 0
+        end: 29
   "router.push(getSignInUrl(\"/profile\"));\n":
     labels:
-    - source: router.push(getSignInUrl("/profile"))
-      style: primary
-      start: 0
-      end: 37
+      - source: router.push(getSignInUrl("/profile"))
+        style: primary
+        start: 0
+        end: 37
   "subscribeToSession((user) => {\n  if (!user) router.replace(routes.signIn);\n});\n":
     labels:
-    - source: router.replace(routes.signIn)
-      style: primary
-      start: 44
-      end: 73
+      - source: router.replace(routes.signIn)
+        style: primary
+        start: 44
+        end: 73

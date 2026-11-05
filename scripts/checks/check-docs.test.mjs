@@ -92,6 +92,13 @@ test("matches the inventory to installed entrypoints", () => {
     [],
   );
   assert.deepEqual(
+    inspectSkillInventory(
+      files,
+      "| first     | entry |\n| second    | entry |",
+    ),
+    [],
+  );
+  assert.deepEqual(
     inspectSkillInventory(files, "| first | entry |\n| stale | entry |"),
     [
       "Missing skill inventory entry: second",

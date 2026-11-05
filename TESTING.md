@@ -347,6 +347,9 @@ Playwright verifies production builds across a representative viewport matrix:
 | `mobile-390`   | 390x844    | Modern mobile device layout, vertical button stacking, touch target sizing, and fluid hero sections.                                                           |
 | `tablet-768`   | 768x1024   | Intermediate tablet viewport reflow and layout transitions.                                                                                                    |
 | `desktop-1280` | 1280x800   | Full desktop multi-column layouts, side-by-side action alignment, and wide content containers.                                                                 |
+
+The suite verifies the following behavior:
+
 - **Zero horizontal scrollbar**: Each route (`/`, `/sign-in`, `/register`) is verified
   to ensure content fits within the client viewport without horizontal overflow.
 - **Touch target compliance**: Iterates over all interactive controls (`button`, `a`,
@@ -838,3 +841,18 @@ registry exclusion descriptions above. Coverage includes every TypeScript
 and TSX file under `src`, including registry components, stories, and tests.
 Unit and browser test discovery remain separate. Removing analyzer exclusions
 may expose existing diagnostics; do not suppress them to restore a green run.
+
+## CI job ownership
+
+The static job validates PR titles with Commitlint and runs `node --test scripts/ci/check-results.test.mjs` against the actual required-check predicate. It already covers UI state through `check:repo`. All build, E2E, auth, rules and security suites remain required. Only optional manual production smoke may be skipped. Emulator auth installs only Chromium headless shell. Compare cold and warm CI runs before claiming timing gains; caches never substitute for verification.
+
+## Analysis categories
+
+All files remain analyzed. Application runtime rules are blocking; test, story,
+registry and external-bundle style or complexity findings remain visible as
+warnings. Registry React correctness, browser acceptance and security checks
+remain blocking. Full-source coverage is reported with the existing 70 percent
+floor applied to application code. Knip parses CSS imports and MCP declarations;
+its explicit host-tool list does not exclude source files. Generated JSON spelling
+checks inspect linguistic fields, while translations have explicit vocabulary.
+See [ADR 0023](docs/adr/0023-classify-analysis-without-file-exclusions.md).

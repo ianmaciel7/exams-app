@@ -153,7 +153,10 @@ const MessageBranch = ({
   const currentBranch =
     selectedIndex >= 0
       ? selectedIndex
-      : Math.min(Math.max(0, defaultBranch), Math.max(0, branchKeys.length - 1));
+      : Math.min(
+          Math.max(0, defaultBranch),
+          Math.max(0, branchKeys.length - 1),
+        );
 
   const setBranchKeys = useCallback(
     (nextKeys: string[]) => {
@@ -166,7 +169,12 @@ const MessageBranch = ({
       setSelectedKey((previous) =>
         previous && nextKeys.includes(previous)
           ? previous
-          : (nextKeys[Math.min(Math.max(0, defaultBranch), Math.max(0, nextKeys.length - 1))] ?? null),
+          : (nextKeys[
+              Math.min(
+                Math.max(0, defaultBranch),
+                Math.max(0, nextKeys.length - 1),
+              )
+            ] ?? null),
       );
     },
     [defaultBranch],
@@ -227,13 +235,14 @@ const MessageBranchContent = ({
     () => Children.toArray(children).filter(isValidElement),
     [children],
   );
-  const keys = branches.map((branch) => String(branch.key));
-  const keySignature = JSON.stringify(keys);
+  const keySignature = JSON.stringify(
+    branches.map((branch) => String(branch.key)),
+  );
 
   // Reconcile identities, not just list length: same-sized replacements and
   // reorders must refresh the selector while preserving a selected keyed item.
   useEffect(() => {
-    setBranchKeys(keys);
+    setBranchKeys(JSON.parse(keySignature));
   }, [keySignature, setBranchKeys]);
 
   return branches.map((branch, index) => (
@@ -378,27 +387,27 @@ const MessageToolbar = ({
 
 export {
   Message,
-  MessageContent,
-  MessageActions,
   MessageAction,
+  type MessageActionProps,
+  MessageActions,
+  type MessageActionsProps,
   MessageBranch,
   MessageBranchContent,
-  MessageBranchSelector,
-  MessageBranchPrevious,
-  MessageBranchNext,
-  MessageBranchPage,
-  MessageResponse,
-  MessageToolbar,
-  type MessageProps,
-  type MessageContentProps,
-  type MessageActionsProps,
-  type MessageActionProps,
-  type MessageBranchProps,
   type MessageBranchContentProps,
-  type MessageBranchSelectorProps,
-  type MessageBranchPreviousProps,
+  MessageBranchNext,
   type MessageBranchNextProps,
+  MessageBranchPage,
   type MessageBranchPageProps,
+  MessageBranchPrevious,
+  type MessageBranchPreviousProps,
+  type MessageBranchProps,
+  MessageBranchSelector,
+  type MessageBranchSelectorProps,
+  MessageContent,
+  type MessageContentProps,
+  type MessageProps,
+  MessageResponse,
   type MessageResponseProps,
+  MessageToolbar,
   type MessageToolbarProps,
 };

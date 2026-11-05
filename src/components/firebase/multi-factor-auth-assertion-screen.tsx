@@ -1,14 +1,25 @@
 "use client";
 
 import { getTranslation } from "@firebase-oss/ui-core";
-import { useUI, type MultiFactorAuthAssertionScreenProps } from "@firebase-oss/ui-react";
-
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  type MultiFactorAuthAssertionScreenProps,
+  useUI,
+} from "@firebase-oss/ui-react";
 import { MultiFactorAuthAssertionForm } from "@/components/firebase/multi-factor-auth-assertion-form";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
-export type MultiFactorAuthEnrollmentScreenProps = MultiFactorAuthAssertionScreenProps;
+export type MultiFactorAuthEnrollmentScreenProps =
+  MultiFactorAuthAssertionScreenProps;
 
-export function MultiFactorAuthAssertionScreen(props: MultiFactorAuthEnrollmentScreenProps) {
+export function MultiFactorAuthAssertionScreen(
+  props: MultiFactorAuthEnrollmentScreenProps,
+) {
   const ui = useUI();
 
   const titleText = getTranslation(ui, "labels", "multiFactorAssertion");
@@ -18,7 +29,9 @@ export function MultiFactorAuthAssertionScreen(props: MultiFactorAuthEnrollmentS
     <div className="max-w-sm mx-auto">
       <Card>
         <CardHeader>
-          <CardTitle role="heading" aria-level={1}>{titleText}</CardTitle>
+          <CardTitle role="heading" aria-level={1}>
+            {titleText}
+          </CardTitle>
           <CardDescription>{subtitleText}</CardDescription>
         </CardHeader>
         <CardContent>

@@ -1,4 +1,5 @@
 ---
+
 trigger: model_decision
 description: "Read when changing external synchronization, subscriptions, cleanup, or asynchronous lifecycle work."
 ---

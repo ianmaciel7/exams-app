@@ -1,4 +1,5 @@
 ---
+
 trigger: model_decision
 description: "Read when deciding where to save rules, operational guides, conventions, or project knowledge."
 ---
@@ -17,7 +18,7 @@ Read when deciding where to save rules, operational guides, conventions, or proj
 
 - **`.agents/rules/` (Behavioral constraints for agents)**:
   - Contains **prescriptive agent guardrails applied when their context is relevant**.
-  - Dictates *how agents must behave, write, and verify code* across the codebase (e.g. naming, file limits, thin routes, language, framework patterns).
+  - Dictates _how agents must behave, write, and verify code_ across the codebase (e.g. naming, file limits, thin routes, language, framework patterns).
   - Kept concise and machine-actionable to conserve prompt context.
 - **`docs/` (Human and domain documentation & system operations)**:
   - Contains **descriptive reference documentation, operational guides, and history**.

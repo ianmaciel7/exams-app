@@ -52,6 +52,7 @@ Key architectural choices:
 
 2. **Provider Configuration & `disableTransitionOnChange`**:
    The root layout (`src/app/layout.tsx`) and Ladle environment (`.ladle/components.tsx`) mount `ThemeProvider` with:
+
    ```tsx
    <ThemeProvider
      attribute="class"
@@ -62,6 +63,7 @@ Key architectural choices:
      ...
    </ThemeProvider>
    ```
+
    The `disableTransitionOnChange` prop is mandatory. It suppresses all CSS transitions and animations while theme classes change on `<html>`, preventing jarring visual flashes or delayed element background updates during mode switching.
 
 3. **Zero-Toggle Default Philosophy (Pure System Theme)**:
@@ -75,6 +77,7 @@ Key architectural choices:
 
 5. **`@layer base` Rules**:
    Global element defaults in `src/app/globals.css` enforce:
+
    ```css
    @layer base {
      * {
@@ -92,10 +95,12 @@ Key architectural choices:
      }
    }
    ```
+
    This ensures standard borders, accessible focus outlines with ring color tokens, and pointer cursors across all interactive button elements.
 
 6. **Dual Compilation Pipeline (Turbopack and Ladle `@tailwindcss/vite`)**:
    - In Next.js: `next.config.ts` delegates CSS processing to `@tailwindcss/turbopack` via loader rules:
+
      ```ts
      turbopack: {
        rules: {

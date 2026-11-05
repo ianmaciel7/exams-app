@@ -1,4 +1,5 @@
 ---
+
 trigger: model_decision
 description: "Read when changing touch, mobile, form-field, motion, or responsive behavior of UI components and pages."
 ---

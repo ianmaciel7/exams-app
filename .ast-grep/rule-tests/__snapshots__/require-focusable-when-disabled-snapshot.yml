@@ -2,76 +2,76 @@ id: require-focusable-when-disabled
 snapshots:
   "const a = (\n  <Button disabled={pending}>\n    {pending && <Spinner data-icon=\"inline-start\" />}\n    Save\n  </Button>\n);\n":
     labels:
-    - source: |-
-        <Button disabled={pending}>
-            {pending && <Spinner data-icon="inline-start" />}
-            Save
-          </Button>
-      style: primary
-      start: 14
-      end: 116
-    - source: disabled
-      style: secondary
-      start: 22
-      end: 30
-    - source: disabled={pending}
-      style: secondary
-      start: 22
-      end: 40
-    - source: disabled={pending}
-      style: secondary
-      start: 22
-      end: 40
-    - source: Spinner
-      style: secondary
-      start: 59
-      end: 66
-    - source: <Spinner data-icon="inline-start" />
-      style: secondary
-      start: 58
-      end: 94
-    - source: Button
-      style: secondary
-      start: 15
-      end: 21
-    - source: Button
-      style: secondary
-      start: 15
-      end: 21
+      - source: |-
+          <Button disabled={pending}>
+              {pending && <Spinner data-icon="inline-start" />}
+              Save
+            </Button>
+        style: primary
+        start: 14
+        end: 116
+      - source: disabled
+        style: secondary
+        start: 22
+        end: 30
+      - source: disabled={pending}
+        style: secondary
+        start: 22
+        end: 40
+      - source: disabled={pending}
+        style: secondary
+        start: 22
+        end: 40
+      - source: Spinner
+        style: secondary
+        start: 59
+        end: 66
+      - source: <Spinner data-icon="inline-start" />
+        style: secondary
+        start: 58
+        end: 94
+      - source: Button
+        style: secondary
+        start: 15
+        end: 21
+      - source: Button
+        style: secondary
+        start: 15
+        end: 21
   "const a = (\n  <Button type=\"submit\" disabled={ui.state !== \"idle\"}>\n    {ui.state !== \"idle\" ? <><Spinner />Go</> : \"Go\"}\n  </Button>\n);\n":
     labels:
-    - source: |-
-        <Button type="submit" disabled={ui.state !== "idle"}>
-            {ui.state !== "idle" ? <><Spinner />Go</> : "Go"}
-          </Button>
-      style: primary
-      start: 14
-      end: 133
-    - source: disabled
-      style: secondary
-      start: 36
-      end: 44
-    - source: disabled={ui.state !== "idle"}
-      style: secondary
-      start: 36
-      end: 66
-    - source: disabled={ui.state !== "idle"}
-      style: secondary
-      start: 36
-      end: 66
-    - source: Spinner
-      style: secondary
-      start: 98
-      end: 105
-    - source: <Spinner />
-      style: secondary
-      start: 97
-      end: 108
-    - source: Button
-      style: secondary
-      start: 15
-      end: 21
-    - source: Button
-      style: secondary
-      start: 15
-      end: 21
+      - source: |-
+          <Button type="submit" disabled={ui.state !== "idle"}>
+              {ui.state !== "idle" ? <><Spinner />Go</> : "Go"}
+            </Button>
+        style: primary
+        start: 14
+        end: 133
+      - source: disabled
+        style: secondary
+        start: 36
+        end: 44
+      - source: disabled={ui.state !== "idle"}
+        style: secondary
+        start: 36
+        end: 66
+      - source: disabled={ui.state !== "idle"}
+        style: secondary
+        start: 36
+        end: 66
+      - source: Spinner
+        style: secondary
+        start: 98
+        end: 105
+      - source: <Spinner />
+        style: secondary
+        start: 97
+        end: 108
+      - source: Button
+        style: secondary
+        start: 15
+        end: 21
+      - source: Button
+        style: secondary
+        start: 15
+        end: 21

@@ -28,7 +28,11 @@ afterEach(() => {
 describe("Policies", () => {
   it("navigates without submitting the enclosing authentication form", () => {
     const onSubmit = vi.fn((event: React.FormEvent) => event.preventDefault());
-    render(<form onSubmit={onSubmit}><Policies /></form>);
+    render(
+      <form onSubmit={onSubmit}>
+        <Policies />
+      </form>,
+    );
     const terms = screen.getByRole("button", { name: "termsOfService" });
     expect(terms.getAttribute("type")).toBe("button");
     fireEvent.click(terms);

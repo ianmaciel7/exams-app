@@ -1,4 +1,5 @@
 ---
+
 trigger: model_decision
 description: "Read when changing local state, reducers, context, derived values, or external stores."
 ---

@@ -56,89 +56,94 @@ documentation entrypoints, except for the domain records described below:
    relevant attributes, relationships, cardinalities, and integrity
    constraints.
 10. `TOOLING.md` is the operational inventory of every installed or configured
-   development tool, including its version or status, purpose, and source of
-   truth. It covers the package manager, build toolchain, code-quality tools
-   (including Biome and GritQL rules), UI scaffolding, commands, and agent
-   tooling; it does not duplicate the application dependency catalog.
+    development tool, including its version or status, purpose, and source of
+    truth. It covers the package manager, build toolchain, code-quality tools
+    (including Biome and GritQL rules), UI scaffolding, commands, and agent
+    tooling; it does not duplicate the application dependency catalog.
 11. `CODING_STANDARDS.md` consolidates day-to-day code conventions whose
-   executable form is split across tool configuration and accepted ADRs.
+    executable form is split across tool configuration and accepted ADRs.
 12. `DESIGN.md` is the visual design reference. It documents the design tokens
-   (light and dark colors, typography, radius), the shadcn/ui setup, and the
-   component inventory as they are implemented. `src/app/globals.css` is the
-   source of truth for tokens; `DESIGN.md` mirrors it (hex values are the sRGB
-   equivalents of the `oklch()` values) and must be updated in the same change
-   whenever the theme, fonts, or shadcn configuration change. It must not
-   describe tokens, components, or brand rules that the code does not
-   implement. The document must follow this structure:
-   - YAML front matter with `version`, `name`, `description`, and the token
-     groups `colors` (split into `light` and `dark`), `typography`, and
-     `rounded`. Add `spacing` or `components` only when the code defines them.
-   - Colors are quoted hex strings (`#rrggbb`, or `#rrggbbaa` for alpha). Each
-     token name matches its CSS variable in `globals.css` without the `--`
-     prefix, and every token has both a light and a dark value.
-   - Body sections in this order: Overview, Project setup, Colors, Typography,
-     Components, Shape, Behavior, Do's and Don'ts. Sections without
-     implemented content are omitted, not filled with placeholders.
-   - Each documented value cites its source (`globals.css`, `layout.tsx`,
-     `components.json`, `typeset.css`) so it can be verified.
+    (light and dark colors, typography, radius), the shadcn/ui setup, and the
+    component inventory as they are implemented. `src/app/globals.css` is the
+    source of truth for tokens; `DESIGN.md` mirrors it (hex values are the sRGB
+    equivalents of the `oklch()` values) and must be updated in the same change
+    whenever the theme, fonts, or shadcn configuration change. It must not
+    describe tokens, components, or brand rules that the code does not
+    implement. The document must follow this structure:
+
+- YAML front matter with `version`, `name`, `description`, and the token
+  groups `colors` (split into `light` and `dark`), `typography`, and
+  `rounded`. Add `spacing` or `components` only when the code defines them.
+- Colors are quoted hex strings (`#rrggbb`, or `#rrggbbaa` for alpha). Each
+  token name matches its CSS variable in `globals.css` without the `--`
+  prefix, and every token has both a light and a dark value.
+- Body sections in this order: Overview, Project setup, Colors, Typography,
+  Components, Shape, Behavior, Do's and Don'ts. Sections without
+  implemented content are omitted, not filled with placeholders.
+- Each documented value cites its source (`globals.css`, `layout.tsx`,
+  `components.json`, `typeset.css`) so it can be verified.
+
 13. Ladle (`.ladle/`) is the isolated UI component development and documentation
-   workbench. It provides an isolated environment for developing, inspecting,
-   and cataloging design system primitives and UI extensions through colocated
-   `*.stories.tsx` files, completely independent of the Next.js App Router
-   runtime.
+    workbench. It provides an isolated environment for developing, inspecting,
+    and cataloging design system primitives and UI extensions through colocated
+    `*.stories.tsx` files, completely independent of the Next.js App Router
+    runtime.
 14. **Cross-route vs. route-private code placement**:
-   - Following the Next.js project-structure strategy of splitting by feature or
-     route, underscore-prefixed private folders (`_components`, `_hooks`, `_lib`)
-     colocate non-routable code strictly with the route segment or route group
-     that owns it (for example, home-page modules in `src/app/_components/` and
-     `src/app/_hooks/`).
-   - Code consumed by more than one route tree is placed outside `src/app/` in
-     the canonical shared directories: shared components in
-     `src/components/ui/extensions/` (per [ADR 0002](0002-configure-shadcn-ui.md)),
-     shared hooks in `src/hooks/`, and non-UI helpers in `src/lib/` (such as
-     `RouteLoading`, `AuthProviderClient`, `FirebaseAuthSessionBridgeClient`,
-     their orchestration hooks, and `src/lib/locale.ts`).
-   - Layouts and `loading.tsx` files import shared modules through `@/` aliases
-     rather than reaching into `src/app/_*`.
-   - `pnpm check:components` and the `no-module-support-in-hooks` ast-grep rules
-     enforce hook conventions across both `src/app/**/_hooks/` and `src/hooks/`
-     (excluding the shadcn-registry `src/hooks/use-mobile.ts`).
+
+- Following the Next.js project-structure strategy of splitting by feature or
+  route, underscore-prefixed private folders (`_components`, `_hooks`, `_lib`)
+  colocate non-routable code strictly with the route segment or route group
+  that owns it (for example, home-page modules in `src/app/_components/` and
+  `src/app/_hooks/`).
+- Code consumed by more than one route tree is placed outside `src/app/` in
+  the canonical shared directories: shared components in
+  `src/components/ui/extensions/` (per [ADR 0002](0002-configure-shadcn-ui.md)),
+  shared hooks in `src/hooks/`, and non-UI helpers in `src/lib/` (such as
+  `RouteLoading`, `AuthProviderClient`, `FirebaseAuthSessionBridgeClient`,
+  their orchestration hooks, and `src/lib/locale.ts`).
+- Layouts and `loading.tsx` files import shared modules through `@/` aliases
+  rather than reaching into `src/app/_*`.
+- `pnpm check:components` and the `no-module-support-in-hooks` ast-grep rules
+  enforce hook conventions across both `src/app/**/_hooks/` and `src/hooks/`
+  (excluding the shadcn-registry `src/hooks/use-mobile.ts`).
+
 15. **Owned component integration suffixes and exact export naming**:
-   - Application-owned components in `src/components/ui/extensions/` and
-     `src/app/**/_components/` use filename suffixes based on integration
-     responsibility rather than raw React runtime directives (evolving from and
-     superseding an earlier runtime-suffix-for-all-client-components rule and an
-     earlier suffix-free semantic export rule):
-     - Reserve `-client.tsx` (declaring `"use client"`) for browser integrations
-       (e.g., session, persistence, navigation, browser file/URL APIs, theme),
-       including integration work delegated to local hooks or helpers.
-     - Reserve `-server.tsx` (importing `"server-only"`) for server integrations.
-     - Keep presentation components without a runtime suffix, including interactive
-       UI and form-context presentation (such as profile fields and save-state
-       buttons) that use state, events, or `useFormContext` and therefore declare
-       `"use client"`, as well as shared presentation compatible with either graph
-       (such as `LabeledSpinner`). Composing an integration child does not make the
-       parent an integration, and `fetch` alone does not determine the execution
-       environment. The convention combines Container/Presentational separation
-       with React module boundaries.
-   - Owned component exports, their `<ComponentName>Props` types, and their
-     component-named orchestration hooks (`use<ComponentName>`) must match the
-     complete filename stem 1:1, including `Client` or `Server` on integration
-     modules (for example, `home-section-client.tsx` exports `HomeSectionClient`,
-     `HomeSectionClientProps`, and uses `useHomeSectionClient`;
-     `profile-form-client.tsx` exports `ProfileFormClient` with compound parts
-     sharing the same root). Colocated tests and stories use the full filename
-     stem.
-   - Private hook modules in `src/app/**/_hooks/` and shared hooks in `src/hooks/`
-     enforce exact file and export name parity. Native presentation hooks (`useId`,
-     `useTranslations`, `useFormContext`, `useWatch`) may be composed directly in
-     components without custom wrapper hooks.
-   - `pnpm check:components` enforces component placement, conservative static
-     integration-evidence tracing through local `.ts` helpers, boundary directives,
-     composition contracts, and exact filename-stem term parity (`checkStemComponentTermParity`)
-     in `verify:fast` and `verify:static`. Framework-mandated route files and
-     registry output (`src/components/ui/`, `src/components/firebase/`,
-     `src/components/ai-elements/`) retain their exclusions.
+
+- Application-owned components in `src/components/ui/extensions/` and
+  `src/app/**/_components/` use filename suffixes based on integration
+  responsibility rather than raw React runtime directives (evolving from and
+  superseding an earlier runtime-suffix-for-all-client-components rule and an
+  earlier suffix-free semantic export rule):
+  - Reserve `-client.tsx` (declaring `"use client"`) for browser integrations
+    (e.g., session, persistence, navigation, browser file/URL APIs, theme),
+    including integration work delegated to local hooks or helpers.
+  - Reserve `-server.tsx` (importing `"server-only"`) for server integrations.
+  - Keep presentation components without a runtime suffix, including interactive
+    UI and form-context presentation (such as profile fields and save-state
+    buttons) that use state, events, or `useFormContext` and therefore declare
+    `"use client"`, as well as shared presentation compatible with either graph
+    (such as `LabeledSpinner`). Composing an integration child does not make the
+    parent an integration, and `fetch` alone does not determine the execution
+    environment. The convention combines Container/Presentational separation
+    with React module boundaries.
+- Owned component exports, their `<ComponentName>Props` types, and their
+  component-named orchestration hooks (`use<ComponentName>`) must match the
+  complete filename stem 1:1, including `Client` or `Server` on integration
+  modules (for example, `home-section-client.tsx` exports `HomeSectionClient`,
+  `HomeSectionClientProps`, and uses `useHomeSectionClient`;
+  `profile-form-client.tsx` exports `ProfileFormClient` with compound parts
+  sharing the same root). Colocated tests and stories use the full filename
+  stem.
+- Private hook modules in `src/app/**/_hooks/` and shared hooks in `src/hooks/`
+  enforce exact file and export name parity. Native presentation hooks (`useId`,
+  `useTranslations`, `useFormContext`, `useWatch`) may be composed directly in
+  components without custom wrapper hooks.
+- `pnpm check:components` enforces component placement, conservative static
+  integration-evidence tracing through local `.ts` helpers, boundary directives,
+  composition contracts, and exact filename-stem term parity (`checkStemComponentTermParity`)
+  in `verify:fast` and `verify:static`. Framework-mandated route files and
+  registry output (`src/components/ui/`, `src/components/firebase/`,
+  `src/components/ai-elements/`) retain their exclusions.
 
 16. **Biome Overrides for Vendored Registries (`biome.json`)**:
     Because vendored code from shadcn, AI SDK Elements, and third-party registries uses external generation idioms, `biome.json` configures mandatory overrides for `src/components/ui/**`, `src/components/ai-elements/**`, `src/lib/highlighter.tsx`, and `src/app/typeset.css`:

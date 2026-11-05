@@ -181,6 +181,246 @@
           }
         }
       }
+    },
+    {
+      "includes": ["src/**/*.test.*", "src/**/*.stories.*", "src/**/*.spec.*"],
+      "linter": {
+        "rules": {
+          "complexity": {
+            "noExcessiveCognitiveComplexity": {
+              "level": "warn",
+              "options": {
+                "maxAllowedComplexity": 15
+              }
+            },
+            "noExcessiveLinesPerFunction": {
+              "level": "warn",
+              "options": {
+                "maxLines": 40,
+                "skipBlankLines": true,
+                "skipIifes": false
+              }
+            },
+            "noExcessiveNestedCallbacks": {
+              "level": "warn",
+              "options": {
+                "max": 2
+              }
+            }
+          },
+          "style": {
+            "noJsxLiterals": "warn"
+          },
+          "correctness": {
+            "noComponentHookFactories": "warn"
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "src/components/ui/**",
+        "src/components/firebase/**",
+        "src/components/ai-elements/**"
+      ],
+      "linter": {
+        "rules": {
+          "complexity": {
+            "noExcessiveCognitiveComplexity": {
+              "level": "warn",
+              "options": {
+                "maxAllowedComplexity": 15
+              }
+            },
+            "noExcessiveLinesPerFunction": {
+              "level": "warn",
+              "options": {
+                "maxLines": 40,
+                "skipBlankLines": true,
+                "skipIifes": false
+              }
+            },
+            "noExcessiveNestedCallbacks": {
+              "level": "warn",
+              "options": {
+                "max": 2
+              }
+            }
+          },
+          "style": {
+            "noJsxLiterals": "warn"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/components/ui/extensions/**"],
+      "linter": {
+        "rules": {
+          "complexity": {
+            "noExcessiveCognitiveComplexity": {
+              "level": "error",
+              "options": {
+                "maxAllowedComplexity": 8
+              }
+            },
+            "noExcessiveLinesPerFunction": {
+              "level": "error",
+              "options": {
+                "maxLines": 40,
+                "skipBlankLines": true,
+                "skipIifes": false
+              }
+            },
+            "noExcessiveNestedCallbacks": {
+              "level": "error",
+              "options": {
+                "max": 2
+              }
+            }
+          },
+          "style": {
+            "noJsxLiterals": {
+              "level": "error",
+              "options": {
+                "ignoreProps": true
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "src/components/ui/extensions/**/*.test.*",
+        "src/components/ui/extensions/**/*.stories.*",
+        "src/components/ui/extensions/**/*.spec.*"
+      ],
+      "linter": {
+        "rules": {
+          "complexity": {
+            "noExcessiveCognitiveComplexity": {
+              "level": "warn",
+              "options": {
+                "maxAllowedComplexity": 15
+              }
+            },
+            "noExcessiveLinesPerFunction": {
+              "level": "warn",
+              "options": {
+                "maxLines": 40,
+                "skipBlankLines": true,
+                "skipIifes": false
+              }
+            },
+            "noExcessiveNestedCallbacks": {
+              "level": "warn",
+              "options": {
+                "max": 2
+              }
+            }
+          },
+          "style": {
+            "noJsxLiterals": "warn"
+          },
+          "correctness": {
+            "noComponentHookFactories": "warn"
+          }
+        }
+      }
+    },
+    {
+      "includes": [".agents/skills/**"],
+      "linter": {
+        "rules": {
+          "complexity": {
+            "noExcessiveCognitiveComplexity": "warn"
+          },
+          "suspicious": {
+            "noAssignInExpressions": "warn",
+            "noControlCharactersInRegex": "warn",
+            "useIterableCallbackReturn": "warn",
+            "noDuplicateObjectKeys": "warn",
+            "noDoubleEquals": "warn",
+            "noRedeclare": "warn"
+          },
+          "correctness": {
+            "noUnsafeFinally": "warn",
+            "useHookAtTopLevel": "warn",
+            "noComponentHookFactories": "warn",
+            "useYield": "warn"
+          },
+          "style": {
+            "noJsxLiterals": "warn"
+          }
+        }
+      }
+    },
+    {
+      "includes": [".semgrep/**"],
+      "linter": {
+        "rules": {
+          "security": {
+            "noGlobalEval": "warn",
+            "noDangerouslySetInnerHtml": "warn"
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "src/components/ui/**",
+        "src/components/firebase/**",
+        "src/components/ai-elements/**"
+      ],
+      "linter": {
+        "rules": {
+          "a11y": {
+            "useSemanticElements": "warn",
+            "useFocusableInteractive": "warn",
+            "noNoninteractiveTabindex": "warn",
+            "useKeyWithClickEvents": "warn",
+            "noLabelWithoutControl": "warn"
+          },
+          "suspicious": {
+            "noArrayIndexKey": "warn"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/app/**/_components/*-form.tsx"],
+      "linter": {
+        "rules": {
+          "complexity": {
+            "noExcessiveLinesPerFunction": {
+              "level": "warn",
+              "options": {
+                "maxLines": 40,
+                "skipBlankLines": true,
+                "skipIifes": false
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/components/ui/extensions/**"],
+      "linter": {
+        "rules": {
+          "a11y": {
+            "useSemanticElements": "error",
+            "useFocusableInteractive": "error",
+            "noNoninteractiveTabindex": "error",
+            "useKeyWithClickEvents": "error",
+            "noLabelWithoutControl": "error"
+          },
+          "suspicious": {
+            "noArrayIndexKey": "error"
+          }
+        }
+      }
     }
   ],
   "yaml": {

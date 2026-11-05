@@ -74,12 +74,12 @@ const Source = ({ href, title, children, ...props }: SourceProps) => (
 );
 
 export {
-  Sources,
-  SourcesTrigger,
-  SourcesContent,
   Source,
-  type SourcesProps,
-  type SourcesTriggerProps,
-  type SourcesContentProps,
   type SourceProps,
+  Sources,
+  SourcesContent,
+  type SourcesContentProps,
+  type SourcesProps,
+  SourcesTrigger,
+  type SourcesTriggerProps,
 };

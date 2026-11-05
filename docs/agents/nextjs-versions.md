@@ -6,12 +6,12 @@ Read this guide when checking framework compatibility or planning an upgrade.
 
 Checked on 2026-10-30 without changing dependencies:
 
-| Item | Value |
-| --- | --- |
-| Next.js (`package.json`, installed) | 16.4.3 |
-| React / React DOM | 19.3.1 |
-| React Compiler plugin | 1.0.0 |
-| Router | App Router only |
+| Item                                | Value           |
+| ----------------------------------- | --------------- |
+| Next.js (`package.json`, installed) | 16.4.3          |
+| React / React DOM                   | 19.3.1          |
+| React Compiler plugin               | 1.0.0           |
+| Router                              | App Router only |
 
 `next.config.ts` enables `cacheComponents`, `partialPrefetching`, and
 `reactCompiler`. The legacy segment configs `dynamic`, `revalidate`, and

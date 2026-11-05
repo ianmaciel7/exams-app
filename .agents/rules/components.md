@@ -1,4 +1,5 @@
 ---
+
 trigger: model_decision
 description: "Read when naming, placing, exporting, or defining props for owned components."
 ---
@@ -18,11 +19,11 @@ This section covers component dimensions and file contracts; see also [Component
 
 ## Three independent dimensions
 
-| Dimension | Convention | Examples |
-| --- | --- | --- |
-| Runtime | Import graphs determine membership; `"use client"` declares a boundary, while a shared module can compile in both graphs | `AccountCard` may participate in a client subtree without its own directive |
+| Dimension      | Convention                                                                                                                                                                                | Examples                                                                                                     |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| Runtime        | Import graphs determine membership; `"use client"` declares a boundary, while a shared module can compile in both graphs                                                                  | `AccountCard` may participate in a client subtree without its own directive                                  |
 | Responsibility | Every component must specify a concrete component type or semantic role describing its composition or behavior, not its runtime environment. Bare domain or runtime labels are prohibited | `ProfileForm`, `ProfileAvatarFieldClient`, `PublicGuardClient`, `RouteUsageBridgeClient`, `SignInFormClient` |
-| Placement | Colocate route components in private `_components/`, hooks in `_hooks/` and shared components in `src/components/ui/extensions/` | App Router private folders do not become routes |
+| Placement      | Colocate route components in private `_components/`, hooks in `_hooks/` and shared components in `src/components/ui/extensions/`                                                          | App Router private folders do not become routes                                                              |
 
 Every owned component must specify a concrete component type or semantic role describing its composition or behavior (such as `*-field`, `*-form`, `*-card`, `*-dialog`, `*-hero`, `*-button`, `*-provider`, or `*-guard`). A component name must never describe only its feature domain or runtime environment without a concrete role.
 

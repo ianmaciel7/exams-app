@@ -15,7 +15,7 @@ ensure the following is done.
 - The Android project has a Firebase config file (`google-services.json`) and
   the Google services Gradle plugin (`google-services`).
 
-______________________________________________________________________
+---
 
 ## 1. Enable Authentication via CLI
 
@@ -26,7 +26,7 @@ Firebase CLI:
 npx -y firebase-tools@latest init auth
 ```
 
-______________________________________________________________________
+---
 
 ## 2. Add dependencies to Gradle build files
 
@@ -65,7 +65,7 @@ dependencies {
 }
 ```
 
-______________________________________________________________________
+---
 
 ## 3. Initialize FirebaseAuth
 
@@ -120,7 +120,7 @@ class MainActivity : ComponentActivity() {
 }
 ```
 
-______________________________________________________________________
+---
 
 ## 4. Check current Auth state
 
@@ -139,7 +139,7 @@ public override fun onStart() {
 }
 ```
 
-______________________________________________________________________
+---
 
 ## 5. Use sign-in providers in the app
 
@@ -185,7 +185,7 @@ fun signInUser(email: String, password: String) {
 }
 ```
 
-______________________________________________________________________
+---
 
 ## 6. Sign out users
 

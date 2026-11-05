@@ -23,13 +23,13 @@ Working branches are short-lived branches created off `dev` (or off `main` for `
 
 Format: `<type>/<short-kebab-case-description>`
 
-| Type | Base Branch | Target Branch | Use |
-| --- | --- | --- | --- |
-| `feat/` | `dev` | `dev` | New features and capabilities |
-| `fix/` | `dev` | `dev` | Bug fixes for active development |
-| `hotfix/` | `main` | `main` | Urgent production fixes; back-merged into `dev` after release |
-| `chore/` | `dev` | `dev` | Tooling, dependencies, and repo maintenance |
-| `release/` | `dev` | `main` | Release preparation and stabilization |
+| Type       | Base Branch | Target Branch | Use                                                           |
+| ---------- | ----------- | ------------- | ------------------------------------------------------------- |
+| `feat/`    | `dev`       | `dev`         | New features and capabilities                                 |
+| `fix/`     | `dev`       | `dev`         | Bug fixes for active development                              |
+| `hotfix/`  | `main`      | `main`        | Urgent production fixes; back-merged into `dev` after release |
+| `chore/`   | `dev`       | `dev`         | Tooling, dependencies, and repo maintenance                   |
+| `release/` | `dev`       | `main`        | Release preparation and stabilization                         |
 
 Keep names lowercase, short, and descriptive. AI agents may use an
 agent-specific source prefix (`ai/`, `codex/`, `claude/`, `copilot/`, or

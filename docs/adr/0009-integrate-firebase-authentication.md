@@ -359,10 +359,10 @@ The `Client` suffix is a repository naming rule, not a Next.js convention.
 - **Moved**: 2026-11-03, because the rules implement this record's authorization model
 
 - **Firebase security rules ownership**: `firestore.rules`, `storage.rules`, and
-   `database.rules.json` are wired through `firebase.json` and reviewed with the
-   `firebase-rules-review` skill. They implement the authorization model of
-   this record: owner-only `users/{uid}`
-   preferences limited to `locale` and `theme`, an admin read path through the
-   `role` custom claim, owner-only avatar uploads capped at 2 MiB
-   (`jpeg`/`png`/`webp`), a closed Realtime Database, and a denied legacy
-   `usageLogs` collection.
+  `database.rules.json` are wired through `firebase.json` and reviewed with the
+  `firebase-rules-review` skill. They implement the authorization model of
+  this record: owner-only `users/{uid}`
+  preferences limited to `locale` and `theme`, an admin read path through the
+  `role` custom claim, owner-only avatar uploads capped at 2 MiB
+  (`jpeg`/`png`/`webp`), a closed Realtime Database, and a denied legacy
+  `usageLogs` collection.

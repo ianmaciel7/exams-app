@@ -2,41 +2,41 @@ id: no-raw-form-control
 snapshots:
   const a = <input type="file" hidden />;:
     labels:
-    - source: <input type="file" hidden />
-      style: primary
-      start: 10
-      end: 38
-    - source: input
-      style: secondary
-      start: 11
-      end: 16
+      - source: <input type="file" hidden />
+        style: primary
+        start: 10
+        end: 38
+      - source: input
+        style: secondary
+        start: 11
+        end: 16
   const a = <label htmlFor="name">Name</label>;:
     labels:
-    - source: <label htmlFor="name">
-      style: primary
-      start: 10
-      end: 32
-    - source: label
-      style: secondary
-      start: 11
-      end: 16
+      - source: <label htmlFor="name">
+        style: primary
+        start: 10
+        end: 32
+      - source: label
+        style: secondary
+        start: 11
+        end: 16
   const a = <select name="locale" />;:
     labels:
-    - source: <select name="locale" />
-      style: primary
-      start: 10
-      end: 34
-    - source: select
-      style: secondary
-      start: 11
-      end: 17
+      - source: <select name="locale" />
+        style: primary
+        start: 10
+        end: 34
+      - source: select
+        style: secondary
+        start: 11
+        end: 17
   const a = <textarea name="bio" />;:
     labels:
-    - source: <textarea name="bio" />
-      style: primary
-      start: 10
-      end: 33
-    - source: textarea
-      style: secondary
-      start: 11
-      end: 19
+      - source: <textarea name="bio" />
+        style: primary
+        start: 10
+        end: 33
+      - source: textarea
+        style: secondary
+        start: 11
+        end: 19

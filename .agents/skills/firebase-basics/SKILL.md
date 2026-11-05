@@ -1,11 +1,12 @@
 ---
+
 name: firebase-basics
 description: >-
-  Provides foundational Firebase CLI setup, CLI installation, version checks (`firebase-tools@latest --version`), CLI login (including --no-localhost), project creation, project selection (`firebase use`), and app config file downloads (`google-services.json`, `GoogleService-Info.plist`). Use ONLY for CLI login, project creation/switching, or downloading app config files. Don't use for Firebase Hosting deploy, Firestore, Auth, App Hosting, Data Connect, Crashlytics, or Remote Config.
+Provides foundational Firebase CLI setup, CLI installation, version checks (`firebase-tools@latest --version`), CLI login (including --no-localhost), project creation, project selection (`firebase use`), and app config file downloads (`google-services.json`, `GoogleService-Info.plist`). Use ONLY for CLI login, project creation/switching, or downloading app config files. Don't use for Firebase Hosting deploy, Firestore, Auth, App Hosting, Data Connect, Crashlytics, or Remote Config.
 metadata:
-  author: Google LLC
-  category: CloudInfrastructureAndServices
-  version: "1.0.0"
+author: Google LLC
+category: CloudInfrastructureAndServices
+version: "1.0.0"
 ---
 
 # Prerequisites
@@ -14,7 +15,6 @@ Complete these setup steps before proceeding:
 
 1. **Local Environment Setup:** Verify the environment is properly set up so we
    can use Firebase tools:
-
    - Run `npx -y firebase-tools@latest --version` to check if the Firebase CLI
      is installed.
    - Verify if the Firebase MCP server is installed using your existing tools.
@@ -43,41 +43,32 @@ Complete these setup steps before proceeding:
    have the correct permissions. Run `npx -y firebase-tools@latest login`. For
    environments without a browser (e.g., remote shells), use
    `npx -y firebase-tools@latest login --no-localhost`.
-
    - The command should output the current user.
    - If you are not logged in, follow the interactive instructions from this
      command to authenticate.
 
-1. **Active Project:** Most Firebase tasks require an active project context.
+## Active project
 
-   > [!IMPORTANT] **For Agents:** Before proceeding with project configuration,
-   > you MUST pause and ask the developer if they prefer to:
-   >
-   > 1. **Provide an existing Firebase Project ID**, or
-   > 1. **Create a new Firebase project**.
+Most Firebase tasks require an active project context. Before proceeding with
+project configuration, agents must ask whether the developer wants to provide
+an existing Firebase Project ID or create a new Firebase project.
 
-   - **If using an existing Project ID:**
+For an existing project, run `npx -y firebase-tools@latest use`. If it outputs
+`Active Project: <project-id>`, confirm that this is the intended project. If
+not, or if none is active, set the project provided by the user:
 
-     1. Check the current project by running `npx -y firebase-tools@latest use`.
+```bash
+npx -y firebase-tools@latest use <PROJECT_ID>
+```
 
-     1. If the command outputs `Active Project: <project-id>`, confirm with the
-        user if this is the intended project.
+For a new project, run:
 
-     1. If not, or if no project is active, set the project provided by the
-        user:
+```bash
+npx -y firebase-tools@latest projects:create <project-id> --display-name "<display-name>"
+```
 
-        ```bash
-        npx -y firebase-tools@latest use <PROJECT_ID>
-        ```
-
-   - **If creating a new project:** Run the following command to create it:
-
-     ```bash
-     npx -y firebase-tools@latest projects:create <project-id> --display-name "<display-name>"
-     ```
-
-     *Note: The `<project-id>` must be 6-30 characters, lowercase, and can
-     contain digits and hyphens. It must be globally unique.*
+The project ID must be globally unique, 6-30 characters, lowercase, and may
+contain digits and hyphens.
 
 # Firebase Usage Principles
 
@@ -94,7 +85,7 @@ Adhere to these principles:
    in your search query significantly improves relevance.
 1. **Follow Agent Skills for implementation guidance:** Skills provide
    opinionated workflows (CUJs), security rules, and best practices. Always
-   consult them to understand *how* to implement Firebase features correctly
+   consult them to understand _how_ to implement Firebase features correctly
    instead of relying on general knowledge.
 1. **Use Firebase MCP Server tools instead of direct API calls:** Whenever you
    need to interact with remote Firebase APIs (such as fetching Crashlytics logs

@@ -75,14 +75,14 @@ const TaskContent = ({ children, className, ...props }: TaskContentProps) => (
 );
 
 export {
-  TaskItemFile,
-  TaskItem,
   Task,
-  TaskTrigger,
   TaskContent,
+  type TaskContentProps,
+  TaskItem,
+  TaskItemFile,
   type TaskItemFileProps,
   type TaskItemProps,
   type TaskProps,
+  TaskTrigger,
   type TaskTriggerProps,
-  type TaskContentProps,
 };

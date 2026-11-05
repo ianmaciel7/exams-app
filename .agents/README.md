@@ -7,12 +7,12 @@ Project-local instructions, MCP configuration, and reusable skills.
 `.agents/agents.json` enables Codex, Claude, and Antigravity, with
 `syncMode` set to `source-only`.
 
-| MCP server | Command | Purpose |
-| --- | --- | --- |
-| Serena | `node .agents/scripts/serena-stdio-guard.mjs serena start-mcp-server --project-from-cwd --context=codex` | Project-local semantic symbol analysis; closes Serena's process tree when the stdio client disconnects |
-| Next.js DevTools | `pnpm exec next-devtools-mcp` | Runtime diagnostics and route inspection |
-| Playwright | `pnpm dlx @playwright/mcp@0.0.83` | Browser automation for verifying UI changes |
-| Firebase | `pnpm dlx firebase-tools@15.34.1 mcp` | Firebase project, security rules, and emulator tooling |
+| MCP server       | Command                                                                                                  | Purpose                                                                                                |
+| ---------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Serena           | `node .agents/scripts/serena-stdio-guard.mjs serena start-mcp-server --project-from-cwd --context=codex` | Project-local semantic symbol analysis; closes Serena's process tree when the stdio client disconnects |
+| Next.js DevTools | `pnpm exec next-devtools-mcp`                                                                            | Runtime diagnostics and route inspection                                                               |
+| Playwright       | `pnpm dlx @playwright/mcp@0.0.83`                                                                        | Browser automation for verifying UI changes                                                            |
+| Firebase         | `pnpm dlx firebase-tools@15.34.1 mcp`                                                                    | Firebase project, security rules, and emulator tooling                                                 |
 
 These are configured servers, not a statement that the executables are
 installed or that runtime connectivity has been verified. Serena and the

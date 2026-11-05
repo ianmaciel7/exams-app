@@ -127,7 +127,7 @@ const TranscriptionSegment = ({
 
 export {
   Transcription,
-  TranscriptionSegment,
   type TranscriptionProps,
+  TranscriptionSegment,
   type TranscriptionSegmentProps,
 };

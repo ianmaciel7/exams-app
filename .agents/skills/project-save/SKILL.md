@@ -1,4 +1,5 @@
 ---
+
 name: project-save
 description: Persist and organize user-provided rules, architecture decisions, retrospective improvements (/retro), project conventions, tooling specifications, and domain knowledge into canonical documentation. Activate when the user instructs to save, record, persist, remember, or document rules, configurations, decisions, or conventions.
 ---
@@ -14,7 +15,7 @@ This skill governs how to classify, locate, and record knowledge, rules, decisio
 3. **Single source of truth**: Store each rule or piece of knowledge in its authoritative canonical document. Do not duplicate rules across multiple guides.
 4. **ADR immutability**: Accepted Architecture Decision Records (`docs/adr/0001-*` through current) are historical and immutable per [agent rules](../../rules/adr.md#adr-naming-and-immutability). Never rewrite, edit, or renumber an accepted record.
 5. **Every rule needs a safeguard**: A rule that lives only in prose will be broken again. When you save a rule, convention, or lesson learned from a mistake, also make it mechanically enforced by the strongest installed tool, so the same error cannot return silently. Documentation records the rule; a safeguard defends it. See [Safeguards](#safeguards-make-every-saved-rule-enforceable).
-6. **Retrospective synthesis & environment improvement**: Findings from `/retro` suggest improvements to the agent's *environment*, not ephemeral patches to code. When persisting retro results, classify them:
+6. **Retrospective synthesis & environment improvement**: Findings from `/retro` suggest improvements to the agent's _environment_, not ephemeral patches to code. When persisting retro results, classify them:
    - **Mechanical violations** (fixed patterns, imports, banned APIs, file locations) must become deterministic checks and safeguards.
    - **Judgement calls** (cross-file consistency, style, heuristics) belong in `CODING_STANDARDS.md`, where they are reviewed by the review agent (`/code-review`) without imposing context pressure on implementation.
    - **Navigation friction** belongs as navigation pointers in `AGENTS.md` or domain indices.
@@ -26,32 +27,32 @@ This skill governs how to classify, locate, and record knowledge, rules, decisio
 
 Use this matrix to identify the canonical destination file for any given piece of information:
 
-| Information Type | Description & Examples | Target File | Action |
-| --- | --- | --- | --- |
-| **Tool inventory & host dependencies** | Host prerequisites, package managers, CLI tools, runtime versions, build tools | `TOOLING.md` (## Tool inventory, ## Host prerequisites) | **Update** |
-| **Commands & scripts** | Package scripts, verification commands, audit commands | `TOOLING.md` (## Commands, ### Verification entry points) | **Update** |
-| **Configuration sources** | Roles and locations of config files (`biome.json`, `next.config.ts`, etc.) | `TOOLING.md` (## Configuration sources) | **Update** |
-| **Custom code quality rules** | Biome GritQL rules, ast-grep structural rules, Semgrep static security rules | `TOOLING.md` (## Custom rule registry) | **Update** |
-| **Known tooling limitations** | Workarounds, tool quirks, exclusions, upstream bugs | `TOOLING.md` (## Known limitations) | **Update** |
-| **Coding & styling conventions** | TypeScript standards, React patterns, Next.js practices, import ordering | `CODING_STANDARDS.md` | **Update** |
-| **Design tokens & UI components** | Colors, spacing, typography, theme tokens, shadcn components, Ladle stories | `DESIGN.md` | **Update** |
-| **Testing strategy & practices** | Unit, integration, browser, e2e, a11y, visual, mutation test practices | `TESTING.md` | **Update** |
-| **Git workflow & contributions** | Branch naming, Conventional Commits, PR guidelines, git hooks | `CONTRIBUTING.md` | **Update** |
-| **Security policies** | Vulnerability handling, security scanners, ignored security advisories | `SECURITY.md` | **Update** |
-| **Architecture & layering** | Repository layers, boundary rules, routing architecture, i18n structure | `ARCHITECTURE.md` | **Update** |
-| **Domain vocabulary** | Business terms, ubiquitous language definitions | `GLOSSARY.md` | **Update** |
-| **Database & persistence schema** | Entity-relationship model, tables, columns, relations, storage | `DER.md` | **Update / Create** |
-| **Global agent directives** | Overall mission, high-level engineering rules, documentation map for agents | `AGENTS.md` | **Update** |
-| **Agent tool configuration** | MCP servers, client integrations, sync settings | `.agents/agents.json` | **Update** |
-| **Persistent agent rules** | Standalone, machine-actionable behavioral constraints for AI agents (e.g., naming, language, thin routes, components) | Owning topic in `.agents/rules/`; index: `.agents/rules/README.md` | **Update** |
-| **Reusable agent skills** | Multi-step interactive agent workflows, tool guides, reusable recipes | `.agents/skills/<name>/SKILL.md` | **Create** |
-| **Architecture Decision Records (ADRs)** | Architectural choices, trade-offs, tech evaluations, paradigm changes | `docs/adr/NNNN-<phrase>.md` | **Create** (Immutable) |
-| **External research results, upstream API/doc lookup caches, transient exploratory findings** | Operational research cache; keeps canonical Markdown repository documentation focused on stable, agreed-upon standards. | Serena Memory (`write_memory`) under `research/*` | **Write / Cache** |
-| **Retro: Navigation pointers** | Navigation aids to eliminate exploration friction surfaced in `/retro` | `AGENTS.md` (or domain index docs) | **Update** |
-| **Retro: Mechanical safeguards** | Deterministic checks for mechanical errors caught during `/retro` | `TOOLING.md` (## Custom rule registry / Commands) | **Update** |
-| **Retro: Reviewer standards** | Review-time heuristics and judgement rules for the reviewer agent (`code-review`) | `CODING_STANDARDS.md` | **Update** |
-| **Retro: Steering & no-ops** | Pruning bloat, removing no-op instructions, or streamlining steering | `AGENTS.md` | **Update** |
-| **Retro: Tool economy** | Streamlining expensive tool calls, adjusting MCP configs or logging access | `TOOLING.md`, `.agents/agents.json` | **Update** |
+| Information Type                                                                              | Description & Examples                                                                                                  | Target File                                                        | Action                 |
+| --------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | ---------------------- |
+| **Tool inventory & host dependencies**                                                        | Host prerequisites, package managers, CLI tools, runtime versions, build tools                                          | `TOOLING.md` (## Tool inventory, ## Host prerequisites)            | **Update**             |
+| **Commands & scripts**                                                                        | Package scripts, verification commands, audit commands                                                                  | `TOOLING.md` (## Commands, ### Verification entry points)          | **Update**             |
+| **Configuration sources**                                                                     | Roles and locations of config files (`biome.json`, `next.config.ts`, etc.)                                              | `TOOLING.md` (## Configuration sources)                            | **Update**             |
+| **Custom code quality rules**                                                                 | Biome GritQL rules, ast-grep structural rules, Semgrep static security rules                                            | `TOOLING.md` (## Custom rule registry)                             | **Update**             |
+| **Known tooling limitations**                                                                 | Workarounds, tool quirks, exclusions, upstream bugs                                                                     | `TOOLING.md` (## Known limitations)                                | **Update**             |
+| **Coding & styling conventions**                                                              | TypeScript standards, React patterns, Next.js practices, import ordering                                                | `CODING_STANDARDS.md`                                              | **Update**             |
+| **Design tokens & UI components**                                                             | Colors, spacing, typography, theme tokens, shadcn components, Ladle stories                                             | `DESIGN.md`                                                        | **Update**             |
+| **Testing strategy & practices**                                                              | Unit, integration, browser, e2e, a11y, visual, mutation test practices                                                  | `TESTING.md`                                                       | **Update**             |
+| **Git workflow & contributions**                                                              | Branch naming, Conventional Commits, PR guidelines, git hooks                                                           | `CONTRIBUTING.md`                                                  | **Update**             |
+| **Security policies**                                                                         | Vulnerability handling, security scanners, ignored security advisories                                                  | `SECURITY.md`                                                      | **Update**             |
+| **Architecture & layering**                                                                   | Repository layers, boundary rules, routing architecture, i18n structure                                                 | `ARCHITECTURE.md`                                                  | **Update**             |
+| **Domain vocabulary**                                                                         | Business terms, ubiquitous language definitions                                                                         | `GLOSSARY.md`                                                      | **Update**             |
+| **Database & persistence schema**                                                             | Entity-relationship model, tables, columns, relations, storage                                                          | `DER.md`                                                           | **Update / Create**    |
+| **Global agent directives**                                                                   | Overall mission, high-level engineering rules, documentation map for agents                                             | `AGENTS.md`                                                        | **Update**             |
+| **Agent tool configuration**                                                                  | MCP servers, client integrations, sync settings                                                                         | `.agents/agents.json`                                              | **Update**             |
+| **Persistent agent rules**                                                                    | Standalone, machine-actionable behavioral constraints for AI agents (e.g., naming, language, thin routes, components)   | Owning topic in `.agents/rules/`; index: `.agents/rules/README.md` | **Update**             |
+| **Reusable agent skills**                                                                     | Multi-step interactive agent workflows, tool guides, reusable recipes                                                   | `.agents/skills/<name>/SKILL.md`                                   | **Create**             |
+| **Architecture Decision Records (ADRs)**                                                      | Architectural choices, trade-offs, tech evaluations, paradigm changes                                                   | `docs/adr/NNNN-<phrase>.md`                                        | **Create** (Immutable) |
+| **External research results, upstream API/doc lookup caches, transient exploratory findings** | Operational research cache; keeps canonical Markdown repository documentation focused on stable, agreed-upon standards. | Serena Memory (`write_memory`) under `research/*`                  | **Write / Cache**      |
+| **Retro: Navigation pointers**                                                                | Navigation aids to eliminate exploration friction surfaced in `/retro`                                                  | `AGENTS.md` (or domain index docs)                                 | **Update**             |
+| **Retro: Mechanical safeguards**                                                              | Deterministic checks for mechanical errors caught during `/retro`                                                       | `TOOLING.md` (## Custom rule registry / Commands)                  | **Update**             |
+| **Retro: Reviewer standards**                                                                 | Review-time heuristics and judgement rules for the reviewer agent (`code-review`)                                       | `CODING_STANDARDS.md`                                              | **Update**             |
+| **Retro: Steering & no-ops**                                                                  | Pruning bloat, removing no-op instructions, or streamlining steering                                                    | `AGENTS.md`                                                        | **Update**             |
+| **Retro: Tool economy**                                                                       | Streamlining expensive tool calls, adjusting MCP configs or logging access                                              | `TOOLING.md`, `.agents/agents.json`                                | **Update**             |
 
 ---
 
@@ -91,17 +92,22 @@ Modify an existing document when the user's information refines, extends, or upd
 Create a new file only when the information constitutes a distinct, modular artifact:
 
 1. **Architecture Decision Records (`docs/adr/NNNN-<phrase>.md`)**:
-  - **Trigger**: A significant architectural, structural, or technology choice that requires recording context, options considered, decision, and consequences.
-  - **Immutability rule**: Accepted ADRs are strictly immutable per [agent rules](../../rules/adr.md#adr-naming-and-immutability). Never edit or rewrite accepted records.
-  - **Naming format**: Next unused four-digit number followed by a kebab-case imperative phrase (e.g., `0009-adopt-database-orm.md`).
-  - **Index update**: After creating the ADR, add its entry to `docs/adr/README.md`. If superseding an earlier ADR, note the supersession in `docs/adr/README.md` and in the new ADR.
+
+- **Trigger**: A significant architectural, structural, or technology choice that requires recording context, options considered, decision, and consequences.
+- **Immutability rule**: Accepted ADRs are strictly immutable per [agent rules](../../rules/adr.md#adr-naming-and-immutability). Never edit or rewrite accepted records.
+- **Naming format**: Next unused four-digit number followed by a kebab-case imperative phrase (e.g., `0009-adopt-database-orm.md`).
+- **Index update**: After creating the ADR, add its entry to `docs/adr/README.md`. If superseding an earlier ADR, note the supersession in `docs/adr/README.md` and in the new ADR.
+
 2. **Agent Persistent Rules (`.agents/rules/`)**:
-  - **Trigger**: A discrete, persistent behavioral constraint that applies to all coding agents working across the repository (e.g., formatting constraints, commit constraints, language requirements).
-  - **Format**: Concise rule in the owning technology or project topic file. Follow official documentation topics for framework guidance, use short filenames, keep one context per rule, and store procedural references in `docs/agents/`, and update `.agents/rules/README.md` when adding a topic.
+
+- **Trigger**: A discrete, persistent behavioral constraint that applies to all coding agents working across the repository (e.g., formatting constraints, commit constraints, language requirements).
+- **Format**: Concise rule in the owning technology or project topic file. Follow official documentation topics for framework guidance, use short filenames, keep one context per rule, and store procedural references in `docs/agents/`, and update `.agents/rules/README.md` when adding a topic.
+
 3. **Reusable Agent Skills (`.agents/skills/<name>/SKILL.md`)**:
-  - **Trigger**: A complex, multi-step interactive workflow, domain-specific procedure, or tool guide that agents should load on demand.
-  - **Format**: Directory named with kebab-case, containing `SKILL.md` with YAML front matter (`name` and `description`).
-  - **Registration**: Register new skills in `.agents/skills/README.md`, `.agents/README.md`, and `TOOLING.md`.
+
+- **Trigger**: A complex, multi-step interactive workflow, domain-specific procedure, or tool guide that agents should load on demand.
+- **Format**: Directory named with kebab-case, containing `SKILL.md` with YAML front matter (`name` and `description`).
+- **Registration**: Register new skills in `.agents/skills/README.md`, `.agents/README.md`, and `TOOLING.md`.
 
 ---
 
@@ -113,19 +119,19 @@ Applies to every kind of knowledge this skill saves, not only one topic (languag
 
 Read [TOOLING.md](../../../TOOLING.md) (tool inventory, commands, custom rule registry) first and reuse what is installed before adding anything new. Prefer native tool rules over custom scripts.
 
-| What must be prevented | Preferred enforcement |
-| --- | --- |
-| Code style, lint, import order, unsafe patterns | Biome native rule, then a Biome GritQL plugin in `.biome/rules/` |
-| Structural or syntactic patterns in code | ast-grep rule in `.ast-grep/` with snapshot tests |
-| Type contracts, props, route shapes | TypeScript types, then a TypeScript-AST script in `scripts/checks/check-*.mjs` |
-| Layering and dependency direction | dependency-cruiser (`.dependency-cruiser.cjs`) |
-| Dead code, unused exports and dependencies | Knip; duplication via jscpd; complexity via Fallow |
-| Security patterns and secrets | Semgrep rules in `.semgrep/`, Gitleaks, `pnpm audit` |
-| Behavior and regressions | Vitest, Vitest Browser Mode, Playwright, axe, Stryker |
-| Docs, spelling, prose, language | markdownlint, CSpell, a `scripts/checks/check-*.mjs` guard |
-| Commit and branch conventions | Commitlint, Husky, lint-staged |
-| Workflow and CI correctness | actionlint, zizmor |
-| Rule that no tool above can express | A small dependency-free `scripts/checks/check-<topic>.mjs` with a `node --test` suite |
+| What must be prevented                          | Preferred enforcement                                                                 |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------- |
+| Code style, lint, import order, unsafe patterns | Biome native rule, then a Biome GritQL plugin in `.biome/rules/`                      |
+| Structural or syntactic patterns in code        | ast-grep rule in `.ast-grep/` with snapshot tests                                     |
+| Type contracts, props, route shapes             | TypeScript types, then a TypeScript-AST script in `scripts/checks/check-*.mjs`        |
+| Layering and dependency direction               | dependency-cruiser (`.dependency-cruiser.cjs`)                                        |
+| Dead code, unused exports and dependencies      | Knip; duplication via jscpd; complexity via Fallow                                    |
+| Security patterns and secrets                   | Semgrep rules in `.semgrep/`, Gitleaks, `pnpm audit`                                  |
+| Behavior and regressions                        | Vitest, Vitest Browser Mode, Playwright, axe, Stryker                                 |
+| Docs, spelling, prose, language                 | markdownlint, CSpell, a `scripts/checks/check-*.mjs` guard                            |
+| Commit and branch conventions                   | Commitlint, Husky, lint-staged                                                        |
+| Workflow and CI correctness                     | actionlint, zizmor                                                                    |
+| Rule that no tool above can express             | A small dependency-free `scripts/checks/check-<topic>.mjs` with a `node --test` suite |
 
 ### 2. Test the safeguard
 
@@ -157,6 +163,7 @@ Run the new check against the whole repository before wiring it in. If it alread
 Before persisting a rule, convention, or architectural decision, verify whether the rule reflects current repository code and upstream library reality. Use the following specialized tools:
 
 ### 1. Serena (Semantic Symbol Analysis MCP)
+
 Serena provides project-local semantic symbol indexing, code navigation, and project-scoped research memory caching. Use it to inspect codebase symbols, verify whether conventions or patterns are already in use, locate relevant components, and manage research caches before saving rules or standards:
 - **Code symbol navigation**:
   - `find_symbol`: Verify whether an interface, class, component, or helper function already exists in `src/` (e.g., checking if `ButtonProps` or `ThemeToggle` follows the proposed naming convention).
@@ -168,29 +175,35 @@ Serena provides project-local semantic symbol indexing, code navigation, and pro
   - `write_memory` / `edit_memory`: Cache upstream API lookups, compatibility notes, and transient research scratchpads without cluttering canonical Markdown documents.
 
 ### 2. Context7 (`context7-cli`)
+
 When the user's rule touches external dependencies or framework capabilities (Next.js 16, React 19, Tailwind CSS v4, shadcn/ui, `next-intl`), check authoritative upstream documentation instead of relying on outdated training data:
 - Step 1: Resolve the library ID:
+
   ```bash
   ctx7 library <library-name> [query]
   ```
 - Step 2: Query documentation:
+
   ```bash
   ctx7 docs <library-id> <query>
   ```
 - Example: Verify current Next.js 16 Server Actions signatures or Tailwind v4 `@theme` directives before documenting them in `CODING_STANDARDS.md` or `DESIGN.md`.
 
 ### 3. Next.js DevTools MCP
+
 When establishing rules around routing, server vs. client component boundaries, or runtime performance:
 - Use Next.js DevTools to inspect route segments, server-rendered components, and client boundary hooks.
 - Validate route naming conventions, layout nesting rules, or metadata export expectations against actual route trees.
 
 ### 4. ast-grep & Biome
+
 When turning a coding convention into an enforceable automated rule:
 - **Biome GritQL**: Use GritQL plugins in `.biome/rules/` to enforce Next.js route, page, and layout prop types. Regression-test them in `.biome/rules/nextjs/rules.test.ts`.
 - **ast-grep**: Use `sgconfig.yml` and `.ast-grep/` for syntax-aware pattern enforcement (e.g., forbidding dynamic class names or manual memoization). Run snapshot tests via `pnpm check:structure`.
 - If an automated rule is created, record it in the **Custom rule registry** table in `TOOLING.md`.
 
 ### 5. Session Transcripts & Retrospectives (`/retro`)
+
 When persisting findings from a retrospective or debugging session:
 - **Transcript analysis**: Read primary session logs (`transcript.jsonl`) to identify what caused friction or confusion.
 - **Rule classification**: Split findings into mechanical mistakes (requiring automated checks in `TOOLING.md` / linters / CI) and judgement calls (requiring rules in `CODING_STANDARDS.md` enforced at review time by `code-review`).
@@ -277,19 +290,23 @@ flowchart TD
 When a user requests to save or document information (e.g., "save this rule", "save this rule to TOOLING.md", "remember this convention"):
 
 ### 1. Ingest & Interpret
+
 - Extract the core rule, convention, architectural decision, retrospective candidate (`/retro`), or tool specification from the user's input or session retrospective.
 - Check the language: if input is in Portuguese or another language, translate the technical guidance into idiomatic English for storage (per [agent rules](../../rules/language.md#language-policy)).
 
 ### 2. Sanitize & Normalize
+
 - **Remove absolute machine paths**: Replace machine-specific absolute paths (such as full workspace paths or user directory prefixes) with repository-relative paths (e.g., `TOOLING.md`).
 - Ensure code snippets follow repository coding standards (TypeScript, Biome formatting).
 
 ### 3. Classify & Select Target
+
 - Consult the [Decision Matrix](#decision-matrix-information-type-to-destination).
 - Decide between **UPDATE** and **CREATE** using the criteria above.
 - If the user explicitly nominated a target file (e.g., `TOOLING.md`), verify that the information fits that file's ownership scope in `docs/README.md`. If a more specific or appropriate document exists (e.g., an ADR vs updating `TOOLING.md`), explain the choice.
 
 ### 4. Apply Changes
+
 - **For Updates**:
   1. Read the target section in the existing document.
   2. Locate the appropriate table or section heading.
@@ -300,6 +317,7 @@ When a user requests to save or document information (e.g., "save this rule", "s
   3. Update related index files (`docs/adr/README.md` for ADRs, `.agents/skills/README.md` for skills).
 
 ### 5. Quality Assurance & Verification
+
 Run the following checks to ensure repository integrity:
 
 ```bash
@@ -317,9 +335,11 @@ agents sync
 ```
 
 ### 5b. Add or Verify the Safeguard
+
 Follow [Safeguards](#safeguards-make-every-saved-rule-enforceable): select an installed tool from `TOOLING.md`, add valid and invalid tests, wire the check into hooks, `verify:*`, and CI, and register it in `TOOLING.md`. If no safeguard is feasible, state why in the confirmation.
 
 ### 6. Confirm to User
+
 Provide a concise summary of the action taken:
 - The target file path (repository-relative).
 - The section or table updated, or the new file created.

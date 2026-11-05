@@ -1,14 +1,21 @@
 "use client";
 
-import { GoogleAuthProvider } from "firebase/auth";
 import { getTranslation } from "@firebase-oss/ui-core";
-import { useUI, type GoogleSignInButtonProps, GoogleLogo } from "@firebase-oss/ui-react";
+import {
+  GoogleLogo,
+  type GoogleSignInButtonProps,
+  useUI,
+} from "@firebase-oss/ui-react";
+import { GoogleAuthProvider } from "firebase/auth";
 
 import { OAuthButton } from "@/components/firebase/oauth-button";
 
 export type { GoogleSignInButtonProps };
 
-export function GoogleSignInButton({ provider, ...props }: GoogleSignInButtonProps) {
+export function GoogleSignInButton({
+  provider,
+  ...props
+}: GoogleSignInButtonProps) {
   const ui = useUI();
 
   return (

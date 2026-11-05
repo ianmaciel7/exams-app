@@ -129,13 +129,13 @@ describe("native App Router import policy", () => {
     ).toContain("lint/style/noRestrictedImports");
   });
 
-  it("keeps untouched vendor components outside this policy", () => {
+  it("also enforces the import policy on copied components", () => {
     expect(
       lintSingle(
         vendorFile,
         'import Router from "next/router"; export { Router };',
       ),
-    ).not.toContain("lint/style/noRestrictedImports");
+    ).toContain("lint/style/noRestrictedImports");
   });
 });
 

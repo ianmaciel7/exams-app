@@ -2,21 +2,21 @@ id: require-select-group
 snapshots:
   "const a = (\n  <SelectContent>\n    <SelectItem value=\"a\">A</SelectItem>\n  </SelectContent>\n);\n":
     labels:
-    - source: <SelectItem value="a">
-      style: primary
-      start: 34
-      end: 56
-    - source: SelectItem
-      style: secondary
-      start: 35
-      end: 45
+      - source: <SelectItem value="a">
+        style: primary
+        start: 34
+        end: 56
+      - source: SelectItem
+        style: secondary
+        start: 35
+        end: 45
   "const a = (\n  <SelectContent>\n    {items.map((i) => (\n      <SelectItem key={i} value={i}>{i}</SelectItem>\n    ))}\n  </SelectContent>\n);\n":
     labels:
-    - source: <SelectItem key={i} value={i}>
-      style: primary
-      start: 60
-      end: 90
-    - source: SelectItem
-      style: secondary
-      start: 61
-      end: 71
+      - source: <SelectItem key={i} value={i}>
+        style: primary
+        start: 60
+        end: 90
+      - source: SelectItem
+        style: secondary
+        start: 61
+        end: 71

@@ -6,11 +6,11 @@ Read this guide when checking runtime/type compatibility or planning an upgrade.
 
 Checked on 2026-10-30 without changing dependencies:
 
-| Package | Installed version |
-| --- | --- |
-| Next.js | 16.4.3 |
-| React | 19.3.1 |
-| React DOM | 19.3.1 |
+| Package   | Installed version |
+| --------- | ----------------- |
+| Next.js   | 16.4.3            |
+| React     | 19.3.1            |
+| React DOM | 19.3.1            |
 
 A Node import probe confirmed that `ViewTransition`, `addTransitionType`, and
 `react-dom`'s `browser` export exist in the installed packages. Export presence

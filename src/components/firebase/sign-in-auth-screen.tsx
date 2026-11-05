@@ -1,16 +1,29 @@
 "use client";
 
 import { getTranslation } from "@firebase-oss/ui-core";
-import { useUI, type SignInAuthScreenProps, useOnUserAuthenticated } from "@firebase-oss/ui-react";
-
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { SignInAuthForm } from "@/components/firebase/sign-in-auth-form";
+import {
+  type SignInAuthScreenProps,
+  useOnUserAuthenticated,
+  useUI,
+} from "@firebase-oss/ui-react";
 import { MultiFactorAuthAssertionScreen } from "@/components/firebase/multi-factor-auth-assertion-screen";
+import { SignInAuthForm } from "@/components/firebase/sign-in-auth-form";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 
 export type { SignInAuthScreenProps };
 
-export function SignInAuthScreen({ children, onSignIn, ...props }: SignInAuthScreenProps) {
+export function SignInAuthScreen({
+  children,
+  onSignIn,
+  ...props
+}: SignInAuthScreenProps) {
   const ui = useUI();
 
   const titleText = getTranslation(ui, "labels", "signIn");
@@ -26,7 +39,9 @@ export function SignInAuthScreen({ children, onSignIn, ...props }: SignInAuthScr
     <div className="max-w-sm mx-auto">
       <Card>
         <CardHeader>
-          <CardTitle role="heading" aria-level={1}>{titleText}</CardTitle>
+          <CardTitle role="heading" aria-level={1}>
+            {titleText}
+          </CardTitle>
           <CardDescription>{subtitleText}</CardDescription>
         </CardHeader>
         <CardContent>

@@ -1,4 +1,5 @@
 ---
+
 trigger: model_decision
 description: "Read when changing persistence modules, DTOs, schemas, data placement, or dependency injection."
 ---
@@ -19,14 +20,14 @@ This section establishes the architectural responsibilities and naming conventio
 
 When structuring data modeling, access control, and persistence operations, organize code into the following designated files:
 
-| File | Primary Responsibility | Scope & Typical Contents |
-| --- | --- | --- |
-| `definitions.ts` | **Types, contracts, and schemas** | TypeScript `type` and `interface` definitions, data contracts, and schema validation objects (e.g., Zod schemas) that represent domain models or data shapes. |
-| `dto.ts` | **Select and structure transferred data** | Data Transfer Object (DTO) transformers, mappers, and projection functions that sanitize, shape, or format data crossing system or client/server boundaries. |
-| `dal.ts` | **Protected data access** | Data Access Layer (DAL) ensuring authorization, permission verification, context validation, and boundary protection before delegating to queries or mutations. |
-| `data.ts` | **Data queries and operations** | Low-level queries, persistence interactions, database/SDK operations, and mutation logic. |
-| `auth.ts` | **User authentication** | Authentication operations and credential verification ("Who are you?"), user sign-up, sign-in, credential validation, password recovery, and sign-out. |
-| `session.ts` | **Session lifecycle & state** | Session management ("Are you authenticated and what is your active session?"), token signing/verification, session storage/cookies, and session persistence. |
+| File             | Primary Responsibility                    | Scope & Typical Contents                                                                                                                                        |
+| ---------------- | ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `definitions.ts` | **Types, contracts, and schemas**         | TypeScript `type` and `interface` definitions, data contracts, and schema validation objects (e.g., Zod schemas) that represent domain models or data shapes.   |
+| `dto.ts`         | **Select and structure transferred data** | Data Transfer Object (DTO) transformers, mappers, and projection functions that sanitize, shape, or format data crossing system or client/server boundaries.    |
+| `dal.ts`         | **Protected data access**                 | Data Access Layer (DAL) ensuring authorization, permission verification, context validation, and boundary protection before delegating to queries or mutations. |
+| `data.ts`        | **Data queries and operations**           | Low-level queries, persistence interactions, database/SDK operations, and mutation logic.                                                                       |
+| `auth.ts`        | **User authentication**                   | Authentication operations and credential verification ("Who are you?"), user sign-up, sign-in, credential validation, password recovery, and sign-out.          |
+| `session.ts`     | **Session lifecycle & state**             | Session management ("Are you authenticated and what is your active session?"), token signing/verification, session storage/cookies, and session persistence.    |
 
 ## Architectural guidelines
 

@@ -41,7 +41,7 @@ We establish a unified agent architecture centered in `.agents/`, governed by `A
    - Indexed via `.agents/rules/README.md` to allow agents to selectively load only the rule context relevant to their current task without context window bloat.
 
 5. **Lead Orchestrator Directive (`AGENTS.md`)**:
-   - Direct the primary agent to operate as a **Lead Orchestrator** (*Orquestrador Principal*), delegating specialized subtasks to dedicated subagents (`research`, `architect`, `code-reviewer`, `test-engineer`, `security-reviewer`, `doc-maintainer`).
+   - Direct the primary agent to operate as a **Lead Orchestrator** (_Orquestrador Principal_), delegating specialized subtasks to dedicated subagents (`research`, `architect`, `code-reviewer`, `test-engineer`, `security-reviewer`, `doc-maintainer`).
    - Enforce repository portability: strictly forbid hardcoded absolute machine paths (`C:\Users\...`, `/home/...`) in committed code, configuration, or documentation; require relative workspace paths.
    - Enforce English as the standard language for code, comments, documentation, and agent artifacts.
 
@@ -67,27 +67,27 @@ We establish a unified agent architecture centered in `.agents/`, governed by `A
    non-deterministic.
 
 9. **Repository guards and review workflow**: the contract guards under
-    `scripts/checks/` run through dedicated scripts, each preceded by its own
-    `node --test` regression suite, and are part of `verify:fast`:
-    - `pnpm check:routes` keeps `page.tsx`, `layout.tsx`, and `template.tsx` thin.
-    - `pnpm check:components` enforces owned-component naming and boundaries.
-    - `pnpm check:responsiveness` enforces viewport exports, no zoom restrictions,
-      fluid widths up to 320px, and WCAG 2.2 touch targets.
-    - `pnpm check:english` enforces the English-by-default policy; locale catalogs
-      in `src/messages/` are exempt.
-    - `pnpm test:production-smoke` runs the regression tests of the deployed-HTML
-      smoke check (`scripts/checks/check-production-smoke.mjs`). The check itself runs
-      in the manual-URL `production-smoke` CI job against `PRODUCTION_URL`: it rejects
-      private or reserved addresses and verifies a `200` HTML response whose `<html lang>`
-      matches each of `en`, `pt-BR`, and `es`.
-    - `pnpm check:docs` validates documentation links and the skill inventory
-      against `skills-lock.json`.
+   `scripts/checks/` run through dedicated scripts, each preceded by its own
+   `node --test` regression suite, and are part of `verify:fast`:
+   - `pnpm check:routes` keeps `page.tsx`, `layout.tsx`, and `template.tsx` thin.
+     - `pnpm check:components` enforces owned-component naming and boundaries.
+       - `pnpm check:responsiveness` enforces viewport exports, no zoom restrictions,
+         fluid widths up to 320px, and WCAG 2.2 touch targets.
+         - `pnpm check:english` enforces the English-by-default policy; locale catalogs
+           in `src/messages/` are exempt.
+           - `pnpm test:production-smoke` runs the regression tests of the deployed-HTML
+             smoke check (`scripts/checks/check-production-smoke.mjs`). The check itself runs
+             in the manual-URL `production-smoke` CI job against `PRODUCTION_URL`: it rejects
+             private or reserved addresses and verifies a `200` HTML response whose `<html lang>`
+             matches each of `en`, `pt-BR`, and `es`.
+             - `pnpm check:docs` validates documentation links and the skill inventory
+               against `skills-lock.json`.
 
-    `.github/workflows/review-validation.yml` is a manual (`workflow_dispatch`)
-    job that runs `verify:fast`, `check:docs`, `check:spelling`, and
-    `check:markdown` for current-state review; it is not a required status check.
+               `.github/workflows/review-validation.yml` is a manual (`workflow_dispatch`)
+               job that runs `verify:fast`, `check:docs`, `check:spelling`, and
+               `check:markdown` for current-state review; it is not a required status check.
 
-*Client-Facing Generative UI*: User-facing AI chat, code blocks, canvas flows, and streaming components in `src/components/ai-elements/` are distributed via the shadcn CLI registry and governed by [ADR 0002: Configure shadcn/ui](0002-configure-shadcn-ui.md).
+_Client-Facing Generative UI_: User-facing AI chat, code blocks, canvas flows, and streaming components in `src/components/ai-elements/` are distributed via the shadcn CLI registry and governed by [ADR 0002: Configure shadcn/ui](0002-configure-shadcn-ui.md).
 
 ## Consequences
 

@@ -149,17 +149,19 @@ function main() {
 
   const query = queryWords.join(" ");
 
-  const docFiles =
-    serverOnly ? [] : scanDirectory(DOCS_DIR, [".md"]);
-  const serverFiles =
-    docsOnly ? [] : scanDirectory(SERVER_LIB_DIR, [".d.ts", ".js"]);
+  const docFiles = serverOnly ? [] : scanDirectory(DOCS_DIR, [".md"]);
+  const serverFiles = docsOnly
+    ? []
+    : scanDirectory(SERVER_LIB_DIR, [".d.ts", ".js"]);
 
   const allFiles = [...docFiles, ...serverFiles];
   const results = searchFiles(allFiles, query, REPO_ROOT);
 
   if (results.length === 0) {
     console.log(`No results found for "${query}".`);
-    console.log(`Try a broader term or run with --list to see available categories.`);
+    console.log(
+      `Try a broader term or run with --list to see available categories.`,
+    );
     return;
   }
 

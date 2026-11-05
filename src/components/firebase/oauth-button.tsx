@@ -1,9 +1,9 @@
 "use client";
 
 import {
-  useUI,
   type OAuthButtonProps,
   useSignInWithProvider,
+  useUI,
 } from "@firebase-oss/ui-react";
 import { useId } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -12,7 +12,12 @@ import { Spinner } from "@/components/ui/spinner";
 
 export type { OAuthButtonProps };
 
-export function OAuthButton({ provider, children, themed, onSignIn }: OAuthButtonProps) {
+export function OAuthButton({
+  provider,
+  children,
+  themed,
+  onSignIn,
+}: OAuthButtonProps) {
   const ui = useUI();
   const { error, callback } = useSignInWithProvider(provider, onSignIn);
   const isPending = ui.state !== "idle";
@@ -33,7 +38,10 @@ export function OAuthButton({ provider, children, themed, onSignIn }: OAuthButto
         variant={themed ? "default" : "outline"}
       >
         {isPending ? (
-          <><Spinner data-icon="inline-start" aria-hidden="true" />{children}</>
+          <>
+            <Spinner data-icon="inline-start" aria-hidden="true" />
+            {children}
+          </>
         ) : (
           children
         )}

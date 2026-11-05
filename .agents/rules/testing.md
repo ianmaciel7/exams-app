@@ -44,3 +44,18 @@ interaction coverage or accessibility conformance.
 Do not exempt copied registry components from Biome, React Doctor, coverage,
 jscpd, Fallow, Knip, or CSpell. Follow the current tool exclusion policy in
 `TOOLING.md`; Git tracking exclusions are independent of analyzer scope.
+
+## CI maintenance
+
+Keep shared setup in `.github/actions/` and suite ownership in `.github/workflows/ci.yml`. Preserve the fail-closed CI result gate and run `node --test scripts/ci/check-results.test.mjs` when changing its policy. Key download caches by tool version and inputs; never skip verification on a cache hit.
+
+## Analysis categories
+
+All files remain analyzed. Application runtime rules are blocking; test, story,
+registry and external-bundle style or complexity findings remain visible as
+warnings. Registry React correctness, browser acceptance and security checks
+remain blocking. Full-source coverage is reported with the existing 70 percent
+floor applied to application code. Knip parses CSS imports and MCP declarations;
+its explicit host-tool list does not exclude source files. Generated JSON spelling
+checks inspect linguistic fields, while translations have explicit vocabulary.
+See [ADR 0023](../../docs/adr/0023-classify-analysis-without-file-exclusions.md).

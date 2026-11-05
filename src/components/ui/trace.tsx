@@ -150,11 +150,11 @@ function TraceCollapsibleContent({
 
 export {
   Trace,
-  TraceLine,
-  TraceIcon,
-  TraceTitle,
-  TraceDescription,
   TraceCollapsible,
-  TraceCollapsibleTrigger,
   TraceCollapsibleContent,
+  TraceCollapsibleTrigger,
+  TraceDescription,
+  TraceIcon,
+  TraceLine,
+  TraceTitle,
 };

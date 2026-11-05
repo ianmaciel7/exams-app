@@ -1,3 +1,7 @@
 {
-  "$schema": "https://react.doctor/schema/config.json"
+  "$schema": "https://react.doctor/schema/config.json",
+  "rules": {
+    "react-hooks-js/todo": "warn",
+    "react-hooks-js/static-components": "warn"
+  }
 }
