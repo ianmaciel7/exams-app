@@ -1,33 +1,31 @@
+import "server-only";
+
+import { getLocale } from "next-intl/server";
+import { defaultLocale, isLocale } from "@/i18n/routing";
 import {
-  type User,
-  updateProfile,
-  verifyBeforeUpdateEmail,
-} from "firebase/auth";
-import { doc, getDoc, setDoc } from "firebase/firestore";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import {
-  getFirebaseFirestore,
-  getFirebaseStorage,
-} from "@/lib/firebase/client";
-import { withUsageGuard } from "@/lib/firebase/usage";
-import { isLocale, type Locale } from "@/lib/locale";
-import { getActiveUser, getSessionUser } from "@/lib/session";
+  getAdminAuth,
+  getAdminBucket,
+  getAdminFirestore,
+} from "@/lib/firebase/admin";
+import type { Locale } from "@/lib/locale";
 import { isThemePreference } from "@/lib/theme";
+import { verifySession } from "../../_lib/dal";
 import type {
-  ProfileDependencies,
-  ProfileGateway,
+  ProfileSnapshot,
   ProfileValues,
-  SavedProfile,
-  SaveProfileInput,
   UserPreferences,
 } from "./definitions";
 
-export type { ProfileDependencies } from "./definitions";
+const usersCollection = "users";
 
+/** Preferences stored for the user; unsupported stored values are dropped. */
 export async function readUserPreferences(
   uid: string,
 ): Promise<Partial<UserPreferences>> {
-  const snapshot = await getDoc(doc(getFirebaseFirestore(), "users", uid));
+  const snapshot = await getAdminFirestore()
+    .collection(usersCollection)
+    .doc(uid)
+    .get();
   const data = snapshot.data();
 
   return {
@@ -36,126 +34,104 @@ export async function readUserPreferences(
   };
 }
 
-export async function writeUserPreferences(
+async function writeUserPreferences(
   uid: string,
   preferences: Partial<UserPreferences>,
 ): Promise<void> {
-  await setDoc(doc(getFirebaseFirestore(), "users", uid), preferences, {
-    merge: true,
-  });
+  await getAdminFirestore()
+    .collection(usersCollection)
+    .doc(uid)
+    .set(preferences, { merge: true });
 }
 
+/** Read a user's profile; `activeLocale` fills a missing stored locale. */
 export async function readProfile(
   uid: string,
   activeLocale: Locale,
-  isActive: () => boolean,
-) {
-  const preferences = await readUserPreferences(uid);
-  if (!isActive()) return null;
-  const currentUser = getSessionUser();
-  if (!currentUser || currentUser.uid !== uid) return null;
-  const values: ProfileValues = {
-    displayName: currentUser.displayName ?? "",
-    email: currentUser.email ?? "",
-    locale: preferences.locale ?? activeLocale,
-    theme: preferences.theme ?? "system",
-  };
-  return { values, theme: preferences.theme };
-}
-
-async function uploadAvatar(user: User, avatarFile: File | null) {
-  if (!avatarFile) return user.photoURL;
-
-  const avatarRef = ref(getFirebaseStorage(), `users/${user.uid}/avatar`);
-  await uploadBytes(avatarRef, avatarFile, { contentType: avatarFile.type });
-  return getDownloadURL(avatarRef);
-}
-
-const defaultProfileDependencies: ProfileDependencies = {
-  getActiveUser,
-  verifyBeforeUpdateEmail,
-  updateProfile,
-  uploadAvatar,
-  writeUserPreferences,
-};
-
-function getProfileChanges(
-  user: User,
-  previous: ProfileValues,
-  values: ProfileValues,
-) {
-  const displayName = values.displayName.trim();
-  const email = values.email.trim();
+): Promise<ProfileSnapshot> {
+  const [user, preferences] = await Promise.all([
+    getAdminAuth().getUser(uid),
+    readUserPreferences(uid),
+  ]);
   return {
-    displayName,
-    email,
-    emailChanged: email !== (user.email ?? ""),
-    nameChanged: displayName !== (user.displayName ?? ""),
-    preferencesChanged:
-      values.locale !== previous.locale || values.theme !== previous.theme,
-  };
-}
-
-function getProfileUpdate(
-  displayName: string,
-  nameChanged: boolean,
-  photoURL: string | null,
-  avatarChanged: boolean,
-) {
-  return {
-    ...(nameChanged ? { displayName: displayName || null } : {}),
-    ...(avatarChanged ? { photoURL } : {}),
-  };
-}
-
-export async function saveProfile(
-  { user, previous, values, avatarFile }: SaveProfileInput,
-  dependencies: ProfileDependencies = defaultProfileDependencies,
-): Promise<SavedProfile> {
-  const authUser = dependencies.getActiveUser(user);
-  const { displayName, email, emailChanged, nameChanged, preferencesChanged } =
-    getProfileChanges(authUser, previous, values);
-
-  if (emailChanged) await dependencies.verifyBeforeUpdateEmail(authUser, email);
-
-  // Recheck after every asynchronous boundary before starting another write.
-  dependencies.getActiveUser(user);
-  const photoURL = await dependencies.uploadAvatar(authUser, avatarFile);
-  const avatarChanged = Boolean(avatarFile);
-  if (nameChanged || avatarChanged) {
-    dependencies.getActiveUser(user);
-    await dependencies.updateProfile(
-      authUser,
-      getProfileUpdate(displayName, nameChanged, photoURL, avatarChanged),
-    );
-  }
-  if (preferencesChanged) {
-    dependencies.getActiveUser(user);
-    await dependencies.writeUserPreferences(authUser.uid, {
-      locale: values.locale,
-      theme: values.theme,
-    });
-  }
-
-  dependencies.getActiveUser(user);
-  return {
-    photoURL,
-    avatarChanged,
-    emailChanged,
+    photoURL: user.photoURL ?? null,
     values: {
-      displayName,
-      email: authUser.email ?? previous.email,
-      locale: values.locale,
-      theme: values.theme,
+      displayName: user.displayName ?? "",
+      email: user.email ?? "",
+      locale: preferences.locale ?? activeLocale,
+      theme: preferences.theme ?? "system",
     },
   };
 }
 
-/** The Firebase adapter for `ProfileGateway`, wired in by the route's provider. */
-export const firebaseProfileGateway: ProfileGateway = {
-  read: readProfile,
-  save: (input) =>
-    withUsageGuard({ type: "function_use", name: "profile.update" }, () =>
-      saveProfile(input),
-    ),
+/**
+ * Read the signed-in user's profile for the route. The session is verified here
+ * (Data Access Layer), and a missing stored locale falls back to the active one.
+ */
+export async function readOwnProfile(): Promise<ProfileSnapshot> {
+  const { userId } = await verifySession();
+  if (!userId) throw new Error("Authentication session unavailable");
+  const activeLocale = await getLocale();
+  return readProfile(
+    userId,
+    isLocale(activeLocale) ? activeLocale : defaultLocale,
+  );
+}
+
+/** Upload the avatar and return a Firebase Storage download URL for it. */
+async function uploadAvatar(uid: string, avatarFile: File) {
+  const file = getAdminBucket().file(`users/${uid}/avatar`);
+  const token = crypto.randomUUID();
+  await file.save(Buffer.from(await avatarFile.arrayBuffer()), {
+    contentType: avatarFile.type,
+    metadata: { metadata: { firebaseStorageDownloadTokens: token } },
+  });
+  const host = process.env.FIREBASE_STORAGE_EMULATOR_HOST
+    ? `http://${process.env.FIREBASE_STORAGE_EMULATOR_HOST}`
+    : "https://firebasestorage.googleapis.com";
+  const path = encodeURIComponent(file.name);
+  return `${host}/v0/b/${file.bucket.name}/o/${path}?alt=media&token=${token}`;
+}
+
+type SaveProfileInput = {
+  uid: string;
+  previous: ProfileSnapshot;
+  values: ProfileValues;
+  avatarFile: File | null;
 };
+
+/**
+ * Persist the changed fields. The e-mail is never written here: changing it
+ * needs the browser SDK, which sends the confirmation mail.
+ */
+export async function saveProfile({
+  uid,
+  previous,
+  values,
+  avatarFile,
+}: SaveProfileInput): Promise<ProfileSnapshot> {
+  const displayName = values.displayName.trim();
+  const photoURL = avatarFile
+    ? await uploadAvatar(uid, avatarFile)
+    : previous.photoURL;
+
+  if (displayName !== previous.values.displayName || avatarFile) {
+    await getAdminAuth().updateUser(uid, {
+      displayName: displayName || null,
+      photoURL,
+    });
+  }
+  if (
+    values.locale !== previous.values.locale ||
+    values.theme !== previous.values.theme
+  ) {
+    await writeUserPreferences(uid, {
+      locale: values.locale,
+      theme: values.theme,
+    });
+  }
+  return {
+    photoURL,
+    values: { ...values, email: previous.values.email, displayName },
+  };
+}

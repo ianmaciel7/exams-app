@@ -12,8 +12,33 @@ vi.mock("@/components/ui/extensions/translation-text-server", () => ({
     message.split(".").pop(),
 }));
 
+const snapshot = vi.hoisted(() => ({
+  photoURL: null,
+  values: {
+    displayName: "Ada",
+    email: "ada@example.com",
+    locale: "en",
+    theme: "system",
+  },
+}));
+
+// The page reads on the server (Admin SDK) and injects the Server Action.
+vi.mock("./profile/_lib/data", () => ({
+  readOwnProfile: async () => snapshot,
+}));
+
+vi.mock("./profile/_lib/actions", () => ({ updateProfile: vi.fn() }));
+
 vi.mock("./profile/_components/profile-form", () => ({
-  ProfileForm: () => <div data-testid="profile-form" />,
+  ProfileForm: ({ initialValues }: { initialValues: typeof snapshot }) => (
+    <div data-testid="profile-form">{initialValues.values.displayName}</div>
+  ),
+}));
+
+vi.mock("./profile/_components/profile-email-form-container", () => ({
+  ProfileEmailFormContainer: ({ email }: { email: string }) => (
+    <div data-testid="profile-email-form">{email}</div>
+  ),
 }));
 
 afterEach(cleanup);
@@ -21,7 +46,10 @@ afterEach(cleanup);
 describe("protected routes", () => {
   it("renders profile route composition root", async () => {
     render(await ProfilePage());
-    expect(screen.getByTestId("profile-form")).toBeTruthy();
+    expect(screen.getByTestId("profile-form").textContent).toBe("Ada");
+    expect(screen.getByTestId("profile-email-form").textContent).toBe(
+      "ada@example.com",
+    );
     expect(
       screen.getByRole("heading", { name: "personalInfoTitle" }),
     ).toBeTruthy();

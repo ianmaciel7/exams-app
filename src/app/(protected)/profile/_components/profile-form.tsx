@@ -10,7 +10,6 @@ import {
   FormFieldError,
   FormFieldLabel,
 } from "@/components/ui/extensions/form-field";
-import { LoadingStatus } from "@/components/ui/extensions/loading-status";
 import { FieldGroup } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
@@ -27,18 +26,30 @@ import { routes } from "@/lib/navigation";
 import { isThemePreference, themePreferences } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 import { useProfileForm } from "../_hooks/use-profile-form";
-import { profileFieldNames } from "../_lib/definitions";
+import {
+  type ProfileAction,
+  type ProfileSnapshot,
+  profileFieldNames,
+} from "../_lib/definitions";
 import { ProfileAvatarFieldClient } from "./profile-avatar-field-client";
 
-type ProfileFormProps = ComponentProps<typeof Form> & {
-  action?: never;
-  onSubmit?: never;
+type ProfileFormProps = Omit<
+  ComponentProps<typeof Form>,
+  "action" | "onSubmit"
+> & {
+  /** Injected by the page; this component never knows where it saves. */
+  action: ProfileAction;
+  initialValues: ProfileSnapshot;
 };
 
-function ProfileForm({ className, ...props }: ProfileFormProps) {
-  const form = useProfileForm();
-  if (form.isLoading) return <LoadingStatus />;
-  const { t, state, pending, formAction, avatarFile, pickAvatar } = form;
+function ProfileForm({
+  action,
+  initialValues,
+  className,
+  ...props
+}: ProfileFormProps) {
+  const { t, state, pending, formAction, avatarFile, pickAvatar } =
+    useProfileForm(action, initialValues);
 
   // Edits made while a save is pending would be reset with the form.
   return (
@@ -49,9 +60,9 @@ function ProfileForm({ className, ...props }: ProfileFormProps) {
       className={cn("w-full", className)}
     >
       <FieldGroup className="gap-4">
-        {state.error && (
+        {state.hasError && (
           <Alert variant="destructive">
-            <AlertDescription>{state.error}</AlertDescription>
+            <AlertDescription>{t("profileSaveError")}</AlertDescription>
           </Alert>
         )}
 
@@ -60,6 +71,11 @@ function ProfileForm({ className, ...props }: ProfileFormProps) {
           onPick={pickAvatar}
           pending={pending}
           savedCount={state.savedCount}
+          identity={{
+            photoURL: state.photoURL,
+            displayName: state.values.displayName,
+            email: state.values.email,
+          }}
         />
 
         <FormField name={profileFieldNames.displayName}>
@@ -77,23 +93,11 @@ function ProfileForm({ className, ...props }: ProfileFormProps) {
         <FormField name={profileFieldNames.email}>
           <FormFieldLabel>{t("emailLabel")}</FormFieldLabel>
           <Input
-            readOnly={pending}
-            name={profileFieldNames.email}
-            defaultValue={state.values.email}
+            readOnly
+            value={state.values.email}
             type="email"
-            inputMode="email"
             autoComplete="email"
-            autoCapitalize="none"
-            spellCheck={false}
-            required
-            maxLength={254}
           />
-          <FormFieldError match="valueMissing">
-            {t("emailRequired")}
-          </FormFieldError>
-          <FormFieldError match="typeMismatch">
-            {t("emailInvalid")}
-          </FormFieldError>
         </FormField>
 
         <FormField name={profileFieldNames.locale}>

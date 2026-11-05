@@ -21,6 +21,28 @@ resource "google_project_iam_member" "app_hosting_firebase_auth_viewer" {
   member  = google_service_account.app_hosting.member
 }
 
+# The profile Server Action writes with the Admin SDK (ADR 0028): it updates the
+# user's display name and photo, merges preferences into `users/{uid}` and uploads
+# the avatar. The Admin SDK bypasses the security rules, so the action itself
+# checks that the caller owns the data.
+resource "google_project_iam_member" "app_hosting_firebase_auth_admin" {
+  project = var.project_id
+  role    = "roles/firebaseauth.admin"
+  member  = google_service_account.app_hosting.member
+}
+
+resource "google_project_iam_member" "app_hosting_datastore_user" {
+  project = var.project_id
+  role    = "roles/datastore.user"
+  member  = google_service_account.app_hosting.member
+}
+
+resource "google_storage_bucket_iam_member" "app_hosting_avatar_objects" {
+  bucket = google_firebase_storage_default_bucket.default.bucket[0].bucket_id
+  role   = "roles/storage.objectAdmin"
+  member = google_service_account.app_hosting.member
+}
+
 # Cloud Build runs as the default compute account in new projects and needs this role
 # to build Functions and App Hosting backends.
 resource "google_project_iam_member" "compute_cloudbuild" {

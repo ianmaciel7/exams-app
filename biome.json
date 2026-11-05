@@ -177,6 +177,7 @@
                     "message": "Navigate through useNavigation from @/hooks/use-navigation; it is the only module that calls useRouter."
                   },
                   "firebase": "Hooks and components depend on a port (dependency inversion); only a *-provider-client.tsx composition root may import the Firebase SDK.",
+                  "firebase-admin": "Hooks and components never import the Admin SDK; the page injects a Server Action instead.",
                   "@/lib/firebase/client": "Hooks and components depend on a port (dependency inversion); only a *-provider-client.tsx composition root may import the Firebase client."
                 },
                 "patterns": [
@@ -185,8 +186,16 @@
                     "message": "Hooks and components depend on a port (dependency inversion); only a *-provider-client.tsx composition root may import the Firebase SDK."
                   },
                   {
-                    "group": ["**/_lib/data"],
-                    "message": "The data adapter is injected through a provider; hooks and components use the port, not _lib/data."
+                    "group": ["firebase-admin/*"],
+                    "message": "Hooks and components never import the Admin SDK; the page injects a Server Action instead."
+                  },
+                  {
+                    "group": [
+                      "**/_lib/data",
+                      "**/_lib/gateway",
+                      "**/_lib/actions"
+                    ],
+                    "message": "Adapters and Actions are injected (provider or page props); hooks and components use the port or a prop, not _lib/data, _lib/gateway or _lib/actions."
                   }
                 ]
               }

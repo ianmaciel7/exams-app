@@ -91,7 +91,18 @@ utils:
               - kind: intersection_type
               - kind: parenthesized_type
           - has:
-              matches: standard-props
+              any:
+                - matches: standard-props
+                # Omit/Pick over standard props, joined with extra members.
+                - all:
+                    - kind: generic_type
+                    - has:
+                        field: name
+                        regex: "^(Omit|Pick)$"
+                    - has:
+                        kind: type_arguments
+                        has:
+                          matches: standard-props
               stopBy:
                 not:
                   any:

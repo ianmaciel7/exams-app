@@ -75,8 +75,9 @@ When standards conflict, apply them in this order:
     `useActionState`); `ProfileForm` is one client component that renders
     its uncontrolled fields with `defaultValue` from the Action state, and
     the pending flag from `useActionState` replaces a separate saving flag.
-    `ProfileForm` renders the one `FieldGroup`, so `page.tsx` only composes
-    a `Card` around `<ProfileForm />`. Other compound forms that still use React Hook
+    `ProfileForm` renders the one `FieldGroup`; `page.tsx` composes a `Card` and
+    injects the Server Action: `<ProfileForm action={updateProfile}
+    initialValues={profile} />` (ADR 0028). Other compound forms that still use React Hook
     Form use one `useForm` and `<FormProvider {...form}>`; that Provider
     requirement is a repository convention, not universal shadcn/ui policy.
   - Name standalone field components after their React Hook Form data property (for example `ProfileDisplayNameField` for `Controller name="displayName"`). Prefer built-in `FieldGroup`/`FieldSet` over arbitrary wrapper components.
@@ -488,7 +489,7 @@ Components throughout the application—regardless of whether they are Server Co
 - **Route-private composition roots**: Route-level private components (such as `src/app/(public)/sign-in/_components/sign-in-form-client.tsx` and `src/app/(public)/register/_components/register-form-client.tsx`) act as composition roots. They connect Next.js navigation hooks (`router.push(...)`) to the screen's callback props and assemble feature-specific dependencies.
 - **Provider and addon injection via `children` slots**: Presentation screens and shared surfaces must not hardcode third-party identity providers (e.g., Google, GitHub, or SAML) or concrete third-party services. Instead, expose extensible `children` slots so that provider buttons (e.g., `<GoogleSignInButton />`) or custom actions can be injected at the composition root, conditioned on environment variables (such as `NEXT_PUBLIC_FIREBASE_GOOGLE_ENABLED`).
 - **Logic abstraction via custom hooks or service interfaces**: Isolate business logic, validation schemas, and lifecycle effects behind specialized hooks or pure service functions (such as `useUI()`, `useSignInAuthFormSchema()`, `useSignInAuthFormAction()`, and `useOnUserAuthenticated()`). This keeps presentation components focused on rendering state, layout, and event propagation without direct coupling to underlying SDK operations.
-- **Route hooks depend on a port, not on Firebase**: a route-private hook or component (`src/app/**/_hooks`, `_components`) never imports `firebase`, `firebase/*`, `@/lib/firebase/client` or `_lib/data`. It reads a port type from `_lib/definitions.ts` (for the profile, `ProfileGateway`) through a hook that reads a React context. Only the `*-provider-client.tsx` composition root imports the adapter (`firebaseProfileGateway`), and tests inject a fake gateway. Biome `noRestrictedImports` enforces this (ADR 0027).
+- **Route hooks depend on a port, not on Firebase**: a route-private hook or component (`src/app/**/_hooks`, `_components`) never imports `firebase`, `firebase/*`, `@/lib/firebase/client` or `_lib/data`. It reads a port type from `_lib/definitions.ts` (for the profile, `ProfileGateway`) through a hook that reads a React context. Only the `*-provider-client.tsx` composition root imports the adapter (`firebaseProfileGateway`), and tests inject a fake gateway. Biome `noRestrictedImports` enforces this (ADRs 0027 and 0028).
 
 ## Internationalization
 
@@ -697,11 +698,10 @@ state/callbacks. A sub-hook owns one cohesive lifecycle or workflow, not one lin
 of code. For example, `usePublicGuardClient` composes `useAuthUiStore`,
 `useFirebaseUiReturnNavigation` and `useAuthUiLocale`; it does not initialize Firebase,
 subscribe to authentication and synchronize locale inside one monolithic Effect.
-`ProfileCardClient` delegates the browser read lifecycle to `useProfileCardClient` and
-mounts `ProfileForm` only with loaded values. `ProfileForm` renders its fields
-inline and delegates its Action, avatar draft, and feedback to `useProfileForm`, which
-composes `useProfileAvatarDraft` for draft lifecycle handling and
-`useProfileSaveFeedback` for UI feedback (ADRs 0018 and 0019).
+`ProfileForm` receives its Action and initial values as props and delegates its
+Action state, avatar draft, and feedback to `useProfileForm`, which composes
+`useProfileSubmit`, `useProfileAvatarDraft` and `useProfileSaveFeedback`
+(ADRs 0018, 0019 and 0028).
 Pure transformations, constants and subscription support functions remain in the
 route's `_lib`, following the hook support placement contract.
 

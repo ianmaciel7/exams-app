@@ -1,87 +1,51 @@
-"use client";
+"use server";
 
-import type { User } from "firebase/auth";
-import type {
-  ProfileActionState,
-  ProfileGateway,
-  ProfileValues,
-  SavedProfile,
-} from "./definitions";
+import { verifySession } from "../../_lib/dal";
+import { readOwnProfile, saveProfile } from "./data";
+import type { ProfileActionState } from "./definitions";
 import { parseProfileFormData } from "./dto";
-
-type ProfileActionOptions = {
-  /** The persistence port; the Action never imports Firebase. */
-  gateway: ProfileGateway;
-  /** Both are set once the form is shown; the Action only runs from the form. */
-  user: User | null;
-  /** Loaded values the form shows until the first submission. */
-  loaded: ProfileValues | null;
-  /** Message shown when saving fails. */
-  errorMessage: string;
-  /** Called after a successful save, for toast, theme and locale updates. */
-  onSaved: (
-    savedProfile: SavedProfile,
-    values: ProfileValues,
-    previous: ProfileValues,
-  ) => void;
-};
-
-/** State before any submission: the loaded values are also the saved ones. */
-export function initialProfileActionState(
-  loaded: ProfileValues,
-): ProfileActionState {
-  return {
-    saved: loaded,
-    values: loaded,
-    avatarFile: null,
-    error: null,
-    savedCount: 0,
-  };
-}
+import { isValidAvatarFile } from "./utils";
 
 /**
- * The profile form Action, in the `(prevState, formData)` shape that
- * `useActionState` expects. It is a client function on purpose: every write
- * goes through the browser Firebase SDK (see CODING_STANDARDS "Form and Field
- * Architecture"), so there is no Server Function to call.
+ * The profile Server Action, in the `(prevState, formData)` shape
+ * `useActionState` expects. It re-verifies the session itself (a Server
+ * Function is a public endpoint) and reads the current profile from the
+ * server, never from the client, so the user can only change their own data.
  */
-export function createProfileAction({
-  gateway,
-  user,
-  loaded,
-  errorMessage,
-  onSaved,
-}: ProfileActionOptions) {
-  return async function submitProfile(
-    previous: ProfileActionState | null,
-    formData: FormData,
-  ): Promise<ProfileActionState> {
-    if (!user || !loaded) throw new Error("Profile form submitted before load");
-    const state = previous ?? initialProfileActionState(loaded);
-    const { avatarFile, ...values } = parseProfileFormData(
-      formData,
-      state.values,
-      state.avatarFile,
-    );
-
-    try {
-      const savedProfile = await gateway.save({
-        user,
-        previous: state.saved,
-        values,
-        avatarFile,
-      });
-      onSaved(savedProfile, values, state.saved);
-      return {
-        saved: savedProfile.values,
-        values: savedProfile.values,
-        avatarFile: null,
-        error: null,
-        savedCount: state.savedCount + 1,
-      };
-    } catch (cause) {
-      console.error(cause);
-      return { ...state, values, avatarFile, error: errorMessage };
-    }
+export async function updateProfile(
+  previous: ProfileActionState | null,
+  formData: FormData,
+): Promise<ProfileActionState> {
+  const { userId } = await verifySession();
+  if (!userId) throw new Error("Authentication session unavailable");
+  const current = await readOwnProfile();
+  const { avatarFile, ...values } = parseProfileFormData(
+    formData,
+    current.values,
+  );
+  const failed = {
+    values,
+    photoURL: current.photoURL,
+    hasError: true,
+    savedCount: previous?.savedCount ?? 0,
   };
+  if (avatarFile && !isValidAvatarFile(avatarFile)) return failed;
+
+  try {
+    const saved = await saveProfile({
+      uid: userId,
+      previous: current,
+      values,
+      avatarFile,
+    });
+    return {
+      values: saved.values,
+      photoURL: saved.photoURL,
+      hasError: false,
+      savedCount: (previous?.savedCount ?? 0) + 1,
+    };
+  } catch (cause) {
+    console.error(cause);
+    return failed;
+  }
 }

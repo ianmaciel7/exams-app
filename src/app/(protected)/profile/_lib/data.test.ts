@@ -1,326 +1,170 @@
-import type { User } from "firebase/auth";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const firestoreMocks = vi.hoisted(() => ({
-  db: { name: "firestore" },
-  ref: { path: "users/user-123" },
-  doc: vi.fn(),
-  getDoc: vi.fn(),
-  setDoc: vi.fn(),
-  getFirestore: vi.fn(),
-  getSessionUser: vi.fn(),
+const mocks = vi.hoisted(() => ({
+  getUser: vi.fn(),
+  updateUser: vi.fn(),
+  get: vi.fn(),
+  set: vi.fn(),
+  save: vi.fn(),
+  verifySession: vi.fn(),
 }));
 
-vi.mock("firebase/firestore", () => ({
-  doc: firestoreMocks.doc,
-  getDoc: firestoreMocks.getDoc,
-  setDoc: firestoreMocks.setDoc,
+vi.mock("server-only", () => ({}));
+vi.mock("next-intl/server", () => ({ getLocale: async () => "pt-BR" }));
+vi.mock("../../_lib/dal", () => ({ verifySession: mocks.verifySession }));
+vi.mock("@/lib/firebase/admin", () => ({
+  getAdminAuth: () => ({
+    getUser: mocks.getUser,
+    updateUser: mocks.updateUser,
+  }),
+  getAdminFirestore: () => ({
+    collection: () => ({
+      doc: () => ({ get: mocks.get, set: mocks.set }),
+    }),
+  }),
+  getAdminBucket: () => ({
+    file: () => ({
+      name: "users/user-123/avatar",
+      bucket: { name: "demo.appspot.com" },
+      save: mocks.save,
+    }),
+  }),
 }));
-
-vi.mock("@/lib/firebase/client", () => ({
-  getFirebaseFirestore: firestoreMocks.getFirestore,
-  getFirebaseStorage: vi.fn(),
-}));
-
-vi.mock("@/lib/session", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("@/lib/session")>();
-  return {
-    ...actual,
-    getSessionUser: firestoreMocks.getSessionUser,
-  };
-});
 
 import {
-  type ProfileDependencies,
+  readOwnProfile,
   readProfile,
   readUserPreferences,
   saveProfile,
-  writeUserPreferences,
 } from "./data";
-import type { ProfileValues } from "./definitions";
+import type { ProfileSnapshot } from "./definitions";
 
-describe("user preferences", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-    firestoreMocks.getFirestore.mockReturnValue(firestoreMocks.db);
-    firestoreMocks.doc.mockReturnValue(firestoreMocks.ref);
-    firestoreMocks.setDoc.mockResolvedValue(undefined);
-  });
+const previous: ProfileSnapshot = {
+  photoURL: "https://example.com/old.png",
+  values: {
+    displayName: "Ada",
+    email: "ada@example.com",
+    locale: "en",
+    theme: "system",
+  },
+};
 
-  it("reads only supported locale and theme values", async () => {
-    firestoreMocks.getDoc.mockResolvedValue({
+beforeEach(() => {
+  vi.clearAllMocks();
+  mocks.set.mockResolvedValue(undefined);
+  mocks.save.mockResolvedValue(undefined);
+  mocks.updateUser.mockResolvedValue(undefined);
+  mocks.verifySession.mockResolvedValue({ role: "user", userId: "user-123" });
+  mocks.get.mockResolvedValue({ data: () => ({}) });
+});
+
+describe("profile reads", () => {
+  it("keeps only supported locale and theme values", async () => {
+    mocks.get.mockResolvedValue({
       data: () => ({ locale: "pt-BR", theme: "dark", extra: "ignored" }),
     });
-
     await expect(readUserPreferences("user-123")).resolves.toEqual({
       locale: "pt-BR",
       theme: "dark",
     });
-    expect(firestoreMocks.doc).toHaveBeenCalledWith(
-      firestoreMocks.db,
-      "users",
-      "user-123",
-    );
-  });
-
-  it("drops invalid stored values", async () => {
-    firestoreMocks.getDoc.mockResolvedValue({
+    mocks.get.mockResolvedValue({
       data: () => ({ locale: "fr", theme: "solarized" }),
     });
-
     await expect(readUserPreferences("user-123")).resolves.toEqual({});
   });
 
-  it("merges changes into the user's document", async () => {
-    await writeUserPreferences("user-123", { theme: "light" });
+  it("combines the Auth user with the stored preferences", async () => {
+    mocks.getUser.mockResolvedValue({
+      displayName: "Ada",
+      email: "ada@example.com",
+      photoURL: "https://example.com/a.png",
+    });
+    mocks.get.mockResolvedValue({ data: () => ({ theme: "dark" }) });
 
-    expect(firestoreMocks.setDoc).toHaveBeenCalledWith(
-      firestoreMocks.ref,
-      { theme: "light" },
+    await expect(readProfile("user-123", "en")).resolves.toEqual({
+      photoURL: "https://example.com/a.png",
+      values: {
+        displayName: "Ada",
+        email: "ada@example.com",
+        locale: "en",
+        theme: "dark",
+      },
+    });
+  });
+
+  it("reads the verified user's own profile with the active locale", async () => {
+    mocks.getUser.mockResolvedValue({ email: "ada@example.com" });
+    const profile = await readOwnProfile();
+    expect(mocks.getUser).toHaveBeenCalledWith("user-123");
+    expect(profile.values).toMatchObject({ displayName: "", locale: "pt-BR" });
+  });
+
+  it("refuses to read without a verified user", async () => {
+    mocks.verifySession.mockResolvedValue({ role: "user", userId: null });
+    await expect(readOwnProfile()).rejects.toThrow("session unavailable");
+  });
+});
+
+describe("saveProfile", () => {
+  it("writes nothing when nothing changed", async () => {
+    const saved = await saveProfile({
+      uid: "user-123",
+      previous,
+      values: previous.values,
+      avatarFile: null,
+    });
+    expect(mocks.updateUser).not.toHaveBeenCalled();
+    expect(mocks.set).not.toHaveBeenCalled();
+    expect(saved).toEqual(previous);
+  });
+
+  it("updates the name and the preferences, never the e-mail", async () => {
+    const saved = await saveProfile({
+      uid: "user-123",
+      previous,
+      values: {
+        ...previous.values,
+        displayName: " Grace ",
+        email: "attacker@example.com",
+        theme: "dark",
+      },
+      avatarFile: null,
+    });
+    expect(mocks.updateUser).toHaveBeenCalledWith("user-123", {
+      displayName: "Grace",
+      photoURL: previous.photoURL,
+    });
+    expect(mocks.set).toHaveBeenCalledWith(
+      { locale: "en", theme: "dark" },
       { merge: true },
     );
+    expect(saved.values.email).toBe("ada@example.com");
   });
-});
 
-describe("readProfile", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-    firestoreMocks.getFirestore.mockReturnValue(firestoreMocks.db);
-    firestoreMocks.doc.mockReturnValue(firestoreMocks.ref);
-    firestoreMocks.getDoc.mockResolvedValue({ data: () => ({}) });
-    firestoreMocks.getSessionUser.mockReturnValue({
-      uid: "user",
-      displayName: null,
-      email: null,
+  it("uploads a new avatar and stores its download URL", async () => {
+    const avatarFile = new File(["x"], "a.png", { type: "image/png" });
+    const saved = await saveProfile({
+      uid: "user-123",
+      previous,
+      values: previous.values,
+      avatarFile,
     });
-  });
-
-  it("normalizes missing preferences using the active locale and system theme", async () => {
-    expect(await readProfile("user", "pt-BR", () => true)).toEqual({
-      values: { displayName: "", email: "", locale: "pt-BR", theme: "system" },
-      theme: undefined,
-    });
-  });
-
-  it("preserves stored locale and theme", async () => {
-    firestoreMocks.getDoc.mockResolvedValue({
-      data: () => ({ locale: "es", theme: "dark" }),
-    });
-    expect(await readProfile("user", "en", () => true)).toMatchObject({
-      values: { locale: "es", theme: "dark" },
-      theme: "dark",
-    });
-  });
-
-  it("does not read a client session after the owning lifecycle was cancelled", async () => {
-    const read = Promise.withResolvers<{ data: () => object }>();
-    firestoreMocks.getDoc.mockReturnValue(read.promise);
-    let active = true;
-    const pending = readProfile("user", "en", () => active);
-    active = false;
-    read.resolve({ data: () => ({}) });
-    expect(await pending).toBeNull();
-    expect(firestoreMocks.getSessionUser).not.toHaveBeenCalled();
-  });
-
-  it("rejects profile resolved after the active user changes", async () => {
-    firestoreMocks.getSessionUser.mockReturnValue({ uid: "other" });
-    expect(await readProfile("user", "en", () => true)).toBeNull();
-  });
-});
-
-const initial: ProfileValues = {
-  displayName: "Before",
-  email: "old@example.test",
-  locale: "en",
-  theme: "system",
-};
-
-function createDependencies() {
-  const dependencies = {
-    getActiveUser: vi.fn((user: User) => user),
-    verifyBeforeUpdateEmail: vi.fn(async () => {}),
-    updateProfile: vi.fn(async () => {}),
-    uploadAvatar: vi.fn(async () => "https://example.test/avatar.png"),
-    writeUserPreferences: vi.fn(async () => {}),
-  } satisfies ProfileDependencies;
-  return dependencies;
-}
-
-describe("saveProfile dependency boundaries", () => {
-  it.each([
-    "verifyBeforeUpdateEmail",
-    "updateProfile",
-    "writeUserPreferences",
-  ] as const)(
-    "rejects a stale session after %s completes",
-    async (operation) => {
-      const user = {
-        uid: "user-1",
-        email: initial.email,
-        displayName: initial.displayName,
-      } as User;
-      const dependencies = createDependencies();
-      let completeOperation: () => void = () => {};
-      dependencies[operation].mockReturnValueOnce(
-        new Promise<void>((resolve) => {
-          completeOperation = resolve;
-        }),
-      );
-      const saving = saveProfile(
-        {
-          user,
-          previous: initial,
-          values: {
-            ...initial,
-            displayName: "After",
-            email: "new@example.test",
-            theme: "dark",
-          },
-          avatarFile: null,
-        },
-        dependencies,
-      );
-
-      await vi.waitFor(() =>
-        expect(dependencies[operation]).toHaveBeenCalledOnce(),
-      );
-      dependencies.getActiveUser.mockImplementation(() => {
-        throw new Error("Authentication session unavailable");
-      });
-      completeOperation();
-
-      await expect(saving).rejects.toThrow(
-        "Authentication session unavailable",
-      );
-      if (operation === "verifyBeforeUpdateEmail") {
-        expect(dependencies.uploadAvatar).not.toHaveBeenCalled();
-        expect(dependencies.updateProfile).not.toHaveBeenCalled();
-      }
-      if (operation !== "writeUserPreferences") {
-        expect(dependencies.writeUserPreferences).not.toHaveBeenCalled();
-      }
-    },
-  );
-
-  it("does not start profile or preference writes after the session changes during upload", async () => {
-    const user = {
-      uid: "user-1",
-      email: initial.email,
-      displayName: initial.displayName,
-    } as User;
-    const dependencies = createDependencies();
-    let finishUpload: (url: string) => void = () => {};
-    dependencies.uploadAvatar.mockReturnValueOnce(
-      new Promise<string>((resolve) => {
-        finishUpload = resolve;
-      }),
-    );
-    const saving = saveProfile(
-      {
-        user,
-        previous: initial,
-        values: { ...initial, displayName: "After", theme: "dark" },
-        avatarFile: null,
+    expect(mocks.save).toHaveBeenCalledWith(expect.any(Buffer), {
+      contentType: "image/png",
+      metadata: {
+        metadata: { firebaseStorageDownloadTokens: expect.any(String) },
       },
-      dependencies,
-    );
-    dependencies.getActiveUser.mockImplementation(() => {
-      throw new Error("Authentication session unavailable");
     });
-    finishUpload("https://example.test/avatar.png");
-    await expect(saving).rejects.toThrow("Authentication session unavailable");
-    expect(dependencies.updateProfile).not.toHaveBeenCalled();
-    expect(dependencies.writeUserPreferences).not.toHaveBeenCalled();
-  });
-
-  it("runs only necessary adapters for unchanged profile data", async () => {
-    const user = {
-      uid: "user-1",
-      email: initial.email,
-      displayName: initial.displayName,
-      photoURL: null,
-    } as User;
-    const dependencies = createDependencies();
-
-    const result = await saveProfile(
-      { user, previous: initial, values: initial, avatarFile: null },
-      dependencies,
+    const url = new URL(saved.photoURL ?? "");
+    expect(url.origin).toBe("https://firebasestorage.googleapis.com");
+    expect(decodeURIComponent(url.pathname)).toBe(
+      "/v0/b/demo.appspot.com/o/users/user-123/avatar",
     );
-
-    expect(dependencies.getActiveUser).toHaveBeenCalledWith(user);
-    expect(dependencies.verifyBeforeUpdateEmail).not.toHaveBeenCalled();
-    expect(dependencies.updateProfile).not.toHaveBeenCalled();
-    expect(dependencies.writeUserPreferences).not.toHaveBeenCalled();
-    expect(dependencies.uploadAvatar).toHaveBeenCalledWith(user, null);
-    expect(result.emailChanged).toBe(false);
-    expect(result.avatarChanged).toBe(false);
-  });
-
-  it("orchestrates profile, email, avatar and preference updates through injected adapters", async () => {
-    const user = {
-      uid: "user-1",
-      email: initial.email,
-      displayName: initial.displayName,
-    } as User;
-    const values: ProfileValues = {
-      displayName: "After",
-      email: "new@example.test",
-      locale: "es",
-      theme: "dark",
-    };
-    const file = new File(["avatar"], "avatar.png", { type: "image/png" });
-    const dependencies = createDependencies();
-
-    const result = await saveProfile(
-      { user, previous: initial, values, avatarFile: file },
-      dependencies,
-    );
-
-    expect(dependencies.verifyBeforeUpdateEmail).toHaveBeenCalledWith(
-      user,
-      values.email,
-    );
-    expect(dependencies.updateProfile).toHaveBeenCalledWith(user, {
-      displayName: values.displayName,
-      photoURL: "https://example.test/avatar.png",
+    expect(url.searchParams.get("alt")).toBe("media");
+    expect(url.searchParams.get("token")).toBeTruthy();
+    expect(mocks.updateUser).toHaveBeenCalledWith("user-123", {
+      displayName: "Ada",
+      photoURL: saved.photoURL,
     });
-    expect(dependencies.writeUserPreferences).toHaveBeenCalledWith(user.uid, {
-      locale: "es",
-      theme: "dark",
-    });
-    expect(dependencies.uploadAvatar).toHaveBeenCalledWith(user, file);
-    expect(result).toMatchObject({
-      emailChanged: true,
-      avatarChanged: true,
-      photoURL: "https://example.test/avatar.png",
-    });
-    expect(result.values.email).toBe(initial.email);
-  });
-
-  it("does not persist other changes after email verification fails", async () => {
-    const user = {
-      uid: "user-1",
-      email: initial.email,
-      displayName: initial.displayName,
-    } as User;
-    const dependencies = createDependencies();
-    dependencies.verifyBeforeUpdateEmail.mockRejectedValueOnce(
-      new Error("verification unavailable"),
-    );
-    await expect(
-      saveProfile(
-        {
-          user,
-          previous: initial,
-          values: { ...initial, email: "new@example.test" },
-          avatarFile: null,
-        },
-        dependencies,
-      ),
-    ).rejects.toThrow("verification unavailable");
-    expect(dependencies.uploadAvatar).not.toHaveBeenCalled();
-    expect(dependencies.writeUserPreferences).not.toHaveBeenCalled();
-    expect(dependencies.updateProfile).not.toHaveBeenCalled();
   });
 });

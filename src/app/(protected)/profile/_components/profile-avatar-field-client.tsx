@@ -1,18 +1,22 @@
 "use client";
 
-import { type ComponentProps, useId } from "react";
+import type { ComponentProps } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Field, FieldContent, FieldTitle } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { useProfileAvatarFieldClient } from "../_hooks/use-profile-avatar-field-client";
+import {
+  type ProfileAvatarIdentity,
+  useProfileAvatarFieldClient,
+} from "../_hooks/use-profile-avatar-field-client";
 
 type ProfileAvatarFieldClientProps = ComponentProps<typeof Field> & {
   file: File | null;
   onPick: (file: File) => void;
   pending: boolean;
   savedCount: number;
+  identity: ProfileAvatarIdentity;
 };
 
 function ProfileAvatarFieldClient({
@@ -21,23 +25,22 @@ function ProfileAvatarFieldClient({
   onPick,
   pending,
   savedCount,
+  identity,
   ...props
 }: ProfileAvatarFieldClientProps) {
-  const titleId = useId();
-  const {
-    t,
-    disabled,
-    avatarSrc,
-    avatarAlt,
-    fallbackInitial,
-    fileInputRef,
-    handleAvatarChange,
-  } = useProfileAvatarFieldClient({ file, onPick, pending, savedCount });
+  const { fileInputRef, handleAvatarChange, disabled, ...field } =
+    useProfileAvatarFieldClient({
+      file,
+      onPick,
+      pending,
+      savedCount,
+      identity,
+    });
 
   return (
     <Field
       orientation="horizontal"
-      aria-labelledby={titleId}
+      aria-labelledby={field.titleId}
       className={cn("items-center gap-4", className)}
       {...props}
     >
@@ -51,12 +54,18 @@ function ProfileAvatarFieldClient({
         onClick={() => fileInputRef.current?.click()}
       >
         <Avatar className="size-16 transition-opacity group-hover/button:opacity-70">
-          {avatarSrc ? <AvatarImage src={avatarSrc} alt={avatarAlt} /> : null}
-          <AvatarFallback className="text-xl">{fallbackInitial}</AvatarFallback>
+          {field.avatarSrc ? (
+            <AvatarImage src={field.avatarSrc} alt={field.avatarAlt} />
+          ) : null}
+          <AvatarFallback className="text-xl">
+            {field.fallbackInitial}
+          </AvatarFallback>
         </Avatar>
       </Button>
       <FieldContent className="self-center">
-        <FieldTitle id={titleId}>{t("profilePhotoTitle")}</FieldTitle>
+        <FieldTitle id={field.titleId}>
+          {field.t("profilePhotoTitle")}
+        </FieldTitle>
         <Button
           type="button"
           variant="link"
@@ -65,7 +74,7 @@ function ProfileAvatarFieldClient({
           disabled={disabled}
           onClick={() => fileInputRef.current?.click()}
         >
-          {t("profilePhotoChange")}
+          {field.t("profilePhotoChange")}
         </Button>
       </FieldContent>
       <Input

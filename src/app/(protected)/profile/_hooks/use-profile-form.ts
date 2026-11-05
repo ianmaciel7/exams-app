@@ -1,66 +1,50 @@
-import { useLocale, useTranslations } from "next-intl";
-import { useTheme } from "next-themes";
+import { useTranslations } from "next-intl";
 import { useActionState } from "react";
-import { useSession } from "@/hooks/use-session";
-import { defaultLocale, isLocale } from "@/i18n/routing";
 import {
-  createProfileAction,
-  initialProfileActionState,
-} from "../_lib/actions";
-import { profileFieldNames } from "../_lib/definitions";
+  type ProfileAction,
+  type ProfileSnapshot,
+  profileFieldNames,
+} from "../_lib/definitions";
 import { useProfileAvatarDraft } from "./use-profile-avatar-draft";
-import { useProfileGateway } from "./use-profile-gateway";
-import { useProfileRead } from "./use-profile-read";
-import { useProfileSaveFeedback } from "./use-profile-save-feedback";
+import { useProfilePreferencesSync } from "./use-profile-preferences-sync";
+import {
+  type ProfileClientState,
+  useProfileSubmit,
+} from "./use-profile-submit";
 
 /**
- * Coordinates the profile form: the browser read (`useProfileRead`), the form
- * Action (`useActionState`) and the avatar picked since the last Action
- * result. It reports `isLoading` until the read finishes, then returns the
- * form state and the `Auth` translator the fields render from.
+ * The profile form's UI state: the injected Action through `useActionState`
+ * and the avatar picked since the last Action result. The Action itself comes
+ * in as a prop, so this hook knows nothing about where the data is stored.
  */
-export function useProfileForm() {
+export function useProfileForm(
+  action: ProfileAction,
+  snapshot: ProfileSnapshot,
+) {
   const t = useTranslations("Auth");
-  const locale = useLocale();
-  const activeLocale = isLocale(locale) ? locale : defaultLocale;
-  const { setTheme } = useTheme();
-  const { user } = useSession();
-  const gateway = useProfileGateway();
-  const profile = useProfileRead();
-  const loaded = profile.isLoading ? null : profile.values;
-
-  const { onSaved } = useProfileSaveFeedback({ activeLocale, setTheme });
-  const [submitted, dispatch, pending] = useActionState(
-    createProfileAction({
-      gateway,
-      user: user ?? null,
-      loaded,
-      errorMessage: t("profileSaveError"),
-      onSaved,
-    }),
-    null,
+  useProfilePreferencesSync(snapshot.values);
+  const initial: ProfileClientState = {
+    ...snapshot,
+    hasError: false,
+    savedCount: 0,
+    avatarFile: null,
+  };
+  const [state, dispatch, pending] = useActionState(
+    useProfileSubmit(action),
+    initial,
   );
-  const { avatarFile, pickedAvatar, pickAvatar } = useProfileAvatarDraft({
-    actionState: submitted,
-    actionAvatar: submitted?.avatarFile ?? null,
+  const { avatarFile, pickAvatar } = useProfileAvatarDraft({
+    actionState: state,
+    actionAvatar: state.avatarFile,
   });
 
-  if (!loaded) return { isLoading: true } as const;
-
   const formAction = (formData: FormData) => {
-    // The picked file is added here rather than read from the file input, which
-    // the browser clears when React resets the form after an Action.
-    if (pickedAvatar) formData.set(profileFieldNames.avatar, pickedAvatar);
+    // The pending file (picked now, or kept from a failed save) is added here
+    // rather than read from the file input, which the browser clears when
+    // React resets the form after an Action.
+    if (avatarFile) formData.set(profileFieldNames.avatar, avatarFile);
     dispatch(formData);
   };
 
-  return {
-    isLoading: false,
-    t,
-    state: submitted ?? initialProfileActionState(loaded),
-    pending,
-    formAction,
-    avatarFile,
-    pickAvatar,
-  } as const;
+  return { t, state, pending, formAction, avatarFile, pickAvatar };
 }

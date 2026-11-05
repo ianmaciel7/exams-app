@@ -23,10 +23,6 @@ export const exceptions = new Map([
     "route contract suite spanning sign-in, register and recovery pages",
   ],
   [
-    "src/app/(protected)/profile/_components/profile-page.test.tsx",
-    "journey suite over the profile page, loading, error and guard",
-  ],
-  [
     "src/components/ai-elements/review-findings.test.tsx",
     "review suite over many ai-elements modules",
   ],

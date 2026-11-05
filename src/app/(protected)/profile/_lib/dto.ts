@@ -13,13 +13,12 @@ function readText(formData: FormData, name: string, fallback: string) {
 
 /**
  * Reads the profile form's `FormData`. A missing or unknown value falls back to
- * `fallback`; a file input with no selection (empty `File`) falls back to
- * `pendingAvatar`, the upload kept from a failed save.
+ * `fallback`; a file input with no selection (empty `File`) means no new
+ * avatar. The e-mail is read-only here and always comes from `fallback`.
  */
 export function parseProfileFormData(
   formData: FormData,
   fallback: ProfileValues,
-  pendingAvatar: File | null,
 ): ProfileFormValues {
   const locale = readText(formData, profileFieldNames.locale, fallback.locale);
   const theme = readText(formData, profileFieldNames.theme, fallback.theme);
@@ -30,11 +29,10 @@ export function parseProfileFormData(
       formData,
       profileFieldNames.displayName,
       fallback.displayName,
-    ),
-    email: readText(formData, profileFieldNames.email, fallback.email),
+    ).slice(0, 100),
+    email: fallback.email,
     locale: isLocale(locale) ? locale : fallback.locale,
     theme: isThemePreference(theme) ? theme : fallback.theme,
-    avatarFile:
-      avatar instanceof File && avatar.size > 0 ? avatar : pendingAvatar,
+    avatarFile: avatar instanceof File && avatar.size > 0 ? avatar : null,
   };
 }

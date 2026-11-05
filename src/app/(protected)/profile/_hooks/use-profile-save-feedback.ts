@@ -1,33 +1,27 @@
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { useTheme } from "next-themes";
 import { useNavigation } from "@/hooks/use-navigation";
+import { defaultLocale, isLocale } from "@/i18n/routing";
 import { toast } from "@/lib/toast";
-import type { ProfileValues, SavedProfile } from "../_lib/definitions";
+import type { ProfileActionState } from "../_lib/definitions";
 import { syncSavedLocale } from "../_lib/utils";
+import { useProfileGateway } from "./use-profile-gateway";
 
-type UseProfileSaveFeedbackOptions = {
-  activeLocale: string;
-  setTheme: (theme: ProfileValues["theme"]) => void;
-};
-
-export function useProfileSaveFeedback({
-  activeLocale,
-  setTheme,
-}: UseProfileSaveFeedbackOptions) {
+/** Browser side effects of a saved profile: toast, theme, locale, Auth reload. */
+export function useProfileSaveFeedback() {
   const t = useTranslations("Auth");
+  const locale = useLocale();
+  const activeLocale = isLocale(locale) ? locale : defaultLocale;
   const { refresh } = useNavigation();
-  const onSaved = (
-    savedProfile: SavedProfile,
-    values: ProfileValues,
-    previous: ProfileValues,
-  ) => {
-    if (values.theme !== previous.theme) setTheme(values.theme);
-    toast.add({
-      title: savedProfile.emailChanged
-        ? t("emailVerificationSent")
-        : t("profileSaved"),
-      type: "success",
-    });
-    syncSavedLocale(savedProfile.values.locale, activeLocale, refresh);
+  const { setTheme } = useTheme();
+  const gateway = useProfileGateway();
+
+  // The theme is applied on every success: after a failed save the previous
+  // values are the failed submission, so comparing against them would skip it.
+  return (saved: ProfileActionState) => {
+    setTheme(saved.values.theme);
+    toast.add({ title: t("profileSaved"), type: "success" });
+    void gateway.refreshUser();
+    syncSavedLocale(saved.values.locale, activeLocale, refresh);
   };
-  return { onSaved };
 }
