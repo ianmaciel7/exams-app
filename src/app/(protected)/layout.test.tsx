@@ -5,8 +5,8 @@ import ProtectedLayout from "./layout";
 const mocks = vi.hoisted(() => ({ verify: vi.fn() }));
 
 vi.mock("./_lib/dal", () => ({ verifySession: mocks.verify }));
-vi.mock("./_components/route-usage-bridge-client", () => ({
-  RouteUsageBridgeClient: () => <div data-testid="route-usage" />,
+vi.mock("./_components/navigation-events", () => ({
+  NavigationEvents: () => <div data-testid="route-usage" />,
 }));
 
 afterEach(cleanup);

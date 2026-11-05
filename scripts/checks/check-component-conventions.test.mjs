@@ -1031,6 +1031,20 @@ describe("component integration naming", () => {
     );
   });
 
+  it("allows official Next.js doc component names without -client", () => {
+    const component =
+      '"use client"; import { usePathname } from "next/navigation"; function NavigationEvents() { usePathname(); return null; } export { NavigationEvents };';
+    assert.equal(messages(component, "navigation-events", new Map()), "");
+    assert.match(
+      messages(
+        component.replaceAll("NavigationEvents", "RouteWatcher"),
+        "route-watcher",
+        new Map(),
+      ),
+      /-client\.tsx/,
+    );
+  });
+
   it("excludes registry source, framework files and tests", () => {
     for (const path of [
       "src/app/error.tsx",

@@ -17,6 +17,11 @@ valid:
     function useProfileStatus() {
       return { status: "ready" };
     }
+  - |
+    function NavigationEvents() {
+      useNavigationEvents();
+      return null;
+    }
 invalid:
   - |
     function ProfileSection() {
