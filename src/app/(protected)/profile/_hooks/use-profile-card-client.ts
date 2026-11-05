@@ -1,6 +1,6 @@
 import { useLocale } from "next-intl";
 import { useTheme } from "next-themes";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigation } from "@/hooks/use-navigation";
 import { useSession } from "@/hooks/use-session";
 import { defaultLocale, isLocale } from "@/i18n/routing";
@@ -15,20 +15,16 @@ export function useProfileCardClient() {
   const { refresh } = useNavigation();
   const { setTheme } = useTheme();
   const profile = useProfileLoad(session, activeLocale);
-  const initialized = useRef(false);
-  const [lastUid, setLastUid] = useState(session.user?.uid);
-
-  if (session.user?.uid !== lastUid) {
-    setLastUid(session.user?.uid);
-    initialized.current = false;
-  }
+  const uid = session.user?.uid ?? "";
+  const initializedUid = useRef<string | null>(null);
 
   useEffect(() => {
-    if (profile.isLoading || profile.isError || initialized.current) return;
-    initialized.current = true;
+    if (profile.isLoading || profile.isError || initializedUid.current === uid)
+      return;
+    initializedUid.current = uid;
     if (profile.theme) setTheme(profile.theme);
     syncSavedLocale(profile.values.locale, activeLocale, refresh);
-  }, [profile, activeLocale, refresh, setTheme]);
+  }, [profile, uid, activeLocale, refresh, setTheme]);
 
   if (profile.isError) throw profile.error;
   return profile;
