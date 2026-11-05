@@ -6,13 +6,12 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
-export default function ProfileError({
-  error,
-  retry,
-}: {
+type ProfileErrorProps = {
   error: Error & { digest?: string };
   retry: () => void;
-}) {
+};
+
+export default function ProfileError({ error, retry }: ProfileErrorProps) {
   const t = useTranslations("Auth");
   const app = useTranslations("App");
 

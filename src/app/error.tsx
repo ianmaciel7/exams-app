@@ -4,13 +4,12 @@ import { useTranslations } from "next-intl";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 
-export default function ErrorPage({
-  error,
-  retry,
-}: {
+type ErrorPageProps = {
   error: Error & { digest?: string };
   retry: () => void;
-}) {
+};
+
+export default function ErrorPage({ error, retry }: ErrorPageProps) {
   const t = useTranslations("App");
 
   useEffect(() => {

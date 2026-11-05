@@ -1,0 +1,166 @@
+id: no-inline-component-props
+snapshots:
+  "async function ProfileCard(props: { title: string }) { return <div />; }\n":
+    labels:
+    - source: "props: { title: string }"
+      style: primary
+      start: 27
+      end: 51
+    - source: ProfileCard
+      style: secondary
+      start: 15
+      end: 26
+    - source: "async function ProfileCard(props: { title: string }) { return <div />; }"
+      style: secondary
+      start: 0
+      end: 72
+    - source: "(props: { title: string })"
+      style: secondary
+      start: 26
+      end: 52
+    - source: "{ title: string }"
+      style: secondary
+      start: 34
+      end: 51
+    - source: ": { title: string }"
+      style: secondary
+      start: 32
+      end: 51
+  "const Card = ({ title }: { title: string }) => <div>{title}</div>;\n":
+    labels:
+    - source: "{ title }: { title: string }"
+      style: primary
+      start: 14
+      end: 42
+    - source: Card
+      style: secondary
+      start: 6
+      end: 10
+    - source: "Card = ({ title }: { title: string }) => <div>{title}</div>"
+      style: secondary
+      start: 6
+      end: 65
+    - source: "({ title }: { title: string }) => <div>{title}</div>"
+      style: secondary
+      start: 13
+      end: 65
+    - source: "({ title }: { title: string })"
+      style: secondary
+      start: 13
+      end: 43
+    - source: "{ title: string }"
+      style: secondary
+      start: 25
+      end: 42
+    - source: ": { title: string }"
+      style: secondary
+      start: 23
+      end: 42
+  "const Card = function (props?: { title: string }) { return <div />; };\n":
+    labels:
+    - source: "props?: { title: string }"
+      style: primary
+      start: 23
+      end: 48
+    - source: Card
+      style: secondary
+      start: 6
+      end: 10
+    - source: "Card = function (props?: { title: string }) { return <div />; }"
+      style: secondary
+      start: 6
+      end: 69
+    - source: "function (props?: { title: string }) { return <div />; }"
+      style: secondary
+      start: 13
+      end: 69
+    - source: "(props?: { title: string })"
+      style: secondary
+      start: 22
+      end: 49
+    - source: "{ title: string }"
+      style: secondary
+      start: 31
+      end: 48
+    - source: ": { title: string }"
+      style: secondary
+      start: 29
+      end: 48
+  "export default function ErrorPage({ error, retry }: { error: Error & { digest?: string }; retry: () => void }) { return <button onClick={retry} />; }\n":
+    labels:
+    - source: "{ error, retry }: { error: Error & { digest?: string }; retry: () => void }"
+      style: primary
+      start: 34
+      end: 109
+    - source: ErrorPage
+      style: secondary
+      start: 24
+      end: 33
+    - source: "function ErrorPage({ error, retry }: { error: Error & { digest?: string }; retry: () => void }) { return <button onClick={retry} />; }"
+      style: secondary
+      start: 15
+      end: 149
+    - source: "({ error, retry }: { error: Error & { digest?: string }; retry: () => void })"
+      style: secondary
+      start: 33
+      end: 110
+    - source: "{ error: Error & { digest?: string }; retry: () => void }"
+      style: secondary
+      start: 52
+      end: 109
+    - source: ": { error: Error & { digest?: string }; retry: () => void }"
+      style: secondary
+      start: 50
+      end: 109
+  "export default function ProfileError(props: { error: Error; retry: () => void }) { return <div />; }\n":
+    labels:
+    - source: "props: { error: Error; retry: () => void }"
+      style: primary
+      start: 37
+      end: 79
+    - source: ProfileError
+      style: secondary
+      start: 24
+      end: 36
+    - source: "function ProfileError(props: { error: Error; retry: () => void }) { return <div />; }"
+      style: secondary
+      start: 15
+      end: 100
+    - source: "(props: { error: Error; retry: () => void })"
+      style: secondary
+      start: 36
+      end: 80
+    - source: "{ error: Error; retry: () => void }"
+      style: secondary
+      start: 44
+      end: 79
+    - source: ": { error: Error; retry: () => void }"
+      style: secondary
+      start: 42
+      end: 79
+  "function ProfileCard(props: ComponentProps<\"div\"> & { title: string }) { return <div />; }\n":
+    labels:
+    - source: "props: ComponentProps<\"div\"> & { title: string }"
+      style: primary
+      start: 21
+      end: 69
+    - source: ProfileCard
+      style: secondary
+      start: 9
+      end: 20
+    - source: "function ProfileCard(props: ComponentProps<\"div\"> & { title: string }) { return <div />; }"
+      style: secondary
+      start: 0
+      end: 90
+    - source: "(props: ComponentProps<\"div\"> & { title: string })"
+      style: secondary
+      start: 20
+      end: 70
+    - source: "{ title: string }"
+      style: secondary
+      start: 52
+      end: 69
+    - source: ": ComponentProps<\"div\"> & { title: string }"
+      style: secondary
+      start: 26
+      end: 69

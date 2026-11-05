@@ -585,6 +585,14 @@ mirroring third-party implementation details.
 
 ## Compound component guard regression tests
 
+`pnpm check:structure` tests `no-inline-component-props` with valid named and
+native React contracts and invalid inline error-boundary, intersection, and
+arrow-component contracts. Its scan includes App Router special files, even
+though those files are outside the component naming guard. Error boundaries
+are exempt only from HTML prop inheritance, not from named parameter types.
+The scope regression suite also scans temporary root, nested, and global error
+files with the installed CLI, then checks that named aliases pass in each path.
+
 `pnpm check:components` runs the naming/profile safety tests and the general
 composition regression suite, then scans all owned components. New cases cover
 valid named families in both directive-free and client-boundary modules, simple

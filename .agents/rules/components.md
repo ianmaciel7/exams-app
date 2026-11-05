@@ -42,6 +42,10 @@ and does not transfer maintenance ownership to vendors. Application-owned extens
 - Component value exports must preserve the local function name. Aliases such as `OtherCard as AccountCard` and component re-exports cannot satisfy the filename contract, even when an unused matching local function exists. Type-only exports are exempt.
 - Use `AccountCardProps` for props of `AccountCard`; inherit React/HTML
   component props according to the existing component-props rule.
+  Extract inline object parameter types into named `<ComponentName>Props`
+  aliases. `no-inline-component-props` also covers Next.js special files,
+  including `error.tsx` and `global-error.tsx`; their framework exports remain
+  unchanged. Error-boundary props do not inherit HTML attributes.
 - Every owned component identifier and filename MUST include a concrete component role / type describing its composition (e.g. `*-field`, `*-fields`, `*-form`, `*-card`, `*-dialog`, `*-header`, `*-button`, `*-table`, `*-list`, `*-provider`, `*-guard`, `*-flow`, `*-hero`, `*-section`, `*-content`, or `*-text`). This is a mandatory contract, not an optional preference; omitting the component type is prohibited. This list of semantic roles is **not** closed. `Flow` specifically denotes navigation or application flow wiring.
 - Bare feature/domain integration names like `<Domain>Client` or `<Domain>Server` (e.g. `ProfileClient`, `SettingsClient`, `HomeServer`) that omit the component type are explicitly forbidden. The `Client` and `Server` suffixes specify the runtime environment, NOT the component type. Omitting the component type creates ambiguous components with no clear composition role. All integration components must pair their domain with a concrete semantic role before any runtime suffix (e.g. `ProfileAvatarFieldClient`, `SettingsSectionClient`, `HomeHeroClient`).
 - Effect-only client components that render nothing (`return null`) keep the
