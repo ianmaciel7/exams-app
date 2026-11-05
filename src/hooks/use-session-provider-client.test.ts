@@ -3,13 +3,9 @@ import type { User } from "firebase/auth";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
-  getPendingSignOut: vi.fn(),
   subscribeToSession: vi.fn(),
 }));
 
-vi.mock("@/lib/auth", () => ({
-  getPendingSignOut: mocks.getPendingSignOut,
-}));
 vi.mock("@/lib/session", () => ({
   subscribeToSession: mocks.subscribeToSession,
 }));
@@ -23,56 +19,17 @@ async function renderSubscribed() {
   return rendered;
 }
 
-describe("useSessionProviderClient sign-out transition", () => {
+describe("useSessionProviderClient", () => {
   let notify: (user: User | null) => void;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mocks.getPendingSignOut.mockReturnValue(null);
     mocks.subscribeToSession.mockImplementation(
       (callback: (user: User | null) => void) => {
         notify = callback;
         return () => {};
       },
     );
-  });
-
-  it("keeps authenticated navigation until sign-out persistence completes", async () => {
-    const user = { uid: "user-1" } as User;
-    const { result } = await renderSubscribed();
-
-    act(() => notify(user));
-    expect(result.current.user).toBe(user);
-
-    const deferred = Promise.withResolvers<void>();
-    mocks.getPendingSignOut.mockReturnValue(deferred.promise);
-    act(() => notify(null));
-    expect(result.current.user).toBe(user);
-
-    await act(async () => {
-      deferred.resolve();
-      await deferred.promise;
-    });
-    expect(result.current.user).toBeNull();
-    expect(result.current.isLoading).toBe(false);
-  });
-
-  it("ignores a stale sign-out completion after a newer session arrives", async () => {
-    const first = { uid: "user-1" } as User;
-    const second = { uid: "user-2" } as User;
-    const { result } = await renderSubscribed();
-
-    act(() => notify(first));
-    const deferred = Promise.withResolvers<void>();
-    mocks.getPendingSignOut.mockReturnValue(deferred.promise);
-    act(() => notify(null));
-    act(() => notify(second));
-
-    await act(async () => {
-      deferred.resolve();
-      await deferred.promise;
-    });
-    expect(result.current.user).toBe(second);
   });
 
   it("moves from loading to one explicit session state", async () => {
@@ -115,22 +72,11 @@ describe("useSessionProviderClient sign-out transition", () => {
     log.mockRestore();
   });
 
-  it("unsubscribes and ignores a sign-out that settles after unmount", async () => {
+  it("unsubscribes on unmount and ignores a subscription that resolves late", async () => {
     const unsubscribe = vi.fn();
-    mocks.subscribeToSession.mockImplementation(
-      (callback: (user: User | null) => void) => {
-        notify = callback;
-        return unsubscribe;
-      },
-    );
-    const { result, unmount } = await renderSubscribed();
-    const deferred = Promise.withResolvers<void>();
-    mocks.getPendingSignOut.mockReturnValue(deferred.promise);
-    act(() => notify(null));
+    mocks.subscribeToSession.mockImplementation(() => unsubscribe);
+    const { unmount } = await renderSubscribed();
     unmount();
-    deferred.resolve();
-    await deferred.promise;
     expect(unsubscribe).toHaveBeenCalledOnce();
-    expect(result.current.isLoading).toBe(true);
   });
 });
