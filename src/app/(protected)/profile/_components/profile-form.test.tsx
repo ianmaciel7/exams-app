@@ -131,6 +131,42 @@ describe("ProfileForm", () => {
     expect(mocks.toastAdd).not.toHaveBeenCalled();
   });
 
+  it("applies the stored theme and locale when the form mounts", () => {
+    render(
+      <ProfileGatewayProviderClient gateway={gateway}>
+        <ProfileForm
+          action={savingAction()}
+          initialValues={{
+            ...snapshot,
+            values: { ...snapshot.values, theme: "dark", locale: "es" },
+          }}
+        />
+      </ProfileGatewayProviderClient>,
+    );
+    expect(mocks.setTheme).toHaveBeenCalledWith("dark");
+    expect(mocks.refresh).toHaveBeenCalled();
+  });
+
+  it("applies the saved theme after a failed save followed by a retry", async () => {
+    let attempt = 0;
+    const action: ProfileAction = async (_previous, formData) => {
+      attempt += 1;
+      return {
+        values: { ...snapshot.values, theme: "dark" },
+        photoURL: null,
+        hasError: attempt === 1,
+        savedCount: attempt,
+      };
+    };
+    renderForm(action);
+    await clickSave();
+    await waitFor(() => expect(screen.getByRole("alert")).toBeTruthy());
+    mocks.setTheme.mockClear();
+    await clickSave();
+
+    await waitFor(() => expect(mocks.setTheme).toHaveBeenCalledWith("dark"));
+  });
+
   it("rejects an unsupported avatar before calling the Action", () => {
     const action = savingAction();
     renderForm(action);

@@ -3,7 +3,7 @@ import { useTheme } from "next-themes";
 import { useNavigation } from "@/hooks/use-navigation";
 import { defaultLocale, isLocale } from "@/i18n/routing";
 import { toast } from "@/lib/toast";
-import type { ProfileActionState, ProfileValues } from "../_lib/definitions";
+import type { ProfileActionState } from "../_lib/definitions";
 import { syncSavedLocale } from "../_lib/utils";
 import { useProfileGateway } from "./use-profile-gateway";
 
@@ -16,8 +16,10 @@ export function useProfileSaveFeedback() {
   const { setTheme } = useTheme();
   const gateway = useProfileGateway();
 
-  return (saved: ProfileActionState, previous: ProfileValues) => {
-    if (saved.values.theme !== previous.theme) setTheme(saved.values.theme);
+  // The theme is applied on every success: after a failed save the previous
+  // values are the failed submission, so comparing against them would skip it.
+  return (saved: ProfileActionState) => {
+    setTheme(saved.values.theme);
     toast.add({ title: t("profileSaved"), type: "success" });
     void gateway.refreshUser();
     syncSavedLocale(saved.values.locale, activeLocale, refresh);

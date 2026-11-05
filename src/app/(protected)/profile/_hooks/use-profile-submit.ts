@@ -15,10 +15,7 @@ export type ProfileClientState = ProfileActionState & {
  * Wraps the injected Action: sends only serializable state to it, keeps the
  * avatar picked for a failed save, and runs the browser side effects.
  */
-export function useProfileSubmit(
-  action: ProfileAction,
-  initialValues: ProfileValues,
-) {
+export function useProfileSubmit(action: ProfileAction) {
   const onSaved = useProfileSaveFeedback();
 
   return async (
@@ -34,7 +31,7 @@ export function useProfileSubmit(
     const result = await action(serverPrevious, formData);
     if (result.hasError)
       return { ...result, avatarFile: getPickedAvatar(formData) };
-    onSaved(result, previous?.values ?? initialValues);
+    onSaved(result);
     return { ...result, avatarFile: null };
   };
 }

@@ -6,6 +6,7 @@ import {
   profileFieldNames,
 } from "../_lib/definitions";
 import { useProfileAvatarDraft } from "./use-profile-avatar-draft";
+import { useProfilePreferencesSync } from "./use-profile-preferences-sync";
 import {
   type ProfileClientState,
   useProfileSubmit,
@@ -21,6 +22,7 @@ export function useProfileForm(
   snapshot: ProfileSnapshot,
 ) {
   const t = useTranslations("Auth");
+  useProfilePreferencesSync(snapshot.values);
   const initial: ProfileClientState = {
     ...snapshot,
     hasError: false,
@@ -28,7 +30,7 @@ export function useProfileForm(
     avatarFile: null,
   };
   const [state, dispatch, pending] = useActionState(
-    useProfileSubmit(action, snapshot.values),
+    useProfileSubmit(action),
     initial,
   );
   const { avatarFile, pickAvatar } = useProfileAvatarDraft({
