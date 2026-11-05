@@ -36,6 +36,12 @@ from application naming checks; this exclusion preserves upstream API shapes
 and does not transfer maintenance ownership to vendors. Application-owned extensions under
 `src/components/ui/extensions/` **are** checked.
 
+## Anti-Over-Engineering and Pragmatic Cohesion
+
+- **Avoid Hyper-Fragmentation**: Keep closely related component and hook logic cohesive in the same module. Do not split simple forms or fields into chains of single-purpose micro-hooks (< 30-50 lines) or pass-through containers merely for theoretical single-responsibility dogma.
+- **Framework-First Architecture**: Follow canonical Next.js App Router patterns (Server Actions, direct utilities, shared root providers). Avoid introducing route-level Ports, Adapters, Gateways, or route-level React Context Providers where standard framework idioms suffice.
+- **Critical Architecture Review**: Proactively audit and alert on over-engineering, code duplication, and unnecessary indirection rather than passively justifying complex existing scaffolding.
+
 ## Component file contracts
 
 - Use `kebab-case.tsx` and a matching PascalCase family root. Every owned component module may also export related parts prefixed by the root name, such as `AccountCardHeader` in `account-card.tsx`. Declare each as a local named function and export the parts together. Simple components retain one export. Do not use `export default` or `export function` in owned reusable components.

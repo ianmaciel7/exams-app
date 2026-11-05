@@ -25,6 +25,9 @@ Deliver correct, maintainable changes with minimal risk.
 - Validate changes with relevant checks before final delivery.
 - Surface assumptions and edge cases explicitly.
 - Prefer reversible changes and deterministic outputs.
+- **Framework-First Simplicity**: Follow official Next.js canonical idioms (Server Actions, direct utilities, shared root session). Avoid route-level Ports, Adapters, or React Context Gateways where standard framework features suffice.
+- **Cohesion over Hyper-Fragmentation**: Keep closely related logic cohesive rather than fracturing into single-purpose micro-hooks.
+- **Proactive Critical Assessment**: Question over-engineering, code duplication, and unnecessary indirection instead of passively rationalizing them.
 
 ## MCP & Skills
 

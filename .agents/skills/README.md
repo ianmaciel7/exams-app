@@ -16,6 +16,7 @@ skills.
 | impeccable                  | [SKILL.md](impeccable/SKILL.md)                  | `pbakaus/impeccable`          | Design, audit, critique, shape, and polish frontend UI/UX                       |
 | nextjs-docs                 | [SKILL.md](nextjs-docs/SKILL.md)                 | Project-local                 | Inspect installed Next.js documentation and server runtime internals            |
 | project-new-component       | [SKILL.md](project-new-component/SKILL.md)       | Project-local                 | Scaffold components that follow the naming and boundary contracts               |
+| project-prompt-engineer     | [SKILL.md](project-prompt-engineer/SKILL.md)     | Project-local                 | Draft concise, context-dense prompts for AI handoff                             |
 | project-save                | [SKILL.md](project-save/SKILL.md)                | Project-local                 | Persist knowledge, rules, decisions, and conventions to canonical documentation |
 | retro                       | [SKILL.md](retro/SKILL.md)                       | Not recorded in lock metadata | Review completed work and capture improvements                                  |
 | setup-matt-pocock-skills    | [SKILL.md](setup-matt-pocock-skills/SKILL.md)    | `mattpocock/skills`           | Configure engineering skill and tracker documentation                           |
