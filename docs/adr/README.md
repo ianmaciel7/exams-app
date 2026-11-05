@@ -223,7 +223,7 @@ earlier files stay in Git history. Reference the new home in new work.
   - `src/app/(protected)/_lib/dal.ts` memoizes `verifySession` and `verifyRole` with React `cache()`,
     verifying session cookies with revocation checks via `verifySessionCookie(..., true)`.
   - `src/app/(protected)/layout.tsx` is a pure Server Component that awaits `verifySession()`.
-  - Telemetry is observed independently by `RouteUsageBridgeClient`.
+  - Telemetry is observed independently by `RouteUsageReporterClient`.
 
 These clarifications describe the checked-in configuration. They do not claim
 that a hosted run succeeded or that all tooling is installed on a contributor's

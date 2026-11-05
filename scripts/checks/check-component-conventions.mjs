@@ -10,7 +10,7 @@ const environmentSuffix = /-(component|ui|presentation)$/;
 const screenStem = /(^|-)(screen|view|page)$/;
 const semanticStem = (stem) => stem.replace(/-(client|server)$/, "");
 const semanticRoleSuffix =
-  /(^|-)(card|form|field|fields|dialog|header|button|table|list|provider|guard|flow|hero|section|content|bridge|document|bar|nav|menu|panel|sheet|drawer|modal|popover|tooltip|alert|status|badge|input|select|text)$/;
+  /(^|-)(card|form|field|fields|dialog|header|button|table|list|provider|guard|flow|hero|section|content|bridge|reporter|document|bar|nav|menu|panel|sheet|drawer|modal|popover|tooltip|alert|status|badge|input|select|text)$/;
 const serverImports =
   /^(next\/(headers|cache|server)|next-intl\/server|server-only|firebase-admin)(\/|$)/;
 const uiPhaseStatuses = new Set(["loading", "hidden", "error", "ready"]);
