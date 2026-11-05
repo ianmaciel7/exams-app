@@ -1,7 +1,7 @@
 import type { User } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { syncSessionCookie } from "@/lib/auth";
-import { loadSession } from "@/lib/firebase-loaders";
+import { loadFirebaseClient } from "@/lib/firebase-loaders";
 import type { Session } from "@/lib/session-context";
 
 /** The single Firebase Auth subscription behind `SessionProviderClient`. */
@@ -25,10 +25,10 @@ export function useSessionProviderClient() {
       setSession({ isError: false, isLoading: false, user });
 
     let unsubscribe: (() => void) | undefined;
-    loadSession()
-      .then(({ subscribeToSession }) => {
+    loadFirebaseClient()
+      .then(({ subscribeToAuth }) => {
         if (lifetime.signal.aborted) return;
-        unsubscribe = subscribeToSession(settle);
+        unsubscribe = subscribeToAuth(settle);
       })
       .catch(fail);
     return () => {

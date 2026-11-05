@@ -3,12 +3,12 @@ import { useFirebaseUi } from "@/hooks/use-firebase-ui";
 import { useFirebaseUiReturnNavigation } from "@/hooks/use-firebase-ui-return-navigation";
 import { useFirebaseUiTranslations } from "@/hooks/use-firebase-ui-translations";
 
-export function usePublicGuardClient() {
+export function usePublicUiProviderClient() {
   const locale = useLocale();
   const t = useTranslations("Auth");
   const { ui, isError } = useFirebaseUi();
-  const { ready } = useFirebaseUiReturnNavigation(ui);
+  useFirebaseUiReturnNavigation(ui);
   useFirebaseUiTranslations(ui, locale);
 
-  return { isError, isLoading: !isError && (!ui || !ready), t, ui };
+  return { isError, t, ui };
 }

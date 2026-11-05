@@ -11,7 +11,7 @@ const mocks = vi.hoisted(() => ({
 
 vi.mock("server-only", () => ({}));
 vi.mock("next-intl/server", () => ({ getLocale: async () => "pt-BR" }));
-vi.mock("../../_lib/dal", () => ({ verifySession: mocks.verifySession }));
+vi.mock("@/lib/dal", () => ({ verifySession: mocks.verifySession }));
 vi.mock("@/lib/firebase/admin", () => ({
   getAdminAuth: () => ({
     getUser: mocks.getUser,

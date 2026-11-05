@@ -4,16 +4,16 @@ files:
   - src/**/*.ts
   - src/**/*.tsx
 ignores:
-  - src/lib/session.ts
+  - src/lib/firebase/client.ts
   - src/components/firebase/**
   - src/**/*.test.ts
   - src/**/*.test.tsx
 severity: error
-message: Read the signed-in user through getSessionUser() or getActiveUser() from "@/lib/session", not auth.currentUser.
+message: Read the signed-in user through getFirebaseAuthUser() or getActiveFirebaseAuthUser() from "@/lib/firebase/client", not auth.currentUser.
 note: |
   Feature code must not reach into the Firebase Auth singleton
-  (getFirebaseUI().get().auth.currentUser). src/lib/session.ts owns session
-  reads so callers depend on one seam that tests can mock without Firebase.
+  (getFirebaseUI().get().auth.currentUser). src/lib/firebase/client.ts owns browser
+  auth-user reads so callers depend on one seam that tests can mock without Firebase.
   Sign-out and other auth actions belong in src/lib/auth.ts.
 rule:
   pattern: $AUTH.currentUser

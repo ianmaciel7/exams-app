@@ -1,53 +1,34 @@
-import { onAuthStateChanged, type Unsubscribe, type User } from "firebase/auth";
-import { getFirebaseUI } from "@/lib/firebase/client";
-import { getPendingSignOut } from "@/lib/pending-sign-out";
+import "server-only";
+
+import { cookies } from "next/headers";
+import { cache } from "react";
+import { getFirebaseServerSession } from "@/lib/firebase/server";
+import type { UserRole } from "@/lib/role";
+
+export const SESSION_COOKIE_NAME = "__session";
+
+export type Session = {
+  userId: string | null;
+  role: UserRole;
+  isAuthenticated: boolean;
+};
 
 /**
- * Observe the active session. Throws if Firebase is misconfigured. The SDK
- * marks the observer's error and completed callbacks as deprecated and never
- * calls them, so failures surface only through the thrown error.
- *
- * Sign-out is held back until it has persisted, so a rapid navigation cannot
- * restore stale auth. A newer event supersedes a held one.
+ * Read and verify the active session cookie. Memoized with React `cache()`
+ * across a single render pass. It never redirects, so it is safe for public
+ * routes and conditional rendering.
  */
-export function subscribeToSession(
-  onChange: (user: User | null) => void,
-): Unsubscribe {
-  let revision = 0;
-  let active = true;
-  const unsubscribe = onAuthStateChanged(getFirebaseUI().get().auth, (user) => {
-    const current = ++revision;
-    const pending = user ? null : getPendingSignOut();
-    if (!pending) return onChange(user);
-
-    const finish = () => {
-      if (active && revision === current) onChange(user);
-    };
-    void pending.then(finish, finish);
-  });
-  return () => {
-    active = false;
-    unsubscribe();
+export const getSession = cache(async (): Promise<Session> => {
+  const session = await getFirebaseServerSession();
+  return {
+    userId: session.userId,
+    role: session.role,
+    isAuthenticated: Boolean(session.userId),
   };
-}
+});
 
-/** Return the signed-in user, or null when there is no session. */
-export function getSessionUser(): User | null {
-  return getFirebaseUI().get().auth.currentUser;
-}
-
-/** Return the active user, requiring it to match the expected uid. */
-export function getActiveUser(expectedUser: User): User {
-  const currentUser = getSessionUser();
-  if (!currentUser || currentUser.uid !== expectedUser.uid) {
-    throw new Error("Authentication session unavailable");
-  }
-  return currentUser;
-}
-
-/** Reload the browser user after a server-side profile update. */
-export async function reloadSessionUser(): Promise<void> {
-  const user = getSessionUser();
-  if (!user) throw new Error("Authentication session unavailable");
-  return user.reload();
+/** Delete the session cookie on the server. */
+export async function deleteSession(): Promise<void> {
+  const cookieStore = await cookies();
+  cookieStore.delete(SESSION_COOKIE_NAME);
 }

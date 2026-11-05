@@ -1,6 +1,6 @@
 "use server";
 
-import { verifySession } from "../../_lib/dal";
+import { verifySession } from "@/lib/dal";
 import { readOwnProfile, saveProfile } from "./data";
 import type { ProfileActionState } from "./definitions";
 import { parseProfileFormData } from "./dto";

@@ -4,7 +4,7 @@ import ProtectedLayout from "./layout";
 
 const mocks = vi.hoisted(() => ({ verify: vi.fn() }));
 
-vi.mock("./_lib/dal", () => ({ verifySession: mocks.verify }));
+vi.mock("@/lib/dal", () => ({ verifySession: mocks.verify }));
 vi.mock("./_components/navigation-events", () => ({
   NavigationEvents: () => <div data-testid="route-usage" />,
 }));

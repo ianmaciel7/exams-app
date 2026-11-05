@@ -2,17 +2,17 @@ import "server-only";
 
 import { notFound } from "next/navigation";
 import { cache } from "react";
-import { getFirebaseServerSession } from "@/lib/firebase/server";
 import { redirectToSignIn } from "@/lib/navigation";
 import { hasRole, type UserRole } from "@/lib/role";
+import { getSession } from "@/lib/session";
 
 /**
  * Authentication boundary for protected data and operations. It fails closed:
  * without a server-verified identity, the caller is sent to sign-in.
  */
 export const verifySession = cache(async () => {
-  const session = await getFirebaseServerSession();
-  if (!session.userId) redirectToSignIn();
+  const session = await getSession();
+  if (!session.isAuthenticated || !session.userId) redirectToSignIn();
   return { role: session.role, userId: session.userId };
 });
 

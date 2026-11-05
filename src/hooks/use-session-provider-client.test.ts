@@ -3,11 +3,11 @@ import type { User } from "firebase/auth";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
-  subscribeToSession: vi.fn(),
+  subscribeToAuth: vi.fn(),
 }));
 
-vi.mock("@/lib/session", () => ({
-  subscribeToSession: mocks.subscribeToSession,
+vi.mock("@/lib/firebase/client", () => ({
+  subscribeToAuth: mocks.subscribeToAuth,
 }));
 
 import { useSessionProviderClient } from "./use-session-provider-client";
@@ -15,7 +15,7 @@ import { useSessionProviderClient } from "./use-session-provider-client";
 /** Firebase loads on demand, so wait for the hook to subscribe. */
 async function renderSubscribed() {
   const rendered = renderHook(() => useSessionProviderClient());
-  await vi.waitFor(() => expect(mocks.subscribeToSession).toHaveBeenCalled());
+  await vi.waitFor(() => expect(mocks.subscribeToAuth).toHaveBeenCalled());
   return rendered;
 }
 
@@ -24,7 +24,7 @@ describe("useSessionProviderClient", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mocks.subscribeToSession.mockImplementation(
+    mocks.subscribeToAuth.mockImplementation(
       (callback: (user: User | null) => void) => {
         notify = callback;
         return () => {};
@@ -39,7 +39,7 @@ describe("useSessionProviderClient", () => {
       isLoading: true,
       user: null,
     });
-    await vi.waitFor(() => expect(mocks.subscribeToSession).toHaveBeenCalled());
+    await vi.waitFor(() => expect(mocks.subscribeToAuth).toHaveBeenCalled());
 
     const user = { uid: "user-1" } as User;
     act(() => notify(user));
@@ -58,7 +58,7 @@ describe("useSessionProviderClient", () => {
   });
 
   it("reports a failed subscription as an error, not as a signed-out visitor", async () => {
-    mocks.subscribeToSession.mockImplementation(() => {
+    mocks.subscribeToAuth.mockImplementation(() => {
       throw new Error("missing config");
     });
     const log = vi.spyOn(console, "error").mockImplementation(() => {});
@@ -74,7 +74,7 @@ describe("useSessionProviderClient", () => {
 
   it("unsubscribes on unmount and ignores a subscription that resolves late", async () => {
     const unsubscribe = vi.fn();
-    mocks.subscribeToSession.mockImplementation(() => unsubscribe);
+    mocks.subscribeToAuth.mockImplementation(() => unsubscribe);
     const { unmount } = await renderSubscribed();
     unmount();
     expect(unsubscribe).toHaveBeenCalledOnce();

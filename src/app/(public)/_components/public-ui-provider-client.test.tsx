@@ -1,7 +1,7 @@
 import { enUs, esEs, ptBr } from "@firebase-oss/ui-translations";
 import { act, cleanup, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { PublicGuardClient } from "./public-guard-client";
+import { PublicUiProviderClient } from "./public-ui-provider-client";
 
 const mocks = vi.hoisted(() => ({
   router: { replace: vi.fn() },
@@ -23,13 +23,15 @@ vi.mock("@/lib/auth", () => ({
   getPendingSignOut: () => null,
   syncSessionCookie: mocks.syncSessionCookie,
 }));
-vi.mock("firebase/auth", () => ({ onAuthStateChanged: mocks.subscribe }));
-vi.mock("@/lib/firebase/client", () => ({ getFirebaseUI: mocks.getUI }));
+vi.mock("@/lib/firebase/client", () => ({
+  getFirebaseUI: mocks.getUI,
+  subscribeToAuth: mocks.subscribe,
+}));
 vi.mock("@firebase-oss/ui-react", () => ({
   FirebaseUIProvider: ({ children }: { children: React.ReactNode }) => children,
 }));
 
-describe("PublicGuardClient", () => {
+describe("PublicUiProviderClient", () => {
   afterEach(() => {
     cleanup();
     window.history.replaceState(null, "", "/");
@@ -44,19 +46,14 @@ describe("PublicGuardClient", () => {
     mocks.syncSessionCookie.mockResolvedValue(undefined);
   });
 
-  it("waits for the first auth state and renders the screen for a signed-out user", () => {
+  it("provides the Firebase UI context and renders the screen without waiting for auth state", () => {
     render(
-      <PublicGuardClient>
+      <PublicUiProviderClient>
         <p>{"Screen"}</p>
-      </PublicGuardClient>,
+      </PublicUiProviderClient>,
     );
-    expect(
-      document.querySelector('[data-slot="loading-status"]'),
-    ).not.toBeNull();
-    expect(screen.queryByText("Screen")).toBeNull();
-    expect(mocks.setLocale).toHaveBeenCalled();
-    act(() => mocks.subscribe.mock.calls[0][1](null));
     expect(screen.getByText("Screen")).toBeTruthy();
+    expect(mocks.setLocale).toHaveBeenCalled();
   });
 
   it("creates the session cookie before leaving the sign-in screen", async () => {
@@ -67,12 +64,12 @@ describe("PublicGuardClient", () => {
       }),
     );
     render(
-      <PublicGuardClient>
+      <PublicUiProviderClient>
         <p>{"Screen"}</p>
-      </PublicGuardClient>,
+      </PublicUiProviderClient>,
     );
     const user = { uid: "user" };
-    act(() => mocks.subscribe.mock.calls[0][1](user));
+    act(() => mocks.subscribe.mock.calls[0][0](user));
     expect(mocks.syncSessionCookie).toHaveBeenCalledWith(user);
     expect(mocks.router.replace).not.toHaveBeenCalled();
     finishSync();
@@ -87,43 +84,57 @@ describe("PublicGuardClient", () => {
       }),
     );
     const { unmount } = render(
-      <PublicGuardClient>
+      <PublicUiProviderClient>
         <p>{"Screen"}</p>
-      </PublicGuardClient>,
+      </PublicUiProviderClient>,
     );
-    act(() => mocks.subscribe.mock.calls[0][1]({ uid: "user" }));
+    act(() => mocks.subscribe.mock.calls[0][0]({ uid: "user" }));
     unmount();
     finishSync();
     await Promise.resolve();
     expect(mocks.router.replace).not.toHaveBeenCalled();
   });
 
-  it("redirects a signed-in user without displaying the screen", async () => {
+  it("redirects a signed-in user after creating the session cookie", async () => {
     render(
-      <PublicGuardClient>
+      <PublicUiProviderClient>
         <p>{"Screen"}</p>
-      </PublicGuardClient>,
+      </PublicUiProviderClient>,
     );
-    act(() => mocks.subscribe.mock.calls[0][1]({ uid: "user" }));
+    act(() => mocks.subscribe.mock.calls[0][0]({ uid: "user" }));
     await waitFor(() => expect(mocks.router.replace).toHaveBeenCalledWith("/"));
-    expect(screen.queryByText("Screen")).toBeNull();
+  });
+
+  it("does not navigate for a signed-out user", () => {
+    render(
+      <PublicUiProviderClient>
+        <p>{"Screen"}</p>
+      </PublicUiProviderClient>,
+    );
+    act(() => mocks.subscribe.mock.calls[0][0](null));
+    expect(mocks.syncSessionCookie).not.toHaveBeenCalled();
+    expect(mocks.router.replace).not.toHaveBeenCalled();
   });
 
   it("syncs locale changes without recreating the store or subscription", () => {
-    const view = render(<PublicGuardClient>{"Screen"}</PublicGuardClient>);
+    const view = render(
+      <PublicUiProviderClient>{"Screen"}</PublicUiProviderClient>,
+    );
     expect(mocks.setLocale).toHaveBeenLastCalledWith(ptBr);
     mocks.locale = "es";
-    view.rerender(<PublicGuardClient>{"Screen"}</PublicGuardClient>);
+    view.rerender(<PublicUiProviderClient>{"Screen"}</PublicUiProviderClient>);
     expect(mocks.setLocale).toHaveBeenLastCalledWith(esEs);
     mocks.locale = "unsupported";
-    view.rerender(<PublicGuardClient>{"Screen"}</PublicGuardClient>);
+    view.rerender(<PublicUiProviderClient>{"Screen"}</PublicUiProviderClient>);
     expect(mocks.setLocale).toHaveBeenLastCalledWith(enUs);
     expect(mocks.subscribe).toHaveBeenCalledOnce();
   });
 
   it("unsubscribes and ignores session callbacks after unmount", () => {
-    const view = render(<PublicGuardClient>{"Screen"}</PublicGuardClient>);
-    const onSession = mocks.subscribe.mock.calls[0][1];
+    const view = render(
+      <PublicUiProviderClient>{"Screen"}</PublicUiProviderClient>,
+    );
+    const onSession = mocks.subscribe.mock.calls[0][0];
     view.unmount();
     expect(mocks.unsubscribe).toHaveBeenCalledOnce();
     act(() => onSession({ uid: "late-user" }));
@@ -136,9 +147,9 @@ describe("PublicGuardClient", () => {
     });
     const log = vi.spyOn(console, "error").mockImplementation(() => {});
     render(
-      <PublicGuardClient>
+      <PublicUiProviderClient>
         <p>{"Screen"}</p>
-      </PublicGuardClient>,
+      </PublicUiProviderClient>,
     );
     expect(screen.getByRole("alert").textContent).toBe("configurationError");
     log.mockRestore();
@@ -157,15 +168,14 @@ describe("PublicGuardClient", () => {
         `/sign-in?next=${encodeURIComponent(next)}`,
       );
       render(
-        <PublicGuardClient>
+        <PublicUiProviderClient>
           <p>{"Screen"}</p>
-        </PublicGuardClient>,
+        </PublicUiProviderClient>,
       );
-      act(() => mocks.subscribe.mock.calls[0][1]({ uid: "user" }));
+      act(() => mocks.subscribe.mock.calls[0][0]({ uid: "user" }));
       await waitFor(() =>
         expect(mocks.router.replace).toHaveBeenCalledWith(destination),
       );
-      expect(screen.queryByText("Screen")).toBeNull();
     },
   );
 });

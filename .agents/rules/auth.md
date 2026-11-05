@@ -16,7 +16,7 @@ Authentication helpers remain flat modules under `src/lib`: use `auth.ts`,
 `session.ts`, and `return-url.ts`. Do not create `src/lib/auth/` for these
 modules; `auth.ts` owns authentication operations, `session.ts` owns the
 active Firebase session, and `return-url.ts` owns safe post-auth navigation.
-Profile hooks call `sendEmailChangeVerification` and `reloadSessionUser` through
+Profile hooks call `sendEmailChangeVerification` and `reloadFirebaseAuthUser` through
 those modules, without a route-private gateway or direct SDK imports (ADR 0029).
 `pending-sign-out.ts` shares the logout barrier without an auth/session import cycle.
 
@@ -36,7 +36,7 @@ those modules, without a route-private gateway or direct SDK imports (ADR 0029).
 - Never read the session inside a `use cache` scope. Resolve it first, then pass only the user id to an unexported cached function; keep tokens and email addresses out of cache keys and tags.
 - Authorize Admin SDK access in application code; it bypasses Firebase Security Rules.
 - Session cookies (`__session`) are the server session transport per [ADR 0021](../../docs/adr/0021-adopt-official-nextjs-server-auth-dal.md). Do not add Proxy auth checks or `authInterrupts` without a new ADR.
-- Create the session cookie (`syncSessionCookie`) before navigating from sign-in to a protected route. The server verifies the cookie, so navigating first redirects back to sign-in and drops the query string. `public-guard-client.test.tsx` guards the order.
+- Create the session cookie (`syncSessionCookie`) before navigating from sign-in to a protected route. The server verifies the cookie, so navigating first redirects back to sign-in and drops the query string. `use-firebase-ui-return-navigation` guards the order.
 - The server DAL redirect knows only the route path, not its query string: `redirectToSignIn` returns to the path.
 - A change to the authentication architecture updates `tests/firebase-auth.spec.ts` in the same pull request. The emulator E2E does not run in the cloud container, so CI is its only check, and `failOnFlakyTests` makes a flaky run fail.
 

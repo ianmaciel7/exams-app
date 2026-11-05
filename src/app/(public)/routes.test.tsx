@@ -2,8 +2,8 @@ import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { renderToString } from "react-dom/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import ForgotPasswordPage from "./forgot-password/page";
-import RegisterPage from "./register/page";
-import SignInPage from "./sign-in/page";
+import { RegisterFormClient } from "./register/_components/register-form-client";
+import { SignInFormClient } from "./sign-in/_components/sign-in-form-client";
 
 const { push } = vi.hoisted(() => ({ push: vi.fn() }));
 vi.mock("next/navigation", () => ({ useRouter: () => ({ push }) }));
@@ -53,7 +53,7 @@ afterEach(() => {
   window.history.replaceState(null, "", "/");
 });
 describe("authentication routes", () => {
-  it.each([SignInPage, RegisterPage, ForgotPasswordPage])(
+  it.each([SignInFormClient, RegisterFormClient, ForgotPasswordPage])(
     "renders %s without browser globals",
     (Page) => {
       vi.stubGlobal("window", undefined);
@@ -65,13 +65,13 @@ describe("authentication routes", () => {
     },
   );
   it("navigates from sign in to registration and recovery", () => {
-    render(<SignInPage />);
+    render(<SignInFormClient />);
     fireEvent.click(screen.getByRole("button", { name: "register" }));
     fireEvent.click(screen.getByRole("button", { name: "reset" }));
     expect(push.mock.calls).toEqual([["/register"], ["/forgot-password"]]);
   });
   it("navigates from registration back to sign in", () => {
-    render(<RegisterPage />);
+    render(<RegisterFormClient />);
     fireEvent.click(screen.getByRole("button", { name: "sign in" }));
     expect(push).toHaveBeenCalledWith("/sign-in");
   });
@@ -84,7 +84,7 @@ describe("authentication routes", () => {
   it("preserves the requested destination throughout registration and recovery", () => {
     const next = `?next=${encodeURIComponent("/profile?tab=security")}`;
     window.history.replaceState(null, "", `/sign-in${next}`);
-    const { unmount } = render(<SignInPage />);
+    const { unmount } = render(<SignInFormClient />);
     fireEvent.click(screen.getByRole("button", { name: "register" }));
     fireEvent.click(screen.getByRole("button", { name: "reset" }));
     expect(push.mock.calls).toEqual([
@@ -94,7 +94,7 @@ describe("authentication routes", () => {
     unmount();
 
     window.history.replaceState(null, "", `/register${next}`);
-    const registration = render(<RegisterPage />);
+    const registration = render(<RegisterFormClient />);
     fireEvent.click(screen.getByRole("button", { name: "sign in" }));
     expect(push).toHaveBeenLastCalledWith(`/sign-in${next}`);
     registration.unmount();
@@ -111,7 +111,7 @@ describe("authentication routes", () => {
       "",
       `/sign-in?next=${encodeURIComponent("https://evil.example")}`,
     );
-    render(<SignInPage />);
+    render(<SignInFormClient />);
     fireEvent.click(screen.getByRole("button", { name: "register" }));
     expect(push).toHaveBeenCalledWith("/register");
   });

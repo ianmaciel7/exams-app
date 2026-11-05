@@ -493,7 +493,7 @@ Components throughout the application—regardless of whether they are Server Co
 - **Route-private composition roots**: Route-level private components (such as `src/app/(public)/sign-in/_components/sign-in-form-client.tsx` and `src/app/(public)/register/_components/register-form-client.tsx`) act as composition roots. They connect Next.js navigation hooks (`router.push(...)`) to the screen's callback props and assemble feature-specific dependencies.
 - **Provider and addon injection via `children` slots**: Presentation screens and shared surfaces must not hardcode third-party identity providers (e.g., Google, GitHub, or SAML) or concrete third-party services. Instead, expose extensible `children` slots so that provider buttons (e.g., `<GoogleSignInButton />`) or custom actions can be injected at the composition root, conditioned on environment variables (such as `NEXT_PUBLIC_FIREBASE_GOOGLE_ENABLED`).
 - **Logic abstraction via custom hooks or service interfaces**: Isolate business logic, validation schemas, and lifecycle effects behind specialized hooks or pure service functions (such as `useUI()`, `useSignInAuthFormSchema()`, `useSignInAuthFormAction()`, and `useOnUserAuthenticated()`). This keeps presentation components focused on rendering state, layout, and event propagation without direct coupling to underlying SDK operations.
-- **Route hooks use canonical services, not Firebase SDK imports**: a route-private hook or component (`src/app/**/_hooks`, `_components`) never imports `firebase`, `firebase/*`, `@/lib/firebase/client` or `_lib/data`. Profile hooks call `reloadSessionUser` from `@/lib/session` and `sendEmailChangeVerification` from `@/lib/auth`; tests mock these service modules. A context/provider is not required solely to forward those operations. Biome `noRestrictedImports` retains the SDK boundary (ADR 0029 amends ADRs 0027 and 0028).
+- **Route hooks use canonical services, not Firebase SDK imports**: a route-private hook or component (`src/app/**/_hooks`, `_components`) never imports `firebase`, `firebase/*`, `@/lib/firebase/client` or `_lib/data`. Profile hooks call `reloadFirebaseAuthUser` and `sendEmailChangeVerification` from `@/lib/auth`; tests mock these service modules. A context/provider is not required solely to forward those operations. Biome `noRestrictedImports` retains the SDK boundary (ADR 0029 amends ADRs 0027 and 0028).
 
 ## Internationalization
 
@@ -699,7 +699,7 @@ install upstream agent skills simply because a guide mentions them.
 
 Main component hooks coordinate focused sub-hooks and expose rendering-ready
 state/callbacks. A sub-hook owns one cohesive lifecycle or workflow, not one line
-of code. For example, `usePublicGuardClient` composes `useAuthUiStore`,
+of code. For example, `usePublicUiProviderClient` composes `useAuthUiStore`,
 `useFirebaseUiReturnNavigation` and `useAuthUiLocale`; it does not initialize Firebase,
 subscribe to authentication and synchronize locale inside one monolithic Effect.
 `ProfileForm` receives its Action and initial values as props and delegates its

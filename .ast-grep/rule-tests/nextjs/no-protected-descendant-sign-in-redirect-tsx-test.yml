@@ -1,7 +1,7 @@
 id: no-protected-descendant-sign-in-redirect-tsx
 valid:
   - |
-    subscribeToSession((user) => {
+    subscribeToAuth((user) => {
       setAuth({ error: null, isLoading: false, user });
     });
   - |
@@ -14,7 +14,7 @@ valid:
     refresh();
 invalid:
   - |
-    subscribeToSession((user) => {
+    subscribeToAuth((user) => {
       if (!user) router.replace(routes.signIn);
     });
   - |

@@ -3,8 +3,8 @@
 // Contentful Paint. These live outside the hooks because React Compiler does
 // not support `import()` there.
 
-/** Load the session module on demand. */
-export const loadSession = () => import("@/lib/session");
+/** Load the browser Firebase client (auth state) on demand. */
+export const loadFirebaseClient = () => import("@/lib/firebase/client");
 
 /** Load the sign-out module on demand. */
 export const loadAuth = () => import("@/lib/auth");

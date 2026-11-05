@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
-  getFirebaseServerSession: vi.fn(),
+  getSession: vi.fn(),
   notFound: vi.fn(() => {
     throw new Error("NOT_FOUND");
   }),
@@ -11,9 +11,7 @@ const mocks = vi.hoisted(() => ({
 }));
 
 vi.mock("next/navigation", () => ({ notFound: mocks.notFound }));
-vi.mock("@/lib/firebase/server", () => ({
-  getFirebaseServerSession: mocks.getFirebaseServerSession,
-}));
+vi.mock("@/lib/session", () => ({ getSession: mocks.getSession }));
 vi.mock("@/lib/navigation", () => ({
   redirectToSignIn: mocks.redirectToSignIn,
   routes: { home: "/" },
@@ -25,18 +23,20 @@ describe("verifySession", () => {
   beforeEach(() => vi.clearAllMocks());
 
   it("fails closed without a verified identity", async () => {
-    mocks.getFirebaseServerSession.mockResolvedValue({
+    mocks.getSession.mockResolvedValue({
       role: "user",
       userId: null,
+      isAuthenticated: false,
     });
     await expect(verifySession()).rejects.toThrow("SIGN_IN");
     expect(mocks.redirectToSignIn).toHaveBeenCalledOnce();
   });
 
   it("returns only the verified identity", async () => {
-    mocks.getFirebaseServerSession.mockResolvedValue({
+    mocks.getSession.mockResolvedValue({
       role: "admin",
       userId: "a1",
+      isAuthenticated: true,
     });
     await expect(verifySession()).resolves.toEqual({
       role: "admin",
@@ -48,7 +48,7 @@ describe("verifySession", () => {
     const fault = Object.assign(new Error("offline"), {
       code: "auth/internal-error",
     });
-    mocks.getFirebaseServerSession.mockRejectedValue(fault);
+    mocks.getSession.mockRejectedValue(fault);
     await expect(verifySession()).rejects.toBe(fault);
     expect(mocks.redirectToSignIn).not.toHaveBeenCalled();
   });
@@ -58,25 +58,28 @@ describe("verifyRole", () => {
   beforeEach(() => vi.clearAllMocks());
 
   it("sends callers without a verified session to sign-in", async () => {
-    mocks.getFirebaseServerSession.mockResolvedValue({
+    mocks.getSession.mockResolvedValue({
       role: "user",
       userId: null,
+      isAuthenticated: false,
     });
     await expect(verifyRole("user")).rejects.toThrow("SIGN_IN");
   });
 
   it("answers an insufficient role as not found", async () => {
-    mocks.getFirebaseServerSession.mockResolvedValue({
+    mocks.getSession.mockResolvedValue({
       role: "user",
       userId: "u1",
+      isAuthenticated: true,
     });
     await expect(verifyRole("admin")).rejects.toThrow("NOT_FOUND");
   });
 
   it("returns the verified identity when the role suffices", async () => {
-    mocks.getFirebaseServerSession.mockResolvedValue({
+    mocks.getSession.mockResolvedValue({
       role: "admin",
       userId: "a1",
+      isAuthenticated: true,
     });
     await expect(verifyRole("user")).resolves.toEqual({
       role: "admin",
