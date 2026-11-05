@@ -1,5 +1,5 @@
 import { enUs, esEs, ptBr } from "@firebase-oss/ui-translations";
-import { act, cleanup, render, screen } from "@testing-library/react";
+import { act, cleanup, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { PublicGuardClient } from "./public-guard-client";
 
@@ -53,14 +53,14 @@ describe("PublicGuardClient", () => {
     expect(screen.getByText("Screen")).toBeTruthy();
   });
 
-  it("redirects a signed-in user without displaying the screen", () => {
+  it("redirects a signed-in user without displaying the screen", async () => {
     render(
       <PublicGuardClient>
         <p>{"Screen"}</p>
       </PublicGuardClient>,
     );
     act(() => mocks.subscribe.mock.calls[0][1]({ uid: "user" }));
-    expect(mocks.router.replace).toHaveBeenCalledWith("/");
+    await waitFor(() => expect(mocks.router.replace).toHaveBeenCalledWith("/"));
     expect(screen.queryByText("Screen")).toBeNull();
   });
 
@@ -103,19 +103,24 @@ describe("PublicGuardClient", () => {
     ["/profile?tab=security", "/profile?tab=security"],
     ["https://evil.example", "/"],
     ["/sign-in", "/"],
-  ])("redirects safely after sign-in with next=%s", (next, destination) => {
-    window.history.replaceState(
-      null,
-      "",
-      `/sign-in?next=${encodeURIComponent(next)}`,
-    );
-    render(
-      <PublicGuardClient>
-        <p>{"Screen"}</p>
-      </PublicGuardClient>,
-    );
-    act(() => mocks.subscribe.mock.calls[0][1]({ uid: "user" }));
-    expect(mocks.router.replace).toHaveBeenCalledWith(destination);
-    expect(screen.queryByText("Screen")).toBeNull();
-  });
+  ])(
+    "redirects safely after sign-in with next=%s",
+    async (next, destination) => {
+      window.history.replaceState(
+        null,
+        "",
+        `/sign-in?next=${encodeURIComponent(next)}`,
+      );
+      render(
+        <PublicGuardClient>
+          <p>{"Screen"}</p>
+        </PublicGuardClient>,
+      );
+      act(() => mocks.subscribe.mock.calls[0][1]({ uid: "user" }));
+      await waitFor(() =>
+        expect(mocks.router.replace).toHaveBeenCalledWith(destination),
+      );
+      expect(screen.queryByText("Screen")).toBeNull();
+    },
+  );
 });
