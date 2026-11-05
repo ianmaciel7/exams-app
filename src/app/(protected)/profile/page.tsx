@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/card";
 import { TranslationTextServer as T } from "@/components/ui/extensions/translation-text-server";
 import { verifySession } from "../_lib/dal";
-import { ProfileFormClient } from "./_components/profile-form-client";
+import { ProfileForm } from "./_components/profile-form";
 
 export const instant = false;
 
@@ -25,7 +25,7 @@ export default async function ProfilePage() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ProfileFormClient />
+        <ProfileForm />
       </CardContent>
     </Card>
   );

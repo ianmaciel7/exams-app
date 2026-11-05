@@ -1,4 +1,4 @@
-# ADR 0025: Adopt App Check for callable functions
+# ADR 0026: Adopt App Check for callable functions
 
 - **Status**: Accepted
 - **Date**: 2026-11-05

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import type { Locale } from "@/lib/locale";
-import type { Session } from "@/lib/watch-session";
+import type { Session } from "@/lib/session-context";
 import { readProfile } from "../_lib/data";
 import type { ProfileLoadState } from "../_lib/definitions";
 

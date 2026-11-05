@@ -127,7 +127,7 @@ let appCheckStarted = false;
 
 /**
  * Starts App Check when a reCAPTCHA site key is configured, so callables can
- * enforce it (ADR 0025). Without the key it does nothing. The debug token flag
+ * enforce it (ADR 0026). Without the key it does nothing. The debug token flag
  * lets local development and emulators get a token without reCAPTCHA.
  */
 function startAppCheck(app: ReturnType<typeof getFirebaseApp>) {

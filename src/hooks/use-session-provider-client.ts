@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import type { User } from "firebase/auth";
+import { useEffect, useState } from "react";
 import { syncSessionCookie } from "@/lib/auth";
-import { loadAuth, loadSession } from "@/lib/firebase-loaders";
-import { type Session, watchSession } from "@/lib/watch-session";
+import { loadSession } from "@/lib/firebase-loaders";
+import type { Session } from "@/lib/session-context";
 
 /** The single Firebase Auth subscription behind `SessionProviderClient`. */
 export function useSessionProviderClient() {
@@ -10,28 +11,24 @@ export function useSessionProviderClient() {
     isLoading: true,
     user: null,
   });
-  const revisionRef = useRef(0);
 
   useEffect(() => {
     const lifetime = new AbortController();
     const fail = (cause: unknown) => {
       console.error(cause);
-      revisionRef.current++;
       if (!lifetime.signal.aborted) {
         setSession({ isError: true, isLoading: false, user: null });
       }
     };
 
+    const settle = (user: User | null) =>
+      setSession({ isError: false, isLoading: false, user });
+
     let unsubscribe: (() => void) | undefined;
-    Promise.all([loadSession(), loadAuth()])
-      .then((modules) => {
+    loadSession()
+      .then(({ subscribeToSession }) => {
         if (lifetime.signal.aborted) return;
-        unsubscribe = watchSession(modules, {
-          fail,
-          revision: revisionRef,
-          setSession,
-          signal: lifetime.signal,
-        });
+        unsubscribe = subscribeToSession(settle);
       })
       .catch(fail);
     return () => {

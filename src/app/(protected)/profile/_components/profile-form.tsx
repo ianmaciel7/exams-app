@@ -10,6 +10,7 @@ import {
   FormFieldError,
   FormFieldLabel,
 } from "@/components/ui/extensions/form-field";
+import { LoadingStatus } from "@/components/ui/extensions/loading-status";
 import { FieldGroup } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
@@ -26,18 +27,18 @@ import { routes } from "@/lib/navigation";
 import { isThemePreference, themePreferences } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 import { useProfileForm } from "../_hooks/use-profile-form";
-import { type ProfileValues, profileFieldNames } from "../_lib/definitions";
+import { profileFieldNames } from "../_lib/definitions";
 import { ProfileAvatarFieldClient } from "./profile-avatar-field-client";
 
 type ProfileFormProps = ComponentProps<typeof Form> & {
-  initialValues: ProfileValues;
   action?: never;
   onSubmit?: never;
 };
 
-function ProfileForm({ initialValues, className, ...props }: ProfileFormProps) {
-  const { t, state, pending, formAction, avatarFile, pickAvatar } =
-    useProfileForm(initialValues);
+function ProfileForm({ className, ...props }: ProfileFormProps) {
+  const form = useProfileForm();
+  if (form.isLoading) return <LoadingStatus />;
+  const { t, state, pending, formAction, avatarFile, pickAvatar } = form;
 
   // Edits made while a save is pending would be reset with the form.
   return (

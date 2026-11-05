@@ -12,8 +12,8 @@ vi.mock("@/components/ui/extensions/translation-text-server", () => ({
     message.split(".").pop(),
 }));
 
-vi.mock("./profile/_components/profile-form-client", () => ({
-  ProfileFormClient: () => <div data-testid="profile-form-client" />,
+vi.mock("./profile/_components/profile-form", () => ({
+  ProfileForm: () => <div data-testid="profile-form" />,
 }));
 
 afterEach(cleanup);
@@ -21,7 +21,7 @@ afterEach(cleanup);
 describe("protected routes", () => {
   it("renders profile route composition root", async () => {
     render(await ProfilePage());
-    expect(screen.getByTestId("profile-form-client")).toBeTruthy();
+    expect(screen.getByTestId("profile-form")).toBeTruthy();
     expect(
       screen.getByRole("heading", { name: "personalInfoTitle" }),
     ).toBeTruthy();

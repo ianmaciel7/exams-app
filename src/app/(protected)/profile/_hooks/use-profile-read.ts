@@ -7,8 +7,12 @@ import { defaultLocale, isLocale } from "@/i18n/routing";
 import { syncSavedLocale } from "../_lib/utils";
 import { useProfileLoad } from "./use-profile-load";
 
-/** Own the browser read for this visit, without a shared Promise cache. */
-export function useProfileFormClient() {
+/**
+ * Own the browser read for this visit, without a shared Promise cache, and
+ * apply the saved theme and locale once. A failed read or the 15-second
+ * deadline throws to `profile/error.tsx`.
+ */
+export function useProfileRead() {
   const session = useSession();
   const locale = useLocale();
   const activeLocale = isLocale(locale) ? locale : defaultLocale;

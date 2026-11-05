@@ -18,6 +18,11 @@ or `checkMode = "helper"` for libraries invoked by another check. Their
 offline regression suites still run automatically. Keep external tool
 execution in its existing owning command.
 
+Colocated tests are named after the file they test (`page.tsx` is tested by
+`page.test.tsx`; a variant such as `.browser` is allowed). `check-test-names`
+enforces it; a suite that deliberately spans several modules needs an entry
+with a reason in its `exceptions` map.
+
 Before implementing or changing a user-facing or asynchronous workflow, or one
 with multiple steps, enumerate the relevant states, events, transitions and transition
 pairs. Define success, cancellation, failure, and recovery expectations
