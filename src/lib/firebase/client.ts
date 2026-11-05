@@ -1,4 +1,3 @@
-// cspell:ignore APPCHECK
 import {
   initializeUI,
   providerPopupStrategy,
