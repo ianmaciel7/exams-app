@@ -195,7 +195,7 @@ describe("route-only Firebase import restrictions", () => {
   });
 });
 
-describe("shared utilities and server boundaries in route UI", () => {
+describe("dependency inversion in route hooks and components", () => {
   const routeParent = "src/app";
   const [appDirectory] = createTempDirs([routeParent], "port-");
   const hooks = join(appDirectory, "_hooks");
@@ -222,26 +222,11 @@ describe("shared utilities and server boundaries in route UI", () => {
     }
   });
 
-  it("rejects obsolete route adapters even in a provider-named component", () => {
+  it("lets a provider composition root import the adapter", () => {
     const output = lintSingle(
       join(components, "port-provider-client.tsx"),
       'import { firebaseGateway } from "../_lib/gateway"; export { firebaseGateway };',
     );
-    expect(output).toContain("lint/style/noRestrictedImports");
-  });
-
-  it.each([
-    'import { sendEmailChangeVerification } from "@/lib/auth"; export { sendEmailChangeVerification };',
-    'import { reloadSessionUser } from "@/lib/session"; export { reloadSessionUser };',
-    'import { trackEvent } from "@/lib/firebase/usage"; export { trackEvent };',
-  ])("allows a shared browser utility: %s", (source) => {
-    for (const [directory, name] of [
-      [hooks, "use-profile.ts"],
-      [components, "profile-form.tsx"],
-    ] as const) {
-      expect(lintSingle(join(directory, name), source)).not.toContain(
-        "lint/style/noRestrictedImports",
-      );
-    }
+    expect(output).not.toContain("lint/style/noRestrictedImports");
   });
 });

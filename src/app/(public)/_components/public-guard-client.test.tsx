@@ -20,6 +20,7 @@ vi.mock("next-intl", () => ({
   useTranslations: () => (key: string) => key,
 }));
 vi.mock("@/lib/auth", () => ({
+  getPendingSignOut: () => null,
   syncSessionCookie: mocks.syncSessionCookie,
 }));
 vi.mock("firebase/auth", () => ({ onAuthStateChanged: mocks.subscribe }));

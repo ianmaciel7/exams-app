@@ -110,11 +110,6 @@ stem and component identifiers:
 
 ## UI companion components for integration boundaries (Client and Server)
 
-A `*-dialog.tsx` composing `Dialog` and a form may own the form workflow without
-a `-client` suffix, as `ProfileEmailDialog` does (ADR 0029). The boundary must
-still declare `"use client"`. A dialog without a form does not gain this exception;
-keep direct SDK access in shared utilities and preserve ordinary suffix checks.
-
 Every Client (`*-client.tsx` / `*Client`) or Server (`*-server.tsx` / `*Server`) integration component must be paired with an equivalent UI presentation component (without integration suffixes, e.g. `HomeSection` in `home-section.tsx` for `HomeSectionClient` in `home-section-client.tsx`).
 
 - The companion UI component owns markup, HTML elements, styled layout containers, and presentation compound parts (such as `HomeSection`, `HomeSectionContent`, `HomeSectionHeader`, `HomeSectionFooter`).

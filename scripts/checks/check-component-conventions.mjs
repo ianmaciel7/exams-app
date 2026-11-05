@@ -491,28 +491,14 @@ function integrationKinds(integration, clientBoundary) {
   };
 }
 
-function isFormDialog(source, stem) {
-  if (!stem.endsWith("-dialog")) return false;
-  const names = jsxEntries(source).map((entry) => entry.name);
-  return (
-    names.includes("Dialog") &&
-    names.some(
-      (name) =>
-        name === "form" || name === "Form" || /^[A-Z].*Form$/.test(name),
-    )
-  );
-}
-
-function integrationNameMessages(stem, client, server, formDialog) {
+function integrationNameMessages(stem, client, server) {
   const messages = [];
   // A form component owns its Action and the integrations it needs, as in the
-  // Next.js and shadcn form guides. A dialog composing a form owns that workflow
-  // too; both keep their semantic form/dialog stem instead of a client suffix.
+  // Next.js and shadcn form guides, so `-form.tsx` is exempt from `-client`.
   if (
     client &&
     !stem.endsWith("-client") &&
     !stem.endsWith("-form") &&
-    !formDialog &&
     !nextjsDocComponentStems.has(stem)
   )
     messages.push(
@@ -559,12 +545,7 @@ export function inspectComponentRuntime(
   const integration = componentIntegrations(source, filename, modules);
   const { client, server } = integrationKinds(integration, clientBoundary);
   const messages = [
-    ...integrationNameMessages(
-      stem,
-      client,
-      server,
-      isFormDialog(source, stem),
-    ),
+    ...integrationNameMessages(stem, client, server),
     ...integrationBoundaryMessages(source, stem, clientBoundary, client),
   ];
   return messages.map((message) => ({

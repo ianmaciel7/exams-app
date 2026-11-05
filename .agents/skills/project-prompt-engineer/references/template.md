@@ -13,40 +13,23 @@ This reference guide provides the canonical, ready-to-use markdown template for 
 
 ---
 
-### Current State
+### Final Implementation ("Como Vai Ficar")
 
-- `path/to/current-file.tsx`:
+#### 1. `path/to/target-file.tsx`
+[Brief description of file role]
 
-  ```tsx
-  // Minimal snippet illustrating the current baseline, code structure, or limitation
-  ```
-- [Direct explanation of why the current approach is suboptimal, buggy, or requires refactoring]
+```tsx
+// Exact final code snippet of how this file will look like
+```
 
----
-
-### Action Plan
-
-#### 1. Create [File / Component Name]
-
-- **File**: `path/to/new-file.tsx`
-- **Identifier**: `ComponentName` (props: `ComponentNameProps`)
-- **Details**:
-  - [Primitives, libraries, or base parts consumed]
-  - [Props, state orchestration, or hooks utilized]
-  - [DOM, event handling, or mutation flow]
-
-#### 2. Modify [Existing Component / Module]
-
-- **File**: `path/to/existing-file.tsx`
-- [Modifications, replacements, or wiring required]
-
-  ```tsx
-  // Snippet showing how the new component or function is integrated
-  ```
+#### 2. `path/to/another-target-file.ts`
+```ts
+// Exact final code snippet of how this file will look like
+```
 
 #### 3. Obsolete Code Removal
-
-- [Specific files, functions, hooks, or dead exports to delete]
+- `path/to/obsolete-file.tsx` (reason for deletion)
+- `path/to/obsolete-file.test.tsx`
 
 ---
 
@@ -79,6 +62,12 @@ This reference guide provides the canonical, ready-to-use markdown template for 
   ```bash
   gh pr create --base dev --title "type(scope): description" --body "Summary of changes..."
   ```
+
+---
+
+### Knowledge Persistence & Project Save
+
+- If any new conventions, architectural decisions, reusable patterns, or important domain/library discoveries were established during this task, execute `/project-save` (or follow `.agents/skills/project-save/SKILL.md`) to persist them into canonical repository documentation.
 ````
 
 ---
@@ -88,9 +77,12 @@ This reference guide provides the canonical, ready-to-use markdown template for 
 Before saving or sending the prompt to the user, ensure:
 
 - [ ] **No Generic Fluff**: All role-playing intros ("You are an expert...") and generic stack primers have been stripped out.
+- [ ] **No "Current State" Overhead**: Do not include baseline/current state descriptions or snippets. The receiving agent can read existing files directly.
+- [ ] **Exact Final Code ("Como Vai Ficar") Included**: Every file to be created or modified has its complete, exact destination code snippet written out.
 - [ ] **Concrete Relative Paths**: All paths are repository-relative (`src/app/...`) and never contain machine-specific absolute prefixes.
 - [ ] **Exact Identifiers**: Component names, hook names, and prop types are explicitly defined.
 - [ ] **Specific Guardrails**: Repository gotchas that could cause CI failures (AST linters, naming rules, boundary violations) are stated upfront.
 - [ ] **Verification Commands Included**: The receiving agent is given executable commands to confirm their work.
 - [ ] **Pull Request Workflow Included**: Explicit instructions are included to create a branch off `dev`, commit, push, and open a PR via `gh pr create`.
+- [ ] **Knowledge Persistence Instruction Included**: Prompt instructs the receiving agent to execute `/project-save` (or follow `.agents/skills/project-save/SKILL.md`) to persist critical conventions or decisions.
 - [ ] **Delivered as Artifact**: The prompt is persisted as a Markdown file in the conversation artifact directory.

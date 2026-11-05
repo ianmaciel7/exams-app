@@ -1,22 +1,10 @@
 import { signOut, verifyBeforeUpdateEmail } from "firebase/auth";
 import { getFirebaseUI } from "@/lib/firebase/client";
 import { trackEvent } from "@/lib/firebase/usage";
-import {
-  getActiveUser,
-  getPendingSignOut,
-  getSessionUser,
-  setPendingSignOut,
-} from "@/lib/session";
+import { getPendingSignOut, setPendingSignOut } from "@/lib/pending-sign-out";
+import { getActiveUser, getSessionUser } from "@/lib/session";
 
-/** Record authenticated usage before sending email-change verification. */
-export async function sendEmailChangeVerification(
-  email: string,
-): Promise<void> {
-  const user = getSessionUser();
-  if (!user) throw new Error("Authentication session unavailable");
-  await trackEvent({ type: "function_use", name: "profile.update" });
-  await verifyBeforeUpdateEmail(getActiveUser(user), email);
-}
+export { getPendingSignOut } from "@/lib/pending-sign-out";
 
 export async function syncSessionCookie(user: {
   getIdToken: () => Promise<string>;
@@ -88,5 +76,19 @@ export function signOutUser() {
   ]).then(() => undefined);
 
   setPendingSignOut(pending);
+  const clearPending = () => {
+    if (getPendingSignOut() === pending) setPendingSignOut(null);
+  };
+  void pending.then(clearPending, clearPending);
   return pending;
+}
+
+/** Send confirmation before changing the signed-in user's email address. */
+export async function sendEmailChangeVerification(
+  email: string,
+): Promise<void> {
+  const user = getSessionUser();
+  if (!user) throw new Error("Authentication session unavailable");
+  await trackEvent({ type: "function_use", name: "profile.update" });
+  return verifyBeforeUpdateEmail(getActiveUser(user), email);
 }

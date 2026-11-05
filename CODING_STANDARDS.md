@@ -346,18 +346,27 @@ behavior/accessibility tests remain responsible for their respective contracts.
 #### Next.js form recommendations: what applies here
 
 The [Next.js forms guide](https://nextjs.org/docs/app/guides/forms) builds forms
-on `<form action={fn}>`, `FormData`, `useActionState` and `useFormStatus`.
-The profile page reads data on the server and injects `updateProfile` into
-`ProfileForm`. That Server Action verifies the session, parses the submitted
-values and delegates persistence to the server-only data module. Browser-only
-Firebase authentication operations, including email verification, stay in shared
-client utilities; the Firebase UI authentication forms keep their client Actions.
+on `<form action={fn}>`, `FormData`, `useActionState` and `useFormStatus`. In
+React 19 the Action does not have to be a Server Function: a client function
+works the same way, with the same `(prevState, formData)` signature, pending
+state and automatic form reset. The guide's Server Function part (`'use server'`,
+`verifySession()`, schema parsing on the server) is what does not apply here.
+Every mutation in this app writes through the browser Firebase SDK, which needs
+the signed-in client: sign-in, sign-up, password reset, email link, phone and
+SMS or TOTP second factors (reCAPTCHA and the reCAPTCHA verifier are browser
+only), and the profile (`updateProfile`, `verifyBeforeUpdateEmail`, Storage
+upload and Firestore writes are client calls checked by security rules). A
+Server Action would need the Admin SDK, would drop `verifyBeforeUpdateEmail`,
+and would move authorization from rules to code. So these forms stay client
+forms, and the guide's other points are met as follows:
 
-- Profile form: `<Form action={formAction}>` delegates to `useProfileForm` and
-  the injected Server Action. The serializable result contains `values`,
-  `photoURL`, `hasError` and `savedCount`; avatar draft state stays in the browser.
-  Fields use `name` and `defaultValue`. Failed saves return submitted values so
-  React's form reset preserves user edits.
+- Profile form (the reference): `<Form action={formAction}>` where `formAction`
+  comes from `useActionState(createProfileAction(...), initialState)`. The
+  Action (`_lib/actions.ts`) is a client function that parses `FormData`
+  (`_lib/dto.ts`), writes through Firebase and returns the next state
+  (`values`, pending `avatarFile`, `error`). Fields are uncontrolled inputs with
+  `name` and `defaultValue` from that state. After an Action React resets the
+  form, so a failed save returns the submitted values to keep the user's input.
 - Pending state: the third value of `useActionState` in `ProfileForm`, passed
   to the avatar field as a prop; the save button uses
   `focusableWhenDisabled`. The Firebase UI auth forms still use
@@ -484,7 +493,7 @@ Components throughout the application—regardless of whether they are Server Co
 - **Route-private composition roots**: Route-level private components (such as `src/app/(public)/sign-in/_components/sign-in-form-client.tsx` and `src/app/(public)/register/_components/register-form-client.tsx`) act as composition roots. They connect Next.js navigation hooks (`router.push(...)`) to the screen's callback props and assemble feature-specific dependencies.
 - **Provider and addon injection via `children` slots**: Presentation screens and shared surfaces must not hardcode third-party identity providers (e.g., Google, GitHub, or SAML) or concrete third-party services. Instead, expose extensible `children` slots so that provider buttons (e.g., `<GoogleSignInButton />`) or custom actions can be injected at the composition root, conditioned on environment variables (such as `NEXT_PUBLIC_FIREBASE_GOOGLE_ENABLED`).
 - **Logic abstraction via custom hooks or service interfaces**: Isolate business logic, validation schemas, and lifecycle effects behind specialized hooks or pure service functions (such as `useUI()`, `useSignInAuthFormSchema()`, `useSignInAuthFormAction()`, and `useOnUserAuthenticated()`). This keeps presentation components focused on rendering state, layout, and event propagation without direct coupling to underlying SDK operations.
-- **Route hooks use shared browser utilities**: route UI calls `sendEmailChangeVerification` from `@/lib/auth` and `reloadSessionUser` from `@/lib/session`; it does not introduce a route-specific Gateway or provider. Direct Firebase SDK/client imports and server-private data/Action imports remain prohibited by Biome. The page injects the authenticated Server Action. See [ADR 0029](docs/adr/0029-use-shared-profile-auth-and-session-utilities.md).
+- **Route hooks use canonical services, not Firebase SDK imports**: a route-private hook or component (`src/app/**/_hooks`, `_components`) never imports `firebase`, `firebase/*`, `@/lib/firebase/client` or `_lib/data`. Profile hooks call `reloadSessionUser` from `@/lib/session` and `sendEmailChangeVerification` from `@/lib/auth`; tests mock these service modules. A context/provider is not required solely to forward those operations. Biome `noRestrictedImports` retains the SDK boundary (ADR 0029 amends ADRs 0027 and 0028).
 
 ## Internationalization
 
@@ -962,11 +971,6 @@ Composing an integration component does not make presentation an integration.
 Mandatory Next.js filenames, registry output, hooks and non-component modules
 retain their existing contracts. Integrations stay in their current route or
 shared extension placement; no new container directory is required.
-
-A `*-dialog.tsx` that composes `Dialog` and a form shares the form exception
-from the `-client` suffix. `ProfileEmailDialog` owns its browser workflow through
-`useProfileEmailDialog` and shared auth utilities. It still declares `"use client"`;
-a dialog without a form keeps the ordinary integration naming requirements.
 
 See [the naming rule](.agents/rules/components.md#ci-enforcement) for
 executable coverage and limits, and [ADR 0006](docs/adr/0006-document-project-standards.md)

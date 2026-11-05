@@ -157,6 +157,7 @@
       "includes": [
         "src/app/**/_hooks/**",
         "src/app/**/_components/**",
+        "!src/app/**/*-provider-client.tsx",
         "!src/app/**/*.test.*"
       ],
       "linter": {
@@ -175,14 +176,14 @@
                     "importNames": ["useRouter"],
                     "message": "Navigate through useNavigation from @/hooks/use-navigation; it is the only module that calls useRouter."
                   },
-                  "firebase": "Use shared auth/session utilities; route hooks and components never import the Firebase SDK directly.",
+                  "firebase": "Hooks and components depend on a port (dependency inversion); only a *-provider-client.tsx composition root may import the Firebase SDK.",
                   "firebase-admin": "Hooks and components never import the Admin SDK; the page injects a Server Action instead.",
-                  "@/lib/firebase/client": "Use shared auth/session utilities instead of importing the Firebase client into route UI."
+                  "@/lib/firebase/client": "Hooks and components depend on a port (dependency inversion); only a *-provider-client.tsx composition root may import the Firebase client."
                 },
                 "patterns": [
                   {
                     "group": ["firebase/*"],
-                    "message": "Use shared auth/session utilities; route hooks and components never import the Firebase SDK directly."
+                    "message": "Hooks and components depend on a port (dependency inversion); only a *-provider-client.tsx composition root may import the Firebase SDK."
                   },
                   {
                     "group": ["firebase-admin/*"],
@@ -194,7 +195,7 @@
                       "**/_lib/gateway",
                       "**/_lib/actions"
                     ],
-                    "message": "Use shared auth/session utilities and page-injected Server Actions; do not couple route UI to private persistence modules or obsolete gateways."
+                    "message": "Adapters and Actions are injected (provider or page props); hooks and components use the port or a prop, not _lib/data, _lib/gateway or _lib/actions."
                   }
                 ]
               }

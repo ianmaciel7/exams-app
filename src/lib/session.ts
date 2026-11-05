@@ -1,22 +1,6 @@
 import { onAuthStateChanged, type Unsubscribe, type User } from "firebase/auth";
 import { getFirebaseUI } from "@/lib/firebase/client";
-
-let pendingSignOut: Promise<void> | null = null;
-
-/** Keep observers behind the shared sign-out persistence barrier. */
-export function getPendingSignOut() {
-  return pendingSignOut;
-}
-
-/** Register sign-out persistence and release its barrier on either outcome. */
-export function setPendingSignOut(pending: Promise<void> | null) {
-  pendingSignOut = pending;
-  if (!pending) return;
-  const clear = () => {
-    if (pendingSignOut === pending) pendingSignOut = null;
-  };
-  void pending.then(clear, clear);
-}
+import { getPendingSignOut } from "@/lib/pending-sign-out";
 
 /**
  * Observe the active session. Throws if Firebase is misconfigured. The SDK
@@ -52,13 +36,6 @@ export function getSessionUser(): User | null {
   return getFirebaseUI().get().auth.currentUser;
 }
 
-/** Synchronize the browser user after a server-side profile mutation. */
-export async function reloadSessionUser(): Promise<void> {
-  const user = getSessionUser();
-  if (!user) throw new Error("Authentication session unavailable");
-  await user.reload();
-}
-
 /** Return the active user, requiring it to match the expected uid. */
 export function getActiveUser(expectedUser: User): User {
   const currentUser = getSessionUser();
@@ -66,4 +43,11 @@ export function getActiveUser(expectedUser: User): User {
     throw new Error("Authentication session unavailable");
   }
   return currentUser;
+}
+
+/** Reload the browser user after a server-side profile update. */
+export async function reloadSessionUser(): Promise<void> {
+  const user = getSessionUser();
+  if (!user) throw new Error("Authentication session unavailable");
+  return user.reload();
 }

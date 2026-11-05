@@ -16,13 +16,11 @@ Authentication helpers remain flat modules under `src/lib`: use `auth.ts`,
 `session.ts`, and `return-url.ts`. Do not create `src/lib/auth/` for these
 modules; `auth.ts` owns authentication operations, `session.ts` owns the
 active Firebase session, and `return-url.ts` owns safe post-auth navigation.
+Profile hooks call `sendEmailChangeVerification` and `reloadSessionUser` through
+those modules, without a route-private gateway or direct SDK imports (ADR 0029).
+`pending-sign-out.ts` shares the logout barrier without an auth/session import cycle.
 
 ## Protected access
-
-Profile email verification calls `sendEmailChangeVerification` in `@/lib/auth`;
-browser user reload calls `reloadSessionUser` in `@/lib/session` (ADR 0029).
-The session module owns the sign-out persistence barrier and never imports auth.
-Do not reintroduce route-specific auth providers or a circular core dependency.
 
 - Authenticate identity and authorize the requested operation independently.
 - Keep `dal.ts` as the boundary for sensitive/protected data access.

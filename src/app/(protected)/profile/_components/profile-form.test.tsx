@@ -14,16 +14,11 @@ import { ProfileForm } from "./profile-form";
 
 const mocks = vi.hoisted(() => ({
   refresh: vi.fn(),
+  reloadSessionUser: vi.fn(async () => {}),
+  sendEmailChangeVerification: vi.fn(async () => {}),
   setTheme: vi.fn(),
   toastAdd: vi.fn(),
-  changeEmail: vi.fn<() => Promise<void>>().mockResolvedValue(undefined),
-  reloadUser: vi.fn<() => Promise<void>>().mockResolvedValue(undefined),
 }));
-
-vi.mock("@/lib/auth", () => ({
-  sendEmailChangeVerification: mocks.changeEmail,
-}));
-vi.mock("@/lib/session", () => ({ reloadSessionUser: mocks.reloadUser }));
 
 vi.mock("next-intl", () => ({
   useTranslations: () => (key: string) => key,
@@ -40,6 +35,13 @@ vi.mock("@/hooks/use-navigation", () => ({
 
 vi.mock("@/lib/toast", () => ({ toast: { add: mocks.toastAdd } }));
 vi.mock("@/components/ui/toast", () => ({ toast: { add: mocks.toastAdd } }));
+
+vi.mock("@/lib/session", () => ({
+  reloadSessionUser: mocks.reloadSessionUser,
+}));
+vi.mock("@/lib/auth", () => ({
+  sendEmailChangeVerification: mocks.sendEmailChangeVerification,
+}));
 
 const snapshot: ProfileSnapshot = {
   photoURL: null,
@@ -103,7 +105,24 @@ describe("ProfileForm", () => {
       title: "profileSaved",
       type: "success",
     });
-    expect(mocks.reloadUser).toHaveBeenCalled();
+    expect(mocks.reloadSessionUser).toHaveBeenCalled();
+  });
+
+  it("keeps the successful save when browser session reload fails", async () => {
+    mocks.reloadSessionUser.mockRejectedValueOnce(new Error("reload failed"));
+    const log = vi.spyOn(console, "error").mockImplementation(() => {});
+    try {
+      renderForm(savingAction());
+      await clickSave();
+      await waitFor(() => expect(log).toHaveBeenCalledOnce());
+      expect(mocks.toastAdd).toHaveBeenCalledWith({
+        title: "profileSaved",
+        type: "success",
+      });
+      expect(screen.queryByRole("alert")).toBeNull();
+    } finally {
+      log.mockRestore();
+    }
   });
 
   it("shows an alert and no toast when the Action fails", async () => {
@@ -123,23 +142,6 @@ describe("ProfileForm", () => {
       expect(screen.getByRole("alert").textContent).toBe("profileSaveError"),
     );
     expect(mocks.toastAdd).not.toHaveBeenCalled();
-  });
-
-  it("keeps the successful save when browser session reload fails", async () => {
-    mocks.reloadUser.mockRejectedValueOnce(new Error("reload failed"));
-    const log = vi.spyOn(console, "error").mockImplementation(() => {});
-    try {
-      renderForm(savingAction());
-      await clickSave();
-      await waitFor(() => expect(log).toHaveBeenCalledOnce());
-      expect(mocks.toastAdd).toHaveBeenCalledWith({
-        title: "profileSaved",
-        type: "success",
-      });
-      expect(screen.queryByRole("alert")).toBeNull();
-    } finally {
-      log.mockRestore();
-    }
   });
 
   it("applies the stored theme and locale when the form mounts", () => {
@@ -236,10 +238,12 @@ describe("ProfileEmailForm", () => {
   });
 });
 
-describe("ProfileEmailDialog in ProfileForm", () => {
+describe("ProfileEmailDialogClient in ProfileForm", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(mocks.changeEmail).mockReset().mockResolvedValue(undefined);
+    vi.mocked(mocks.sendEmailChangeVerification)
+      .mockReset()
+      .mockResolvedValue(undefined);
   });
   afterEach(cleanup);
 
@@ -281,7 +285,9 @@ describe("ProfileEmailDialog in ProfileForm", () => {
     );
 
     await waitFor(() =>
-      expect(mocks.changeEmail).toHaveBeenCalledWith("new@example.com"),
+      expect(mocks.sendEmailChangeVerification).toHaveBeenCalledWith(
+        "new@example.com",
+      ),
     );
     await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
     await waitFor(() => expect(document.activeElement).toBe(trigger));
@@ -295,7 +301,9 @@ describe("ProfileEmailDialog in ProfileForm", () => {
   });
 
   it("keeps the dialog and submitted address on failure, then supports retry", async () => {
-    vi.mocked(mocks.changeEmail).mockRejectedValueOnce(new Error("network"));
+    vi.mocked(mocks.sendEmailChangeVerification).mockRejectedValueOnce(
+      new Error("network"),
+    );
     const log = vi.spyOn(console, "error").mockImplementation(() => {});
     try {
       const action = savingAction();
@@ -321,7 +329,7 @@ describe("ProfileEmailDialog in ProfileForm", () => {
         within(dialog).getByRole("button", { name: "changeEmail" }),
       );
       await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
-      expect(mocks.changeEmail).toHaveBeenCalledTimes(2);
+      expect(mocks.sendEmailChangeVerification).toHaveBeenCalledTimes(2);
       expect(action).not.toHaveBeenCalled();
     } finally {
       log.mockRestore();
@@ -330,7 +338,7 @@ describe("ProfileEmailDialog in ProfileForm", () => {
 
   it("announces pending and prevents duplicate requests", async () => {
     let finish: () => void = () => {};
-    vi.mocked(mocks.changeEmail).mockImplementationOnce(
+    vi.mocked(mocks.sendEmailChangeVerification).mockImplementationOnce(
       () =>
         new Promise<void>((resolve) => {
           finish = resolve;
@@ -353,7 +361,7 @@ describe("ProfileEmailDialog in ProfileForm", () => {
       "true",
     );
     fireEvent.click(pending);
-    expect(mocks.changeEmail).toHaveBeenCalledTimes(1);
+    expect(mocks.sendEmailChangeVerification).toHaveBeenCalledTimes(1);
     await act(async () => finish());
     await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
     expect(action).not.toHaveBeenCalled();
@@ -361,7 +369,7 @@ describe("ProfileEmailDialog in ProfileForm", () => {
 
   it("does not close a reopened dialog when an earlier request finishes", async () => {
     let finish: () => void = () => {};
-    vi.mocked(mocks.changeEmail).mockImplementationOnce(
+    vi.mocked(mocks.sendEmailChangeVerification).mockImplementationOnce(
       () =>
         new Promise<void>((resolve) => {
           finish = resolve;
@@ -394,7 +402,7 @@ describe("ProfileEmailDialog in ProfileForm", () => {
         "emailInvalid",
       ),
     );
-    expect(mocks.changeEmail).not.toHaveBeenCalled();
+    expect(mocks.sendEmailChangeVerification).not.toHaveBeenCalled();
     fireEvent.click(
       within(dialog).getByRole("button", { name: "cancelEmailChange" }),
     );

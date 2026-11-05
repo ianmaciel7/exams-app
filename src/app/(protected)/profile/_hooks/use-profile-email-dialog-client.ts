@@ -3,8 +3,8 @@ import { useRef, useState } from "react";
 import { sendEmailChangeVerification } from "@/lib/auth";
 import { toast } from "@/lib/toast";
 
-/** Own dialog state and send verification through the shared auth module. */
-export function useProfileEmailDialog() {
+/** Own the dialog and send browser-only email change requests. */
+export function useProfileEmailDialogClient() {
   const t = useTranslations("Auth");
   const [isOpen, setIsOpen] = useState(false);
   const opening = useRef(0);

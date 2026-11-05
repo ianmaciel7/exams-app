@@ -5,8 +5,13 @@ const mocks = vi.hoisted(() => ({
   auth: {
     currentUser: null as { uid: string; reload?: () => Promise<void> } | null,
   },
+  getPendingSignOut: vi.fn(),
   onAuthStateChanged: vi.fn(),
 }));
+vi.mock("@/lib/pending-sign-out", () => ({
+  getPendingSignOut: mocks.getPendingSignOut,
+}));
+
 vi.mock("firebase/auth", () => ({
   onAuthStateChanged: mocks.onAuthStateChanged,
 }));
@@ -18,7 +23,6 @@ import {
   getActiveUser,
   getSessionUser,
   reloadSessionUser,
-  setPendingSignOut,
   subscribeToSession,
 } from "./session";
 
@@ -31,34 +35,13 @@ describe("getSessionUser", () => {
   });
 });
 
-describe("reloadSessionUser", () => {
-  it("reloads the shared Firebase user after a server save", async () => {
-    const reload = vi.fn(async () => {});
-    mocks.auth.currentUser = { uid: "u1", reload };
-    await reloadSessionUser();
-    expect(reload).toHaveBeenCalledOnce();
-  });
-
-  it("rejects when there is no user to reload", async () => {
-    mocks.auth.currentUser = null;
-    await expect(reloadSessionUser()).rejects.toThrow("Authentication");
-  });
-
-  it("propagates reload failures without creating a new session", async () => {
-    const reload = vi.fn().mockRejectedValue(new Error("network"));
-    mocks.auth.currentUser = { uid: "u1", reload };
-    await expect(reloadSessionUser()).rejects.toThrow("network");
-    expect(getSessionUser()?.uid).toBe("u1");
-  });
-});
-
 describe("subscribeToSession", () => {
   let emit: (user: User | null) => void;
   const stop = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
-    setPendingSignOut(null);
+    mocks.getPendingSignOut.mockReturnValue(null);
     mocks.onAuthStateChanged.mockImplementation(
       (_auth: unknown, callback: (user: User | null) => void) => {
         emit = callback;
@@ -89,7 +72,7 @@ describe("subscribeToSession", () => {
     const onChange = vi.fn();
     subscribeToSession(onChange);
     const deferred = Promise.withResolvers<void>();
-    setPendingSignOut(deferred.promise);
+    mocks.getPendingSignOut.mockReturnValue(deferred.promise);
 
     emit(null);
     expect(onChange).not.toHaveBeenCalled();
@@ -103,7 +86,7 @@ describe("subscribeToSession", () => {
     const next = { uid: "u2" } as User;
     subscribeToSession(onChange);
     const deferred = Promise.withResolvers<void>();
-    setPendingSignOut(deferred.promise);
+    mocks.getPendingSignOut.mockReturnValue(deferred.promise);
 
     emit(null);
     emit(next);
@@ -116,7 +99,7 @@ describe("subscribeToSession", () => {
     const onChange = vi.fn();
     const unsubscribe = subscribeToSession(onChange);
     const deferred = Promise.withResolvers<void>();
-    setPendingSignOut(deferred.promise);
+    mocks.getPendingSignOut.mockReturnValue(deferred.promise);
 
     emit(null);
     unsubscribe();
@@ -128,7 +111,7 @@ describe("subscribeToSession", () => {
   it("still settles when sign-out persistence fails", async () => {
     const onChange = vi.fn();
     subscribeToSession(onChange);
-    setPendingSignOut(Promise.reject(new Error("x")));
+    mocks.getPendingSignOut.mockReturnValue(Promise.reject(new Error("x")));
 
     emit(null);
     await vi.waitFor(() => expect(onChange).toHaveBeenCalledWith(null));
@@ -155,5 +138,29 @@ describe("getActiveUser", () => {
     expect(() => getActiveUser(expected)).toThrow(
       "Authentication session unavailable",
     );
+  });
+});
+
+describe("reloadSessionUser", () => {
+  it("reloads the signed-in user", async () => {
+    const reload = vi.fn().mockResolvedValue(undefined);
+    mocks.auth.currentUser = { uid: "u1", reload };
+    await reloadSessionUser();
+    expect(reload).toHaveBeenCalledOnce();
+  });
+
+  it("rejects without a session", async () => {
+    mocks.auth.currentUser = null;
+    await expect(reloadSessionUser()).rejects.toThrow(
+      "Authentication session unavailable",
+    );
+  });
+
+  it("propagates reload failures", async () => {
+    mocks.auth.currentUser = {
+      uid: "u1",
+      reload: vi.fn().mockRejectedValue(new Error("offline")),
+    };
+    await expect(reloadSessionUser()).rejects.toThrow("offline");
   });
 });

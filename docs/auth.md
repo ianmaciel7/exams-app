@@ -120,18 +120,6 @@ fictional `@example.test` addresses.
 
 ## Token failures and sign-out
 
-The profile browser workflow uses shared utilities: `sendEmailChangeVerification`
-in `src/lib/auth.ts` records `trackEvent` before sending verification and checks
-that the active user still matches after telemetry settles. `reloadSessionUser`
-in `src/lib/session.ts` reloads the browser user after a server save. The route
-has no Gateway/provider layer; its Server Action still verifies the session and
-owns persistence. See [ADR 0029](adr/0029-use-shared-profile-auth-and-session-utilities.md).
-
-The session module owns the shared pending sign-out promise. Auth registers
-sign-out persistence there, and the existing observer waits for settlement.
-This prevents stale session navigation without a second Auth subscription or
-a circular import between auth, telemetry and session.
-
 Only `auth/argument-error`, `auth/id-token-expired`,
 `auth/id-token-revoked`, `auth/user-disabled`, and `auth/user-not-found` represent
 an unauthenticated session. Admin credential, network, and other server faults must reach the

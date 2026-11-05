@@ -9,8 +9,8 @@ const mocks = vi.hoisted(() => ({
 vi.mock("firebase/functions", () => ({ httpsCallable: mocks.callable }));
 vi.mock("@/lib/firebase/client", () => ({
   getFirebaseFunctions: () => "functions",
-  getFirebaseUI: () => ({ get: () => ({ auth: { currentUser: mocks.user } }) }),
 }));
+vi.mock("@/lib/session", () => ({ getSessionUser: () => mocks.user }));
 beforeEach(() => {
   vi.clearAllMocks();
   mocks.user = { uid: "user-1" };
@@ -19,41 +19,44 @@ beforeEach(() => {
     .mockResolvedValue({ data: { eventId: "event-1" } });
   mocks.callable.mockReturnValue(mocks.logUsage);
 });
-
-it("sends the event through the existing authenticated callable contract", async () => {
-  const event = { type: "function_use", name: "profile.update" } as const;
-  await expect(trackEvent(event)).resolves.toBeUndefined();
-  expect(mocks.callable).toHaveBeenCalledWith("functions", "recordUsage", {
-    timeout: 15_000,
-  });
-  expect(mocks.logUsage).toHaveBeenCalledExactlyOnceWith(event);
-});
-
-it("waits for acknowledgment before resolving", async () => {
-  const acknowledgment = Promise.withResolvers<void>();
-  mocks.logUsage.mockReturnValue(acknowledgment.promise);
-  const finished = vi.fn();
-  const pending = trackEvent({ type: "screen_view", name: "/profile" }).then(
-    finished,
-  );
+it.each([
+  { type: "function_use", name: "profile.update" },
+  { type: "screen_view", name: "/profile" },
+] as const)(
+  "sends the $type event to the authenticated callable",
+  async (event) => {
+    await expect(trackEvent(event)).resolves.toBeUndefined();
+    expect(mocks.logUsage).toHaveBeenCalledExactlyOnceWith(event);
+    expect(mocks.callable).toHaveBeenCalledWith("functions", "recordUsage", {
+      timeout: 15_000,
+    });
+  },
+);
+it("waits for the callable acknowledgment", async () => {
+  const deferred = Promise.withResolvers<void>();
+  mocks.logUsage.mockReturnValue(deferred.promise);
+  const settled = vi.fn();
+  const result = trackEvent({
+    type: "function_use",
+    name: "profile.update",
+  }).then(settled);
   await Promise.resolve();
-  expect(finished).not.toHaveBeenCalled();
-  acknowledgment.resolve();
-  await pending;
-  expect(finished).toHaveBeenCalledOnce();
+  expect(settled).not.toHaveBeenCalled();
+  deferred.resolve();
+  await result;
+  expect(settled).toHaveBeenCalledOnce();
 });
-
-it("propagates callable failure to the caller", async () => {
+it("propagates callable failures", async () => {
   mocks.logUsage.mockRejectedValue(new Error("offline"));
   await expect(
     trackEvent({ type: "function_use", name: "profile.update" }),
   ).rejects.toThrow("offline");
 });
-
-it("rejects unauthenticated events before calling Firebase", async () => {
+it("rejects unauthenticated usage before creating the callable", async () => {
   mocks.user = null;
   await expect(
-    trackEvent({ type: "screen_view", name: "/profile" }),
+    trackEvent({ type: "function_use", name: "profile.update" }),
   ).rejects.toThrow("Authentication");
   expect(mocks.callable).not.toHaveBeenCalled();
+  expect(mocks.logUsage).not.toHaveBeenCalled();
 });

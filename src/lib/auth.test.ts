@@ -17,8 +17,11 @@ vi.mock("@/lib/firebase/client", () => ({
   getFirebaseUI: () => ({ get: () => ({ auth: mocks.auth }) }),
 }));
 
-import { sendEmailChangeVerification, signOutUser } from "./auth";
-import { getPendingSignOut } from "./session";
+import {
+  getPendingSignOut,
+  sendEmailChangeVerification,
+  signOutUser,
+} from "./auth";
 
 describe("sendEmailChangeVerification", () => {
   beforeEach(() => {
