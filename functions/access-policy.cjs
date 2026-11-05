@@ -1,3 +1,5 @@
+const roles = new Set(["user", "admin"]);
+
 function parseEmails(value) {
   return new Set(
     String(value ?? "")
@@ -57,7 +59,12 @@ function createBeforeSignInHandler({ getPolicy, HttpsError }) {
         "Verify the email address before signing in.",
       );
     }
-    return { customClaims: { role: policy.roleFor(email, emailVerified) } };
+    // Promote-only: the allowlist can raise a user to admin, but never lowers a
+    // role that `setUserRole` already set, so a promoted user keeps the role.
+    const current = event.data.customClaims?.role;
+    const derived = policy.roleFor(email, emailVerified);
+    const role = derived === "admin" || !roles.has(current) ? derived : current;
+    return { customClaims: { ...event.data.customClaims, role } };
   };
 }
 
