@@ -367,6 +367,22 @@ describe("owned component conventions", () => {
     );
   });
 
+  it("allows a container that injects a hook-provided function", () => {
+    const file =
+      "src/app/(protected)/profile/_components/profile-email-form-container.tsx";
+    const container =
+      '"use client"; import { useProfileEmailFormContainer } from "../_hooks/use-profile-email-form-container"; import { ProfileEmailForm } from "./profile-email-form"; function ProfileEmailFormContainer(props) { const changeEmail = useProfileEmailFormContainer(); return <ProfileEmailForm {...props} changeEmail={changeEmail} />; } export { ProfileEmailFormContainer };';
+    expectValid(container, file);
+    // Reading a field of the hook result is a pass-through, not an injection.
+    expectInvalid(
+      container
+        .replace("const changeEmail =", "const profile =")
+        .replace("changeEmail={changeEmail}", "email={profile.email}"),
+      /Middle Man/,
+      file,
+    );
+  });
+
   it("does not treat a context provider as a Middle Man (dependency injection)", () => {
     expectValid(
       '"use client"; import { ProfileGatewayContext } from "../_lib/gateway-context"; function ProfileGatewayProviderClient(props) { return <ProfileGatewayContext value={props.gateway}>{props.children}</ProfileGatewayContext>; } export { ProfileGatewayProviderClient };',

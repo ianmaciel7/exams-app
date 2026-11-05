@@ -1,8 +1,8 @@
 "use client";
 
 import type { PropsWithChildren } from "react";
-import { firebaseProfileGateway } from "../_lib/data";
 import type { ProfileGateway } from "../_lib/definitions";
+import { firebaseProfileGateway } from "../_lib/gateway";
 import { ProfileGatewayContext } from "../_lib/gateway-context";
 
 type ProfileGatewayProviderClientProps = PropsWithChildren<{

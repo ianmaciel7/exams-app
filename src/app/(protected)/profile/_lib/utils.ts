@@ -1,5 +1,6 @@
 import { localeCookie } from "@/i18n/routing";
 import type { Locale } from "@/lib/locale";
+import { profileFieldNames } from "./definitions";
 
 const MAX_AVATAR_SIZE = 2 * 1024 * 1024;
 const ACCEPTED_AVATAR_TYPES = new Set([
@@ -30,6 +31,12 @@ function getAvatarFallbackInitial(
   return (displayName?.charAt(0) || email?.charAt(0) || "U").toUpperCase();
 }
 
+/** The avatar file in a submitted form, or null when none was chosen. */
+function getPickedAvatar(formData: FormData) {
+  const avatar = formData.get(profileFieldNames.avatar);
+  return avatar instanceof File && avatar.size > 0 ? avatar : null;
+}
+
 function syncSavedLocale(
   savedLocale: Locale,
   activeLocale: string,
@@ -46,6 +53,7 @@ export {
   ACCEPTED_AVATAR_TYPES,
   getAvatarFallbackInitial,
   getAvatarSource,
+  getPickedAvatar,
   isValidAvatarFile,
   MAX_AVATAR_SIZE,
   syncSavedLocale,

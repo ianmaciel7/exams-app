@@ -208,6 +208,9 @@ describe("dependency inversion in route hooks and components", () => {
     'import { getAuth } from "firebase/auth"; export { getAuth };',
     'import { app } from "@/lib/firebase/client"; export { app };',
     'import { readProfile } from "../_lib/data"; export { readProfile };',
+    'import { firebaseGateway } from "../_lib/gateway"; export { firebaseGateway };',
+    'import { updateProfile } from "../_lib/actions"; export { updateProfile };',
+    'import { getAuth } from "firebase-admin/auth"; export { getAuth };',
   ])("rejects infrastructure imports in hooks and components: %s", (source) => {
     for (const [directory, name] of [
       [hooks, "use-port.ts"],
@@ -222,7 +225,7 @@ describe("dependency inversion in route hooks and components", () => {
   it("lets a provider composition root import the adapter", () => {
     const output = lintSingle(
       join(components, "port-provider-client.tsx"),
-      'import { firebaseGateway } from "../_lib/data"; export { firebaseGateway };',
+      'import { firebaseGateway } from "../_lib/gateway"; export { firebaseGateway };',
     );
     expect(output).not.toContain("lint/style/noRestrictedImports");
   });

@@ -70,6 +70,16 @@ snapshots:
         style: secondary
         start: 5
         end: 15
+  'type PanelProps = Omit<{ forwarded: ComponentProps<"div"> }, "id"> & { title: string };':
+    labels:
+      - source: 'type PanelProps = Omit<{ forwarded: ComponentProps<"div"> }, "id"> & { title: string };'
+        style: primary
+        start: 0
+        end: 87
+      - source: PanelProps
+        style: secondary
+        start: 5
+        end: 15
   'type PanelProps = Omit<{ forwarded: ComponentProps<"div"> }, "id">;':
     labels:
       - source: 'type PanelProps = Omit<{ forwarded: ComponentProps<"div"> }, "id">;'

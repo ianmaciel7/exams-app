@@ -18,7 +18,7 @@ function formWith(entries: Record<string, string | File>) {
 }
 
 describe("parseProfileFormData", () => {
-  it("reads the submitted fields", () => {
+  it("reads the submitted fields but never the e-mail", () => {
     const avatar = new File(["x"], "a.png", { type: "image/png" });
     const result = parseProfileFormData(
       formWith({
@@ -29,11 +29,10 @@ describe("parseProfileFormData", () => {
         avatar,
       }),
       fallback,
-      null,
     );
     expect(result).toEqual({
       displayName: "Grace",
-      email: "grace@example.com",
+      email: "ada@example.com",
       locale: "pt-BR",
       theme: "dark",
       avatarFile: avatar,
@@ -44,20 +43,22 @@ describe("parseProfileFormData", () => {
     const result = parseProfileFormData(
       formWith({ locale: "xx", theme: "neon" }),
       fallback,
-      null,
     );
     expect(result.locale).toBe("en");
     expect(result.theme).toBe("system");
   });
 
-  it("keeps the pending avatar when no file is selected", () => {
-    const pending = new File(["x"], "a.png", { type: "image/png" });
+  it("treats an empty file input as no new avatar", () => {
     const empty = new File([], "", { type: "application/octet-stream" });
+    const result = parseProfileFormData(formWith({ avatar: empty }), fallback);
+    expect(result.avatarFile).toBeNull();
+  });
+
+  it("limits the display name to 100 characters", () => {
     const result = parseProfileFormData(
-      formWith({ avatar: empty }),
+      formWith({ displayName: "a".repeat(150) }),
       fallback,
-      pending,
     );
-    expect(result.avatarFile).toBe(pending);
+    expect(result.displayName).toHaveLength(100);
   });
 });

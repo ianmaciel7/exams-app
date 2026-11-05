@@ -6,13 +6,17 @@ import { Button } from "@/components/ui/button";
 import { Field, FieldContent, FieldTitle } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { useProfileAvatarFieldClient } from "../_hooks/use-profile-avatar-field-client";
+import {
+  type ProfileAvatarIdentity,
+  useProfileAvatarFieldClient,
+} from "../_hooks/use-profile-avatar-field-client";
 
 type ProfileAvatarFieldClientProps = ComponentProps<typeof Field> & {
   file: File | null;
   onPick: (file: File) => void;
   pending: boolean;
   savedCount: number;
+  identity: ProfileAvatarIdentity;
 };
 
 function ProfileAvatarFieldClient({
@@ -21,18 +25,17 @@ function ProfileAvatarFieldClient({
   onPick,
   pending,
   savedCount,
+  identity,
   ...props
 }: ProfileAvatarFieldClientProps) {
   const titleId = useId();
-  const {
-    t,
-    disabled,
-    avatarSrc,
-    avatarAlt,
-    fallbackInitial,
-    fileInputRef,
-    handleAvatarChange,
-  } = useProfileAvatarFieldClient({ file, onPick, pending, savedCount });
+  const field = useProfileAvatarFieldClient({
+    file,
+    onPick,
+    pending,
+    savedCount,
+    identity,
+  });
 
   return (
     <Field
@@ -47,36 +50,40 @@ function ProfileAvatarFieldClient({
         className="size-16 rounded-full p-0"
         aria-hidden="true"
         tabIndex={-1}
-        disabled={disabled}
-        onClick={() => fileInputRef.current?.click()}
+        disabled={field.disabled}
+        onClick={() => field.fileInputRef.current?.click()}
       >
         <Avatar className="size-16 transition-opacity group-hover/button:opacity-70">
-          {avatarSrc ? <AvatarImage src={avatarSrc} alt={avatarAlt} /> : null}
-          <AvatarFallback className="text-xl">{fallbackInitial}</AvatarFallback>
+          {field.avatarSrc ? (
+            <AvatarImage src={field.avatarSrc} alt={field.avatarAlt} />
+          ) : null}
+          <AvatarFallback className="text-xl">
+            {field.fallbackInitial}
+          </AvatarFallback>
         </Avatar>
       </Button>
       <FieldContent className="self-center">
-        <FieldTitle id={titleId}>{t("profilePhotoTitle")}</FieldTitle>
+        <FieldTitle id={titleId}>{field.t("profilePhotoTitle")}</FieldTitle>
         <Button
           type="button"
           variant="link"
           size="sm"
           className="h-auto w-fit px-0 leading-snug"
-          disabled={disabled}
-          onClick={() => fileInputRef.current?.click()}
+          disabled={field.disabled}
+          onClick={() => field.fileInputRef.current?.click()}
         >
-          {t("profilePhotoChange")}
+          {field.t("profilePhotoChange")}
         </Button>
       </FieldContent>
       <Input
-        ref={fileInputRef}
+        ref={field.fileInputRef}
         type="file"
         autoComplete="off"
         accept="image/jpeg,image/png,image/webp"
         className="hidden"
         tabIndex={-1}
-        disabled={disabled}
-        onChange={handleAvatarChange}
+        disabled={field.disabled}
+        onChange={field.handleAvatarChange}
       />
     </Field>
   );

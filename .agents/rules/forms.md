@@ -33,27 +33,26 @@ These are project conventions aligned with the current shadcn/ui and React Hook 
 
 ## Profile behavior ownership
 
-- `ProfileForm` owns the browser load state through `useProfileForm`, which
-  composes `useProfileRead`. It renders `LoadingStatus` while reading and the
-  fields only with loaded values. Cleanup stops accepting results from that lifecycle, and the
-  15-second deadline ends its UI wait. Errors reach `profile/error.tsx`; retry
-  remounts the loader and reads again, without cache eviction. `loading.tsx`
-  remains the route's server-rendering fallback (ADR 0019).
-- Keep reads and writes in `data.ts`, transferred form values in `dto.ts`, and
-  contracts and field names in `definitions.ts`. There is no profile Promise
-  registry or cache module. Initial theme and locale apply once per mounted
-  visit, preserving saved values across Activity reconnects.
-- User identity comes from `useSession()`; there is no form context or extra
-  authentication subscription.
-- `ProfileForm` owns its Action lifecycle; the Action is created by
-  `createProfileAction` in `_lib/actions.ts` and successful UI feedback goes
-  through `useProfileSaveFeedback`. Use the pending value of `useActionState`
+- The Server Component page reads the profile (`readOwnProfile`) and injects
+  the Server Action: `<ProfileForm action={updateProfile} initialValues={profile} />`
+  (ADR 0028). `ProfileForm` has no loading state of its own and never imports
+  Firebase, a gateway or `_lib/actions`. Errors reach `profile/error.tsx`;
+  `loading.tsx` remains the route's server-rendering fallback.
+- Keep server reads and writes in `data.ts` (`server-only`, Admin SDK), the
+  browser adapter in `gateway.ts`, transferred form values in `dto.ts`, and
+  contracts and field names in `definitions.ts`. The Server Action never trusts
+  the client's previous state: it re-verifies the session and reads the current
+  profile itself. The e-mail is never written by the Action.
+- `ProfileForm` receives its Action as a prop (`ProfileAction`); `useProfileSubmit`
+  wraps it to keep only serializable state on the wire, retain a picked avatar
+  after a failed save, and run the browser feedback through
+  `useProfileSaveFeedback`. Use the pending value of `useActionState`
   instead of keeping a second saving flag;
   `ProfileValues` and `ProfileFormValues` live in
   `src/app/(protected)/profile/_lib/definitions.ts`; persistence lives in the sibling
   `data.ts` module.
-  `saveProfile` accepts typed `ProfileDependencies` with default Firebase
-  adapters to test persistence without production services.
+  Tests mock `@/lib/firebase/admin` to test persistence without production
+  services.
 - `ProfileAvatarFieldClient` uses `useProfileAvatarFieldClient` for field state and avatar display data, with `useProfileAvatarInput` handling validation and `useProfileAvatarPreview` the preview. In `useProfileForm`, avatar draft lifecycle is managed by `useProfileAvatarDraft` via pure derivation (`{ baseState, file }`), keeping the selection in sync with Action dispatches (cleared on success, preserved on failure for retry) so submission can upload it without DOM file-input dependencies or render-phase state adjustments; preview URLs are released on replacement, successful reset and unmount.
 - `ProfileForm` renders the **one** `FieldGroup`: do not wrap individual fields in another `FieldGroup`. `page.tsx` composes the shadcn `Card` parts and resolves translated headings; `ProfileForm` loads and renders the form itself.
 

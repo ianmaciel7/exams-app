@@ -175,18 +175,20 @@ The security and HTTP header modules also remain flat under `src/lib`:
 and `csp.ts` (pure Content Security Policy directive builder); consumers should
 import them as `@/lib/headers` and `@/lib/csp`.
 Firebase Web SDK initialization lives in `src/lib/firebase/client.ts`. The
-profile route's `ProfileCardClient` loads data before mounting `ProfileForm`;
-`createProfileAction` coordinates saves. `readProfile`, `readUserPreferences`,
-`writeUserPreferences`, and `saveProfile` in
-`src/app/(protected)/profile/_lib/data.ts` handle Firestore/Storage/Auth
-persistence and inject typed Firebase adapters for independent tests.
-`useProfileCardClient` owns the read lifecycle, timeout and initial preferences;
-abandoned reads cannot change the UI. `useProfileForm` owns the form Action
-(`useActionState`), composes `useSession`, and delegates avatar draft handling to
-`useProfileAvatarDraft` and feedback to `useProfileSaveFeedback`; `ProfileForm` renders its fields
-inline (ADR 0019). `page.tsx` resolves headings and renders `ProfileCardClient`, which
-renders the loaded Card and form. The client loading state uses `LoadingStatus`;
-`loading.tsx` covers server rendering and `error.tsx` handles read failures.
+profile route is a Server Component page that reads the profile with
+`readOwnProfile` (Admin SDK, behind the `verifySession` Data Access Layer) and
+renders `<ProfileForm action={updateProfile} initialValues={profile} />`
+(ADR 0028). `updateProfile` is a Server Action (`_lib/actions.ts`) that
+re-verifies the session, reads the current profile on the server and calls
+`saveProfile`, which updates the Auth user, merges preferences into
+`users/{uid}` and uploads the avatar through the Admin SDK. `ProfileForm` is a
+presentational client component: it only receives `action` and `initialValues`
+and keeps the Action state, the avatar draft and the browser feedback (toast,
+theme, locale, Auth reload) in `useProfileForm`. The e-mail change stays in the
+browser, because only the client SDK's `verifyBeforeUpdateEmail` sends the
+confirmation mail: `ProfileEmailFormContainer` injects it through the
+`ProfileGateway` port (ADR 0027) into `ProfileEmailForm`. `loading.tsx` covers
+server rendering and `error.tsx` handles read failures.
 `dto.ts` maps form submissions. Profile value types and field names live in
 `src/app/(protected)/profile/_lib/definitions.ts`, alongside the route-private profile
 workflow. The canonical profile

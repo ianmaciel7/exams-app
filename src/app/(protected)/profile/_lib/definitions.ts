@@ -24,71 +24,41 @@ export type ProfileValues = {
 
 export type ProfileFormValues = ProfileValues & { avatarFile: File | null };
 
-export type ProfileLoadState =
-  | { isLoading: true; isError: false }
-  | {
-      isLoading: false;
-      isError: false;
-      values: ProfileValues;
-      theme?: ThemePreference;
-    }
-  | { isLoading: false; isError: true; error: unknown };
-
 /**
- * Result of the profile form Action (`useActionState`). `values` is what the
- * fields show next: the saved values, or the submitted ones after a failure so
- * React's post-Action form reset does not discard the user's input.
- * `avatarFile` is the pending upload kept across a failed save.
+ * Result of the profile Server Action. Everything here is serializable.
+ * `values` is what the fields show next: the saved values, or the submitted
+ * ones after a failure so React's post-Action form reset does not discard the
+ * user's input. `photoURL` is the stored avatar; `savedCount` busts its cache.
  */
 export type ProfileActionState = {
-  /** Last values persisted; the base `saveProfile` diffs the submission against. */
-  saved: ProfileValues;
   values: ProfileValues;
-  avatarFile: File | null;
-  error: string | null;
-  /** Number of saved submissions; busts the cached avatar image. */
+  photoURL: string | null;
+  hasError: boolean;
   savedCount: number;
 };
 
-export type SavedProfile = {
+/**
+ * The Action the page injects into `ProfileForm`. A Server Action in
+ * production; tests pass a plain function.
+ */
+export type ProfileAction = (
+  previous: ProfileActionState | null,
+  formData: FormData,
+) => Promise<ProfileActionState>;
+
+/** What the Server Component page reads and hands to the form. */
+export type ProfileSnapshot = {
   values: ProfileValues;
   photoURL: string | null;
-  avatarChanged: boolean;
-  emailChanged: boolean;
-};
-
-export type SaveProfileInput = {
-  user: import("firebase/auth").User;
-  previous: ProfileValues;
-  values: ProfileValues;
-  avatarFile: File | null;
-};
-
-/** Ports for profile persistence. Tests may inject adapters without Firebase. */
-export type ProfileDependencies = {
-  getActiveUser: typeof import("@/lib/session").getActiveUser;
-  verifyBeforeUpdateEmail: typeof import("firebase/auth").verifyBeforeUpdateEmail;
-  updateProfile: typeof import("firebase/auth").updateProfile;
-  uploadAvatar: (
-    user: import("firebase/auth").User,
-    avatarFile: File | null,
-  ) => Promise<string | null>;
-  writeUserPreferences: (
-    uid: string,
-    preferences: Partial<UserPreferences>,
-  ) => Promise<void>;
 };
 
 /**
- * Port the profile UI depends on. `data.ts` owns the Firebase adapter and
- * `ProfileGatewayProviderClient` is the only UI module that wires it in, so
- * hooks and components never import Firebase and tests inject a fake.
+ * Browser-only port for the parts that cannot run on the server: the e-mail
+ * change (`verifyBeforeUpdateEmail` sends the confirmation mail) and the Auth
+ * user refresh after a server save. `data.ts`/`gateway.ts` own the adapters and
+ * `ProfileGatewayProviderClient` is the only UI module that wires them in.
  */
 export type ProfileGateway = {
-  read: (
-    uid: string,
-    activeLocale: Locale,
-    isActive: () => boolean,
-  ) => Promise<{ values: ProfileValues; theme?: ThemePreference } | null>;
-  save: (input: SaveProfileInput) => Promise<SavedProfile>;
+  changeEmail: (email: string) => Promise<void>;
+  refreshUser: () => Promise<void>;
 };

@@ -1113,6 +1113,50 @@ function isRenderingLogic(node, source) {
   );
 }
 
+/**
+ * Names bound directly to an owned hook's result (`const action = useX()`).
+ * Passing one down as a prop injects what a Server Component page cannot pass
+ * itself, such as a browser-only function (dependency inversion).
+ */
+function collectInjectedHookResults(statement, ownedImports) {
+  const injected = new Set();
+  const visit = (node) => {
+    if (
+      ts.isVariableDeclaration(node) &&
+      ts.isIdentifier(node.name) &&
+      node.initializer &&
+      ts.isCallExpression(node.initializer) &&
+      ts.isIdentifier(node.initializer.expression) &&
+      /^use[A-Z]/.test(node.initializer.expression.text) &&
+      ownedImports.has(node.initializer.expression.text)
+    ) {
+      injected.add(node.name.text);
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(statement);
+  return injected;
+}
+
+function injectsHookResult(statement, injected) {
+  let found = false;
+  const visit = (node) => {
+    if (
+      ts.isJsxAttribute(node) &&
+      node.initializer &&
+      ts.isJsxExpression(node.initializer) &&
+      node.initializer.expression &&
+      ts.isIdentifier(node.initializer.expression) &&
+      injected.has(node.initializer.expression.text)
+    ) {
+      found = true;
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(statement);
+  return found;
+}
+
 function analyzeDelegation(statement, ownedImports, source) {
   const delegates = [];
   let hasLogic = false;
@@ -1129,6 +1173,8 @@ function analyzeDelegation(statement, ownedImports, source) {
     ts.forEachChild(node, visit);
   };
   visit(statement);
+  const injected = collectInjectedHookResults(statement, ownedImports);
+  if (injectsHookResult(statement, injected)) hasLogic = true;
   return { delegates, hasLogic };
 }
 
