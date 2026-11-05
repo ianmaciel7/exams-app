@@ -1,0 +1,35 @@
+id: no-hardcoded-color
+language: tsx
+files:
+  - src/app/**/*.tsx
+  - src/components/**/*.tsx
+  - src/hooks/**/*.tsx
+ignores:
+  - "**/*.test.tsx"
+  - "**/*.stories.tsx"
+  - "src/components/ui/[!e]*.tsx"
+  - "src/components/ui/e[!x]*.tsx"
+  - src/components/ai-elements/**
+severity: error
+message: Use a semantic color token (`text-destructive`, `bg-muted`, `text-muted-foreground`) instead of a palette color or a `dark:` color override.
+note: |
+  shadcn/ui theming rule: components use the semantic tokens from globals.css,
+  which already switch with the theme (docs/adr/0003). A palette color such as
+  `text-green-600` or a manual `dark:text-green-400` pair bypasses the theme,
+  fails contrast checks in one mode and ignores custom presets. Add a token to
+  globals.css when no existing one fits. `dark:invert` and similar non-color
+  utilities are allowed.
+rule:
+  kind: string_fragment
+  regex: '(^|[\s:!])(bg|text|border|ring|outline|fill|stroke|from|via|to|divide|decoration|shadow|accent|caret)-(red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose|slate|gray|zinc|neutral|stone|white|black)(-[0-9]+)?(/[0-9]+)?(\s|$)|(^|[\s!])dark:!?(bg|text|border|ring|outline|fill|stroke)-'
+  inside:
+    stopBy: end
+    any:
+      - kind: jsx_attribute
+        has:
+          kind: property_identifier
+          regex: ^className$
+      - kind: call_expression
+        has:
+          field: function
+          regex: ^(cn|clsx|cva)$

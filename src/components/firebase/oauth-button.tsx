@@ -6,6 +6,7 @@ import {
   useSignInWithProvider,
 } from "@firebase-oss/ui-react";
 import { useId } from "react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 
@@ -23,6 +24,7 @@ export function OAuthButton({ provider, children, themed, onSignIn }: OAuthButto
         type="button"
         disabled={isPending}
         aria-busy={isPending}
+        focusableWhenDisabled
         aria-describedby={error ? errorId : undefined}
         onClick={callback}
         data-provider={provider.providerId}
@@ -37,13 +39,9 @@ export function OAuthButton({ provider, children, themed, onSignIn }: OAuthButto
         )}
       </Button>
       {error ? (
-        <div
-          id={errorId}
-          role="alert"
-          className="text-left text-xs text-destructive"
-        >
-          {error}
-        </div>
+        <Alert id={errorId} variant="destructive" className="mt-2">
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
       ) : null}
     </div>
   );

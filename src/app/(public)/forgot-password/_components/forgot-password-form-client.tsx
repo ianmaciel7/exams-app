@@ -9,7 +9,7 @@ type ForgotPasswordFormClientProps = ComponentProps<"div">;
 function ForgotPasswordFormClient(props: ForgotPasswordFormClientProps) {
   const { goToSignIn } = useForgotPasswordFormClient();
   return (
-    <div {...props}>
+    <div data-slot="forgot-password-form" {...props}>
       <ForgotPasswordAuthContent onBackToSignInClick={goToSignIn} />
     </div>
   );

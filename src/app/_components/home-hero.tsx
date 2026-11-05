@@ -20,7 +20,6 @@ function HomeHeroHeader({ className, ...props }: HomeHeroHeaderProps) {
   return (
     <div
       data-slot="home-hero-header"
-      {...props}
       className={cn(
         "flex flex-col items-center gap-6 text-center sm:items-start sm:text-left",
         className,

@@ -20,6 +20,7 @@ import { Form } from "@/components/ui/extensions/form";
 import { FormField, FormFieldLabel, FormFieldError } from "@/components/ui/extensions/form-field";
 import { FormError } from "@/components/ui/extensions/form-error";
 import { Input } from "@/components/ui/input";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Policies } from "./policies";
 import { getAuthErrorMessage } from "./auth-error-message";
@@ -51,9 +52,11 @@ export function ForgotPasswordAuthForm(props: ForgotPasswordAuthFormProps) {
 
   if (emailSent) {
     return (
-      <div className="text-center space-y-4">
-        <div className="text-green-600 dark:text-green-400">{getTranslation(ui, "messages", "checkEmailForReset")}</div>
-      </div>
+      <Alert role="status">
+        <AlertDescription>
+          {getTranslation(ui, "messages", "checkEmailForReset")}
+        </AlertDescription>
+      </Alert>
     );
   }
 
@@ -75,6 +78,7 @@ export function ForgotPasswordAuthForm(props: ForgotPasswordAuthFormProps) {
         <Button
           type="submit"
           disabled={ui.state !== "idle"}
+          focusableWhenDisabled
         >
           {ui.state !== "idle" ? (
             <><Spinner data-icon="inline-start" aria-hidden="true" />{getTranslation(ui, "labels", "resetPassword")}</>

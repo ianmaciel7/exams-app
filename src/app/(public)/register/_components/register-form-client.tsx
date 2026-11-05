@@ -10,7 +10,7 @@ type RegisterFormClientProps = ComponentProps<"div">;
 function RegisterFormClient(props: RegisterFormClientProps) {
   const { goToSignIn } = useRegisterFormClient();
   return (
-    <div {...props}>
+    <div data-slot="register-form" {...props}>
       <SignUpAuthContent onSignInClick={goToSignIn}>
         {process.env.NEXT_PUBLIC_FIREBASE_GOOGLE_ENABLED === "true" ? (
           <GoogleSignInButton />

@@ -1,0 +1,14 @@
+id: prefer-alert
+valid:
+  - |
+    const a = (
+      <Alert variant="destructive">
+        <AlertDescription>{message}</AlertDescription>
+      </Alert>
+    );
+  - const a = <div role="status">Loading</div>;
+  - const a = <div className="text-destructive">{message}</div>;
+invalid:
+  - const a = <p role="alert">{message}</p>;
+  - const a = <div role="alert" className="text-sm text-destructive">{message}</div>;
+  - const a = <span role="alert" />;

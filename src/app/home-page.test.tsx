@@ -142,7 +142,9 @@ describe("home session", () => {
     await resolveSession({ displayName: "Alex" });
     fireEvent.click(screen.getByRole("button", { name: en.Auth.signOut }));
     const pending = screen.getByRole("button", { name: en.Home.signingOut });
-    expect(pending.hasAttribute("disabled")).toBe(true);
+    // focusableWhenDisabled keeps focus on the button, so Base UI sets
+    // aria-disabled instead of the disabled attribute.
+    expect(pending.getAttribute("aria-disabled")).toBe("true");
     expect(pending.getAttribute("aria-busy")).toBe("true");
     fireEvent.click(pending);
     await vi.waitFor(() => expect(mocks.signOut).toHaveBeenCalled());

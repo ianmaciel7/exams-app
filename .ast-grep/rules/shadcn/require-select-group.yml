@@ -1,0 +1,35 @@
+id: require-select-group
+language: tsx
+files:
+  - src/app/**/*.tsx
+  - src/components/**/*.tsx
+  - src/hooks/**/*.tsx
+ignores:
+  - "**/*.test.tsx"
+  - "**/*.stories.tsx"
+  - "src/components/ui/[!e]*.tsx"
+  - "src/components/ui/e[!x]*.tsx"
+  - src/components/ai-elements/**
+severity: error
+message: Wrap `SelectItem` in `SelectGroup` inside `SelectContent`.
+note: |
+  shadcn/ui composition rule: items always sit inside their group component
+  (`SelectItem` in `SelectGroup`, `DropdownMenuItem` in
+  `DropdownMenuGroup`). Base UI Select.Group gives the list its group role and
+  lets `SelectLabel` name it.
+rule:
+  any:
+    - kind: jsx_opening_element
+    - kind: jsx_self_closing_element
+  has:
+    field: name
+    regex: ^SelectItem$
+  not:
+    inside:
+      stopBy: end
+      kind: jsx_element
+      has:
+        field: open_tag
+        has:
+          field: name
+          regex: ^SelectGroup$

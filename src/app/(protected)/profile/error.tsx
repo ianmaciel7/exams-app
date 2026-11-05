@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useEffect } from "react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
@@ -22,7 +23,9 @@ export default function ProfileError({
   return (
     <Card className="mx-auto w-full max-w-sm shadow-md ring-foreground/20 sm:max-w-md lg:max-w-lg">
       <CardContent>
-        <p role="alert">{t("profileLoadError")}</p>
+        <Alert variant="destructive">
+          <AlertDescription>{t("profileLoadError")}</AlertDescription>
+        </Alert>
       </CardContent>
       <CardFooter className="border-t-0 bg-transparent pt-0">
         <Button onClick={retry}>{app("tryAgain")}</Button>
