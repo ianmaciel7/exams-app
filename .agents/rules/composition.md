@@ -1,4 +1,5 @@
 ---
+
 trigger: model_decision
 description: "Read when composing owned component families, forwarding primitive props, or defining children slots."
 ---
@@ -23,10 +24,10 @@ Use `src/components/ui/card.tsx`, `button.tsx` and `field.tsx` as reference impl
 - Prefer narrow component props; do not hand `ProfileForm` or `ProfileAvatarFieldClient` the
   entire profile controller as a `profile` prop.
 - `FieldGroup`, `FieldSet`, `Field` and `Controller` are real primitives/API integrations; do not introduce arbitrary *Fields wrapper components solely for visual grouping.
-- The family-root and root-prefixed-part convention applies to every owned module, including Server and Client Components.  Upstream shadcn/ui files also export related primitives together; generated registries remain unchanged.
-Use the installed [shadcn skill](../skills/shadcn/SKILL.md) for Base UI,
-button/icon, styling, containment, and chat rules. Keep local changes consistent
-with [shadcn.md](shadcn.md).
+- The family-root and root-prefixed-part convention applies to every owned module, including Server and Client Components. Upstream shadcn/ui files also export related primitives together; generated registries remain unchanged.
+  Use the installed [shadcn skill](../skills/shadcn/SKILL.md) for Base UI,
+  button/icon, styling, containment, and chat rules. Keep local changes consistent
+  with [shadcn.md](shadcn.md).
 
 The TypeScript AST guard checks literal Controller names against owned `*-field.tsx` filenames and prevents whole-controller `profile` props on the profile components listed above. These checks cannot judge all component responsibilities and do not inspect dynamic Controller names.
 

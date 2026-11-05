@@ -190,15 +190,15 @@ These changes keep automated tools from rewriting the layer or reporting upstrea
 code as project defects. Application-owned code is still validated, and no rule
 was changed.
 
-| Tool | Change |
-| --- | --- |
-| Biome (and so `lint-staged`) | `!src/components/firebase` in `files.includes` |
-| TypeScript | `src/components/firebase` stays in `tsconfig.json`, so the editor, `tsc`, and Next.js check it |
-| CSpell | `src/components/firebase` in `ignorePaths` |
-| jscpd | `**/components/firebase/**` in `ignore` |
-| Knip | `unresolved` ignored for `src/components/firebase/**` only |
-| Vitest coverage | `src/components/firebase/**` in `exclude` |
-| Fallow health, React Doctor | `src/components/firebase/**` ignored |
+| Tool                         | Change                                                                                         |
+| ---------------------------- | ---------------------------------------------------------------------------------------------- |
+| Biome (and so `lint-staged`) | `!src/components/firebase` in `files.includes`                                                 |
+| TypeScript                   | `src/components/firebase` stays in `tsconfig.json`, so the editor, `tsc`, and Next.js check it |
+| CSpell                       | `src/components/firebase` in `ignorePaths`                                                     |
+| jscpd                        | `**/components/firebase/**` in `ignore`                                                        |
+| Knip                         | `unresolved` ignored for `src/components/firebase/**` only                                     |
+| Vitest coverage              | `src/components/firebase/**` in `exclude`                                                      |
+| Fallow health, React Doctor  | `src/components/firebase/**` ignored                                                           |
 
 Dependency-cruiser and ast-grep still scan the layer. Dependency-cruiser reports
 no violation. ast-grep reports one `no-hardcoded-ui-attribute` warning in

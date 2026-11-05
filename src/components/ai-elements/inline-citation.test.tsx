@@ -5,7 +5,9 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 vi.mock("@/components/ui/hover-card", () => ({
   HoverCard: ({ children }: PropsWithChildren) => <div>{children}</div>,
   HoverCardContent: ({ children }: PropsWithChildren) => <div>{children}</div>,
-  HoverCardTrigger: ({ children }: PropsWithChildren) => <span>{children}</span>,
+  HoverCardTrigger: ({ children }: PropsWithChildren) => (
+    <span>{children}</span>
+  ),
 }));
 
 import { InlineCitationCardTrigger } from "./inline-citation";

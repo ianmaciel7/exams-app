@@ -1,3 +1,4 @@
+// biome-ignore-all lint/plugin: Semgrep asserts the intentionally unsafe examples in this negative fixture.
 "use client";
 
 // ruleid: no-server-api-in-client-components
@@ -46,7 +47,16 @@ export async function Client() {
   // ruleid: no-dangerously-set-inner-html
   const bad = <div dangerouslySetInnerHTML={{ __html: a }} />;
   // ok: no-dangerously-set-inner-html
-  const good = <div>{b}{c}{f}{g}{k}{s}</div>;
+  const good = (
+    <div>
+      {b}
+      {c}
+      {f}
+      {g}
+      {k}
+      {s}
+    </div>
+  );
   const store = await cookies();
   // ruleid: session-cookie-must-be-http-only
   store.set("session", a, { path: "/" });

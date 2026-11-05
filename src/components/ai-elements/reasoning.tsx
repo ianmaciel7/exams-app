@@ -222,11 +222,11 @@ ReasoningTrigger.displayName = "ReasoningTrigger";
 ReasoningContent.displayName = "ReasoningContent";
 
 export {
-  useReasoning,
   Reasoning,
-  ReasoningTrigger,
   ReasoningContent,
-  type ReasoningProps,
-  type ReasoningTriggerProps,
   type ReasoningContentProps,
+  type ReasoningProps,
+  ReasoningTrigger,
+  type ReasoningTriggerProps,
+  useReasoning,
 };

@@ -4,11 +4,7 @@
     "path": "AGENTS.md"
   },
   "integrations": {
-    "enabled": [
-      "codex",
-      "claude",
-      "antigravity"
-    ],
+    "enabled": ["codex", "claude", "antigravity"],
     "options": {
       "cursorAutoApprove": true,
       "antigravityGlobalSync": true,
@@ -37,31 +33,21 @@
         "enabled": true,
         "description": "Next.js runtime diagnostics and route inspection",
         "command": "pnpm",
-        "args": [
-          "exec",
-          "next-devtools-mcp"
-        ]
+        "args": ["exec", "next-devtools-mcp"]
       },
       "playwright": {
         "transport": "stdio",
         "enabled": true,
         "description": "Browser automation for verifying UI changes",
         "command": "pnpm",
-        "args": [
-          "dlx",
-          "@playwright/mcp@0.0.83"
-        ]
+        "args": ["dlx", "@playwright/mcp@0.0.83"]
       },
       "firebase": {
         "transport": "stdio",
         "enabled": true,
         "description": "Firebase project, security rules, and emulator tooling",
         "command": "pnpm",
-        "args": [
-          "dlx",
-          "firebase-tools@15.34.1",
-          "mcp"
-        ]
+        "args": ["dlx", "firebase-tools@15.34.1", "mcp"]
       }
     }
   },

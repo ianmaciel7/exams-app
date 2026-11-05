@@ -37,13 +37,16 @@ Key architectural choices:
 
 4. **Class Name Utility Convention (`"cn": "^0.4.0"`)**:
    We adopt the lightweight npm package `"cn": "^0.4.0"` to merge conditional Tailwind classes. The project standardizes on `src/lib/utils.ts` re-exporting `cn`:
+
    ```ts
    export { cn } from "cn";
    ```
+
    This avoids redundant internal wrapper code while providing standard `cn(...)` usage across all components.
 
 5. **Starter Page Native Composition (`src/app/page.tsx`)**:
    Action buttons in the starter screen use native, semantic Next.js `<Link>` elements styled via the `buttonVariants` helper rather than the obsolete `<Button render={<Link>}>`:
+
    ```tsx
    <Link
      href="https://vercel.com/new?..."
@@ -59,6 +62,7 @@ Key architectural choices:
      {t("deployNow")}
    </Link>
    ```
+
    This clean semantic composition avoids Base UI button prop inheritance overhead, eliminates unnecessary `nativeButton={false}` overrides, and conforms directly to standard HTML and Next.js navigation semantics with full-width mobile and `md:w-[158px]` responsive sizing.
 
 6. **Root Provider Integration (`<TooltipProvider>`)**:
@@ -69,13 +73,15 @@ Key architectural choices:
    - Subscribes to `window.matchMedia("(max-width: 767px)")`.
    - `getSnapshot` returns `window.innerWidth < 768`.
    - `getServerSnapshot` returns `false` (desktop layout during SSR).
-   This eliminates layout shifts, client-side re-render flashes, and hydration warnings.
+     This eliminates layout shifts, client-side re-render flashes, and hydration warnings.
 
 8. **Pre-installation and Local Adaptation of UI Components**:
    We pre-install components from the shadcn/ui registry:
+
    ```bash
    pnpm dlx shadcn@latest add --all -y
    ```
+
    Unused components do not inflate client route bundles because Next.js and Turbopack statically tree-shake per route. Application components in `src/components/ui/` are locally owned and adapted for Base UI (`base-nova`), keyboard accessibility, and repository composition contracts (`require-button-props`, `require-component-props`). Raw re-execution of upstream registry additions must be reviewed against these local contracts.
 
 9. **Scoped Markdown Typography (`src/app/typeset.css`)**:
@@ -98,7 +104,7 @@ Key architectural choices:
 
     Together with `@base-ui/react` and `@shadcn/react`, these primitives provide turn-key generative chat, code blocks, canvas flows, and media rendering. Vendored sources incorporate local bug fixes and regression tests (such as `AgentTool` lazy schema resolution and `PromptInput` local attachment resets) maintained directly in project source.
 
-*Architectural Boundary*: Downstream concerns related to UI are owned by their respective records:
+_Architectural Boundary_: Downstream concerns related to UI are owned by their respective records:
 - Theming, dark mode, and OKLCH color palettes are defined in [ADR 0003](0003-configure-theming.md).
 - Component architecture, shared component placement in `src/components/ui/extensions/`, and `biome.json` overrides for vendored code are defined in [ADR 0006](0006-document-project-standards.md).
 - Agent execution workflows, MCP tools, and skills are defined in [ADR 0007](0007-configure-agent-ecosystem.md).

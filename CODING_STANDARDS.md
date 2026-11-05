@@ -260,7 +260,7 @@ At the call site, the caller supplies the content for each part:
 <AccountCard>
   <AccountCardHeader>{heading}</AccountCardHeader>
   <AccountCardContent>{children}</AccountCardContent>
-</AccountCard>
+</AccountCard>;
 ```
 
 Compose only the parts with content. An adapter that extracts `className` merges
@@ -272,13 +272,13 @@ Server/Client describes module graphs and rendering, independently of compound
 anatomy. Filename suffixes identify integration responsibilities; directives and imports establish
 the actual boundary:
 
-| Situation | Meaning |
-| --- | --- |
-| Module without a directive | It can participate in the server graph, client graph, or both depending on imports; the missing directive alone does not prove it is a Server Component |
-| Module with `"use client"` in its directive prologue | It establishes a client boundary; its runtime dependencies join the client graph without repeating the directive in every file |
-| Client Component on an initial request | Next.js can render its initial HTML on the server and hydrate it in the browser; Client does not mean browser-only rendering |
-| Server parent passes `<ServerDetails />` as `children` to a Client Component | The server renders the details and passes their output; the Client Component does not import the server module |
-| Ordinary callback inside the client graph | It can pass between Client Components; React serialization constraints apply when values cross the Server-to-Client boundary |
+| Situation                                                                    | Meaning                                                                                                                                                 |
+| ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Module without a directive                                                   | It can participate in the server graph, client graph, or both depending on imports; the missing directive alone does not prove it is a Server Component |
+| Module with `"use client"` in its directive prologue                         | It establishes a client boundary; its runtime dependencies join the client graph without repeating the directive in every file                          |
+| Client Component on an initial request                                       | Next.js can render its initial HTML on the server and hydrate it in the browser; Client does not mean browser-only rendering                            |
+| Server parent passes `<ServerDetails />` as `children` to a Client Component | The server renders the details and passes their output; the Client Component does not import the server module                                          |
+| Ordinary callback inside the client graph                                    | It can pass between Client Components; React serialization constraints apply when values cross the Server-to-Client boundary                            |
 
 Keep browser interactivity behind the smallest useful client boundary. Shared
 components do not gain a runtime from names such as `Card`, `Form`, `Header`,
@@ -578,13 +578,13 @@ recipes. Consult the migration guide and installed compiler diagnostics;
 `unstable_cache` have migration guidance; this does not require a speculative
 rewrite of code that is not present.
 
-| API | Intended use |
-| --- | --- |
-| `cacheLife`, `cacheTag` | Define lifetime and tags inside a cache scope |
-| `revalidateTag(tag, "max")` | Mark tagged server data stale with stale-while-revalidate behavior; Server Functions or Route Handlers |
-| `updateTag(tag)` | Immediately expire tagged data for read-your-own-writes; Server Actions only |
-| `revalidatePath(path)` | Invalidate the selected page/layout path; does not replace tags shared by other paths |
-| `refresh()` from `next/cache` | Refresh the client router from a Server Action; does not invalidate tagged server data |
+| API                                       | Intended use                                                                                                                            |
+| ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `cacheLife`, `cacheTag`                   | Define lifetime and tags inside a cache scope                                                                                           |
+| `revalidateTag(tag, "max")`               | Mark tagged server data stale with stale-while-revalidate behavior; Server Functions or Route Handlers                                  |
+| `updateTag(tag)`                          | Immediately expire tagged data for read-your-own-writes; Server Actions only                                                            |
+| `revalidatePath(path)`                    | Invalidate the selected page/layout path; does not replace tags shared by other paths                                                   |
+| `refresh()` from `next/cache`             | Refresh the client router from a Server Action; does not invalidate tagged server data                                                  |
 | `router.refresh()` from `next/navigation` | Request and merge fresh RSC output for the current route while preserving unaffected client state; does not invalidate the server cache |
 
 The single-argument `revalidateTag(tag)` form is deprecated. For immediate
@@ -717,8 +717,10 @@ The native Biome budget for owned runtime source is cognitive complexity **8**,
 function body size **40 lines excluding blanks**, and callback nesting **2**. Values at
 the limit are allowed; the next value is an error. These checks include focused
 sub-hooks and `_lib`/shared functions, so moving a large body to a helper does not
-remove its budget. The existing copied registry and test/spec/story exclusions
-remain; non-source scripts keep the existing cognitive limit of 15.
+remove its budget. All files remain analyzed. Test/spec/story and copied registry complexity
+findings are review-level warnings; application-owned runtime budgets remain
+blocking. Non-source scripts keep the cognitive limit of 15, with external
+skill bundles classified separately. See ADR 0023 for the category policy.
 
 Decompose along responsibilities, preserve cancellation and authorization checks,
 and test public behavior after extraction. Do not suppress diagnostics, raise a
@@ -933,11 +935,11 @@ validates the complete module graph.
 
 ## Integration filename convention
 
-| Responsibility | Owned component filename | Actual runtime boundary | Examples |
-| --- | --- | --- | --- |
-| Browser integration | `<domain>-<role>-client.tsx` | `"use client"` | Firebase Auth, browser storage, navigation, theme persistence, browser requests |
-| Server integration | `<domain>-<role>-server.tsx` | `import "server-only"` | Server requests, database access, secrets, Firebase Admin |
-| Presentation | `<domain>-<role>.tsx` | `"use client"` when interactive; otherwise follows its dependencies | Fields, cards, loading UI, stateful controls and form context adapters |
+| Responsibility      | Owned component filename     | Actual runtime boundary                                             | Examples                                                                        |
+| ------------------- | ---------------------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| Browser integration | `<domain>-<role>-client.tsx` | `"use client"`                                                      | Firebase Auth, browser storage, navigation, theme persistence, browser requests |
+| Server integration  | `<domain>-<role>-server.tsx` | `import "server-only"`                                              | Server requests, database access, secrets, Firebase Admin                       |
+| Presentation        | `<domain>-<role>.tsx`        | `"use client"` when interactive; otherwise follows its dependencies | Fields, cards, loading UI, stateful controls and form context adapters          |
 
 All integration components must include a concrete semantic component role / type describing their composition (e.g. `*-card-client.tsx`, `*-form-client.tsx`, `*-button-client.tsx`, `*-guard-client.tsx`, `*-provider-client.tsx`, `*-section-client.tsx`, `*-hero-client.tsx`). Bare feature or domain integration names like `<Domain>Client` or `<Domain>Server` (such as `ProfileClient`, `SettingsClient`, `HomeServer`) without a component type are explicitly forbidden. The `Client` and `Server` suffixes specify the runtime environment, NOT the component type. Omitting the component type creates ambiguous components with no clear composition role.
 
@@ -987,7 +989,6 @@ Owned source (`src/`, `scripts/`, `functions/`, `tests/`) follows one style:
 - Message files (`en`, `es`, `pt-BR`) keep an identical key set.
 - Keep short, straightforward calls on one line. Use an expanded trailing-object
   call when any of these conditions applies:
-
   - The final object is invocation policy or options, distinct from the operation's
     domain input, even when it currently has one property (for example, Firestore's
     `merge` option).
@@ -1044,16 +1045,16 @@ of provider billing. Verified regression examples live in `context.test.tsx`.
 
 ## Legacy React API guidance
 
-| Available legacy API | Direction for new code |
-| --- | --- |
-| `Children` | Prefer explicit composition over unnecessary child inspection. |
-| `cloneElement` | Prefer composition and explicit props. |
-| `Component` | Usually prefer function components; retain classes where needed for Error Boundaries. |
-| `PureComponent` | Prefer function components and justified optimization. |
-| `createElement` | Prefer JSX. |
-| `createRef` | Use `useRef` in function components. |
-| `forwardRef` | Prefer React 19 ref props. |
-| `isValidElement` | Inspect an element only for a concrete integration need. |
+| Available legacy API | Direction for new code                                                                |
+| -------------------- | ------------------------------------------------------------------------------------- |
+| `Children`           | Prefer explicit composition over unnecessary child inspection.                        |
+| `cloneElement`       | Prefer composition and explicit props.                                                |
+| `Component`          | Usually prefer function components; retain classes where needed for Error Boundaries. |
+| `PureComponent`      | Prefer function components and justified optimization.                                |
+| `createElement`      | Prefer JSX.                                                                           |
+| `createRef`          | Use `useRef` in function components.                                                  |
+| `forwardRef`         | Prefer React 19 ref props.                                                            |
+| `isValidElement`     | Inspect an element only for a concrete integration need.                              |
 
 For removed APIs, use `createRoot` instead of `ReactDOM.render`, `hydrateRoot`
 instead of `ReactDOM.hydrate`, explicit refs instead of `findDOMNode`,

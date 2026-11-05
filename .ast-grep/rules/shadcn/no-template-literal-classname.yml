@@ -20,7 +20,7 @@ note: |
 rule:
   kind: template_string
   not:
-    regex: '^`[^`$]*`$'
+    regex: "^`[^`$]*`$"
   inside:
     kind: jsx_expression
     inside:

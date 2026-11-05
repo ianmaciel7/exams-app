@@ -39,15 +39,15 @@ application maps them as follows. Firebase Authentication, session cookies,
 `verifySessionCookie`, and Security Rules are documented Firebase mechanisms; the names
 below and the split between them are choices of this repository.
 
-| Module | Responsibility | Grants access? |
-| --- | --- | --- |
-| `SessionProviderClient` | The single client Firebase Auth subscription, mounted once in the root layout; `isLoading`, `isError`, and `user` cannot contradict each other | No |
-| `useSession` | Reads the global session from any client component; never subscribes again | No |
-| `ProtectedGuard` | Semantic Server layout container for protected routes | No |
-| `RouteUsageBridgeClient` | Fire-and-forget route usage telemetry; never gates content | No |
-| `verifySession()` | Server DAL boundary: fails closed and returns the verified identity | Authentication |
-| `verifyRole()` | `verifySession()` plus the required role | Authorization |
-| Security Rules | Every Client SDK read and write | Authorization |
+| Module                   | Responsibility                                                                                                                                 | Grants access? |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- | -------------- |
+| `SessionProviderClient`  | The single client Firebase Auth subscription, mounted once in the root layout; `isLoading`, `isError`, and `user` cannot contradict each other | No             |
+| `useSession`             | Reads the global session from any client component; never subscribes again                                                                     | No             |
+| `ProtectedGuard`         | Semantic Server layout container for protected routes                                                                                          | No             |
+| `RouteUsageBridgeClient` | Fire-and-forget route usage telemetry; never gates content                                                                                     | No             |
+| `verifySession()`        | Server DAL boundary: fails closed and returns the verified identity                                                                            | Authentication |
+| `verifyRole()`           | `verifySession()` plus the required role                                                                                                       | Authorization  |
+| Security Rules           | Every Client SDK read and write                                                                                                                | Authorization  |
 
 Protected data and privileged server operations must use `verifyRole()` or
 `verifySession()` and check ownership. Insufficient roles return `notFound()` so

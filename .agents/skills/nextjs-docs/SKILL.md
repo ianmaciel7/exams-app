@@ -1,4 +1,5 @@
 ---
+
 name: nextjs-docs
 description: Lookup and verify installed Next.js documentation in node_modules/next/dist/docs/ and server internals in node_modules/next/dist/server/lib/. Use before planning, writing, modifying, or answering anything regarding Next.js routing, caching, server actions, server/client components, or runtime behavior.
 ---

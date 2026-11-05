@@ -23,7 +23,7 @@ When using SwiftUI, you **MUST** ensure `FirebaseApp.configure()` is called
 
 - **UNSAFE (CRASH):** Declaring a `@State` (for `@Observable`) or `@StateObject`
   (for Combine) property in the root `App` struct if its initializer touches
-  Firebase. Property initializers run *before* the `App.init()` body, meaning
+  Firebase. Property initializers run _before_ the `App.init()` body, meaning
   the object's `init()` will fire before Firebase is configured.
 - **SAFE:** Initialize Firebase in `App.init()` and pass your state objects into
   the sub-views (like `ContentView`), or use `onAppear` for delayed setup.
@@ -134,13 +134,11 @@ secrets:
 
 1. Supply `AppCheckDebugToken` via your local environment instead of hardcoding
    it in code:
-
    - **Xcode Scheme Environment Variables (Recommended):**
-
      - Select **Product > Scheme > Edit Scheme...** (or `Cmd + <`).
      - Navigate to **Run > Arguments > Environment Variables**.
      - Add `AppCheckDebugToken = <YOUR_DEBUG_TOKEN>`.
-     - *Tip:* Keep your personal scheme unshared or ensure user scheme data
+     - _Tip:_ Keep your personal scheme unshared or ensure user scheme data
        (`xcuserdata/`) is included in `.gitignore` so your personal debug token
        is not committed.
 

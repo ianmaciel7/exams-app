@@ -1,4 +1,5 @@
 ---
+
 title: Promise.all() for Independent Operations
 impact: CRITICAL
 impactDescription: 2-10× improvement
@@ -12,9 +13,9 @@ When async operations have no interdependencies, execute them concurrently using
 **Incorrect (sequential execution, 3 round trips):**
 
 ```typescript
-const user = await fetchUser()
-const posts = await fetchPosts()
-const comments = await fetchComments()
+const user = await fetchUser();
+const posts = await fetchPosts();
+const comments = await fetchComments();
 ```
 
 **Correct (parallel execution, 1 round trip):**
@@ -23,6 +24,6 @@ const comments = await fetchComments()
 const [user, posts, comments] = await Promise.all([
   fetchUser(),
   fetchPosts(),
-  fetchComments()
-])
+  fetchComments(),
+]);
 ```

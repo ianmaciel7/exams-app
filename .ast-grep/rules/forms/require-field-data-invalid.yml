@@ -31,7 +31,7 @@ rule:
     kind: arrow_function
     has:
       field: parameters
-      regex: 'fieldState'
+      regex: "fieldState"
   not:
     matches: field-with-data-invalid
 

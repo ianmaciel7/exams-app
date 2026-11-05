@@ -2,17 +2,17 @@ id: review-redundant-state-effect
 snapshots:
   "useEffect(() => {\n  setPreview(URL.createObjectURL(file));\n}, [file]);\n":
     labels:
-    - source: |-
-        useEffect(() => {
-          setPreview(URL.createObjectURL(file));
-        }, [file])
-      style: primary
-      start: 0
-      end: 69
-    - source: |-
-        (() => {
-          setPreview(URL.createObjectURL(file));
-        }, [file])
-      style: secondary
-      start: 9
-      end: 69
+      - source: |-
+          useEffect(() => {
+            setPreview(URL.createObjectURL(file));
+          }, [file])
+        style: primary
+        start: 0
+        end: 69
+      - source: |-
+          (() => {
+            setPreview(URL.createObjectURL(file));
+          }, [file])
+        style: secondary
+        start: 9
+        end: 69

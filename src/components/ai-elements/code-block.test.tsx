@@ -9,7 +9,11 @@ afterEach(cleanup);
 function tokenize(code: string) {
   return new Promise<string>((resolve) => {
     const read = (result: NonNullable<ReturnType<typeof highlightCode>>) => {
-      resolve(result.tokens.map((line) => line.map((token) => token.content).join("")).join("\n"));
+      resolve(
+        result.tokens
+          .map((line) => line.map((token) => token.content).join(""))
+          .join("\n"),
+      );
     };
     const cached = highlightCode(code, "javascript", read);
     if (cached) read(cached);
@@ -19,7 +23,10 @@ function tokenize(code: string) {
 function snippets(marker: string) {
   const prefix = `// ${marker} ${"prefix ".repeat(20)}\n`;
   const suffix = `\n// ${"suffix ".repeat(20)}`;
-  return [`${prefix}const result = "first";${suffix}`, `${prefix}const result = "other";${suffix}`] as const;
+  return [
+    `${prefix}const result = "first";${suffix}`,
+    `${prefix}const result = "other";${suffix}`,
+  ] as const;
 }
 
 describe("CodeBlock text identity", () => {
@@ -33,7 +40,10 @@ describe("CodeBlock text identity", () => {
 
   it("delivers each requested text to concurrent subscriptions with matching endpoints", async () => {
     const [first, other] = snippets("concurrent");
-    expect(await Promise.all([tokenize(first), tokenize(other)])).toEqual([first, other]);
+    expect(await Promise.all([tokenize(first), tokenize(other)])).toEqual([
+      first,
+      other,
+    ]);
   });
 });
 

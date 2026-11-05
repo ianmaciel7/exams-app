@@ -2,10 +2,10 @@
 
 Two stacks, applied in order. Nothing here runs in CI; apply from a trusted machine.
 
-| Stack | Purpose | State |
-| --- | --- | --- |
-| `bootstrap/` | Creates the GCP project, base APIs and the state bucket | local (applied once) |
-| `prod/` | Firebase, Firestore, RTDB, Storage, App Hosting, deploy identity | GCS bucket from bootstrap |
+| Stack        | Purpose                                                          | State                     |
+| ------------ | ---------------------------------------------------------------- | ------------------------- |
+| `bootstrap/` | Creates the GCP project, base APIs and the state bucket          | local (applied once)      |
+| `prod/`      | Firebase, Firestore, RTDB, Storage, App Hosting, deploy identity | GCS bucket from bootstrap |
 
 ## Prerequisites
 
@@ -41,7 +41,7 @@ then apply again so the repository link and backend can finish.
 
 ## 3. After apply
 
-- The `production` environment variables used by `.github/workflows/firebase-cd.yml` are managed here (see [ADR 0011](../docs/adr/0011-configure-terraform-infrastructure.md)); applying needs `GITHUB_TOKEN` or a logged in `gh` CLI.
+- The `production` environment variables used by `.github/workflows/cd.yml` are managed here (see [ADR 0011](../docs/adr/0011-configure-terraform-infrastructure.md)); applying needs `GITHUB_TOKEN` or a logged in `gh` CLI.
 - Copy `firebase_web_config` into `apphosting.yaml` (public values, not secrets), except the API key:
   `apphosting.yaml` references the Secret Manager secret `firebase-web-api-key`, and `check:secret-guard`
   rejects any key literal in that file. Add the value once, from a key restricted to your domains and the
@@ -76,17 +76,17 @@ then apply again so the repository link and backend can finish.
 
 The production stack is organized into domain-scoped files:
 
-| File | Purpose |
-| --- | --- |
-| `main.tf` | Required versions, providers, backend configuration, and root project data |
-| `apis.tf` | Google Cloud API service activations |
-| `firebase.tf` | Firebase project, web app, Firestore Native, Realtime Database, and Storage |
-| `app_hosting.tf` | App Hosting backend, service accounts, and Developer Connect GitHub link |
-| `auth.tf` | Identity Platform configuration and Auth blocking function triggers |
-| `iam.tf` | Additive team access bindings (owners and Firebase developers) |
-| `github_wif.tf` | Workload Identity Federation for GitHub Actions and release secrets |
-| `outputs.tf` | Web configuration and environment outputs |
-| `variables.tf` | Input variable declarations |
+| File             | Purpose                                                                     |
+| ---------------- | --------------------------------------------------------------------------- |
+| `main.tf`        | Required versions, providers, backend configuration, and root project data  |
+| `apis.tf`        | Google Cloud API service activations                                        |
+| `firebase.tf`    | Firebase project, web app, Firestore Native, Realtime Database, and Storage |
+| `app_hosting.tf` | App Hosting backend, service accounts, and Developer Connect GitHub link    |
+| `auth.tf`        | Identity Platform configuration and Auth blocking function triggers         |
+| `iam.tf`         | Additive team access bindings (owners and Firebase developers)              |
+| `github_wif.tf`  | Workload Identity Federation for GitHub Actions and release secrets         |
+| `outputs.tf`     | Web configuration and environment outputs                                   |
+| `variables.tf`   | Input variable declarations                                                 |
 
 ## Team access
 

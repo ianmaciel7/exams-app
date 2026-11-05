@@ -1,107 +1,108 @@
 ---
+
 version: alpha
 name: exams-app-design
 description: Neutral grayscale shadcn/ui (base-nova) theme with Geist typography, a 0.625rem base radius, class-based dark mode, and light/dark token sets defined in src/app/globals.css.
 
 colors:
-  light:
-    background: "#ffffff"
-    foreground: "#0a0a0a"
-    card: "#ffffff"
-    card-foreground: "#0a0a0a"
-    popover: "#ffffff"
-    popover-foreground: "#0a0a0a"
-    primary: "#171717"
-    primary-foreground: "#fafafa"
-    secondary: "#f5f5f5"
-    secondary-foreground: "#171717"
-    muted: "#f5f5f5"
-    muted-foreground: "#737373"
-    accent: "#f5f5f5"
-    accent-foreground: "#171717"
-    destructive: "#e7000b"
-    border: "#e5e5e5"
-    input: "#e5e5e5"
-    ring: "#a1a1a1"
-    chart-1: "#d4d4d4"
-    chart-2: "#737373"
-    chart-3: "#525252"
-    chart-4: "#404040"
-    chart-5: "#262626"
-    sidebar: "#fafafa"
-    sidebar-foreground: "#0a0a0a"
-    sidebar-primary: "#171717"
-    sidebar-primary-foreground: "#fafafa"
-    sidebar-accent: "#f5f5f5"
-    sidebar-accent-foreground: "#171717"
-    sidebar-border: "#e5e5e5"
-    sidebar-ring: "#a1a1a1"
-  dark:
-    background: "#0a0a0a"
-    foreground: "#fafafa"
-    card: "#171717"
-    card-foreground: "#fafafa"
-    popover: "#171717"
-    popover-foreground: "#fafafa"
-    primary: "#e5e5e5"
-    primary-foreground: "#171717"
-    secondary: "#262626"
-    secondary-foreground: "#fafafa"
-    muted: "#262626"
-    muted-foreground: "#a1a1a1"
-    accent: "#262626"
-    accent-foreground: "#fafafa"
-    destructive: "#ff6467"
-    border: "#ffffff1a"
-    input: "#ffffff26"
-    ring: "#737373"
-    chart-1: "#d4d4d4"
-    chart-2: "#737373"
-    chart-3: "#525252"
-    chart-4: "#404040"
-    chart-5: "#262626"
-    sidebar: "#171717"
-    sidebar-foreground: "#fafafa"
-    sidebar-primary: "#1447e6"
-    sidebar-primary-foreground: "#fafafa"
-    sidebar-accent: "#262626"
-    sidebar-accent-foreground: "#fafafa"
-    sidebar-border: "#ffffff1a"
-    sidebar-ring: "#737373"
+light:
+background: "#ffffff"
+foreground: "#0a0a0a"
+card: "#ffffff"
+card-foreground: "#0a0a0a"
+popover: "#ffffff"
+popover-foreground: "#0a0a0a"
+primary: "#171717"
+primary-foreground: "#fafafa"
+secondary: "#f5f5f5"
+secondary-foreground: "#171717"
+muted: "#f5f5f5"
+muted-foreground: "#737373"
+accent: "#f5f5f5"
+accent-foreground: "#171717"
+destructive: "#e7000b"
+border: "#e5e5e5"
+input: "#e5e5e5"
+ring: "#a1a1a1"
+chart-1: "#d4d4d4"
+chart-2: "#737373"
+chart-3: "#525252"
+chart-4: "#404040"
+chart-5: "#262626"
+sidebar: "#fafafa"
+sidebar-foreground: "#0a0a0a"
+sidebar-primary: "#171717"
+sidebar-primary-foreground: "#fafafa"
+sidebar-accent: "#f5f5f5"
+sidebar-accent-foreground: "#171717"
+sidebar-border: "#e5e5e5"
+sidebar-ring: "#a1a1a1"
+dark:
+background: "#0a0a0a"
+foreground: "#fafafa"
+card: "#171717"
+card-foreground: "#fafafa"
+popover: "#171717"
+popover-foreground: "#fafafa"
+primary: "#e5e5e5"
+primary-foreground: "#171717"
+secondary: "#262626"
+secondary-foreground: "#fafafa"
+muted: "#262626"
+muted-foreground: "#a1a1a1"
+accent: "#262626"
+accent-foreground: "#fafafa"
+destructive: "#ff6467"
+border: "#ffffff1a"
+input: "#ffffff26"
+ring: "#737373"
+chart-1: "#d4d4d4"
+chart-2: "#737373"
+chart-3: "#525252"
+chart-4: "#404040"
+chart-5: "#262626"
+sidebar: "#171717"
+sidebar-foreground: "#fafafa"
+sidebar-primary: "#1447e6"
+sidebar-primary-foreground: "#fafafa"
+sidebar-accent: "#262626"
+sidebar-accent-foreground: "#fafafa"
+sidebar-border: "#ffffff1a"
+sidebar-ring: "#737373"
 
 typography:
-  font-sans:
-    fontFamily: Geist (var(--font-geist))
-  font-heading:
-    fontFamily: Geist (var(--font-geist))
-  font-mono:
-    fontFamily: Geist Mono (var(--font-geist-mono))
-  typeset:
-    fontSize: 1em
-    fontSizeMobile: 1.125em
-    lineHeight: 1.75
-    flowSpacing: 1.25em
-  typeset-docs:
-    fontSize: 15px
-    lineHeight: 1.75
-    flowSpacing: 1.25em
-  typeset-headings:
-    h1: 1.75em
-    h2: 1.25em
-    h3: 1.125em
-    h4: 1em
-    h5: 0.875em
-    h6: 0.8125em
+font-sans:
+fontFamily: Geist (var(--font-geist))
+font-heading:
+fontFamily: Geist (var(--font-geist))
+font-mono:
+fontFamily: Geist Mono (var(--font-geist-mono))
+typeset:
+fontSize: 1em
+fontSizeMobile: 1.125em
+lineHeight: 1.75
+flowSpacing: 1.25em
+typeset-docs:
+fontSize: 15px
+lineHeight: 1.75
+flowSpacing: 1.25em
+typeset-headings:
+h1: 1.75em
+h2: 1.25em
+h3: 1.125em
+h4: 1em
+h5: 0.875em
+h6: 0.8125em
 
 rounded:
-  base: 0.625rem
-  sm: 6px
-  md: 8px
-  lg: 10px
-  xl: 14px
-  2xl: 18px
-  3xl: 22px
-  4xl: 26px
+base: 0.625rem
+sm: 6px
+md: 8px
+lg: 10px
+xl: 14px
+2xl: 18px
+3xl: 22px
+4xl: 26px
 ---
 
 The external accessibility and usability applicability matrix, including its
@@ -116,22 +117,22 @@ Source of truth: `src/app/globals.css`. Colors are authored there in `oklch()`; 
 
 ## Project setup
 
-| Item | Value | Source |
-|---|---|---|
-| shadcn style | `base-nova` | `components.json` |
-| Base color | `neutral`, CSS variables on, no prefix | `components.json` |
-| Icons | `lucide` | `components.json` |
-| Tailwind CSS entry | `src/app/globals.css` (Tailwind v4, no config file) | `components.json` |
-| Animations | `tw-animate-css`, `shadcn/tailwind.css` | `globals.css` |
-| Primitive base | Base UI (`@base-ui/react`); use the Base UI component documentation | `components.json`, `src/components/ui/` |
-| Class merging | `cn`; application helper re-exports it | `src/lib/utils.ts`, `package.json` |
-| Direction | `rtl: false`; current locales use LTR | `components.json` |
-| Theme switching | `next-themes`, `attribute="class"`, `defaultTheme="system"`, `enableSystem`, `disableTransitionOnChange` | `src/app/layout.tsx` |
-| `html` classes | Geist + Geist Mono variables, `h-full antialiased` | `src/app/layout.tsx` |
-| `body` classes | `min-h-full flex flex-col` | `src/app/layout.tsx` |
-| Provider stack | `Suspense` > async `IntlProvider` > `ThemeProvider` > `TooltipProvider`, with a sibling `Toaster` inside the theme provider | `src/app/layout.tsx` |
-| Component aliases | `@/components`, `@/components/ui`, `@/lib`, `@/hooks`, `@/lib/utils` | `components.json` |
-| Component workshop | Ladle, uses `NextIntlClientProvider` with English messages, theme and tooltip providers; wrapper uses `bg-background p-4 font-sans text-foreground` | `.ladle/components.tsx` |
+| Item               | Value                                                                                                                                               | Source                                  |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
+| shadcn style       | `base-nova`                                                                                                                                         | `components.json`                       |
+| Base color         | `neutral`, CSS variables on, no prefix                                                                                                              | `components.json`                       |
+| Icons              | `lucide`                                                                                                                                            | `components.json`                       |
+| Tailwind CSS entry | `src/app/globals.css` (Tailwind v4, no config file)                                                                                                 | `components.json`                       |
+| Animations         | `tw-animate-css`, `shadcn/tailwind.css`                                                                                                             | `globals.css`                           |
+| Primitive base     | Base UI (`@base-ui/react`); use the Base UI component documentation                                                                                 | `components.json`, `src/components/ui/` |
+| Class merging      | `cn`; application helper re-exports it                                                                                                              | `src/lib/utils.ts`, `package.json`      |
+| Direction          | `rtl: false`; current locales use LTR                                                                                                               | `components.json`                       |
+| Theme switching    | `next-themes`, `attribute="class"`, `defaultTheme="system"`, `enableSystem`, `disableTransitionOnChange`                                            | `src/app/layout.tsx`                    |
+| `html` classes     | Geist + Geist Mono variables, `h-full antialiased`                                                                                                  | `src/app/layout.tsx`                    |
+| `body` classes     | `min-h-full flex flex-col`                                                                                                                          | `src/app/layout.tsx`                    |
+| Provider stack     | `Suspense` > async `IntlProvider` > `ThemeProvider` > `TooltipProvider`, with a sibling `Toaster` inside the theme provider                         | `src/app/layout.tsx`                    |
+| Component aliases  | `@/components`, `@/components/ui`, `@/lib`, `@/hooks`, `@/lib/utils`                                                                                | `components.json`                       |
+| Component workshop | Ladle, uses `NextIntlClientProvider` with English messages, theme and tooltip providers; wrapper uses `bg-background p-4 font-sans text-foreground` | `.ladle/components.tsx`                 |
 
 ## Colors
 
@@ -139,21 +140,21 @@ Tokens are CSS variables on `:root` (light) and `.dark` (dark), exposed to Tailw
 
 ### Surfaces
 
-| Token | Light | Dark | oklch (light / dark) |
-|---|---|---|---|
-| `background` | `#ffffff` | `#0a0a0a` | `1 0 0` / `0.145 0 0` |
-| `card`, `popover` | `#ffffff` | `#171717` | `1 0 0` / `0.205 0 0` |
-| `secondary`, `muted`, `accent` | `#f5f5f5` | `#262626` | `0.97 0 0` / `0.269 0 0` |
-| `sidebar` | `#fafafa` | `#171717` | `0.985 0 0` / `0.205 0 0` |
+| Token                          | Light     | Dark      | oklch (light / dark)      |
+| ------------------------------ | --------- | --------- | ------------------------- |
+| `background`                   | `#ffffff` | `#0a0a0a` | `1 0 0` / `0.145 0 0`     |
+| `card`, `popover`              | `#ffffff` | `#171717` | `1 0 0` / `0.205 0 0`     |
+| `secondary`, `muted`, `accent` | `#f5f5f5` | `#262626` | `0.97 0 0` / `0.269 0 0`  |
+| `sidebar`                      | `#fafafa` | `#171717` | `0.985 0 0` / `0.205 0 0` |
 
 ### Text
 
-| Token | Light | Dark |
-|---|---|---|
+| Token                                                 | Light     | Dark      |
+| ----------------------------------------------------- | --------- | --------- |
 | `foreground`, `card-foreground`, `popover-foreground` | `#0a0a0a` | `#fafafa` |
-| `primary-foreground` | `#fafafa` | `#171717` |
-| `secondary-foreground`, `accent-foreground` | `#171717` | `#fafafa` |
-| `muted-foreground` | `#737373` | `#a1a1a1` |
+| `primary-foreground`                                  | `#fafafa` | `#171717` |
+| `secondary-foreground`, `accent-foreground`           | `#171717` | `#fafafa` |
+| `muted-foreground`                                    | `#737373` | `#a1a1a1` |
 
 ### Action & feedback
 
@@ -162,11 +163,11 @@ Tokens are CSS variables on `:root` (light) and `.dark` (dark), exposed to Tailw
 
 ### Borders & focus
 
-| Token | Light | Dark |
-|---|---|---|
+| Token    | Light     | Dark            |
+| -------- | --------- | --------------- |
 | `border` | `#e5e5e5` | `#ffffff` @ 10% |
-| `input` | `#e5e5e5` | `#ffffff` @ 15% |
-| `ring` | `#a1a1a1` | `#737373` |
+| `input`  | `#e5e5e5` | `#ffffff` @ 15% |
+| `ring`   | `#a1a1a1` | `#737373`       |
 
 The base layer applies `border-border outline-ring/50` to every element.
 
@@ -198,15 +199,15 @@ No custom type scale exists outside the typeset; other sizes come from Tailwind 
 
 Base radius `--radius: 0.625rem` (10px). Derived tokens:
 
-| Token | Formula | Value |
-|---|---|---|
-| `radius-sm` | `radius × 0.6` | 6px |
-| `radius-md` | `radius × 0.8` | 8px |
-| `radius-lg` | `radius` | 10px |
-| `radius-xl` | `radius × 1.4` | 14px |
-| `radius-2xl` | `radius × 1.8` | 18px |
-| `radius-3xl` | `radius × 2.2` | 22px |
-| `radius-4xl` | `radius × 2.6` | 26px |
+| Token        | Formula        | Value |
+| ------------ | -------------- | ----- |
+| `radius-sm`  | `radius × 0.6` | 6px   |
+| `radius-md`  | `radius × 0.8` | 8px   |
+| `radius-lg`  | `radius`       | 10px  |
+| `radius-xl`  | `radius × 1.4` | 14px  |
+| `radius-2xl` | `radius × 1.8` | 18px  |
+| `radius-3xl` | `radius × 2.2` | 22px  |
+| `radius-4xl` | `radius × 2.6` | 26px  |
 
 ## Behavior
 

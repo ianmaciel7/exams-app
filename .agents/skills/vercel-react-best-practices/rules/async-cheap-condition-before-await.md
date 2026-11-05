@@ -1,4 +1,5 @@
 ---
+
 title: Check Cheap Conditions Before Async Flags
 impact: HIGH
 impactDescription: avoids unnecessary async work when a synchronous guard already fails
@@ -14,7 +15,7 @@ This is a specialization of [Defer Await Until Needed](./async-defer-await.md) f
 **Incorrect:**
 
 ```typescript
-const someFlag = await getFlag()
+const someFlag = await getFlag();
 
 if (someFlag && someCondition) {
   // ...
@@ -25,7 +26,7 @@ if (someFlag && someCondition) {
 
 ```typescript
 if (someCondition) {
-  const someFlag = await getFlag()
+  const someFlag = await getFlag();
   if (someFlag) {
     // ...
   }

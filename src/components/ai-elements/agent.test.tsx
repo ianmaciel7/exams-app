@@ -31,9 +31,13 @@ function deferredSchema() {
 
 describe("AgentTool schema presentation", () => {
   it("resolves a lazy input schema through the supported SDK adapter", async () => {
-    const lazy = vi.fn(() => jsonSchema({ type: "object", title: "Lazy input" }));
+    const lazy = vi.fn(() =>
+      jsonSchema({ type: "object", title: "Lazy input" }),
+    );
     render(<ToolDetails tool={{ inputSchema: lazy }} />);
-    await waitFor(() => expect(screen.getByText(/"title": "Lazy input"/)).toBeTruthy());
+    await waitFor(() =>
+      expect(screen.getByText(/"title": "Lazy input"/)).toBeTruthy(),
+    );
     expect(lazy).toHaveBeenCalled();
   });
 
@@ -41,7 +45,9 @@ describe("AgentTool schema presentation", () => {
     const pending = deferredSchema();
     render(<ToolDetails tool={{ inputSchema: jsonSchema(pending.promise) }} />);
     expect(screen.getByText("Loading schema…")).toBeTruthy();
-    await act(async () => pending.resolve({ type: "object", title: "Async input" }));
+    await act(async () =>
+      pending.resolve({ type: "object", title: "Async input" }),
+    );
     expect(screen.getByText(/"title": "Async input"/)).toBeTruthy();
   });
 
@@ -54,11 +60,19 @@ describe("AgentTool schema presentation", () => {
 
   it("does not let an obsolete asynchronous schema overwrite a replacement", async () => {
     const old = deferredSchema();
-    const { rerender } = render(<ToolDetails tool={{ inputSchema: jsonSchema(old.promise) }} />);
-    const current = { inputSchema: jsonSchema({ type: "object", title: "Current input" }) };
+    const { rerender } = render(
+      <ToolDetails tool={{ inputSchema: jsonSchema(old.promise) }} />,
+    );
+    const current = {
+      inputSchema: jsonSchema({ type: "object", title: "Current input" }),
+    };
     rerender(<ToolDetails tool={current} />);
-    await waitFor(() => expect(screen.getByText(/"title": "Current input"/)).toBeTruthy());
-    await act(async () => old.resolve({ type: "object", title: "Obsolete input" }));
+    await waitFor(() =>
+      expect(screen.getByText(/"title": "Current input"/)).toBeTruthy(),
+    );
+    await act(async () =>
+      old.resolve({ type: "object", title: "Obsolete input" }),
+    );
     expect(screen.queryByText(/Obsolete input/)).toBeNull();
     expect(screen.getByText(/"title": "Current input"/)).toBeTruthy();
   });

@@ -142,12 +142,12 @@ const SnippetCopyButton = ({
 export {
   Snippet,
   SnippetAddon,
-  SnippetText,
-  SnippetInput,
-  SnippetCopyButton,
-  type SnippetProps,
   type SnippetAddonProps,
-  type SnippetTextProps,
-  type SnippetInputProps,
+  SnippetCopyButton,
   type SnippetCopyButtonProps,
+  SnippetInput,
+  type SnippetInputProps,
+  type SnippetProps,
+  SnippetText,
+  type SnippetTextProps,
 };

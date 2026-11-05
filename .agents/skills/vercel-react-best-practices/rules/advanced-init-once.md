@@ -1,4 +1,5 @@
 ---
+
 title: Initialize App Once, Not Per Mount
 impact: LOW-MEDIUM
 impactDescription: avoids duplicate init in development
@@ -14,9 +15,9 @@ Do not put app-wide initialization that must run once per app load inside `useEf
 ```tsx
 function Comp() {
   useEffect(() => {
-    loadFromStorage()
-    checkAuthToken()
-  }, [])
+    loadFromStorage();
+    checkAuthToken();
+  }, []);
 
   // ...
 }
@@ -25,15 +26,15 @@ function Comp() {
 **Correct (once per app load):**
 
 ```tsx
-let didInit = false
+let didInit = false;
 
 function Comp() {
   useEffect(() => {
-    if (didInit) return
-    didInit = true
-    loadFromStorage()
-    checkAuthToken()
-  }, [])
+    if (didInit) return;
+    didInit = true;
+    loadFromStorage();
+    checkAuthToken();
+  }, []);
 
   // ...
 }

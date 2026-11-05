@@ -1,4 +1,5 @@
 ---
+
 trigger: model_decision
 description: "Read when changing Compiler configuration, directives, optimization, or eligibility diagnostics."
 ---

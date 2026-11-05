@@ -1,4 +1,5 @@
 ---
+
 trigger: model_decision
 description: "Read when changing route entrypoints, handlers, navigation, metadata, or viewport exports."
 ---

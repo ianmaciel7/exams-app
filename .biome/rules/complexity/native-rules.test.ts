@@ -148,7 +148,7 @@ describe("owned function complexity budgets", () => {
   });
 
   it.each(["test", "spec", "stories"])(
-    "preserves %s fixture exclusions",
+    "reports nonblocking complexity diagnostics for %s fixtures",
     (kind) => {
       const result = lint(
         `${branches(9)}\n${lines(41)}\n${nested(3)}`,
@@ -158,18 +158,36 @@ describe("owned function complexity budgets", () => {
         result.diagnostics.filter(({ category }) =>
           Object.values(categories).includes(category),
         ),
+      ).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ severity: "warning" }),
+        ]),
+      );
+      expect(
+        result.diagnostics.filter(
+          ({ category, severity }) =>
+            Object.values(categories).includes(category) &&
+            severity === "error",
+        ),
       ).toEqual([]);
     },
   );
 
-  it.each(vendorFiles)("preserves copied registry exclusions: %s", (file) => {
-    expect(
-      lint(
-        `${branches(9)}\n${lines(41)}\n${nested(3)}`,
-        file,
-      ).diagnostics.filter(({ category }) =>
-        Object.values(categories).includes(category),
-      ),
-    ).toEqual([]);
-  });
+  it.each(vendorFiles)(
+    "reports nonblocking complexity diagnostics for copied registry: %s",
+    (file) => {
+      expect(
+        lint(
+          `${branches(9)}\n${lines(41)}\n${nested(3)}`,
+          file,
+        ).diagnostics.filter(({ category }) =>
+          Object.values(categories).includes(category),
+        ),
+      ).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ severity: "warning" }),
+        ]),
+      );
+    },
+  );
 });

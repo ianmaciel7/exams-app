@@ -34,7 +34,11 @@ describe("OAuthButton", () => {
 
   it("communicates a pending provider operation and blocks duplicate attempts", () => {
     mocks.state = "pending";
-    render(<OAuthButton provider={{ providerId: "google.com" } as never}>{"Google"}</OAuthButton>);
+    render(
+      <OAuthButton provider={{ providerId: "google.com" } as never}>
+        {"Google"}
+      </OAuthButton>,
+    );
 
     const button = screen.getByRole("button", { name: /Google/ });
     expect((button as HTMLButtonElement).disabled).toBe(true);
@@ -43,7 +47,11 @@ describe("OAuthButton", () => {
 
   it("keeps provider errors associated with the retryable control", () => {
     mocks.error = "The popup was blocked.";
-    render(<OAuthButton provider={{ providerId: "google.com" } as never}>{"Google"}</OAuthButton>);
+    render(
+      <OAuthButton provider={{ providerId: "google.com" } as never}>
+        {"Google"}
+      </OAuthButton>,
+    );
 
     const button = screen.getByRole("button", { name: "Google" });
     const alert = screen.getByRole("alert");

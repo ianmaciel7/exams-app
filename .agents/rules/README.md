@@ -1,4 +1,5 @@
 ---
+
 trigger: manual
 description: "Index of project rule topics; consult to select relevant rules."
 ---
@@ -14,32 +15,32 @@ from the previous rules still require verification against installed packages.
 
 ## Reading map
 
-| Rule | When to read |
-| --- | --- |
-| [components.md](components.md) | naming, placing, exporting, or defining props for owned components |
-| [composition.md](composition.md) | composing owned component families, forwarding primitive props, or defining children slots |
-| [hooks.md](hooks.md) | implementing or refactoring custom hooks and component behavior ownership |
-| [react.md](react.md) | changing React render logic, hook call order, API compatibility, or adopting experimental APIs |
-| [state.md](state.md) | changing local state, reducers, context, derived values, or external stores |
-| [effects.md](effects.md) | changing external synchronization, subscriptions, cleanup, or asynchronous lifecycle work |
-| [forms.md](forms.md) | changing form context, validation, Actions, submission, reset, or profile field ownership |
-| [routes.md](routes.md) | changing route entrypoints, handlers, navigation, metadata, or viewport exports |
-| [boundaries.md](boundaries.md) | changing runtime import graphs, Server Components, Server Functions, or data crossing runtime boundaries |
-| [cache.md](cache.md) | changing Next.js caches, invalidation, streaming, prefetching, or request lifetimes |
-| [assets.md](assets.md) | changing Next.js image or font loading and resource hints |
-| [data.md](data.md) | changing persistence modules, DTOs, schemas, data placement, or dependency injection |
-| [auth.md](auth.md) | changing identity, session cookies/tokens, protected access, or post-auth navigation |
-| [testing.md](testing.md) | testing or changing stateful journeys, cancellation, errors, retries, or recovery |
-| [ui-state.md](ui-state.md) | changing user-visible pending, success, error, empty, cancellation, retry, or recovery behavior |
-| [rendering.md](rendering.md) | changing Suspense, loading/error boundaries, transitions, hydration, or component identity |
-| [mobile.md](mobile.md) | changing touch targets, form-field text, autofill, motion, or mobile layout behavior |
-| [dom.md](dom.md) | changing HTML/SVG semantics, refs, portals, imperative browser integration, or Fragment refs |
-| [compiler.md](compiler.md) | changing Compiler configuration, directives, optimization, or eligibility diagnostics |
-| [shadcn.md](shadcn.md) | maintaining copied shadcn/Base UI source, adapting primitives, or updating UI registry output |
-| [language.md](language.md) | writing source comments, documentation, agent artifacts, or commit messages |
-| [adr.md](adr.md) | creating, superseding, or referencing architecture decision records |
-| [docs.md](docs.md) | deciding where to save rules, operational guides, conventions, or project knowledge |
-| [research.md](research.md) | Read before external documentation research or when caching and promoting research findings |
+| Rule                             | When to read                                                                                             |
+| -------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| [components.md](components.md)   | naming, placing, exporting, or defining props for owned components                                       |
+| [composition.md](composition.md) | composing owned component families, forwarding primitive props, or defining children slots               |
+| [hooks.md](hooks.md)             | implementing or refactoring custom hooks and component behavior ownership                                |
+| [react.md](react.md)             | changing React render logic, hook call order, API compatibility, or adopting experimental APIs           |
+| [state.md](state.md)             | changing local state, reducers, context, derived values, or external stores                              |
+| [effects.md](effects.md)         | changing external synchronization, subscriptions, cleanup, or asynchronous lifecycle work                |
+| [forms.md](forms.md)             | changing form context, validation, Actions, submission, reset, or profile field ownership                |
+| [routes.md](routes.md)           | changing route entrypoints, handlers, navigation, metadata, or viewport exports                          |
+| [boundaries.md](boundaries.md)   | changing runtime import graphs, Server Components, Server Functions, or data crossing runtime boundaries |
+| [cache.md](cache.md)             | changing Next.js caches, invalidation, streaming, prefetching, or request lifetimes                      |
+| [assets.md](assets.md)           | changing Next.js image or font loading and resource hints                                                |
+| [data.md](data.md)               | changing persistence modules, DTOs, schemas, data placement, or dependency injection                     |
+| [auth.md](auth.md)               | changing identity, session cookies/tokens, protected access, or post-auth navigation                     |
+| [testing.md](testing.md)         | testing or changing stateful journeys, cancellation, errors, retries, or recovery                        |
+| [ui-state.md](ui-state.md)       | changing user-visible pending, success, error, empty, cancellation, retry, or recovery behavior          |
+| [rendering.md](rendering.md)     | changing Suspense, loading/error boundaries, transitions, hydration, or component identity               |
+| [mobile.md](mobile.md)           | changing touch targets, form-field text, autofill, motion, or mobile layout behavior                     |
+| [dom.md](dom.md)                 | changing HTML/SVG semantics, refs, portals, imperative browser integration, or Fragment refs             |
+| [compiler.md](compiler.md)       | changing Compiler configuration, directives, optimization, or eligibility diagnostics                    |
+| [shadcn.md](shadcn.md)           | maintaining copied shadcn/Base UI source, adapting primitives, or updating UI registry output            |
+| [language.md](language.md)       | writing source comments, documentation, agent artifacts, or commit messages                              |
+| [adr.md](adr.md)                 | creating, superseding, or referencing architecture decision records                                      |
+| [docs.md](docs.md)               | deciding where to save rules, operational guides, conventions, or project knowledge                      |
+| [research.md](research.md)       | Read before external documentation research or when caching and promoting research findings              |
 
 ## Existing sources
 

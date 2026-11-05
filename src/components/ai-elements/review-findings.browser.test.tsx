@@ -3,9 +3,9 @@ import { expect, test, vi } from "vitest";
 import { page, userEvent } from "vitest/browser";
 import { render } from "vitest-browser-react";
 import { ArtifactAction } from "./artifact";
+import { Attachment, AttachmentRemove, Attachments } from "./attachments";
 import { MessageAction } from "./message";
 import { PromptInputButton } from "./prompt-input";
-import { Attachment, AttachmentRemove, Attachments } from "./attachments";
 
 test.each(["grid", "inline"] as const)(
   "reveals the %s removal action for keyboard focus without pointer hover",
@@ -78,23 +78,27 @@ test.each([
       </PromptInputButton>
     ),
   },
-])("$name tooltip button has one tab stop and one activation", async ({ renderAction }) => {
-  const onClick = vi.fn();
-  const screen = await render(
-    <>
-      {renderAction(onClick)}
-      <button type="button">Next control</button>
-    </>,
-  );
-  await expect.poll(() => screen.getByRole("button").elements().length).toBe(2);
-  const action = screen.getByRole("button").first();
-  await userEvent.tab();
-  await expect.element(action).toHaveFocus();
-  await userEvent.keyboard("{Enter}");
-  expect(onClick).toHaveBeenCalledTimes(1);
-  await userEvent.tab();
-  await expect
-    .element(screen.getByRole("button", { name: "Next control" }))
-    .toHaveFocus();
-});
-
+])(
+  "$name tooltip button has one tab stop and one activation",
+  async ({ renderAction }) => {
+    const onClick = vi.fn();
+    const screen = await render(
+      <>
+        {renderAction(onClick)}
+        <button type="button">Next control</button>
+      </>,
+    );
+    await expect
+      .poll(() => screen.getByRole("button").elements().length)
+      .toBe(2);
+    const action = screen.getByRole("button").first();
+    await userEvent.tab();
+    await expect.element(action).toHaveFocus();
+    await userEvent.keyboard("{Enter}");
+    expect(onClick).toHaveBeenCalledTimes(1);
+    await userEvent.tab();
+    await expect
+      .element(screen.getByRole("button", { name: "Next control" }))
+      .toHaveFocus();
+  },
+);

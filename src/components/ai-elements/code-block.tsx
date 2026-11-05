@@ -389,24 +389,18 @@ const CodeBlockContent = ({
   );
 
   // Async highlighting result (populated after shiki loads)
-  const [asyncTokens, setAsyncTokens] = useState<TokenizedCode | null>(null);
-  const asyncKeyRef = useRef({ code, language });
-
-  // Invalidate stale async tokens synchronously during render
-  if (
-    asyncKeyRef.current.code !== code ||
-    asyncKeyRef.current.language !== language
-  ) {
-    asyncKeyRef.current = { code, language };
-    setAsyncTokens(null);
-  }
+  const [asyncResult, setAsyncResult] = useState<{
+    code: string;
+    language: BundledLanguage;
+    tokens: TokenizedCode;
+  } | null>(null);
 
   useEffect(() => {
     let cancelled = false;
 
     highlightCode(code, language, (result) => {
       if (!cancelled) {
-        setAsyncTokens(result);
+        setAsyncResult({ code, language, tokens: result });
       }
     });
 
@@ -415,7 +409,10 @@ const CodeBlockContent = ({
     };
   }, [code, language]);
 
-  const tokenized = asyncTokens ?? syncTokens;
+  const tokenized =
+    asyncResult?.code === code && asyncResult.language === language
+      ? asyncResult.tokens
+      : syncTokens;
 
   return (
     <div className="relative overflow-auto">
@@ -558,24 +555,24 @@ const CodeBlockLanguageSelectorItem = (
 ) => <SelectItem {...props} />;
 
 export {
-  highlightCode,
-  CodeBlockContainer,
-  CodeBlockHeader,
-  CodeBlockTitle,
-  CodeBlockFilename,
-  CodeBlockActions,
-  CodeBlockContent,
   CodeBlock,
+  CodeBlockActions,
+  CodeBlockContainer,
+  CodeBlockContent,
   CodeBlockCopyButton,
-  CodeBlockLanguageSelector,
-  CodeBlockLanguageSelectorTrigger,
-  CodeBlockLanguageSelectorValue,
-  CodeBlockLanguageSelectorContent,
-  CodeBlockLanguageSelectorItem,
   type CodeBlockCopyButtonProps,
-  type CodeBlockLanguageSelectorProps,
-  type CodeBlockLanguageSelectorTriggerProps,
-  type CodeBlockLanguageSelectorValueProps,
+  CodeBlockFilename,
+  CodeBlockHeader,
+  CodeBlockLanguageSelector,
+  CodeBlockLanguageSelectorContent,
   type CodeBlockLanguageSelectorContentProps,
+  CodeBlockLanguageSelectorItem,
   type CodeBlockLanguageSelectorItemProps,
+  type CodeBlockLanguageSelectorProps,
+  CodeBlockLanguageSelectorTrigger,
+  type CodeBlockLanguageSelectorTriggerProps,
+  CodeBlockLanguageSelectorValue,
+  type CodeBlockLanguageSelectorValueProps,
+  CodeBlockTitle,
+  highlightCode,
 };

@@ -2,37 +2,37 @@ id: no-template-literal-classname
 snapshots:
   "const a = <div className={`${base} motion-reduce:animate-none`} />;":
     labels:
-    - source: "`${base} motion-reduce:animate-none`"
-      style: primary
-      start: 26
-      end: 62
-    - source: className
-      style: secondary
-      start: 15
-      end: 24
-    - source: className={`${base} motion-reduce:animate-none`}
-      style: secondary
-      start: 15
-      end: 63
-    - source: "{`${base} motion-reduce:animate-none`}"
-      style: secondary
-      start: 25
-      end: 63
+      - source: "`${base} motion-reduce:animate-none`"
+        style: primary
+        start: 26
+        end: 62
+      - source: className
+        style: secondary
+        start: 15
+        end: 24
+      - source: className={`${base} motion-reduce:animate-none`}
+        style: secondary
+        start: 15
+        end: 63
+      - source: "{`${base} motion-reduce:animate-none`}"
+        style: secondary
+        start: 25
+        end: 63
   "const a = <div className={`p-2 ${active ? \"bg-muted\" : \"\"}`} />;\n":
     labels:
-    - source: "`p-2 ${active ? \"bg-muted\" : \"\"}`"
-      style: primary
-      start: 26
-      end: 59
-    - source: className
-      style: secondary
-      start: 15
-      end: 24
-    - source: "className={`p-2 ${active ? \"bg-muted\" : \"\"}`}"
-      style: secondary
-      start: 15
-      end: 60
-    - source: "{`p-2 ${active ? \"bg-muted\" : \"\"}`}"
-      style: secondary
-      start: 25
-      end: 60
+      - source: '`p-2 ${active ? "bg-muted" : ""}`'
+        style: primary
+        start: 26
+        end: 59
+      - source: className
+        style: secondary
+        start: 15
+        end: 24
+      - source: 'className={`p-2 ${active ? "bg-muted" : ""}`}'
+        style: secondary
+        start: 15
+        end: 60
+      - source: '{`p-2 ${active ? "bg-muted" : ""}`}'
+        style: secondary
+        start: 25
+        end: 60

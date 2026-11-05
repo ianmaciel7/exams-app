@@ -1,4 +1,5 @@
 ---
+
 trigger: model_decision
 description: "Read when maintaining copied shadcn/Base UI source, adapting primitives, or updating UI registry output."
 ---

@@ -187,7 +187,7 @@ The columns are default, hover, focus, active and disabled. Add `loading` with S
       {...previewState(state)}
     />
   )}
-/>
+/>;
 ```
 
 If the DESIGN.md says a state doesn't change ("primary darkens on press only"), leave that column identical. The matrix shows the spec is followed.
@@ -225,7 +225,7 @@ Pick the two to four DESIGN.md rules that are easiest to break and render each a
     <Button>Get started</Button>
     <Button>Contact sales</Button>
   </Example>
-</div>
+</div>;
 ```
 
 Caption each with the rule in one line, for example "One primary action per group." Mark Don't with `destructive` text, not a new color.

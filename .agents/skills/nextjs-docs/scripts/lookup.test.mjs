@@ -4,16 +4,16 @@ import { resolve } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 
-const scriptPath = resolve(
-  fileURLToPath(import.meta.url),
-  "../lookup.mjs",
-);
+const scriptPath = resolve(fileURLToPath(import.meta.url), "../lookup.mjs");
 
 test("lookup script shows help when invoked without arguments", () => {
   const output = execFileSync("node", [scriptPath, "--help"], {
     encoding: "utf8",
   });
-  assert.match(output, /Next\.js Installed Documentation & Server Internals Lookup/);
+  assert.match(
+    output,
+    /Next\.js Installed Documentation & Server Internals Lookup/,
+  );
   assert.match(output, /Usage:/);
 });
 

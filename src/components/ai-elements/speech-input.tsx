@@ -2,10 +2,34 @@
 
 import { MicIcon, SquareIcon } from "lucide-react";
 import type { ComponentProps } from "react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
+
+function listenToRecorder(
+  recorder: MediaRecorder,
+  handlers: {
+    data: (event: BlobEvent) => void;
+    stop: () => void;
+    error: () => void;
+  },
+) {
+  recorder.addEventListener("dataavailable", handlers.data);
+  recorder.addEventListener("stop", handlers.stop);
+  recorder.addEventListener("error", handlers.error);
+  return () => {
+    recorder.removeEventListener("dataavailable", handlers.data);
+    recorder.removeEventListener("stop", handlers.stop);
+    recorder.removeEventListener("error", handlers.error);
+  };
+}
 
 interface SpeechRecognition extends EventTarget {
   continuous: boolean;
@@ -100,6 +124,7 @@ const SpeechInput = ({
   const [isRecognitionReady, setIsRecognitionReady] = useState(false);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const recorderListenersRef = useRef<(() => void) | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const mountedRef = useRef(false);
   const recordingRevisionRef = useRef(0);
@@ -110,9 +135,11 @@ const SpeechInput = ({
   const onAudioRecordedRef =
     useRef<SpeechInputProps["onAudioRecorded"]>(onAudioRecorded);
 
-  // Keep refs in sync
-  onTranscriptionChangeRef.current = onTranscriptionChange;
-  onAudioRecordedRef.current = onAudioRecorded;
+  // Event callbacks see the latest committed props, without render-time mutation.
+  useLayoutEffect(() => {
+    onTranscriptionChangeRef.current = onTranscriptionChange;
+    onAudioRecordedRef.current = onAudioRecorded;
+  }, [onTranscriptionChange, onAudioRecorded]);
 
   // Initialize Speech Recognition when mode is speech-recognition
   useEffect(() => {
@@ -184,6 +211,8 @@ const SpeechInput = ({
     mountedRef.current = true;
     return () => {
       mountedRef.current = false;
+      recorderListenersRef.current?.();
+      recorderListenersRef.current = null;
       recordingRevisionRef.current += 1;
       startingRef.current = false;
       const recorder = mediaRecorderRef.current;
@@ -266,9 +295,12 @@ const SpeechInput = ({
         if (isCurrent()) setIsListening(false);
       };
 
-      mediaRecorder.addEventListener("dataavailable", handleDataAvailable);
-      mediaRecorder.addEventListener("stop", handleStop);
-      mediaRecorder.addEventListener("error", handleError);
+      recorderListenersRef.current?.();
+      recorderListenersRef.current = listenToRecorder(mediaRecorder, {
+        data: handleDataAvailable,
+        stop: handleStop,
+        error: handleError,
+      });
 
       mediaRecorderRef.current = mediaRecorder;
       mediaRecorder.start();

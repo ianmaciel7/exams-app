@@ -1,8 +1,9 @@
 ---
+
 name: emulator-test
 description: Run the Firebase Auth emulator end-to-end suite from a clean emulator state and report the result. Use when the user asks to run the auth emulator tests or verify sign-in, profile, or Cloud Function flows against the emulators.
 metadata:
-  disable-model-invocation: true
+disable-model-invocation: true
 ---
 
 # Run the auth emulator tests

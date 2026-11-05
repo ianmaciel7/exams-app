@@ -1,4 +1,5 @@
 ---
+
 trigger: model_decision
 description: "Read when changing user-visible pending, success, error, empty, cancellation, retry, or recovery behavior."
 ---

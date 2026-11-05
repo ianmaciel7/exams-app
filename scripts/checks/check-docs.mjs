@@ -87,7 +87,7 @@ export function inspectSkillInventory(files, inventory) {
     }),
   );
   const listed = new Set(
-    [...inventory.matchAll(/^\| ([a-z][a-z0-9-]+) \|/gm)].map(
+    [...inventory.matchAll(/^\|\s+([a-z][a-z0-9-]+)\s+\|/gm)].map(
       (match) => match[1],
     ),
   );

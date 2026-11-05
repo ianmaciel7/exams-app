@@ -1,7 +1,7 @@
-import { cn } from "@/lib/utils";
 import { getTranslation } from "@firebase-oss/ui-core";
-import { useUI, PolicyContext } from "@firebase-oss/ui-react";
+import { PolicyContext, useUI } from "@firebase-oss/ui-react";
 import { useContext } from "react";
+import { cn } from "@/lib/utils";
 
 export function Policies() {
   const ui = useUI();
@@ -17,8 +17,20 @@ export function Policies() {
 
   const className = cn("hover:underline font-semibold");
   const policyLinks = new Map([
-    ["{tos}", { url: termsOfServiceUrl, label: getTranslation(ui, "labels", "termsOfService") }],
-    ["{privacy}", { url: privacyPolicyUrl, label: getTranslation(ui, "labels", "privacyPolicy") }],
+    [
+      "{tos}",
+      {
+        url: termsOfServiceUrl,
+        label: getTranslation(ui, "labels", "termsOfService"),
+      },
+    ],
+    [
+      "{privacy}",
+      {
+        url: privacyPolicyUrl,
+        label: getTranslation(ui, "labels", "privacyPolicy"),
+      },
+    ],
   ]);
 
   return (
@@ -30,11 +42,22 @@ export function Policies() {
         }
 
         return onNavigate ? (
-          <button key={index} type="button" className={className} onClick={() => onNavigate(link.url)}>
+          <button
+            key={index}
+            type="button"
+            className={className}
+            onClick={() => onNavigate(link.url)}
+          >
             {link.label}
           </button>
         ) : (
-          <a key={index} target="_blank" rel="noopener noreferrer" className={className} href={link.url.toString()}>
+          <a
+            key={index}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={className}
+            href={link.url.toString()}
+          >
             {link.label}
           </a>
         );

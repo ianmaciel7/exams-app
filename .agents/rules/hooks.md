@@ -1,4 +1,5 @@
 ---
+
 trigger: model_decision
 description: "Read when implementing or refactoring custom hooks and component behavior ownership."
 ---

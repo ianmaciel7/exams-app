@@ -11,7 +11,7 @@ output "firebase_web_config" {
 }
 
 output "github_actions_variables" {
-  description = "Values for the GitHub repository variables used by firebase-cd.yml."
+  description = "Values for the GitHub repository variables used by cd.yml."
   value = {
     FIREBASE_PROJECT_ID               = var.project_id
     FIREBASE_APP_HOSTING_BACKEND_ID   = google_firebase_app_hosting_backend.app.backend_id

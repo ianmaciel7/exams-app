@@ -1,4 +1,5 @@
 ---
+
 trigger: model_decision
 description: "Read when changing HTML/SVG semantics, refs, portals, imperative browser integration, or Fragment refs."
 ---
@@ -36,14 +37,14 @@ Use an explicit `Fragment` ref for grouped DOM interaction when it avoids a
 wrapper needed only for a ref. Shorthand Fragments cannot carry that prop.
 Understand all supplied `FragmentInstance` capabilities:
 
-| Methods | Required guidance |
-| --- | --- |
-| `addEventListener`, `removeEventListener`, `dispatchEvent` | Preserve event semantics and remove owned registrations. |
-| `focus`, `focusLast`, `blur` | Verify focus across eligible descendants and accessible keyboard flows. |
-| `observeUsing`, `unobserveUsing` | Pair supported observer registration and cleanup. |
-| `getClientRects`, `getRootNode` | Respect Fragment geometry/root semantics instead of assuming one wrapper element. |
-| `compareDocumentPosition` | Exists in installed renderer source but is absent from installed Fragment types; resolve that mismatch before typed usage. |
-| `scrollIntoView` | Follow the installed optional-boolean signature and test grouped scrolling behavior. |
+| Methods                                                    | Required guidance                                                                                                          |
+| ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `addEventListener`, `removeEventListener`, `dispatchEvent` | Preserve event semantics and remove owned registrations.                                                                   |
+| `focus`, `focusLast`, `blur`                               | Verify focus across eligible descendants and accessible keyboard flows.                                                    |
+| `observeUsing`, `unobserveUsing`                           | Pair supported observer registration and cleanup.                                                                          |
+| `getClientRects`, `getRootNode`                            | Respect Fragment geometry/root semantics instead of assuming one wrapper element.                                          |
+| `compareDocumentPosition`                                  | Exists in installed renderer source but is absent from installed Fragment types; resolve that mismatch before typed usage. |
+| `scrollIntoView`                                           | Follow the installed optional-boolean signature and test grouped scrolling behavior.                                       |
 
 Do not hide a runtime/type mismatch with an unchecked cast or replace semantic
 wrappers without evaluating layout/accessibility. Method presence is not a

@@ -1,4 +1,5 @@
 ---
+
 trigger: model_decision
 description: "Read when changing Next.js image or font loading and resource hints."
 ---

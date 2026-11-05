@@ -43,7 +43,7 @@ track visibility, and jump to it. `MessageScrollerButton` sits inside
       <ChatMessage key={m.id} message={m} />
     ))}
   </div>
-</div>
+</div>;
 ```
 
 **Correct:**
@@ -68,7 +68,7 @@ track visibility, and jump to it. `MessageScrollerButton` sits inside
     </MessageScrollerViewport>
     <MessageScrollerButton />
   </MessageScroller>
-</MessageScrollerProvider>
+</MessageScrollerProvider>;
 ```
 
 ---
@@ -96,7 +96,7 @@ rebuild the row from flex divs.
     </Bubble>
     <MessageFooter>{time}</MessageFooter>
   </MessageContent>
-</Message>
+</Message>;
 ```
 
 ---
@@ -118,7 +118,7 @@ with absolutely-positioned `Badge`s.
 ```tsx
 <div className="w-fit rounded-2xl bg-primary px-3 py-2 text-primary-foreground">
   {text}
-</div>
+</div>;
 ```
 
 **Correct:**
@@ -129,7 +129,7 @@ with absolutely-positioned `Badge`s.
   <BubbleReactions side="bottom" align="end">
     <Badge variant="secondary">👍 2</Badge>
   </BubbleReactions>
-</Bubble>
+</Bubble>;
 ```
 
 ---
@@ -159,7 +159,7 @@ separate spinner.
       <DownloadIcon />
     </AttachmentAction>
   </AttachmentActions>
-</Attachment>
+</Attachment>;
 ```
 
 For an image, use `<AttachmentMedia variant="image">` with an `img` child.
@@ -182,7 +182,7 @@ labeled separators are `Marker`, not a `Separator` plus a centered span.
   <Separator className="flex-1" />
   <span className="text-xs text-muted-foreground">Today</span>
   <Separator className="flex-1" />
-</div>
+</div>;
 ```
 
 **Correct:**
@@ -190,7 +190,7 @@ labeled separators are `Marker`, not a `Separator` plus a centered span.
 ```tsx
 <Marker variant="separator">
   <MarkerContent>Today</MarkerContent>
-</Marker>
+</Marker>;
 ```
 
 ---
@@ -301,7 +301,7 @@ const [open, setOpen] = useState(true)
     </TraceLine>
   </TraceCollapsibleTrigger>
   <TraceCollapsibleContent>{part.text}</TraceCollapsibleContent>
-</TraceCollapsible>
+</TraceCollapsible>;
 ```
 
 **Incorrect:** a tool row whose output may not exist yet.
@@ -312,7 +312,7 @@ const [open, setOpen] = useState(true)
     <TraceLine status={status}>…</TraceLine>
   </TraceCollapsibleTrigger>
   {output && <TraceCollapsibleContent>{output}</TraceCollapsibleContent>}
-</TraceCollapsible>
+</TraceCollapsible>;
 ```
 
 **Correct:** a `TraceLine` until there is something to open.
@@ -324,20 +324,20 @@ function ToolRow({
   status,
   output,
 }: {
-  icon: React.ReactNode
-  title: string
-  status?: "running" | "error"
-  output?: string
+  icon: React.ReactNode;
+  title: string;
+  status?: "running" | "error";
+  output?: string;
 }) {
   const line = (
     <TraceLine status={status}>
       <TraceIcon>{icon}</TraceIcon>
       <TraceTitle>{title}</TraceTitle>
     </TraceLine>
-  )
+  );
 
   if (output === undefined) {
-    return line
+    return line;
   }
 
   return (
@@ -351,7 +351,7 @@ function ToolRow({
         </CodeBlock>
       </TraceCollapsibleContent>
     </TraceCollapsible>
-  )
+  );
 }
 ```
 
@@ -362,7 +362,7 @@ function ToolRow({
   <SheetTrigger asChild>
     <TraceLine>…</TraceLine>
   </SheetTrigger>
-</Sheet>
+</Sheet>;
 ```
 
 **Correct:** sources, each link wrapping its own line.
@@ -397,7 +397,7 @@ function ToolRow({
       ))}
     </Trace>
   </TraceCollapsibleContent>
-</TraceCollapsible>
+</TraceCollapsible>;
 ```
 
 ---
@@ -429,7 +429,7 @@ a `CodeBlock`, never a hand-rolled `<pre>`.
 ```tsx
 <pre className="rounded-md bg-muted p-3 font-mono text-xs whitespace-pre-wrap">
   {output}
-</pre>
+</pre>;
 ```
 
 **Correct:**
@@ -445,7 +445,7 @@ a `CodeBlock`, never a hand-rolled `<pre>`.
   <CodeBlockContent wrap className="max-h-72">
     {output}
   </CodeBlockContent>
-</CodeBlock>
+</CodeBlock>;
 ```
 
 ---
