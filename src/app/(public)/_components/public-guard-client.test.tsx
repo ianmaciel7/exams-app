@@ -9,6 +9,7 @@ const mocks = vi.hoisted(() => ({
   setLocale: vi.fn(),
   getUI: vi.fn(),
   unsubscribe: vi.fn(),
+  syncSessionCookie: vi.fn(),
   locale: "pt-BR",
 }));
 vi.mock("next/navigation", () => ({
@@ -17,6 +18,9 @@ vi.mock("next/navigation", () => ({
 vi.mock("next-intl", () => ({
   useLocale: () => mocks.locale,
   useTranslations: () => (key: string) => key,
+}));
+vi.mock("@/lib/auth", () => ({
+  syncSessionCookie: mocks.syncSessionCookie,
 }));
 vi.mock("firebase/auth", () => ({ onAuthStateChanged: mocks.subscribe }));
 vi.mock("@/lib/firebase/client", () => ({ getFirebaseUI: mocks.getUI }));
@@ -36,6 +40,7 @@ describe("PublicGuardClient", () => {
       get: () => ({ auth: {}, setLocale: mocks.setLocale }),
     });
     mocks.subscribe.mockReturnValue(mocks.unsubscribe);
+    mocks.syncSessionCookie.mockResolvedValue(undefined);
   });
 
   it("waits for the first auth state and renders the screen for a signed-out user", () => {
@@ -51,6 +56,45 @@ describe("PublicGuardClient", () => {
     expect(mocks.setLocale).toHaveBeenCalled();
     act(() => mocks.subscribe.mock.calls[0][1](null));
     expect(screen.getByText("Screen")).toBeTruthy();
+  });
+
+  it("creates the session cookie before leaving the sign-in screen", async () => {
+    let finishSync: () => void = () => undefined;
+    mocks.syncSessionCookie.mockReturnValue(
+      new Promise<void>((resolve) => {
+        finishSync = resolve;
+      }),
+    );
+    render(
+      <PublicGuardClient>
+        <p>{"Screen"}</p>
+      </PublicGuardClient>,
+    );
+    const user = { uid: "user" };
+    act(() => mocks.subscribe.mock.calls[0][1](user));
+    expect(mocks.syncSessionCookie).toHaveBeenCalledWith(user);
+    expect(mocks.router.replace).not.toHaveBeenCalled();
+    finishSync();
+    await waitFor(() => expect(mocks.router.replace).toHaveBeenCalledWith("/"));
+  });
+
+  it("does not navigate after the screen is left while the cookie is pending", async () => {
+    let finishSync: () => void = () => undefined;
+    mocks.syncSessionCookie.mockReturnValue(
+      new Promise<void>((resolve) => {
+        finishSync = resolve;
+      }),
+    );
+    const { unmount } = render(
+      <PublicGuardClient>
+        <p>{"Screen"}</p>
+      </PublicGuardClient>,
+    );
+    act(() => mocks.subscribe.mock.calls[0][1]({ uid: "user" }));
+    unmount();
+    finishSync();
+    await Promise.resolve();
+    expect(mocks.router.replace).not.toHaveBeenCalled();
   });
 
   it("redirects a signed-in user without displaying the screen", async () => {
