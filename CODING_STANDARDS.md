@@ -986,6 +986,9 @@ Owned source (`src/`, `scripts/`, `functions/`, `tests/`) follows one style:
   `*-guard`, `*-provider`, `*-hero`, `*-section`). Bare domain names with only runtime
   suffixes (`<Domain>Client`, `<Domain>Server`) are forbidden.
 - Use `type` aliases, not `interface`. Props are named `<ComponentName>Props`.
+  Inline object types in component parameters are prohibited, including in
+  Next.js `error.tsx` and `global-error.tsx`. Extract a named props alias;
+  framework error-boundary contracts do not inherit HTML attributes.
 - Only module-level constants use `SCREAMING_CASE`.
 - Message files (`en`, `es`, `pt-BR`) keep an identical key set.
 - Keep short, straightforward calls on one line. Use an expanded trailing-object

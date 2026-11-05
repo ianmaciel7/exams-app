@@ -433,6 +433,16 @@ Use behavior tests rather than a syntax rule that merely looks for `cleanup`
 or a ref. No test suite guarantees that all future race conditions are absent;
 these regressions specifically guard the observed failures.
 
+## Inline component props
+
+`no-inline-component-props` runs through `pnpm check:structure` and lint-staged.
+It rejects object types in named component parameters across owned app and
+component TSX, including Next.js error boundaries. Named aliases and native
+React/generated route types remain valid. Error-boundary files are exempt
+from `require-component-props` HTML inheritance because Next.js supplies their
+`error` and `retry` contract. Regression cases and snapshots live under
+`.ast-grep/rule-tests/components/` and `.ast-grep/rule-tests/__snapshots__/`.
+
 ## Known limitations
 
 - **`apphosting.yaml` carries no API key literal.** The Firebase Web API key is

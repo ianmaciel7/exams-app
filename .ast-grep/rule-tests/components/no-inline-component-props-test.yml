@@ -1,0 +1,27 @@
+id: no-inline-component-props
+valid:
+  - |
+    type ErrorPageProps = { error: Error & { digest?: string }; retry: () => void };
+    export default function ErrorPage({ error, retry }: ErrorPageProps) { return <button onClick={retry} />; }
+  - |
+    function Layout({ children }: LayoutProps<"/">) { return children; }
+  - |
+    function ProfileCard(props: ComponentProps<"div">) { return <div {...props} />; }
+  - |
+    function loadProfile(options: { id: string }) { return options.id; }
+  - |
+    type CardProps = { title: string };
+    const Card = (props: CardProps) => <div>{props.title}</div>;
+invalid:
+  - |
+    const Card = function (props?: { title: string }) { return <div />; };
+  - |
+    async function ProfileCard(props: { title: string }) { return <div />; }
+  - |
+    export default function ErrorPage({ error, retry }: { error: Error & { digest?: string }; retry: () => void }) { return <button onClick={retry} />; }
+  - |
+    export default function ProfileError(props: { error: Error; retry: () => void }) { return <div />; }
+  - |
+    function ProfileCard(props: ComponentProps<"div"> & { title: string }) { return <div />; }
+  - |
+    const Card = ({ title }: { title: string }) => <div>{title}</div>;

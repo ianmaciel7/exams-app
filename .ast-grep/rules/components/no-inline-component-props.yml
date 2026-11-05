@@ -1,0 +1,41 @@
+id: no-inline-component-props
+language: tsx
+files:
+  - src/app/**/*.tsx
+  - src/components/**/*.tsx
+ignores:
+  - "**/*.test.tsx"
+  - "**/*.spec.tsx"
+  - "**/*.stories.tsx"
+  - "src/components/ui/[!e]*.tsx"
+  - "src/components/ui/e[!x]*.tsx"
+  - src/components/firebase/**
+  - src/components/ai-elements/**
+severity: error
+message: Extract inline component props into a named <ComponentName>Props type alias.
+note: Next.js special filenames retain framework exports but must also use named props types.
+rule:
+  any:
+    - kind: required_parameter
+    - kind: optional_parameter
+  has:
+    kind: type_annotation
+    has:
+      kind: object_type
+      stopBy: end
+  inside:
+    kind: formal_parameters
+    inside:
+      any:
+        - kind: function_declaration
+          has:
+            field: name
+            regex: "^[A-Z]"
+        - any:
+            - kind: arrow_function
+            - kind: function_expression
+          inside:
+            kind: variable_declarator
+            has:
+              field: name
+              regex: "^[A-Z]"
