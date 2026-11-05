@@ -890,3 +890,7 @@ floor applied to application code. Knip parses CSS imports and MCP declarations;
 its explicit host-tool list does not exclude source files. Generated JSON spelling
 checks inspect linguistic fields, while translations have explicit vocabulary.
 See [ADR 0023](docs/adr/0023-classify-analysis-without-file-exclusions.md).
+
+Security rule tests explicitly pass both `.semgrep/rules.yml` and
+`.semgrep/rules.tsx` to Semgrep; directory-only discovery missed the TSX fixture.
+The command must exercise all nine rule fixtures, not report zero tests.

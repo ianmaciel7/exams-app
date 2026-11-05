@@ -1,3 +1,4 @@
+// biome-ignore-all lint/plugin: Semgrep asserts the intentionally unsafe examples in this negative fixture.
 "use client";
 
 // ruleid: no-server-api-in-client-components
@@ -32,7 +33,6 @@ export async function Client() {
   // ruleid: no-unsafe-html-sinks
   document.body.innerHTML = "<b>x</b>";
   // ruleid: no-unsafe-html-sinks
-  // biome-ignore lint/plugin: This negative security fixture must exercise the forbidden sink.
   document.write("x");
   // ruleid: no-unsafe-html-sinks
   document.body.insertAdjacentHTML("beforeend", "<b>x</b>");
