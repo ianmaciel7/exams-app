@@ -1,6 +1,9 @@
 const assert = require("node:assert/strict");
 const { test } = require("node:test");
-const { createUsageLogHandler } = require("./usage-logs.cjs");
+const {
+  createUsageLogHandler,
+  usageCallableOptions,
+} = require("./usage-logs.cjs");
 
 class HttpsError extends Error {
   constructor(code, message) {
@@ -94,4 +97,17 @@ test("does not acknowledge synchronous logger failure", () => {
       }),
     /logger failed/,
   );
+});
+
+test("enforces App Check only when ENFORCE_APP_CHECK is true", () => {
+  assert.equal(usageCallableOptions({}).enforceAppCheck, false);
+  assert.equal(
+    usageCallableOptions({ ENFORCE_APP_CHECK: "false" }).enforceAppCheck,
+    false,
+  );
+  assert.equal(
+    usageCallableOptions({ ENFORCE_APP_CHECK: "true" }).enforceAppCheck,
+    true,
+  );
+  assert.equal(usageCallableOptions({}).timeoutSeconds, 15);
 });

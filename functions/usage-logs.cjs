@@ -52,4 +52,14 @@ function createUsageLogHandler({ logger, HttpsError }) {
   };
 }
 
-module.exports = { createUsageLogHandler };
+// App Check is enforced only when ENFORCE_APP_CHECK=true at deploy time, after
+// the web app has a reCAPTCHA key registered (docs/adr/0025-*.md).
+function usageCallableOptions(env) {
+  return {
+    timeoutSeconds: 15,
+    maxInstances: 10,
+    enforceAppCheck: env.ENFORCE_APP_CHECK === "true",
+  };
+}
+
+module.exports = { createUsageLogHandler, usageCallableOptions };

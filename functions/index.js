@@ -3,7 +3,10 @@ const logger = require("firebase-functions/logger");
 
 const { initializeApp } = require("firebase-admin/app");
 const { getAuth } = require("firebase-admin/auth");
-const { createUsageLogHandler } = require("./usage-logs.cjs");
+const {
+  createUsageLogHandler,
+  usageCallableOptions,
+} = require("./usage-logs.cjs");
 const { createSetUserRoleHandler } = require("./user-roles.cjs");
 const {
   beforeUserCreated,
@@ -24,7 +27,7 @@ exports.setUserRole = onCall(
 );
 
 exports.recordUsage = onCall(
-  { timeoutSeconds: 15, maxInstances: 10 },
+  usageCallableOptions(process.env),
   createUsageLogHandler({ logger, HttpsError }),
 );
 

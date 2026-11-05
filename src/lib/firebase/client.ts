@@ -1,3 +1,4 @@
+// cspell:ignore APPCHECK
 import {
   initializeUI,
   providerPopupStrategy,
@@ -5,6 +6,7 @@ import {
 } from "@firebase-oss/ui-core";
 import type { FirebaseOptions } from "firebase/app";
 import { getApp, getApps, initializeApp } from "firebase/app";
+import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 import { connectAuthEmulator, getAuth } from "firebase/auth";
 import { connectFirestoreEmulator, getFirestore } from "firebase/firestore";
 import { connectFunctionsEmulator, getFunctions } from "firebase/functions";
@@ -122,8 +124,32 @@ export function getFirebaseFirestore() {
   return firestore;
 }
 
+let appCheckStarted = false;
+
+/**
+ * Starts App Check when a reCAPTCHA site key is configured, so callables can
+ * enforce it (ADR 0025). Without the key it does nothing. The debug token flag
+ * lets local development and emulators get a token without reCAPTCHA.
+ */
+function startAppCheck(app: ReturnType<typeof getFirebaseApp>) {
+  const siteKey = process.env.NEXT_PUBLIC_FIREBASE_APPCHECK_SITE_KEY?.trim();
+  if (appCheckStarted || !siteKey) return;
+  appCheckStarted = true;
+
+  if (process.env.NODE_ENV === "development") {
+    // biome-ignore lint/suspicious/noExplicitAny: Firebase reads this global flag.
+    (globalThis as any).FIREBASE_APPCHECK_DEBUG_TOKEN = true;
+  }
+  initializeAppCheck(app, {
+    provider: new ReCaptchaV3Provider(siteKey),
+    isTokenAutoRefreshEnabled: true,
+  });
+}
+
 export function getFirebaseFunctions() {
-  const functions = getFunctions(getFirebaseApp(getValidatedFirebaseConfig()));
+  const app = getFirebaseApp(getValidatedFirebaseConfig());
+  startAppCheck(app);
+  const functions = getFunctions(app);
   if (process.env.NODE_ENV !== "development") return functions;
 
   const host = (
