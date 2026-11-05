@@ -1,6 +1,7 @@
 "use client";
 
 import type { ComponentProps } from "react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/extensions/form";
 import {
@@ -18,8 +19,8 @@ type ProfileEmailFormProps = Omit<
   "action" | "onSubmit"
 > & {
   email: string;
-  /** Injected by the container; the form does not know how the change is sent. */
-  changeEmail: (email: string) => Promise<void>;
+  /** The dialog returns whether the confirmation was sent successfully. */
+  changeEmail: (email: string) => Promise<boolean>;
 };
 
 function ProfileEmailForm({
@@ -28,21 +29,31 @@ function ProfileEmailForm({
   className,
   ...props
 }: ProfileEmailFormProps) {
-  const { t, dispatch, pending } = useProfileEmailForm(changeEmail);
+  const { t, dispatch, pending, state, onSubmit } = useProfileEmailForm(
+    changeEmail,
+    email,
+  );
 
   return (
     <Form
       {...props}
       action={dispatch}
+      onSubmit={onSubmit}
+      aria-busy={pending}
       validationMode="onBlur"
       className={cn("w-full", className)}
     >
+      {state.hasError && (
+        <Alert variant="destructive" className="mb-4">
+          <AlertDescription>{t("profileSaveError")}</AlertDescription>
+        </Alert>
+      )}
       <FormField name="newEmail">
         <FormFieldLabel>{t("newEmailLabel")}</FormFieldLabel>
         <Input
           readOnly={pending}
           name="newEmail"
-          defaultValue={email}
+          defaultValue={state.email}
           type="email"
           inputMode="email"
           autoComplete="email"
@@ -60,7 +71,6 @@ function ProfileEmailForm({
       </FormField>
       <Button
         type="submit"
-        variant="outline"
         className="mt-2 w-full"
         disabled={pending}
         focusableWhenDisabled

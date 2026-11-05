@@ -585,6 +585,17 @@ mirroring third-party implementation details.
 
 ## Compound component guard regression tests
 
+The profile form suite covers the email dialog's portal, labelled description,
+initial focus, cancellation, pending state, validation, failure/retry, success
+closure and focus restoration. Opening and submitting the email form must not
+invoke the profile Action or reset unsaved profile edits. Current email remains
+unchanged until Firebase verification; an earlier request cannot close a reopened
+dialog. Middle Man guard fixtures distinguish
+controlled dialog handlers (including destructuring aliases) from data forwarding.
+`profile-email-dialog.browser.test.tsx` covers keyboard opening, focus trapping,
+Escape, Enter submission, focus restoration, portal separation and popup width
+in Chromium at mobile and desktop widths.
+
 `pnpm check:structure` tests `no-inline-component-props` with valid named and
 native React contracts and invalid inline error-boundary, intersection, and
 arrow-component contracts. Its scan includes App Router special files, even

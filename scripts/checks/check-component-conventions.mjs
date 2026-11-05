@@ -1127,19 +1127,33 @@ function isRenderingLogic(node, source) {
  * Passing one down as a prop injects what a Server Component page cannot pass
  * itself, such as a browser-only function (dependency inversion).
  */
+function injectedHookBindings(name) {
+  if (ts.isIdentifier(name)) return [name.text];
+  if (!ts.isObjectBindingPattern(name)) return [];
+  return name.elements
+    .filter((element) => {
+      const key = element.propertyName ?? element.name;
+      return (
+        ts.isIdentifier(element.name) &&
+        ts.isIdentifier(key) &&
+        /^on[A-Z]/.test(key.text)
+      );
+    })
+    .map((element) => element.name.text);
+}
+
 function collectInjectedHookResults(statement, ownedImports) {
   const injected = new Set();
   const visit = (node) => {
     if (
       ts.isVariableDeclaration(node) &&
-      ts.isIdentifier(node.name) &&
       node.initializer &&
       ts.isCallExpression(node.initializer) &&
       ts.isIdentifier(node.initializer.expression) &&
       /^use[A-Z]/.test(node.initializer.expression.text) &&
       ownedImports.has(node.initializer.expression.text)
     ) {
-      injected.add(node.name.text);
+      for (const name of injectedHookBindings(node.name)) injected.add(name);
     }
     ts.forEachChild(node, visit);
   };

@@ -1,17 +1,24 @@
 import { useTranslations } from "next-intl";
-import { useActionState } from "react";
+import { type FormEvent, useActionState } from "react";
+
+type ProfileEmailFormState = { email: string; hasError: boolean };
 
 /** The e-mail form's Action state around the injected change function. */
 export function useProfileEmailForm(
-  changeEmail: (email: string) => Promise<void>,
+  changeEmail: (email: string) => Promise<boolean>,
+  email: string,
 ) {
   const t = useTranslations("Auth");
-  const [, dispatch, pending] = useActionState(
-    async (_previous: null, formData: FormData) => {
-      await changeEmail(String(formData.get("newEmail") ?? "").trim());
-      return null;
+  const [state, dispatch, pending] = useActionState(
+    async (_previous: ProfileEmailFormState, formData: FormData) => {
+      const nextEmail = String(formData.get("newEmail") ?? "").trim();
+      const sent = await changeEmail(nextEmail);
+      return { email: nextEmail, hasError: !sent };
     },
-    null,
+    { email, hasError: false },
   );
-  return { t, dispatch, pending };
+  // Portals separate the DOM forms, but React submit events still bubble.
+  const onSubmit = (event: FormEvent<HTMLFormElement>) =>
+    event.stopPropagation();
+  return { t, dispatch, pending, state, onSubmit };
 }

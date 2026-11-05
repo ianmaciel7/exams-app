@@ -48,4 +48,9 @@ exports instead of static properties on the root function.
 
 ## UI companion composition
 
+A controlled dialog owns its open state and event handlers, even when its only
+owned child is a form. The Middle Man guard recognizes destructured `on*`
+handlers from local orchestration hooks, including aliases. Destructured data
+alone does not establish behavior; keep simple pass-through wrappers prohibited.
+
 Integration modules (`*-client.tsx` / `*-server.tsx`) must compose their companion UI presentation component (without suffix, e.g. `HomeClient` composes `Home`). Presentation compound parts belong to the presentation UI family without suffixes (`HomeContent`, `HomeLogo`, `HomeHeading`, `HomeFooter`), while the integration boundary orchestrates state, hooks, and actions.
