@@ -92,7 +92,7 @@ function VerifyPhoneNumberForm(props: VerifyPhoneNumberFormProps) {
             </Field>
           )}
         />
-        <Button type="submit" disabled={ui.state !== "idle"}>
+        <Button type="submit" disabled={ui.state !== "idle"} focusableWhenDisabled>
           {ui.state !== "idle" ? (
             <><Spinner data-icon="inline-start" aria-hidden="true" />{getTranslation(ui, "labels", "verifyCode")}</>
           ) : (
@@ -160,7 +160,7 @@ function PhoneNumberForm(props: PhoneNumberFormProps) {
         />
         <div ref={recaptchaContainerRef} />
         <Policies />
-        <Button type="submit" disabled={ui.state !== "idle"}>
+        <Button type="submit" disabled={ui.state !== "idle"} focusableWhenDisabled>
           {ui.state !== "idle" ? (
             <><Spinner data-icon="inline-start" aria-hidden="true" />{getTranslation(ui, "labels", "sendCode")}</>
           ) : (

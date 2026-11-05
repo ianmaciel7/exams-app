@@ -68,7 +68,7 @@ export function TotpMultiFactorAssertionForm(props: TotpMultiFactorAssertionForm
             </Field>
           )}
         />
-        <Button type="submit" disabled={ui.state !== "idle"}>
+        <Button type="submit" disabled={ui.state !== "idle"} focusableWhenDisabled>
           {ui.state !== "idle" ? (
             <><Spinner data-icon="inline-start" aria-hidden="true" />{getTranslation(ui, "labels", "verifyCode")}</>
           ) : (

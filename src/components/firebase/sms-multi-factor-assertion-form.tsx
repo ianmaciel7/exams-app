@@ -17,6 +17,7 @@ import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { Field, FieldLabel, FieldDescription, FieldError, FieldTitle } from "@/components/ui/field";
 import { Form } from "@/components/ui/extensions/form";
 import { FormError } from "@/components/ui/extensions/form-error";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
@@ -49,7 +50,7 @@ function SmsMultiFactorAssertionPhoneForm(props: SmsMultiFactorAssertionPhoneFor
   };
 
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col gap-4">
       <Field>
         <FieldTitle>{getTranslation(ui, "labels", "phoneNumber")}</FieldTitle>
         <FieldDescription>
@@ -59,14 +60,18 @@ function SmsMultiFactorAssertionPhoneForm(props: SmsMultiFactorAssertionPhoneFor
         </FieldDescription>
       </Field>
       <div className="fui-recaptcha-container" ref={recaptchaContainerRef} />
-      <Button onClick={onSubmit} disabled={ui.state !== "idle"}>
+      <Button type="button" onClick={onSubmit} disabled={ui.state !== "idle"} focusableWhenDisabled>
         {ui.state !== "idle" ? (
           <><Spinner data-icon="inline-start" aria-hidden="true" />{getTranslation(ui, "labels", "sendCode")}</>
         ) : (
           getTranslation(ui, "labels", "sendCode")
         )}
       </Button>
-      {error && <div role="alert" className="text-sm text-destructive">{error}</div>}
+      {error && (
+        <Alert variant="destructive">
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
     </div>
   );
 }
@@ -126,7 +131,7 @@ function SmsMultiFactorAssertionVerifyForm(props: SmsMultiFactorAssertionVerifyF
             </Field>
           )}
         />
-        <Button type="submit" disabled={ui.state !== "idle"}>
+        <Button type="submit" disabled={ui.state !== "idle"} focusableWhenDisabled>
           {ui.state !== "idle" ? (
             <><Spinner data-icon="inline-start" aria-hidden="true" />{getTranslation(ui, "labels", "verifyCode")}</>
           ) : (

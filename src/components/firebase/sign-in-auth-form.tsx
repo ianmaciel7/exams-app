@@ -89,6 +89,7 @@ export function SignInAuthForm(props: SignInAuthFormProps) {
         <Button
           type="submit"
           disabled={ui.state !== "idle"}
+          focusableWhenDisabled
         >
           {ui.state !== "idle" ? (
             <><Spinner data-icon="inline-start" aria-hidden="true" />{getTranslation(ui, "labels", "signIn")}</>

@@ -1,0 +1,44 @@
+id: no-space-utilities
+snapshots:
+  const a = <div className="flex space-x-2" />;:
+    labels:
+    - source: flex space-x-2
+      style: primary
+      start: 26
+      end: 40
+    - source: className
+      style: secondary
+      start: 15
+      end: 24
+    - source: className="flex space-x-2"
+      style: secondary
+      start: 15
+      end: 41
+  const a = <div className="space-y-4" />;:
+    labels:
+    - source: space-y-4
+      style: primary
+      start: 26
+      end: 35
+    - source: className
+      style: secondary
+      start: 15
+      end: 24
+    - source: className="space-y-4"
+      style: secondary
+      start: 15
+      end: 36
+  "const a = cn(\"p-2\", active && \"space-y-2\");":
+    labels:
+    - source: space-y-2
+      style: primary
+      start: 31
+      end: 40
+    - source: cn
+      style: secondary
+      start: 10
+      end: 12
+    - source: cn("p-2", active && "space-y-2")
+      style: secondary
+      start: 10
+      end: 42

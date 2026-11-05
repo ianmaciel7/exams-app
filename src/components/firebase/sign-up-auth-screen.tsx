@@ -56,7 +56,7 @@ export function SignUpAuthScreen({ children, onSignUp, ...props }: SignUpAuthScr
           {children ? (
             <>
               <Separator className="my-4" />
-              <div className="space-y-2">{children}</div>
+              <div className="flex flex-col gap-2">{children}</div>
             </>
           ) : null}
         </CardContent>

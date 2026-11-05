@@ -1,0 +1,10 @@
+id: no-space-utilities
+valid:
+  - const a = <div className="flex flex-col gap-4" />;
+  - const a = <div className={cn("flex gap-2", open && "gap-4")} />;
+  - const a = <div className="-space-x-2" />;
+  - const a = "space-y-4";
+invalid:
+  - const a = <div className="space-y-4" />;
+  - const a = <div className="flex space-x-2" />;
+  - const a = cn("p-2", active && "space-y-2");

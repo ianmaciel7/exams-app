@@ -1,6 +1,7 @@
 "use client";
 
 import type { ComponentProps } from "react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
@@ -20,6 +21,7 @@ function HomeSignOutButtonClient({
 
   return (
     <div
+      data-slot="home-sign-out-button"
       {...props}
       className={cn("flex w-full flex-col gap-2 sm:w-auto", className)}
     >
@@ -29,6 +31,7 @@ function HomeSignOutButtonClient({
         onClick={handleSignOut}
         disabled={isPending}
         aria-busy={isPending}
+        focusableWhenDisabled
         aria-describedby={isError ? errorId : undefined}
         className={homeHeroActionSize}
       >
@@ -36,13 +39,9 @@ function HomeSignOutButtonClient({
         {isPending ? t("signingOut") : auth("signOut")}
       </Button>
       {isError && (
-        <p
-          id={errorId}
-          role="alert"
-          className="max-w-xs text-sm text-destructive"
-        >
-          {t("signOutError")}
-        </p>
+        <Alert id={errorId} variant="destructive" className="max-w-xs">
+          <AlertDescription>{t("signOutError")}</AlertDescription>
+        </Alert>
       )}
     </div>
   );

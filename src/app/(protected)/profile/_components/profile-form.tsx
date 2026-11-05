@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import type { ComponentProps } from "react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Form } from "@/components/ui/extensions/form";
 import {
@@ -48,9 +49,9 @@ function ProfileForm({ initialValues, className, ...props }: ProfileFormProps) {
     >
       <FieldGroup className="gap-4">
         {state.error && (
-          <p role="alert" className="text-sm text-destructive">
-            {state.error}
-          </p>
+          <Alert variant="destructive">
+            <AlertDescription>{state.error}</AlertDescription>
+          </Alert>
         )}
 
         <ProfileAvatarFieldClient
