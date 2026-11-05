@@ -404,7 +404,7 @@ or move shared modules merely to satisfy a folder name.
 | Usage telemetry delays or fails a protected page. | `route-usage-client.test.tsx` fails unless content renders while the record is pending or rejected. |
 | A completed send erases a newer draft or attachment. | `prompt-input.test.tsx` checks provider draft revisions, identical text re-entered as a new revision, attachment identities, local edits, success reset, and failure preservation. |
 | Permission resolves after media cleanup, or recorder setup fails. | `speech-input.test.tsx` checks late-stream release, setup/start failures, duplicate pending requests, active-track cleanup, and obsolete transcription callbacks. |
-| A session changes during a profile operation. | `src/lib/profile.test.ts` checks that later profile/preference writes do not start after session validation fails. Keep Firebase Security Rules as the authoritative authorization boundary. |
+| A session changes during a profile operation. | `src/app/(protected)/profile/_lib/data.test.ts` checks that later profile/preference writes do not start after session validation fails. Keep Firebase Security Rules as the authoritative authorization boundary. |
 | Root audit misses a separately deployed dependency graph. | `pnpm audit:functions` audits `functions/package-lock.json` explicitly; both `verify:security` and the CI security job run it. |
 
 `pnpm test` includes the component lifecycle regressions even where copied

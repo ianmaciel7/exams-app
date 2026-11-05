@@ -19,7 +19,7 @@ flowchart TD
   AdminSDK -->|Rejected session| SignIn
   AdminSDK --> Layout[Protected layout: verifySession in DAL]
   Layout -->|Unauthenticated| SignIn
-  Layout -->|Authenticated| Protected[Protected route: AuthGuard]
+  Layout -->|Authenticated| Protected[Protected route: ProtectedGuard]
   Protected --> Rules[Firebase Security Rules and callable authorization]
 ```
 
