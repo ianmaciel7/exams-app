@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.5.15/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.6.3/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -60,7 +60,10 @@
           }
         }
       },
-      "preset": "recommended"
+      "preset": "recommended",
+      "correctness": {
+        "noComponentHookFactories": "off"
+      }
     },
     "domains": {
       "next": "recommended",
@@ -269,9 +272,7 @@
                 "skipBlankLines": true,
                 "skipIifes": false
               }
-            }
-          },
-          "nursery": {
+            },
             "noExcessiveNestedCallbacks": {
               "level": "error",
               "options": {
@@ -292,5 +293,21 @@
         }
       }
     }
-  ]
+  ],
+  "yaml": {
+    "formatter": {
+      "enabled": false
+    },
+    "linter": {
+      "enabled": false
+    }
+  },
+  "markdown": {
+    "formatter": {
+      "enabled": false
+    },
+    "linter": {
+      "enabled": false
+    }
+  }
 }
