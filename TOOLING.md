@@ -140,7 +140,7 @@ project skills are tracked in `.agents/skills/` and `skills-lock.json`.
 | `pnpm check:unused` | Knip. |
 | `pnpm check:duplicates` | jscpd. |
 | `pnpm check:structure` | ast-grep rule tests, then a scan of application code. |
-| `pnpm check:component-structure` | Owned components follow the shadcn structure: root tag, `data-slot`, `cn(..., className)`, one props spread, `useRender` with `mergeProps`. |
+| `pnpm check:component-structure` | Owned components follow the shadcn structure: root tag, `data-slot`, `cn(..., className)`, one props spread, `useRender` with `mergeProps`. Destructured props require a rest binding; renamed `className` bindings must be the final `cn()` argument. |
 | `pnpm check:routes` | Enforce thin `page.tsx`, `layout.tsx` and `template.tsx` entrypoints with AST tests. |
 | `pnpm check:components` | Test/enforce hook filename/export parity for owned private hooks, component names, compound parts, props forwarding, profile action/parent safety (the profile form is one native form submitted by a React Action, never `FormProvider`), client boundaries, explicit UI phase flags, and no inline type guards or ternary key expressions in JSX. Presentation-only hooks do not need wrapper hooks. Firebase imports inside a `server-only` helper do not count as browser integration. Registry code excluded. |
 | `pnpm check:ui-state` | Run AST regression fixtures and scan `src/` TypeScript/TSX for direct raw exception coercion (`String(error)`, template interpolation `` `${error}` ``) into JSX, form errors, or toast payloads. Included in `verify:fast`, `verify:static`, and CI's `static` job. Supports `// check-ui-state-ignore: <reason>`. Does not replace behavioral or accessibility tests. |

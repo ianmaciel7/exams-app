@@ -108,7 +108,7 @@ function destructures(parameter, property) {
   );
 }
 
-function usesCn(initializer) {
+function usesCn(initializer, bindingName) {
   const expression =
     initializer && ts.isJsxExpression(initializer)
       ? initializer.expression
@@ -116,12 +116,17 @@ function usesCn(initializer) {
   if (!expression || !ts.isCallExpression(expression)) return false;
   if (expression.expression.getText() !== "cn") return false;
   const last = expression.arguments.at(-1);
-  return !!last && ts.isIdentifier(last) && last.text === "className";
+  return !!last && ts.isIdentifier(last) && last.text === bindingName;
 }
 
 function checkRootProps(root, parameter, report) {
   const rest = restName(parameter);
-  if (rest) {
+  if (!rest) {
+    report(
+      root,
+      "Capture and spread the remaining props onto the root exactly once.",
+    );
+  } else {
     const count = spreads(root, rest).length;
     if (count !== 1) {
       report(
@@ -131,8 +136,14 @@ function checkRootProps(root, parameter, report) {
     }
   }
   if (destructures(parameter, "className")) {
+    const binding = parameter.name.elements.find(
+      (element) =>
+        !element.dotDotDotToken &&
+        (element.propertyName?.getText() ?? element.name.getText()) ===
+          "className",
+    );
     const className = attribute(root, "className");
-    if (!className || !usesCn(className.initializer)) {
+    if (!className || !usesCn(className.initializer, binding.name.getText())) {
       report(
         root,
         'Merge className with cn("...", className) as the last argument.',

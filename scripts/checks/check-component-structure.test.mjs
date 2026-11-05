@@ -67,6 +67,30 @@ describe("component structure", () => {
     );
   });
 
+  it("rejects destructured parameters that discard remaining props", () => {
+    assert.match(
+      messages(
+        valid
+          .replace("className, ...props", "className")
+          .replace(" {...props}", ""),
+      ).join(" "),
+      /remaining props/,
+    );
+  });
+
+  it("uses the local binding when className is renamed", () => {
+    const renamed = valid
+      .replace("className, ...props", "className: customClass, ...props")
+      .replace('cn("flex", className)', 'cn("flex", customClass)');
+    assert.deepEqual(messages(renamed), []);
+    assert.match(
+      messages(renamed.replace('cn("flex", customClass)', "customClass")).join(
+        " ",
+      ),
+      /Merge className/,
+    );
+  });
+
   it("follows aliases, Omit and intersections to the tag", () => {
     const tagOf = (type) => {
       const source = ts.createSourceFile(

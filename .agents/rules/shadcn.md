@@ -51,6 +51,9 @@ context; it does not replace or duplicate the upstream rule examples.
 
 ## Preserve owned source
 
+Native component props must retain a rest binding when destructured. A renamed
+`className` binding must still be the final `cn()` argument on the root.
+
 - Reuse installed primitives and named parts before creating custom UI.
   Keep application adapters in owned component directories and preserve their
   native props, children, refs, slots, and semantics.
