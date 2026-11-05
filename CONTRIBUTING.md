@@ -92,11 +92,12 @@ an up-to-date branch, address review conversations, and obtain an independent
 review when available. Verify that the final squash commit title follows Conventional
 Commits.
 
-The repository deletes the head branch when a pull request merges
-(`delete_branch_on_merge`) and allows auto-merge. Prefer
-`gh pr merge <number> --squash --auto` once the checks are green, so no merged
-branch is left on the remote. A branch whose pull request closed without
-merging is deleted by hand.
+`main` and `dev` are long-lived, special branches and must never be deleted. The
+repository keeps `delete_branch_on_merge` disabled (set by `pnpm setup:github`) and the
+`Protect dev branch` ruleset blocks deleting or force-pushing `dev`. Auto-merge is
+allowed: prefer `gh pr merge <number> --squash --auto` once the checks are green.
+Delete short-lived working branches by hand after their pull request merges or
+closes; never delete `main` or `dev`.
 
 ## Merging into main
 

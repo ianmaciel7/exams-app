@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 if (process.env.GITHUB_TOKEN && !process.env.GH_TOKEN) {
@@ -68,17 +68,11 @@ try {
   );
 }
 
-// 4. Configure modern GitHub Repository Ruleset (~DEFAULT_BRANCH protection)
-const rulesetFilePath = resolve(
-  import.meta.dirname,
-  "../.github/rulesets/default-branch.json",
-);
+// 4. Configure modern GitHub Repository Rulesets (main via ~DEFAULT_BRANCH, dev explicitly)
+const rulesetsDir = resolve(import.meta.dirname, "../.github/rulesets");
 
 try {
-  const rulesetPayload = readFileSync(rulesetFilePath, "utf8");
-  const parsed = JSON.parse(rulesetPayload);
-
-  // Check if repository ruleset already exists (excluding inherited organization rulesets)
+  // Check which repository rulesets already exist (excluding inherited organization rulesets)
   const existingRulesets = JSON.parse(
     execFileSync(
       "gh",
@@ -89,51 +83,58 @@ try {
     ),
   );
 
-  const matched = Array.isArray(existingRulesets)
-    ? existingRulesets.find(
-        (r) => r.name === parsed.name && r.source_type === "Repository",
-      )
-    : null;
+  for (const file of readdirSync(rulesetsDir)
+    .filter((name) => name.endsWith(".json"))
+    .sort()) {
+    const rulesetPayload = readFileSync(resolve(rulesetsDir, file), "utf8");
+    const parsed = JSON.parse(rulesetPayload);
 
-  if (matched) {
-    execFileSync(
-      "gh",
-      [
-        "api",
-        "--method",
-        "PUT",
-        `repos/${repo}/rulesets/${matched.id}`,
-        "--input",
-        "-",
-      ],
-      {
-        input: rulesetPayload,
-        stdio: ["pipe", "ignore", "inherit"],
-      },
-    );
-    console.log(
-      `✔ Updated existing ruleset '${parsed.name}' (ID: ${matched.id}).`,
-    );
-  } else {
-    const created = JSON.parse(
+    const matched = Array.isArray(existingRulesets)
+      ? existingRulesets.find(
+          (r) => r.name === parsed.name && r.source_type === "Repository",
+        )
+      : null;
+
+    if (matched) {
       execFileSync(
         "gh",
-        ["api", "--method", "POST", `repos/${repo}/rulesets`, "--input", "-"],
+        [
+          "api",
+          "--method",
+          "PUT",
+          `repos/${repo}/rulesets/${matched.id}`,
+          "--input",
+          "-",
+        ],
         {
           input: rulesetPayload,
-          encoding: "utf8",
-          stdio: ["pipe", "pipe", "inherit"],
+          stdio: ["pipe", "ignore", "inherit"],
         },
-      ),
-    );
-    console.log(
-      `✔ Created modern GitHub Ruleset '${parsed.name}' (ID: ${created.id}).`,
-    );
+      );
+      console.log(
+        `✔ Updated existing ruleset '${parsed.name}' (ID: ${matched.id}).`,
+      );
+    } else {
+      const created = JSON.parse(
+        execFileSync(
+          "gh",
+          ["api", "--method", "POST", `repos/${repo}/rulesets`, "--input", "-"],
+          {
+            input: rulesetPayload,
+            encoding: "utf8",
+            stdio: ["pipe", "pipe", "inherit"],
+          },
+        ),
+      );
+      console.log(
+        `✔ Created modern GitHub Ruleset '${parsed.name}' (ID: ${created.id}).`,
+      );
+    }
   }
 } catch (err) {
   hasError = true;
   console.error(
-    "Failed to configure GitHub repository ruleset:",
+    "Failed to configure GitHub repository rulesets:",
     err instanceof Error ? err.message : err,
   );
 }
