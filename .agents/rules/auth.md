@@ -31,7 +31,10 @@ active Firebase session, and `return-url.ts` owns safe post-auth navigation.
 - Route telemetry is fire-and-forget: `RouteUsageBridgeClient` records screen usage in its own component, only for a signed-in user, and it never delays or fails protected content.
 - Never read the session inside a `use cache` scope. Resolve it first, then pass only the user id to an unexported cached function; keep tokens and email addresses out of cache keys and tags.
 - Authorize Admin SDK access in application code; it bypasses Firebase Security Rules.
-- Do not add session cookies, Proxy auth checks, or `authInterrupts` without a new ADR; see [ADR 0009](../../docs/adr/0009-integrate-firebase-authentication.md).
+- Session cookies (`__session`) are the server session transport per [ADR 0021](../../docs/adr/0021-adopt-official-nextjs-server-auth-dal.md). Do not add Proxy auth checks or `authInterrupts` without a new ADR.
+- Create the session cookie (`syncSessionCookie`) before navigating from sign-in to a protected route. The server verifies the cookie, so navigating first redirects back to sign-in and drops the query string. `public-guard-client.test.tsx` guards the order.
+- The server DAL redirect knows only the route path, not its query string: `redirectToSignIn` returns to the path.
+- A change to the authentication architecture updates `tests/firebase-auth.spec.ts` in the same pull request. The emulator E2E does not run in the cloud container, so CI is its only check, and `failOnFlakyTests` makes a flaky run fail.
 
 ## Token verification failures
 
