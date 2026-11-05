@@ -1,42 +1,21 @@
-import { useLocale } from "next-intl";
-import { useTheme } from "next-themes";
-import { useEffect, useRef, useState } from "react";
-import { useNavigation } from "@/hooks/use-navigation";
-import { useSession } from "@/hooks/use-session";
-import { defaultLocale, isLocale } from "@/i18n/routing";
+import { useEffect, useState } from "react";
 import type { Locale } from "@/lib/locale";
 import type { Session } from "@/lib/watch-session";
 import { readProfile } from "../_lib/data";
 import type { ProfileLoadState } from "../_lib/definitions";
-import { syncSavedLocale } from "../_lib/locale-sync";
-
-/** Own the browser read for this visit, without a shared Promise cache. */
-export function useProfileClient() {
-  const session = useSession();
-  const locale = useLocale();
-  const activeLocale = isLocale(locale) ? locale : defaultLocale;
-  const { refresh } = useNavigation();
-  const { setTheme } = useTheme();
-  const profile = useProfileLoad(session, activeLocale);
-  const initialized = useRef(false);
-
-  useEffect(() => {
-    if (profile.isLoading || profile.isError || initialized.current) return;
-    initialized.current = true;
-    if (profile.theme) setTheme(profile.theme);
-    syncSavedLocale(profile.values.locale, activeLocale, refresh);
-  }, [profile, activeLocale, refresh, setTheme]);
-
-  if (profile.isError) throw profile.error;
-  return profile;
-}
 
 /** Discard stale results and stop waiting when this visit ends or times out. */
-function useProfileLoad(session: Session, activeLocale: Locale) {
+export function useProfileLoad(session: Session, activeLocale: Locale) {
+  const [currentUid, setCurrentUid] = useState(session.user?.uid);
   const [profile, setProfile] = useState<ProfileLoadState>({
     isLoading: true,
     isError: false,
   });
+
+  if (session.user?.uid !== currentUid) {
+    setCurrentUid(session.user?.uid);
+    setProfile({ isLoading: true, isError: false });
+  }
 
   useEffect(() => {
     if (!profile.isLoading || !session.user) return;

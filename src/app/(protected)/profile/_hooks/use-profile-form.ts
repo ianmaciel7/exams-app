@@ -1,10 +1,11 @@
 import { useLocale, useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
-import { useActionState, useState } from "react";
+import { useActionState } from "react";
 import { useSession } from "@/hooks/use-session";
 import { defaultLocale, isLocale } from "@/i18n/routing";
 import { createProfileAction } from "../_lib/actions";
 import { type ProfileValues, profileFieldNames } from "../_lib/definitions";
+import { useProfileAvatarDraft } from "./use-profile-avatar-draft";
 import { useProfileSaveFeedback } from "./use-profile-save-feedback";
 
 /**
@@ -18,7 +19,7 @@ export function useProfileForm(initialValues: ProfileValues) {
   const activeLocale = isLocale(locale) ? locale : defaultLocale;
   const { setTheme } = useTheme();
   const { user } = useSession();
-  if (!user) throw new Error("Protected components require AuthGuardClient");
+  if (!user) throw new Error("Protected components require active session");
 
   const { onSaved } = useProfileSaveFeedback({ activeLocale, setTheme });
   const [state, dispatch, pending] = useActionState(
@@ -31,12 +32,10 @@ export function useProfileForm(initialValues: ProfileValues) {
       savedCount: 0,
     },
   );
-  // A file picked since the last Action result; the result then owns the
-  // pending upload (kept after a failed save, cleared after a saved one).
-  const [pick, setPick] = useState<{ file: File; after: typeof state } | null>(
-    null,
-  );
-  const pickedAvatar = pick?.after === state ? pick.file : null;
+  const { avatarFile, pickedAvatar, pickAvatar } = useProfileAvatarDraft({
+    actionState: state,
+    actionAvatar: state.avatarFile,
+  });
 
   const formAction = (formData: FormData) => {
     // The picked file is added here rather than read from the file input, which
@@ -50,7 +49,7 @@ export function useProfileForm(initialValues: ProfileValues) {
     state,
     pending,
     formAction,
-    avatarFile: pickedAvatar ?? state.avatarFile,
-    pickAvatar: (file: File) => setPick({ file, after: state }),
+    avatarFile,
+    pickAvatar,
   };
 }

@@ -1,8 +1,14 @@
-import { AuthGuardClient } from "./_components/auth-guard-client";
-import { rejectInvalidBridgeSession } from "./_lib/dal";
+import { ProtectedGuard } from "./_components/protected-guard";
+import { RouteUsageBridgeClient } from "./_components/route-usage-bridge-client";
+import { verifySession } from "./_lib/dal";
 
 export default async function ProtectedLayout({ children }: LayoutProps<"/">) {
-  await rejectInvalidBridgeSession();
+  await verifySession();
 
-  return <AuthGuardClient>{children}</AuthGuardClient>;
+  return (
+    <ProtectedGuard>
+      <RouteUsageBridgeClient />
+      {children}
+    </ProtectedGuard>
+  );
 }

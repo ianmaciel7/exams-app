@@ -2,6 +2,10 @@ import { lookup } from "node:dns/promises";
 import { request as httpsRequest } from "node:https";
 import { BlockList, isIP } from "node:net";
 import { fileURLToPath } from "node:url";
+import { localeCookie, locales } from "../../src/lib/locale-config.mjs";
+
+// Requires an explicitly configured public deployment origin.
+export const checkMode = "manual";
 
 const blocked = new BlockList();
 for (const [address, prefix] of [
@@ -79,9 +83,14 @@ export async function validateProductionOrigin(raw, resolveHost = lookup) {
   return { target, record: addresses[0] };
 }
 
-export function requestProductionHtml(target, record, locale) {
+export function requestProductionHtml(
+  target,
+  record,
+  locale,
+  requestHtml = httpsRequest,
+) {
   return new Promise((resolve, reject) => {
-    const request = httpsRequest(
+    const request = requestHtml(
       target,
       {
         method: "GET",
@@ -89,7 +98,7 @@ export function requestProductionHtml(target, record, locale) {
         lookup: (_hostname, _options, callback) =>
           callback(null, record.address, record.family),
         timeout: 15000,
-        headers: { accept: "text/html", cookie: `NEXT_LOCALE=${locale}` },
+        headers: { accept: "text/html", cookie: `${localeCookie}=${locale}` },
       },
       (response) => {
         let html = "";
@@ -125,7 +134,7 @@ export async function runProductionSmoke(
   { resolveHost = lookup, readHtml = requestProductionHtml } = {},
 ) {
   const { target, record } = await validateProductionOrigin(raw, resolveHost);
-  for (const locale of ["en", "pt-BR", "es"]) {
+  for (const locale of locales) {
     const response = await readHtml(target, record, locale);
     if (
       response.status !== 200 ||

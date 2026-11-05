@@ -9,7 +9,7 @@ import {
 import { Activity, Component, type ReactNode, Suspense } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { SessionProviderClient } from "@/components/ui/extensions/session-provider-client";
-import { AuthGuardClient } from "../../_components/auth-guard-client";
+import { ProtectedGuard } from "../../_components/protected-guard";
 import ProfileError from "../error";
 import ProfileLoading from "../loading";
 import ProfilePage from "../page";
@@ -35,6 +35,21 @@ const mocks = vi.hoisted(() => ({
 vi.mock("next/navigation", () => ({
   useRouter: () => mocks.router,
   usePathname: () => "/profile",
+}));
+
+vi.mock("../../_lib/dal", () => ({
+  verifySession: async () => {
+    if (!mocks.currentUser) {
+      mocks.router.replace(
+        `/sign-in?next=${encodeURIComponent(window.location.pathname + window.location.search)}`,
+      );
+      return { role: "user", userId: null };
+    }
+    return {
+      role: "user",
+      userId: (mocks.currentUser as { uid: string }).uid,
+    };
+  },
 }));
 
 vi.mock("@/lib/firebase/usage", () => ({
@@ -130,16 +145,25 @@ class SegmentErrorBoundary extends Component<
 /** Firebase loads on demand; wait for it so the gate has subscribed. */
 async function renderProfile() {
   // The route entrypoint is an async Server Component: resolve it first.
-  const page = await ProfilePage();
+  let page: ReactNode = null;
+  if (mocks.currentUser) {
+    page = await ProfilePage();
+  } else {
+    try {
+      page = await ProfilePage();
+    } catch {
+      // Unauthenticated redirect handled by verifySession
+    }
+  }
   const tree = (mode: "visible" | "hidden") => (
     <SessionProviderClient>
-      <AuthGuardClient>
+      <ProtectedGuard>
         <SegmentErrorBoundary>
           <Activity mode={mode}>
             <Suspense fallback={<ProfileLoading />}>{page}</Suspense>
           </Activity>
         </SegmentErrorBoundary>
-      </AuthGuardClient>
+      </ProtectedGuard>
     </SessionProviderClient>
   );
   const rendered = render(tree("visible"));

@@ -3,12 +3,12 @@
 import { FirebaseUIProvider } from "@firebase-oss/ui-react";
 import type { PropsWithChildren } from "react";
 import { LoadingStatus } from "@/components/ui/extensions/loading-status";
-import { useAuthProviderClient } from "@/hooks/use-auth-provider-client";
+import { usePublicGuardClient } from "../_hooks/use-public-guard-client";
 
-type AuthProviderClientProps = PropsWithChildren;
+type PublicGuardClientProps = PropsWithChildren;
 
-function AuthProviderClient({ children }: AuthProviderClientProps) {
-  const state = useAuthProviderClient();
+function PublicGuardClient({ children }: PublicGuardClientProps) {
+  const state = usePublicGuardClient();
   const { t } = state;
 
   if (state.isError)
@@ -25,4 +25,4 @@ function AuthProviderClient({ children }: AuthProviderClientProps) {
   return <FirebaseUIProvider ui={state.ui}>{children}</FirebaseUIProvider>;
 }
 
-export { AuthProviderClient };
+export { PublicGuardClient };

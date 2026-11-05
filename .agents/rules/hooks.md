@@ -18,13 +18,13 @@ Owned components keep rendering, translations, primitive prop forwarding and sim
 - Expose explicit session flags (`isLoading`, `isHidden`, `isError`) and an
   already resolved error message. Components render the applicable flag rather
   than deriving readiness from user, authentication and preferences flags.
-- Keep responsibilities local: `useProfileClient` owns the browser read;
+- Keep responsibilities local: `useProfileCardClient` owns the browser read;
   `useProfileForm` owns the form Action (`useActionState`), using its pending
   value rather than a parallel saving flag; `useProfileAvatarFieldClient`
   handles avatar field data. Do not mirror derived state in additional
   `useState` variables.
 - `check:components` rejects React state/effect imports (including aliases), namespace state/effect calls, Firebase value imports, async workflow functions, compound `if` conditions/derived locals and error fallbacks inside owned component functions. Async Server Components, simple discriminated-state branches, translations, form context and presentation props such as `disabled={disabled || pending}` remain valid.
-- The guard checks syntax, not arbitrary semantic equivalence or the ideal number of hooks. Generated Firebase/UI registries and Next.js special files retain their existing scope exclusions. Module-level setup is outside component branch analysis.
+- The guard checks syntax, not arbitrary semantic equivalence or the ideal number of hook calls. Generated Firebase/UI registries and Next.js special files retain their existing scope exclusions. Module-level setup is outside component branch analysis.
 
 ## Component-named orchestration hooks
 
@@ -57,12 +57,21 @@ Route-private `_hooks/**/*.ts` and `.tsx` modules contain hook implementations,
 imports, exports and types. Move module-level support functions and values to
 that route's `_lib/`: this includes constants, lookup collections and React
 context objects. A filename starting with `use-` does not make helpers inside
-that module part of the hook. `getAvatarSource` and avatar limits live in `profile/_lib/avatar.ts`.
+that module part of the hook. `getAvatarSource` and avatar limits live in `profile/_lib/utils.ts`.
 
 The hook itself may be a named `useX` function declaration or a `useX` variable
 initialized directly with an arrow/function expression. Local constants,
 handlers, closures and lifecycle callbacks inside the hook remain valid. Do not
 move code that depends on hook-local state merely to satisfy a module-level rule.
+
+Each owned hook file defines exactly one custom hook, matching its filename.
+Additional hooks belong in separate matching `use-*.ts` modules and are imported
+by the orchestrator. `check:components` counts local implementations, including
+unexported and nested functions and arrow/function-expression variables, across
+App Router `_hooks/` and shared `src/hooks/`, including nested directories.
+Imported hooks and ordinary callbacks are allowed; overload signatures are not
+additional implementations. Test/spec/story files and the shadcn-provided
+`src/hooks/use-mobile.ts` retain their exclusions.
 
 The blocking ast-grep rules `no-module-support-in-hooks-ts` and `-tsx` run in
 `check:structure`, already included in fast/static verification. They inspect
@@ -93,15 +102,15 @@ Splitting pattern for a hook that mixes concerns:
 - Pure decisions (validation, derived display values such as a fallback initial
   or a versioned URL) go to the route's `_lib/` as plain functions with unit
   tests; hooks only call them. `isValidAvatarFile` and
-  `getAvatarFallbackInitial` live in `profile/_lib/avatar.ts`.
+  `getAvatarFallbackInitial` live in `profile/_lib/utils.ts`.
 - Each effect with its own lifecycle gets its own `useX` hook: the avatar
   preview object URL (`useProfileAvatarPreview`) and the hidden file input
   (`useProfileAvatarInput`) are separate from the form binding in
-  `useProfileAvatarFieldClient`. In `useAuthGuardClient`, redirecting and
-  usage recording are separate hooks.
-- Module-level hooks in a `_hooks` file are allowed when they are `useX`
-  declarations; do not introduce a component when the hook split already keeps
-  the component free of behavior.
+  `useProfileAvatarFieldClient`. In `useProfileForm`, avatar draft selection
+  across Action dispatches is delegated to `useProfileAvatarDraft`, using pure
+  state derivation (`{ baseState, file }`) rather than render-phase state adjustments.
+- Put each focused `useX` hook in its own matching file; do not introduce a
+  component when importing a focused hook keeps the component free of behavior.
 - No mechanical check can prove a hook has one responsibility. The existing
   safeguards (`no-module-support-in-hooks`, Biome complexity budgets,
   `check:components`) stay the gate; the split itself is a review item.

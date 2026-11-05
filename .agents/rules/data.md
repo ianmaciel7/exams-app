@@ -43,7 +43,7 @@ See [auth.md](auth.md) for authentication/session placement and authorization.
 2. **Locality and Placement**:
    - Keep pure domain types, constants, and guards in dedicated flat modules under `src/lib/` (e.g., `src/lib/role.ts`, `src/lib/locale.ts`, `src/lib/theme.ts`).
    - Keep `src/lib/firebase/` scoped to Firebase SDK initialization and server token verification (`client.ts`, `server.ts`, `admin.ts`, `config.ts`). Do not place route-specific Firestore or Storage operations under `src/lib/firebase/`.
-   - For route-private or feature-colocated data access and server route guards, place modules in private `_lib/` folders (e.g., `src/app/(protected)/_lib/require-protected-access.ts`, `src/app/(protected)/profile/_lib/data.ts`). Colocate both reads (such as `readProfile` and `readUserPreferences`) and mutations (`saveProfile`, `writeUserPreferences`) in `_lib/data.ts` rather than splitting async reads into a separate `_lib/defaults.ts` file. Enforced by `pnpm check:components` (`inspectLibPlacement`).
+   - For route-private or feature-colocated data access and server route guards, place modules in private `_lib/` folders (e.g., `src/app/(protected)/_lib/dal.ts`, `src/app/(protected)/profile/_lib/data.ts`). Colocate both reads (such as `readProfile` and `readUserPreferences`) and mutations (`saveProfile`, `writeUserPreferences`) in `_lib/data.ts` rather than splitting async reads into a separate `_lib/defaults.ts` file. Enforced by `pnpm check:components` (`inspectLibPlacement`).
 
 3. **`data.ts` Method Naming, Size, and Complexity Budgets**:
    - **Method naming convention**: Every exported function in a `data.ts` module must start with an explicit camelCase operation verb followed by a PascalCase domain noun:
@@ -65,8 +65,8 @@ See [auth.md](auth.md) for authentication/session placement and authorization.
 ## Route-private support modules
 
 `_lib/` also owns route-private non-hook support declarations, not just persistence
-operations. Use descriptive modules such as `avatar.ts` for avatar URL selection
-and upload limits, and `session.ts` for the shared context object.
+operations. Use a route-level `utils.ts` for avatar URL selection, the locale cookie sync
+and upload limits, and descriptive modules such as `session.ts` for the shared context object.
 Do not place these helpers in hook modules or force them into `data.ts` merely
 because they are under `_lib`. Keep actual hooks in `_hooks`; a type-only reference
 to a hook return type does not execute that hook or create a runtime dependency.

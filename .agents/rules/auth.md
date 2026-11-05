@@ -25,14 +25,16 @@ active Firebase session, and `return-url.ts` owns safe post-auth navigation.
 - Never commit cloud credentials, private tokens, or API keys into tracked files (such as `.vscode/launch.json` or tool scripts). Launch configurations must reference Git-ignored local files via `envFile`. Staged files are guarded by Gitleaks in the pre-commit hook.
 - Preserve safe post-auth navigation through `return-url.ts`.
 - Follow [SECURITY.md](../../SECURITY.md) and the actual Firebase rules and token-verification implementation.
-- Call `verifyRole` or `verifySession` inside every Server Function and Route Handler, and check resource ownership; the auth guard, the layout check, and React `cache` do not cover them. The service worker forwards tokens only on navigation and RSC requests, so extend it with any new endpoint type.
-- `rejectInvalidBridgeSession` is a navigation check that tolerates a missing bridge. Never use it for authorization, and never give its redirect a protected return path.
-- `SessionProviderClient` in the root layout owns the only client session subscription; client components read it with `useSession`. `AuthGuardClient` owns the protected sign-in redirect, and its descendants read it with `useSession`; do not subscribe or redirect again.
-- The Firebase Auth service worker bridge keeps its own subscription: sign-out waits for the worker to acknowledge `uid: null`, while `useSession` holds the signed-out state until sign-out completes, so the bridge must not read `useSession`.
-- Guard telemetry is fire-and-forget: `useAuthGuardClient` records screen usage in its own hook, only for a signed-in user, and it never delays or fails protected content.
+- Call `verifyRole` or `verifySession` inside every Server Function and Route Handler, and check resource ownership; React `cache` shares checks within a render pass.
+- `src/app/(protected)/layout.tsx` calls `await verifySession()` in the Data Access Layer (DAL) to fail closed on unauthenticated requests before streaming protected routes.
+- `SessionProviderClient` in the root layout owns the only client session subscription; client components read it with `useSession`.
+- Route telemetry is fire-and-forget: `RouteUsageBridgeClient` records screen usage in its own component, only for a signed-in user, and it never delays or fails protected content.
 - Never read the session inside a `use cache` scope. Resolve it first, then pass only the user id to an unexported cached function; keep tokens and email addresses out of cache keys and tags.
 - Authorize Admin SDK access in application code; it bypasses Firebase Security Rules.
-- Do not add session cookies, Proxy auth checks, or `authInterrupts` without a new ADR; see [ADR 0009](../../docs/adr/0009-integrate-firebase-authentication.md).
+- Session cookies (`__session`) are the server session transport per [ADR 0021](../../docs/adr/0021-adopt-official-nextjs-server-auth-dal.md). Do not add Proxy auth checks or `authInterrupts` without a new ADR.
+- Create the session cookie (`syncSessionCookie`) before navigating from sign-in to a protected route. The server verifies the cookie, so navigating first redirects back to sign-in and drops the query string. `public-guard-client.test.tsx` guards the order.
+- The server DAL redirect knows only the route path, not its query string: `redirectToSignIn` returns to the path.
+- A change to the authentication architecture updates `tests/firebase-auth.spec.ts` in the same pull request. The emulator E2E does not run in the cloud container, so CI is its only check, and `failOnFlakyTests` makes a flaky run fail.
 
 ## Token verification failures
 
@@ -62,10 +64,13 @@ at least one `google.com` identity for interactive provider testing. The
 
 ## Firebase security rules
 
-Every rule in `firestore.rules`, `storage.rules`, and `database.rules.json`
+Every rules file referenced by `firebase.json`
 needs a negative test in `tests/rules/` that runs on the emulators: another
 user, an anonymous visitor, a forged `role` claim, and an unmatched path must
 all be refused. A rule must never allow access unconditionally. Run
 `pnpm test:rules` after a rules change; the `pnpm check:firebase-rules`
 safeguard fails when a rules file has no test, a matched path is not named in
-its test, or CI stops running them.
+its test, a configured file is missing, or CI stops running them. The guard
+and emulator helper read paths from `firebase.json`; do not duplicate rules
+filenames in scripts. Text matching is a structural hint, not behavioral
+coverage. Keep allow/deny assertions in the emulator tests.

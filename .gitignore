@@ -62,6 +62,7 @@ next-env.d.ts
 .serena/
 .agents/local.json
 .agents/generated/
+.agents/teamwork/
 .agents/agents.json.*.bak
 .agents/plugin-data/
 .agents/mcp_config.json

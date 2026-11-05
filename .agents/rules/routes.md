@@ -89,6 +89,10 @@ For locale behavior, read [Architecture](../../ARCHITECTURE.md#internationalizat
 and [Coding standards](../../CODING_STANDARDS.md): preserve the existing cookie-only,
 unprefixed locale decision and accepted ADR history.
 
+Keep supported locales, the default locale, and the locale cookie name in
+`src/lib/locale-config.mjs`. Application modules and plain Node.js smoke
+checks must consume that shared configuration rather than duplicate it.
+
 ## Proxy reference
 
 Before introducing or changing Proxy, read the installed Next.js Proxy guide and

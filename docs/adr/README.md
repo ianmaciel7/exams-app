@@ -17,7 +17,7 @@ original date. Read current operational details in the
 | [0006](0006-document-project-standards.md) | Accepted; incorporates former 0032; testing detail superseded by 0005 | Documentation ownership, repository boundaries, cross-route placement, owned component naming, and single owners for navigation, locale cookie, scripts, and message keys |
 | [0007](0007-configure-agent-ecosystem.md) | Accepted | Multi-agent orchestration, four MCP servers, fifteen locked skills, domain rule architecture, `PRODUCT.md`, Graphify graph, tool-usage evaluations, repository guards, and Firebase security rules ownership |
 | [0008](0008-install-firebase-ui-registry.md) | Accepted | Dynamic cross-platform installer and locally owned source model for `@firebase` registry |
-| [0009](0009-integrate-firebase-authentication.md) | Accepted; incorporates former 0017, 0024 and 0025 | Browser Firebase Authentication, Electron redirect OAuth, native usage logging, role custom claims, email allowlist, service worker session bridge, session verification contract, and emulators |
+| [0009](0009-integrate-firebase-authentication.md) | Accepted; incorporates former 0017, 0024 and 0025; session transport and verification superseded by 0021 | Browser Firebase Authentication, Electron redirect OAuth, native usage logging, role custom claims, email allowlist, service worker session bridge, session verification contract, and emulators |
 | [0010](0010-configure-ci.md) | Accepted; incorporates former 0033 | Continuous integration, quality tooling, custom rules catalog, layered verification, Git hooks, and isolated CI tools |
 | [0011](0011-configure-terraform-infrastructure.md) | Accepted; incorporates former 0013, 0014, 0019, 0020 and 0031, and the Web API key secret | Terraform stacks for the project, Firebase, App Hosting and federation split by domain; team access; release environment; Auth trigger registration; permanent project IDs; manual apply |
 | [0012](0012-configure-cd.md) | Accepted; incorporates former 0015, 0016, 0018 and 0022; manual provisioning superseded by 0011 | Release-driven Firebase production delivery, App Hosting, OIDC federation, `us-central1`, budget alerts, callable Function access, and browser-check gates |
@@ -29,6 +29,7 @@ original date. Read current operational details in the
 | [0018](0018-delegate-profile-form-hooks.md) | Accepted; amends ADR 0017 | `useProfileForm` owns the profile form's read, Action and avatar state; `check:components` applies the hook-delegation rule to `*-form.tsx` again |
 | [0019](0019-scope-profile-loading-to-the-screen.md) | Accepted; amends ADRs 0016, 0017 and 0018 | Screen-owned browser loading with cleanup, timeout and retry; no Promise registry; form mapping in `dto.ts` |
 | [0020](0020-render-loading-status-at-each-boundary.md) | Accepted; supersedes the loading-indicator scope of 0002 | Direct shared `LoadingStatus` fallbacks replace the global indicator, markers, CSS reveal and frame probe |
+| [0021](0021-adopt-official-nextjs-server-auth-dal.md) | Accepted; supersedes former 0024 and 0025 (incorporated in 0009) | Next.js Server Components authentication, Data Access Layer (DAL), HTTP-only Firebase Session Cookies (`__session`), `/api/auth/session` route handler, zero-trust server layout protection, and telemetry decoupling |
 
 ## Consolidation of 2026-11-01
 
@@ -154,7 +155,7 @@ earlier files stay in Git history. Reference the new home in new work.
     session subscription and sign-in redirect (with `?next=`), as ADR 0009 records.
   - The `/profile` landing page presents authenticated user details (`email`, `displayName`,
     `uid`) and provides sign-out controls invoking `signOut(auth)`; it does not redirect itself.
-  - Public `AuthProviderClient` redirects authenticated users from public authentication pages to
+  - Public `PublicGuardClient` redirects authenticated users from public authentication pages to
     `/profile`.
   - FirebaseUI preserves its popup strategy in ordinary browsers and uses its supported redirect
     strategy only for Electron user agents. In development, Next proxies the Auth Emulator handler
@@ -207,6 +208,15 @@ earlier files stay in Git history. Reference the new home in new work.
     `test:production-smoke`, and `check:docs` are `verify:fast` guards, each with its own
     regression tests.
   - `review-validation.yml` is manual-dispatch only and not a required check.
+
+- **ADR 0021: Next.js Server Components authentication and Data Access Layer**:
+  - The application adopts official Next.js App Router Data Access Layer (DAL) patterns:
+    native HTTP-only Firebase Session Cookies (`__session`) replace the Service Worker header bridge.
+  - `/api/auth/session` mints and clears session cookies using Firebase Admin SDK (`createSessionCookie`).
+  - `src/app/(protected)/_lib/dal.ts` memoizes `verifySession` and `verifyRole` with React `cache()`,
+    verifying session cookies with revocation checks via `verifySessionCookie(..., true)`.
+  - `src/app/(protected)/layout.tsx` is a pure Server Component that awaits `verifySession()`.
+  - Telemetry is observed independently by `RouteUsageBridgeClient`.
 
 These clarifications describe the checked-in configuration. They do not claim
 that a hosted run succeeded or that all tooling is installed on a contributor's

@@ -3,7 +3,6 @@ language: typescript
 files:
   - "src/app/(protected)/**/*.ts"
 ignores:
-  - "src/app/(protected)/_hooks/use-auth-guard-client.ts"
   - "src/app/(protected)/_lib/**"
   - "**/*.test.ts"
 severity: error

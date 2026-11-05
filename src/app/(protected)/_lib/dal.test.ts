@@ -19,61 +19,22 @@ vi.mock("@/lib/navigation", () => ({
   routes: { home: "/" },
 }));
 
-import { rejectInvalidBridgeSession, verifyRole, verifySession } from "./dal";
-
-describe("rejectInvalidBridgeSession", () => {
-  beforeEach(() => vi.clearAllMocks());
-
-  it("tolerates the first load when the worker bridge is inactive", async () => {
-    mocks.getFirebaseServerSession.mockResolvedValue({
-      isBridgeActive: false,
-      role: "user",
-      userId: null,
-    });
-    await expect(rejectInvalidBridgeSession()).resolves.toBeUndefined();
-    expect(mocks.redirectToSignIn).not.toHaveBeenCalled();
-  });
-
-  it("redirects home-bound when the worker's token did not verify", async () => {
-    mocks.getFirebaseServerSession.mockResolvedValue({
-      isBridgeActive: true,
-      role: "user",
-      userId: null,
-    });
-    await expect(rejectInvalidBridgeSession()).rejects.toThrow("SIGN_IN");
-    // A protected return path would loop for a client that still has a session.
-    expect(mocks.redirectToSignIn).toHaveBeenCalledWith("/");
-  });
-
-  it("lets verified sessions continue", async () => {
-    mocks.getFirebaseServerSession.mockResolvedValue({
-      isBridgeActive: true,
-      role: "user",
-      userId: "u1",
-    });
-    await expect(rejectInvalidBridgeSession()).resolves.toBeUndefined();
-    expect(mocks.redirectToSignIn).not.toHaveBeenCalled();
-  });
-});
+import { verifyRole, verifySession } from "./dal";
 
 describe("verifySession", () => {
   beforeEach(() => vi.clearAllMocks());
 
-  it.each([true, false])(
-    "fails closed without a verified identity (bridge active: %s)",
-    async (isBridgeActive) => {
-      mocks.getFirebaseServerSession.mockResolvedValue({
-        isBridgeActive,
-        role: "user",
-        userId: null,
-      });
-      await expect(verifySession()).rejects.toThrow("SIGN_IN");
-    },
-  );
+  it("fails closed without a verified identity", async () => {
+    mocks.getFirebaseServerSession.mockResolvedValue({
+      role: "user",
+      userId: null,
+    });
+    await expect(verifySession()).rejects.toThrow("SIGN_IN");
+    expect(mocks.redirectToSignIn).toHaveBeenCalledOnce();
+  });
 
   it("returns only the verified identity", async () => {
     mocks.getFirebaseServerSession.mockResolvedValue({
-      isBridgeActive: true,
       role: "admin",
       userId: "a1",
     });
@@ -96,9 +57,8 @@ describe("verifySession", () => {
 describe("verifyRole", () => {
   beforeEach(() => vi.clearAllMocks());
 
-  it("sends callers without a verified session to sign-in, even if the bridge is off", async () => {
+  it("sends callers without a verified session to sign-in", async () => {
     mocks.getFirebaseServerSession.mockResolvedValue({
-      isBridgeActive: false,
       role: "user",
       userId: null,
     });
@@ -107,7 +67,6 @@ describe("verifyRole", () => {
 
   it("answers an insufficient role as not found", async () => {
     mocks.getFirebaseServerSession.mockResolvedValue({
-      isBridgeActive: true,
       role: "user",
       userId: "u1",
     });
@@ -116,7 +75,6 @@ describe("verifyRole", () => {
 
   it("returns the verified identity when the role suffices", async () => {
     mocks.getFirebaseServerSession.mockResolvedValue({
-      isBridgeActive: true,
       role: "admin",
       userId: "a1",
     });

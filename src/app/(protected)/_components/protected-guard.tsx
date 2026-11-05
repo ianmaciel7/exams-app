@@ -2,9 +2,9 @@ import type { ComponentProps } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-type AuthGuardProps = ComponentProps<"main">;
+type ProtectedGuardProps = ComponentProps<"main">;
 
-function AuthGuard({ className, ...props }: AuthGuardProps) {
+function ProtectedGuard({ className, ...props }: ProtectedGuardProps) {
   return (
     <main
       className={cn(
@@ -16,19 +16,19 @@ function AuthGuard({ className, ...props }: AuthGuardProps) {
   );
 }
 
-type AuthGuardErrorProps = ComponentProps<"div"> & {
+type ProtectedGuardErrorProps = ComponentProps<"div"> & {
   message: string;
   onRetry: () => void;
   retryLabel: string;
 };
 
-function AuthGuardError({
+function ProtectedGuardError({
   className,
   message,
   onRetry,
   retryLabel,
   ...props
-}: AuthGuardErrorProps) {
+}: ProtectedGuardErrorProps) {
   return (
     <div
       className={cn("flex flex-col items-center gap-4 text-center", className)}
@@ -40,4 +40,4 @@ function AuthGuardError({
   );
 }
 
-export { AuthGuard, AuthGuardError };
+export { ProtectedGuard, ProtectedGuardError };

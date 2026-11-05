@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { syncSessionCookie } from "@/lib/auth";
 import { loadAuth, loadSession } from "@/lib/firebase-loaders";
 import { type Session, watchSession } from "@/lib/watch-session";
 
@@ -22,7 +23,6 @@ export function useSessionProviderClient() {
     };
 
     let unsubscribe: (() => void) | undefined;
-    // Firebase loads on demand so the server-rendered home hero stays the LCP.
     Promise.all([loadSession(), loadAuth()])
       .then((modules) => {
         if (lifetime.signal.aborted) return;
@@ -39,6 +39,12 @@ export function useSessionProviderClient() {
       unsubscribe?.();
     };
   }, []);
+
+  useEffect(() => {
+    if (session.user && typeof session.user.getIdToken === "function") {
+      void syncSessionCookie(session.user);
+    }
+  }, [session.user]);
 
   return session;
 }

@@ -2,7 +2,7 @@ import { useTranslations } from "next-intl";
 import { useNavigation } from "@/hooks/use-navigation";
 import { toast } from "@/lib/toast";
 import type { ProfileValues, SavedProfile } from "../_lib/definitions";
-import { syncSavedLocale } from "../_lib/locale-sync";
+import { syncSavedLocale } from "../_lib/utils";
 
 type UseProfileSaveFeedbackOptions = {
   activeLocale: string;

@@ -1,5 +1,6 @@
 import { readdirSync, readFileSync } from "node:fs";
-import { join } from "node:path";
+import { join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 
 // ast-grep globs let `*` cross `/`, so `src/components/ui/*.tsx` in `ignores`
 // also skips `src/components/ui/extensions/**`, where our own components live.
@@ -26,7 +27,10 @@ export function findBadIgnores(rulesDir = ".ast-grep/rules") {
   return found;
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (
+  process.argv[1] &&
+  resolve(process.argv[1]) === fileURLToPath(import.meta.url)
+) {
   const bad = findBadIgnores();
   if (bad.length > 0) {
     console.error(

@@ -1,7 +1,7 @@
 import { useTranslations } from "next-intl";
 import { type ChangeEvent, useEffect, useRef } from "react";
 import { toast } from "@/components/ui/toast";
-import { isValidAvatarFile } from "../_lib/avatar";
+import { isValidAvatarFile } from "../_lib/utils";
 
 /** Hidden file input: validates the pick and keeps the input in sync with the form value. */
 export function useProfileAvatarInput(

@@ -6,6 +6,5 @@ export const routing = defineRouting({
   defaultLocale,
 });
 
+export { localeCookie } from "@/lib/locale-config.mjs";
 export { defaultLocale, isLocale, locales };
-
-export const localeCookie = "NEXT_LOCALE";

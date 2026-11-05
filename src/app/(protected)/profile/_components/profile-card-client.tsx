@@ -10,21 +10,21 @@ import {
 } from "@/components/ui/card";
 import { LoadingStatus } from "@/components/ui/extensions/loading-status";
 import { cn } from "@/lib/utils";
-import { useProfileClient } from "../_hooks/use-profile-client";
+import { useProfileCardClient } from "../_hooks/use-profile-card-client";
 import { ProfileForm } from "./profile-form";
 
-type ProfileClientProps = ComponentProps<typeof Card> & {
+type ProfileCardClientProps = ComponentProps<typeof Card> & {
   title: string;
   description: string;
 };
 
-function ProfileClient({
+function ProfileCardClient({
   title,
   description,
   className,
   ...props
-}: ProfileClientProps) {
-  const profile = useProfileClient();
+}: ProfileCardClientProps) {
+  const profile = useProfileCardClient();
   if (profile.isLoading) return <LoadingStatus />;
 
   return (
@@ -48,4 +48,4 @@ function ProfileClient({
   );
 }
 
-export { ProfileClient };
+export { ProfileCardClient };

@@ -70,13 +70,13 @@ function nested(depth: number) {
 const categories = {
   cognitive: "lint/complexity/noExcessiveCognitiveComplexity",
   lines: "lint/complexity/noExcessiveLinesPerFunction",
-  callbacks: "lint/nursery/noExcessiveNestedCallbacks",
+  callbacks: "lint/complexity/noExcessiveNestedCallbacks",
 };
 
 const ruleFlags = {
   cognitive: ["--only=complexity/noExcessiveCognitiveComplexity"],
   lines: ["--only=complexity/noExcessiveLinesPerFunction"],
-  callbacks: ["--only=nursery/noExcessiveNestedCallbacks"],
+  callbacks: ["--only=complexity/noExcessiveNestedCallbacks"],
 } as const;
 
 describe("owned function complexity budgets", () => {

@@ -99,3 +99,37 @@ test("the emulator stays open only while no list is configured", () => {
     code: "permission-denied",
   });
 });
+
+test("sign-in keeps a role set by setUserRole and merges other claims", () => {
+  const { signIn } = handlers();
+  const promoted = {
+    data: {
+      email: "user@example.test",
+      emailVerified: true,
+      customClaims: { role: "admin", plan: "x" },
+    },
+  };
+  assert.deepEqual(signIn(promoted), {
+    customClaims: { role: "admin", plan: "x" },
+  });
+});
+
+test("sign-in still promotes an allowlisted admin but never demotes", () => {
+  const { signIn } = handlers();
+  const demoted = {
+    data: {
+      email: "admin@example.test",
+      emailVerified: true,
+      customClaims: { role: "user" },
+    },
+  };
+  assert.deepEqual(signIn(demoted), { customClaims: { role: "admin" } });
+  const invalid = {
+    data: {
+      email: "user@example.test",
+      emailVerified: true,
+      customClaims: { role: "owner" },
+    },
+  };
+  assert.deepEqual(signIn(invalid), { customClaims: { role: "user" } });
+});

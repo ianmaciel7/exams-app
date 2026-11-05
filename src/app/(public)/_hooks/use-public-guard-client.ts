@@ -1,9 +1,9 @@
 import { useLocale, useTranslations } from "next-intl";
-import { useFirebaseUi } from "./use-firebase-ui";
-import { useFirebaseUiReturnNavigation } from "./use-firebase-ui-return-navigation";
-import { useFirebaseUiTranslations } from "./use-firebase-ui-translations";
+import { useFirebaseUi } from "@/hooks/use-firebase-ui";
+import { useFirebaseUiReturnNavigation } from "@/hooks/use-firebase-ui-return-navigation";
+import { useFirebaseUiTranslations } from "@/hooks/use-firebase-ui-translations";
 
-export function useAuthProviderClient() {
+export function usePublicGuardClient() {
   const locale = useLocale();
   const t = useTranslations("Auth");
   const { ui, isError } = useFirebaseUi();
