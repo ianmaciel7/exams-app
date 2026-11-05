@@ -1,4 +1,5 @@
 import { useTranslations } from "next-intl";
+import { useId } from "react";
 import { getAvatarFallbackInitial, getAvatarSource } from "../_lib/utils";
 import { useProfileAvatarInput } from "./use-profile-avatar-input";
 import { useProfileAvatarPreview } from "./use-profile-avatar-preview";
@@ -34,6 +35,7 @@ export function useProfileAvatarFieldClient({
 
   return {
     t,
+    titleId: useId(),
     disabled: pending,
     avatarSrc: getAvatarSource(preview, photoURL, savedCount),
     avatarAlt: displayName || t("profileTitle"),
