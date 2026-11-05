@@ -21,12 +21,18 @@ const mocks = vi.hoisted(() => ({
   connectStorageEmulator: vi.fn(),
   getFirestore: vi.fn(),
   getStorage: vi.fn(),
+  initializeAppCheck: vi.fn(),
+  ReCaptchaV3Provider: vi.fn(),
 }));
 
 vi.mock("firebase/app", () => ({
   getApp: mocks.getApp,
   getApps: mocks.getApps,
   initializeApp: mocks.initializeApp,
+}));
+vi.mock("firebase/app-check", () => ({
+  initializeAppCheck: mocks.initializeAppCheck,
+  ReCaptchaV3Provider: mocks.ReCaptchaV3Provider,
 }));
 vi.mock("firebase/auth", () => ({
   connectAuthEmulator: mocks.connectAuthEmulator,
@@ -240,5 +246,29 @@ describe("getFirebaseUI", () => {
     expect(getFirebaseFunctions()).toBe(functions);
     expect(mocks.connectStorageEmulator).not.toHaveBeenCalled();
     expect(mocks.connectFunctionsEmulator).not.toHaveBeenCalled();
+  });
+  it("starts App Check once when a site key is configured", async () => {
+    vi.stubEnv("NEXT_PUBLIC_FIREBASE_APPCHECK_SITE_KEY", "site-key");
+    mocks.getFunctions.mockReturnValue({});
+
+    const { getFirebaseFunctions } = await import("./client");
+    getFirebaseFunctions();
+    getFirebaseFunctions();
+
+    expect(mocks.ReCaptchaV3Provider).toHaveBeenCalledWith("site-key");
+    expect(mocks.initializeAppCheck).toHaveBeenCalledTimes(1);
+    expect(mocks.initializeAppCheck).toHaveBeenCalledWith(
+      mocks.app,
+      expect.objectContaining({ isTokenAutoRefreshEnabled: true }),
+    );
+  });
+
+  it("skips App Check without a site key", async () => {
+    mocks.getFunctions.mockReturnValue({});
+
+    const { getFirebaseFunctions } = await import("./client");
+    getFirebaseFunctions();
+
+    expect(mocks.initializeAppCheck).not.toHaveBeenCalled();
   });
 });

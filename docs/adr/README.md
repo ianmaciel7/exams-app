@@ -36,7 +36,8 @@ original date. Read current operational details in the
 | [0023](0023-classify-analysis-without-file-exclusions.md) | Accepted; amends ADRs 0010 and 0022 | Analyze every file with category-specific rules, application coverage gates, and real dependency inputs |
 | [0024](0024-compose-profile-card-in-page.md) | Accepted; amends ADR 0019 | `page.tsx` composes the shadcn `Card` directly; `ProfileForm` is the only client leaf ("direct page composition, client leaves") |
 | [0025](0025-load-profile-inside-the-form.md) | Accepted; amends ADRs 0019 and 0024 | `ProfileForm` loads the profile itself through `useProfileForm`/`useProfileRead`; no `ProfileFormClient`; the Middle Man rule treats loading guards as no logic |
-| [0026](0026-invert-profile-data-dependency.md) | Accepted; amends ADRs 0019 and 0025 | `useProfileForm` depends on a `ProfileGateway` port injected by `ProfileGatewayProviderClient`; Biome forbids Firebase imports in route hooks and components |
+| [0026](0026-adopt-app-check-for-callable-functions.md) | Accepted; extends ADR 0009 | Optional App Check for the `recordUsage` callable, off by default |
+| [0027](0027-invert-profile-data-dependency.md) | Accepted; amends ADRs 0019 and 0025 | `useProfileForm` depends on a `ProfileGateway` port injected by `ProfileGatewayProviderClient`; Biome forbids Firebase imports in route hooks and components |
 
 ## Consolidation of 2026-11-01
 

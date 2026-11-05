@@ -1,4 +1,4 @@
-# ADR 0026: Invert the profile data dependency with a gateway port
+# ADR 0027: Invert the profile data dependency with a gateway port
 
 - **Status**: Accepted; amends ADRs 0019 and 0025
 
