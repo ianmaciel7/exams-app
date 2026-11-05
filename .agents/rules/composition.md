@@ -1,4 +1,5 @@
 ---
+
 trigger: model_decision
 description: "Read when composing owned component families, forwarding primitive props, or defining children slots."
 ---
