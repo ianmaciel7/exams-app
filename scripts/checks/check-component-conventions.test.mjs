@@ -353,6 +353,20 @@ describe("owned component conventions", () => {
     );
   });
 
+  it("rejects a Middle Man whose only logic is a loading guard", () => {
+    const file =
+      "src/app/(protected)/profile/_components/profile-form-client.tsx";
+    const guard =
+      '"use client"; import { LoadingStatus } from "@/components/ui/extensions/loading-status"; import { ProfileForm } from "./profile-form"; import { useProfileFormClient } from "../_hooks/use-profile-form-client"; function ProfileFormClient(props) { const profile = useProfileFormClient(); if (profile.isLoading) return <LoadingStatus />; return <ProfileForm {...props} values={profile.values} />; } export { ProfileFormClient };';
+    expectInvalid(guard, /Middle Man/, file);
+    expectValid(
+      guard
+        .replace("return <ProfileForm", "return profile.values ? <ProfileForm")
+        .replace("/>; } export", "/> : null; } export"),
+      file,
+    );
+  });
+
   it("keeps client leaves free of Card parts (direct page composition)", () => {
     const file =
       "src/app/(protected)/profile/_components/profile-form-client.tsx";

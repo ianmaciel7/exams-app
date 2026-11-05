@@ -11,7 +11,10 @@ import type {
 import { parseProfileFormData } from "./dto";
 
 type ProfileActionOptions = {
-  user: User;
+  /** Both are set once the form is shown; the Action only runs from the form. */
+  user: User | null;
+  /** Loaded values the form shows until the first submission. */
+  loaded: ProfileValues | null;
   /** Message shown when saving fails. */
   errorMessage: string;
   /** Called after a successful save, for toast, theme and locale updates. */
@@ -22,6 +25,19 @@ type ProfileActionOptions = {
   ) => void;
 };
 
+/** State before any submission: the loaded values are also the saved ones. */
+export function initialProfileActionState(
+  loaded: ProfileValues,
+): ProfileActionState {
+  return {
+    saved: loaded,
+    values: loaded,
+    avatarFile: null,
+    error: null,
+    savedCount: 0,
+  };
+}
+
 /**
  * The profile form Action, in the `(prevState, formData)` shape that
  * `useActionState` expects. It is a client function on purpose: every write
@@ -30,13 +46,16 @@ type ProfileActionOptions = {
  */
 export function createProfileAction({
   user,
+  loaded,
   errorMessage,
   onSaved,
 }: ProfileActionOptions) {
   return async function submitProfile(
-    state: ProfileActionState,
+    previous: ProfileActionState | null,
     formData: FormData,
   ): Promise<ProfileActionState> {
+    if (!user || !loaded) throw new Error("Profile form submitted before load");
+    const state = previous ?? initialProfileActionState(loaded);
     const { avatarFile, ...values } = parseProfileFormData(
       formData,
       state.values,

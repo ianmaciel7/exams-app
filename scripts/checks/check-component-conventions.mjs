@@ -1089,8 +1089,22 @@ const logicalOperators = new Set([
   ts.SyntaxKind.QuestionQuestionToken,
 ]);
 
+function isGuardReturn(node) {
+  if (node.elseStatement) return false;
+  const body = ts.isBlock(node.thenStatement)
+    ? node.thenStatement.statements
+    : [node.thenStatement];
+  return body.length === 1 && ts.isReturnStatement(body[0]);
+}
+
+/**
+ * An early `return` guard (`if (isLoading) return <LoadingStatus />;`) only
+ * waits for data, so it does not give a wrapper behavior of its own. Ternaries,
+ * `&&`, `??`, `||`, `.map` and any other `if` still count as logic.
+ */
 function isRenderingLogic(node, source) {
-  if (ts.isConditionalExpression(node) || ts.isIfStatement(node)) return true;
+  if (ts.isIfStatement(node)) return !isGuardReturn(node);
+  if (ts.isConditionalExpression(node)) return true;
   if (ts.isBinaryExpression(node))
     return logicalOperators.has(node.operatorToken.kind);
   return (
@@ -1117,7 +1131,8 @@ function analyzeDelegation(statement, ownedImports, source) {
 /**
  * Middle Man (Fowler, "Remove Middle Man"): a route-private component that only
  * delegates to a single owned component, with no conditional or list rendering
- * of its own, adds a layer without behavior. Applies to every component kind.
+ * of its own (an early loading guard does not count), adds a layer without
+ * behavior. Applies to every component kind.
  * Adapters over third-party primitives in `ui/extensions` are exempt.
  */
 function checkMiddleManComponent(source, filename, report) {
