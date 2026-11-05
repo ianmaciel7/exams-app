@@ -1,16 +1,10 @@
 import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-
-const services = [
-  { name: "firestore", rules: "firestore.rules", test: "firestore.test.mjs" },
-  { name: "storage", rules: "storage.rules", test: "storage.test.mjs" },
-  {
-    name: "database",
-    rules: "database.rules.json",
-    test: "database.test.mjs",
-  },
-];
+import {
+  configuredRules,
+  readFirebaseConfig,
+} from "../lib/firebase-config.mjs";
 
 /** Literal path segments after `match /`, ignoring `{wildcards}`. */
 function matchedSegments(rules) {
@@ -31,9 +25,11 @@ function matchedSegments(rules) {
   return [...names];
 }
 
-function inspectService({ name, rules, test }, files) {
+function inspectService({ service: name, rules }, files) {
+  const test = `${name}.test.mjs`;
   const source = files[rules];
-  if (source === undefined) return [];
+  if (source === undefined)
+    return [`firebase.json references missing rules file: ${rules}`];
   const testSource = files[`tests/rules/${test}`];
   if (testSource === undefined)
     return [`${rules} has no emulator test at tests/rules/${test}`];
@@ -50,11 +46,18 @@ function inspectService({ name, rules, test }, files) {
 }
 
 /**
- * Every deployed rules file needs an emulator test that names each matched
+ * Every configured rules file needs an emulator test that names each matched
  * path, no rule may allow everything, and CI must run the rules tests.
+ * Text matching is a structural hint, not proof of behavioral coverage.
  * `files` maps repository paths to their text (or undefined when missing).
  */
 export function inspectFirebaseRules(files) {
+  let services;
+  try {
+    services = configuredRules(JSON.parse(files["firebase.json"]));
+  } catch (error) {
+    return [`Invalid Firebase configuration: ${error.message}`];
+  }
   const errors = services.flatMap((service) => inspectService(service, files));
   if (!(files[".github/workflows/ci.yml"] ?? "").includes("tests/rules"))
     errors.push(
@@ -70,8 +73,11 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
       ? readFileSync(resolve(root, path), "utf8")
       : undefined;
   const paths = [
+    "firebase.json",
     ".github/workflows/ci.yml",
-    ...services.flatMap(({ rules, test }) => [rules, `tests/rules/${test}`]),
+    ...configuredRules(readFirebaseConfig(root)).flatMap(
+      ({ rules, service }) => [rules, `tests/rules/${service}.test.mjs`],
+    ),
   ];
   const errors = inspectFirebaseRules(
     Object.fromEntries(paths.map((path) => [path, read(path)])),

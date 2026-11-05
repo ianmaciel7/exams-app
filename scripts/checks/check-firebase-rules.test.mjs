@@ -1,8 +1,14 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { configuredRules, rulesPathFor } from "../lib/firebase-config.mjs";
 import { inspectFirebaseRules } from "./check-firebase-rules.mjs";
 
 const valid = {
+  "firebase.json": JSON.stringify({
+    firestore: { rules: "firestore.rules" },
+    storage: { rules: "storage.rules" },
+    database: { rules: "database.rules.json" },
+  }),
   "firestore.rules":
     "service cloud.firestore { match /databases/{d}/documents { match /users/{uid} { allow read: if request.auth != null; } } }",
   "tests/rules/firestore.test.mjs": 'doc("users/alice")',
@@ -16,6 +22,79 @@ const valid = {
 
 test("accepts rules with emulator tests run by CI", () =>
   assert.deepEqual(inspectFirebaseRules(valid), []));
+
+test("follows renamed rules files in firebase.json", () => {
+  const files = { ...valid, "config/access.rules": valid["firestore.rules"] };
+  delete files["firestore.rules"];
+  files["firebase.json"] = JSON.stringify({
+    firestore: { rules: "config/access.rules" },
+  });
+  assert.deepEqual(inspectFirebaseRules(files), []);
+  assert.equal(
+    rulesPathFor(JSON.parse(files["firebase.json"]), "firestore"),
+    "config/access.rules",
+  );
+});
+
+test("rejects missing configured files and malformed configuration", () => {
+  const files = { ...valid };
+  delete files["firestore.rules"];
+  assert.match(
+    inspectFirebaseRules(files).join(),
+    /missing rules file: firestore.rules/,
+  );
+  for (const source of [
+    undefined,
+    "{",
+    '{"firestore":{}}',
+    '{"storage":[]}',
+    '{"database":{"rules":"../outside.rules"}}',
+  ]) {
+    assert.match(
+      inspectFirebaseRules({ ...valid, "firebase.json": source }).join(),
+      /Invalid Firebase configuration/,
+    );
+  }
+});
+
+test("inspects every configured database and requires explicit selection when ambiguous", () => {
+  const config = {
+    firestore: [
+      { database: "(default)", rules: "firestore.rules" },
+      { database: "archive", rules: "archive.rules" },
+    ],
+  };
+  const files = {
+    ...valid,
+    "firebase.json": JSON.stringify(config),
+    "archive.rules": "match /archives/{id} { allow read: if false; }",
+  };
+  assert.match(
+    inspectFirebaseRules(files).join(),
+    /"archives" is not exercised/,
+  );
+  files["tests/rules/firestore.test.mjs"] += '\n doc("archives/one")';
+  assert.deepEqual(inspectFirebaseRules(files), []);
+  assert.throws(
+    () => rulesPathFor(config, "firestore"),
+    /select a configured target/,
+  );
+  assert.equal(rulesPathFor(config, "firestore", "archive"), "archive.rules");
+});
+
+test("rejects rules paths outside the repository on Windows and POSIX", () => {
+  for (const rules of [
+    "/tmp/access.rules",
+    "C:\\access.rules",
+    "..\\access.rules",
+    "",
+  ]) {
+    assert.throws(
+      () => configuredRules({ firestore: { rules } }),
+      /repository-relative/,
+    );
+  }
+});
 
 test("rejects a rules file without a test", () => {
   const files = { ...valid };

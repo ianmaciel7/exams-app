@@ -61,10 +61,13 @@ at least one `google.com` identity for interactive provider testing. The
 
 ## Firebase security rules
 
-Every rule in `firestore.rules`, `storage.rules`, and `database.rules.json`
+Every rules file referenced by `firebase.json`
 needs a negative test in `tests/rules/` that runs on the emulators: another
 user, an anonymous visitor, a forged `role` claim, and an unmatched path must
 all be refused. A rule must never allow access unconditionally. Run
 `pnpm test:rules` after a rules change; the `pnpm check:firebase-rules`
 safeguard fails when a rules file has no test, a matched path is not named in
-its test, or CI stops running them.
+its test, a configured file is missing, or CI stops running them. The guard
+and emulator helper read paths from `firebase.json`; do not duplicate rules
+filenames in scripts. Text matching is a structural hint, not behavioral
+coverage. Keep allow/deny assertions in the emulator tests.

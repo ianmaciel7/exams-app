@@ -1,6 +1,10 @@
 import assert from "node:assert/strict";
+import { EventEmitter } from "node:events";
+import { Readable } from "node:stream";
 import { describe, it } from "node:test";
+import { localeCookie, locales } from "../../src/lib/locale-config.mjs";
 import {
+  requestProductionHtml,
   runProductionSmoke,
   validateProductionOrigin,
 } from "./check-production-smoke.mjs";
@@ -76,11 +80,37 @@ describe("production URL security boundary", () => {
         };
       },
     });
-    assert.deepEqual(observed, [
-      ["app.example.org", "93.184.216.34", "en"],
-      ["app.example.org", "93.184.216.34", "pt-BR"],
-      ["app.example.org", "93.184.216.34", "es"],
-    ]);
+    assert.deepEqual(
+      observed,
+      locales.map((locale) => ["app.example.org", "93.184.216.34", locale]),
+    );
+  });
+
+  it("constructs requests with the shared locale cookie and pinned DNS address", async () => {
+    for (const locale of locales) {
+      const record = { address: "93.184.216.34", family: 4 };
+      const result = await requestProductionHtml(
+        new URL("https://app.example.org"),
+        record,
+        locale,
+        (_target, options, callback) => {
+          assert.equal(options.headers.cookie, `${localeCookie}=${locale}`);
+          options.lookup("app.example.org", {}, (_error, address, family) => {
+            assert.equal(address, record.address);
+            assert.equal(family, record.family);
+          });
+          const request = new EventEmitter();
+          request.end = () => {
+            const response = Readable.from([`<html lang="${locale}">`]);
+            response.statusCode = 200;
+            response.headers = { "content-type": "text/html" };
+            callback(response);
+          };
+          return request;
+        },
+      );
+      assert.equal(result.html, `<html lang="${locale}">`);
+    }
   });
 
   it("fails closed on redirects, invalid HTML and mismatched server language", async () => {

@@ -137,6 +137,65 @@ describe("owned hook filename/export parity", () => {
       /use-<semantic-name>/,
     );
   });
+
+  it("rejects additional unexported function and variable hooks", () => {
+    const file =
+      "src/app/(protected)/profile/_hooks/use-profile-card-client.ts";
+    for (const extra of [
+      "function useProfileLoad() {}",
+      "const useProfileLoad = () => {};",
+      "const useProfileLoad = function () {};",
+      "const useProfileLoad = (function useProfileLoad() {});",
+      "const useProfileLoad = (() => {}) satisfies (() => void);",
+    ]) {
+      const code = `export function useProfileCardClient() {}\n${extra}`;
+      const findings = inspectHookFilename(code, file);
+      assert.equal(findings.length, 1, code);
+      assert.match(findings[0].message, /exactly one hook.*useProfileLoad/);
+      assert.equal(findings[0].line, 2);
+    }
+  });
+
+  it("rejects nested hook definitions and multiple hooks in shared or nested modules", () => {
+    for (const file of [
+      matching,
+      "src/hooks/use-protected-guard-client.ts",
+      "src/hooks/session/use-protected-guard-client.ts",
+      "src/app/(protected)/_hooks/session/use-protected-guard-client.tsx",
+      "src\\app\\(protected)\\_hooks\\use-protected-guard-client.ts",
+    ]) {
+      assert.match(
+        messages(
+          "export function useProtectedGuardClient() { function useInner() {} return useInner(); }",
+          file,
+        ),
+        /exactly one hook.*useInner/,
+      );
+    }
+    assert.match(
+      messages(
+        "export function useProtectedGuardClient() { const useInner = () => {}; return useInner(); }",
+        matching,
+      ),
+      /exactly one hook.*useInner/,
+    );
+  });
+
+  it("allows imported hooks, local callbacks, overloads and named function expressions", () => {
+    for (const code of [
+      "import { useState } from 'react'; import { useProfileLoad } from './use-profile-load'; export function useProtectedGuardClient() { const [value] = useState(0); useProfileLoad(); function onClick() {} return { value, onClick }; }",
+      "function useProtectedGuardClient(): void; function useProtectedGuardClient() {} export { useProtectedGuardClient };",
+      "export const useProtectedGuardClient = function useProtectedGuardClient() {};",
+    ])
+      assert.equal(messages(code, matching), "", code);
+    assert.match(
+      messages(
+        "import { useOther } from './other'; export const useProtectedGuardClient = useOther;",
+        matching,
+      ),
+      /no local hook implementation/,
+    );
+  });
 });
 
 describe("presentation hooks in owned fields", () => {

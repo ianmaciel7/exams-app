@@ -39,7 +39,7 @@
     "check:workflows": "actionlint && zizmor .github/workflows",
     "audit": "pnpm audit",
     "audit:functions": "npm --prefix functions audit --package-lock-only --ignore-scripts",
-    "check:repo": "pnpm check:structure && pnpm check:routes && pnpm check:components && pnpm check:ui-state && pnpm check:responsiveness && pnpm check:english && pnpm check:docs && pnpm check:adr && pnpm check:release && pnpm check:app-hosting-auth-iam && pnpm check:emulator-snapshot && pnpm check:firebase-rules && pnpm check:secret-guard && pnpm check:package-scripts",
+    "check:repo": "pnpm check:structure && node --test scripts/run-checks.test.mjs && node scripts/run-checks.mjs",
     "verify:fast": "pnpm lint:ci && pnpm typecheck && pnpm test && pnpm test:logging && pnpm test:evals && pnpm test:production-smoke && pnpm check:repo",
     "verify:static": "pnpm lint:ci && pnpm typecheck && pnpm test:coverage && pnpm test:logging && pnpm test:production-smoke && pnpm check:architecture && pnpm check:unused && pnpm check:duplicates && pnpm check:repo && pnpm check:spelling && pnpm check:markdown && pnpm analyze:fallow && pnpm analyze:react",
     "verify:build": "pnpm test:browser && pnpm analyze:size && pnpm ladle:build",

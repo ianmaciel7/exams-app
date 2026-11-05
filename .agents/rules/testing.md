@@ -8,8 +8,17 @@ description: "Read before testing or changing stateful user journeys, asynchrono
 The authoritative testing strategy and acceptance model are in
 [TESTING.md](../../TESTING.md#stateful-user-journeys-and-model-based-acceptance).
 
-Before implementing or changing a user-facing, asynchronous, or multistep
-workflow, enumerate the relevant states, events, transitions and transition
+Repository checks use `scripts/checks/check-*.mjs` with colocated
+`check-*.test.mjs` regressions. `pnpm check:repo` discovers new files through
+`scripts/run-checks.mjs`; do not add them to a manual command chain. Modules
+must be safe to import and expose a guarded CLI. The default mode is `repo`;
+export `checkMode = "manual"` for checks requiring a server or deployment,
+or `checkMode = "helper"` for libraries invoked by another check. Their
+offline regression suites still run automatically. Keep external tool
+execution in its existing owning command.
+
+Before implementing or changing a user-facing or asynchronous workflow, or one
+with multiple steps, enumerate the relevant states, events, transitions and transition
 pairs. Define success, cancellation, failure, and recovery expectations
 independently of the existing implementation. Prioritize risk and document
 uncovered transitions. Test critical behavior through observable user outcomes

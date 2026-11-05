@@ -24,7 +24,7 @@ Owned components keep rendering, translations, primitive prop forwarding and sim
   handles avatar field data. Do not mirror derived state in additional
   `useState` variables.
 - `check:components` rejects React state/effect imports (including aliases), namespace state/effect calls, Firebase value imports, async workflow functions, compound `if` conditions/derived locals and error fallbacks inside owned component functions. Async Server Components, simple discriminated-state branches, translations, form context and presentation props such as `disabled={disabled || pending}` remain valid.
-- The guard checks syntax, not arbitrary semantic equivalence or the ideal number of hooks. Generated Firebase/UI registries and Next.js special files retain their existing scope exclusions. Module-level setup is outside component branch analysis.
+- The guard checks syntax, not arbitrary semantic equivalence or the ideal number of hook calls. Generated Firebase/UI registries and Next.js special files retain their existing scope exclusions. Module-level setup is outside component branch analysis.
 
 ## Component-named orchestration hooks
 
@@ -64,6 +64,15 @@ initialized directly with an arrow/function expression. Local constants,
 handlers, closures and lifecycle callbacks inside the hook remain valid. Do not
 move code that depends on hook-local state merely to satisfy a module-level rule.
 
+Each owned hook file defines exactly one custom hook, matching its filename.
+Additional hooks belong in separate matching `use-*.ts` modules and are imported
+by the orchestrator. `check:components` counts local implementations, including
+unexported and nested functions and arrow/function-expression variables, across
+App Router `_hooks/` and shared `src/hooks/`, including nested directories.
+Imported hooks and ordinary callbacks are allowed; overload signatures are not
+additional implementations. Test/spec/story files and the shadcn-provided
+`src/hooks/use-mobile.ts` retain their exclusions.
+
 The blocking ast-grep rules `no-module-support-in-hooks-ts` and `-tsx` run in
 `check:structure`, already included in fast/static verification. They inspect
 top-level declarations, including exported declarations, and intentionally exclude
@@ -100,9 +109,8 @@ Splitting pattern for a hook that mixes concerns:
   `useProfileAvatarFieldClient`. In `useProfileForm`, avatar draft selection
   across Action dispatches is delegated to `useProfileAvatarDraft`, using pure
   state derivation (`{ baseState, file }`) rather than render-phase state adjustments.
-- Module-level hooks in a `_hooks` file are allowed when they are `useX`
-  declarations; do not introduce a component when the hook split already keeps
-  the component free of behavior.
+- Put each focused `useX` hook in its own matching file; do not introduce a
+  component when importing a focused hook keeps the component free of behavior.
 - No mechanical check can prove a hook has one responsibility. The existing
   safeguards (`no-module-support-in-hooks`, Biome complexity budgets,
   `check:components`) stay the gate; the split itself is a review item.
