@@ -1035,6 +1035,34 @@ function checkFormComponent(source, report) {
   }
 }
 
+const cardPrimitives = new Set([
+  "Card",
+  "CardAction",
+  "CardContent",
+  "CardDescription",
+  "CardFooter",
+  "CardHeader",
+  "CardTitle",
+]);
+
+/**
+ * Direct page composition, client leaves: a `*-client` component is a browser
+ * leaf. It must not render shadcn Card parts; the Server Component page
+ * composes them and passes the leaf as children.
+ */
+function checkClientLeafRendersNoCard(source, stem, report) {
+  if (!stem.endsWith("-client")) return;
+  for (const element of jsxEntries(source)) {
+    if (cardPrimitives.has(element.name)) {
+      report(
+        element.node ?? source,
+        `Client component "${stem}" must not render <${element.name}>; compose Card parts in the Server Component page and keep the client at the leaf (see .agents/rules/composition.md).`,
+      );
+      return;
+    }
+  }
+}
+
 export function inspectComponent(content, filename) {
   if (!isOwnedComponent(filename)) return [];
   const source = ts.createSourceFile(
@@ -1070,6 +1098,7 @@ export function inspectComponent(content, filename) {
     report,
   );
   if (stem.endsWith("-form")) checkFormComponent(source, report);
+  checkClientLeafRendersNoCard(source, stem, report);
   checkHookResponsibilities(source, report);
   checkFieldControllerNames(source, stem, report);
   checkProfilePropDrilling(source, report);

@@ -339,6 +339,20 @@ describe("owned component conventions", () => {
     );
   });
 
+  it("keeps client leaves free of Card parts (direct page composition)", () => {
+    const file =
+      "src/app/(protected)/profile/_components/profile-form-client.tsx";
+    expectInvalid(
+      '"use client"; function ProfileFormClient(props) { return <Card {...props}><CardContent /></Card>; } export { ProfileFormClient };',
+      /must not render <Card>/,
+      file,
+    );
+    expectValid(
+      '"use client"; function ProfileFormClient(props) { return <ProfileForm {...props} />; } export { ProfileFormClient };',
+      file,
+    );
+  });
+
   it("allows semantic roles, matching exports and Server Components", () => {
     expectValid(
       compoundCard(
