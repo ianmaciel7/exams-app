@@ -2,13 +2,13 @@ id: require-use-render-props
 snapshots:
   "function Panel(props: ComponentProps<\"section\">) {\n  return <section {...props} />;\n}\n":
     labels:
-    - source: ComponentProps<"section">
-      style: primary
-      start: 22
-      end: 47
+      - source: ComponentProps<"section">
+        style: primary
+        start: 22
+        end: 47
   "function Panel(props: React.ComponentProps<\"div\">) {\n  return <div {...props} />;\n}\n":
     labels:
-    - source: React.ComponentProps<"div">
-      style: primary
-      start: 22
-      end: 49
+      - source: React.ComponentProps<"div">
+        style: primary
+        start: 22
+        end: 49

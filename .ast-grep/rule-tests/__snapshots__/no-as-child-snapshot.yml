@@ -2,11 +2,11 @@ id: no-as-child
 snapshots:
   "const a = <DialogTrigger asChild><Button /></DialogTrigger>;\n":
     labels:
-    - source: asChild
-      style: primary
-      start: 25
-      end: 32
-    - source: asChild
-      style: secondary
-      start: 25
-      end: 32
+      - source: asChild
+        style: primary
+        start: 25
+        end: 32
+      - source: asChild
+        style: secondary
+        start: 25
+        end: 32

@@ -3,7 +3,10 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
-import { inspectPrinciples, parsePrinciples } from "./check-base-ui-principles.mjs";
+import {
+  inspectPrinciples,
+  parsePrinciples,
+} from "./check-base-ui-principles.mjs";
 
 const table = (rows) =>
   `<!-- base-ui-version: 1.9.0 -->\n| Principle | Guard |\n| --- | --- |\n${rows}\n`;
@@ -45,7 +48,9 @@ test("rejects a missing rule, an unlisted rule, an unknown guard and a version d
   const root = fixture([".ast-grep/rules/base-ui/orphan.yml"]);
   try {
     const errors = inspectPrinciples({
-      markdown: table("| A | rule:gone |\n| B | wish:x |\n| C | manual:short |"),
+      markdown: table(
+        "| A | rule:gone |\n| B | wish:x |\n| C | manual:short |",
+      ),
       root,
       installedVersion: "1.10.0",
     }).join("\n");
