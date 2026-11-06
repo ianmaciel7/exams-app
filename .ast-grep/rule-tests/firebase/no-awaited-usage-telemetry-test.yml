@@ -1,0 +1,8 @@
+id: no-awaited-usage-telemetry
+valid:
+  - "trackEvent({ type: 'screen_view', name: 'home' }).catch(console.error);"
+  - "void trackEvent(event);"
+  - "await other.trackEvent(event);"
+invalid:
+  - "await trackEvent({ type: 'function_use', name: 'profile.update' });"
+  - "const sent = await trackEvent(event);"

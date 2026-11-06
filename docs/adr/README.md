@@ -42,6 +42,7 @@ original date. Read current operational details in the
 | [0029](0029-simplify-profile-client-services.md) | Accepted; amends ADRs 0027 and 0028 | Canonical auth/session helpers replace the profile gateway; explicit client telemetry uses `trackEvent` |
 
 | [0030](0030-constrain-http-status-helpers.md) | Accepted; amends ADR 0021 | Explicit HTTP response contracts, conditional representations and native navigation interrupts |
+| [0031](0031-report-usage-after-the-user-action.md) | Accepted; amends ADR 0029 | E-mail change confirms first and reports usage afterwards; telemetry never blocks a user action |
 
 ## Consolidation of 2026-11-01
 
