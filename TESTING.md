@@ -107,20 +107,20 @@ with the Firebase Auth, Firestore, and Functions emulators. Their assertions
 must verify **observable outcomes** and, where applicable, persisted records
 rather than only mocked calls or navigation.
 
-| Journey / security boundary                 | Executable evidence           | Required outcome                                                                                                                |
-| ------------------------------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| Registration and persisted login            | `tests/firebase-auth.spec.ts` | Register in the browser and retain an authenticated session                                                                     |
-| Guest protected deep link to sign-in        | `tests/firebase-auth.spec.ts` | Preserve the requested protected path and query after login                                                                     |
-| Profile preferences and identity            | `tests/firebase-auth.spec.ts` | Save via the browser, read Firestore independently, reload, sign out and sign in again                                          |
-| Cross-account preference isolation          | `tests/firebase-auth.spec.ts` | Owner can read/write; a different user cannot read/write; anonymous access is denied                                            |
-| Password recovery                           | `tests/firebase-auth.spec.ts` | Emulator issues a recovery code and the UI handles network failure                                                              |
-| Google sign-in                              | `tests/firebase-auth.spec.ts` | Emulated popup/redirect flows complete; production OAuth is a separate risk                                                     |
-| Google popup cancellation and retry         | `tests/firebase-auth.spec.ts` | Closing an unauthenticated popup returns to usable sign-in and permits a second attempt                                         |
-| Protected session and server token verdicts | `tests/firebase-auth.spec.ts` | First load without the worker, forwarded token, failed refresh, rejected tokens, no redirect loop, sign-out, and account switch |
-| Role claims in Security Rules               | `tests/firebase-auth.spec.ts` | A refreshed token gains and loses access; an issued token keeps its claim in Rules until it expires                             |
-| Usage transport and acknowledgment           | `tests/firebase-usage.spec.ts` | Real preflight, readable authentication errors, accepted events, browser CORS, and the app's screen-view acknowledgment |
-| Usage outage and recovery                    | `tests/firebase-usage.spec.ts` | A refused connection leaves the profile usable; the next navigation receives a real acknowledgment after transport recovers |
-| Responsive, visual, and a11y                | `tests/*.spec.ts`             | Assert defined layouts and detectable issues; these are not substitutes for a completed journey                                 |
+| Journey / security boundary                 | Executable evidence            | Required outcome                                                                                                                |
+| ------------------------------------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- |
+| Registration and persisted login            | `tests/firebase-auth.spec.ts`  | Register in the browser and retain an authenticated session                                                                     |
+| Guest protected deep link to sign-in        | `tests/firebase-auth.spec.ts`  | Preserve the requested protected path and query after login                                                                     |
+| Profile preferences and identity            | `tests/firebase-auth.spec.ts`  | Save via the browser, read Firestore independently, reload, sign out and sign in again                                          |
+| Cross-account preference isolation          | `tests/firebase-auth.spec.ts`  | Owner can read/write; a different user cannot read/write; anonymous access is denied                                            |
+| Password recovery                           | `tests/firebase-auth.spec.ts`  | Emulator issues a recovery code and the UI handles network failure                                                              |
+| Google sign-in                              | `tests/firebase-auth.spec.ts`  | Emulated popup/redirect flows complete; production OAuth is a separate risk                                                     |
+| Google popup cancellation and retry         | `tests/firebase-auth.spec.ts`  | Closing an unauthenticated popup returns to usable sign-in and permits a second attempt                                         |
+| Protected session and server token verdicts | `tests/firebase-auth.spec.ts`  | First load without the worker, forwarded token, failed refresh, rejected tokens, no redirect loop, sign-out, and account switch |
+| Role claims in Security Rules               | `tests/firebase-auth.spec.ts`  | A refreshed token gains and loses access; an issued token keeps its claim in Rules until it expires                             |
+| Usage transport and acknowledgment          | `tests/firebase-usage.spec.ts` | Real preflight, readable authentication errors, accepted events, browser CORS, and the app's screen-view acknowledgment         |
+| Usage outage and recovery                   | `tests/firebase-usage.spec.ts` | A refused connection leaves the profile usable; the next navigation receives a real acknowledgment after transport recovers     |
+| Responsive, visual, and a11y                | `tests/*.spec.ts`              | Assert defined layouts and detectable issues; these are not substitutes for a completed journey                                 |
 
 Playwright uses `failOnFlakyTests` in CI: a test that fails before passing on
 retry must fail the job. Investigate traces and classify the root cause rather
