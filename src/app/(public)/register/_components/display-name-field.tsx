@@ -1,5 +1,3 @@
-"use client";
-
 import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
 import { Controller, useFormContext } from "react-hook-form";

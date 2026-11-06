@@ -75,6 +75,7 @@ and does not transfer maintenance ownership to vendors. Application-owned extens
   Firebase, browser storage, object URLs, theme persistence and external fetches.
   React state, Effects, events, React Hook Form context, translations, or the
   presence/name of a custom hook alone do not justify an integration suffix.
+- A module that only client modules import does not repeat `"use client"` (Next.js: the directive marks entry points rendered from Server Components); `check-redundant-use-client.mjs` rejects it unless it is a `-client` integration or a Next.js documentation effect component. A React Hook Form body cannot be named `*-form.tsx` (reserved for Action forms); it lives in the route's `*-form-client.tsx`.
 - Browser integration entrypoints declare `"use client"`; server integration
   entrypoints import `"server-only"`. Interactive presentation also uses client
   boundaries where required. A name without a suffix does not mean server-compatible.
