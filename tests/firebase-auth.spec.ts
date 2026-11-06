@@ -157,12 +157,7 @@ test("password recovery sends an emulator reset code and displays failures", asy
   await page
     .getByRole("button", { name: "Reset Password", exact: true })
     .click();
-  try {
-    await expect(page.getByText(/unable to connect|network/i)).toBeVisible();
-  } catch (error) {
-    console.log("DEBUG-FORGOT", await page.locator("main").innerHTML());
-    throw error;
-  }
+  await expect(page.getByText(/unable to connect|network/i)).toBeVisible();
   await page.unrouteAll();
   await page
     .getByRole("button", { name: "Reset Password", exact: true })
