@@ -98,10 +98,6 @@ export async function POST(request: NextRequest) {
 }
 
 export async function DELETE() {
-  console.log("DIAG delete start");
   await deleteSession();
-  console.log("DIAG delete after deleteSession");
-  const response = ok({ status: "success" });
-  console.log("DIAG delete response built");
-  return response;
+  return ok({ status: "success" });
 }
