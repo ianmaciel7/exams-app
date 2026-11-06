@@ -1,0 +1,32 @@
+id: require-render-function-spread-props
+snapshots:
+  "const a = <Switch.Thumb render={(props, state) => <span>{state.checked}</span>} />;\n":
+    labels:
+    - source: render={(props, state) => <span>{state.checked}</span>}
+      style: primary
+      start: 24
+      end: 79
+    - source: render
+      style: secondary
+      start: 24
+      end: 30
+    - source: props
+      style: secondary
+      start: 33
+      end: 38
+    - source: props
+      style: secondary
+      start: 33
+      end: 38
+    - source: (props, state)
+      style: secondary
+      start: 32
+      end: 46
+    - source: (props, state) => <span>{state.checked}</span>
+      style: secondary
+      start: 32
+      end: 78
+    - source: "{(props, state) => <span>{state.checked}</span>}"
+      style: secondary
+      start: 31
+      end: 79

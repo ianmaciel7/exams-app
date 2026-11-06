@@ -1,0 +1,9 @@
+id: require-render-function-spread-props
+valid:
+  - |
+    const a = <Switch.Thumb render={(props, state) => <span {...props}>{state.checked}</span>} />;
+  - |
+    const a = <Controller render={({ field }) => <input {...field} />} />;
+invalid:
+  - |
+    const a = <Switch.Thumb render={(props, state) => <span>{state.checked}</span>} />;

@@ -1,0 +1,9 @@
+id: require-toast-error-priority
+valid:
+  - |
+    toast.add({ title: "Saved", type: "success" });
+  - |
+    toast.add({ title: "Failed", type: "error", priority: "high" });
+invalid:
+  - |
+    toast.add({ title: "Failed", type: "error" });

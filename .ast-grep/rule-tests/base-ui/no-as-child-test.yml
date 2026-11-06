@@ -1,0 +1,7 @@
+id: no-as-child
+valid:
+  - |
+    const a = <DialogTrigger render={<Button />}>Open</DialogTrigger>;
+invalid:
+  - |
+    const a = <DialogTrigger asChild><Button /></DialogTrigger>;

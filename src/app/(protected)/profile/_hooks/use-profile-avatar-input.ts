@@ -19,7 +19,11 @@ export function useProfileAvatarInput(
     const selected = event.target.files?.[0];
     if (!selected) return;
     if (!isValidAvatarFile(selected)) {
-      toast.add({ title: t("profilePhotoInvalid"), type: "error" });
+      toast.add({
+        title: t("profilePhotoInvalid"),
+        type: "error",
+        priority: "high",
+      });
       event.target.value = "";
       return;
     }

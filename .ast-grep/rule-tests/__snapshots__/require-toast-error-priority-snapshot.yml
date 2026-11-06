@@ -1,0 +1,16 @@
+id: require-toast-error-priority
+snapshots:
+  "toast.add({ title: \"Failed\", type: \"error\" });\n":
+    labels:
+    - source: "toast.add({ title: \"Failed\", type: \"error\" })"
+      style: primary
+      start: 0
+      end: 45
+    - source: "{ title: \"Failed\", type: \"error\" }"
+      style: secondary
+      start: 10
+      end: 44
+    - source: "{ title: \"Failed\", type: \"error\" }"
+      style: secondary
+      start: 10
+      end: 44

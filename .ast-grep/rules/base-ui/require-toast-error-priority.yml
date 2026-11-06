@@ -1,0 +1,34 @@
+id: require-toast-error-priority
+language: tsx
+files:
+  - src/components/**/*.tsx
+  - src/app/**/_components/**/*.tsx
+  - src/app/**/_hooks/**/*.ts
+  - src/components/**/*.ts
+  - src/hooks/**/*.ts
+ignores:
+  - "**/*.test.tsx"
+  - "**/*.test.ts"
+  - "**/*.stories.tsx"
+severity: error
+message: 'An error toast must set priority: "high" so assistive technology announces it assertively.'
+note: |
+  Base UI toasts default to priority "low" (polite). Errors the user must act
+  on use priority "high" (assertive)
+  (https://base-ui.com/react/components/toast).
+  Example:
+    toast.add({ title: t("saveError"), type: "error", priority: "high" });
+rule:
+  pattern: $MANAGER.add($OPTIONS)
+  all:
+    - has:
+        field: arguments
+        has:
+          kind: object
+          regex: "type\\s*:\\s*[\"']error[\"']"
+    - not:
+        has:
+          field: arguments
+          has:
+            kind: object
+            regex: "priority\\s*:"
