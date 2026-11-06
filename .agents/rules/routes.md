@@ -107,3 +107,15 @@ session boundary. `src/proxy.ts` only applies per-request CSP headers ([ADR 0001
 and does not rewrite or redirect; it imports canonical header names from `src/lib/headers.ts`
 and policy construction from `src/lib/csp.ts`. Preserve the project's cookie-only locale
 decision; the existence of upstream Proxy examples does not require adding one here.
+
+## Route Handlers
+
+A `route.ts` under `src/app` exports only the HTTP method handlers Next.js
+supports (`GET`, `HEAD`, `POST`, `PUT`, `DELETE`, `PATCH`, `OPTIONS`) and the
+route segment config options (`dynamic`, `dynamicParams`, `revalidate`,
+`fetchCache`, `runtime`, `preferredRegion`, `maxDuration`,
+`generateStaticParams`). Helpers, constants and types move to `src/lib`, and
+the handler imports them through `@/lib/server` and `@/lib/headers`.
+`check-route-handlers` and the `no-route-handler-helpers` ast-grep rule reject
+any other export or declaration, with no per-file exceptions. See the
+[Route Handler reference](https://nextjs.org/docs/app/api-reference/file-conventions/route).
