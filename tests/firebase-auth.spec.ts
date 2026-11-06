@@ -1075,3 +1075,66 @@ for (const colorScheme of ["light", "dark"] as const) {
     });
   }
 }
+
+test("changing the e-mail sends the confirmation, even during a telemetry outage, and applies it once the link is opened", async ({
+  page,
+  request,
+}) => {
+  test.setTimeout(90_000);
+  const email = `before-${crypto.randomUUID()}@example.test`;
+  const newEmail = `after-${crypto.randomUUID()}@example.test`;
+  const created = await request.post(
+    `${emulator}/identitytoolkit.googleapis.com/v1/accounts:signUp?key=emulator-only`,
+    { data: { email, password, returnSecureToken: true } },
+  );
+  expect(created.ok()).toBe(true);
+
+  await page.goto("/sign-in");
+  await signInEmail(page).fill(email);
+  await signInPassword(page).fill(password);
+  await page.getByRole("button", { name: "Sign In", exact: true }).click();
+  await expect(page).toHaveURL("/");
+  await page.getByRole("link", { name: "My profile" }).click();
+  await expect(page.getByLabel("Email", { exact: true })).toHaveValue(email);
+
+  // Usage telemetry is best effort: its outage must not stop the confirmation.
+  await page.route("**/recordUsage*", (route) => route.abort("failed"));
+  await page.getByRole("button", { name: "Change", exact: true }).click();
+  await page.getByLabel("New email").fill(newEmail);
+  await page
+    .getByRole("dialog")
+    .getByRole("button", { name: "Change email" })
+    .click();
+  await expect(
+    page.getByText("Check your new email to confirm the change."),
+  ).toBeVisible();
+
+  // The emulator is the independent oracle for what the SDK really sent.
+  const codes = await request.get(
+    `${emulator}/emulator/v1/projects/${project}/oobCodes`,
+  );
+  const { oobCodes } = (await codes.json()) as {
+    oobCodes: {
+      email: string;
+      newEmail?: string;
+      requestType: string;
+      oobLink: string;
+    }[];
+  };
+  const change = oobCodes.find(
+    (code) =>
+      code.requestType === "VERIFY_AND_CHANGE_EMAIL" &&
+      code.newEmail === newEmail,
+  );
+  expect(
+    change,
+    "a VERIFY_AND_CHANGE_EMAIL code for the new address",
+  ).toBeTruthy();
+
+  // Opening the mailed link is what changes the address.
+  const applied = await request.get(change?.oobLink ?? "");
+  expect(applied.ok()).toBe(true);
+
+  await page.reload();
+  await expect(page.getByLabel("Email", { exact: true })).toHaveValue(newEmail);
+});

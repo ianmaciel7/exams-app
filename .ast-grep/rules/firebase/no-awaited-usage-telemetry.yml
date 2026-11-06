@@ -1,0 +1,17 @@
+id: no-awaited-usage-telemetry
+language: tsx
+files:
+  - src/**/*.ts
+  - src/**/*.tsx
+ignores:
+  - src/**/*.test.ts
+  - src/**/*.test.tsx
+severity: error
+message: Do not await trackEvent(); report usage without letting it decide the user's action.
+note: |
+  Usage telemetry is a best-effort side effect (ADR 0029, ADR 0031). Awaiting it
+  before or around a user action lets a logging outage block that action, as when
+  a failing recordUsage callable stopped the e-mail confirmation from being sent.
+  Call it after the action and swallow its failure: trackEvent(event).catch(log).
+rule:
+  pattern: await trackEvent($$$ARGS)

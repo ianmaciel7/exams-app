@@ -126,14 +126,20 @@ export function signOutUser() {
   return pending;
 }
 
-/** Send confirmation before changing the signed-in user's email address. */
+/**
+ * Send confirmation before changing the signed-in user's email address. Usage
+ * telemetry is reported afterwards and never decides the outcome: a logging
+ * outage must not stop the confirmation mail.
+ */
 export async function sendEmailChangeVerification(
   email: string,
 ): Promise<void> {
   const user = getFirebaseAuthUser();
   if (!user) throw new Error("Authentication session unavailable");
-  await trackEvent({ type: "function_use", name: "profile.update" });
-  return verifyBeforeUpdateEmail(getActiveFirebaseAuthUser(user), email);
+  await verifyBeforeUpdateEmail(getActiveFirebaseAuthUser(user), email);
+  trackEvent({ type: "function_use", name: "profile.update" }).catch(
+    console.error,
+  );
 }
 
 /** Reload the signed-in user after a server-side profile update. */

@@ -648,8 +648,9 @@ mirroring third-party implementation details.
 
 ## Compound component guard regression tests
 
-Profile service regressions reject an account switch while email-change telemetry
-is pending and keep successful profile-save feedback when browser-user reload
+Profile service regressions send the e-mail confirmation even when usage telemetry
+fails (ADR 0031; an emulator journey applies the mailed link and checks the new
+address) and keep successful profile-save feedback when browser-user reload
 fails. Auth tests exercise the actual session identity helper and the shared
 sign-out promise, including concurrent sign-out calls.
 
