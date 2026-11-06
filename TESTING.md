@@ -1,5 +1,13 @@
 # Testing
 
+## Firebase presentation coverage
+
+Owned components in `src/components/firebase` remain in the application coverage
+threshold, including forms moved out of `(public)`. Their tests can render the
+presentation with injected slots without Firebase UI context. Directory guard
+regressions allow Firebase presentation but reject integration suffixes and
+server/client-only boundaries; dependency-cruiser forbids imports back into routes.
+
 ## Validation commands
 
 Run the checks relevant to a change before opening a pull request. See

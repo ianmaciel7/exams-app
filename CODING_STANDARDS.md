@@ -391,25 +391,18 @@ authorization tests with it.
 
 Compose forms with `Form`, `FormField`, `FormFieldLabel`,
 `FormFieldDescription` and `FormFieldError` from
-`@/components/ui/extensions/form` and `form-field`. They wrap the Base UI `Form` and
-`Field`, which link label, description and error to the control with
-`aria-labelledby`, `aria-describedby` and `aria-invalid`, render `noValidate`,
-and focus the first invalid control on submit. The shadcn `Field` in
-`ui/field.tsx` is a plain `div` and gives none of that, so do not use its
-`FieldLabel htmlFor` or `FieldError` for text controls; only the
-Firebase UI forms still do, until the auth refactor migrates them. Declare
-`required`, `type`, `maxLength` and `autoComplete` on the control and show
-localized text with `<FormFieldError match="valueMissing">`. Do not add a
-second RHF resolver for the same constraint: Base UI validates first and stops
-the submit. Review items that no tool checks: `inputMode`, `autoCapitalize`,
-`spellCheck`, and `focusableWhenDisabled` on pending submit buttons.
+`@/components/ui/extensions/form` and `form-field`. These wrap Base UI Form/Field
+and connect labels, descriptions, errors and invalid state automatically. The
+shadcn `FieldGroup` supplies layout; plain `ui/field` elements do not replace
+that control wiring. Keep the existing schema resolver for public Firebase
+authentication and avoid adding duplicate validation for the same constraint.
 
-Use `FieldGroup`, `Field`, `FieldLabel`, `FieldDescription`, and `FieldError`
-from the installed `@/components/ui/field` alongside React Hook Form
-`Controller`. The upstream guide demonstrates a choice of schema validation;
-it does not require a specific schema library or `FormProvider` in every form.
-The profile currently uses RHF defaults, controlled values, and field-level
-rules, without a schema resolver. Add one only when the feature needs it.
+Public authentication integration components own the Firebase hooks, RHF
+instance, `FormProvider` and submit binding. Their presentation components without suffixes
+companions own markup and root-prefixed content parts. Keep a stable root
+across normal and MFA content so standard props, refs and `render` survive
+transitions. Single-field SMS/TOTP companions accept `control` explicitly;
+no `FormProvider` is needed when no child reads form context.
 
 - Initialize complete defaults for controlled values. When external values
   change, choose RHF `values` or `reset` deliberately and preserve unsaved edits.
@@ -920,17 +913,20 @@ optimistic-state, or experimental Suspense feature.
 
 ## Owned component placement
 
-Place shared application components in `src/components/ui/extensions/` and
-route-private components in `src/app/**/_components/`. For example,
-`LoadingStatus` belongs in `ui/extensions` because both
-route components and Firebase UI consume it. Do not create parallel application
-component folders such as `src/components/loading/`.
+Place Firebase authentication presentation in `src/components/firebase/`,
+including forms, fields, policy content and provider feedback. These are owned
+components, subject to the naming, structure, lint and coverage checks; they
+have no registry exclusion. Other shared presentation belongs in
+`src/components/ui/extensions/`. Keep Firebase integrations (`*-client.tsx`),
+hooks and route wiring in `src/app/**/_components/` and `_hooks/`.
 
-`pnpm check:components` rejects JavaScript and TypeScript source files (including
-colocated tests and barrel files) outside the `ui`, `firebase`, and `ai-elements`
-registry trees under `src/components`. Existing registry trees remain allowed;
-their generated source retains its existing exclusions. This is repository
-policy, not a Next.js requirement.
+Shared components never import `src/app`, even for types. Define presentation
+props independently, and pass integrations through React node slots or
+callbacks. Authentication integrations supply policy and social sign-in slots.
+`check-components-directory` permits only `ui`, `ai-elements` and `firebase`
+under `src/components`, and rejects integration suffixes and explicit
+server/client-only markers there. This is repository policy, not a Next.js
+requirement.
 
 Placement does not classify runtime. `IntlProvider` in `intl-provider-server.tsx` is an async Server
 Component using server-only translation APIs; `ThemeProviderServer` in `theme-provider-server.tsx` renders the client-boundary

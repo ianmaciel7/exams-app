@@ -26,11 +26,12 @@ export function useSmsMultiFactorPhoneSectionClient({
   const [error, setError] = useState<string | null>(null);
 
   const sendCode = async () => {
+    if (!recaptchaVerifier) return;
     try {
       setError(null);
       const verificationId = await action({
         hint,
-        recaptchaVerifier: recaptchaVerifier!,
+        recaptchaVerifier,
       });
       onCodeSent(verificationId);
     } catch (error) {
@@ -43,9 +44,9 @@ export function useSmsMultiFactorPhoneSectionClient({
       phoneNumber: (hint as PhoneMultiFactorInfo).phoneNumber || "",
     }),
     error,
-    isPending: ui.state !== "idle",
+    isPending: ui.state !== "idle" || !recaptchaVerifier,
     recaptchaContainerRef,
-    sendCode,
+    onSendCode: sendCode,
     sendLabel: getTranslation(ui, "labels", "sendCode"),
     title: getTranslation(ui, "labels", "phoneNumber"),
   };

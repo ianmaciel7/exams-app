@@ -4,7 +4,8 @@ import { fileURLToPath } from "node:url";
 
 // `src/components` holds only presentational building blocks written in the
 // shadcn/Base UI style: the `ui` registry (including `ui/extensions`) and the
-// `ai-elements` registry. Integration components, the ones that read the
+// `ai-elements` registry, plus owned Firebase presentation under `firebase`.
+// Integration components, the ones that read the
 // session, headers, Firebase or the request, belong next to the route that
 // owns them in a private `_components` folder (Next.js project organization),
 // shared ones in the nearest common `_components` folder. This is a rule on
@@ -12,7 +13,7 @@ import { fileURLToPath } from "node:url";
 // name and boundary directives.
 
 const root = "src/components";
-const registries = new Set(["ui", "ai-elements"]);
+const componentTrees = new Set(["ui", "ai-elements", "firebase"]);
 const integrationStem = /-(?:client|server)$/;
 const serverBoundary =
   /^\s*(?:["']use server["']|import\s+["']server-only["']|import\s+["']client-only["'])/m;
@@ -23,9 +24,9 @@ export function inspectComponentsDirectory(sources) {
   for (const [file, text] of Object.entries(sources)) {
     if (!file.startsWith(`${root}/`)) continue;
     const [, , registry, ...rest] = file.split("/");
-    if (!registries.has(registry) || rest.length === 0) {
+    if (!componentTrees.has(registry) || rest.length === 0) {
       errors.push(
-        `${file}: ${root} only holds the ${[...registries].join(" and ")} registries; move integration components to the _components folder of the route that owns them (src/app/**/_components).`,
+        `${file}: ${root} only holds the ${[...componentTrees].join(" and ")} component trees; move integration components to the _components folder of the route that owns them (src/app/**/_components).`,
       );
       continue;
     }
@@ -68,5 +69,7 @@ if (
     console.error(errors.join("\n"));
     process.exit(1);
   }
-  console.log("src/components holds only ui and ai-elements style components.");
+  console.log(
+    "src/components holds only ui, ai-elements and firebase presentation components.",
+  );
 }

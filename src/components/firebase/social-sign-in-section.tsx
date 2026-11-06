@@ -1,12 +1,20 @@
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
 import { useTranslations } from "next-intl";
-import { GoogleSignInButtonClient } from "@/app/(public)/_components/firebase/google-sign-in-button-client";
+import type { ReactNode } from "react";
 import { Separator } from "@/components/ui/separator";
 
-type SocialSignInSectionProps = useRender.ComponentProps<"div">;
+type SocialSignInSectionProps = useRender.ComponentProps<"div"> & {
+  enabled: boolean;
+  providerButton: ReactNode;
+};
 
-function SocialSignInSection({ render, ...props }: SocialSignInSectionProps) {
+function SocialSignInSection({
+  enabled,
+  providerButton,
+  render,
+  ...props
+}: SocialSignInSectionProps) {
   const t = useTranslations("Auth");
   const rendered = useRender({
     defaultTagName: "div",
@@ -23,9 +31,7 @@ function SocialSignInSection({ render, ...props }: SocialSignInSectionProps) {
                 </span>
               </div>
             </div>
-            <div className="flex flex-col gap-2">
-              <GoogleSignInButtonClient />
-            </div>
+            <div className="flex flex-col gap-2">{providerButton}</div>
           </>
         ),
       },
@@ -33,9 +39,7 @@ function SocialSignInSection({ render, ...props }: SocialSignInSectionProps) {
     ),
     state: { slot: "social-sign-in-section" },
   });
-  return process.env.NEXT_PUBLIC_FIREBASE_GOOGLE_ENABLED === "true"
-    ? rendered
-    : null;
+  return enabled ? rendered : null;
 }
 
 export { SocialSignInSection };

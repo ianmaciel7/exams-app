@@ -1,76 +1,48 @@
 "use client";
-
-import { mergeProps } from "@base-ui/react/merge-props";
-import { useRender } from "@base-ui/react/use-render";
-import { useTranslations } from "next-intl";
+import type { ComponentProps } from "react";
 import { FormProvider } from "react-hook-form";
+import { GoogleSignInButtonClient } from "@/app/(public)/_components/firebase/google-sign-in-button-client";
 import { MultiFactorAssertionFlowClient } from "@/app/(public)/_components/firebase/multi-factor-assertion-flow-client";
-import { Form } from "@/components/ui/extensions/form";
-import { FieldGroup } from "@/components/ui/field";
-import { routes } from "@/lib/navigation";
-import { cn } from "@/lib/utils";
-import { AuthLink } from "../../_components/auth-link";
-import { AuthSubmitSection } from "../../_components/auth-submit-section";
-import { EmailField } from "../../_components/email-field";
-import { PasswordField } from "../../_components/password-field";
-import { SocialSignInSection } from "../../_components/social-sign-in-section";
+import { PoliciesSectionClient } from "@/app/(public)/_components/firebase/policies-section-client";
+import {
+  RegisterForm,
+  RegisterFormContent,
+} from "@/components/firebase/register-form";
+import { SocialSignInSection } from "@/components/firebase/social-sign-in-section";
 import { useRegisterFormClient } from "../_hooks/use-register-form-client";
-import { DisplayNameField } from "./display-name-field";
 
-type RegisterFormClientProps = useRender.ComponentProps<"div"> & {
+type RegisterFormClientProps = ComponentProps<typeof RegisterForm> & {
   next?: string | string[];
 };
-
-function RegisterFormClient({
-  next,
-  className,
-  render,
-  ...props
-}: RegisterFormClientProps) {
-  const t = useTranslations("Auth");
+function RegisterFormClient({ next, ...props }: RegisterFormClientProps) {
   const { rootError, form, isMfa, isPending, onSubmit, requireDisplayName } =
     useRegisterFormClient();
-
-  const rendered = useRender({
-    defaultTagName: "div",
-    render,
-    props: mergeProps<"div">(
-      {
-        className: cn("flex flex-col gap-4", className),
-        children: (
-          <>
-            <FormProvider {...form}>
-              <Form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="flex flex-col gap-4"
-              >
-                <FieldGroup>
-                  {requireDisplayName ? <DisplayNameField /> : null}
-                  <EmailField autoComplete="email" />
-                  <PasswordField autoComplete="new-password" />
-                </FieldGroup>
-                <AuthSubmitSection
-                  error={rootError}
-                  isPending={isPending}
-                  submitLabel={t("registerTitle")}
-                />
-                <div className="text-center text-xs text-muted-foreground">
-                  {t("alreadyHaveAccount")}{" "}
-                  <AuthLink route={routes.signIn} next={next}>
-                    {t("signInTitle")}
-                  </AuthLink>
-                </div>
-              </Form>
-            </FormProvider>
-            <SocialSignInSection />
-          </>
-        ),
-      },
-      props,
-    ),
-    state: { slot: "register-form" },
-  });
-  return isMfa ? <MultiFactorAssertionFlowClient /> : rendered;
+  return (
+    <RegisterForm {...props}>
+      {isMfa ? (
+        <MultiFactorAssertionFlowClient />
+      ) : (
+        <FormProvider {...form}>
+          <RegisterFormContent
+            next={next}
+            policies={<PoliciesSectionClient />}
+            socialSignIn={
+              <SocialSignInSection
+                enabled={
+                  process.env.NEXT_PUBLIC_FIREBASE_GOOGLE_ENABLED === "true"
+                }
+                providerButton={<GoogleSignInButtonClient />}
+              />
+            }
+            rootError={rootError}
+            isPending={isPending}
+            onSubmit={form.handleSubmit(onSubmit)}
+            requireDisplayName={requireDisplayName}
+          />
+        </FormProvider>
+      )}
+    </RegisterForm>
+  );
 }
 
 export { RegisterFormClient };

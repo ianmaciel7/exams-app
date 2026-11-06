@@ -1,5 +1,5 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({ onNavigate: vi.fn() }));
 vi.mock("@firebase-oss/ui-core", () => ({
@@ -25,18 +25,16 @@ afterEach(() => {
   vi.clearAllMocks();
 });
 
-describe("PoliciesSectionClient", () => {
-  it("navigates without submitting the enclosing authentication form", () => {
-    const onSubmit = vi.fn((event: React.FormEvent) => event.preventDefault());
-    render(
-      <form onSubmit={onSubmit}>
-        <PoliciesSectionClient />
-      </form>,
-    );
-    const terms = screen.getByRole("button", { name: "termsOfService" });
-    expect(terms.getAttribute("type")).toBe("button");
-    fireEvent.click(terms);
-    expect(onSubmit).not.toHaveBeenCalled();
-    expect(mocks.onNavigate).toHaveBeenCalledWith("https://example.test/terms");
-  });
+it("navigates without submitting the enclosing authentication form", () => {
+  const onSubmit = vi.fn((event: React.FormEvent) => event.preventDefault());
+  render(
+    <form onSubmit={onSubmit}>
+      <PoliciesSectionClient />
+    </form>,
+  );
+  const terms = screen.getByRole("button", { name: "termsOfService" });
+  expect(terms.getAttribute("type")).toBe("button");
+  fireEvent.click(terms);
+  expect(onSubmit).not.toHaveBeenCalled();
+  expect(mocks.onNavigate).toHaveBeenCalledWith("https://example.test/terms");
 });

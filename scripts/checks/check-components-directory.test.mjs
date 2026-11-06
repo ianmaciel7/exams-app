@@ -6,9 +6,10 @@ import {
 } from "./check-components-directory.mjs";
 
 describe("src/components directory guard", () => {
-  it("accepts ui, ui/extensions and ai-elements components", () => {
+  it("accepts ui, ui/extensions, ai-elements and Firebase presentation", () => {
     assert.deepEqual(
       inspectComponentsDirectory({
+        "src/components/firebase/forgot-password-form.tsx": "export {};",
         "src/components/ui/button.tsx": '"use client";\nexport {};',
         "src/components/ui/extensions/form.tsx": "export {};",
         "src/components/ai-elements/message.tsx": "export {};",
@@ -18,9 +19,9 @@ describe("src/components directory guard", () => {
     );
   });
 
-  it("rejects any folder that is not a registry, whatever its name", () => {
+  it("rejects directories outside the allowed component trees", () => {
     const errors = inspectComponentsDirectory({
-      "src/components/firebase/policies.tsx": "export {};",
+      "src/components/unknown/policies.tsx": "export {};",
       "src/components/auth/sign-in.tsx": "export {};",
       "src/components/loose.tsx": "export {};",
     });
@@ -33,16 +34,19 @@ describe("src/components directory guard", () => {
       "src/components/ui/extensions/theme-provider-server.tsx": "export {};",
       "src/components/ui/extensions/theme-provider-server.test.tsx": "",
       "src/components/ai-elements/feed-server.ts": "",
+      "src/components/firebase/policies-client.tsx": "export {};",
+      "src/components/firebase/form-server.tsx": "export {};",
     });
-    assert.equal(errors.length, 3);
+    assert.equal(errors.length, 5);
   });
 
   it("rejects server boundaries inside a registry", () => {
     const errors = inspectComponentsDirectory({
       "src/components/ui/x.tsx": 'import "server-only";\nexport {};',
       "src/components/ui/y.ts": '"use server";',
+      "src/components/firebase/x.tsx": 'import "client-only";',
     });
-    assert.equal(errors.length, 2);
+    assert.equal(errors.length, 3);
   });
 
   it("passes on the repository", () => {

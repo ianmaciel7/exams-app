@@ -5,11 +5,13 @@ import { createGoogleAuthProvider } from "@/lib/firebase/multi-factor";
 
 export function useGoogleSignInButtonClient() {
   const ui = useUI();
+  // The provider is a subscription dependency in the Firebase UI hook.
+  // Preserve its identity across renders, including non-Compiler test builds.
   const provider = useMemo(() => createGoogleAuthProvider(), []);
   const { error, callback } = useSignInWithProvider(provider);
 
   return {
-    callback,
+    onSignIn: callback,
     error,
     isPending: ui.state !== "idle",
     label: getTranslation(ui, "labels", "signInWithGoogle"),

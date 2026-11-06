@@ -30,12 +30,13 @@ export default defineConfig({
       // Report every source file. Keep the established 70% gate on application
       // runtime code; copied libraries have separate, visible coverage totals.
       thresholds: {
-        "src/{app,hooks,lib,i18n,components/ui/extensions}/**/*.{ts,tsx}": {
-          statements: 70,
-          branches: 70,
-          functions: 70,
-          lines: 70,
-        },
+        "src/{app,hooks,lib,i18n,components/ui/extensions,components/firebase}/**/*.{ts,tsx}":
+          {
+            statements: 70,
+            branches: 70,
+            functions: 70,
+            lines: 70,
+          },
       },
       include: ["src/**/*.{ts,tsx}"],
     },
