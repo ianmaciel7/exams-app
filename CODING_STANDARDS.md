@@ -266,7 +266,7 @@ At the call site, the caller supplies the content for each part:
 <AccountCard>
   <AccountCardHeader>{heading}</AccountCardHeader>
   <AccountCardContent>{children}</AccountCardContent>
-</AccountCard>
+</AccountCard>;
 ```
 
 Compose only the parts with content. An adapter that extracts `className` merges

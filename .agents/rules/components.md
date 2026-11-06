@@ -1,4 +1,5 @@
 ---
+
 trigger: model_decision
 description: "Read when naming, placing, exporting, or defining props for owned components."
 ---
