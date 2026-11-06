@@ -2,13 +2,13 @@ id: no-awaited-usage-telemetry
 snapshots:
   "await trackEvent({ type: 'function_use', name: 'profile.update' });":
     labels:
-    - source: "await trackEvent({ type: 'function_use', name: 'profile.update' })"
-      style: primary
-      start: 0
-      end: 66
+      - source: "await trackEvent({ type: 'function_use', name: 'profile.update' })"
+        style: primary
+        start: 0
+        end: 66
   const sent = await trackEvent(event);:
     labels:
-    - source: await trackEvent(event)
-      style: primary
-      start: 13
-      end: 36
+      - source: await trackEvent(event)
+        style: primary
+        start: 13
+        end: 36
