@@ -1,0 +1,45 @@
+id: require-render-function-spread-props
+language: tsx
+files:
+  - src/components/**/*.tsx
+  - src/app/**/_components/**/*.tsx
+ignores:
+  - "**/*.test.tsx"
+  - "**/*.stories.tsx"
+severity: error
+message: A render function must spread the received props onto the element it returns.
+note: |
+  render={(props, state) => <el />} replaces Base UI's props, so ref, handlers
+  and ARIA attributes are lost unless the function spreads them. Spread props
+  on the returned element, or use mergeProps when adding your own
+  (https://base-ui.com/react/handbook/composition).
+  Example:
+    render={(props, state) => <span {...props}>{state.open ? "On" : "Off"}</span>}
+rule:
+  kind: jsx_attribute
+  all:
+    - has:
+        kind: property_identifier
+        regex: ^render$
+    - has:
+        kind: jsx_expression
+        has:
+          kind: arrow_function
+          has:
+            field: parameters
+            kind: formal_parameters
+            has:
+              kind: required_parameter
+              nthChild: 1
+              has:
+                kind: identifier
+                regex: ^props$
+          not:
+            has:
+              field: body
+              has:
+                stopBy: end
+                any:
+                  - kind: jsx_expression
+                    regex: ^\{\s*\.\.\.
+                  - pattern: mergeProps($$$ARGS)

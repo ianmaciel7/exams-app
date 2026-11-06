@@ -1,0 +1,14 @@
+id: prefer-size-utility
+snapshots:
+  "const a = <div className=\"w-10 h-10 rounded\" />;\n":
+    labels:
+      - source: w-10 h-10 rounded
+        style: primary
+        start: 26
+        end: 43
+  "const a = <div className={cn(\"h-2.5 w-2.5\", x)} />;\n":
+    labels:
+      - source: h-2.5 w-2.5
+        style: primary
+        start: 30
+        end: 41

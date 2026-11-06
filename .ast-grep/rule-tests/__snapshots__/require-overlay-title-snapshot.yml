@@ -1,0 +1,16 @@
+id: require-overlay-title
+snapshots:
+  "const a = <DialogContent><p>Body</p></DialogContent>;\n":
+    labels:
+      - source: <DialogContent><p>Body</p></DialogContent>
+        style: primary
+        start: 10
+        end: 52
+      - source: DialogContent
+        style: secondary
+        start: 11
+        end: 24
+      - source: DialogContent
+        style: secondary
+        start: 11
+        end: 24

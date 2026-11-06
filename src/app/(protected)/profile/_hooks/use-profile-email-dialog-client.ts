@@ -24,7 +24,11 @@ export function useProfileEmailDialogClient() {
       return true;
     } catch (cause) {
       console.error(cause);
-      toast.add({ title: t("profileSaveError"), type: "error" });
+      toast.add({
+        title: t("profileSaveError"),
+        type: "error",
+        priority: "high",
+      });
       return false;
     }
   };

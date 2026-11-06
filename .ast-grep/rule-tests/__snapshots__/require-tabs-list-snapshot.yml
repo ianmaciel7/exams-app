@@ -1,0 +1,16 @@
+id: require-tabs-list
+snapshots:
+  "const a = <Tabs><TabsTrigger value=\"a\">A</TabsTrigger></Tabs>;\n":
+    labels:
+      - source: <TabsTrigger value="a">
+        style: primary
+        start: 16
+        end: 39
+      - source: <TabsTrigger value="a">A</TabsTrigger>
+        style: secondary
+        start: 16
+        end: 54
+      - source: TabsTrigger
+        style: secondary
+        start: 17
+        end: 28

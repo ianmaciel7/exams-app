@@ -1,0 +1,31 @@
+id: require-use-render-props
+language: tsx
+files:
+  - src/components/**/*.tsx
+  - src/app/**/_components/**/*.tsx
+ignores:
+  - "**/*.test.tsx"
+  - "**/*.stories.tsx"
+  # Backlog: shadcn registry copies and AI Elements still type props with the plain React types.
+  - "src/components/ui/[!e]*.tsx"
+  - "src/components/ui/e[!x]*.tsx"
+  - src/components/ai-elements/**
+severity: error
+message: 'Type owned component props with useRender.ComponentProps<"tag"> so callers can pass render.'
+note: |
+  ComponentProps<"div"> is the plain React type and has no render prop. Base UI
+  components, and the components built on them, accept render so callers can
+  replace the element or compose another component. Accept
+  useRender.ComponentProps<"tag">, merge defaults with mergeProps and return
+  useRender({ defaultTagName, render, props })
+  (https://base-ui.com/react/utils/use-render).
+  Example:
+    function Panel({ render, ...props }: useRender.ComponentProps<"section">) {
+      return useRender({ defaultTagName: "section", render, props: mergeProps<"section">({ className: "panel" }, props) });
+    }
+rule:
+  kind: generic_type
+  regex: ^(React\.)?ComponentProps<\s*"[a-z0-9]+"\s*>$
+  not:
+    # html and body are the document, which render cannot replace.
+    regex: ^(React\.)?ComponentProps<\s*"(html|body)"\s*>$

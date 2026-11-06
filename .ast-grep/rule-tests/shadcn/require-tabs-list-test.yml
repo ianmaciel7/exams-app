@@ -1,0 +1,9 @@
+id: require-tabs-list
+valid:
+  - |
+    const a = <Tabs><TabsList><TabsTrigger value="a">A</TabsTrigger></TabsList></Tabs>;
+  - |
+    const Wrapped = (props) => (<TabsTrigger {...props} />);
+invalid:
+  - |
+    const a = <Tabs><TabsTrigger value="a">A</TabsTrigger></Tabs>;

@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/extensions/form-field";
 import { Input } from "@/components/ui/input";
 
-type DisplayNameFieldProps = ComponentProps<"input">;
+type DisplayNameFieldProps = ComponentProps<typeof Input>;
 
 function DisplayNameField(props: DisplayNameFieldProps) {
   const t = useTranslations("Auth");

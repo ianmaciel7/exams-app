@@ -1,0 +1,7 @@
+id: no-custom-shimmer
+valid:
+  - |
+    const a = <span className="shimmer">Thinking</span>;
+invalid:
+  - |
+    const a = <span className="animate-pulse bg-linear-to-r bg-clip-text text-transparent">Thinking</span>;

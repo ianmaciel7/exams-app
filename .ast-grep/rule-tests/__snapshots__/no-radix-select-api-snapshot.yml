@@ -1,0 +1,38 @@
+id: no-radix-select-api
+snapshots:
+  "const a = <SelectContent position=\"popper\" />;\n":
+    labels:
+      - source: position="popper"
+        style: primary
+        start: 25
+        end: 42
+      - source: position
+        style: secondary
+        start: 25
+        end: 33
+      - source: SelectContent
+        style: secondary
+        start: 11
+        end: 24
+      - source: <SelectContent position="popper" />
+        style: secondary
+        start: 10
+        end: 45
+  "const a = <SelectValue placeholder=\"Pick one\" />;\n":
+    labels:
+      - source: placeholder="Pick one"
+        style: primary
+        start: 23
+        end: 45
+      - source: placeholder
+        style: secondary
+        start: 23
+        end: 34
+      - source: SelectValue
+        style: secondary
+        start: 11
+        end: 22
+      - source: <SelectValue placeholder="Pick one" />
+        style: secondary
+        start: 10
+        end: 48

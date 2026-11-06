@@ -1,0 +1,33 @@
+id: require-avatar-fallback
+language: tsx
+files:
+  - src/app/**/*.tsx
+  - src/components/**/*.tsx
+  - src/hooks/**/*.tsx
+ignores:
+  - "**/*.test.tsx"
+  - "**/*.stories.tsx"
+severity: error
+message: "Avatar needs an AvatarFallback for when the image fails to load."
+note: |
+  shadcn/ui rule. Example:
+    <Avatar><AvatarImage src={url} alt="" /><AvatarFallback>IM</AvatarFallback></Avatar>
+rule:
+  kind: jsx_element
+  has:
+    field: open_tag
+    has:
+      field: name
+      regex: "^Avatar$"
+  not:
+    has:
+      stopBy: end
+      any:
+        - kind: jsx_self_closing_element
+          has:
+            field: name
+            regex: "^AvatarFallback$"
+        - kind: jsx_opening_element
+          has:
+            field: name
+            regex: "^AvatarFallback$"

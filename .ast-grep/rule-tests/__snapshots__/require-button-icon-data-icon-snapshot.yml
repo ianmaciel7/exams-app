@@ -1,0 +1,28 @@
+id: require-button-icon-data-icon
+snapshots:
+  "const a = <Button><SearchIcon />Search</Button>;\n":
+    labels:
+      - source: <SearchIcon />
+        style: primary
+        start: 18
+        end: 32
+      - source: Button
+        style: secondary
+        start: 11
+        end: 17
+      - source: Button
+        style: secondary
+        start: 11
+        end: 17
+      - source: Search
+        style: secondary
+        start: 32
+        end: 38
+      - source: <Button><SearchIcon />Search</Button>
+        style: secondary
+        start: 10
+        end: 47
+      - source: SearchIcon
+        style: secondary
+        start: 19
+        end: 29

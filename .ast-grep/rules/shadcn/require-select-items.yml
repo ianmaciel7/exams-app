@@ -1,0 +1,47 @@
+id: require-select-items
+language: tsx
+files:
+  - src/app/**/*.tsx
+  - src/components/**/*.tsx
+  - src/hooks/**/*.tsx
+ignores:
+  - "**/*.test.tsx"
+  - "**/*.stories.tsx"
+severity: error
+message: "Base UI Select needs an items prop on the root, or a SelectValue render function, to label the value."
+note: |
+  shadcn/ui base-vs-radix rule: with the base library, <Select items={items}>
+  lets SelectValue show the selected label and a { value: null } item acts as
+  the placeholder. Radix uses inline children only.
+rule:
+  kind: jsx_element
+  has:
+    field: open_tag
+    all:
+      - has:
+          field: name
+          regex: "^Select$"
+      - not:
+          has:
+            kind: jsx_attribute
+            has:
+              kind: property_identifier
+              regex: "^items$"
+      # A wrapper that spreads its props lets the caller pass items.
+      - not:
+          has:
+            kind: jsx_expression
+            regex: '^\{\s*\.\.\.'
+  not:
+    # SelectValue with a render function child labels the value without items.
+    has:
+      stopBy: end
+      kind: jsx_element
+      all:
+        - has:
+            field: open_tag
+            has:
+              field: name
+              regex: "^SelectValue$"
+        - has:
+            kind: jsx_expression

@@ -1,0 +1,8 @@
+id: prefer-truncate-shorthand
+snapshots:
+  "const a = <p className=\"overflow-hidden text-ellipsis whitespace-nowrap\" />;\n":
+    labels:
+      - source: overflow-hidden text-ellipsis whitespace-nowrap
+        style: primary
+        start: 24
+        end: 71

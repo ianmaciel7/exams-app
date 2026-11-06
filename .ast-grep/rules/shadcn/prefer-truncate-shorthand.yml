@@ -1,0 +1,16 @@
+id: prefer-truncate-shorthand
+language: tsx
+files:
+  - src/app/**/*.tsx
+  - src/components/**/*.tsx
+  - src/hooks/**/*.tsx
+ignores:
+  - "**/*.test.tsx"
+  - "**/*.stories.tsx"
+severity: error
+message: "Use the truncate utility instead of overflow-hidden text-ellipsis whitespace-nowrap."
+note: |
+  shadcn/ui styling rule: truncate is the shorthand for the three utilities.
+rule:
+  kind: string_fragment
+  regex: "overflow-hidden.*text-ellipsis.*whitespace-nowrap|text-ellipsis.*whitespace-nowrap.*overflow-hidden|whitespace-nowrap.*overflow-hidden.*text-ellipsis|overflow-hidden.*whitespace-nowrap.*text-ellipsis"

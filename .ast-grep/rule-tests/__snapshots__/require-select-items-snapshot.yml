@@ -1,0 +1,16 @@
+id: require-select-items
+snapshots:
+  "const a = <Select defaultValue=\"a\"><SelectTrigger><SelectValue /></SelectTrigger></Select>;\n":
+    labels:
+      - source: <Select defaultValue="a"><SelectTrigger><SelectValue /></SelectTrigger></Select>
+        style: primary
+        start: 10
+        end: 90
+      - source: Select
+        style: secondary
+        start: 11
+        end: 17
+      - source: <Select defaultValue="a">
+        style: secondary
+        start: 10
+        end: 35

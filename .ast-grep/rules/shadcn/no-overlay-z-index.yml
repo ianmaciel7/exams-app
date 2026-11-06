@@ -1,0 +1,31 @@
+id: no-overlay-z-index
+language: tsx
+files:
+  - src/app/**/*.tsx
+  - src/components/**/*.tsx
+  - src/hooks/**/*.tsx
+ignores:
+  - "**/*.test.tsx"
+  - "**/*.stories.tsx"
+severity: error
+message: "Overlay components manage their own stacking; remove the z-index class."
+note: |
+  shadcn/ui rule: Dialog, Sheet, Drawer, Popover, Tooltip, DropdownMenu and
+  similar overlays set their own z-index.
+rule:
+  kind: string_fragment
+  regex: '(^|[\s:!])-?z-([0-9]+|\[[^\]]+\])(\s|$)'
+  inside:
+    stopBy: end
+    kind: jsx_attribute
+    has:
+      kind: property_identifier
+      regex: "^className$"
+    inside:
+      stopBy: end
+      any:
+        - kind: jsx_opening_element
+        - kind: jsx_self_closing_element
+      has:
+        field: name
+        regex: "^(Dialog|AlertDialog|Sheet|Drawer|Popover|Tooltip|HoverCard|DropdownMenu|ContextMenu|Menubar)(Content|Popup|Overlay|Positioner)$"

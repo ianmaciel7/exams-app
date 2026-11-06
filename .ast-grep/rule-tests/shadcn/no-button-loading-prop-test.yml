@@ -1,0 +1,9 @@
+id: no-button-loading-prop
+valid:
+  - |
+    const a = <Button disabled={pending}>Save</Button>;
+invalid:
+  - |
+    const a = <Button isPending={pending}>Save</Button>;
+  - |
+    const a = <Button loading>Save</Button>;

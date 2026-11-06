@@ -1,0 +1,9 @@
+id: no-animate-pulse
+valid:
+  - |
+    const a = <Skeleton className="h-4 w-20" />;
+  - |
+    const a = <ClockIcon className="animate-pulse" />;
+invalid:
+  - |
+    const a = <div className="h-4 w-20 animate-pulse rounded bg-muted" />;

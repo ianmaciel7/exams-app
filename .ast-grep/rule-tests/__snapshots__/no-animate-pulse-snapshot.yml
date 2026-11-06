@@ -1,0 +1,8 @@
+id: no-animate-pulse
+snapshots:
+  "const a = <div className=\"h-4 w-20 animate-pulse rounded bg-muted\" />;\n":
+    labels:
+      - source: h-4 w-20 animate-pulse rounded bg-muted
+        style: primary
+        start: 26
+        end: 65

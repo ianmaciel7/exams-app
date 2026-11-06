@@ -1,0 +1,46 @@
+id: no-slider-single-value-array
+snapshots:
+  "const a = <Slider defaultValue={[50]} max={100} />;\n":
+    labels:
+      - source: defaultValue={[50]}
+        style: primary
+        start: 18
+        end: 37
+      - source: defaultValue
+        style: secondary
+        start: 18
+        end: 30
+      - source: "{[50]}"
+        style: secondary
+        start: 31
+        end: 37
+      - source: Slider
+        style: secondary
+        start: 11
+        end: 17
+      - source: <Slider defaultValue={[50]} max={100} />
+        style: secondary
+        start: 10
+        end: 50
+  "const a = <Slider value={[value]} onValueChange={setValue} />;\n":
+    labels:
+      - source: value={[value]}
+        style: primary
+        start: 18
+        end: 33
+      - source: value
+        style: secondary
+        start: 18
+        end: 23
+      - source: "{[value]}"
+        style: secondary
+        start: 24
+        end: 33
+      - source: Slider
+        style: secondary
+        start: 11
+        end: 17
+      - source: <Slider value={[value]} onValueChange={setValue} />
+        style: secondary
+        start: 10
+        end: 61

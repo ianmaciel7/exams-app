@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/extensions/form-field";
 import { Input } from "@/components/ui/input";
 
-type PasswordFieldProps = ComponentProps<"input"> & {
+type PasswordFieldProps = ComponentProps<typeof Input> & {
   autoComplete: "current-password" | "new-password";
   /** Rendered beside the label, such as a password recovery link. */
   labelAction?: ReactNode;
