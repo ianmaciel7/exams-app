@@ -4,6 +4,8 @@ This guide maps the repository's Markdown documentation to its source of truth.
 Project documentation is written in English; locale catalogs use their own
 language, as defined in `.agents/rules/language.md#language-policy`.
 
+See [HTTP status helpers](http-status-helpers.md) for response and navigation contracts.
+
 ## Current guides
 
 | Document                                                           | Responsibility                                                           | Verify against                                                      |
