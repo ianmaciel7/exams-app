@@ -111,7 +111,6 @@ export function responseHeaders(input?: HeadersInit): Headers {
       );
   }
   validateCommonHeaders(headers);
-  if (!headers.has("Cache-Control")) headers.set("Cache-Control", "no-store");
   return headers;
 }
 

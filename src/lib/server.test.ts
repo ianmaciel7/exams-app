@@ -25,7 +25,7 @@ it("retains typed JSON, named status and cookies", async () => {
 });
 
 it("uses a safe explicit cache policy and validates dates", () => {
-  expect(server.ok({}).headers.get("Cache-Control")).toBe("no-store");
+  expect(server.ok({}).headers.get("Cache-Control")).toBeNull();
   expect(
     server
       .ok({}, { cache: { visibility: "private", maxAge: 60 } })
