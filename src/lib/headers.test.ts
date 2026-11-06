@@ -16,5 +16,8 @@ describe("headers module", () => {
     expect(headerMap["X-Frame-Options"]).toBe("SAMEORIGIN");
     expect(headerMap["Strict-Transport-Security"]).toContain("max-age=");
     expect(headerMap["Content-Security-Policy"]).toContain("frame-ancestors");
+    expect(headerMap["Permissions-Policy"]).toBe(
+      "camera=(), microphone=(), geolocation=()",
+    );
   });
 });

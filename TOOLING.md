@@ -691,10 +691,25 @@ implement them in `functions/`, never in `src/lib/firebase/client.ts`. See
 interactive local development, run `pnpm dev` with the emulator variables in `.env`.
 The operational commands for the Firebase Emulator Suite are:
 
-- `pnpm emulator`: starts the isolated `demo-test` Emulator Suite with `--import=./emulator-data --export-on-exit`. The Emulator Suite UI is
+- `pnpm emulator`: first installs the separate Functions dependencies with
+  `npm ci --prefix functions --ignore-scripts`, then starts the isolated
+  `demo-test` Emulator Suite with `--import=./emulator-data --export-on-exit`.
+  A failed install stops startup. The Emulator Suite UI is
   accessible at `http://127.0.0.1:4000`.
 - `pnpm emulator:export` (`firebase emulators:export --project demo-test ./emulator-data --force`): saves current emulator state into `./emulator-data`.
 - `pnpm emulator:clear` (`node scripts/emulator/clear.mjs`): clears all accounts in the emulator.
+
+If a browser reports a CORS preflight failure for the local `recordUsage`
+callable, check the Functions emulator terminal first. Firebase callables
+already handle `OPTIONS` and allow cross-origin calls by default; adding CORS
+headers to Next.js does not repair a missing or unloaded function. Stop the
+suite and restart it with `pnpm emulator` so the locked Functions dependencies
+are installed. Confirm that the terminal lists `recordUsage` as initialized,
+that the browser project ID is `demo-test`, and that the configured Functions
+endpoint matches `firebase.json`. Restart Next.js after changing its environment.
+Dependency installation addresses missing or stale packages; other load or
+network errors still require the emulator's own diagnostics. Keep callable
+authentication and the configured production App Check enforcement enabled.
 
 See [Firebase setup](https://firebase.google.com/docs/auth/web/start) and
 [OAuth domain guidance](https://firebase.google.com/docs/auth/web/redirect-best-practices).
