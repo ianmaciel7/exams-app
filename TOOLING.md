@@ -906,6 +906,11 @@ The guard compares listed skills to versioned `SKILL.md` entrypoints. Positive
 and negative regression cases cover links, anchors, historical mappings, and
 missing/extra inventory entries.
 
+`scripts/checks/check-tooling-docs.mjs` (discovered by `pnpm check:repo`) keeps
+this file current: it fails when a `package.json` script (except the `prepare`
+lifecycle hook), an ast-grep rule, or a `.github/workflows/*.yml` file is not
+mentioned here. Add the row in the same change that adds the tool.
+
 ## Firebase authentication
 
 Historical ADR links use this entrypoint. Current commands, SDK boundaries,
