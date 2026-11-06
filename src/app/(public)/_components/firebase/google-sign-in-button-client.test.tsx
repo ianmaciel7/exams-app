@@ -11,7 +11,7 @@ vi.mock("@firebase-oss/ui-core", () => ({
   getTranslation: () => "Google",
 }));
 vi.mock("@firebase-oss/ui-react", () => ({
-  GoogleLogo: () => null,
+  GoogleLogo: (props: React.ComponentProps<"svg">) => <svg {...props} />,
   useUI: () => ({ state: mocks.state }),
   useSignInWithProvider: () => ({
     callback: mocks.callback,
@@ -53,6 +53,9 @@ describe("GoogleSignInButtonClient", () => {
 
     const button = screen.getByRole("button", { name: /Google/ });
     const alert = screen.getByRole("alert");
+    expect(button.querySelector("svg")?.getAttribute("data-icon")).toBe(
+      "inline-start",
+    );
     expect(button.getAttribute("aria-describedby")).toBe(alert.id);
     fireEvent.click(button);
     expect(mocks.callback).toHaveBeenCalledTimes(1);

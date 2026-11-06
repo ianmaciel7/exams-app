@@ -731,6 +731,12 @@ See [Firebase setup](https://firebase.google.com/docs/auth/web/start) and
 
 ## shadcn/ui CLI workflow
 
+Public authentication uses presentation/integration pairs. Companion presence is
+currently a manual review obligation; `check:components` checks their naming,
+form roots and forwarding contracts. Behavior regressions cover root props and
+refs during MFA transitions. The auth form presentation lives in `*-form.tsx`,
+while the integration retains the Firebase workflow and `FormProvider`.
+
 The project already has `components.json`. Use the installed CLI for repeatable
 project work; use `pnpm dlx shadcn@latest` only when deliberately evaluating a
 newer CLI. A CLI upgrade does not update copied component source automatically.

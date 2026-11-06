@@ -1,80 +1,31 @@
 "use client";
-
-import { mergeProps } from "@base-ui/react/merge-props";
-import { useRender } from "@base-ui/react/use-render";
-import { useTranslations } from "next-intl";
+import type { ComponentProps } from "react";
 import { FormProvider } from "react-hook-form";
 import { MultiFactorAssertionFlowClient } from "@/app/(public)/_components/firebase/multi-factor-assertion-flow-client";
-import { Form } from "@/components/ui/extensions/form";
-import { FieldGroup } from "@/components/ui/field";
-import { routes } from "@/lib/navigation";
-import { cn } from "@/lib/utils";
-import { AuthLink } from "../../_components/auth-link";
-import { AuthSubmitSection } from "../../_components/auth-submit-section";
-import { EmailField } from "../../_components/email-field";
-import { PasswordField } from "../../_components/password-field";
-import { SocialSignInSection } from "../../_components/social-sign-in-section";
 import { useSignInFormClient } from "../_hooks/use-sign-in-form-client";
+import { SignInForm, SignInFormContent } from "./sign-in-form";
 
-type SignInFormClientProps = useRender.ComponentProps<"div"> & {
+type SignInFormClientProps = ComponentProps<typeof SignInForm> & {
   next?: string | string[];
 };
-
-function SignInFormClient({
-  next,
-  className,
-  render,
-  ...props
-}: SignInFormClientProps) {
-  const t = useTranslations("Auth");
+function SignInFormClient({ next, ...props }: SignInFormClientProps) {
   const { rootError, form, isMfa, isPending, onSubmit } = useSignInFormClient();
-
-  const rendered = useRender({
-    defaultTagName: "div",
-    render,
-    props: mergeProps<"div">(
-      {
-        className: cn("flex flex-col gap-4", className),
-        children: (
-          <>
-            <FormProvider {...form}>
-              <Form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="flex flex-col gap-4"
-              >
-                <FieldGroup>
-                  <EmailField autoComplete="username" />
-                  <PasswordField
-                    autoComplete="current-password"
-                    labelAction={
-                      <AuthLink route={routes.forgotPassword} next={next}>
-                        {t("forgotPasswordPrompt")}
-                      </AuthLink>
-                    }
-                  />
-                </FieldGroup>
-                <AuthSubmitSection
-                  error={rootError}
-                  isPending={isPending}
-                  submitLabel={t("signInTitle")}
-                />
-                <div className="text-center text-xs text-muted-foreground">
-                  {t("noAccountPrompt")}{" "}
-                  <AuthLink route={routes.register} next={next}>
-                    {t("registerTitle")}
-                  </AuthLink>
-                </div>
-              </Form>
-            </FormProvider>
-            <SocialSignInSection />
-          </>
-        ),
-      },
-      props,
-    ),
-    state: { slot: "sign-in-form" },
-  });
-  return isMfa ? <MultiFactorAssertionFlowClient /> : rendered;
+  return (
+    <SignInForm {...props}>
+      {isMfa ? (
+        <MultiFactorAssertionFlowClient />
+      ) : (
+        <FormProvider {...form}>
+          <SignInFormContent
+            next={next}
+            rootError={rootError}
+            isPending={isPending}
+            onSubmit={form.handleSubmit(onSubmit)}
+          />
+        </FormProvider>
+      )}
+    </SignInForm>
+  );
 }
 
 export { SignInFormClient };

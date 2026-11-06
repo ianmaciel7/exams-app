@@ -1,6 +1,6 @@
 import { enUs, esEs, ptBr } from "@firebase-oss/ui-translations";
 import { act, cleanup, render, screen, waitFor } from "@testing-library/react";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import { PublicUiProviderClient } from "./public-ui-provider-client";
 
 const mocks = vi.hoisted(() => ({
@@ -33,164 +33,159 @@ vi.mock("@firebase-oss/ui-react", () => ({
   FirebaseUIProvider: ({ children }: { children: React.ReactNode }) => children,
 }));
 
-describe("PublicUiProviderClient", () => {
-  afterEach(() => {
-    cleanup();
-    window.history.replaceState(null, "", "/");
+afterEach(() => {
+  cleanup();
+  window.history.replaceState(null, "", "/");
+});
+beforeEach(() => {
+  vi.clearAllMocks();
+  mocks.locale = "pt-BR";
+  mocks.getUI.mockReturnValue({
+    get: () => ({ auth: {}, setLocale: mocks.setLocale }),
   });
-  beforeEach(() => {
-    vi.clearAllMocks();
-    mocks.locale = "pt-BR";
-    mocks.getUI.mockReturnValue({
-      get: () => ({ auth: {}, setLocale: mocks.setLocale }),
-    });
-    mocks.subscribe.mockReturnValue(mocks.unsubscribe);
-    mocks.syncSessionCookie.mockResolvedValue(true);
-    mocks.signOutUser.mockResolvedValue(undefined);
-  });
+  mocks.subscribe.mockReturnValue(mocks.unsubscribe);
+  mocks.syncSessionCookie.mockResolvedValue(true);
+  mocks.signOutUser.mockResolvedValue(undefined);
+});
 
-  it("provides the Firebase UI context and renders the screen without waiting for auth state", () => {
-    render(
-      <PublicUiProviderClient>
-        <p>{"Screen"}</p>
-      </PublicUiProviderClient>,
-    );
-    expect(screen.getByText("Screen")).toBeTruthy();
-    expect(mocks.setLocale).toHaveBeenCalled();
-  });
+it("provides the Firebase UI context and renders the screen without waiting for auth state", () => {
+  render(
+    <PublicUiProviderClient>
+      <p>{"Screen"}</p>
+    </PublicUiProviderClient>,
+  );
+  expect(screen.getByText("Screen")).toBeTruthy();
+  expect(mocks.setLocale).toHaveBeenCalled();
+});
 
-  it("creates the session cookie before leaving the sign-in screen", async () => {
-    let finishSync: (synced: boolean) => void = () => undefined;
-    mocks.syncSessionCookie.mockReturnValue(
-      new Promise<boolean>((resolve) => {
-        finishSync = resolve;
-      }),
-    );
-    render(
-      <PublicUiProviderClient>
-        <p>{"Screen"}</p>
-      </PublicUiProviderClient>,
-    );
-    const user = { uid: "user" };
-    act(() => mocks.subscribe.mock.calls[0][0](user));
-    expect(mocks.syncSessionCookie).toHaveBeenCalledWith(user);
-    expect(mocks.router.replace).not.toHaveBeenCalled();
-    finishSync(true);
-    await waitFor(() => expect(mocks.router.replace).toHaveBeenCalledWith("/"));
-  });
+it("creates the session cookie before leaving the sign-in screen", async () => {
+  let finishSync: (synced: boolean) => void = () => undefined;
+  mocks.syncSessionCookie.mockReturnValue(
+    new Promise<boolean>((resolve) => {
+      finishSync = resolve;
+    }),
+  );
+  render(
+    <PublicUiProviderClient>
+      <p>{"Screen"}</p>
+    </PublicUiProviderClient>,
+  );
+  const user = { uid: "user" };
+  act(() => mocks.subscribe.mock.calls[0][0](user));
+  expect(mocks.syncSessionCookie).toHaveBeenCalledWith(user);
+  expect(mocks.router.replace).not.toHaveBeenCalled();
+  finishSync(true);
+  await waitFor(() => expect(mocks.router.replace).toHaveBeenCalledWith("/"));
+});
 
-  it("does not navigate after the screen is left while the cookie is pending", async () => {
-    let finishSync: (synced: boolean) => void = () => undefined;
-    mocks.syncSessionCookie.mockReturnValue(
-      new Promise<boolean>((resolve) => {
-        finishSync = resolve;
-      }),
-    );
-    const { unmount } = render(
-      <PublicUiProviderClient>
-        <p>{"Screen"}</p>
-      </PublicUiProviderClient>,
-    );
-    act(() => mocks.subscribe.mock.calls[0][0]({ uid: "user" }));
-    unmount();
-    finishSync(true);
-    await Promise.resolve();
-    expect(mocks.router.replace).not.toHaveBeenCalled();
-  });
+it("does not navigate after the screen is left while the cookie is pending", async () => {
+  let finishSync: (synced: boolean) => void = () => undefined;
+  mocks.syncSessionCookie.mockReturnValue(
+    new Promise<boolean>((resolve) => {
+      finishSync = resolve;
+    }),
+  );
+  const { unmount } = render(
+    <PublicUiProviderClient>
+      <p>{"Screen"}</p>
+    </PublicUiProviderClient>,
+  );
+  act(() => mocks.subscribe.mock.calls[0][0]({ uid: "user" }));
+  unmount();
+  finishSync(true);
+  await Promise.resolve();
+  expect(mocks.router.replace).not.toHaveBeenCalled();
+});
 
-  it("redirects a signed-in user after creating the session cookie", async () => {
-    render(
-      <PublicUiProviderClient>
-        <p>{"Screen"}</p>
-      </PublicUiProviderClient>,
-    );
-    act(() => mocks.subscribe.mock.calls[0][0]({ uid: "user" }));
-    await waitFor(() => expect(mocks.router.replace).toHaveBeenCalledWith("/"));
-  });
+it("redirects a signed-in user after creating the session cookie", async () => {
+  render(
+    <PublicUiProviderClient>
+      <p>{"Screen"}</p>
+    </PublicUiProviderClient>,
+  );
+  act(() => mocks.subscribe.mock.calls[0][0]({ uid: "user" }));
+  await waitFor(() => expect(mocks.router.replace).toHaveBeenCalledWith("/"));
+});
 
-  it("signs out and does not navigate when session cookie creation fails", async () => {
-    mocks.syncSessionCookie.mockResolvedValue(false);
-    render(
-      <PublicUiProviderClient>
-        <p>{"Screen"}</p>
-      </PublicUiProviderClient>,
-    );
-    act(() => mocks.subscribe.mock.calls[0][0]({ uid: "user" }));
-    await waitFor(() => expect(mocks.signOutUser).toHaveBeenCalledOnce());
-    expect(mocks.router.replace).not.toHaveBeenCalled();
-  });
+it("signs out and does not navigate when session cookie creation fails", async () => {
+  mocks.syncSessionCookie.mockResolvedValue(false);
+  render(
+    <PublicUiProviderClient>
+      <p>{"Screen"}</p>
+    </PublicUiProviderClient>,
+  );
+  act(() => mocks.subscribe.mock.calls[0][0]({ uid: "user" }));
+  await waitFor(() => expect(mocks.signOutUser).toHaveBeenCalledOnce());
+  expect(mocks.router.replace).not.toHaveBeenCalled();
+});
 
-  it("does not navigate for a signed-out user", () => {
-    render(
-      <PublicUiProviderClient>
-        <p>{"Screen"}</p>
-      </PublicUiProviderClient>,
-    );
-    act(() => mocks.subscribe.mock.calls[0][0](null));
-    expect(mocks.syncSessionCookie).not.toHaveBeenCalled();
-    expect(mocks.router.replace).not.toHaveBeenCalled();
-  });
+it("does not navigate for a signed-out user", () => {
+  render(
+    <PublicUiProviderClient>
+      <p>{"Screen"}</p>
+    </PublicUiProviderClient>,
+  );
+  act(() => mocks.subscribe.mock.calls[0][0](null));
+  expect(mocks.syncSessionCookie).not.toHaveBeenCalled();
+  expect(mocks.router.replace).not.toHaveBeenCalled();
+});
 
-  it("syncs locale changes without recreating the store or subscription", () => {
-    const view = render(
-      <PublicUiProviderClient>{"Screen"}</PublicUiProviderClient>,
-    );
-    expect(mocks.setLocale).toHaveBeenLastCalledWith(ptBr);
-    mocks.locale = "es";
-    view.rerender(<PublicUiProviderClient>{"Screen"}</PublicUiProviderClient>);
-    expect(mocks.setLocale).toHaveBeenLastCalledWith(esEs);
-    mocks.locale = "unsupported";
-    view.rerender(<PublicUiProviderClient>{"Screen"}</PublicUiProviderClient>);
-    expect(mocks.setLocale).toHaveBeenLastCalledWith(enUs);
-    expect(mocks.subscribe).toHaveBeenCalledOnce();
-  });
+it("syncs locale changes without recreating the store or subscription", () => {
+  const view = render(
+    <PublicUiProviderClient>{"Screen"}</PublicUiProviderClient>,
+  );
+  expect(mocks.setLocale).toHaveBeenLastCalledWith(ptBr);
+  mocks.locale = "es";
+  view.rerender(<PublicUiProviderClient>{"Screen"}</PublicUiProviderClient>);
+  expect(mocks.setLocale).toHaveBeenLastCalledWith(esEs);
+  mocks.locale = "unsupported";
+  view.rerender(<PublicUiProviderClient>{"Screen"}</PublicUiProviderClient>);
+  expect(mocks.setLocale).toHaveBeenLastCalledWith(enUs);
+  expect(mocks.subscribe).toHaveBeenCalledOnce();
+});
 
-  it("unsubscribes and ignores session callbacks after unmount", () => {
-    const view = render(
-      <PublicUiProviderClient>{"Screen"}</PublicUiProviderClient>,
-    );
-    const onSession = mocks.subscribe.mock.calls[0][0];
-    view.unmount();
-    expect(mocks.unsubscribe).toHaveBeenCalledOnce();
-    act(() => onSession({ uid: "late-user" }));
-    expect(mocks.router.replace).not.toHaveBeenCalled();
-  });
+it("unsubscribes and ignores session callbacks after unmount", () => {
+  const view = render(
+    <PublicUiProviderClient>{"Screen"}</PublicUiProviderClient>,
+  );
+  const onSession = mocks.subscribe.mock.calls[0][0];
+  view.unmount();
+  expect(mocks.unsubscribe).toHaveBeenCalledOnce();
+  act(() => onSession({ uid: "late-user" }));
+  expect(mocks.router.replace).not.toHaveBeenCalled();
+});
 
-  it("shows a configuration error", () => {
-    mocks.getUI.mockImplementation(() => {
-      throw new Error("missing configuration");
-    });
-    const log = vi.spyOn(console, "error").mockImplementation(() => {});
-    render(
-      <PublicUiProviderClient>
-        <p>{"Screen"}</p>
-      </PublicUiProviderClient>,
-    );
-    expect(screen.getByRole("alert").textContent).toBe("configurationError");
-    log.mockRestore();
+it("shows a configuration error", () => {
+  mocks.getUI.mockImplementation(() => {
+    throw new Error("missing configuration");
   });
+  const log = vi.spyOn(console, "error").mockImplementation(() => {});
+  render(
+    <PublicUiProviderClient>
+      <p>{"Screen"}</p>
+    </PublicUiProviderClient>,
+  );
+  expect(screen.getByRole("alert").textContent).toBe("configurationError");
+  log.mockRestore();
+});
 
-  it.each([
-    ["/profile?tab=security", "/profile?tab=security"],
-    ["https://evil.example", "/"],
-    ["/sign-in", "/"],
-  ])(
-    "redirects safely after sign-in with next=%s",
-    async (next, destination) => {
-      window.history.replaceState(
-        null,
-        "",
-        `/sign-in?next=${encodeURIComponent(next)}`,
-      );
-      render(
-        <PublicUiProviderClient>
-          <p>{"Screen"}</p>
-        </PublicUiProviderClient>,
-      );
-      act(() => mocks.subscribe.mock.calls[0][0]({ uid: "user" }));
-      await waitFor(() =>
-        expect(mocks.router.replace).toHaveBeenCalledWith(destination),
-      );
-    },
+it.each([
+  ["/profile?tab=security", "/profile?tab=security"],
+  ["https://evil.example", "/"],
+  ["/sign-in", "/"],
+])("redirects safely after sign-in with next=%s", async (next, destination) => {
+  window.history.replaceState(
+    null,
+    "",
+    `/sign-in?next=${encodeURIComponent(next)}`,
+  );
+  render(
+    <PublicUiProviderClient>
+      <p>{"Screen"}</p>
+    </PublicUiProviderClient>,
+  );
+  act(() => mocks.subscribe.mock.calls[0][0]({ uid: "user" }));
+  await waitFor(() =>
+    expect(mocks.router.replace).toHaveBeenCalledWith(destination),
   );
 });
