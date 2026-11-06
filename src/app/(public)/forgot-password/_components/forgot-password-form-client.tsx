@@ -1,11 +1,11 @@
 "use client";
 import type { ComponentProps } from "react";
 import { FormProvider } from "react-hook-form";
-import { PoliciesSectionClient } from "@/app/(public)/_components/firebase/policies-section-client";
 import {
   ForgotPasswordForm,
   ForgotPasswordFormContent,
 } from "@/components/firebase/forgot-password-form";
+import { PoliciesSectionClient } from "@/components/firebase/policies-section-client";
 import { useForgotPasswordFormClient } from "../_hooks/use-forgot-password-form-client";
 
 type ForgotPasswordFormClientProps = ComponentProps<

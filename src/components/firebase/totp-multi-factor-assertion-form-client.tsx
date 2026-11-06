@@ -1,11 +1,11 @@
 "use client";
 import type { ComponentProps } from "react";
 import { TotpMultiFactorAssertionForm } from "@/components/firebase/totp-multi-factor-assertion-form";
+import { useTotpMultiFactorAssertionFormClient } from "@/hooks/use-totp-multi-factor-assertion-form-client";
 import type {
   MultiFactorInfo,
   UserCredential,
 } from "@/lib/firebase/multi-factor";
-import { useTotpMultiFactorAssertionFormClient } from "../../_hooks/use-totp-multi-factor-assertion-form-client";
 
 type TotpMultiFactorAssertionFormClientProps = Omit<
   ComponentProps<typeof TotpMultiFactorAssertionForm>,

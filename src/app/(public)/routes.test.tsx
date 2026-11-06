@@ -8,21 +8,15 @@ import { SignInFormClient } from "./sign-in/_components/sign-in-form-client";
 vi.mock("next-intl", () => ({
   useTranslations: () => (key: string) => key,
 }));
-vi.mock(
-  "@/app/(public)/_components/firebase/google-sign-in-button-client",
-  () => ({
-    GoogleSignInButtonClient: () => null,
-  }),
-);
-vi.mock("@/app/(public)/_components/firebase/policies-section-client", () => ({
+vi.mock("@/components/firebase/google-sign-in-button-client", () => ({
+  GoogleSignInButtonClient: () => null,
+}));
+vi.mock("@/components/firebase/policies-section-client", () => ({
   PoliciesSectionClient: () => null,
 }));
-vi.mock(
-  "@/app/(public)/_components/firebase/multi-factor-assertion-flow-client",
-  () => ({
-    MultiFactorAssertionFlowClient: () => null,
-  }),
-);
+vi.mock("@/components/firebase/multi-factor-assertion-flow-client", () => ({
+  MultiFactorAssertionFlowClient: () => null,
+}));
 vi.mock("@firebase-oss/ui-react", () => ({
   useUI: () => ({ state: "idle" }),
   useSignInAuthFormSchema: () => ({}),
