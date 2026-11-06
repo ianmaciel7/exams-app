@@ -42,6 +42,7 @@ function ForgotPasswordFormClient({
               <EmailField autoComplete="email" />
             </FieldGroup>
             <AuthSubmitSection
+              error={form.formState.errors.root?.message}
               isPending={isPending}
               submitLabel={t("forgotPasswordTitle")}
             />

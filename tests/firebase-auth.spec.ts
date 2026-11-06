@@ -186,7 +186,9 @@ test("navigation and translated screens", async ({ page, context }) => {
     { name: "NEXT_LOCALE", value: "pt-BR", url: authTestOrigin },
   ]);
   await page.reload();
-  await expect(page.getByLabel(ptBrMessages.Auth.emailLabel)).toBeVisible();
+  await expect(
+    page.getByLabel(ptBrMessages.Auth.emailAddressLabel),
+  ).toBeVisible();
 });
 
 test("Google popup signs in with the emulator", async ({ page }) => {

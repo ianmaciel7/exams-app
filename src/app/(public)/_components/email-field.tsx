@@ -28,12 +28,11 @@ function EmailField({ autoComplete, ...props }: EmailFieldProps) {
           touched={fieldState.isTouched}
           dirty={fieldState.isDirty}
         >
-          <FormFieldLabel>{t("emailLabel")}</FormFieldLabel>
+          <FormFieldLabel>{t("emailAddressLabel")}</FormFieldLabel>
           <Input
             {...props}
             autoComplete={autoComplete}
             {...field}
-            required
             type="email"
             inputMode="email"
             autoCapitalize="none"

@@ -72,7 +72,8 @@
     "orSeparator": "or",
     "passwordLabel": "Password",
     "resetEmailSent": "Check your email for the password reset link.",
-    "backToSignIn": "Back to sign in"
+    "backToSignIn": "Back to sign in",
+    "emailAddressLabel": "Email address"
   },
   "Home": {
     "stack": "Next.js + shadcn/ui + Firebase",

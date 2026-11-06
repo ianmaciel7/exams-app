@@ -51,6 +51,7 @@ function SignInFormClient({ className, ...props }: SignInFormClientProps) {
             />
           </FieldGroup>
           <AuthSubmitSection
+            error={form.formState.errors.root?.message}
             isPending={isPending}
             submitLabel={t("signInTitle")}
           />

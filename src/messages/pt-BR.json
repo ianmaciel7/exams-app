@@ -72,7 +72,8 @@
     "orSeparator": "ou",
     "passwordLabel": "Senha",
     "resetEmailSent": "Verifique seu e-mail para o link de redefinição de senha.",
-    "backToSignIn": "Voltar para entrar"
+    "backToSignIn": "Voltar para entrar",
+    "emailAddressLabel": "Endereço de e-mail"
   },
   "Home": {
     "stack": "Next.js + shadcn/ui + Firebase",

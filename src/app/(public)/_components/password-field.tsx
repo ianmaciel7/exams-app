@@ -42,7 +42,6 @@ function PasswordField({
             {...props}
             autoComplete={autoComplete}
             {...field}
-            required
             type="password"
             autoCapitalize="none"
             spellCheck={false}

@@ -30,7 +30,6 @@ function DisplayNameField(props: DisplayNameFieldProps) {
           <Input
             {...props}
             {...field}
-            required
             maxLength={50}
             autoComplete="name"
             spellCheck={false}

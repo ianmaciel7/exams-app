@@ -41,6 +41,7 @@ function RegisterFormClient({ className, ...props }: RegisterFormClientProps) {
             <PasswordField autoComplete="new-password" />
           </FieldGroup>
           <AuthSubmitSection
+            error={form.formState.errors.root?.message}
             isPending={isPending}
             submitLabel={t("registerTitle")}
           />
