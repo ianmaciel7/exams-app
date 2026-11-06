@@ -101,6 +101,29 @@ rubric, manual review, and failure follow-up.
 
 ## Acceptance journeys and independent verification
 
+Revoked sessions must be rejected at the cookie exchange as well as at the DAL.
+`route.test.ts` covers a revoked ID token, a disabled user, and a newly minted
+cookie that fails verification. The emulator suite revokes a real test account
+and requires the exchange to return `401` and remove its cookie. Its browser
+journey retains the stale client session, reloads the profile, checks that
+sign-in stabilizes with no repeated session exchanges, then explicitly signs
+in again after the test revocation is cleared. A successful cookie mint alone
+is not evidence of a usable session; refreshing an ID token does not change
+its original authentication time.
+
+The root session provider must also sign out when synchronization fails before
+the POST (for example, token refresh removed the browser identity). Its unit
+tests protect newer accounts from a late rejection. `auth.test.ts` verifies
+that logout waits for dispatched cookie writes before deleting the cookie and
+that a token refresh completing after logout cannot recreate the session.
+
+The browser SDK can discard a revoked user while it initializes, so the provider
+may only ever observe a signed-out state. The first signed-out verdict therefore
+clears the server cookie (`clearStaleSessionCookie`), and a later exchange waits
+for that request. Unit tests mocked the SDK as always delivering a user and
+missed this; only the browser journey above caught it. Any session logic that
+depends on SDK timing needs that browser journey, not only mocked unit tests.
+
 A green unit-test suite or coverage percentage does not prove that a user can
 finish a workflow. Critical journeys are tested against the running application
 with the Firebase Auth, Firestore, and Functions emulators. Their assertions
