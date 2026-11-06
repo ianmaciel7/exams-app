@@ -1,11 +1,6 @@
 import Image from "next/image";
 import type { ComponentProps } from "react";
 import { cn } from "@/lib/utils";
-import {
-  HomeHeroDescription,
-  HomeHeroHeader,
-  HomeHeroTitle,
-} from "./home-hero";
 
 type HomeProps = ComponentProps<"main">;
 
@@ -55,20 +50,6 @@ function HomeLogo({ className, ...props }: HomeLogoProps) {
   );
 }
 
-type HomeHeadingProps = ComponentProps<typeof HomeHeroHeader> & {
-  title: string;
-  description: string;
-};
-
-function HomeHeading({ title, description, ...props }: HomeHeadingProps) {
-  return (
-    <HomeHeroHeader data-slot="home-heading" {...props}>
-      <HomeHeroTitle>{title}</HomeHeroTitle>
-      <HomeHeroDescription>{description}</HomeHeroDescription>
-    </HomeHeroHeader>
-  );
-}
-
 type HomeFooterProps = ComponentProps<"div">;
 
 function HomeFooter({ className, ...props }: HomeFooterProps) {
@@ -81,4 +62,4 @@ function HomeFooter({ className, ...props }: HomeFooterProps) {
   );
 }
 
-export { Home, HomeContent, HomeFooter, HomeHeading, HomeLogo };
+export { Home, HomeContent, HomeFooter, HomeLogo };
