@@ -81,7 +81,7 @@ When standards conflict, apply them in this order:
     the pending flag from `useActionState` replaces a separate saving flag.
     `ProfileForm` renders the one `FieldGroup`; `page.tsx` composes a `Card` and
     injects the Server Action: `<ProfileForm action={updateProfile}
-    initialValues={profile} />` (ADR 0028). Other compound forms that still use React Hook
+initialValues={profile} />` (ADR 0028). Other compound forms that still use React Hook
     Form use one `useForm` and `<FormProvider {...form}>`; that Provider
     requirement is a repository convention, not universal shadcn/ui policy.
   - Name standalone field components after their React Hook Form data property (for example `ProfileDisplayNameField` for `Controller name="displayName"`). Prefer built-in `FieldGroup`/`FieldSet` over arbitrary wrapper components.
@@ -186,6 +186,7 @@ responsive design standards and accessibility criteria enforced by
     zoom by declaring `userScalable: false`, `maximumScale: 1`, or `<meta name="viewport" content="user-scalable=no">`
     is strictly forbidden. Users must always be able to zoom text and layout up to at least
     200% without loss of content or functionality.
+
 - **Rigid pixel width anti-pattern (WCAG 1.4.10 Reflow)**:
   - Do not use fixed pixel widths exceeding 320px (such as `w-[400px]`, `min-w-[500px]`,
     or inline `style={{ width: "450px" }}`) without responsive modifiers or fluid constraints.
@@ -265,7 +266,7 @@ At the call site, the caller supplies the content for each part:
 <AccountCard>
   <AccountCardHeader>{heading}</AccountCardHeader>
   <AccountCardContent>{children}</AccountCardContent>
-</AccountCard>;
+</AccountCard>
 ```
 
 Compose only the parts with content. An adapter that extracts `className` merges
@@ -489,8 +490,8 @@ Components throughout the application—regardless of whether they are Server Co
 - **Universal Component Decoupling (Server, Client, and Shared Components)**:
   - Do not hardcode high-level infrastructure, application routing (`useRouter`, `redirect`, `Link`), external API clients, or environment-dependent SDKs inside reusable or presentation components.
   - Presentational and domain UI components must receive their actions, dynamic slots, and data abstractions via props (e.g., explicit callbacks, `children`, or injected interfaces) rather than instantiating or coupling to concrete implementations directly.
-- **Zero route coupling in presentation screens**: Screen and auth form components must remain purely presentational and never import Next.js navigation hooks (`useRouter`, `redirect`, `Link`) or hardcode application routes (such as `/register`, `/sign-in`, or `/forgot-password`). Decouple them by defining explicit callback props (e.g., `onSignUpClick?: () => void`, `onForgotPasswordClick?: () => void`, `onSignIn?: (credential: UserCredential) => void`).
-- **Route-private composition roots**: Route-level private components (such as `src/app/(public)/sign-in/_components/sign-in-form-client.tsx` and `src/app/(public)/register/_components/register-form-client.tsx`) act as composition roots. They connect Next.js navigation hooks (`router.push(...)`) to the screen's callback props and assemble feature-specific dependencies.
+- **Zero route coupling in shared components**: shared presentational components never import Next.js navigation hooks (`useRouter`, `redirect`, `Link`) or hardcode application routes (such as `/register`, `/sign-in`, or `/forgot-password`). Decouple them by defining explicit callback props (e.g., `onSignUpClick?: () => void`). The authentication forms are route-private leaves that read `useNavigation` through their hook.
+- **Route-private composition roots**: Route-level private components (such as `src/app/(public)/sign-in/_components/sign-in-form-client.tsx` and `src/app/(public)/register/_components/register-form-client.tsx`) act as composition roots. They own their form hook (`useNavigation`, Firebase UI core actions) and assemble feature-specific dependencies.
 - **Provider and addon injection via `children` slots**: Presentation screens and shared surfaces must not hardcode third-party identity providers (e.g., Google, GitHub, or SAML) or concrete third-party services. Instead, expose extensible `children` slots so that provider buttons (e.g., `<GoogleSignInButton />`) or custom actions can be injected at the composition root, conditioned on environment variables (such as `NEXT_PUBLIC_FIREBASE_GOOGLE_ENABLED`).
 - **Logic abstraction via custom hooks or service interfaces**: Isolate business logic, validation schemas, and lifecycle effects behind specialized hooks or pure service functions (such as `useUI()`, `useSignInAuthFormSchema()`, `useSignInAuthFormAction()`, and `useOnUserAuthenticated()`). This keeps presentation components focused on rendering state, layout, and event propagation without direct coupling to underlying SDK operations.
 - **Route hooks use canonical services, not Firebase SDK imports**: a route-private hook or component (`src/app/**/_hooks`, `_components`) never imports `firebase`, `firebase/*`, `@/lib/firebase/client` or `_lib/data`. Profile hooks call `reloadFirebaseAuthUser` and `sendEmailChangeVerification` from `@/lib/auth`; tests mock these service modules. A context/provider is not required solely to forward those operations. Biome `noRestrictedImports` retains the SDK boundary (ADR 0029 amends ADRs 0027 and 0028).

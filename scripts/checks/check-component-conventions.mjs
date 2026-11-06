@@ -960,8 +960,19 @@ function exportedDataFunctionNames(statement) {
 
 export function inspectComponentPlacement(filename) {
   const path = filename.replaceAll("\\", "/");
+  if (!path.startsWith("src/components/")) return [];
+  if (/\.[cm]?ts$/.test(path) && !/\.d\.[cm]?ts$/.test(path)) {
+    return [
+      {
+        file: filename,
+        line: 1,
+        column: 1,
+        message:
+          "Place non-UI helpers and utilities in src/lib/ (or src/lib/firebase/); src/components/ is reserved for React UI components.",
+      },
+    ];
+  }
   if (
-    !path.startsWith("src/components/") ||
     !/\.[cm]?[jt]sx?$/.test(path) ||
     /^src\/components\/(ui|firebase|ai-elements)\//.test(path)
   )
@@ -1290,7 +1301,7 @@ function isOwnedNamingFile(filename) {
     path.startsWith("src/") &&
     /\.tsx?$/.test(path) &&
     !/\.(test|spec|stories)\.tsx?$/.test(path) &&
-    !/^src\/components\/(firebase|ai-elements)\//.test(path) &&
+    !/^src\/components\/ai-elements\//.test(path) &&
     (!path.startsWith("src/components/ui/") ||
       path.startsWith("src/components/ui/extensions/"))
   );
@@ -1346,9 +1357,84 @@ export function inspectNaming(content, filename) {
     const name = declaredName(node);
     if (name && ts.isIdentifier(name) && hasBannedNamingTerm(name.text))
       report(name, name.text);
+    // An alias does not hide the banned term of the imported identifier.
+    if (ts.isImportSpecifier(node)) {
+      const original = (node.propertyName ?? node.name).text;
+      if (hasBannedNamingTerm(original)) report(node, original);
+    }
+    // Importing a -screen or -view module brings the banned term back.
+    if (
+      ts.isImportDeclaration(node) &&
+      ts.isStringLiteral(node.moduleSpecifier) &&
+      /(^|\/)[^/]+-(screen|view)$/.test(node.moduleSpecifier.text)
+    )
+      report(node.moduleSpecifier, node.moduleSpecifier.text);
     ts.forEachChild(node, visit);
   }
   visit(source);
+  return findings;
+}
+
+const nextRouteEntryPattern =
+  /^src\/app\/(?:.*\/)?(?:page|layout|template|error|global-error|not-found|loading|default)\.tsx$/;
+
+/**
+ * shadcn convention for every component module outside the registry copies:
+ * declare a local named function and export it with `export { Name }`. Next.js
+ * route entry points are the only modules that use `export default`.
+ */
+export function inspectComponentExportConventions(content, filename) {
+  const path = filename.replaceAll("\\", "/");
+  if (
+    !path.startsWith("src/") ||
+    !path.endsWith(".tsx") ||
+    /\.(test|spec|stories)\.tsx$/.test(path) ||
+    /^src\/components\/ai-elements\//.test(path) ||
+    /^src\/components\/ui\/[^/]+\.tsx$/.test(path) ||
+    nextRouteEntryPattern.test(path)
+  )
+    return [];
+  const source = ts.createSourceFile(
+    filename,
+    content,
+    ts.ScriptTarget.Latest,
+    true,
+    ts.ScriptKind.TSX,
+  );
+  const findings = [];
+  const report = (statement, message) => {
+    const position = source.getLineAndCharacterOfPosition(
+      statement.getStart(source),
+    );
+    findings.push({
+      file: filename,
+      line: position.line + 1,
+      column: position.character + 1,
+      message,
+    });
+  };
+  const defaultMessage =
+    'Do not use "export default" in component files; use explicit named exports ("export { ComponentName };").';
+  for (const statement of source.statements) {
+    const isDefault =
+      ts.isFunctionDeclaration(statement) &&
+      statement.modifiers?.some(
+        (modifier) => modifier.kind === ts.SyntaxKind.DefaultKeyword,
+      );
+    if (isDefault) report(statement, defaultMessage);
+    else if (
+      ts.isFunctionDeclaration(statement) &&
+      exported(statement) &&
+      statement.name &&
+      /^[A-Z]/.test(statement.name.text)
+    )
+      report(
+        statement,
+        `Do not use inline "export function ${statement.name.text}()"; declare it as a local function and use "export { ${statement.name.text} };" at the bottom of the module.`,
+      );
+    if (ts.isExportAssignment(statement) && !statement.isExportEquals)
+      report(statement, defaultMessage);
+  }
   return findings;
 }
 
@@ -1623,6 +1709,7 @@ export function checkComponents(root) {
       ...inspectHookFilename(content, path),
       ...inspectUiPhaseStatus(content, path),
       ...inspectComponent(content, path),
+      ...inspectComponentExportConventions(content, path),
     ];
   });
 }

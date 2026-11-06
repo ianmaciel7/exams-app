@@ -12,7 +12,6 @@ ignores:
   # Composite controls (input-otp, the country selector) are not Base UI Field
   # controls, so these forms wire aria-describedby by hand. Do not add files here
   # for a plain text input; use FormField.
-  - src/components/firebase/phone-auth-form.tsx
   - src/components/firebase/sms-multi-factor-assertion-form.tsx
   - src/components/firebase/sms-multi-factor-enrollment-form.tsx
   - src/components/firebase/totp-multi-factor-assertion-form.tsx

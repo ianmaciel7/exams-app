@@ -10,12 +10,7 @@ import { GoogleAuthProvider } from "firebase/auth";
 
 import { OAuthButton } from "@/components/firebase/oauth-button";
 
-export type { GoogleSignInButtonProps };
-
-export function GoogleSignInButton({
-  provider,
-  ...props
-}: GoogleSignInButtonProps) {
+function GoogleSignInButton({ provider, ...props }: GoogleSignInButtonProps) {
   const ui = useUI();
 
   return (
@@ -25,3 +20,5 @@ export function GoogleSignInButton({
     </OAuthButton>
   );
 }
+
+export { GoogleSignInButton };

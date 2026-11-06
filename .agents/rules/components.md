@@ -1,5 +1,4 @@
 ---
-
 trigger: model_decision
 description: "Read when naming, placing, exporting, or defining props for owned components."
 ---
@@ -27,7 +26,7 @@ This section covers component dimensions and file contracts; see also [Component
 
 Every owned component must specify a concrete component type or semantic role describing its composition or behavior (such as `*-field`, `*-form`, `*-card`, `*-dialog`, `*-hero`, `*-button`, `*-provider`, or `*-guard`). A component name must never describe only its feature domain or runtime environment without a concrete role.
 
-Route composition roots that render an auth form carry `Form` in the name (`SignInFormClient`, `RegisterFormClient`) and their hooks and files follow it (`use-sign-in-form-client.ts`, `sign-in-form-client.tsx`). The forgot-password page renders `ForgotPasswordAuthScreen` directly: the screen owns its navigation, so no wrapper exists.
+Route composition roots that render an auth form carry `Form` in the name (`SignInFormClient`, `RegisterFormClient`) and their hooks and files follow it (`use-sign-in-form-client.ts`, `sign-in-form-client.tsx`). The forgot-password page composes `Card` directly and renders `ForgotPasswordFormClient`, like the sign-in and register pages. The legacy Firebase UI `*-auth-screen.tsx` and `*-auth-form.tsx` modules no longer exist; shared form parts live in `src/app/(public)/_components/` (`EmailField`, `PasswordField`, `AuthSubmitSection`).
 
 The shadcn primitives live under `src/components/ui/`; Firebase registry output
 lives under `src/components/firebase/`; generated AI Elements live under
@@ -159,9 +158,15 @@ exact term parity (`checkStemComponentTermParity`), and existing composition/for
 
 Do not use `View` or `Screen` as words in owned component, hook, type, variable, parameter, import-binding or file names. Use the responsibility instead (`ProfileAvatarFieldClient`, `useProfileAvatarFieldClient`, `AuthCardHeader`, `AuthContent`, `AuthFlow`).
 
-`check:components` scans owned `.ts` and `.tsx` files throughout `src`, including hooks and library modules. CamelCase, kebab-case and numbered words are checked, so `AccountScreenState`, `AccountScreen2` and `use-account-view.ts` fail; unrelated words such as `Viewport` and `preview` remain valid. Generated registries and test/story files retain their exclusions. Preserve external API export names, but alias their local bindings (`SignInAuthScreen as SignInAuthContent`).
+`check:components` scans owned `.ts` and `.tsx` files throughout `src`, including hooks and library modules. CamelCase, kebab-case and numbered words are checked, so `AccountScreenState`, `AccountScreen2` and `use-account-view.ts` fail; unrelated words such as `Viewport` and `preview` remain valid. Generated registries and test/story files retain their exclusions. The scan includes `src/components/firebase/`. An import never hides the term: `import { AccountScreen as AccountContent }` and `import ... from "./account-screen"` fail, so do not depend on a module or export that carries the word.
 
-Export aliases, named function/class expressions, enums and type parameters also follow this policy. Re-export external names with a semantic public alias (`AccountScreen as AccountContent`); exporting `AccountContent as AccountScreen` is prohibited. Comments and string content are outside this naming check.
+Export aliases, named function/class expressions, enums and type parameters also follow this policy. Re-exporting an external name with a semantic public alias (`AccountScreen as AccountContent`) stays valid; exporting `AccountContent as AccountScreen` is prohibited. Comments and string content are outside this naming check.
+
+## Component export style and helper placement
+
+Every component module in `src/` (including `src/components/firebase/`, excluding the shadcn copies `src/components/ui/*.tsx` and AI Elements) declares `function Name()` locally and exports it with `export { Name }`. Inline `export function Name()` and `export default` are rejected by `inspectComponentExportConventions`; `export default` is reserved for Next.js route entry points (`page`, `layout`, `template`, `error`, `global-error`, `not-found`, `loading`, `default`).
+
+`src/components/` holds React UI only. Non-UI `.ts` helpers, including their tests, belong in `src/lib/` (or `src/lib/firebase/`), for example `src/lib/firebase/auth-error-message.ts`.
 
 ## Owned component placement
 

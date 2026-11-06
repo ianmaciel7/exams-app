@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
   inspectComponent,
+  inspectComponentExportConventions,
   inspectComponentPlacement,
   inspectComponentRuntime,
   inspectDataModuleConventions,
@@ -692,24 +693,31 @@ describe("owned component conventions", () => {
       ["src/app/_hooks/use-account-screen.ts", "export const status = 1;"],
     ])
       assert.ok(inspectNaming(code, file).length, code);
-    assert.deepEqual(
+    assert.ok(
       inspectNaming(
         'import { AccountScreen as AccountContent } from "external"; function AccountSection() {}',
         component,
-      ),
-      [],
+      ).length,
+      "an alias must not hide the banned term of the imported name",
+    );
+    assert.ok(
+      inspectNaming(
+        'import { AccountContent } from "@/components/account-screen";',
+        component,
+      ).length,
+      "importing a -screen module is banned",
+    );
+    assert.ok(
+      inspectNaming(
+        "function SignInAuthScreen() {}",
+        "src/components/firebase/sign-in-auth-screen.tsx",
+      ).length,
+      "the firebase directory is audited for banned naming terms",
     );
     assert.deepEqual(
       inspectNaming(
         'import type { Viewport } from "next"; const preview = true;',
         hook,
-      ),
-      [],
-    );
-    assert.deepEqual(
-      inspectNaming(
-        "function AccountScreen() {}",
-        "src/components/firebase/account-screen.tsx",
       ),
       [],
     );
@@ -750,7 +758,6 @@ describe("owned component conventions", () => {
   it("allows external names aliased to semantic names and unrelated words", () => {
     for (const code of [
       'export { AccountScreen as AccountContent } from "external";',
-      'import { AccountView as AccountContent } from "external";',
       "const preview2 = true; const viewport = true;",
       'const label = "Screen View"; // Screen and View in prose are allowed.',
     ]) {
@@ -822,13 +829,28 @@ describe("component placement", () => {
       "src/components/loading/loading-indicator.tsx",
       "src/components/loading-indicator.tsx",
       "src/components/loading/loading.test.tsx",
-      "src/components/loading/index.ts",
       "src/components/loading/indicator.jsx",
       "src\\components\\loading\\loading-indicator.tsx",
     ]) {
       assert.match(
         inspectComponentPlacement(file)[0]?.message ?? "",
         /ui\/extensions/,
+      );
+    }
+  });
+
+  it("rejects non-UI helper modules in src/components, including Windows paths", () => {
+    for (const file of [
+      "src/components/firebase/auth-error-message.ts",
+      "src/components/firebase/auth-error-message.test.ts",
+      "src/components/ui/utils.ts",
+      "src/components/loading/index.ts",
+      "src\\components\\firebase\\auth-error-message.ts",
+    ]) {
+      assert.match(
+        inspectComponentPlacement(file)[0]?.message ?? "",
+        /Place non-UI helpers and utilities in src\/lib\//,
+        file,
       );
     }
   });
@@ -1275,5 +1297,59 @@ describe("data.ts method naming and file size conventions", () => {
     const findings = inspectDataModuleConventions(oversized, dataFile);
     assert.equal(findings.length, 1);
     assert.match(findings[0].message, /must not exceed 150 non-empty lines/);
+  });
+});
+
+describe("component export conventions", () => {
+  const inspectExports = (code, file) =>
+    inspectComponentExportConventions(code, file).map((issue) => issue.message);
+
+  it("rejects inline export function in every component folder, including firebase", () => {
+    for (const file of [
+      "src/components/firebase/sign-up-auth-form.tsx",
+      "src/components/ui/extensions/custom-card.tsx",
+      "src/app/(public)/sign-in/_components/sign-in-form-client.tsx",
+    ])
+      assert.match(
+        inspectExports(
+          "export function SignUpAuthForm() { return <div />; }",
+          file,
+        )[0] ?? "",
+        /Do not use inline "export function SignUpAuthForm/,
+        file,
+      );
+  });
+
+  it("rejects export default outside Next.js route entry points", () => {
+    for (const code of [
+      "export default function CustomCard() { return <div />; }",
+      "function CustomCard() { return <div />; } export default CustomCard;",
+    ])
+      assert.match(
+        inspectExports(
+          code,
+          "src/components/ui/extensions/custom-card.tsx",
+        )[0] ?? "",
+        /Do not use "export default" in component files/,
+      );
+  });
+
+  it("allows the shadcn export style, route entry points, tests and registry copies", () => {
+    const named =
+      "function Policies() { return <div />; } export { Policies };";
+    assert.deepEqual(
+      inspectExports(named, "src/components/firebase/policies.tsx"),
+      [],
+    );
+    const route = "export default function Page() { return <div />; }";
+    for (const file of [
+      "src/app/(public)/sign-in/page.tsx",
+      "src/app/layout.tsx",
+      "src/app/error.tsx",
+      "src/app/not-found.tsx",
+      "src/app/(public)/register/page.test.tsx",
+      "src/components/ui/button.tsx",
+    ])
+      assert.deepEqual(inspectExports(route, file), [], file);
   });
 });
