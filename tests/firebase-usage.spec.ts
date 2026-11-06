@@ -1,4 +1,8 @@
 // cspell:ignore connectionrefused requestfailed
+import { once } from "node:events";
+import { createServer } from "node:http";
+import { createRequire } from "node:module";
+import { resolve } from "node:path";
 import {
   type APIRequestContext,
   expect,
@@ -100,8 +104,8 @@ for (const origin of ["http://localhost:3000", "http://127.0.0.1:3000"]) {
   });
 }
 
-for (const authorization of [undefined, "Bearer invalid-token"]) {
-  test(`usage callable rejects ${authorization ? "invalid" : "missing"} authentication with readable CORS errors`, async ({
+for (const authorization of [undefined, "NotBearer invalid-token"]) {
+  test(`usage callable rejects ${authorization ? "malformed" : "missing"} authentication with readable CORS errors`, async ({
     request,
   }) => {
     const origin = "http://localhost:3000";
@@ -117,6 +121,43 @@ for (const authorization of [undefined, "Bearer invalid-token"]) {
     expect((await response.json()).error.status).toBe("UNAUTHENTICATED");
   });
 }
+
+test("callable SDK rejects invalid tokens without the emulator verification shortcut", async ({
+  request,
+}) => {
+  // Firebase CLI enables skipTokenVerification inside its Functions workers.
+  // Load the actual export in this test worker, where that shortcut is off.
+  expect(process.env.FIREBASE_DEBUG_MODE).not.toBe("true");
+  const requireFunctions = createRequire(resolve("functions/index.js"));
+  const { recordUsage } = requireFunctions("./index.js");
+  const express = requireFunctions("express");
+  const app = express();
+  app.use(express.json());
+  app.post("/recordUsage", recordUsage);
+  const server = createServer(app);
+  server.listen(0, "127.0.0.1");
+  await once(server, "listening");
+  try {
+    const address = server.address();
+    if (!address || typeof address === "string")
+      throw new Error("Missing test server address");
+    const origin = "http://localhost:3000";
+    const response = await request.post(
+      `http://127.0.0.1:${address.port}/recordUsage`,
+      {
+        headers: { Origin: origin, Authorization: "Bearer invalid-token" },
+        data: { data: profileEvent },
+      },
+    );
+    expect(response.status()).toBe(401);
+    expect(response.headers()["access-control-allow-origin"]).toBe(origin);
+    expect((await response.json()).error.status).toBe("UNAUTHENTICATED");
+  } finally {
+    await new Promise<void>((resolve, reject) =>
+      server.close((error) => (error ? reject(error) : resolve())),
+    );
+  }
+});
 
 test("usage callable validates authenticated payloads and acknowledges approved events", async ({
   request,

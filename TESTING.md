@@ -482,10 +482,18 @@ to your app rather than disabling E2E or automatically accepting new baselines.
 as the auth journeys. It exercises `recordUsage` through the running Functions
 emulator, including the exact `localhost:3000` origin from the reported error
 and its `127.0.0.1` alternative. It checks `OPTIONS` status and CORS headers,
-missing/invalid authentication, payload validation, and real event IDs.
+missing/malformed authentication, payload validation, and real event IDs.
 Chromium also performs a cross-origin fetch and the application's own profile
 navigation must receive an acknowledgment. API-only calls bypass browser CORS
 enforcement, so they are not sufficient on their own.
+
+Firebase CLI enables the Functions SDK's `skipTokenVerification` debug feature
+inside emulator workers. The invalid-token regression therefore starts the
+actual exported callable with its real SDK in a separate HTTP server inside
+the Playwright worker, where debug mode must be off. It requires a malformed
+ID token to return a readable `401 UNAUTHENTICATED`, rather than accepting the
+emulator's permissive decoding as production security evidence. This check
+does not establish production signature, expiry, or revocation behavior.
 
 Screen-view telemetry deliberately catches transport failures so it cannot
 block protected content. This means the existing profile UI assertions could
