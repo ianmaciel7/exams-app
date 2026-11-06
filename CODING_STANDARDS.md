@@ -1081,6 +1081,8 @@ mechanically rewrite valid boundaries.
 
 ## HTTP status helpers
 
+Every `src/lib/<name>.ts` that imports `next/<name>` (`headers`, `navigation`, `server`) is the only importer of that Next.js module; other files import from `@/lib/<name>` and re-export what is missing there. This is enforced mechanically by `pnpm check:repo` (`check-lib-owns-next-modules`) and, for response construction, by the `prefer-lib-server-responses` ast-grep rule.
+
 Use named exports from `src/lib/server.ts` for HTTP responses and
 `src/lib/navigation.ts` for native rendering interrupts. Required metadata,
 cache policy and conditional representation contracts are documented in

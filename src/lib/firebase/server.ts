@@ -1,9 +1,9 @@
 import "server-only";
 
-import { cookies, headers } from "next/headers";
-import { connection } from "next/server";
 import { cache } from "react";
+import { cookies, headers } from "@/lib/headers";
 import { readUserRole, type UserRole } from "@/lib/role";
+import { connection } from "@/lib/server";
 import { getAdminAuth } from "./admin";
 
 export type FirebaseServerSession = {

@@ -1,6 +1,5 @@
-import { useRouter } from "next/navigation";
 import { useMemo } from "react";
-import { getSignInUrl } from "@/lib/navigation";
+import { getSignInUrl, useRouter } from "@/lib/navigation";
 
 /**
  * The single client-side navigation entry point. Owned modules use this hook

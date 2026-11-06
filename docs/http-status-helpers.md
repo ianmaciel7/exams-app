@@ -32,7 +32,7 @@ headers. JSON helpers validate the complete media type including parameters.
 Unencoded JSON cannot advertise a content encoding. Framing, upgrades and
 successful CONNECT require a dedicated transport implementation.
 
-The default is `Cache-Control: no-store`. Set `cache: { visibility: "private",
+No Cache-Control is added by default. Set `cache: "no-store"`, `cache: { visibility: "private",
 maxAge: 60 }`, a public policy, or explicit Cache-Control headers when appropriate.
 Do not supply both cache options and a raw Cache-Control. Set-Cookie alone does
 not prevent caching. The 428 helper always forces no-store.

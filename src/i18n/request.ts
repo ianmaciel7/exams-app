@@ -1,6 +1,6 @@
-import { cookies, headers } from "next/headers";
 import { hasLocale } from "next-intl";
 import { getRequestConfig } from "next-intl/server";
+import { cookies, headers } from "@/lib/headers";
 import { localeCookie, routing } from "./routing";
 
 function getBrowserLocale(acceptLanguage: string | null) {
