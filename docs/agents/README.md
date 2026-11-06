@@ -19,3 +19,4 @@ belong to `TOOLING.md`; test strategy belongs to `TESTING.md`.
 | [coverage.md](coverage.md)                     | Locate official topics, local owners, and conditional references                      |
 | [rules.md](rules.md)                           | Maintain rule scope and client loading                                                |
 | [base-ui-principles.md](base-ui-principles.md) | Map every official Base UI principle to a guard, and review it on a Base UI upgrade   |
+| [shadcn-principles.md](shadcn-principles.md)   | Map every shadcn/ui critical rule to a guard, and review it on a shadcn upgrade       |

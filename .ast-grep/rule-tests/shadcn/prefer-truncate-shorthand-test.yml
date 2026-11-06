@@ -1,0 +1,7 @@
+id: prefer-truncate-shorthand
+valid:
+  - |
+    const a = <p className="truncate" />;
+invalid:
+  - |
+    const a = <p className="overflow-hidden text-ellipsis whitespace-nowrap" />;

@@ -1,0 +1,9 @@
+id: no-icon-size-class-in-button
+valid:
+  - |
+    const a = <Button><SearchIcon data-icon="inline-start" />Search</Button>;
+  - |
+    const a = <SearchIcon className="size-4" />;
+invalid:
+  - |
+    const a = <Button><SearchIcon className="size-4" />Search</Button>;

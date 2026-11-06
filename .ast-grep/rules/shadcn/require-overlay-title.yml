@@ -1,0 +1,38 @@
+id: require-overlay-title
+language: tsx
+files:
+  - src/app/**/*.tsx
+  - src/components/**/*.tsx
+  - src/hooks/**/*.tsx
+ignores:
+  - "**/*.test.tsx"
+  - "**/*.stories.tsx"
+severity: error
+message: "Dialog, AlertDialog, Sheet and Drawer content needs a Title (use sr-only to hide it)."
+note: |
+  shadcn/ui rule: the title names the dialog for assistive technology.
+  Example:
+    <DialogContent><DialogHeader><DialogTitle className="sr-only">Menu</DialogTitle></DialogHeader></DialogContent>
+rule:
+  kind: jsx_element
+  has:
+    field: open_tag
+    has:
+      field: name
+      regex: "^(Dialog|AlertDialog|Sheet|Drawer)Content$"
+  not:
+    has:
+      stopBy: end
+      any:
+        - kind: jsx_self_closing_element
+          has:
+            field: name
+            regex: "^(Dialog|AlertDialog|Sheet|Drawer)Title$"
+        - kind: jsx_opening_element
+          has:
+            field: name
+            regex: "^(Dialog|AlertDialog|Sheet|Drawer)Title$"
+        - kind: jsx_self_closing_element
+          has:
+            field: name
+            regex: "^(Dialog|AlertDialog|Sheet|Drawer)Header$"

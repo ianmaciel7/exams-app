@@ -1,0 +1,11 @@
+id: prefer-size-utility
+valid:
+  - |
+    const a = <div className="size-10 rounded" />;
+  - |
+    const a = <div className="w-10 h-8" />;
+invalid:
+  - |
+    const a = <div className="w-10 h-10 rounded" />;
+  - |
+    const a = <div className={cn("h-2.5 w-2.5", x)} />;

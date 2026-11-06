@@ -1,0 +1,32 @@
+id: no-icon-size-class-in-button
+snapshots:
+  "const a = <Button><SearchIcon className=\"size-4\" />Search</Button>;\n":
+    labels:
+      - source: <SearchIcon className="size-4" />
+        style: primary
+        start: 18
+        end: 51
+      - source: size-4
+        style: secondary
+        start: 41
+        end: 47
+      - source: className="size-4"
+        style: secondary
+        start: 30
+        end: 48
+      - source: Button
+        style: secondary
+        start: 11
+        end: 17
+      - source: Button
+        style: secondary
+        start: 11
+        end: 17
+      - source: <Button><SearchIcon className="size-4" />Search</Button>
+        style: secondary
+        start: 10
+        end: 66
+      - source: SearchIcon
+        style: secondary
+        start: 19
+        end: 29

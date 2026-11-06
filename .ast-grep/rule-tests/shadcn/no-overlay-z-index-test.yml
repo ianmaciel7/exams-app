@@ -1,0 +1,11 @@
+id: no-overlay-z-index
+valid:
+  - |
+    const a = <DialogContent className="p-0" />;
+  - |
+    const a = <div className="z-10" />;
+invalid:
+  - |
+    const a = <DialogContent className="z-50 p-0" />;
+  - |
+    const a = <PopoverContent className="z-[100]" />;

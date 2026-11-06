@@ -1,0 +1,16 @@
+id: require-avatar-fallback
+snapshots:
+  "const a = <Avatar><AvatarImage src=\"x\" /></Avatar>;\n":
+    labels:
+      - source: <Avatar><AvatarImage src="x" /></Avatar>
+        style: primary
+        start: 10
+        end: 50
+      - source: Avatar
+        style: secondary
+        start: 11
+        end: 17
+      - source: Avatar
+        style: secondary
+        start: 11
+        end: 17

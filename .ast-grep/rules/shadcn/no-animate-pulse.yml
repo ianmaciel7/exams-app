@@ -1,0 +1,28 @@
+id: no-animate-pulse
+language: tsx
+files:
+  - src/app/**/*.tsx
+  - src/components/**/*.tsx
+  - src/hooks/**/*.tsx
+ignores:
+  - "**/*.test.tsx"
+  - "**/*.stories.tsx"
+severity: error
+message: "Use Skeleton for loading placeholders instead of a custom animate-pulse element."
+note: |
+  shadcn/ui rule: loading placeholders are Skeleton
+  (https://ui.shadcn.com/docs/components/skeleton). A pulse on a status icon or
+  a cursor is not a placeholder and is allowed.
+rule:
+  kind: string_fragment
+  regex: '(^|[\s:!])animate-pulse(\s|$)'
+  all:
+    - regex: "bg-(muted|accent)"
+    - not:
+        # Skeleton is the one component that owns the pulse.
+        inside:
+          stopBy: end
+          kind: function_declaration
+          has:
+            field: name
+            regex: "^Skeleton$"

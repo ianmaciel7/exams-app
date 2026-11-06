@@ -1,0 +1,9 @@
+id: require-overlay-title
+valid:
+  - |
+    const a = <DialogContent><DialogHeader><DialogTitle>Edit</DialogTitle></DialogHeader></DialogContent>;
+  - |
+    const a = <SheetContent><SheetTitle className="sr-only">Menu</SheetTitle></SheetContent>;
+invalid:
+  - |
+    const a = <DialogContent><p>Body</p></DialogContent>;

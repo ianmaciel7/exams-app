@@ -1,0 +1,7 @@
+id: no-hr-element
+valid:
+  - |
+    const a = <Separator />;
+invalid:
+  - |
+    const a = <hr />;

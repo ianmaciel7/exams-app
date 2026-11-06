@@ -1,0 +1,9 @@
+id: require-avatar-fallback
+valid:
+  - |
+    const a = <Avatar><AvatarImage src="x" /><AvatarFallback>IM</AvatarFallback></Avatar>;
+  - |
+    const a = <Avatar><AvatarFallback>{initial}</AvatarFallback></Avatar>;
+invalid:
+  - |
+    const a = <Avatar><AvatarImage src="x" /></Avatar>;

@@ -1,0 +1,12 @@
+id: no-hr-element
+snapshots:
+  "const a = <hr />;\n":
+    labels:
+      - source: <hr />
+        style: primary
+        start: 10
+        end: 16
+      - source: hr
+        style: secondary
+        start: 11
+        end: 13
