@@ -1,6 +1,6 @@
 import "server-only";
 
-import { redirect } from "@/lib/navigation";
+import { redirect } from "next/navigation";
 import { getSafeReturnUrl } from "@/lib/return-url";
 import { getSession } from "@/lib/session";
 

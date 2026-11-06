@@ -1,9 +1,6 @@
 import "server-only";
 
 import { NextResponse } from "next/server";
-
-export { connection, type NextRequest, NextResponse } from "next/server";
-
 import {
   allowedMethods,
   type Challenge,
@@ -302,7 +299,6 @@ export const resetContent = emptyResponse(205);
 export const temporaryRedirect = redirectResponse(307);
 
 export const ok = jsonResponse(httpStatus.ok);
-export const badRequest = jsonResponse(httpStatus.badRequest);
 export const preconditionRequired = jsonResponse(
   httpStatus.preconditionRequired,
 );

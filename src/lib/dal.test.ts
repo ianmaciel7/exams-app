@@ -10,9 +10,9 @@ const mocks = vi.hoisted(() => ({
   }),
 }));
 
+vi.mock("next/navigation", () => ({ notFound: mocks.notFound }));
 vi.mock("@/lib/session", () => ({ getSession: mocks.getSession }));
 vi.mock("@/lib/navigation", () => ({
-  notFound: mocks.notFound,
   redirectToSignIn: mocks.redirectToSignIn,
   routes: { home: "/" },
 }));

@@ -1,7 +1,5 @@
 import { headers } from "next/headers";
 
-export { cookies, headers } from "next/headers";
-
 /** Request header that carries the per-request CSP nonce to Server Components. */
 export const nonceHeader = "x-nonce";
 

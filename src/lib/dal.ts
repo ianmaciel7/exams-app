@@ -1,7 +1,8 @@
 import "server-only";
 
+import { notFound } from "next/navigation";
 import { cache } from "react";
-import { notFound, redirectToSignIn } from "@/lib/navigation";
+import { redirectToSignIn } from "@/lib/navigation";
 import { hasRole, type UserRole } from "@/lib/role";
 import { getSession } from "@/lib/session";
 
