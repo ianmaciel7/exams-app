@@ -111,6 +111,8 @@ export function responseHeaders(input?: HeadersInit): Headers {
       );
   }
   validateCommonHeaders(headers);
+  const date = headers.get("Date");
+  if (date === null) headers.set("Date", new Date().toUTCString());
   return headers;
 }
 
