@@ -18,7 +18,7 @@ it("retains typed JSON, named status and cookies", async () => {
   const response = server.ok({ id: 1 });
   expectTypeOf(response).toEqualTypeOf<NextResponse<{ id: number }>>();
   expect(await response.json()).toEqual({ id: 1 });
-  response.cookies.set("session", "value", { httpOnly: true });
+  response.cookies.set("session", "value", { httpOnly: true, secure: true });
   expect(response.headers.get("Set-Cookie")).toContain("HttpOnly");
   const options = { status: 500, headers: { "X-Test": "value" } };
   expect(server.ok({}, options).status).toBe(200);

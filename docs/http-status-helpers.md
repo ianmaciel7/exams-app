@@ -12,9 +12,12 @@ import { created, unauthorized, conditionalResponse } from "@/lib/server";
 
 created({ id: "123" }, { location: "/api/users/123" });
 created({ id: "123" }, { atRequestUri: "https://example.com/api/users/123" });
-unauthorized({ error: "Authentication required" }, {
-  challenge: { scheme: "Bearer", parameters: { realm: "api" } },
-});
+unauthorized(
+  { error: "Authentication required" },
+  {
+    challenge: { scheme: "Bearer", parameters: { realm: "api" } },
+  },
+);
 ```
 
 The creation identity is an explicit project policy, not a universal RFC MUST
