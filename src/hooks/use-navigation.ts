@@ -1,10 +1,6 @@
+import { useRouter } from "next/navigation";
 import { useMemo } from "react";
-import {
-  type AuthRoute,
-  getSignInUrl,
-  routes,
-  useRouter,
-} from "@/lib/navigation";
+import { type AuthRoute, getSignInUrl, routes } from "@/lib/navigation";
 import { getAuthNavigationUrl } from "@/lib/return-url";
 
 /**
