@@ -18,8 +18,15 @@ type SignInFormClientProps = ComponentProps<"div">;
 
 function SignInFormClient({ className, ...props }: SignInFormClientProps) {
   const t = useTranslations("Auth");
-  const { form, goToForgotPassword, goToRegister, isMfa, isPending, onSubmit } =
-    useSignInFormClient();
+  const {
+    rootError,
+    form,
+    goToForgotPassword,
+    goToRegister,
+    isMfa,
+    isPending,
+    onSubmit,
+  } = useSignInFormClient();
 
   if (isMfa) return <MultiFactorAuthAssertionForm />;
 
@@ -51,7 +58,7 @@ function SignInFormClient({ className, ...props }: SignInFormClientProps) {
             />
           </FieldGroup>
           <AuthSubmitSection
-            error={form.formState.errors.root?.message}
+            error={rootError}
             isPending={isPending}
             submitLabel={t("signInTitle")}
           />

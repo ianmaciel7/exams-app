@@ -19,8 +19,15 @@ type RegisterFormClientProps = ComponentProps<"div">;
 
 function RegisterFormClient({ className, ...props }: RegisterFormClientProps) {
   const t = useTranslations("Auth");
-  const { form, goToSignIn, isMfa, isPending, onSubmit, requireDisplayName } =
-    useRegisterFormClient();
+  const {
+    rootError,
+    form,
+    goToSignIn,
+    isMfa,
+    isPending,
+    onSubmit,
+    requireDisplayName,
+  } = useRegisterFormClient();
 
   if (isMfa) return <MultiFactorAuthAssertionForm />;
 
@@ -41,7 +48,7 @@ function RegisterFormClient({ className, ...props }: RegisterFormClientProps) {
             <PasswordField autoComplete="new-password" />
           </FieldGroup>
           <AuthSubmitSection
-            error={form.formState.errors.root?.message}
+            error={rootError}
             isPending={isPending}
             submitLabel={t("registerTitle")}
           />

@@ -19,7 +19,7 @@ function ForgotPasswordFormClient({
   ...props
 }: ForgotPasswordFormClientProps) {
   const t = useTranslations("Auth");
-  const { emailSent, form, goToSignIn, isPending, onSubmit } =
+  const { rootError, emailSent, form, goToSignIn, isPending, onSubmit } =
     useForgotPasswordFormClient();
 
   return (
@@ -42,7 +42,7 @@ function ForgotPasswordFormClient({
               <EmailField autoComplete="email" />
             </FieldGroup>
             <AuthSubmitSection
-              error={form.formState.errors.root?.message}
+              error={rootError}
               isPending={isPending}
               submitLabel={t("forgotPasswordTitle")}
             />

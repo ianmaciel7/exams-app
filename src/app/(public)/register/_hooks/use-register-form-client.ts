@@ -42,6 +42,7 @@ export function useRegisterFormClient() {
   };
 
   return {
+    rootError: form.formState.errors.root?.message,
     form,
     goToSignIn,
     isMfa: Boolean(ui.multiFactorResolver),

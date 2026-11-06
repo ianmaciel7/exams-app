@@ -31,6 +31,7 @@ export function useForgotPasswordFormClient() {
   };
 
   return {
+    rootError: form.formState.errors.root?.message,
     emailSent,
     form,
     goToSignIn,

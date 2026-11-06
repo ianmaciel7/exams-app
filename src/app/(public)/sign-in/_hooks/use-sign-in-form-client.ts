@@ -28,6 +28,7 @@ export function useSignInFormClient() {
   };
 
   return {
+    rootError: form.formState.errors.root?.message,
     form,
     goToForgotPassword,
     goToRegister,
