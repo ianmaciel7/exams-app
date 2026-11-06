@@ -1,12 +1,23 @@
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import {
+  act,
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+} from "@testing-library/react";
 import { NextIntlClientProvider } from "next-intl";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import en from "@/messages/en.json";
-import { HomeSignOutButtonClient } from "./home-sign-out-button-client";
+import { SignOutButtonClient } from "./sign-out-button-client";
 
 const mocks = vi.hoisted(() => ({
   signOut: vi.fn(),
   getUI: vi.fn(),
+  refresh: vi.fn(),
+}));
+
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ refresh: mocks.refresh }),
 }));
 
 vi.mock("firebase/auth", () => ({
@@ -17,7 +28,7 @@ vi.mock("@/lib/firebase/client", () => ({
   getFirebaseUI: mocks.getUI,
 }));
 
-describe("HomeSignOutButtonClient", () => {
+describe("SignOutButtonClient", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mocks.getUI.mockReturnValue({ get: () => ({ auth: {} }) });
@@ -27,7 +38,7 @@ describe("HomeSignOutButtonClient", () => {
   it("renders with custom className and accessible button text", () => {
     render(
       <NextIntlClientProvider locale="en" messages={en}>
-        <HomeSignOutButtonClient className="custom-signout-wrapper" />
+        <SignOutButtonClient className="custom-signout-wrapper" />
       </NextIntlClientProvider>,
     );
 
@@ -41,7 +52,7 @@ describe("HomeSignOutButtonClient", () => {
 
     render(
       <NextIntlClientProvider locale="en" messages={en}>
-        <HomeSignOutButtonClient />
+        <SignOutButtonClient />
       </NextIntlClientProvider>,
     );
 
@@ -51,8 +62,36 @@ describe("HomeSignOutButtonClient", () => {
     fireEvent.click(button);
 
     const alert = await screen.findByRole("alert");
-    expect(alert.id).toBe("home-sign-out-error");
+    expect(alert.id).toBe("sign-out-error");
     expect(alert.textContent).toBe(en.Home.signOutError);
-    expect(button.getAttribute("aria-describedby")).toBe("home-sign-out-error");
+    expect(button.getAttribute("aria-describedby")).toBe("sign-out-error");
+  });
+
+  it("signs out, refreshes the server tree and ignores repeated clicks", async () => {
+    let finish: () => void = () => {};
+    mocks.signOut.mockReturnValue(
+      new Promise<void>((resolve) => {
+        finish = resolve;
+      }),
+    );
+
+    render(
+      <NextIntlClientProvider locale="en" messages={en}>
+        <SignOutButtonClient />
+      </NextIntlClientProvider>,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: en.Auth.signOut }));
+    const pending = await screen.findByRole("button", {
+      name: en.Home.signingOut,
+    });
+    expect(pending.getAttribute("aria-busy")).toBe("true");
+    fireEvent.click(pending);
+    await act(async () => {
+      finish();
+    });
+
+    expect(mocks.signOut).toHaveBeenCalledOnce();
+    expect(mocks.refresh).toHaveBeenCalledOnce();
   });
 });

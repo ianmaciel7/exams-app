@@ -21,8 +21,10 @@ describe("getSession", () => {
     mocks.getFirebaseServerSession.mockResolvedValue({
       role: "admin",
       userId: "a1",
+      displayName: "Ada",
     });
     await expect(getSession()).resolves.toEqual({
+      displayName: "Ada",
       isAuthenticated: true,
       role: "admin",
       userId: "a1",
@@ -35,6 +37,7 @@ describe("getSession", () => {
       userId: null,
     });
     await expect(getSession()).resolves.toEqual({
+      displayName: null,
       isAuthenticated: false,
       role: "user",
       userId: null,
