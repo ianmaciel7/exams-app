@@ -1,12 +1,10 @@
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { cleanup, render, screen } from "@testing-library/react";
 import { renderToString } from "react-dom/server";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { ForgotPasswordFormClient } from "./forgot-password/_components/forgot-password-form-client";
 import { RegisterFormClient } from "./register/_components/register-form-client";
 import { SignInFormClient } from "./sign-in/_components/sign-in-form-client";
 
-const { push } = vi.hoisted(() => ({ push: vi.fn() }));
-vi.mock("next/navigation", () => ({ useRouter: () => ({ push }) }));
 vi.mock("next-intl", () => ({
   useTranslations: () => (key: string) => key,
 }));
@@ -30,17 +28,10 @@ vi.mock("@firebase-oss/ui-core", () => ({
   sendPasswordResetEmail: vi.fn(),
 }));
 
-beforeEach(() => {
-  window.history.replaceState(null, "", "/");
-});
-afterEach(() => {
-  cleanup();
-  push.mockClear();
-  window.history.replaceState(null, "", "/");
-});
+afterEach(cleanup);
 
-const click = (name: string) =>
-  fireEvent.click(screen.getByRole("button", { name }));
+const href = (name: string) =>
+  screen.getByRole("link", { name }).getAttribute("href");
 
 describe("authentication routes", () => {
   it.each([SignInFormClient, RegisterFormClient, ForgotPasswordFormClient])(
@@ -48,64 +39,45 @@ describe("authentication routes", () => {
     (Form) => {
       vi.stubGlobal("window", undefined);
       try {
-        expect(renderToString(<Form />)).toContain("button");
+        expect(renderToString(<Form />)).toContain("<a");
       } finally {
         vi.unstubAllGlobals();
       }
     },
   );
 
-  it("navigates from sign in to registration and recovery", () => {
+  it("links from sign in to registration and recovery", () => {
     render(<SignInFormClient />);
-    click("registerTitle");
-    click("forgotPasswordPrompt");
-    expect(push.mock.calls).toEqual([["/register"], ["/forgot-password"]]);
+    expect(href("registerTitle")).toBe("/register");
+    expect(href("forgotPasswordPrompt")).toBe("/forgot-password");
   });
 
-  it("navigates from registration back to sign in", () => {
+  it("links from registration back to sign in", () => {
     render(<RegisterFormClient />);
-    click("signInTitle");
-    expect(push).toHaveBeenCalledWith("/sign-in");
+    expect(href("signInTitle")).toBe("/sign-in");
   });
 
-  it("navigates from recovery back to sign in", () => {
+  it("links from recovery back to sign in", () => {
     render(<ForgotPasswordFormClient />);
-    click("backToSignIn");
-    expect(push).toHaveBeenCalledWith("/sign-in");
+    expect(href("backToSignIn")).toBe("/sign-in");
   });
 
-  it("preserves the requested destination throughout registration and recovery", () => {
-    const next = `?next=${encodeURIComponent("/profile?tab=security")}`;
-    window.history.replaceState(null, "", `/sign-in${next}`);
-    const { unmount } = render(<SignInFormClient />);
-    click("registerTitle");
-    click("forgotPasswordPrompt");
-    expect(push.mock.calls).toEqual([
-      [`/register${next}`],
-      [`/forgot-password${next}`],
-    ]);
+  it("preserves the requested destination on every link", () => {
+    const next = "/profile?tab=security";
+    const query = `?next=${encodeURIComponent(next)}`;
+    const { unmount } = render(<SignInFormClient next={next} />);
+    expect(href("registerTitle")).toBe(`/register${query}`);
+    expect(href("forgotPasswordPrompt")).toBe(`/forgot-password${query}`);
     unmount();
-
-    window.history.replaceState(null, "", `/register${next}`);
-    const registration = render(<RegisterFormClient />);
-    click("signInTitle");
-    expect(push).toHaveBeenLastCalledWith(`/sign-in${next}`);
+    const registration = render(<RegisterFormClient next={next} />);
+    expect(href("signInTitle")).toBe(`/sign-in${query}`);
     registration.unmount();
-
-    window.history.replaceState(null, "", `/forgot-password${next}`);
-    render(<ForgotPasswordFormClient />);
-    click("backToSignIn");
-    expect(push).toHaveBeenLastCalledWith(`/sign-in${next}`);
+    render(<ForgotPasswordFormClient next={next} />);
+    expect(href("backToSignIn")).toBe(`/sign-in${query}`);
   });
 
-  it("drops unsafe return destinations from authentication navigation", () => {
-    window.history.replaceState(
-      null,
-      "",
-      `/sign-in?next=${encodeURIComponent("https://evil.example")}`,
-    );
-    render(<SignInFormClient />);
-    click("registerTitle");
-    expect(push).toHaveBeenCalledWith("/register");
+  it("drops unsafe return destinations from the links", () => {
+    render(<SignInFormClient next="https://evil.example" />);
+    expect(href("registerTitle")).toBe("/register");
   });
 });

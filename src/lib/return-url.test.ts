@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getSafeReturnUrl } from "./return-url";
+import { getAuthLinkHref, getSafeReturnUrl } from "./return-url";
 
 describe("getSafeReturnUrl", () => {
   it.each([
@@ -19,5 +19,17 @@ describe("getSafeReturnUrl", () => {
     ["/%2e%2e/sign-in", "/"],
   ])("resolves %s to %s", (input, expected) => {
     expect(getSafeReturnUrl(input)).toBe(expected);
+  });
+});
+
+describe("getAuthLinkHref", () => {
+  it.each([
+    [undefined, "/register"],
+    ["/profile?tab=security", "/register?next=%2Fprofile%3Ftab%3Dsecurity"],
+    [["/profile", "/other"], "/register?next=%2Fprofile"],
+    ["https://evil.example", "/register"],
+    ["/sign-in", "/register"],
+  ])("builds the href for next=%j", (next, href) => {
+    expect(getAuthLinkHref("/register", next)).toBe(href);
   });
 });

@@ -615,9 +615,9 @@ return-URL validator for user-controlled redirect destinations.
 
 Navigate on the client through `useNavigation` from
 `src/hooks/use-navigation.ts`. It is the only module that calls `useRouter`
-and exposes `push`, `replace`, `refresh`, `back`, the auth destinations
-(`goToSignIn`, `goToRegister`, `goToForgotPassword`, which keep the `?next=`
-query), and `replaceWithSignIn(destination)`. Its callbacks keep a stable
+and exposes `push`, `replace`, `refresh`, `back` and
+`replaceWithSignIn(destination)`. Links between screens are `Link`, never a
+button that calls the router; `AuthLink` keeps the `?next=` query. Its callbacks keep a stable
 identity so effects can depend on them. Biome `noRestrictedImports` rejects
 `useRouter` from `next/navigation` in every other owned module; other
 `next/navigation` hooks such as `usePathname` stay allowed.

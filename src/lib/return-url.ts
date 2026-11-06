@@ -30,12 +30,12 @@ export function getSafeReturnUrl(value: string | null | undefined): string {
   }
 }
 
-/** Preserve a validated destination when moving between authentication screens. */
-export function getAuthNavigationUrl(
+/** Link between authentication screens, preserving a validated destination. */
+export function getAuthLinkHref(
   pathname: AuthRoute,
-  search: string,
+  next: string | string[] | undefined,
 ): string {
-  const destination = getSafeReturnUrl(new URLSearchParams(search).get("next"));
+  const destination = getSafeReturnUrl(Array.isArray(next) ? next[0] : next);
   return destination === routes.home
     ? pathname
     : `${pathname}?next=${encodeURIComponent(destination)}`;

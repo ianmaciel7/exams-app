@@ -2,22 +2,24 @@
 
 import { useTranslations } from "next-intl";
 import { FormProvider } from "react-hook-form";
-import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/extensions/form";
 import { FieldGroup } from "@/components/ui/field";
+import { routes } from "@/lib/navigation";
+import { AuthLink } from "../../_components/auth-link";
 import { AuthSubmitSection } from "../../_components/auth-submit-section";
 import { EmailField } from "../../_components/email-field";
 import { PasswordField } from "../../_components/password-field";
 import { SocialSignInSection } from "../../_components/social-sign-in-section";
 import type { useSignInFormClient } from "../_hooks/use-sign-in-form-client";
 
-type SignInFormController = ReturnType<typeof useSignInFormClient>;
+type SignInFormController = ReturnType<typeof useSignInFormClient> & {
+  next?: string | string[];
+};
 
 function SignInFormBody({
   rootError,
   form,
-  goToForgotPassword,
-  goToRegister,
+  next,
   isPending,
   onSubmit,
 }: SignInFormController) {
@@ -34,14 +36,9 @@ function SignInFormBody({
             <PasswordField
               autoComplete="current-password"
               labelAction={
-                <Button
-                  type="button"
-                  variant="link"
-                  size="xs"
-                  onClick={goToForgotPassword}
-                >
+                <AuthLink route={routes.forgotPassword} next={next}>
                   {t("forgotPasswordPrompt")}
-                </Button>
+                </AuthLink>
               }
             />
           </FieldGroup>
@@ -52,14 +49,9 @@ function SignInFormBody({
           />
           <div className="text-center text-xs text-muted-foreground">
             {t("noAccountPrompt")}{" "}
-            <Button
-              type="button"
-              variant="link"
-              size="xs"
-              onClick={goToRegister}
-            >
+            <AuthLink route={routes.register} next={next}>
               {t("registerTitle")}
-            </Button>
+            </AuthLink>
           </div>
         </Form>
       </FormProvider>

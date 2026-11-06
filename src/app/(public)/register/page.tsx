@@ -26,7 +26,7 @@ export default async function RegisterPage(props: PageProps<"/register">) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <RegisterFormClient />
+        <RegisterFormClient next={next} />
       </CardContent>
     </Card>
   );

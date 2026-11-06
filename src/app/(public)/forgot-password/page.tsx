@@ -10,7 +10,10 @@ import { ForgotPasswordFormClient } from "./_components/forgot-password-form-cli
 
 export const instant = false;
 
-export default function ForgotPasswordPage() {
+export default async function ForgotPasswordPage(
+  props: PageProps<"/forgot-password">,
+) {
+  const { next } = await props.searchParams;
   return (
     <Card className="w-full shadow-md ring-foreground/20">
       <CardHeader>
@@ -22,7 +25,7 @@ export default function ForgotPasswordPage() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ForgotPasswordFormClient />
+        <ForgotPasswordFormClient next={next} />
       </CardContent>
     </Card>
   );

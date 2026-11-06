@@ -7,9 +7,12 @@ import { cn } from "@/lib/utils";
 import { useSignInFormClient } from "../_hooks/use-sign-in-form-client";
 import { SignInFormBody } from "./sign-in-form-body";
 
-type SignInFormClientProps = useRender.ComponentProps<"div">;
+type SignInFormClientProps = useRender.ComponentProps<"div"> & {
+  next?: string | string[];
+};
 
 function SignInFormClient({
+  next,
   className,
   render,
   ...props
@@ -21,7 +24,7 @@ function SignInFormClient({
     props: mergeProps<"div">(
       {
         className: cn("flex flex-col gap-4", className),
-        children: <SignInFormBody {...controller} />,
+        children: <SignInFormBody {...controller} next={next} />,
       },
       props,
     ),
