@@ -43,7 +43,10 @@ describe("responsiveness guard", () => {
         isOwnedComponent("src/components/ui/extensions/labeled-spinner.tsx"),
         true,
       );
-      assert.equal(isOwnedComponent("src/app/_components/welcome-hero.tsx"), true);
+      assert.equal(
+        isOwnedComponent("src/app/_components/welcome-hero.tsx"),
+        true,
+      );
       assert.equal(
         isOwnedComponent(
           "src/app/(protected)/profile/_components/profile-card.tsx",
