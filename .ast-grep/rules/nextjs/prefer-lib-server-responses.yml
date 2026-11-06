@@ -1,0 +1,23 @@
+id: prefer-lib-server-responses
+language: tsx
+files:
+  - "src/**/*.ts"
+  - "src/**/*.tsx"
+ignores:
+  - "src/lib/server.ts"
+  - "**/*.test.ts"
+  - "**/*.test.tsx"
+severity: error
+message: Build JSON, redirect and empty responses with the named helpers from "@/lib/server" (ok, created, badRequest, temporaryRedirect, noContent) instead of constructing NextResponse or Response directly.
+note: |
+  src/lib/server.ts is the definition of those helpers and the only place that
+  constructs them. NextResponse.next() and NextResponse.rewrite() have no helper
+  and stay available through the re-export. See docs/http-status-helpers.md.
+rule:
+  kind: call_expression
+  any:
+    - pattern: NextResponse.json($$$)
+    - pattern: NextResponse.redirect($$$)
+    - pattern: Response.json($$$)
+    - pattern: Response.redirect($$$)
+    - pattern: server.NextResponse.json($$$)
