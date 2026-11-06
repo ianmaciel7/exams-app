@@ -1,0 +1,86 @@
+id: no-route-handler-helpers
+snapshots:
+  "const FIVE_DAYS = 5;\nexport async function GET() {}\n":
+    labels:
+      - source: const FIVE_DAYS = 5;
+        style: primary
+        start: 0
+        end: 20
+      - source: |
+          const FIVE_DAYS = 5;
+          export async function GET() {}
+        style: secondary
+        start: 0
+        end: 52
+  "export * from \"@/lib/handlers\";\n":
+    labels:
+      - source: export * from "@/lib/handlers";
+        style: primary
+        start: 0
+        end: 31
+  "export const config = {};\n":
+    labels:
+      - source: config
+        style: primary
+        start: 13
+        end: 19
+      - source: export const config = {};
+        style: secondary
+        start: 0
+        end: 25
+      - source: const config = {};
+        style: secondary
+        start: 7
+        end: 25
+      - source: config = {}
+        style: secondary
+        start: 13
+        end: 24
+  "export default function handler() {}\n":
+    labels:
+      - source: export default function handler() {}
+        style: primary
+        start: 0
+        end: 36
+  "export function helper() {}\n":
+    labels:
+      - source: helper
+        style: primary
+        start: 16
+        end: 22
+      - source: export function helper() {}
+        style: secondary
+        start: 0
+        end: 27
+      - source: function helper() {}
+        style: secondary
+        start: 7
+        end: 27
+  "export type Body = { idToken: string };\n":
+    labels:
+      - source: Body
+        style: primary
+        start: 12
+        end: 16
+      - source: "export type Body = { idToken: string };"
+        style: secondary
+        start: 0
+        end: 39
+      - source: "type Body = { idToken: string };"
+        style: secondary
+        start: 7
+        end: 39
+  "function helper() {}\nexport async function GET() {\n  return helper();\n}\n":
+    labels:
+      - source: function helper() {}
+        style: primary
+        start: 0
+        end: 20
+      - source: |
+          function helper() {}
+          export async function GET() {
+            return helper();
+          }
+        style: secondary
+        start: 0
+        end: 72
