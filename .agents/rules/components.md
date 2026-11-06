@@ -19,11 +19,11 @@ This section covers component dimensions and file contracts; see also [Component
 
 ## Three independent dimensions
 
-| Dimension      | Convention                                                                                                                                                                                             | Examples                                                                                |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- |
-| Runtime        | Import graphs determine membership; `"use client"` declares a boundary, while a shared module can compile in both graphs                                                                               | `AccountCard` may participate in a client subtree without its own directive             |
-| Responsibility | Every component must specify a concrete component type or semantic role describing its composition or behavior, not its runtime environment. Bare domain or runtime labels are prohibited              | `ProfileForm`, `ProfileAvatarFieldClient`, `PublicUiProviderClient`, `SignInFormClient` |
-| Placement      | Colocate route components in private `_components/`, hooks in `_hooks/` and shared Firebase presentation in `src/components/firebase/`; route-shared integrations in the nearest common `_components/` | App Router private folders do not become routes                                         |
+| Dimension      | Convention                                                                                                                                                                                                                                                                       | Examples                                                                                |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| Runtime        | Import graphs determine membership; `"use client"` declares a boundary, while a shared module can compile in both graphs                                                                                                                                                         | `AccountCard` may participate in a client subtree without its own directive             |
+| Responsibility | Every component must specify a concrete component type or semantic role describing its composition or behavior, not its runtime environment. Bare domain or runtime labels are prohibited                                                                                        | `ProfileForm`, `ProfileAvatarFieldClient`, `PublicUiProviderClient`, `SignInFormClient` |
+| Placement      | Colocate route components in private `_components/`, hooks in `_hooks/`, and keep Firebase components (presentation and their `-client` wrappers) in `src/components/firebase/` with their hooks in `src/hooks/`; route-shared integrations in the nearest common `_components/` | App Router private folders do not become routes                                         |
 
 Every owned component must specify a concrete component type or semantic role describing its composition or behavior (such as `*-field`, `*-form`, `*-card`, `*-dialog`, `*-hero`, `*-button`, `*-provider`, or `*-guard`). A component name must never describe only its feature domain or runtime environment without a concrete role.
 
@@ -32,10 +32,10 @@ Route composition roots that render an auth form carry `Form` in the name (`Sign
 `src/components` contains the shadcn primitives (`ui/`, including owned
 `ui/extensions/`), generated AI Elements, and owned Firebase presentation
 (`firebase/`). `check-components-directory` rejects other folders and any
-`-client`/`-server` integration or explicit `server-only`/`client-only` boundary
-there. Authentication integrations remain in public-route `_components`,
-while their presentation companions live in `src/components/firebase` and
-receive data, callbacks and integration slots. Only generated shadcn/AI source
+`-server` integration (and `-client` outside `firebase`) or explicit
+`server-only`/`client-only` boundary there. Firebase `-client` wrappers live in
+`src/components/firebase` next to their presentation companions, which receive
+data, callbacks and integration slots. Only generated shadcn/AI source
 retains its documented exclusions; Firebase presentation is fully checked.
 
 ## Anti-Over-Engineering and Pragmatic Cohesion
@@ -178,8 +178,9 @@ Place Firebase authentication presentation in `src/components/firebase/`,
 including forms, fields, policy content and provider feedback. These are owned
 components, subject to the naming, structure, lint and coverage checks; they
 have no registry exclusion. Other shared presentation belongs in
-`src/components/ui/extensions/`. Keep Firebase integrations (`*-client.tsx`),
-hooks and route wiring in `src/app/**/_components/` and `_hooks/`.
+`src/components/ui/extensions/`. Keep Firebase `*-client.tsx` wrappers in `src/components/firebase/` with
+their hooks in `src/hooks/`; other integrations and route wiring stay in
+`src/app/**/_components/` and `_hooks/`.
 
 Shared components never import `src/app`, even for types. Define presentation
 props independently, and pass integrations through React node slots or

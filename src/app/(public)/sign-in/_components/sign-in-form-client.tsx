@@ -1,9 +1,9 @@
 "use client";
 import type { ComponentProps } from "react";
 import { FormProvider } from "react-hook-form";
-import { GoogleSignInButtonClient } from "@/app/(public)/_components/firebase/google-sign-in-button-client";
-import { MultiFactorAssertionFlowClient } from "@/app/(public)/_components/firebase/multi-factor-assertion-flow-client";
-import { PoliciesSectionClient } from "@/app/(public)/_components/firebase/policies-section-client";
+import { GoogleSignInButtonClient } from "@/components/firebase/google-sign-in-button-client";
+import { MultiFactorAssertionFlowClient } from "@/components/firebase/multi-factor-assertion-flow-client";
+import { PoliciesSectionClient } from "@/components/firebase/policies-section-client";
 import {
   SignInForm,
   SignInFormContent,

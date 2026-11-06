@@ -4,9 +4,10 @@ import { fileURLToPath } from "node:url";
 
 // `src/components` holds only presentational building blocks written in the
 // shadcn/Base UI style: the `ui` registry (including `ui/extensions`) and the
-// `ai-elements` registry, plus owned Firebase presentation under `firebase`.
-// Integration components, the ones that read the
-// session, headers, Firebase or the request, belong next to the route that
+// `ai-elements` registry, plus the owned `firebase` tree. The `firebase` tree
+// is the one place where `-client` wrappers (hook plus presentation) may live,
+// because it is scoped to a single SDK. Other integration components, the ones
+// that read the session, headers or the request, belong next to the route that
 // owns them in a private `_components` folder (Next.js project organization),
 // shared ones in the nearest common `_components` folder. This is a rule on
 // the directory, not a list of files: any new file is judged by its path,
@@ -14,6 +15,8 @@ import { fileURLToPath } from "node:url";
 
 const root = "src/components";
 const componentTrees = new Set(["ui", "ai-elements", "firebase"]);
+// Trees that own the integration of one SDK may hold `-client` wrappers.
+const clientWrapperTrees = new Set(["firebase"]);
 const integrationStem = /-(?:client|server)$/;
 const serverBoundary =
   /^\s*(?:["']use server["']|import\s+["']server-only["']|import\s+["']client-only["'])/m;
@@ -34,9 +37,12 @@ export function inspectComponentsDirectory(sources) {
       .split("/")
       .at(-1)
       .replace(/(?:\.(?:test|spec|stories|browser\.test))?\.[cm]?[jt]sx?$/, "");
-    if (integrationStem.test(stem)) {
+    const isIntegration = clientWrapperTrees.has(registry)
+      ? /-server$/.test(stem)
+      : integrationStem.test(stem);
+    if (isIntegration) {
       errors.push(
-        `${file}: ${root} has no -client or -server components; those are integrations and belong in src/app/**/_components.`,
+        `${file}: ${root} has no ${clientWrapperTrees.has(registry) ? "-server" : "-client or -server"} components; those are integrations and belong in src/app/**/_components.`,
       );
     }
     if (serverBoundary.test(text)) {
@@ -70,6 +76,6 @@ if (
     process.exit(1);
   }
   console.log(
-    "src/components holds only ui, ai-elements and firebase presentation components.",
+    "src/components holds only the ui, ai-elements and firebase component trees.",
   );
 }

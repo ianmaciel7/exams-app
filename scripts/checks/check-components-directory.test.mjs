@@ -34,10 +34,18 @@ describe("src/components directory guard", () => {
       "src/components/ui/extensions/theme-provider-server.tsx": "export {};",
       "src/components/ui/extensions/theme-provider-server.test.tsx": "",
       "src/components/ai-elements/feed-server.ts": "",
-      "src/components/firebase/policies-client.tsx": "export {};",
       "src/components/firebase/form-server.tsx": "export {};",
     });
-    assert.equal(errors.length, 5);
+    assert.equal(errors.length, 4);
+  });
+
+  it("accepts -client wrappers in the firebase tree only", () => {
+    assert.deepEqual(
+      inspectComponentsDirectory({
+        "src/components/firebase/policies-section-client.tsx": "export {};",
+      }),
+      [],
+    );
   });
 
   it("rejects server boundaries inside a registry", () => {

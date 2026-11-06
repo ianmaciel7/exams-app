@@ -5,10 +5,9 @@ import { afterEach, expect, it, vi } from "vitest";
 vi.mock("../_hooks/use-register-form-client", () => ({
   useRegisterFormClient: () => ({ isMfa: true }),
 }));
-vi.mock(
-  "@/app/(public)/_components/firebase/multi-factor-assertion-flow-client",
-  () => ({ MultiFactorAssertionFlowClient: () => <p>{"Second factor"}</p> }),
-);
+vi.mock("@/components/firebase/multi-factor-assertion-flow-client", () => ({
+  MultiFactorAssertionFlowClient: () => <p>{"Second factor"}</p>,
+}));
 
 import { RegisterFormClient } from "./register-form-client";
 

@@ -5,8 +5,8 @@ import {
   MultiFactorAssertionFlow,
   MultiFactorAssertionFlowPicker,
 } from "@/components/firebase/multi-factor-assertion-flow";
+import { useMultiFactorAssertionFlowClient } from "@/hooks/use-multi-factor-assertion-flow-client";
 import type { UserCredential } from "@/lib/firebase/multi-factor";
-import { useMultiFactorAssertionFlowClient } from "../../_hooks/use-multi-factor-assertion-flow-client";
 import { SmsMultiFactorPhoneSectionClient } from "./sms-multi-factor-phone-section-client";
 import { SmsMultiFactorVerifyFormClient } from "./sms-multi-factor-verify-form-client";
 import { TotpMultiFactorAssertionFormClient } from "./totp-multi-factor-assertion-form-client";
