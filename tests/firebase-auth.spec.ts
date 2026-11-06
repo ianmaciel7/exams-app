@@ -89,7 +89,7 @@ test.beforeAll(async ({ request }) => {
 test("registration and persisted authentication redirect", async ({ page }) => {
   const email = `register-${crypto.randomUUID()}@example.test`;
   await page.goto("/sign-in");
-  await page.getByRole("button", { name: "Sign Up", exact: true }).click();
+  await page.getByRole("link", { name: "Sign Up", exact: true }).click();
   await expect(page).toHaveURL(/\/register$/);
   await signUpEmail(page).fill(email);
   await signUpPassword(page).fill(password);
@@ -132,7 +132,7 @@ test("password recovery sends an emulator reset code and displays failures", asy
   );
   expect(create.ok()).toBeTruthy();
   await page.goto("/sign-in");
-  await page.getByRole("button", { name: "Forgot Password?" }).click();
+  await page.getByRole("link", { name: "Forgot Password?" }).click();
   await expect(page).toHaveURL(/\/forgot-password$/);
   // Route transitions can retain previous form controls in the DOM; the
   // autocomplete token identifies the recovery email field on this route.
@@ -180,7 +180,7 @@ test("password recovery sends an emulator reset code and displays failures", asy
 
 test("navigation and translated screens", async ({ page, context }) => {
   await page.goto("/forgot-password");
-  await page.getByRole("button", { name: /back to sign in/i }).click();
+  await page.getByRole("link", { name: /back to sign in/i }).click();
   await expect(page).toHaveURL(/\/sign-in$/);
   await context.addCookies([
     { name: "NEXT_LOCALE", value: "pt-BR", url: authTestOrigin },

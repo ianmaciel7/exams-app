@@ -1,0 +1,42 @@
+id: no-button-navigation-onclick
+language: tsx
+files:
+  - src/components/**/*.tsx
+  - src/app/**/_components/**/*.tsx
+ignores:
+  - "**/*.test.tsx"
+  - "**/*.stories.tsx"
+  - "src/components/ui/[!e]*.tsx"
+  - "src/components/ui/e[!x]*.tsx"
+severity: error
+message: Navigate with a real Link styled by buttonVariants, not a Button whose onClick calls the router.
+note: |
+  A button that only navigates is announced as a button, cannot open in a new
+  tab, and does not prefetch. Next.js and WAI-ARIA reserve links for
+  navigation and buttons for actions. See CODING_STANDARDS.md and ADR 0002.
+  Example:
+    <Link href="/register" className={buttonVariants({ variant: "link" })}>Register</Link>
+rule:
+  any:
+    - kind: jsx_opening_element
+    - kind: jsx_self_closing_element
+  all:
+    - has:
+        field: name
+        regex: ^Button$
+    - has:
+        kind: jsx_attribute
+        all:
+          - has:
+              kind: property_identifier
+              regex: ^onClick$
+          - has:
+              kind: jsx_expression
+              regex: ^\{\s*(\(\s*\)\s*=>\s*)?(\w+\.)?(push|replace|navigate|goTo\w*)\b
+    # Moving within a widget (carousel, stepper, pagination) is an action, not a route change.
+    - not:
+        has:
+          kind: jsx_attribute
+          has:
+            kind: jsx_expression
+            regex: ^\{\s*(\(\s*\)\s*=>\s*)?(\w+\.)?goTo(Next|Prev|Previous|First|Last|Slide|Index|Step|Page\b)

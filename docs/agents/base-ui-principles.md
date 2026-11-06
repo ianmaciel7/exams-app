@@ -37,6 +37,7 @@ cannot be automated.
 | Non-button `render` on a button part sets `nativeButton={false}`   | rule:require-native-button-false                                         |
 | A trigger composes Button through `render`, never nests it         | rule:no-nested-button-in-trigger                                         |
 | Links are real anchors, not Button with `render`                   | rule:no-button-render-link                                               |
+| Navigation is a Link, not a Button that calls the router           | rule:no-button-navigation-onclick                                        |
 | Buttons use the shared Button                                      | rule:no-raw-button-element                                               |
 | Value controls use change callbacks, not `onClick`                 | rule:no-onclick-on-value-control                                         |
 | Menu items fire `onClick`                                          | rule:menu-item-on-click                                                  |

@@ -1,0 +1,46 @@
+id: no-button-navigation-onclick
+snapshots:
+  "<Button onClick={goToRegister}>Register</Button>":
+    labels:
+      - source: <Button onClick={goToRegister}>
+        style: primary
+        start: 0
+        end: 31
+      - source: Button
+        style: secondary
+        start: 1
+        end: 7
+      - source: onClick
+        style: secondary
+        start: 8
+        end: 15
+      - source: "{goToRegister}"
+        style: secondary
+        start: 16
+        end: 30
+      - source: onClick={goToRegister}
+        style: secondary
+        start: 8
+        end: 30
+  '<Button variant="link" onClick={() => router.push("/sign-in")}>Sign in</Button>':
+    labels:
+      - source: <Button variant="link" onClick={() => router.push("/sign-in")}>
+        style: primary
+        start: 0
+        end: 63
+      - source: Button
+        style: secondary
+        start: 1
+        end: 7
+      - source: onClick
+        style: secondary
+        start: 23
+        end: 30
+      - source: '{() => router.push("/sign-in")}'
+        style: secondary
+        start: 31
+        end: 62
+      - source: onClick={() => router.push("/sign-in")}
+        style: secondary
+        start: 23
+        end: 62

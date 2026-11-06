@@ -16,18 +16,8 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/extensions/form";
 import { FormError } from "@/components/ui/extensions/form-error";
-import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldLabel,
-  FieldTitle,
-} from "@/components/ui/field";
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSlot,
-} from "@/components/ui/input-otp";
+import { VerificationCodeField } from "@/components/ui/extensions/verification-code-field";
+import { Field, FieldDescription, FieldTitle } from "@/components/ui/field";
 import { Spinner } from "@/components/ui/spinner";
 import { getAuthActionErrorMessage } from "@/lib/firebase/auth-error-message";
 
@@ -143,37 +133,19 @@ function SmsMultiFactorAssertionVerifyForm(
           control={form.control}
           name="verificationCode"
           render={({ field, fieldState }) => (
-            <Field data-invalid={!!fieldState.error}>
-              <FieldLabel htmlFor="verificationCode">
-                {getTranslation(ui, "labels", "verificationCode")}
-              </FieldLabel>
-              <FieldDescription>
-                {getTranslation(ui, "prompts", "smsVerificationPrompt")}
-              </FieldDescription>
-              <InputOTP
-                id="verificationCode"
-                maxLength={6}
-                {...field}
-                aria-invalid={!!fieldState.error}
-                aria-describedby={
-                  fieldState.error ? "verificationCode-error" : undefined
-                }
-              >
-                <InputOTPGroup>
-                  <InputOTPSlot index={0} />
-                  <InputOTPSlot index={1} />
-                  <InputOTPSlot index={2} />
-                  <InputOTPSlot index={3} />
-                  <InputOTPSlot index={4} />
-                  <InputOTPSlot index={5} />
-                </InputOTPGroup>
-              </InputOTP>
-              {fieldState.error && (
-                <FieldError id="verificationCode-error">
-                  {fieldState.error.message}
-                </FieldError>
+            <VerificationCodeField
+              name={field.name}
+              label={getTranslation(ui, "labels", "verificationCode")}
+              description={getTranslation(
+                ui,
+                "prompts",
+                "smsVerificationPrompt",
               )}
-            </Field>
+              value={field.value}
+              onValueChange={field.onChange}
+              onBlur={field.onBlur}
+              error={fieldState.error?.message}
+            />
           )}
         />
         <Button

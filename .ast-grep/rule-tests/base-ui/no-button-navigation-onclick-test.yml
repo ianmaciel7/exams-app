@@ -1,0 +1,8 @@
+id: no-button-navigation-onclick
+valid:
+  - <Link href="/register" className={buttonVariants()}>Register</Link>
+  - <Button onClick={save}>Save</Button>
+  - <Button onClick={() => setOpen(true)}>Open</Button>
+invalid:
+  - <Button onClick={goToRegister}>Register</Button>
+  - <Button variant="link" onClick={() => router.push("/sign-in")}>Sign in</Button>

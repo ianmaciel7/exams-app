@@ -5,23 +5,27 @@ import { useRender } from "@base-ui/react/use-render";
 import { useTranslations } from "next-intl";
 import { FormProvider } from "react-hook-form";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/extensions/form";
 import { FieldGroup } from "@/components/ui/field";
+import { routes } from "@/lib/navigation";
 import { cn } from "@/lib/utils";
+import { AuthLink } from "../../_components/auth-link";
 import { AuthSubmitSection } from "../../_components/auth-submit-section";
 import { EmailField } from "../../_components/email-field";
 import { useForgotPasswordFormClient } from "../_hooks/use-forgot-password-form-client";
 
-type ForgotPasswordFormClientProps = useRender.ComponentProps<"div">;
+type ForgotPasswordFormClientProps = useRender.ComponentProps<"div"> & {
+  next?: string | string[];
+};
 
 function ForgotPasswordFormClient({
+  next,
   className,
   render,
   ...props
 }: ForgotPasswordFormClientProps) {
   const t = useTranslations("Auth");
-  const { rootError, emailSent, form, goToSignIn, isPending, onSubmit } =
+  const { rootError, emailSent, form, isPending, onSubmit } =
     useForgotPasswordFormClient();
 
   return useRender({
@@ -53,9 +57,9 @@ function ForgotPasswordFormClient({
                 </Form>
               </FormProvider>
             )}
-            <Button type="button" variant="link" size="xs" onClick={goToSignIn}>
+            <AuthLink route={routes.signIn} next={next}>
               {t("backToSignIn")}
-            </Button>
+            </AuthLink>
           </>
         ),
       },

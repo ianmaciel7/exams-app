@@ -26,7 +26,7 @@ export default async function SignInPage(props: PageProps<"/sign-in">) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <SignInFormClient />
+        <SignInFormClient next={next} />
       </CardContent>
     </Card>
   );
