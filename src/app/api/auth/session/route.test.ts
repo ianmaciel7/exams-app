@@ -70,8 +70,40 @@ describe("/api/auth/session", () => {
         });
         const response = await POST(request);
         expect(response.status).toBe(401);
+        const data = await response.json();
+        expect(data).toEqual({
+          error: "Failed to create session",
+          code: "unknown",
+        });
         expect(mocks.cookies.has("__session")).toBe(false);
       } finally {
+        log.mockRestore();
+      }
+    });
+
+    it("logs specific diagnostic guidance when auth/user-not-found occurs in emulator mode", async () => {
+      const log = vi.spyOn(console, "error").mockImplementation(() => {});
+      const previousHost = process.env.FIREBASE_AUTH_EMULATOR_HOST;
+      try {
+        process.env.FIREBASE_AUTH_EMULATOR_HOST = "127.0.0.1:9099";
+        const firebaseError = Object.assign(
+          new Error("There is no user record"),
+          { code: "auth/user-not-found" },
+        );
+        mocks.createSessionCookie.mockRejectedValue(firebaseError);
+        const request = new NextRequest("http://localhost/api/auth/session", {
+          method: "POST",
+          body: JSON.stringify({ idToken: "token-from-other-project" }),
+        });
+        const response = await POST(request);
+        expect(response.status).toBe(401);
+        const data = await response.json();
+        expect(data.code).toBe("auth/user-not-found");
+        expect(log).toHaveBeenCalledWith(
+          expect.stringContaining("User not found in emulator project"),
+        );
+      } finally {
+        process.env.FIREBASE_AUTH_EMULATOR_HOST = previousHost;
         log.mockRestore();
       }
     });
