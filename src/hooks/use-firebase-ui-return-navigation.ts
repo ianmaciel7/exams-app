@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigation } from "@/hooks/use-navigation";
-import { syncSessionCookie } from "@/lib/auth";
+import { signOutUser, syncSessionCookie } from "@/lib/auth";
 import { type getFirebaseUI, subscribeToAuth } from "@/lib/firebase/client";
 import { getSafeReturnUrl } from "@/lib/return-url";
 
@@ -17,8 +17,15 @@ export function useFirebaseUiReturnNavigation(
     const syncThenReplace = async (
       user: Parameters<typeof syncSessionCookie>[0],
     ) => {
-      await syncSessionCookie(user);
-      if (active) replace(destination());
+      const synced = await syncSessionCookie(user);
+      if (!active) return;
+      if (synced) {
+        replace(destination());
+      } else {
+        // Session cookie creation failed (for example a revoked session), so
+        // clear the stale client credentials to break the redirect loop.
+        await signOutUser();
+      }
     };
     const unsubscribe = subscribeToAuth((user) => {
       if (!active || !user) return;

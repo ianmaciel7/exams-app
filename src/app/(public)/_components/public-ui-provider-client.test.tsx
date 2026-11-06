@@ -10,6 +10,7 @@ const mocks = vi.hoisted(() => ({
   getUI: vi.fn(),
   unsubscribe: vi.fn(),
   syncSessionCookie: vi.fn(),
+  signOutUser: vi.fn(),
   locale: "pt-BR",
 }));
 vi.mock("next/navigation", () => ({
@@ -22,6 +23,7 @@ vi.mock("next-intl", () => ({
 vi.mock("@/lib/auth", () => ({
   getPendingSignOut: () => null,
   syncSessionCookie: mocks.syncSessionCookie,
+  signOutUser: mocks.signOutUser,
 }));
 vi.mock("@/lib/firebase/client", () => ({
   getFirebaseUI: mocks.getUI,
@@ -43,7 +45,8 @@ describe("PublicUiProviderClient", () => {
       get: () => ({ auth: {}, setLocale: mocks.setLocale }),
     });
     mocks.subscribe.mockReturnValue(mocks.unsubscribe);
-    mocks.syncSessionCookie.mockResolvedValue(undefined);
+    mocks.syncSessionCookie.mockResolvedValue(true);
+    mocks.signOutUser.mockResolvedValue(undefined);
   });
 
   it("provides the Firebase UI context and renders the screen without waiting for auth state", () => {
@@ -57,9 +60,9 @@ describe("PublicUiProviderClient", () => {
   });
 
   it("creates the session cookie before leaving the sign-in screen", async () => {
-    let finishSync: () => void = () => undefined;
+    let finishSync: (synced: boolean) => void = () => undefined;
     mocks.syncSessionCookie.mockReturnValue(
-      new Promise<void>((resolve) => {
+      new Promise<boolean>((resolve) => {
         finishSync = resolve;
       }),
     );
@@ -72,14 +75,14 @@ describe("PublicUiProviderClient", () => {
     act(() => mocks.subscribe.mock.calls[0][0](user));
     expect(mocks.syncSessionCookie).toHaveBeenCalledWith(user);
     expect(mocks.router.replace).not.toHaveBeenCalled();
-    finishSync();
+    finishSync(true);
     await waitFor(() => expect(mocks.router.replace).toHaveBeenCalledWith("/"));
   });
 
   it("does not navigate after the screen is left while the cookie is pending", async () => {
-    let finishSync: () => void = () => undefined;
+    let finishSync: (synced: boolean) => void = () => undefined;
     mocks.syncSessionCookie.mockReturnValue(
-      new Promise<void>((resolve) => {
+      new Promise<boolean>((resolve) => {
         finishSync = resolve;
       }),
     );
@@ -90,7 +93,7 @@ describe("PublicUiProviderClient", () => {
     );
     act(() => mocks.subscribe.mock.calls[0][0]({ uid: "user" }));
     unmount();
-    finishSync();
+    finishSync(true);
     await Promise.resolve();
     expect(mocks.router.replace).not.toHaveBeenCalled();
   });
@@ -103,6 +106,18 @@ describe("PublicUiProviderClient", () => {
     );
     act(() => mocks.subscribe.mock.calls[0][0]({ uid: "user" }));
     await waitFor(() => expect(mocks.router.replace).toHaveBeenCalledWith("/"));
+  });
+
+  it("signs out and does not navigate when session cookie creation fails", async () => {
+    mocks.syncSessionCookie.mockResolvedValue(false);
+    render(
+      <PublicUiProviderClient>
+        <p>{"Screen"}</p>
+      </PublicUiProviderClient>,
+    );
+    act(() => mocks.subscribe.mock.calls[0][0]({ uid: "user" }));
+    await waitFor(() => expect(mocks.signOutUser).toHaveBeenCalledOnce());
+    expect(mocks.router.replace).not.toHaveBeenCalled();
   });
 
   it("does not navigate for a signed-out user", () => {
