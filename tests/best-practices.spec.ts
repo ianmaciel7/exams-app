@@ -53,8 +53,26 @@ for (const path of ["/", "/sign-in", "/register", "/forgot-password"]) {
         violations.push(`${event.violatedDirective} ${event.blockedURI}`),
       );
     });
+    const diag: string[] = [];
+    const started = Date.now();
+    page.on("request", (r) => {
+      diag.push(`+${Date.now() - started} REQ ${r.method()} ${r.url()}`);
+    });
+    page.on("requestfinished", (r) => {
+      diag.push(`+${Date.now() - started} DONE ${r.method()} ${r.url()}`);
+    });
+    page.on("requestfailed", (r) => {
+      diag.push(
+        `+${Date.now() - started} FAIL ${r.url()} ${r.failure()?.errorText}`,
+      );
+    });
     await page.goto(path);
-    await page.waitForLoadState("networkidle");
+    await page
+      .waitForLoadState("networkidle", { timeout: 15_000 })
+      .catch((error) => {
+        console.log(`DIAG ${path}\n${diag.join("\n")}`);
+        throw error;
+      });
     const violations = await page.evaluate(
       () => (window as unknown as { cspViolations: string[] }).cspViolations,
     );
