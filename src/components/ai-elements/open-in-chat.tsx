@@ -241,7 +241,7 @@ const OpenInTrigger = ({ children, ...props }: OpenInTriggerProps) => (
     render={
       <Button type="button" variant="outline">
         {children ?? "Open in chat"}
-        <ChevronDownIcon className="size-4" />
+        <ChevronDownIcon data-icon="inline-end" />
       </Button>
     }
     {...props}
