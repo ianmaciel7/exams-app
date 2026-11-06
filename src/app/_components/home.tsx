@@ -3,11 +3,6 @@ import { useRender } from "@base-ui/react/use-render";
 import Image from "next/image";
 import type { ComponentProps } from "react";
 import { cn } from "@/lib/utils";
-import {
-  HomeHeroDescription,
-  HomeHeroHeader,
-  HomeHeroTitle,
-} from "./home-hero";
 
 type HomeProps = useRender.ComponentProps<"main">;
 
@@ -65,34 +60,16 @@ function HomeLogo({ className, ...props }: HomeLogoProps) {
   );
 }
 
-type HomeHeadingProps = ComponentProps<typeof HomeHeroHeader> & {
-  title: string;
-  description: string;
-};
+type HomeFooterProps = useRender.ComponentProps<"div">;
 
-function HomeHeading({ title, description, ...props }: HomeHeadingProps) {
+function HomeFooter({ className, ...props }: HomeFooterProps) {
   return (
-    <HomeHeroHeader data-slot="home-heading" {...props}>
-      <HomeHeroTitle>{title}</HomeHeroTitle>
-      <HomeHeroDescription>{description}</HomeHeroDescription>
-    </HomeHeroHeader>
+    <div
+      data-slot="home-footer"
+      className={cn("w-full flex justify-center", className)}
+      {...props}
+    />
   );
 }
 
-type HomeFooterProps = useRender.ComponentProps<"div">;
-
-function HomeFooter({ className, render, ...props }: HomeFooterProps) {
-  return useRender({
-    defaultTagName: "div",
-    render,
-    props: mergeProps<"div">(
-      {
-        className: cn("w-full flex justify-center", className),
-      },
-      props,
-    ),
-    state: { slot: "home-footer" },
-  });
-}
-
-export { Home, HomeContent, HomeFooter, HomeHeading, HomeLogo };
+export { Home, HomeContent, HomeFooter, HomeLogo };

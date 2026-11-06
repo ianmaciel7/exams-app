@@ -6,20 +6,19 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
-import { useHomeSignOutButtonClient } from "../_hooks/use-home-sign-out-button-client";
-import { homeHeroActionSize } from "./home-hero";
+import { useSignOutButtonClient } from "../_hooks/use-sign-out-button-client";
+import { welcomeHeroActionSize } from "./welcome-hero";
 
-type HomeSignOutButtonClientProps = useRender.ComponentProps<"div">;
+type SignOutButtonClientProps = useRender.ComponentProps<"div">;
 
-function HomeSignOutButtonClient({
+function SignOutButtonClient({
   className,
   render,
   ...props
-}: HomeSignOutButtonClientProps) {
-  const { t, auth, state, handleSignOut } = useHomeSignOutButtonClient();
-  const isPending = state === "pending";
-  const isError = state === "error";
-  const errorId = "home-sign-out-error";
+}: SignOutButtonClientProps) {
+  const { t, auth, isPending, isError, handleSignOut } =
+    useSignOutButtonClient();
+  const errorId = "sign-out-error";
 
   return useRender({
     defaultTagName: "div",
@@ -37,7 +36,7 @@ function HomeSignOutButtonClient({
               aria-busy={isPending}
               focusableWhenDisabled
               aria-describedby={isError ? errorId : undefined}
-              className={homeHeroActionSize}
+              className={welcomeHeroActionSize}
             >
               {isPending && (
                 <Spinner data-icon="inline-start" aria-hidden="true" />
@@ -54,8 +53,8 @@ function HomeSignOutButtonClient({
       },
       props,
     ),
-    state: { slot: "home-sign-out-button" },
+    state: { slot: "sign-out-button" },
   });
 }
 
-export { HomeSignOutButtonClient };
+export { SignOutButtonClient };

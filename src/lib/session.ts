@@ -11,6 +11,8 @@ export type Session = {
   userId: string | null;
   role: UserRole;
   isAuthenticated: boolean;
+  /** Name claim of the verified token, when the account has one. */
+  displayName?: string | null;
 };
 
 /**
@@ -24,6 +26,7 @@ export const getSession = cache(async (): Promise<Session> => {
     userId: session.userId,
     role: session.role,
     isAuthenticated: Boolean(session.userId),
+    displayName: session.displayName ?? null,
   };
 });
 

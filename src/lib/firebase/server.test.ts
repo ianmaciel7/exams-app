@@ -63,9 +63,17 @@ describe("getFirebaseServerSession", () => {
 
   it("verifies the __session cookie with revocation checks", async () => {
     setCookie("__session", "session-cookie-1");
-    mocks.verifySessionCookie.mockResolvedValue({ uid: "u1", role: "user" });
+    mocks.verifySessionCookie.mockResolvedValue({
+      uid: "u1",
+      role: "user",
+      name: " Ada Lovelace ",
+    });
     const session = await getFirebaseServerSession();
-    expect(session).toEqual({ role: "user", userId: "u1" });
+    expect(session).toEqual({
+      role: "user",
+      userId: "u1",
+      displayName: "Ada Lovelace",
+    });
     expect(mocks.verifySessionCookie).toHaveBeenCalledWith(
       "session-cookie-1",
       true,
@@ -77,7 +85,11 @@ describe("getFirebaseServerSession", () => {
     setHeaders({ authorization: "Bearer id-token-1" });
     mocks.verifyIdToken.mockResolvedValue({ uid: "u2", role: "admin" });
     const session = await getFirebaseServerSession();
-    expect(session).toEqual({ role: "admin", userId: "u2" });
+    expect(session).toEqual({
+      role: "admin",
+      userId: "u2",
+      displayName: null,
+    });
     expect(mocks.verifyIdToken).toHaveBeenCalledWith("id-token-1", true);
   });
 

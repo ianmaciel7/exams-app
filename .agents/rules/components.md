@@ -67,8 +67,8 @@ and does not transfer maintenance ownership to vendors. Application-owned extens
   presentation that declares `"use client"`. Owned component exports and
   props types must match their complete filename stem, including `Client`
   or `Server`. The checker no longer defines a legacy semantic suffix
-  exception. For example, `HomeWelcomeHero` uses
-  `HomeWelcomeHeroProps` in `home-welcome-hero.tsx`.
+  exception. For example, `WelcomeHeroServer` uses
+  `WelcomeHeroServerProps` in `welcome-hero-server.tsx`.
 - Integrations own application data, persistence, authentication, navigation or
   platform access, directly or through focused hooks/helpers. Examples include
   Firebase, browser storage, object URLs, theme persistence and external fetches.
@@ -100,11 +100,11 @@ stem and component identifiers:
 - **Term-for-term matching**: The kebab-case filename stem and PascalCase component identifiers are tokenized into semantic terms (e.g., `home-section-client` -> `["home", "section", "client"]`). Every term present in the filename stem must exist in the component name, and no extraneous terms may appear.
 - **No missing terms**: Declaring a component that drops terms from the filename (such as declaring `HomeSection` in `home-section-client.tsx`, which omits `Client`) triggers an error: `missing term(s): "client"`.
 - **No unexpected terms**: Declaring a component with terms absent from the filename (such as `HomeViewClient` or `HomeSectionViewClient` in `home-section-client.tsx`) triggers an error: `unexpected term(s): "view"`.
-- **Reference implementation (`HomeWelcomeHero`)**: `src/app/_components/home-welcome-hero.tsx` enforces exact 1:1 term parity:
-  - Component declaration and named export: `HomeWelcomeHero`
-  - Prop type declaration: `HomeWelcomeHeroProps` (`HomeProps` is rejected)
-  - Hook coordination: `useHomeWelcomeHero` in `src/app/_hooks/use-home-welcome-hero.ts` (`useHome` is rejected)
-  - Companion UI component: `src/app/_components/home.tsx` exports `Home` and its compound presentation parts (`HomeContent`, `HomeLogo`, `HomeHeading`, `HomeFooter`). The home `page.tsx` composes them around `HomeWelcomeHero`.
+- **Reference implementation (`SignOutButtonClient`)**: `src/app/_components/sign-out-button-client.tsx` enforces exact 1:1 term parity:
+  - Component declaration and named export: `SignOutButtonClient`
+  - Prop type declaration: `SignOutButtonClientProps` (`SignOutButtonProps` is rejected)
+  - Hook coordination: `useSignOutButtonClient` in `src/app/_hooks/use-sign-out-button-client.ts`
+  - Server pair: `welcome-hero-server.tsx` exports `WelcomeHeroServer`, which composes its companion `welcome-hero.tsx` (`WelcomeHero`, `WelcomeHeroHeader`, `WelcomeHeroTitle`, `WelcomeHeroDescription`, `WelcomeHeroActions`, `WelcomeHeroSkeleton`). The home `page.tsx` composes `Home` and streams `WelcomeHeroServer` behind `<Suspense>`.
 - **Profile example:** `profile-form.tsx` exports `ProfileForm`. A `*-form.tsx` component is exempt from the `-client` suffix because it owns its Action and integrations through `useProfileForm` (ADRs 0017 and 0018); `profile-avatar-field-client.tsx` keeps the suffix for its browser object URLs. See
   [ADR 0006](../../docs/adr/0006-document-project-standards.md).
 
