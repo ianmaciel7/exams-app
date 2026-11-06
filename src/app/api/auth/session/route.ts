@@ -2,7 +2,7 @@ import "server-only";
 
 import { getAdminAuth } from "@/lib/firebase/admin";
 import { cookies } from "@/lib/headers";
-import * as server from "@/lib/server";
+import { badRequest, type NextRequest, ok, unauthorized } from "@/lib/server";
 import { deleteSession, SESSION_COOKIE_NAME } from "@/lib/session";
 
 const FIVE_DAYS_MS = 5 * 24 * 60 * 60 * 1000;
@@ -69,21 +69,21 @@ async function setSessionCookie(idToken: string) {
   });
 }
 
-export async function POST(request: server.NextRequest) {
+export async function POST(request: NextRequest) {
   try {
     const body = (await request.json()) as { idToken?: unknown };
     if (typeof body?.idToken !== "string" || !body.idToken) {
-      return server.badRequest({ error: "Invalid idToken" });
+      return badRequest({ error: "Invalid idToken" });
     }
 
     await setSessionCookie(body.idToken);
-    return server.ok({ status: "success" });
+    return ok({ status: "success" });
   } catch (error) {
     const { code, message } = getErrorMessageAndCode(error);
     logSessionCreationFailure(code, message);
 
     await deleteSession();
-    return server.unauthorized(
+    return unauthorized(
       { error: "Failed to create session", code: code ?? "unknown" },
       {
         challenge: { scheme: "Bearer", parameters: { error: "invalid_token" } },
@@ -94,5 +94,5 @@ export async function POST(request: server.NextRequest) {
 
 export async function DELETE() {
   await deleteSession();
-  return server.ok({ status: "success" });
+  return ok({ status: "success" });
 }
