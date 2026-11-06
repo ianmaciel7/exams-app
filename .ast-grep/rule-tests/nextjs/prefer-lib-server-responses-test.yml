@@ -1,0 +1,15 @@
+id: prefer-lib-server-responses
+valid:
+  - |
+    return server.ok({ status: "success" });
+  - |
+    return NextResponse.next({ request: { headers } });
+  - |
+    return NextResponse.rewrite(url);
+invalid:
+  - |
+    return NextResponse.json({ status: "success" });
+  - |
+    return NextResponse.redirect(new URL("/", request.url));
+  - |
+    return Response.json({ ok: true }, { status: 400 });

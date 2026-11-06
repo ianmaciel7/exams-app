@@ -1,8 +1,8 @@
 import "server-only";
 
-import { cookies } from "next/headers";
 import { cache } from "react";
 import { getFirebaseServerSession } from "@/lib/firebase/server";
+import { cookies } from "@/lib/headers";
 import type { UserRole } from "@/lib/role";
 
 export const SESSION_COOKIE_NAME = "__session";
