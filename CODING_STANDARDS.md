@@ -1078,3 +1078,11 @@ mechanically rewrite valid boundaries.
   - Configurations must load environment variables through `"envFile": "${workspaceFolder}/.env.*"` targeting Git-ignored environment files.
   - This rule is enforced mechanically by `pnpm check:secret-guard` and the `.husky/pre-commit` hook.
   - Emulator launch configurations should automate starting background emulator dependencies using `"preLaunchTask"` paired with background problem matchers in `.vscode/tasks.json`.
+
+
+## HTTP status helpers
+
+Use named exports from `src/lib/server.ts` for HTTP responses and
+`src/lib/navigation.ts` for native rendering interrupts. Required metadata,
+cache policy and conditional representation contracts are documented in
+[HTTP status helpers](docs/http-status-helpers.md).

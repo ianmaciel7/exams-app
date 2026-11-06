@@ -17,7 +17,10 @@ const nextConfig: NextConfig = {
   partialPrefetching: true,
   reactCompiler: true,
   // The profile Server Action receives an avatar of up to 2 MB.
-  experimental: { serverActions: { bodySizeLimit: "3mb" } },
+  experimental: {
+    authInterrupts: true,
+    serverActions: { bodySizeLimit: "3mb" },
+  },
   poweredByHeader: false,
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];

@@ -41,6 +41,8 @@ original date. Read current operational details in the
 | [0028](0028-save-profile-with-a-server-action.md) | Accepted; amends ADRs 0019, 0025 and 0027 | `page.tsx` injects the `updateProfile` Server Action (Admin SDK) into a presentational `ProfileForm`; the e-mail change stays in the browser behind the port |
 | [0029](0029-simplify-profile-client-services.md) | Accepted; amends ADRs 0027 and 0028 | Canonical auth/session helpers replace the profile gateway; explicit client telemetry uses `trackEvent` |
 
+| [0030](0030-constrain-http-status-helpers.md) | Accepted; amends ADR 0021 | Explicit HTTP response contracts, conditional representations and native navigation interrupts |
+
 ## Consolidation of 2026-11-01
 
 At the maintainer's direction, records 0013 to 0034 were merged into the

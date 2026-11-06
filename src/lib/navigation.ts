@@ -1,5 +1,7 @@
 import { redirect } from "next/navigation";
 
+export { forbidden, notFound, unauthorized } from "next/navigation";
+
 export const routes = {
   home: "/",
   signIn: "/sign-in",
