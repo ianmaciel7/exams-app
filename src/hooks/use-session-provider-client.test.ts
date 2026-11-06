@@ -6,6 +6,7 @@ const mocks = vi.hoisted(() => ({
   subscribeToAuth: vi.fn(),
   syncSessionCookie: vi.fn(),
   signOutUser: vi.fn(),
+  clearStaleSessionCookie: vi.fn(),
   currentUser: null as User | null,
 }));
 
@@ -17,6 +18,7 @@ vi.mock("@/lib/firebase/client", () => ({
 vi.mock("@/lib/auth", () => ({
   syncSessionCookie: mocks.syncSessionCookie,
   signOutUser: mocks.signOutUser,
+  clearStaleSessionCookie: mocks.clearStaleSessionCookie,
 }));
 
 import { useSessionProviderClient } from "./use-session-provider-client";
@@ -67,6 +69,20 @@ describe("useSessionProviderClient", () => {
       isLoading: false,
       user: null,
     });
+  });
+
+  it("clears a stale server cookie when the first auth verdict is signed out", async () => {
+    await renderSubscribed();
+    act(() => notify(null));
+    act(() => notify(null));
+    expect(mocks.clearStaleSessionCookie).toHaveBeenCalledOnce();
+  });
+
+  it("keeps the server cookie when the first auth verdict is a user", async () => {
+    await renderSubscribed();
+    act(() => notify({ uid: "u" } as User));
+    act(() => notify(null));
+    expect(mocks.clearStaleSessionCookie).not.toHaveBeenCalled();
   });
 
   it("clears stale server credentials when refresh has already removed the browser user", async () => {

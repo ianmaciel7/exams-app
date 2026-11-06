@@ -23,6 +23,7 @@ export async function syncSessionCookie(user: {
   if (typeof fetch !== "function") return false;
   if (getPendingSignOut()) return false;
   const generation = sessionGeneration;
+  await staleClear;
   try {
     const idToken = await user.getIdToken(true);
     if (getPendingSignOut() || generation !== sessionGeneration) return false;
@@ -44,6 +45,21 @@ export async function syncSessionCookie(user: {
   } catch {
     return false;
   }
+}
+
+let staleClear: Promise<void> | null = null;
+
+/**
+ * Drop a server cookie the browser SDK no longer backs. The SDK discards a
+ * revoked user while initializing, so no signed-in state is ever observed and
+ * the cookie would keep bouncing protected routes. Later exchanges wait for it.
+ */
+export function clearStaleSessionCookie(): Promise<void> {
+  if (getPendingSignOut()) return Promise.resolve();
+  staleClear ??= clearSessionCookie().finally(() => {
+    staleClear = null;
+  });
+  return staleClear;
 }
 
 async function clearSessionCookie() {

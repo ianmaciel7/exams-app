@@ -1,6 +1,10 @@
 import type { User } from "firebase/auth";
 import { useEffect, useState } from "react";
-import { signOutUser, syncSessionCookie } from "@/lib/auth";
+import {
+  clearStaleSessionCookie,
+  signOutUser,
+  syncSessionCookie,
+} from "@/lib/auth";
 import { getFirebaseAuthUser } from "@/lib/firebase/client";
 import { loadFirebaseClient } from "@/lib/firebase-loaders";
 import type { Session } from "@/lib/session-context";
@@ -22,8 +26,13 @@ export function useSessionProviderClient() {
       }
     };
 
-    const settle = (user: User | null) =>
+    let first = true;
+    const settle = (user: User | null) => {
+      // The very first verdict of signed-out means any server cookie is stale.
+      if (first && !user) void clearStaleSessionCookie();
+      first = false;
       setSession({ isError: false, isLoading: false, user });
+    };
 
     let unsubscribe: (() => void) | undefined;
     loadFirebaseClient()

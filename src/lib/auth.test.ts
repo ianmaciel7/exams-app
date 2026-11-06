@@ -26,6 +26,7 @@ vi.mock("@/lib/firebase/client", () => ({
 }));
 
 import {
+  clearStaleSessionCookie,
   getPendingSignOut,
   reloadFirebaseAuthUser,
   sendEmailChangeVerification,
@@ -228,6 +229,22 @@ describe("syncSessionCookie", () => {
     expect(fetchMock.mock.calls.map(([, options]) => options.method)).toEqual([
       "POST",
       "DELETE",
+    ]);
+  });
+
+  it("makes a later exchange wait for the stale cookie DELETE", async () => {
+    const del = Promise.withResolvers<Response>();
+    fetchMock.mockReturnValueOnce(del.promise).mockResolvedValue({ ok: true });
+    const clearing = clearStaleSessionCookie();
+    const syncing = syncSessionCookie({ getIdToken: async () => "token" });
+    await Promise.resolve();
+    await Promise.resolve();
+    expect(fetchMock).toHaveBeenCalledOnce();
+    del.resolve(new Response(null, { status: 200 }));
+    await Promise.all([clearing, syncing]);
+    expect(fetchMock.mock.calls.map(([, options]) => options.method)).toEqual([
+      "DELETE",
+      "POST",
     ]);
   });
 
