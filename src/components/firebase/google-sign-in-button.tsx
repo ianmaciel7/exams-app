@@ -4,10 +4,15 @@ import { type ReactNode, useId } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import type { useGoogleSignInButtonClient } from "../../_hooks/use-google-sign-in-button-client";
 
-type GoogleSignInButtonProps = useRender.ComponentProps<"div"> &
-  ReturnType<typeof useGoogleSignInButtonClient> & { icon: ReactNode };
+type GoogleSignInButtonProps = useRender.ComponentProps<"div"> & {
+  icon: ReactNode;
+  onSignIn: () => Promise<void>;
+  error: string | null;
+  isPending: boolean;
+  label: string;
+  providerId: string;
+};
 
 function GoogleSignInButton({
   onSignIn,

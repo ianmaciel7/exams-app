@@ -1,11 +1,12 @@
 "use client";
 import type { ComponentProps } from "react";
 import { FormProvider } from "react-hook-form";
-import { useForgotPasswordFormClient } from "../_hooks/use-forgot-password-form-client";
+import { PoliciesSectionClient } from "@/app/(public)/_components/firebase/policies-section-client";
 import {
   ForgotPasswordForm,
   ForgotPasswordFormContent,
-} from "./forgot-password-form";
+} from "@/components/firebase/forgot-password-form";
+import { useForgotPasswordFormClient } from "../_hooks/use-forgot-password-form-client";
 
 type ForgotPasswordFormClientProps = ComponentProps<
   typeof ForgotPasswordForm
@@ -18,17 +19,16 @@ function ForgotPasswordFormClient({
     useForgotPasswordFormClient();
   return (
     <ForgotPasswordForm {...props}>
-      {
-        <FormProvider {...form}>
-          <ForgotPasswordFormContent
-            next={next}
-            rootError={rootError}
-            isPending={isPending}
-            onSubmit={form.handleSubmit(onSubmit)}
-            emailSent={emailSent}
-          />
-        </FormProvider>
-      }
+      <FormProvider {...form}>
+        <ForgotPasswordFormContent
+          next={next}
+          policies={<PoliciesSectionClient />}
+          rootError={rootError}
+          isPending={isPending}
+          onSubmit={form.handleSubmit(onSubmit)}
+          emailSent={emailSent}
+        />
+      </FormProvider>
     </ForgotPasswordForm>
   );
 }

@@ -1,8 +1,8 @@
 "use client";
 import { FirebaseUIProvider } from "@firebase-oss/ui-react";
 import type { PropsWithChildren } from "react";
+import { PublicUiProvider } from "@/components/firebase/public-ui-provider";
 import { usePublicUiProviderClient } from "../_hooks/use-public-ui-provider-client";
-import { PublicUiProvider } from "./public-ui-provider";
 
 type PublicUiProviderClientProps = PropsWithChildren;
 function PublicUiProviderClient({ children }: PublicUiProviderClientProps) {

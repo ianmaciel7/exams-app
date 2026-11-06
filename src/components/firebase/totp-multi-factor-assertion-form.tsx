@@ -1,30 +1,30 @@
 import type { ComponentProps } from "react";
-import { Controller } from "react-hook-form";
+import { type Control, Controller } from "react-hook-form";
+import { VerificationCodeField } from "@/components/firebase/verification-code-field";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/extensions/form";
 import { FormError } from "@/components/ui/extensions/form-error";
-import { VerificationCodeField } from "@/components/ui/extensions/verification-code-field";
 import { FieldGroup } from "@/components/ui/field";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
-import type { useSmsMultiFactorVerifyFormClient } from "../../_hooks/use-sms-multi-factor-verify-form-client";
 
-type SmsMultiFactorVerifyFormProps = Omit<
-  ComponentProps<typeof Form>,
-  "onSubmit"
-> &
-  ReturnType<typeof useSmsMultiFactorVerifyFormClient>;
-function SmsMultiFactorVerifyForm({
+type TotpMultiFactorAssertionFormProps = ComponentProps<typeof Form> & {
+  codeLabel: string;
+  control: Control<{ verificationCode: string }>;
+  isPending: boolean;
+  rootError?: string;
+  submitLabel: string;
+};
+function TotpMultiFactorAssertionForm({
   codeLabel,
   control,
   isPending,
   onSubmit,
   rootError,
   submitLabel,
-  codeDescription,
   className,
   ...props
-}: SmsMultiFactorVerifyFormProps) {
+}: TotpMultiFactorAssertionFormProps) {
   return (
     <Form
       {...props}
@@ -39,7 +39,6 @@ function SmsMultiFactorVerifyForm({
             <VerificationCodeField
               name={field.name}
               label={codeLabel}
-              description={codeDescription}
               value={field.value}
               onValueChange={field.onChange}
               onBlur={field.onBlur}
@@ -59,4 +58,4 @@ function SmsMultiFactorVerifyForm({
   );
 }
 
-export { SmsMultiFactorVerifyForm };
+export { TotpMultiFactorAssertionForm };

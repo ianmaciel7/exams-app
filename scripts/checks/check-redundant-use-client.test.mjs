@@ -51,6 +51,22 @@ describe("redundant use client guard", () => {
     );
   });
 
+  it("checks owned Firebase presentation after moving it out of routes", () => {
+    const errors = inspectRedundantUseClient({
+      "src/app/x/_components/login-client.tsx": `${client}\nimport "@/components/firebase/sign-in-form";`,
+      "src/components/firebase/sign-in-form.tsx": client,
+    });
+    assert.equal(errors.length, 1);
+    assert.match(errors[0], /firebase\/sign-in-form\.tsx/);
+    assert.deepEqual(
+      inspectRedundantUseClient({
+        "src/app/x/_components/login-client.tsx": `${client}\nimport "@/components/firebase/sign-in-form";`,
+        "src/components/firebase/sign-in-form.tsx": "export {};",
+      }),
+      [],
+    );
+  });
+
   it("passes on the repository", () => {
     assert.deepEqual(
       checkRedundantUseClient(new URL("../../", import.meta.url).pathname),

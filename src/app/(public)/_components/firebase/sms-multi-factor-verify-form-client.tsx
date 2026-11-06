@@ -1,8 +1,8 @@
 "use client";
 import type { ComponentProps } from "react";
+import { SmsMultiFactorVerifyForm } from "@/components/firebase/sms-multi-factor-verify-form";
 import type { UserCredential } from "@/lib/firebase/multi-factor";
 import { useSmsMultiFactorVerifyFormClient } from "../../_hooks/use-sms-multi-factor-verify-form-client";
-import { SmsMultiFactorVerifyForm } from "./sms-multi-factor-verify-form";
 
 type SmsMultiFactorVerifyFormClientProps = Omit<
   ComponentProps<typeof SmsMultiFactorVerifyForm>,

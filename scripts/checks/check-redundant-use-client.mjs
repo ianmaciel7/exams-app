@@ -12,7 +12,7 @@ import { fileURLToPath } from "node:url";
 // The rule is judged by the import graph, not by a list of files.
 
 const ownedScope =
-  /^src\/(?:app\/.*\/(?:_components|_hooks)\/[^/]+|components\/ui\/extensions\/[^/]+)\.tsx?$/;
+  /^src\/(?:app\/.*\/(?:_components|_hooks)\/[^/]+|components\/(?:ui\/extensions|firebase)\/[^/]+)\.tsx?$/;
 const testFile = /\.(?:test|spec|stories|browser\.test)\.[cm]?[jt]sx?$/;
 const keepsDirective = /(?:-client|^navigation-events|^web-vitals)$/;
 const directive = /^\s*(?:\/\/.*\n|\/\*[\s\S]*?\*\/\s*)*["']use client["']/;

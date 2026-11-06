@@ -1,9 +1,15 @@
 "use client";
 import type { ComponentProps } from "react";
 import { FormProvider } from "react-hook-form";
+import { GoogleSignInButtonClient } from "@/app/(public)/_components/firebase/google-sign-in-button-client";
 import { MultiFactorAssertionFlowClient } from "@/app/(public)/_components/firebase/multi-factor-assertion-flow-client";
+import { PoliciesSectionClient } from "@/app/(public)/_components/firebase/policies-section-client";
+import {
+  SignInForm,
+  SignInFormContent,
+} from "@/components/firebase/sign-in-form";
+import { SocialSignInSection } from "@/components/firebase/social-sign-in-section";
 import { useSignInFormClient } from "../_hooks/use-sign-in-form-client";
-import { SignInForm, SignInFormContent } from "./sign-in-form";
 
 type SignInFormClientProps = ComponentProps<typeof SignInForm> & {
   next?: string | string[];
@@ -18,6 +24,15 @@ function SignInFormClient({ next, ...props }: SignInFormClientProps) {
         <FormProvider {...form}>
           <SignInFormContent
             next={next}
+            policies={<PoliciesSectionClient />}
+            socialSignIn={
+              <SocialSignInSection
+                enabled={
+                  process.env.NEXT_PUBLIC_FIREBASE_GOOGLE_ENABLED === "true"
+                }
+                providerButton={<GoogleSignInButtonClient />}
+              />
+            }
             rootError={rootError}
             isPending={isPending}
             onSubmit={form.handleSubmit(onSubmit)}

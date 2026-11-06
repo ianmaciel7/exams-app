@@ -2,8 +2,8 @@ import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
 import type { ComponentProps } from "react";
 import { Button } from "@/components/ui/button";
+import type { MultiFactorInfo } from "@/lib/firebase/multi-factor";
 import { cn } from "@/lib/utils";
-import type { useMultiFactorAssertionFlowClient } from "../../_hooks/use-multi-factor-assertion-flow-client";
 
 type MultiFactorAssertionFlowProps = useRender.ComponentProps<"div">;
 function MultiFactorAssertionFlow({
@@ -23,11 +23,11 @@ function MultiFactorAssertionFlow({
 }
 type MultiFactorAssertionFlowPickerProps = ComponentProps<
   typeof MultiFactorAssertionFlow
-> &
-  Pick<
-    ReturnType<typeof useMultiFactorAssertionFlowClient>,
-    "factors" | "prompt" | "selectHint"
-  >;
+> & {
+  factors: { hint: MultiFactorInfo; label: string }[];
+  prompt: string;
+  selectHint: (hint: MultiFactorInfo) => void;
+};
 function MultiFactorAssertionFlowPicker({
   factors,
   prompt,

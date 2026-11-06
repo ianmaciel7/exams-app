@@ -1,6 +1,6 @@
 import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
-import { VerificationCodeField } from "./verification-code-field";
+import { VerificationCodeField } from "@/components/firebase/verification-code-field";
 
 afterEach(cleanup);
 

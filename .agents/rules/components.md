@@ -19,23 +19,24 @@ This section covers component dimensions and file contracts; see also [Component
 
 ## Three independent dimensions
 
-| Dimension      | Convention                                                                                                                                                                                                                                                     | Examples                                                                                |
-| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| Runtime        | Import graphs determine membership; `"use client"` declares a boundary, while a shared module can compile in both graphs                                                                                                                                       | `AccountCard` may participate in a client subtree without its own directive             |
-| Responsibility | Every component must specify a concrete component type or semantic role describing its composition or behavior, not its runtime environment. Bare domain or runtime labels are prohibited                                                                      | `ProfileForm`, `ProfileAvatarFieldClient`, `PublicUiProviderClient`, `SignInFormClient` |
-| Placement      | Colocate route components in private `_components/`, hooks in `_hooks/` and route-shared components in the nearest common `_components/` (`src/app/_components/` for the whole app, `src/app/(public)/_components/firebase/` for the Firebase auth components) | App Router private folders do not become routes                                         |
+| Dimension      | Convention                                                                                                                                                                                             | Examples                                                                                |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- |
+| Runtime        | Import graphs determine membership; `"use client"` declares a boundary, while a shared module can compile in both graphs                                                                               | `AccountCard` may participate in a client subtree without its own directive             |
+| Responsibility | Every component must specify a concrete component type or semantic role describing its composition or behavior, not its runtime environment. Bare domain or runtime labels are prohibited              | `ProfileForm`, `ProfileAvatarFieldClient`, `PublicUiProviderClient`, `SignInFormClient` |
+| Placement      | Colocate route components in private `_components/`, hooks in `_hooks/` and shared Firebase presentation in `src/components/firebase/`; route-shared integrations in the nearest common `_components/` | App Router private folders do not become routes                                         |
 
 Every owned component must specify a concrete component type or semantic role describing its composition or behavior (such as `*-field`, `*-form`, `*-card`, `*-dialog`, `*-hero`, `*-button`, `*-provider`, or `*-guard`). A component name must never describe only its feature domain or runtime environment without a concrete role.
 
-Route composition roots that render an auth form carry `Form` in the name (`SignInFormClient`, `RegisterFormClient`) and their hooks and files follow it (`use-sign-in-form-client.ts`, `sign-in-form-client.tsx`). The forgot-password page composes `Card` directly and renders `ForgotPasswordFormClient`, like the sign-in and register pages. The legacy Firebase UI `*-auth-screen.tsx` and `*-auth-form.tsx` modules no longer exist; shared form parts live in `src/app/(public)/_components/` (`EmailField`, `PasswordField`, `AuthSubmitSection`).
+Route composition roots that render an auth form carry `Form` in the name (`SignInFormClient`, `RegisterFormClient`) and their hooks and files follow it (`use-sign-in-form-client.ts`, `sign-in-form-client.tsx`). The forgot-password page composes `Card` directly and renders `ForgotPasswordFormClient`, like the sign-in and register pages. The legacy Firebase UI `*-auth-screen.tsx` and `*-auth-form.tsx` modules no longer exist; shared form parts live in `src/components/firebase/` (`EmailField`, `PasswordField`, `AuthSubmitSection`).
 
-`src/components` only holds the shadcn primitives (`ui/`, with the presentational
-`ui/extensions/`) and generated AI Elements; `pnpm check:repo` runs
-`check-components-directory.mjs`, which rejects any other folder, any `-client`/`-server` component and any `"use server"`/`server-only` module there. Integration components (session, headers, Firebase) live in `_components` next to the route that owns them, following the Next.js private-folder convention. Generated AI Elements live under
-`src/components/ai-elements/`. That copied registry source is locally maintained and adaptable, and excluded
-from application naming checks; this exclusion preserves upstream API shapes
-and does not transfer maintenance ownership to vendors. Application-owned extensions under
-`src/components/ui/extensions/` **are** checked.
+`src/components` contains the shadcn primitives (`ui/`, including owned
+`ui/extensions/`), generated AI Elements, and owned Firebase presentation
+(`firebase/`). `check-components-directory` rejects other folders and any
+`-client`/`-server` integration or explicit `server-only`/`client-only` boundary
+there. Authentication integrations remain in public-route `_components`,
+while their presentation companions live in `src/components/firebase` and
+receive data, callbacks and integration slots. Only generated shadcn/AI source
+retains its documented exclusions; Firebase presentation is fully checked.
 
 ## Anti-Over-Engineering and Pragmatic Cohesion
 
@@ -173,17 +174,20 @@ Every component module in `src/` ( excluding the shadcn copies `src/components/u
 
 ## Owned component placement
 
-Place shared application components in `src/components/ui/extensions/` and
-route-private components in `src/app/**/_components/`. For example,
-`LoadingStatus` belongs in `ui/extensions` because both
-route components and Firebase UI consume it. Do not create parallel application
-component folders such as `src/components/loading/`.
+Place Firebase authentication presentation in `src/components/firebase/`,
+including forms, fields, policy content and provider feedback. These are owned
+components, subject to the naming, structure, lint and coverage checks; they
+have no registry exclusion. Other shared presentation belongs in
+`src/components/ui/extensions/`. Keep Firebase integrations (`*-client.tsx`),
+hooks and route wiring in `src/app/**/_components/` and `_hooks/`.
 
-`pnpm check:components` rejects JavaScript and TypeScript source files (including
-colocated tests and barrel files) outside the `ui`, `firebase`, and `ai-elements`
-registry trees under `src/components`. Existing registry trees remain allowed;
-their generated source retains its existing exclusions. This is repository
-policy, not a Next.js requirement.
+Shared components never import `src/app`, even for types. Define presentation
+props independently, and pass integrations through React node slots or
+callbacks. Authentication integrations supply policy and social sign-in slots.
+`check-components-directory` permits only `ui`, `ai-elements` and `firebase`
+under `src/components`, and rejects integration suffixes and explicit
+server/client-only markers there. This is repository policy, not a Next.js
+requirement.
 
 ## Unused vendored components
 

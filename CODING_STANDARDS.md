@@ -913,17 +913,20 @@ optimistic-state, or experimental Suspense feature.
 
 ## Owned component placement
 
-Place shared application components in `src/components/ui/extensions/` and
-route-private components in `src/app/**/_components/`. For example,
-`LoadingStatus` belongs in `ui/extensions` because both
-route components and Firebase UI consume it. Do not create parallel application
-component folders such as `src/components/loading/`.
+Place Firebase authentication presentation in `src/components/firebase/`,
+including forms, fields, policy content and provider feedback. These are owned
+components, subject to the naming, structure, lint and coverage checks; they
+have no registry exclusion. Other shared presentation belongs in
+`src/components/ui/extensions/`. Keep Firebase integrations (`*-client.tsx`),
+hooks and route wiring in `src/app/**/_components/` and `_hooks/`.
 
-`pnpm check:components` rejects JavaScript and TypeScript source files (including
-colocated tests and barrel files) outside the `ui`, `firebase`, and `ai-elements`
-registry trees under `src/components`. Existing registry trees remain allowed;
-their generated source retains its existing exclusions. This is repository
-policy, not a Next.js requirement.
+Shared components never import `src/app`, even for types. Define presentation
+props independently, and pass integrations through React node slots or
+callbacks. Authentication integrations supply policy and social sign-in slots.
+`check-components-directory` permits only `ui`, `ai-elements` and `firebase`
+under `src/components`, and rejects integration suffixes and explicit
+server/client-only markers there. This is repository policy, not a Next.js
+requirement.
 
 Placement does not classify runtime. `IntlProvider` in `intl-provider-server.tsx` is an async Server
 Component using server-only translation APIs; `ThemeProviderServer` in `theme-provider-server.tsx` renders the client-boundary

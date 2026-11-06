@@ -1,15 +1,15 @@
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
 import { useTranslations } from "next-intl";
+import type { ReactNode } from "react";
+import { AuthLink } from "@/components/firebase/auth-link";
+import { AuthSubmitSection } from "@/components/firebase/auth-submit-section";
+import { EmailField } from "@/components/firebase/email-field";
+import { PasswordField } from "@/components/firebase/password-field";
 import { Form } from "@/components/ui/extensions/form";
 import { FieldGroup } from "@/components/ui/field";
 import { routes } from "@/lib/navigation";
 import { cn } from "@/lib/utils";
-import { AuthLink } from "../../_components/auth-link";
-import { AuthSubmitSection } from "../../_components/auth-submit-section";
-import { EmailField } from "../../_components/email-field";
-import { PasswordField } from "../../_components/password-field";
-import { SocialSignInSection } from "../../_components/social-sign-in-section";
 
 type SignInFormProps = useRender.ComponentProps<"div">;
 function SignInForm({ className, render, ...props }: SignInFormProps) {
@@ -26,9 +26,17 @@ function SignInForm({ className, render, ...props }: SignInFormProps) {
 type SignInFormContentProps = Omit<
   React.ComponentProps<typeof Form>,
   "children"
-> & { next?: string | string[]; rootError?: string; isPending: boolean };
+> & {
+  next?: string | string[];
+  rootError?: string;
+  policies?: ReactNode;
+  socialSignIn?: ReactNode;
+  isPending: boolean;
+};
 function SignInFormContent({
   next,
+  policies,
+  socialSignIn,
   rootError,
   isPending,
   onSubmit,
@@ -55,6 +63,7 @@ function SignInFormContent({
           />
         </FieldGroup>
         <AuthSubmitSection
+          policies={policies}
           error={rootError}
           isPending={isPending}
           submitLabel={t("signInTitle")}
@@ -67,7 +76,7 @@ function SignInFormContent({
         </div>
       </Form>
 
-      <SocialSignInSection />
+      {socialSignIn}
     </>
   );
 }

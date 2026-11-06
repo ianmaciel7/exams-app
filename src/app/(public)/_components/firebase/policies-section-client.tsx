@@ -1,7 +1,7 @@
 "use client";
 import type { ComponentProps } from "react";
+import { PoliciesSection } from "@/components/firebase/policies-section";
 import { usePoliciesSectionClient } from "../../_hooks/use-policies-section-client";
-import { PoliciesSection } from "./policies-section";
 
 type PoliciesSectionClientProps = Omit<
   ComponentProps<typeof PoliciesSection>,

@@ -2,10 +2,16 @@ import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import type { usePoliciesSectionClient } from "../../_hooks/use-policies-section-client";
 
 type PoliciesSectionProps = useRender.ComponentProps<"div"> & {
-  policies: ReturnType<typeof usePoliciesSectionClient>;
+  policies: {
+    parts: {
+      key: number;
+      text: string;
+      link?: { url: string | URL; label: string };
+    }[];
+    onNavigate?: (url: string | URL) => void;
+  } | null;
 };
 
 const linkClassName =

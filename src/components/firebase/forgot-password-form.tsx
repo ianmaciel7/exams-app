@@ -1,14 +1,15 @@
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
 import { useTranslations } from "next-intl";
+import type { ReactNode } from "react";
+import { AuthLink } from "@/components/firebase/auth-link";
+import { AuthSubmitSection } from "@/components/firebase/auth-submit-section";
+import { EmailField } from "@/components/firebase/email-field";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Form } from "@/components/ui/extensions/form";
 import { FieldGroup } from "@/components/ui/field";
 import { routes } from "@/lib/navigation";
 import { cn } from "@/lib/utils";
-import { AuthLink } from "../../_components/auth-link";
-import { AuthSubmitSection } from "../../_components/auth-submit-section";
-import { EmailField } from "../../_components/email-field";
 
 type ForgotPasswordFormProps = useRender.ComponentProps<"div">;
 function ForgotPasswordForm({
@@ -32,11 +33,13 @@ type ForgotPasswordFormContentProps = Omit<
 > & {
   next?: string | string[];
   rootError?: string;
+  policies?: ReactNode;
   isPending: boolean;
   emailSent: boolean;
 };
 function ForgotPasswordFormContent({
   next,
+  policies,
   rootError,
   isPending,
   emailSent,
@@ -61,6 +64,7 @@ function ForgotPasswordFormContent({
             <EmailField autoComplete="email" />
           </FieldGroup>
           <AuthSubmitSection
+            policies={policies}
             error={rootError}
             isPending={isPending}
             submitLabel={t("forgotPasswordTitle")}

@@ -53,4 +53,6 @@ owned child is a form. The Middle Man guard recognizes destructured `on*`
 handlers from local orchestration hooks, including aliases. Destructured data
 alone does not establish behavior; keep simple pass-through wrappers prohibited.
 
+Firebase authentication presentation belongs in `src/components/firebase/`; integration modules and hooks remain in route-private folders. Shared forms receive policies and social sign-in as slots, without importing route modules or their hook types.
+
 Integration modules (`*-client.tsx` / `*-server.tsx`) must compose their companion UI presentation component (without suffix, e.g. `HomeClient` composes `Home`). Presentation compound parts belong to the presentation UI family without suffixes (`HomeContent`, `HomeLogo`, `HomeFooter`), while the integration boundary orchestrates state, hooks, and actions.

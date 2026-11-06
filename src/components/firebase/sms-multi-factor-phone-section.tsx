@@ -1,14 +1,21 @@
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
+import type { Ref } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Field, FieldDescription, FieldTitle } from "@/components/ui/field";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
-import type { useSmsMultiFactorPhoneSectionClient } from "../../_hooks/use-sms-multi-factor-phone-section-client";
 
-type SmsMultiFactorPhoneSectionProps = useRender.ComponentProps<"div"> &
-  ReturnType<typeof useSmsMultiFactorPhoneSectionClient>;
+type SmsMultiFactorPhoneSectionProps = useRender.ComponentProps<"div"> & {
+  description: string;
+  error: string | null;
+  isPending: boolean;
+  recaptchaContainerRef: Ref<HTMLDivElement>;
+  onSendCode: () => Promise<void>;
+  sendLabel: string;
+  title: string;
+};
 function SmsMultiFactorPhoneSection({
   description,
   error,

@@ -1,16 +1,16 @@
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
 import { useTranslations } from "next-intl";
+import type { ReactNode } from "react";
+import { AuthLink } from "@/components/firebase/auth-link";
+import { AuthSubmitSection } from "@/components/firebase/auth-submit-section";
+import { DisplayNameField } from "@/components/firebase/display-name-field";
+import { EmailField } from "@/components/firebase/email-field";
+import { PasswordField } from "@/components/firebase/password-field";
 import { Form } from "@/components/ui/extensions/form";
 import { FieldGroup } from "@/components/ui/field";
 import { routes } from "@/lib/navigation";
 import { cn } from "@/lib/utils";
-import { AuthLink } from "../../_components/auth-link";
-import { AuthSubmitSection } from "../../_components/auth-submit-section";
-import { EmailField } from "../../_components/email-field";
-import { PasswordField } from "../../_components/password-field";
-import { SocialSignInSection } from "../../_components/social-sign-in-section";
-import { DisplayNameField } from "./display-name-field";
 
 type RegisterFormProps = useRender.ComponentProps<"div">;
 function RegisterForm({ className, render, ...props }: RegisterFormProps) {
@@ -30,11 +30,15 @@ type RegisterFormContentProps = Omit<
 > & {
   next?: string | string[];
   rootError?: string;
+  policies?: ReactNode;
+  socialSignIn?: ReactNode;
   isPending: boolean;
   requireDisplayName: boolean;
 };
 function RegisterFormContent({
   next,
+  policies,
+  socialSignIn,
   rootError,
   isPending,
   requireDisplayName,
@@ -56,6 +60,7 @@ function RegisterFormContent({
           <PasswordField autoComplete="new-password" />
         </FieldGroup>
         <AuthSubmitSection
+          policies={policies}
           error={rootError}
           isPending={isPending}
           submitLabel={t("registerTitle")}
@@ -68,7 +73,7 @@ function RegisterFormContent({
         </div>
       </Form>
 
-      <SocialSignInSection />
+      {socialSignIn}
     </>
   );
 }

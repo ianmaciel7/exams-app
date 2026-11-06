@@ -32,6 +32,9 @@ configuration and repository documentation.
 │   │   ├── (public)/        # Public authentication routes (sign-in, register, forgot-password)
 │   │   └── _components/     # Route-private components and auth providers
 │   ├── components/          # Reusable application and UI components
+│   │   ├── firebase/        # Owned authentication presentation; no route imports
+│   │   ├── ui/              # shadcn primitives and owned extensions
+│   │   └── ai-elements/     # Generated AI Elements
 │   ├── hooks/               # Reusable React hooks
 │   ├── i18n/                # Locale routing and request config
 │   ├── lib/                 # Framework-independent utilities
@@ -59,7 +62,7 @@ files, and `public/` remain at the repository root, as required by the Next.js
 
 - `src/app` contains route entrypoints and Next.js special files, plus
   route-private implementation code under underscore-prefixed folders.
-- Shared application UI belongs in `src/components/ui/extensions`; shared non-UI helpers belong in
+- Firebase authentication presentation belongs in `src/components/firebase`; other shared UI belongs in `src/components/ui/extensions`; shared non-UI helpers belong in
   `src/lib`.
 - Route-specific implementation details may be colocated with a route. Use an
   underscore-prefixed folder such as `_components`, `_hooks`, or `_lib` when
@@ -146,12 +149,12 @@ The root layout keeps the async `IntlProvider` inside `Suspense`, followed by
 The component libraries under
 `src/components/ui` and `src/components/ai-elements` are locally owned source;
 custom providers under `ui/extensions` remain subject to application checks.
-`src/components/firebase` contains Firebase UI registry source used by the app.
-Treat copied components as locally owned shadcn source and review any registry
-update as a source diff; see [ADR 0008](docs/adr/0008-install-firebase-ui-registry.md).
-TypeScript checks the full directory with the application build config. Bulk
-formatting and other broad checks retain targeted exclusions for untouched
-registry source.
+`src/components/firebase` contains owned authentication presentation, including
+`ForgotPasswordForm`, `SignInForm`, `RegisterForm` and their field/feedback parts.
+Route-private client integrations supply the Firebase behavior, policies and
+social sign-in content. Presentation has no imports from routes or their hooks;
+it remains subject to all owned component checks. The original registry adoption
+is recorded in [ADR 0008](docs/adr/0008-install-firebase-ui-registry.md).
 Ladle (`.ladle/`) isolates and documents UI components without requiring the
 Next.js runtime.
 
@@ -304,17 +307,20 @@ and stable/experimental boundaries.
 
 ## Owned component placement
 
-Place shared application components in `src/components/ui/extensions/` and
-route-private components in `src/app/**/_components/`. For example,
-`LoadingStatus` belongs in `ui/extensions` because both
-route components and Firebase UI consume it. Do not create parallel application
-component folders such as `src/components/loading/`.
+Place Firebase authentication presentation in `src/components/firebase/`,
+including forms, fields, policy content and provider feedback. These are owned
+components, subject to the naming, structure, lint and coverage checks; they
+have no registry exclusion. Other shared presentation belongs in
+`src/components/ui/extensions/`. Keep Firebase integrations (`*-client.tsx`),
+hooks and route wiring in `src/app/**/_components/` and `_hooks/`.
 
-`pnpm check:components` rejects JavaScript and TypeScript source files (including
-colocated tests and barrel files) outside the `ui`, `firebase`, and `ai-elements`
-registry trees under `src/components`. Existing registry trees remain allowed;
-their generated source retains its existing exclusions. This is repository
-policy, not a Next.js requirement.
+Shared components never import `src/app`, even for types. Define presentation
+props independently, and pass integrations through React node slots or
+callbacks. Authentication integrations supply policy and social sign-in slots.
+`check-components-directory` permits only `ui`, `ai-elements` and `firebase`
+under `src/components`, and rejects integration suffixes and explicit
+server/client-only markers there. This is repository policy, not a Next.js
+requirement.
 
 Owned components use `-client.tsx` for browser integrations, `-server.tsx` for
 server integrations, and no suffix for presentation. Presentation may still be

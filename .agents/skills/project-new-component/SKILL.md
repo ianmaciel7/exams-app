@@ -22,8 +22,9 @@ Read the rules first; they own the contract and this skill only sequences it:
    or `*Server`), also create its companion UI presentation component (without suffix)
    to hold layout, HTML elements, and visual compound parts.
 2. Place it: route components in `src/app/<route>/_components/`, hooks in
-   `_hooks/`, shared components in the nearest common `_components/` (never in
-   `src/components`, see `check-components-directory`). Never edit
+   `_hooks/`, Firebase presentation in `src/components/firebase/`, and shared
+   integrations in the nearest common `_components/` (see
+   `check-components-directory`). Never edit
    `src/components/ui/` primitives or `ai-elements/` as a new
    component.
 3. Use a kebab-case filename whose terms match the PascalCase component, the

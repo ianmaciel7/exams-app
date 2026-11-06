@@ -1,12 +1,12 @@
 "use client";
 
 import type { ComponentProps } from "react";
-import type { UserCredential } from "@/lib/firebase/multi-factor";
-import { useMultiFactorAssertionFlowClient } from "../../_hooks/use-multi-factor-assertion-flow-client";
 import {
   MultiFactorAssertionFlow,
   MultiFactorAssertionFlowPicker,
-} from "./multi-factor-assertion-flow";
+} from "@/components/firebase/multi-factor-assertion-flow";
+import type { UserCredential } from "@/lib/firebase/multi-factor";
+import { useMultiFactorAssertionFlowClient } from "../../_hooks/use-multi-factor-assertion-flow-client";
 import { SmsMultiFactorPhoneSectionClient } from "./sms-multi-factor-phone-section-client";
 import { SmsMultiFactorVerifyFormClient } from "./sms-multi-factor-verify-form-client";
 import { TotpMultiFactorAssertionFormClient } from "./totp-multi-factor-assertion-form-client";

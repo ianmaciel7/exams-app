@@ -44,6 +44,8 @@ original date. Read current operational details in the
 | [0030](0030-constrain-http-status-helpers.md) | Accepted; amends ADR 0021 | Explicit HTTP response contracts, conditional representations and native navigation interrupts |
 | [0031](0031-report-usage-after-the-user-action.md) | Accepted; amends ADR 0029 | E-mail change confirms first and reports usage afterwards; telemetry never blocks a user action |
 
+| [0032](0032-share-firebase-authentication-presentation.md) | Accepted; amends ADR 0006 | Shared Firebase authentication presentation, route-owned client integrations and slot-based composition |
+
 ## Consolidation of 2026-11-01
 
 At the maintainer's direction, records 0013 to 0034 were merged into the
