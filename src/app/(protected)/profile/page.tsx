@@ -1,3 +1,4 @@
+import { TranslationTextServer as T } from "@/app/_components/translation-text-server";
 import {
   Card,
   CardContent,
@@ -5,7 +6,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { TranslationTextServer as T } from "@/components/ui/extensions/translation-text-server";
 import { ProfileForm } from "./_components/profile-form";
 import { updateProfile } from "./_lib/actions";
 import { readOwnProfile } from "./_lib/data";

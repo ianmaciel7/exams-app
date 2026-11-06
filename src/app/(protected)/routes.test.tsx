@@ -7,7 +7,7 @@ vi.mock("@/lib/dal", () => ({
 }));
 
 // Async Server Components cannot render in jsdom; the stand-in echoes the key.
-vi.mock("@/components/ui/extensions/translation-text-server", () => ({
+vi.mock("@/app/_components/translation-text-server", () => ({
   TranslationTextServer: ({ message }: { message: string }) =>
     message.split(".").pop(),
 }));

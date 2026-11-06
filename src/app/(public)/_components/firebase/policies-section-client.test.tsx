@@ -18,19 +18,19 @@ vi.mock("@firebase-oss/ui-react", async () => {
   };
 });
 
-import { Policies } from "./policies";
+import { PoliciesSectionClient } from "./policies-section-client";
 
 afterEach(() => {
   cleanup();
   vi.clearAllMocks();
 });
 
-describe("Policies", () => {
+describe("PoliciesSectionClient", () => {
   it("navigates without submitting the enclosing authentication form", () => {
     const onSubmit = vi.fn((event: React.FormEvent) => event.preventDefault());
     render(
       <form onSubmit={onSubmit}>
-        <Policies />
+        <PoliciesSectionClient />
       </form>,
     );
     const terms = screen.getByRole("button", { name: "termsOfService" });

@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 
 const historicalSource = "docs/adr/0003-configure-theming.md";
 const historicalTarget = "src/components/ui/extensions/theme-provider.tsx";
-const currentTarget = "src/components/ui/extensions/theme-provider-client.tsx";
+const currentTarget = "src/app/_components/theme-provider-server.tsx";
 
 function prose(source) {
   return source

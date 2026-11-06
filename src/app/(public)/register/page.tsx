@@ -1,3 +1,4 @@
+import { TranslationTextServer as T } from "@/app/_components/translation-text-server";
 import {
   Card,
   CardContent,
@@ -5,7 +6,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { TranslationTextServer as T } from "@/components/ui/extensions/translation-text-server";
 import { redirectAuthenticated } from "../_lib/redirect-authenticated";
 import { RegisterFormClient } from "./_components/register-form-client";
 

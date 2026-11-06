@@ -59,7 +59,7 @@ describe("responsiveness guard", () => {
         false,
       );
       assert.equal(
-        isOwnedComponent("src/components/firebase/policies.tsx"),
+        isOwnedComponent("src/components/ai-elements/policies.tsx"),
         false,
       );
       assert.equal(

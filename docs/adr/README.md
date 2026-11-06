@@ -255,7 +255,7 @@ component-source migration.
 ## Historical source links
 
 Accepted ADR 0003 records the original `theme-provider.tsx` path. Its current
-implementation is [theme-provider-client.tsx](../../src/components/ui/extensions/theme-provider-client.tsx).
+implementation is [theme-provider-server.tsx](../../src/app/_components/theme-provider-server.tsx).
 The ADR retains the old path as historical context; the documentation guard maps
 only that exact source link to the current file. It does not exempt other broken
 links. Logging links in ADRs 0001 and 0009 resolve through [the logging entrypoint](../logging.md).

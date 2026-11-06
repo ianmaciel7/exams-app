@@ -933,8 +933,8 @@ their generated source retains its existing exclusions. This is repository
 policy, not a Next.js requirement.
 
 Placement does not classify runtime. `IntlProvider` in `intl-provider-server.tsx` is an async Server
-Component using server-only translation APIs; `ThemeProvider` in `theme-provider-client.tsx` declares
-`"use client"`; `LoadingStatus` has no directive and can be used in either
+Component using server-only translation APIs; `ThemeProviderServer` in `theme-provider-server.tsx` renders the client-boundary
+`next-themes` provider; `LoadingStatus` has no directive and can be used in either
 rendering graph. Keep those boundaries even when the files share a directory.
 The existing direct server-import guard complements placement checks; Next.js
 validates the complete module graph.

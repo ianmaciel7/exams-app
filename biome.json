@@ -269,11 +269,7 @@
       }
     },
     {
-      "includes": [
-        "src/components/ui/**",
-        "src/components/firebase/**",
-        "src/components/ai-elements/**"
-      ],
+      "includes": ["src/components/ui/**", "src/components/ai-elements/**"],
       "linter": {
         "rules": {
           "complexity": {
@@ -419,11 +415,7 @@
       }
     },
     {
-      "includes": [
-        "src/components/ui/**",
-        "src/components/firebase/**",
-        "src/components/ai-elements/**"
-      ],
+      "includes": ["src/components/ui/**", "src/components/ai-elements/**"],
       "linter": {
         "rules": {
           "a11y": {
