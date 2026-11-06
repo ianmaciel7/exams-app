@@ -171,7 +171,7 @@ shipped in pull request #41.
 - The home hero renders in the server HTML. Session surfaces (sign-in, sign-out,
   profile links) are client components that wait behind button-sized skeletons.
 - Firebase modules load after hydration through dynamic `import()` calls kept in
-  `src/lib/firebase-loaders.ts`, because React Compiler does not support
+  `src/lib/dynamic.ts`, because React Compiler does not support
   `import()` inside hooks. Other critical-path routes follow the same rule.
 - `pnpm check:lighthouse` fails when the home LCP is above 4 s. The total client
   JavaScript budget in `.size-limit.json` is 770 kB to cover the extra chunk

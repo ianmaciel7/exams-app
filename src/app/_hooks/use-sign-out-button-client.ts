@@ -1,7 +1,7 @@
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import { useNavigation } from "@/hooks/use-navigation";
-import { loadAuth } from "@/lib/firebase-loaders";
+import { loadAuth } from "@/lib/dynamic";
 
 export function useSignOutButtonClient() {
   const t = useTranslations("Home");

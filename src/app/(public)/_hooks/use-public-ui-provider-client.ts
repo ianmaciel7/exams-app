@@ -1,14 +1,13 @@
-import { useLocale, useTranslations } from "next-intl";
-import { useFirebaseUi } from "@/hooks/use-firebase-ui";
+import { useLocale } from "next-intl";
+import { use } from "react";
 import { useFirebaseUiReturnNavigation } from "@/hooks/use-firebase-ui-return-navigation";
 import { useFirebaseUiTranslations } from "@/hooks/use-firebase-ui-translations";
+import { loadFirebaseUi } from "@/lib/dynamic";
 
+/** Suspends until the Firebase UI store is ready, then wires its behaviors. */
 export function usePublicUiProviderClient() {
-  const locale = useLocale();
-  const t = useTranslations("Auth");
-  const { ui, isError } = useFirebaseUi();
+  const ui = use(loadFirebaseUi());
   useFirebaseUiReturnNavigation(ui);
-  useFirebaseUiTranslations(ui, locale);
-
-  return { isError, t, ui };
+  useFirebaseUiTranslations(ui, useLocale());
+  return ui;
 }

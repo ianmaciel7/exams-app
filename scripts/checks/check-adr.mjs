@@ -15,8 +15,8 @@ export const decisionAreas = [
     label: "Firebase security rules emulator tests",
   },
   {
-    path: "src/app/_lib/firebase-loaders.ts",
-    keyword: /firebase-loaders/i,
+    path: "src/lib/dynamic.ts",
+    keyword: /src\/lib\/dynamic\.ts/i,
     label: "on-demand Firebase loading",
   },
   {

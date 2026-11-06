@@ -5,8 +5,8 @@ import {
   signOutUser,
   syncSessionCookie,
 } from "@/lib/auth";
+import { loadFirebaseClient } from "@/lib/dynamic";
 import { getFirebaseAuthUser } from "@/lib/firebase/client";
-import { loadFirebaseClient } from "@/lib/firebase-loaders";
 import type { Session } from "@/lib/session-context";
 
 /** The single Firebase Auth subscription behind `SessionProviderClient`. */
