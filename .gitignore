@@ -32,7 +32,7 @@ node_modules
 *.pem
 
 # Generated documentation artifacts
-/docs/artifacs/
+/docs/artifacts/
 
 # debug
 npm-debug.log*
