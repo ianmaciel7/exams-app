@@ -48,6 +48,61 @@ function declaredNames(node) {
   return node.name ? [node.name.text] : [];
 }
 
+const DEFAULT_EXPORT = "Route Handlers must not have a default export.";
+const STAR_EXPORT = "Route Handlers must not re-export with `export *`.";
+
+function isDefaultExport(node) {
+  return ts
+    .getModifiers(node)
+    ?.some((modifier) => modifier.kind === ts.SyntaxKind.DefaultKeyword);
+}
+
+function isDirective(node) {
+  return ts.isExpressionStatement(node) && ts.isStringLiteral(node.expression);
+}
+
+function notAllowed(node, name) {
+  return {
+    node,
+    message: `"${name}" is not a Route Handler export; export only HTTP methods (GET, POST, ...) and route segment config, and move everything else to src/lib.`,
+  };
+}
+
+function exportDeclarationProblems(node) {
+  if (!node.exportClause || ts.isNamespaceExport(node.exportClause)) {
+    return [{ node, message: STAR_EXPORT }];
+  }
+  return node.exportClause.elements
+    .filter((specifier) => !allowed.has(specifier.name.text))
+    .map((specifier) => notAllowed(specifier, specifier.name.text));
+}
+
+function exportedProblems(node) {
+  if (isDefaultExport(node)) return [{ node, message: DEFAULT_EXPORT }];
+  return declaredNames(node)
+    .filter((name) => !allowed.has(name))
+    .map((name) => notAllowed(node, name));
+}
+
+function helperProblems(node) {
+  const [name = "declaration"] = declaredNames(node);
+  return [
+    {
+      node,
+      message: `Helper "${name}" must not be declared in a Route Handler; move it to src/lib and import it.`,
+    },
+  ];
+}
+
+function statementProblems(node) {
+  if (ts.isImportDeclaration(node) || isDirective(node)) return [];
+  if (ts.isExportAssignment(node)) {
+    return [{ node, message: DEFAULT_EXPORT }];
+  }
+  if (ts.isExportDeclaration(node)) return exportDeclarationProblems(node);
+  return exported(node) ? exportedProblems(node) : helperProblems(node);
+}
+
 /** Returns `{ line, message }` for each statement outside the route contract. */
 export function inspectRouteHandler(contents, filename = "route.ts") {
   const source = ts.createSourceFile(
@@ -57,55 +112,13 @@ export function inspectRouteHandler(contents, filename = "route.ts") {
     true,
     ts.ScriptKind.TS,
   );
-  const problems = [];
-  const report = (node, message) =>
-    problems.push({
+  return source.statements
+    .flatMap(statementProblems)
+    .map(({ node, message }) => ({
       line:
         source.getLineAndCharacterOfPosition(node.getStart(source)).line + 1,
       message,
-    });
-  const notAllowed = (node, name) =>
-    report(
-      node,
-      `"${name}" is not a Route Handler export; export only HTTP methods (GET, POST, ...) and route segment config, and move everything else to src/lib.`,
-    );
-
-  for (const node of source.statements) {
-    if (ts.isImportDeclaration(node)) continue;
-    if (ts.isExpressionStatement(node) && ts.isStringLiteral(node.expression))
-      continue;
-    if (ts.isExportAssignment(node)) {
-      report(node, "Route Handlers must not have a default export.");
-    } else if (ts.isExportDeclaration(node)) {
-      if (!node.exportClause || ts.isNamespaceExport(node.exportClause)) {
-        report(node, "Route Handlers must not re-export with `export *`.");
-        continue;
-      }
-      for (const specifier of node.exportClause.elements) {
-        if (!allowed.has(specifier.name.text))
-          notAllowed(specifier, specifier.name.text);
-      }
-    } else if (exported(node)) {
-      if (
-        ts
-          .getModifiers(node)
-          ?.some((m) => m.kind === ts.SyntaxKind.DefaultKeyword)
-      ) {
-        report(node, "Route Handlers must not have a default export.");
-        continue;
-      }
-      for (const name of declaredNames(node)) {
-        if (!allowed.has(name)) notAllowed(node, name);
-      }
-    } else {
-      const [name = "declaration"] = declaredNames(node);
-      report(
-        node,
-        `Helper "${name}" must not be declared in a Route Handler; move it to src/lib and import it.`,
-      );
-    }
-  }
-  return problems;
+    }));
 }
 
 export function checkRouteHandlers(root) {
