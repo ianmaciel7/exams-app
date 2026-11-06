@@ -25,14 +25,15 @@ export function usePoliciesSectionClient() {
     ],
   ]);
 
-  let offset = 0;
-  const parts = getTranslation(ui, "messages", "termsAndPrivacy")
-    .split(/(\{tos\}|\{privacy\})/)
-    .map((text) => {
-      const part = { key: offset, text, link: links.get(text) };
-      offset += text.length;
-      return part;
-    });
+  const texts = getTranslation(ui, "messages", "termsAndPrivacy").split(
+    /(\{tos\}|\{privacy\})/,
+  );
+  // The offset of a part in the sentence is a stable, unique key.
+  const parts = texts.map((text, position) => ({
+    key: texts.slice(0, position).join("").length,
+    text,
+    link: links.get(text),
+  }));
 
   return { onNavigate, parts };
 }
