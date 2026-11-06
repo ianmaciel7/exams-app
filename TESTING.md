@@ -101,6 +101,16 @@ rubric, manual review, and failure follow-up.
 
 ## Acceptance journeys and independent verification
 
+Revoked sessions must be rejected at the cookie exchange as well as at the DAL.
+`route.test.ts` covers a revoked ID token, a disabled user, and a newly minted
+cookie that fails verification. The emulator suite revokes a real test account
+and requires the exchange to return `401` and remove its cookie. Its browser
+journey retains the stale client session, reloads the profile, checks that
+sign-in stabilizes with no repeated session exchanges, then explicitly signs
+in again after the test revocation is cleared. A successful cookie mint alone
+is not evidence of a usable session; refreshing an ID token does not change
+its original authentication time.
+
 A green unit-test suite or coverage percentage does not prove that a user can
 finish a workflow. Critical journeys are tested against the running application
 with the Firebase Auth, Firestore, and Functions emulators. Their assertions

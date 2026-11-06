@@ -615,6 +615,74 @@ async function openProfileWithBridgeToken(
 }
 
 test.describe("server session verification", () => {
+  test("session exchange rejects revoked credentials instead of acknowledging a rejected cookie", async ({
+    request,
+  }) => {
+    const account = await createAccount(request, "exchange-revoked");
+    const first = await request.post("/api/auth/session", {
+      data: { idToken: account.idToken },
+    });
+    expect(first.status()).toBe(200);
+    await updateAccount(request, account.localId, {
+      validSince: String(Math.floor(Date.now() / 1000) + 60),
+    });
+    const rejected = await request.post("/api/auth/session", {
+      data: { idToken: account.idToken },
+    });
+    expect(rejected.status()).toBe(401);
+    expect((await rejected.json()).code).toBe("auth/id-token-revoked");
+    expect(
+      (await request.storageState()).cookies.some(
+        (cookie) => cookie.name === "__session",
+      ),
+    ).toBe(false);
+  });
+
+  test("revoked browser sessions settle at sign-in and allow explicit sign-in", async ({
+    page,
+    request,
+    context,
+  }) => {
+    const account = await createAccount(request, "cookie-revoked-loop");
+    await signIn(page, account.email, signInUrlTo("/profile"));
+    await expect(page.getByLabel("Email", { exact: true })).toHaveValue(
+      account.email,
+    );
+    await updateAccount(request, account.localId, {
+      validSince: String(Math.floor(Date.now() / 1000) + 60),
+    });
+    let exchanges = 0;
+    page.on("request", (sent) => {
+      if (
+        new URL(sent.url()).pathname === "/api/auth/session" &&
+        sent.method() === "POST"
+      )
+        exchanges += 1;
+    });
+    await page.reload();
+    await expect(page).toHaveURL(`${authTestOrigin}${signInUrlTo("/profile")}`);
+    await expect(signInEmail(page)).toBeEditable();
+    await expect
+      .poll(async () =>
+        (await context.cookies()).some((cookie) => cookie.name === "__session"),
+      )
+      .toBe(false);
+    const settledExchanges = exchanges;
+    // Observe beyond one complete bounce in the reported log (about one second).
+    await page.waitForTimeout(2_000);
+    await expect(page).toHaveURL(`${authTestOrigin}${signInUrlTo("/profile")}`);
+    expect(exchanges).toBe(settledExchanges);
+    expect(exchanges).toBeLessThanOrEqual(2);
+    await updateAccount(request, account.localId, { validSince: "0" });
+    await signInEmail(page).fill(account.email);
+    await signInPassword(page).fill(password ?? "");
+    await page.getByRole("button", { name: "Sign In", exact: true }).click();
+    await expect(page).toHaveURL(`${authTestOrigin}/profile`);
+    await expect(page.getByLabel("Email", { exact: true })).toHaveValue(
+      account.email,
+    );
+  });
+
   // Without a client session, both verdicts end at sign-in. Only the client gate
   // knows the route, so `next` identifies which layer sent the visitor there.
   test("accepts a valid token and serves the protected route", async ({
