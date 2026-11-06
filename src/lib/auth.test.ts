@@ -223,7 +223,8 @@ describe("syncSessionCookie", () => {
     await Promise.resolve();
     expect(fetchMock).toHaveBeenCalledOnce();
     write.resolve(new Response(null, { status: 200 }));
-    await Promise.all([syncing, logout]);
+    const [synced] = await Promise.all([syncing, logout]);
+    expect(synced).toBe(false);
     expect(fetchMock.mock.calls.map(([, options]) => options.method)).toEqual([
       "POST",
       "DELETE",

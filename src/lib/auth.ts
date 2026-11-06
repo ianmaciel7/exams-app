@@ -34,7 +34,10 @@ export async function syncSessionCookie(user: {
     });
     sessionWrites.add(write);
     try {
-      return (await write).ok;
+      const response = await write;
+      return (
+        response.ok && generation === sessionGeneration && !getPendingSignOut()
+      );
     } finally {
       sessionWrites.delete(write);
     }
