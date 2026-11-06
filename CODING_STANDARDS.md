@@ -1079,7 +1079,6 @@ mechanically rewrite valid boundaries.
   - This rule is enforced mechanically by `pnpm check:secret-guard` and the `.husky/pre-commit` hook.
   - Emulator launch configurations should automate starting background emulator dependencies using `"preLaunchTask"` paired with background problem matchers in `.vscode/tasks.json`.
 
-
 ## HTTP status helpers
 
 Use named exports from `src/lib/server.ts` for HTTP responses and
