@@ -111,6 +111,12 @@ in again after the test revocation is cleared. A successful cookie mint alone
 is not evidence of a usable session; refreshing an ID token does not change
 its original authentication time.
 
+The root session provider must also sign out when synchronization fails before
+the POST (for example, token refresh removed the browser identity). Its unit
+tests protect newer accounts from a late rejection. `auth.test.ts` verifies
+that logout waits for dispatched cookie writes before deleting the cookie and
+that a token refresh completing after logout cannot recreate the session.
+
 A green unit-test suite or coverage percentage does not prove that a user can
 finish a workflow. Critical journeys are tested against the running application
 with the Firebase Auth, Firestore, and Functions emulators. Their assertions

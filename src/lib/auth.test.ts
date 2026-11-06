@@ -211,6 +211,38 @@ describe("syncSessionCookie", () => {
     vi.unstubAllGlobals();
   });
 
+  it("deletes the cookie only after an already dispatched exchange finishes", async () => {
+    const write = Promise.withResolvers<Response>();
+    fetchMock
+      .mockReturnValueOnce(write.promise)
+      .mockResolvedValue({ ok: true });
+    mocks.signOut.mockResolvedValue(undefined);
+    const syncing = syncSessionCookie({ getIdToken: async () => "token" });
+    await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledOnce());
+    const logout = signOutUser();
+    await Promise.resolve();
+    expect(fetchMock).toHaveBeenCalledOnce();
+    write.resolve(new Response(null, { status: 200 }));
+    await Promise.all([syncing, logout]);
+    expect(fetchMock.mock.calls.map(([, options]) => options.method)).toEqual([
+      "POST",
+      "DELETE",
+    ]);
+  });
+
+  it("does not recreate a session when token refresh finishes after logout", async () => {
+    const token = Promise.withResolvers<string>();
+    fetchMock.mockResolvedValue({ ok: true });
+    mocks.signOut.mockResolvedValue(undefined);
+    const syncing = syncSessionCookie({ getIdToken: () => token.promise });
+    await signOutUser();
+    token.resolve("obsolete-token");
+    await expect(syncing).resolves.toBe(false);
+    expect(fetchMock.mock.calls.map(([, options]) => options.method)).toEqual([
+      "DELETE",
+    ]);
+  });
+
   it("force-refreshes the ID token and resolves true on success", async () => {
     fetchMock.mockResolvedValue({ ok: true });
     const getIdToken = vi.fn().mockResolvedValue("fresh-token");

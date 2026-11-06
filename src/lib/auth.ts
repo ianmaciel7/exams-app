@@ -9,6 +9,9 @@ import { getPendingSignOut, setPendingSignOut } from "@/lib/pending-sign-out";
 
 export { getPendingSignOut } from "@/lib/pending-sign-out";
 
+const sessionWrites = new Set<Promise<Response>>();
+let sessionGeneration = 0;
+
 /**
  * Create the server session cookie from a freshly refreshed ID token.
  * Resolves to false when the server rejects the token (for example a revoked
@@ -18,20 +21,31 @@ export async function syncSessionCookie(user: {
   getIdToken: (forceRefresh?: boolean) => Promise<string>;
 }): Promise<boolean> {
   if (typeof fetch !== "function") return false;
+  if (getPendingSignOut()) return false;
+  const generation = sessionGeneration;
   try {
     const idToken = await user.getIdToken(true);
-    const response = await fetch("/api/auth/session", {
+    if (getPendingSignOut() || generation !== sessionGeneration) return false;
+    const write = fetch("/api/auth/session", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ idToken }),
+      signal: AbortSignal.timeout(15_000),
     });
-    return response.ok;
+    sessionWrites.add(write);
+    try {
+      return (await write).ok;
+    } finally {
+      sessionWrites.delete(write);
+    }
   } catch {
     return false;
   }
 }
 
 async function clearSessionCookie() {
+  // A late POST response must not recreate the cookie after DELETE completes.
+  await Promise.allSettled([...sessionWrites]);
   try {
     await fetch("/api/auth/session", { method: "DELETE" });
   } catch {
@@ -78,6 +92,7 @@ async function synchronizeSignedOutWorker() {
 export function signOutUser() {
   const pendingSignOut = getPendingSignOut();
   if (pendingSignOut) return pendingSignOut;
+  sessionGeneration += 1;
 
   const pending = Promise.all([
     signOut(getFirebaseUI().get().auth).then(synchronizeSignedOutWorker),

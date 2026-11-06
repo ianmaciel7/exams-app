@@ -1,6 +1,7 @@
 import type { User } from "firebase/auth";
 import { useEffect, useState } from "react";
-import { syncSessionCookie } from "@/lib/auth";
+import { signOutUser, syncSessionCookie } from "@/lib/auth";
+import { getFirebaseAuthUser } from "@/lib/firebase/client";
 import { loadFirebaseClient } from "@/lib/firebase-loaders";
 import type { Session } from "@/lib/session-context";
 
@@ -39,7 +40,17 @@ export function useSessionProviderClient() {
 
   useEffect(() => {
     if (session.user && typeof session.user.getIdToken === "function") {
-      void syncSessionCookie(session.user);
+      const user = session.user;
+      void syncSessionCookie(user)
+        .then((synced) => {
+          const current = getFirebaseAuthUser();
+          // A failed refresh may already have removed the browser user. Still
+          // clear the server cookie, but never sign out a newer account.
+          if (!synced && (!current || current === user)) {
+            return signOutUser();
+          }
+        })
+        .catch(console.error);
     }
   }, [session.user]);
 
