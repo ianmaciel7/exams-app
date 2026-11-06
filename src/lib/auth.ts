@@ -9,19 +9,25 @@ import { getPendingSignOut, setPendingSignOut } from "@/lib/pending-sign-out";
 
 export { getPendingSignOut } from "@/lib/pending-sign-out";
 
+/**
+ * Create the server session cookie from a freshly refreshed ID token.
+ * Resolves to false when the server rejects the token (for example a revoked
+ * session), so callers can sign out instead of redirecting in a loop.
+ */
 export async function syncSessionCookie(user: {
-  getIdToken: () => Promise<string>;
-}) {
-  if (typeof fetch !== "function") return;
+  getIdToken: (forceRefresh?: boolean) => Promise<string>;
+}): Promise<boolean> {
+  if (typeof fetch !== "function") return false;
   try {
-    const idToken = await user.getIdToken();
-    await fetch("/api/auth/session", {
+    const idToken = await user.getIdToken(true);
+    const response = await fetch("/api/auth/session", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ idToken }),
     });
+    return response.ok;
   } catch {
-    // Best-effort session cookie sync
+    return false;
   }
 }
 

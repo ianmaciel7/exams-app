@@ -36,6 +36,23 @@ function isTokenRejection(error: unknown) {
   return typeof code === "string" && TOKEN_REJECTION_CODES.has(code);
 }
 
+function warnInDevelopment(error: unknown) {
+  if (process.env.NODE_ENV !== "development") return;
+
+  // A running emulator that rejected the token is not down.
+  if (isTokenRejection(error)) return;
+
+  if (process.env.FIREBASE_AUTH_EMULATOR_HOST) {
+    console.warn(
+      `[Firebase Dev] Cannot connect to Auth emulator at ${process.env.FIREBASE_AUTH_EMULATOR_HOST}. If the emulator is stopped, start it in another terminal with 'pnpm emulator'.`,
+    );
+  } else {
+    console.warn(
+      "[Firebase Dev] Production token verification failed. Ensure Google Application Default Credentials are set with 'gcloud auth application-default login'.",
+    );
+  }
+}
+
 function logVerificationFailure(error: unknown) {
   const errorWithCode = error as { code?: string; cause?: { code?: string } };
   const code = errorWithCode.code ?? errorWithCode.cause?.code;
@@ -53,17 +70,7 @@ function logVerificationFailure(error: unknown) {
     ...(causeMessage ? { cause: causeMessage } : {}),
   });
 
-  if (process.env.NODE_ENV !== "development") return;
-
-  if (process.env.FIREBASE_AUTH_EMULATOR_HOST) {
-    console.warn(
-      `[Firebase Dev] Cannot connect to Auth emulator at ${process.env.FIREBASE_AUTH_EMULATOR_HOST}. If the emulator is stopped, start it in another terminal with 'pnpm emulator'.`,
-    );
-  } else {
-    console.warn(
-      "[Firebase Dev] Production token verification failed. Ensure Google Application Default Credentials are set with 'gcloud auth application-default login'.",
-    );
-  }
+  warnInDevelopment(error);
 }
 
 async function verifyToken(token: string, isCookie: boolean) {

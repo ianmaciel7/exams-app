@@ -30,6 +30,7 @@ import {
   reloadFirebaseAuthUser,
   sendEmailChangeVerification,
   signOutUser,
+  syncSessionCookie,
 } from "./auth";
 
 describe("sendEmailChangeVerification", () => {
@@ -197,5 +198,46 @@ describe("reloadFirebaseAuthUser", () => {
       reload: vi.fn().mockRejectedValue(new Error("offline")),
     } as unknown as User;
     await expect(reloadFirebaseAuthUser()).rejects.toThrow("offline");
+  });
+});
+
+describe("syncSessionCookie", () => {
+  const fetchMock = vi.fn();
+  beforeEach(() => {
+    fetchMock.mockReset();
+    vi.stubGlobal("fetch", fetchMock);
+  });
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("force-refreshes the ID token and resolves true on success", async () => {
+    fetchMock.mockResolvedValue({ ok: true });
+    const getIdToken = vi.fn().mockResolvedValue("fresh-token");
+    await expect(syncSessionCookie({ getIdToken })).resolves.toBe(true);
+    expect(getIdToken).toHaveBeenCalledWith(true);
+    expect(fetchMock).toHaveBeenCalledWith(
+      "/api/auth/session",
+      expect.objectContaining({
+        method: "POST",
+        body: JSON.stringify({ idToken: "fresh-token" }),
+      }),
+    );
+  });
+
+  it("resolves false when the server rejects the token", async () => {
+    fetchMock.mockResolvedValue({ ok: false, status: 401 });
+    const getIdToken = vi.fn().mockResolvedValue("revoked");
+    await expect(syncSessionCookie({ getIdToken })).resolves.toBe(false);
+  });
+
+  it("resolves false when refreshing or sending fails", async () => {
+    const failingRefresh = vi.fn().mockRejectedValue(new Error("revoked"));
+    await expect(
+      syncSessionCookie({ getIdToken: failingRefresh }),
+    ).resolves.toBe(false);
+    fetchMock.mockRejectedValue(new Error("network"));
+    const getIdToken = vi.fn().mockResolvedValue("token");
+    await expect(syncSessionCookie({ getIdToken })).resolves.toBe(false);
   });
 });

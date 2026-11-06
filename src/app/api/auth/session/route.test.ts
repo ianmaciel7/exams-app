@@ -59,9 +59,10 @@ describe("/api/auth/session", () => {
       );
     });
 
-    it("returns status 401 when createSessionCookie fails", async () => {
+    it("returns status 401 and deletes the session cookie when createSessionCookie fails", async () => {
       const log = vi.spyOn(console, "error").mockImplementation(() => {});
       try {
+        mocks.cookies.set("__session", { value: "old-revoked-cookie" });
         mocks.createSessionCookie.mockRejectedValue(new Error("invalid token"));
         const request = new NextRequest("http://localhost/api/auth/session", {
           method: "POST",
@@ -69,6 +70,7 @@ describe("/api/auth/session", () => {
         });
         const response = await POST(request);
         expect(response.status).toBe(401);
+        expect(mocks.cookies.has("__session")).toBe(false);
       } finally {
         log.mockRestore();
       }
