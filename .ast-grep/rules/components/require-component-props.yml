@@ -14,10 +14,9 @@ ignores:
   - "**/*.stories.tsx"
   - "src/components/ui/[!e]*.tsx"
   - "src/components/ui/e[!x]*.tsx"
-  - src/components/firebase/**
   - src/components/ai-elements/**
   # Renders a bare string, not an element, so it has no element props to inherit.
-  - src/components/ui/extensions/translation-text-server.tsx
+  - src/app/_components/translation-text-server.tsx
 severity: error
 message: Component prop types should extend ComponentProps, HTMLAttributes, or PropsWithChildren.
 note: |

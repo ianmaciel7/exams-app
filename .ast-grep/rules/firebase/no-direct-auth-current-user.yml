@@ -5,7 +5,6 @@ files:
   - src/**/*.tsx
 ignores:
   - src/lib/firebase/client.ts
-  - src/components/firebase/**
   - src/**/*.test.ts
   - src/**/*.test.tsx
 severity: error

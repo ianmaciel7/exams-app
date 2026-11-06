@@ -9,7 +9,7 @@ ignores:
   - "src/components/ui/[!e]*.tsx"
   - "src/components/ui/e[!x]*.tsx"
   - src/components/ai-elements/**
-  - src/components/firebase/policies.tsx
+  - src/app/(public)/_components/policies.tsx
 severity: error
 message: Use the shadcn Button from @/components/ui/button instead of a raw <button>.
 note: |

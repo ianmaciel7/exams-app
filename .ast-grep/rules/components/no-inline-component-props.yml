@@ -9,7 +9,6 @@ ignores:
   - "**/*.stories.tsx"
   - "src/components/ui/[!e]*.tsx"
   - "src/components/ui/e[!x]*.tsx"
-  - src/components/firebase/**
   - src/components/ai-elements/**
 severity: error
 message: Extract inline component props into a named <ComponentName>Props type alias.

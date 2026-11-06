@@ -20,7 +20,7 @@ export function isOwnedComponent(filename) {
   }
   if (path.startsWith("src/app/")) return path.includes("/_components/");
   if (!path.startsWith("src/components/")) return false;
-  if (/^src\/components\/(firebase|ai-elements)\//.test(path)) return false;
+  if (/^src\/components\/ai-elements\//.test(path)) return false;
   if (path.startsWith("src/components/ui/")) {
     return path.startsWith("src/components/ui/extensions/");
   }

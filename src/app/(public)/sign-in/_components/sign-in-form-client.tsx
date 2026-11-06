@@ -2,7 +2,7 @@
 
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
-import { MultiFactorAuthAssertionForm } from "@/components/firebase/multi-factor-auth-assertion-form";
+import { MultiFactorAssertionFlowClient } from "@/app/(public)/_components/firebase/multi-factor-assertion-flow-client";
 import { cn } from "@/lib/utils";
 import { useSignInFormClient } from "../_hooks/use-sign-in-form-client";
 import { SignInFormBody } from "./sign-in-form-body";
@@ -30,7 +30,7 @@ function SignInFormClient({
     ),
     state: { slot: "sign-in-form" },
   });
-  return controller.isMfa ? <MultiFactorAuthAssertionForm /> : rendered;
+  return controller.isMfa ? <MultiFactorAssertionFlowClient /> : rendered;
 }
 
 export { SignInFormClient };

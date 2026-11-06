@@ -2,7 +2,7 @@ import "server-only";
 
 import Link from "next/link";
 import type { ComponentProps } from "react";
-import { TranslationTextServer as T } from "@/components/ui/extensions/translation-text-server";
+import { TranslationTextServer as T } from "@/app/_components/translation-text-server";
 import { routes } from "@/lib/navigation";
 import { getSession } from "@/lib/session";
 import { SignOutButtonClient } from "./sign-out-button-client";

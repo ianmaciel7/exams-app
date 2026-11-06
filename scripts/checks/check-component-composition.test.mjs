@@ -242,7 +242,7 @@ describe("component composition across server and client graphs", () => {
     const broken = `${primitiveImport} ${contract} export default function AccountCard(props: AccountCardProps) { return <Surface />; }`;
     for (const file of [
       "src/components/ui/card.tsx",
-      "src/components/firebase/account-card.tsx",
+      "src/components/ai-elements/account-card.tsx",
       "src/components/ai-elements/account-card.tsx",
       "src/app/settings/page.tsx",
       "src/components/account-card.test.tsx",

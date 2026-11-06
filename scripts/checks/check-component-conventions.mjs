@@ -26,7 +26,7 @@ export function isOwnedComponent(filename) {
   }
   if (path.startsWith("src/app/")) return path.includes("/_components/");
   if (!path.startsWith("src/components/")) return false;
-  if (/^src\/components\/(firebase|ai-elements)\//.test(path)) return false;
+  if (/^src\/components\/ai-elements\//.test(path)) return false;
   if (path.startsWith("src/components/ui/")) {
     return path.startsWith("src/components/ui/extensions/");
   }
@@ -543,6 +543,9 @@ export function inspectComponentRuntime(
   const stem = basename(filename, ".tsx");
   const clientBoundary = isClientBoundary(source);
   const integration = componentIntegrations(source, filename, modules);
+  // A "server-only" module never runs in the browser: importing a client
+  // dependency there only renders that package's own client boundary.
+  if (hasServerOnlyMarker(source)) integration.client = false;
   const { client, server } = integrationKinds(integration, clientBoundary);
   const messages = [
     ...integrationNameMessages(stem, client, server),

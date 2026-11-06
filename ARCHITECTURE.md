@@ -125,7 +125,7 @@ validation integrates `@cspell/dict-pt-br`.
 
 The root layout (`src/app/layout.tsx`) remains synchronous and
 composition-only. Its outer `Suspense` boundary renders
-`IntlDocumentServer` (`src/components/ui/extensions/intl-document-server.tsx`),
+`IntlDocumentServer` (`src/app/_components/intl-document-server.tsx`),
 which resolves `getLocale()` from the existing request cookie and emits the
 root `<html lang={locale}>` on the server. The outer fallback is empty rather
 than an English-language document, so a slower locale lookup cannot send an
@@ -228,8 +228,7 @@ decision, and consequences before the related implementation is merged.
 Server Component support, Lucide, and the `@/*` aliases. Tailwind v4 uses the
 existing CSS entry rather than a separate Tailwind config. The `shadcn` package
 provides the CLI and shared CSS; a dependency upgrade does not replace copied
-files in `src/components/ui`, `src/components/ai-elements`, or
-`src/components/firebase`.
+files in `src/components/ui` or `src/components/ai-elements`.
 
 The repository consumes registries; it does not publish a custom registry.
 Monorepo, package-import, React Aria, Radix, alternative form-library, and

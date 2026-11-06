@@ -699,7 +699,7 @@ session checks. Naming and server authorization remain distinct contracts.
 application files. The suite tests both valid implementations and rejected anti-patterns:
 
 - **Path classifiers**: Confirms discrimination between owned application components, App
-  Router entry points, and third-party vendor trees (`src/components/firebase`,
+  Router entry points, and third-party vendor trees (
   `src/components/ai-elements`, and preinstalled `src/components/ui/*.tsx`).
 - **Root layout viewport metadata (WCAG 1.4.4)**: Confirms valid static `viewport` exports
   and dynamic `generateViewport` functions with `width: 'device-width'` and `initialScale: 1`.

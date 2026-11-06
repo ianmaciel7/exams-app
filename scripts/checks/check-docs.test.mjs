@@ -64,16 +64,13 @@ test("ignores external URLs and examples in fenced or inline code", () => {
 
 test("maps only the exact historical ADR source and requires its replacement", () => {
   const old = "[source](../../src/components/ui/extensions/theme-provider.tsx)";
-  fixture(
-    { "src/components/ui/extensions/theme-provider-client.tsx": "" },
-    (root) => {
-      assert.deepEqual(
-        inspectLinks(root, "docs/adr/0003-configure-theming.md", old),
-        [],
-      );
-      assert.equal(inspectLinks(root, "docs/adr/other.md", old).length, 1);
-    },
-  );
+  fixture({ "src/app/_components/theme-provider-server.tsx": "" }, (root) => {
+    assert.deepEqual(
+      inspectLinks(root, "docs/adr/0003-configure-theming.md", old),
+      [],
+    );
+    assert.equal(inspectLinks(root, "docs/adr/other.md", old).length, 1);
+  });
   fixture({}, (root) => {
     assert.equal(
       inspectLinks(root, "docs/adr/0003-configure-theming.md", old).length,
