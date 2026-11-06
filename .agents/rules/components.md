@@ -23,14 +23,15 @@ This section covers component dimensions and file contracts; see also [Component
 | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
 | Runtime        | Import graphs determine membership; `"use client"` declares a boundary, while a shared module can compile in both graphs                                                                  | `AccountCard` may participate in a client subtree without its own directive             |
 | Responsibility | Every component must specify a concrete component type or semantic role describing its composition or behavior, not its runtime environment. Bare domain or runtime labels are prohibited | `ProfileForm`, `ProfileAvatarFieldClient`, `PublicUiProviderClient`, `SignInFormClient` |
-| Placement      | Colocate route components in private `_components/`, hooks in `_hooks/` and shared components in `src/components/ui/extensions/`                                                          | App Router private folders do not become routes                                         |
+| Placement      | Colocate route components in private `_components/`, hooks in `_hooks/` and route-shared components in the nearest common `_components/` (`src/app/_components/` for the whole app, `src/app/(public)/_components/firebase/` for the Firebase auth components)                                                          | App Router private folders do not become routes                                         |
 
 Every owned component must specify a concrete component type or semantic role describing its composition or behavior (such as `*-field`, `*-form`, `*-card`, `*-dialog`, `*-hero`, `*-button`, `*-provider`, or `*-guard`). A component name must never describe only its feature domain or runtime environment without a concrete role.
 
 Route composition roots that render an auth form carry `Form` in the name (`SignInFormClient`, `RegisterFormClient`) and their hooks and files follow it (`use-sign-in-form-client.ts`, `sign-in-form-client.tsx`). The forgot-password page composes `Card` directly and renders `ForgotPasswordFormClient`, like the sign-in and register pages. The legacy Firebase UI `*-auth-screen.tsx` and `*-auth-form.tsx` modules no longer exist; shared form parts live in `src/app/(public)/_components/` (`EmailField`, `PasswordField`, `AuthSubmitSection`).
 
-The shadcn primitives live under `src/components/ui/`; Firebase registry output
-lives under `src/components/firebase/`; generated AI Elements live under
+`src/components` only holds the shadcn primitives (`ui/`, with the presentational
+`ui/extensions/`) and generated AI Elements; `pnpm check:repo` runs
+`check-components-directory.mjs`, which rejects any other folder, any `-client`/`-server` component and any `"use server"`/`server-only` module there. Integration components (session, headers, Firebase) live in `_components` next to the route that owns them, following the Next.js private-folder convention. Generated AI Elements live under
 `src/components/ai-elements/`. That copied registry source is locally maintained and adaptable, and excluded
 from application naming checks; this exclusion preserves upstream API shapes
 and does not transfer maintenance ownership to vendors. Application-owned extensions under
@@ -165,7 +166,7 @@ Export aliases, named function/class expressions, enums and type parameters also
 
 ## Component export style and helper placement
 
-Every component module in `src/` (including `src/components/firebase/`, excluding the shadcn copies `src/components/ui/*.tsx` and AI Elements) declares `function Name()` locally and exports it with `export { Name }`. Inline `export function Name()` and `export default` are rejected by `inspectComponentExportConventions`; `export default` is reserved for Next.js route entry points (`page`, `layout`, `template`, `error`, `global-error`, `not-found`, `loading`, `default`).
+Every component module in `src/` ( excluding the shadcn copies `src/components/ui/*.tsx` and AI Elements) declares `function Name()` locally and exports it with `export { Name }`. Inline `export function Name()` and `export default` are rejected by `inspectComponentExportConventions`; `export default` is reserved for Next.js route entry points (`page`, `layout`, `template`, `error`, `global-error`, `not-found`, `loading`, `default`).
 
 `src/components/` holds React UI only. Non-UI `.ts` helpers, including their tests, belong in `src/lib/` (or `src/lib/firebase/`), for example `src/lib/firebase/auth-error-message.ts`.
 

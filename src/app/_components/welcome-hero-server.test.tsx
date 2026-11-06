@@ -10,7 +10,7 @@ vi.mock("@/lib/session", () => ({ getSession: mocks.getSession }));
 vi.mock("./sign-out-button-client", () => ({
   SignOutButtonClient: () => <button type="button">{"Sign out"}</button>,
 }));
-vi.mock("@/components/ui/extensions/translation-text-server", () => ({
+vi.mock("@/app/_components/translation-text-server", () => ({
   TranslationTextServer: ({
     message,
     values,

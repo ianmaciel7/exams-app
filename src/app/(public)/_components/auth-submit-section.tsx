@@ -2,7 +2,7 @@
 
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
-import { Policies } from "@/components/firebase/policies";
+import { PoliciesSectionClient } from "@/app/(public)/_components/firebase/policies-section-client";
 import { Button } from "@/components/ui/button";
 import { FormError } from "@/components/ui/extensions/form-error";
 import { Spinner } from "@/components/ui/spinner";
@@ -28,7 +28,7 @@ function AuthSubmitSection({
         className: "flex flex-col gap-4",
         children: (
           <>
-            <Policies />
+            <PoliciesSectionClient />
             <Button type="submit" disabled={isPending} focusableWhenDisabled>
               {isPending ? (
                 <Spinner data-icon="inline-start" aria-hidden="true" />

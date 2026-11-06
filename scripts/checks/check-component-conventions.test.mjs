@@ -121,7 +121,7 @@ describe("owned hook filename/export parity", () => {
     for (const path of [
       "src/hooks/use-mobile.ts",
       "src/app/_hooks/use-account.test.ts",
-      "src/components/firebase/use-auth.ts",
+      "src/components/ai-elements/use-auth.ts",
       "src/app/(protected)/profile/_components/profile-card.tsx",
     ]) {
       assert.equal(isOwnedHookModule(path), false);
@@ -331,7 +331,7 @@ describe("owned component conventions", () => {
     assert.equal(isOwnedComponent("src/app/_components/card.test.tsx"), false);
     assert.equal(isOwnedComponent("src/components/ui/button.tsx"), false);
     assert.equal(
-      isOwnedComponent("src/components/firebase/sign-in-auth-screen.tsx"),
+      isOwnedComponent("src/components/ai-elements/sign-in-auth-screen.tsx"),
       false,
     );
     assert.equal(
@@ -344,12 +344,12 @@ describe("owned component conventions", () => {
     const file =
       "src/app/(public)/forgot-password/_components/forgot-password-form-client.tsx";
     expectInvalid(
-      '"use client"; import { ForgotPasswordAuthScreen } from "@/components/firebase/forgot-password-auth-screen"; function ForgotPasswordFormClient(props) { return <div {...props}><ForgotPasswordAuthScreen /></div>; } export { ForgotPasswordFormClient };',
+      '"use client"; import { ForgotPasswordAuthScreen } from "@/components/ai-elements/forgot-password-auth-screen"; function ForgotPasswordFormClient(props) { return <div {...props}><ForgotPasswordAuthScreen /></div>; } export { ForgotPasswordFormClient };',
       /Middle Man/,
       file,
     );
     expectValid(
-      '"use client"; import { ForgotPasswordAuthScreen } from "@/components/firebase/forgot-password-auth-screen"; function ForgotPasswordFormClient(props) { return props.ready ? <ForgotPasswordAuthScreen /> : null; } export { ForgotPasswordFormClient };',
+      '"use client"; import { ForgotPasswordAuthScreen } from "@/components/ai-elements/forgot-password-auth-screen"; function ForgotPasswordFormClient(props) { return props.ready ? <ForgotPasswordAuthScreen /> : null; } export { ForgotPasswordFormClient };',
       file,
     );
   });
@@ -710,9 +710,9 @@ describe("owned component conventions", () => {
     assert.ok(
       inspectNaming(
         "function SignInAuthScreen() {}",
-        "src/components/firebase/sign-in-auth-screen.tsx",
+        "src/app/(public)/_components/sign-in-auth-screen.tsx",
       ).length,
-      "the firebase directory is audited for banned naming terms",
+      "route-private components are audited for banned naming terms",
     );
     assert.deepEqual(
       inspectNaming(
@@ -841,8 +841,8 @@ describe("component placement", () => {
 
   it("rejects non-UI helper modules in src/components, including Windows paths", () => {
     for (const file of [
-      "src/components/firebase/auth-error-message.ts",
-      "src/components/firebase/auth-error-message.test.ts",
+      "src/components/ai-elements/auth-error-message.ts",
+      "src/components/ai-elements/auth-error-message.test.ts",
       "src/components/ui/utils.ts",
       "src/components/loading/index.ts",
       "src\\components\\firebase\\auth-error-message.ts",
@@ -862,7 +862,7 @@ describe("component placement", () => {
       "src/app/_components/route-loading.tsx",
       "src/app/(protected)/profile/_components/profile-section.tsx",
       "src/components/ui/spinner.tsx",
-      "src/components/firebase/oauth-button.tsx",
+      "src/components/ai-elements/oauth-button.tsx",
       "src/components/ai-elements/message.tsx",
       "src/hooks/use-loading.ts",
     ])
@@ -1085,7 +1085,7 @@ describe("component integration naming", () => {
   it("excludes registry source, framework files and tests", () => {
     for (const path of [
       "src/app/error.tsx",
-      "src/components/firebase/oauth-button.tsx",
+      "src/components/ai-elements/oauth-button.tsx",
       "src/components/ui/button.tsx",
       file("account-client.test"),
     ])
@@ -1304,9 +1304,9 @@ describe("component export conventions", () => {
   const inspectExports = (code, file) =>
     inspectComponentExportConventions(code, file).map((issue) => issue.message);
 
-  it("rejects inline export function in every component folder, including firebase", () => {
+  it("rejects inline export function in every component folder", () => {
     for (const file of [
-      "src/components/firebase/sign-up-auth-form.tsx",
+      "src/app/(public)/_components/sign-up-auth-form.tsx",
       "src/components/ui/extensions/custom-card.tsx",
       "src/app/(public)/sign-in/_components/sign-in-form-client.tsx",
     ])
@@ -1338,7 +1338,7 @@ describe("component export conventions", () => {
     const named =
       "function Policies() { return <div />; } export { Policies };";
     assert.deepEqual(
-      inspectExports(named, "src/components/firebase/policies.tsx"),
+      inspectExports(named, "src/components/ai-elements/policies.tsx"),
       [],
     );
     const route = "export default function Page() { return <div />; }";
@@ -1351,5 +1351,17 @@ describe("component export conventions", () => {
       "src/components/ui/button.tsx",
     ])
       assert.deepEqual(inspectExports(route, file), [], file);
+  });
+});
+
+describe("server-only components rendering client packages", () => {
+  it("does not treat a server-only module as a browser integration", () => {
+    assert.deepEqual(
+      inspectComponentRuntime(
+        'import "server-only"; import { ThemeProvider } from "next-themes"; async function ThemeProviderServer() { return <ThemeProvider />; } export { ThemeProviderServer };',
+        "src/app/_components/theme-provider-server.tsx",
+      ),
+      [],
+    );
   });
 });

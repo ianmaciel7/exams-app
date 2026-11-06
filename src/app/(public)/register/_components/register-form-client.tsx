@@ -4,7 +4,7 @@ import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
 import { useTranslations } from "next-intl";
 import { FormProvider } from "react-hook-form";
-import { MultiFactorAuthAssertionForm } from "@/components/firebase/multi-factor-auth-assertion-form";
+import { MultiFactorAssertionFlowClient } from "@/app/(public)/_components/firebase/multi-factor-assertion-flow-client";
 import { Form } from "@/components/ui/extensions/form";
 import { FieldGroup } from "@/components/ui/field";
 import { routes } from "@/lib/navigation";
@@ -70,7 +70,7 @@ function RegisterFormClient({
     ),
     state: { slot: "register-form" },
   });
-  return isMfa ? <MultiFactorAuthAssertionForm /> : rendered;
+  return isMfa ? <MultiFactorAssertionFlowClient /> : rendered;
 }
 
 export { RegisterFormClient };

@@ -3,7 +3,7 @@
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
 import { useTranslations } from "next-intl";
-import { GoogleSignInButton } from "@/components/firebase/google-sign-in-button";
+import { GoogleSignInButtonClient } from "@/app/(public)/_components/firebase/google-sign-in-button-client";
 import { Separator } from "@/components/ui/separator";
 
 type SocialSignInSectionProps = useRender.ComponentProps<"div">;
@@ -26,7 +26,7 @@ function SocialSignInSection({ render, ...props }: SocialSignInSectionProps) {
               </div>
             </div>
             <div className="flex flex-col gap-2">
-              <GoogleSignInButton />
+              <GoogleSignInButtonClient />
             </div>
           </>
         ),
