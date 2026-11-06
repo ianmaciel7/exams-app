@@ -1,0 +1,9 @@
+id: no-radix-select-api
+valid:
+  - |
+    const a = <SelectContent alignItemWithTrigger={false} side="bottom" />;
+invalid:
+  - |
+    const a = <SelectValue placeholder="Pick one" />;
+  - |
+    const a = <SelectContent position="popper" />;

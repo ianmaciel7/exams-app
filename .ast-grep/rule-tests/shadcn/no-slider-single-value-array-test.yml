@@ -1,0 +1,11 @@
+id: no-slider-single-value-array
+valid:
+  - |
+    const a = <Slider defaultValue={50} max={100} />;
+  - |
+    const a = <Slider defaultValue={[20, 80]} max={100} />;
+invalid:
+  - |
+    const a = <Slider defaultValue={[50]} max={100} />;
+  - |
+    const a = <Slider value={[value]} onValueChange={setValue} />;

@@ -1,0 +1,20 @@
+id: no-custom-shimmer
+language: tsx
+files:
+  - src/app/**/*.tsx
+  - src/components/**/*.tsx
+  - src/hooks/**/*.tsx
+ignores:
+  - "**/*.test.tsx"
+  - "**/*.stories.tsx"
+severity: error
+message: "Use the shimmer utility instead of a hand-written gradient sweep."
+note: |
+  shadcn/ui styling rule: <span className="shimmer">Thinking...</span>. Do not
+  author a bg-clip-text gradient with a custom animation.
+rule:
+  kind: string_fragment
+  regex: "bg-clip-text"
+  all:
+    - regex: "bg-(gradient|linear)"
+    - regex: "animate-|shimmer_"

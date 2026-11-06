@@ -1,0 +1,8 @@
+id: no-custom-shimmer
+snapshots:
+  "const a = <span className=\"animate-pulse bg-linear-to-r bg-clip-text text-transparent\">Thinking</span>;\n":
+    labels:
+      - source: animate-pulse bg-linear-to-r bg-clip-text text-transparent
+        style: primary
+        start: 27
+        end: 85

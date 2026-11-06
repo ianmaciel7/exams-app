@@ -1,0 +1,11 @@
+id: require-select-items
+valid:
+  - |
+    const a = <Select items={items}><SelectTrigger><SelectValue /></SelectTrigger></Select>;
+  - |
+    const a = <Select><SelectTrigger><SelectValue>{(v) => label(v)}</SelectValue></SelectTrigger></Select>;
+  - |
+    const Wrapped = (props) => (<Select {...props}><SelectTrigger /></Select>);
+invalid:
+  - |
+    const a = <Select defaultValue="a"><SelectTrigger><SelectValue /></SelectTrigger></Select>;

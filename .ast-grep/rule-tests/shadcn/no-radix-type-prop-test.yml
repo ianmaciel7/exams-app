@@ -1,0 +1,11 @@
+id: no-radix-type-prop
+valid:
+  - |
+    const a = <Accordion multiple defaultValue={["a"]} />;
+  - |
+    const a = <Input type="email" />;
+invalid:
+  - |
+    const a = <Accordion type="single" collapsible defaultValue="a" />;
+  - |
+    const a = <ToggleGroup type="multiple" />;

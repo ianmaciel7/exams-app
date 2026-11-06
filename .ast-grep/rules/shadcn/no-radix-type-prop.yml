@@ -1,0 +1,30 @@
+id: no-radix-type-prop
+language: tsx
+files:
+  - src/app/**/*.tsx
+  - src/components/**/*.tsx
+  - src/hooks/**/*.tsx
+ignores:
+  - "**/*.test.tsx"
+  - "**/*.stories.tsx"
+severity: error
+message: "Radix API: ToggleGroup and Accordion take a multiple boolean, not type or collapsible."
+note: |
+  shadcn/ui base-vs-radix rule: Base UI has no type="single" | "multiple" and
+  no collapsible; defaultValue is always an array.
+  Example:
+    <Accordion multiple defaultValue={["a", "b"]}>...</Accordion>
+rule:
+  kind: jsx_attribute
+  all:
+    - has:
+        kind: property_identifier
+        regex: "^(type|collapsible)$"
+    - inside:
+        stopBy: neighbor
+        any:
+          - kind: jsx_opening_element
+          - kind: jsx_self_closing_element
+        has:
+          field: name
+          regex: "^(ToggleGroup|Accordion)$"

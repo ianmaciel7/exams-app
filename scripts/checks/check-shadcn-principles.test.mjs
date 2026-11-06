@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 import { inspectPrinciples } from "./check-base-ui-principles.mjs";
-import { SHADCN } from "./check-shadcn-principles.mjs";
+import { inspectComponentsJson, SHADCN } from "./check-shadcn-principles.mjs";
 
 const table = (rows) =>
   `<!-- shadcn-version: 4.23.0 -->\n| Principle | Guard |\n| --- | --- |\n${rows}\n`;
@@ -52,4 +52,20 @@ test("rejects an unlisted shadcn rule and a shadcn version drift", () => {
   } finally {
     rmSync(root, { recursive: true });
   }
+});
+
+test("accepts the Base UI style with lucide icons", () => {
+  assert.deepEqual(
+    inspectComponentsJson({ style: "base-nova", iconLibrary: "lucide" }),
+    [],
+  );
+});
+
+test("rejects a Radix style and another icon library", () => {
+  const errors = inspectComponentsJson({
+    style: "new-york",
+    iconLibrary: "tabler",
+  }).join("\n");
+  assert.match(errors, /must be a base-\* style/);
+  assert.match(errors, /must be lucide/);
 });
