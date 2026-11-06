@@ -1,5 +1,3 @@
-"use client";
-
 import { OTPField as OTPFieldPrimitive } from "@base-ui/react/otp-field";
 import { cn } from "cn";
 
