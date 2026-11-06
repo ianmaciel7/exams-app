@@ -190,17 +190,6 @@ export function contentTooLarge(body: ErrorBody, options?: TooLargeOptions) {
   return json(413, body, options);
 }
 
-export function rangeNotSatisfiable<Body>(
-  body: Body,
-  options: ResponseOptions & { size: number },
-) {
-  if (!Number.isSafeInteger(options.size) || options.size < 0)
-    throw new RangeError("Invalid representation size");
-  const response = json(416, body, options);
-  response.headers.set("Content-Range", `bytes */${options.size}`);
-  return response;
-}
-
 export function unavailableForLegalReasons(
   body: ErrorBody,
   options?: ResponseOptions & { blockedBy?: string | URL },
@@ -305,55 +294,13 @@ export function conditionalResponse(
   return rangedResponse(request, representation, headers);
 }
 
-export const partialContent = conditionalResponse;
 export const noContent = emptyResponse(204);
 export const resetContent = emptyResponse(205);
-export const movedPermanently = redirectResponse(301);
-export const found = redirectResponse(302);
-export const seeOther = redirectResponse(303);
 export const temporaryRedirect = redirectResponse(307);
-export const permanentRedirect = redirectResponse(308);
 
 export const ok = jsonResponse(httpStatus.ok);
-export const nonAuthoritativeInformation = jsonResponse(
-  httpStatus.nonAuthoritativeInformation,
-);
-export const multipleChoices = jsonResponse(httpStatus.multipleChoices);
-export const badRequest = jsonResponse(httpStatus.badRequest);
-export const paymentRequired = jsonResponse(httpStatus.paymentRequired);
-export const forbidden = jsonResponse(httpStatus.forbidden);
-export const notFound = jsonResponse(httpStatus.notFound);
-export const requestTimeout = jsonResponse(httpStatus.requestTimeout);
-export const gone = jsonResponse(httpStatus.gone);
-export const lengthRequired = jsonResponse(httpStatus.lengthRequired);
-export const preconditionFailed = jsonResponse(httpStatus.preconditionFailed);
-export const uriTooLong = jsonResponse(httpStatus.uriTooLong);
-export const unsupportedMediaType = jsonResponse(
-  httpStatus.unsupportedMediaType,
-);
-export const expectationFailed = jsonResponse(httpStatus.expectationFailed);
-export const unprocessableContent = jsonResponse(
-  httpStatus.unprocessableContent,
-);
-export const locked = jsonResponse(httpStatus.locked);
-export const failedDependency = jsonResponse(httpStatus.failedDependency);
 export const preconditionRequired = jsonResponse(
   httpStatus.preconditionRequired,
 );
 export const tooManyRequests = jsonResponse(httpStatus.tooManyRequests);
-export const requestHeaderFieldsTooLarge = jsonResponse(
-  httpStatus.requestHeaderFieldsTooLarge,
-);
-export const internalServerError = jsonResponse(httpStatus.internalServerError);
-export const notImplemented = jsonResponse(httpStatus.notImplemented);
-export const badGateway = jsonResponse(httpStatus.badGateway);
 export const serviceUnavailable = jsonResponse(httpStatus.serviceUnavailable);
-export const gatewayTimeout = jsonResponse(httpStatus.gatewayTimeout);
-export const httpVersionNotSupported = jsonResponse(
-  httpStatus.httpVersionNotSupported,
-);
-export const variantAlsoNegotiates = jsonResponse(
-  httpStatus.variantAlsoNegotiates,
-);
-export const insufficientStorage = jsonResponse(httpStatus.insufficientStorage);
-export const loopDetected = jsonResponse(httpStatus.loopDetected);

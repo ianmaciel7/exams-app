@@ -66,9 +66,9 @@ export const httpStatus = {
   networkAuthenticationRequired: 511,
 } as const;
 
-export type HttpStatusName = keyof typeof httpStatus;
+type HttpStatusName = keyof typeof httpStatus;
 export type HttpStatusCode = (typeof httpStatus)[HttpStatusName];
-export type HttpErrorStatusName = {
+type HttpErrorStatusName = {
   [Name in HttpStatusName]: `${(typeof httpStatus)[Name]}` extends
     | `4${string}`
     | `5${string}`

@@ -48,13 +48,13 @@ responses as well as JSON.
 - 202: requires a status payload by project policy; optional `monitor` identifies
   a progress resource. HTTP does not universally require this URL.
 - 204 and 205: `noContent()` and `resetContent()` have no body.
-- 301/302/303/307/308: redirect constructors require an absolute HTTP(S) URL.
+- 307: `temporaryRedirect` requires an absolute HTTP(S) URL.
 - 401: requires a structured authentication challenge.
 - 405: requires `allow`, including an explicit empty list where appropriate.
 - 406: payload includes an error and available representations.
 - 409: payload describes the conflict; domain resolution details belong to callers.
 - 413: a temporary condition requires retryAfter under project policy.
-- 416: explicit failures require representation size and emit Content-Range.
+- 416: produced by `conditionalResponse` for unsatisfied byte ranges with Content-Range.
 - 451: an explanatory error payload accepts an optional blockedBy URI, emitted as
   a Link with rel=blocked-by. This identifies the blocker, not the legal authority.
 - 429/503: retryAfter is supported but is not universally mandatory.
@@ -91,8 +91,7 @@ before a mutation. Only perform the mutation after a 200 verdict and the normal
 permission/input checks. The caller owns atomicity between validation and write;
 use a transaction or compare-and-swap to avoid lost updates.
 
-`partialContent` is an alias for conditionalResponse, not a promise to always
-produce 206. Single byte ranges support suffixes, open ends and clamping. Invalid,
+`conditionalResponse` does not promise to always produce 206. Single byte ranges support suffixes, open ends and clamping. Invalid,
 unknown-unit and unsupported multipart ranges are ignored, returning the full
 representation. Valid unsatisfied byte ranges return 416. If-Range requires a
 matching strong ETag; date validators also require `lastModifiedIsStrong: true`

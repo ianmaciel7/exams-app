@@ -351,7 +351,7 @@ it.each([
 ] as const)(
   "handles range %s",
   async (range, status, contentRange, expected) => {
-    const response = server.partialContent(
+    const response = server.conditionalResponse(
       request({ Range: range }),
       representation,
     );
@@ -366,31 +366,31 @@ it.each([
 
 it("evaluates cache conditions before ranges and honors If-Range", () => {
   expect(
-    server.partialContent(
+    server.conditionalResponse(
       request({ Range: "bytes=1-2", "If-None-Match": '"v1,part"' }),
       representation,
     ).status,
   ).toBe(304);
   expect(
-    server.partialContent(
+    server.conditionalResponse(
       request({ Range: "bytes=1-2", "If-Range": '"other"' }),
       representation,
     ).status,
   ).toBe(200);
   expect(
-    server.partialContent(
+    server.conditionalResponse(
       request({ Range: "bytes=1-2", "If-Range": 'W/"v1,part"' }),
       representation,
     ).status,
   ).toBe(200);
   expect(
-    server.partialContent(
+    server.conditionalResponse(
       request({ Range: "bytes=1-2", "If-Range": '"v1,part"' }),
       representation,
     ).status,
   ).toBe(206);
   expect(
-    server.partialContent(
+    server.conditionalResponse(
       request({ Range: "bytes=1-2", "If-Range": headers["Last-Modified"] }),
       { ...representation, lastModifiedIsStrong: true },
     ).status,

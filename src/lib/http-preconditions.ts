@@ -11,7 +11,7 @@ const listItem =
   /[ \t]*(?:,|(?:W\/)?"[\x21\x23-\x7e\x80-\xff]*"[ \t]*(?:,|$))/y;
 const maxFieldLength = 16_384;
 
-export function validETag(value: string): boolean {
+function validETag(value: string): boolean {
   return entityTag.test(value);
 }
 
