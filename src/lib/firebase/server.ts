@@ -9,6 +9,7 @@ import { getAdminAuth } from "./admin";
 export type FirebaseServerSession = {
   role: UserRole;
   userId: string | null;
+  displayName?: string | null;
 };
 
 const SESSION_COOKIE_NAME = "__session";
@@ -83,7 +84,11 @@ async function verifyToken(token: string, isCookie: boolean) {
     const claims = isCookie
       ? await adminAuth.verifySessionCookie(token, true)
       : await adminAuth.verifyIdToken(token, true);
-    return { role: readUserRole(claims), userId: claims.uid };
+    return {
+      role: readUserRole(claims),
+      userId: claims.uid,
+      displayName: typeof claims.name === "string" ? claims.name.trim() : null,
+    };
   } catch (error) {
     logVerificationFailure(error);
     // Only a bad token is an unverifiable session. Expired credentials or an
