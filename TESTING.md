@@ -117,6 +117,13 @@ tests protect newer accounts from a late rejection. `auth.test.ts` verifies
 that logout waits for dispatched cookie writes before deleting the cookie and
 that a token refresh completing after logout cannot recreate the session.
 
+The browser SDK can discard a revoked user while it initializes, so the provider
+may only ever observe a signed-out state. The first signed-out verdict therefore
+clears the server cookie (`clearStaleSessionCookie`), and a later exchange waits
+for that request. Unit tests mocked the SDK as always delivering a user and
+missed this; only the browser journey above caught it. Any session logic that
+depends on SDK timing needs that browser journey, not only mocked unit tests.
+
 A green unit-test suite or coverage percentage does not prove that a user can
 finish a workflow. Critical journeys are tested against the running application
 with the Firebase Auth, Firestore, and Functions emulators. Their assertions
