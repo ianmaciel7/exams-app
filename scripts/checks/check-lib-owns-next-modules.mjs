@@ -62,5 +62,7 @@ if (
     console.error(errors.join("\n"));
     process.exit(1);
   }
-  console.log("Each Next.js module is imported only through its src/lib owner.");
+  console.log(
+    "Each Next.js module is imported only through its src/lib owner.",
+  );
 }
