@@ -1,6 +1,6 @@
+import { type NextRequest, NextResponse } from "next/server";
 import { buildContentSecurityPolicy, createNonce } from "@/lib/csp";
 import { cspHeader, nonceHeader } from "@/lib/headers";
-import { type NextRequest, NextResponse } from "@/lib/server";
 
 /**
  * Sets a per-request nonce CSP (ADR 0001). This Proxy only adds headers: it
