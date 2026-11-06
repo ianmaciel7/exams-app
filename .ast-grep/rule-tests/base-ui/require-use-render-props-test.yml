@@ -1,0 +1,23 @@
+id: require-use-render-props
+valid:
+  - |
+    function Panel({ render, ...props }: useRender.ComponentProps<"section">) {
+      return useRender({ defaultTagName: "section", render, props });
+    }
+  - |
+    function Field(props: ComponentProps<typeof Input>) {
+      return <Input {...props} />;
+    }
+  - |
+    function Document({ children }: Pick<ComponentProps<"html">, "children">) {
+      return <html>{children}</html>;
+    }
+invalid:
+  - |
+    function Panel(props: ComponentProps<"section">) {
+      return <section {...props} />;
+    }
+  - |
+    function Panel(props: React.ComponentProps<"div">) {
+      return <div {...props} />;
+    }

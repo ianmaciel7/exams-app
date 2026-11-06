@@ -188,6 +188,7 @@ describe("ProfileForm", () => {
     expect(mocks.toastAdd).toHaveBeenCalledWith({
       title: "profilePhotoInvalid",
       type: "error",
+      priority: "high",
     });
     expect(action).not.toHaveBeenCalled();
   });
@@ -324,6 +325,7 @@ describe("ProfileEmailDialogClient in ProfileForm", () => {
       expect(mocks.toastAdd).toHaveBeenCalledWith({
         title: "profileSaveError",
         type: "error",
+        priority: "high",
       });
       fireEvent.click(
         within(dialog).getByRole("button", { name: "changeEmail" }),

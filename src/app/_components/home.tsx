@@ -1,3 +1,5 @@
+import { mergeProps } from "@base-ui/react/merge-props";
+import { useRender } from "@base-ui/react/use-render";
 import Image from "next/image";
 import type { ComponentProps } from "react";
 import { cn } from "@/lib/utils";
@@ -7,34 +9,42 @@ import {
   HomeHeroTitle,
 } from "./home-hero";
 
-type HomeProps = ComponentProps<"main">;
+type HomeProps = useRender.ComponentProps<"main">;
 
-function Home({ className, ...props }: HomeProps) {
-  return (
-    <main
-      data-slot="home"
-      className={cn(
-        "flex min-h-svh flex-col items-center justify-center bg-background text-foreground font-sans",
-        className,
-      )}
-      {...props}
-    />
-  );
+function Home({ className, render, ...props }: HomeProps) {
+  return useRender({
+    defaultTagName: "main",
+    render,
+    props: mergeProps<"main">(
+      {
+        className: cn(
+          "flex min-h-svh flex-col items-center justify-center bg-background text-foreground font-sans",
+          className,
+        ),
+      },
+      props,
+    ),
+    state: { slot: "home" },
+  });
 }
 
-type HomeContentProps = ComponentProps<"div">;
+type HomeContentProps = useRender.ComponentProps<"div">;
 
-function HomeContent({ className, ...props }: HomeContentProps) {
-  return (
-    <div
-      data-slot="home-content"
-      className={cn(
-        "flex flex-1 w-full max-w-3xl flex-col items-center justify-center gap-12 p-6 sm:items-start",
-        className,
-      )}
-      {...props}
-    />
-  );
+function HomeContent({ className, render, ...props }: HomeContentProps) {
+  return useRender({
+    defaultTagName: "div",
+    render,
+    props: mergeProps<"div">(
+      {
+        className: cn(
+          "flex flex-1 w-full max-w-3xl flex-col items-center justify-center gap-12 p-6 sm:items-start",
+          className,
+        ),
+      },
+      props,
+    ),
+    state: { slot: "home-content" },
+  });
 }
 
 type HomeLogoProps = Omit<ComponentProps<typeof Image>, "src" | "alt">;
@@ -69,16 +79,20 @@ function HomeHeading({ title, description, ...props }: HomeHeadingProps) {
   );
 }
 
-type HomeFooterProps = ComponentProps<"div">;
+type HomeFooterProps = useRender.ComponentProps<"div">;
 
-function HomeFooter({ className, ...props }: HomeFooterProps) {
-  return (
-    <div
-      data-slot="home-footer"
-      className={cn("w-full flex justify-center", className)}
-      {...props}
-    />
-  );
+function HomeFooter({ className, render, ...props }: HomeFooterProps) {
+  return useRender({
+    defaultTagName: "div",
+    render,
+    props: mergeProps<"div">(
+      {
+        className: cn("w-full flex justify-center", className),
+      },
+      props,
+    ),
+    state: { slot: "home-footer" },
+  });
 }
 
 export { Home, HomeContent, HomeFooter, HomeHeading, HomeLogo };

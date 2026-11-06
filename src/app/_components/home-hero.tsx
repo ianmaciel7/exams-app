@@ -1,80 +1,106 @@
-import type { ComponentProps } from "react";
+import { mergeProps } from "@base-ui/react/merge-props";
+import { useRender } from "@base-ui/react/use-render";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-type HomeHeroProps = ComponentProps<"div">;
+type HomeHeroProps = useRender.ComponentProps<"div">;
 
-function HomeHero({ className, ...props }: HomeHeroProps) {
-  return (
-    <div
-      data-slot="home-hero"
-      className={cn("flex flex-col gap-8", className)}
-      {...props}
-    />
-  );
+function HomeHero({ className, render, ...props }: HomeHeroProps) {
+  return useRender({
+    defaultTagName: "div",
+    render,
+    props: mergeProps<"div">(
+      {
+        className: cn("flex flex-col gap-8", className),
+      },
+      props,
+    ),
+    state: { slot: "home-hero" },
+  });
 }
 
-type HomeHeroHeaderProps = ComponentProps<"div">;
+type HomeHeroHeaderProps = useRender.ComponentProps<"div">;
 
-function HomeHeroHeader({ className, ...props }: HomeHeroHeaderProps) {
-  return (
-    <div
-      data-slot="home-hero-header"
-      className={cn(
-        "flex flex-col items-center gap-6 text-center sm:items-start sm:text-left",
-        className,
-      )}
-      {...props}
-    />
-  );
+function HomeHeroHeader({ className, render, ...props }: HomeHeroHeaderProps) {
+  return useRender({
+    defaultTagName: "div",
+    render,
+    props: mergeProps<"div">(
+      {
+        className: cn(
+          "flex flex-col items-center gap-6 text-center sm:items-start sm:text-left",
+          className,
+        ),
+      },
+      props,
+    ),
+    state: { slot: "home-hero-header" },
+  });
 }
 
-type HomeHeroTitleProps = ComponentProps<"h1">;
+type HomeHeroTitleProps = useRender.ComponentProps<"h1">;
 
-function HomeHeroTitle({ className, ...props }: HomeHeroTitleProps) {
-  return (
-    <h1
-      data-slot="home-hero-title"
-      className={cn(
-        "max-w-xs text-3xl font-semibold leading-10 tracking-tight text-foreground",
-        className,
-      )}
-      {...props}
-    />
-  );
+function HomeHeroTitle({ className, render, ...props }: HomeHeroTitleProps) {
+  return useRender({
+    defaultTagName: "h1",
+    render,
+    props: mergeProps<"h1">(
+      {
+        className: cn(
+          "max-w-xs text-3xl font-semibold leading-10 tracking-tight text-foreground",
+          className,
+        ),
+      },
+      props,
+    ),
+    state: { slot: "home-hero-title" },
+  });
 }
 
-type HomeHeroDescriptionProps = ComponentProps<"p">;
+type HomeHeroDescriptionProps = useRender.ComponentProps<"p">;
 
 function HomeHeroDescription({
   className,
+  render,
   ...props
 }: HomeHeroDescriptionProps) {
-  return (
-    <p
-      data-slot="home-hero-description"
-      className={cn(
-        "max-w-md text-lg leading-8 text-muted-foreground",
-        className,
-      )}
-      {...props}
-    />
-  );
+  return useRender({
+    defaultTagName: "p",
+    render,
+    props: mergeProps<"p">(
+      {
+        className: cn(
+          "max-w-md text-lg leading-8 text-muted-foreground",
+          className,
+        ),
+      },
+      props,
+    ),
+    state: { slot: "home-hero-description" },
+  });
 }
 
-type HomeHeroActionsProps = ComponentProps<"div">;
+type HomeHeroActionsProps = useRender.ComponentProps<"div">;
 
-function HomeHeroActions({ className, ...props }: HomeHeroActionsProps) {
-  return (
-    <div
-      data-slot="home-hero-actions"
-      className={cn(
-        "flex flex-col gap-4 text-base font-medium sm:flex-row w-full sm:w-auto",
-        className,
-      )}
-      {...props}
-    />
-  );
+function HomeHeroActions({
+  className,
+  render,
+  ...props
+}: HomeHeroActionsProps) {
+  return useRender({
+    defaultTagName: "div",
+    render,
+    props: mergeProps<"div">(
+      {
+        className: cn(
+          "flex flex-col gap-4 text-base font-medium sm:flex-row w-full sm:w-auto",
+          className,
+        ),
+      },
+      props,
+    ),
+    state: { slot: "home-hero-actions" },
+  });
 }
 
 type HomeHeroActionVariant = "default" | "outline";

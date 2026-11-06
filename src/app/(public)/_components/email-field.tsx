@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/extensions/form-field";
 import { Input } from "@/components/ui/input";
 
-type EmailFieldProps = ComponentProps<"input"> & {
+type EmailFieldProps = ComponentProps<typeof Input> & {
   autoComplete: "email" | "username";
 };
 
