@@ -14,11 +14,11 @@ import { SmsMultiFactorAssertionForm } from "@/components/firebase/sms-multi-fac
 import { TotpMultiFactorAssertionForm } from "@/components/firebase/totp-multi-factor-assertion-form";
 import { Button } from "@/components/ui/button";
 
-export type MultiFactorAuthAssertionFormProps = {
+type MultiFactorAuthAssertionFormProps = {
   onSuccess?: (credential: UserCredential) => void;
 };
 
-export function MultiFactorAuthAssertionForm({
+function MultiFactorAuthAssertionForm({
   onSuccess,
 }: MultiFactorAuthAssertionFormProps) {
   const ui = useUI();
@@ -83,3 +83,5 @@ function SmsButton(props: ComponentProps<typeof Button>) {
   const labelText = getTranslation(ui, "labels", "mfaSmsVerification");
   return <Button {...props}>{labelText}</Button>;
 }
+
+export { MultiFactorAuthAssertionForm };

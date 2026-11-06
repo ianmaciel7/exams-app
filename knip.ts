@@ -5,7 +5,7 @@ import type { KnipConfig } from "knip";
 const config: KnipConfig = {
   entry: [
     "src/app/{page,layout,loading,error,not-found,route}.{ts,tsx}",
-    "src/components/**/*.{ts,tsx}",
+    "src/components/{ui,ai-elements}/**/*.{ts,tsx}",
     "src/**/*.stories.{ts,tsx}",
     "src/app/globals.css",
     ".agents/agents.json",

@@ -9,6 +9,7 @@ import {
   test,
 } from "@playwright/test";
 import esMessages from "../src/messages/es.json";
+import ptBrMessages from "../src/messages/pt-BR.json";
 
 for (const envFile of [".env.local", ".env"]) {
   if (fs.existsSync(envFile)) {
@@ -88,11 +89,11 @@ test.beforeAll(async ({ request }) => {
 test("registration and persisted authentication redirect", async ({ page }) => {
   const email = `register-${crypto.randomUUID()}@example.test`;
   await page.goto("/sign-in");
-  await page.getByRole("button", { name: /don't have an account/i }).click();
+  await page.getByRole("button", { name: "Sign Up", exact: true }).click();
   await expect(page).toHaveURL(/\/register$/);
   await signUpEmail(page).fill(email);
   await signUpPassword(page).fill(password);
-  await page.getByRole("button", { name: "Create Account" }).click();
+  await page.getByRole("button", { name: "Sign Up", exact: true }).click();
   await expect(page).toHaveURL("/");
   await page.goto("/sign-in");
   await expect(page).toHaveURL("/");
@@ -162,7 +163,7 @@ test("password recovery sends an emulator reset code and displays failures", asy
     .getByRole("button", { name: "Reset Password", exact: true })
     .click();
   await expect(
-    page.getByText("Check your email for password reset instructions"),
+    page.getByText("Check your email for the password reset link."),
   ).toBeVisible();
   const response = await request.get(
     `${emulator}/emulator/v1/projects/${project}/oobCodes`,
@@ -185,7 +186,9 @@ test("navigation and translated screens", async ({ page, context }) => {
     { name: "NEXT_LOCALE", value: "pt-BR", url: authTestOrigin },
   ]);
   await page.reload();
-  await expect(page.getByLabel("Endereço de e-mail")).toBeVisible(); // check-english-ignore: pt-BR UI label
+  await expect(
+    page.getByLabel(ptBrMessages.Auth.emailAddressLabel),
+  ).toBeVisible();
 });
 
 test("Google popup signs in with the emulator", async ({ page }) => {

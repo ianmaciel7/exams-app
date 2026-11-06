@@ -59,7 +59,21 @@
     "emailVerificationSent": "Check your new email to confirm the change.",
     "profileSaveError": "Could not save the profile. Please try again.",
     "profileLoadError": "Could not load the profile. Please try again.",
-    "signingOut": "Signing out…"
+    "signingOut": "Signing out…",
+    "signInTitle": "Sign In",
+    "signInDescription": "Sign in to access your account.",
+    "registerTitle": "Sign Up",
+    "registerDescription": "Enter your details to create an account.",
+    "forgotPasswordTitle": "Reset Password",
+    "forgotPasswordDescription": "Enter your email to receive a password reset link.",
+    "alreadyHaveAccount": "Already have an account?",
+    "noAccountPrompt": "Don't have an account?",
+    "forgotPasswordPrompt": "Forgot password?",
+    "orSeparator": "or",
+    "passwordLabel": "Password",
+    "resetEmailSent": "Check your email for the password reset link.",
+    "backToSignIn": "Back to sign in",
+    "emailAddressLabel": "Email address"
   },
   "Home": {
     "stack": "Next.js + shadcn/ui + Firebase",

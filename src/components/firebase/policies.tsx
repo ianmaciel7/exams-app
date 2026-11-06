@@ -1,9 +1,8 @@
 import { getTranslation } from "@firebase-oss/ui-core";
 import { PolicyContext, useUI } from "@firebase-oss/ui-react";
 import { useContext } from "react";
-import { cn } from "@/lib/utils";
 
-export function Policies() {
+function Policies() {
   const ui = useUI();
   const policies = useContext(PolicyContext);
 
@@ -15,7 +14,8 @@ export function Policies() {
   const termsAndPrivacyText = getTranslation(ui, "messages", "termsAndPrivacy");
   const parts = termsAndPrivacyText.split(/(\{tos\}|\{privacy\})/);
 
-  const className = cn("hover:underline font-semibold");
+  const className =
+    "font-medium text-foreground underline underline-offset-4 hover:text-primary";
   const policyLinks = new Map([
     [
       "{tos}",
@@ -34,7 +34,7 @@ export function Policies() {
   ]);
 
   return (
-    <div className="text-text-muted text-center text-xs">
+    <div className="text-center text-xs text-muted-foreground">
       {parts.map((part: string, index: number) => {
         const link = policyLinks.get(part);
         if (!link) {
@@ -65,3 +65,5 @@ export function Policies() {
     </div>
   );
 }
+
+export { Policies };

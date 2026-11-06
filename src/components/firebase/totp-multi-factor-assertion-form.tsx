@@ -19,14 +19,14 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { Spinner } from "@/components/ui/spinner";
-import { getAuthActionErrorMessage } from "./auth-error-message";
+import { getAuthActionErrorMessage } from "@/lib/firebase/auth-error-message";
 
 type TotpMultiFactorAssertionFormProps = {
   hint: MultiFactorInfo;
   onSuccess?: (credential: UserCredential) => void;
 };
 
-export function TotpMultiFactorAssertionForm(
+function TotpMultiFactorAssertionForm(
   props: TotpMultiFactorAssertionFormProps,
 ) {
   const ui = useUI();
@@ -114,3 +114,5 @@ export function TotpMultiFactorAssertionForm(
     </FormProvider>
   );
 }
+
+export { TotpMultiFactorAssertionForm };

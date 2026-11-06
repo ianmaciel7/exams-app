@@ -10,9 +10,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 
-export type { OAuthButtonProps };
-
-export function OAuthButton({
+function OAuthButton({
   provider,
   children,
   themed,
@@ -54,3 +52,5 @@ export function OAuthButton({
     </div>
   );
 }
+
+export { OAuthButton };

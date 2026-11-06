@@ -59,7 +59,21 @@
     "emailVerificationSent": "Revisa tu nuevo correo para confirmar el cambio.",
     "profileSaveError": "No se pudo guardar el perfil. Inténtalo de nuevo.",
     "profileLoadError": "No se pudo cargar el perfil. Vuelva a intentarlo.",
-    "signingOut": "Cerrando sesión…"
+    "signingOut": "Cerrando sesión…",
+    "signInTitle": "Iniciar sesión",
+    "signInDescription": "Inicia sesión para acceder a tu cuenta.",
+    "registerTitle": "Crear cuenta",
+    "registerDescription": "Introduce tus datos para crear una cuenta.",
+    "forgotPasswordTitle": "Restablecer contraseña",
+    "forgotPasswordDescription": "Introduce tu correo para recibir un enlace de restablecimiento.",
+    "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+    "noAccountPrompt": "¿No tienes una cuenta?",
+    "forgotPasswordPrompt": "¿Olvidaste tu contraseña?",
+    "orSeparator": "o",
+    "passwordLabel": "Contraseña",
+    "resetEmailSent": "Revisa tu correo para el enlace de restablecimiento de contraseña.",
+    "backToSignIn": "Volver a iniciar sesión",
+    "emailAddressLabel": "Dirección de correo electrónico"
   },
   "Home": {
     "stack": "Next.js + shadcn/ui + Firebase",

@@ -29,7 +29,7 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { Spinner } from "@/components/ui/spinner";
-import { getAuthActionErrorMessage } from "./auth-error-message";
+import { getAuthActionErrorMessage } from "@/lib/firebase/auth-error-message";
 
 type PhoneMultiFactorInfo = MultiFactorInfo & {
   phoneNumber?: string;
@@ -198,14 +198,12 @@ function SmsMultiFactorAssertionVerifyForm(
   );
 }
 
-export type SmsMultiFactorAssertionFormProps = {
+type SmsMultiFactorAssertionFormProps = {
   hint: MultiFactorInfo;
   onSuccess?: (credential: UserCredential) => void;
 };
 
-export function SmsMultiFactorAssertionForm(
-  props: SmsMultiFactorAssertionFormProps,
-) {
+function SmsMultiFactorAssertionForm(props: SmsMultiFactorAssertionFormProps) {
   const [verification, setVerification] = useState<{
     verificationId: string;
   } | null>(null);
@@ -228,3 +226,5 @@ export function SmsMultiFactorAssertionForm(
     />
   );
 }
+
+export { SmsMultiFactorAssertionForm };
