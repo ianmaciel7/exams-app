@@ -38,6 +38,12 @@ The executable safeguard is the relevant behavioral regression in
 CI job. Do not skip, weaken, or replace a failing acceptance scenario with
 an assertion about implementation details merely to make CI green.
 
+For external calls whose failures are intentionally caught, require an explicit
+integration acknowledgment as well as the user-visible result. Usage telemetry
+is covered by `tests/firebase-usage.spec.ts` in the same required emulator job:
+browser CORS, accepted/rejected calls, outage isolation, and recovery must remain
+observable. Coverage percentages and mocked SDK calls do not prove transport.
+
 Read [ui-state.md](ui-state.md) for cross-cutting feedback and accessible
 presentation guidance. `pnpm check:ui-state` runs in `verify:fast`,
 `verify:static`, and the CI `static` job. It catches only direct raw exception

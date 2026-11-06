@@ -107,18 +107,20 @@ with the Firebase Auth, Firestore, and Functions emulators. Their assertions
 must verify **observable outcomes** and, where applicable, persisted records
 rather than only mocked calls or navigation.
 
-| Journey / security boundary                 | Executable evidence           | Required outcome                                                                                                                |
-| ------------------------------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| Registration and persisted login            | `tests/firebase-auth.spec.ts` | Register in the browser and retain an authenticated session                                                                     |
-| Guest protected deep link to sign-in        | `tests/firebase-auth.spec.ts` | Preserve the requested protected path and query after login                                                                     |
-| Profile preferences and identity            | `tests/firebase-auth.spec.ts` | Save via the browser, read Firestore independently, reload, sign out and sign in again                                          |
-| Cross-account preference isolation          | `tests/firebase-auth.spec.ts` | Owner can read/write; a different user cannot read/write; anonymous access is denied                                            |
-| Password recovery                           | `tests/firebase-auth.spec.ts` | Emulator issues a recovery code and the UI handles network failure                                                              |
-| Google sign-in                              | `tests/firebase-auth.spec.ts` | Emulated popup/redirect flows complete; production OAuth is a separate risk                                                     |
-| Google popup cancellation and retry         | `tests/firebase-auth.spec.ts` | Closing an unauthenticated popup returns to usable sign-in and permits a second attempt                                         |
-| Protected session and server token verdicts | `tests/firebase-auth.spec.ts` | First load without the worker, forwarded token, failed refresh, rejected tokens, no redirect loop, sign-out, and account switch |
-| Role claims in Security Rules               | `tests/firebase-auth.spec.ts` | A refreshed token gains and loses access; an issued token keeps its claim in Rules until it expires                             |
-| Responsive, visual, and a11y                | `tests/*.spec.ts`             | Assert defined layouts and detectable issues; these are not substitutes for a completed journey                                 |
+| Journey / security boundary                 | Executable evidence            | Required outcome                                                                                                                |
+| ------------------------------------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- |
+| Registration and persisted login            | `tests/firebase-auth.spec.ts`  | Register in the browser and retain an authenticated session                                                                     |
+| Guest protected deep link to sign-in        | `tests/firebase-auth.spec.ts`  | Preserve the requested protected path and query after login                                                                     |
+| Profile preferences and identity            | `tests/firebase-auth.spec.ts`  | Save via the browser, read Firestore independently, reload, sign out and sign in again                                          |
+| Cross-account preference isolation          | `tests/firebase-auth.spec.ts`  | Owner can read/write; a different user cannot read/write; anonymous access is denied                                            |
+| Password recovery                           | `tests/firebase-auth.spec.ts`  | Emulator issues a recovery code and the UI handles network failure                                                              |
+| Google sign-in                              | `tests/firebase-auth.spec.ts`  | Emulated popup/redirect flows complete; production OAuth is a separate risk                                                     |
+| Google popup cancellation and retry         | `tests/firebase-auth.spec.ts`  | Closing an unauthenticated popup returns to usable sign-in and permits a second attempt                                         |
+| Protected session and server token verdicts | `tests/firebase-auth.spec.ts`  | First load without the worker, forwarded token, failed refresh, rejected tokens, no redirect loop, sign-out, and account switch |
+| Role claims in Security Rules               | `tests/firebase-auth.spec.ts`  | A refreshed token gains and loses access; an issued token keeps its claim in Rules until it expires                             |
+| Usage transport and acknowledgment          | `tests/firebase-usage.spec.ts` | Real preflight, readable authentication errors, accepted events, browser CORS, and the app's screen-view acknowledgment         |
+| Usage outage and recovery                   | `tests/firebase-usage.spec.ts` | A refused connection leaves the profile usable; the next navigation receives a real acknowledgment after transport recovers     |
+| Responsive, visual, and a11y                | `tests/*.spec.ts`              | Assert defined layouts and detectable issues; these are not substitutes for a completed journey                                 |
 
 Playwright uses `failOnFlakyTests` in CI: a test that fails before passing on
 retry must fail the job. Investigate traces and classify the root cause rather
@@ -408,12 +410,19 @@ Cover the variants and states a reviewer needs to see, not every prop.
 ## Coverage, complexity, and size
 
 - `pnpm test:coverage` writes `coverage/`. It measures application code and
-  leaves out the vendored `src/components/ui/*.tsx` and
-  `src/components/ai-elements`; `src/components/ui/extensions` is measured.
+  includes all `src` code, including registry components. The 70% thresholds
+  apply to application code and UI extensions, as configured in
+  `vitest.config.mts`; reporting scope and threshold scope are different.
 - `vitest.config.mts` sets a coverage floor of 70% (statements, branches,
   functions, lines). Actual coverage comes from the latest run. Raise it as
   application code grows; never lower it to pass a run. `json-summary` feeds
   the CI step summary.
+- Line and branch coverage measure executed code, not browser CORS, deployed
+  function availability, or emulator startup. Map critical service boundaries
+  to integration tests with successful calls, rejected calls, and recovery.
+  Mocked SDK acknowledgments and a rendered page cannot establish that an
+  external dependency worked. Keep those assertions in the required emulator
+  job rather than raising a percentage to imply integration coverage.
 - `pnpm analyze:health` runs coverage and feeds it to Fallow so CRAP scores
   reflect real tests; `pnpm analyze:fallow` reuses an existing `coverage/`. Add a test before accepting a complex, untested function.
 - `pnpm analyze:size` builds the app and fails when generated client JavaScript or
@@ -468,6 +477,32 @@ application removes the home page or its primary heading, adapt the smoke test
 to your app rather than disabling E2E or automatically accepting new baselines.
 
 ### Firebase emulator regression coverage
+
+`tests/firebase-usage.spec.ts` runs in the same required `auth-emulator` job
+as the auth journeys. It exercises `recordUsage` through the running Functions
+emulator, including the exact `localhost:3000` origin from the reported error
+and its `127.0.0.1` alternative. It checks `OPTIONS` status and CORS headers,
+missing/malformed authentication, payload validation, and real event IDs.
+Chromium also performs a cross-origin fetch and the application's own profile
+navigation must receive an acknowledgment. API-only calls bypass browser CORS
+enforcement, so they are not sufficient on their own.
+
+Firebase CLI enables the Functions SDK's `skipTokenVerification` debug feature
+inside emulator workers. The invalid-token regression therefore starts the
+actual exported callable with its real SDK in a separate HTTP server inside
+the Playwright worker, where debug mode must be off. It requires a malformed
+ID token to return a readable `401 UNAUTHENTICATED`, rather than accepting the
+emulator's permissive decoding as production security evidence. This check
+does not establish production signature, expiry, or revocation behavior.
+
+Screen-view telemetry deliberately catches transport failures so it cannot
+block protected content. This means the existing profile UI assertions could
+pass while usage logging was broken. The dedicated outage journey refuses
+the callable connection, verifies that the profile remains usable, restores
+transport, and requires a real acknowledgment on the next navigation. A missing
+or unloaded callable now fails the positive protocol/browser tests even when
+the profile renders. These tests prove handler execution, not durable Cloud
+Logging ingestion or production App Check/provider behavior.
 
 The standalone `auth-emulator` job starts Auth, Firestore, and Functions in
 an isolated `demo-test` project. It installs the Functions dependencies
