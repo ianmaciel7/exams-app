@@ -1,0 +1,60 @@
+id: no-route-handler-helpers
+language: ts
+files:
+  - src/app/**/route.ts
+  - src/app/**/route.js
+ignores:
+  - "**/*.test.ts"
+severity: error
+message: Route handler files may declare only the HTTP method handlers and Next.js route segment config; move helpers, constants and types to src/lib.
+note: |
+  Next.js route.ts supports exporting GET, HEAD, POST, PUT, DELETE, PATCH and
+  OPTIONS plus the route segment config options. Any other export is rejected
+  by Next.js type generation, and a non-exported declaration is a helper that
+  belongs in src/lib where it can be tested and reused. pnpm check:routes
+  enforces the same contract with the TypeScript compiler API.
+rule:
+  any:
+    - all:
+        - any:
+            - kind: function_declaration
+            - kind: generator_function_declaration
+            - kind: class_declaration
+            - kind: lexical_declaration
+            - kind: variable_declaration
+            - kind: enum_declaration
+            - kind: interface_declaration
+            - kind: type_alias_declaration
+        - inside:
+            kind: program
+            stopBy: neighbor
+    - all:
+        - any:
+            - kind: identifier
+            - kind: type_identifier
+        - not:
+            regex: ^(GET|HEAD|POST|PUT|DELETE|PATCH|OPTIONS|dynamic|dynamicParams|revalidate|fetchCache|runtime|preferredRegion|maxDuration|generateStaticParams)$
+        - inside:
+            field: name
+            any:
+              - kind: function_declaration
+              - kind: generator_function_declaration
+              - kind: class_declaration
+              - kind: variable_declarator
+              - kind: enum_declaration
+              - kind: interface_declaration
+              - kind: type_alias_declaration
+            inside:
+              stopBy: neighbor
+              any:
+                - kind: export_statement
+                - all:
+                    - kind: lexical_declaration
+                    - inside:
+                        kind: export_statement
+                        stopBy: neighbor
+    - all:
+        - kind: export_statement
+        - any:
+            - regex: ^export\s*\*
+            - regex: ^export\s+default\b
