@@ -30,35 +30,41 @@ function resolveImport(specifier, from, files) {
     .find((candidate) => files.has(candidate));
 }
 
-/** `sources` maps repository-relative POSIX paths to file text. */
-export function inspectRedundantUseClient(sources) {
+function collectImporters(sources) {
   const files = new Set(Object.keys(sources));
   const importers = new Map();
   for (const [file, text] of Object.entries(sources)) {
     if (testFile.test(file)) continue;
     for (const match of text.matchAll(importSpecifier)) {
       const target = resolveImport(match[1], file, files);
-      if (!target) continue;
-      importers.set(target, [...(importers.get(target) ?? []), file]);
+      if (target)
+        importers.set(target, [...(importers.get(target) ?? []), file]);
     }
   }
-  const errors = [];
-  for (const [file, text] of Object.entries(sources)) {
-    if (!ownedScope.test(file) || testFile.test(file) || !directive.test(text))
-      continue;
-    const stem = file
-      .split("/")
-      .at(-1)
-      .replace(/\.tsx?$/, "");
-    if (keepsDirective.test(stem)) continue;
-    const parents = importers.get(file) ?? [];
-    if (parents.length && parents.every((p) => directive.test(sources[p]))) {
-      errors.push(
-        `${file}: "use client" is redundant, only client modules import it (${parents.join(", ")}). Remove the directive; it is a neutral module of the client graph (Next.js use-client docs).`,
-      );
-    }
-  }
-  return errors;
+  return importers;
+}
+
+function isRedundantDirective(file, sources, importers) {
+  if (!ownedScope.test(file) || testFile.test(file)) return false;
+  if (!directive.test(sources[file])) return false;
+  const stem = file
+    .split("/")
+    .at(-1)
+    .replace(/\.tsx?$/, "");
+  if (keepsDirective.test(stem)) return false;
+  const parents = importers.get(file) ?? [];
+  return parents.length > 0 && parents.every((p) => directive.test(sources[p]));
+}
+
+/** `sources` maps repository-relative POSIX paths to file text. */
+export function inspectRedundantUseClient(sources) {
+  const importers = collectImporters(sources);
+  return Object.keys(sources)
+    .filter((file) => isRedundantDirective(file, sources, importers))
+    .map(
+      (file) =>
+        `${file}: "use client" is redundant, only client modules import it (${importers.get(file).join(", ")}). Remove the directive; it is a neutral module of the client graph (Next.js use-client docs).`,
+    );
 }
 
 export function checkRedundantUseClient(base) {
