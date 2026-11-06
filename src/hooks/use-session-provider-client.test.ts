@@ -4,10 +4,21 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
   subscribeToAuth: vi.fn(),
+  syncSessionCookie: vi.fn(),
+  signOutUser: vi.fn(),
+  clearStaleSessionCookie: vi.fn(),
+  currentUser: null as User | null,
 }));
 
 vi.mock("@/lib/firebase/client", () => ({
   subscribeToAuth: mocks.subscribeToAuth,
+  getFirebaseAuthUser: () => mocks.currentUser,
+}));
+
+vi.mock("@/lib/auth", () => ({
+  syncSessionCookie: mocks.syncSessionCookie,
+  signOutUser: mocks.signOutUser,
+  clearStaleSessionCookie: mocks.clearStaleSessionCookie,
 }));
 
 import { useSessionProviderClient } from "./use-session-provider-client";
@@ -24,6 +35,9 @@ describe("useSessionProviderClient", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    mocks.currentUser = null;
+    mocks.syncSessionCookie.mockReset().mockResolvedValue(true);
+    mocks.signOutUser.mockResolvedValue(undefined);
     mocks.subscribeToAuth.mockImplementation(
       (callback: (user: User | null) => void) => {
         notify = callback;
@@ -55,6 +69,39 @@ describe("useSessionProviderClient", () => {
       isLoading: false,
       user: null,
     });
+  });
+
+  it("clears a stale server cookie when the first auth verdict is signed out", async () => {
+    await renderSubscribed();
+    act(() => notify(null));
+    act(() => notify(null));
+    expect(mocks.clearStaleSessionCookie).toHaveBeenCalledOnce();
+  });
+
+  it("keeps the server cookie when the first auth verdict is a user", async () => {
+    await renderSubscribed();
+    act(() => notify({ uid: "u" } as User));
+    act(() => notify(null));
+    expect(mocks.clearStaleSessionCookie).not.toHaveBeenCalled();
+  });
+
+  it("clears stale server credentials when refresh has already removed the browser user", async () => {
+    mocks.syncSessionCookie.mockResolvedValue(false);
+    await renderSubscribed();
+    act(() =>
+      notify({ uid: "revoked", getIdToken: vi.fn() } as unknown as User),
+    );
+    await vi.waitFor(() => expect(mocks.signOutUser).toHaveBeenCalledOnce());
+  });
+
+  it("does not sign out a newer account when an old exchange fails late", async () => {
+    const pending = Promise.withResolvers<boolean>();
+    mocks.syncSessionCookie.mockReturnValue(pending.promise);
+    await renderSubscribed();
+    act(() => notify({ uid: "old", getIdToken: vi.fn() } as unknown as User));
+    mocks.currentUser = { uid: "new" } as User;
+    await act(async () => pending.resolve(false));
+    expect(mocks.signOutUser).not.toHaveBeenCalled();
   });
 
   it("reports a failed subscription as an error, not as a signed-out visitor", async () => {

@@ -26,6 +26,7 @@ vi.mock("@/lib/firebase/client", () => ({
 }));
 
 import {
+  clearStaleSessionCookie,
   getPendingSignOut,
   reloadFirebaseAuthUser,
   sendEmailChangeVerification,
@@ -209,6 +210,55 @@ describe("syncSessionCookie", () => {
   });
   afterEach(() => {
     vi.unstubAllGlobals();
+  });
+
+  it("deletes the cookie only after an already dispatched exchange finishes", async () => {
+    const write = Promise.withResolvers<Response>();
+    fetchMock
+      .mockReturnValueOnce(write.promise)
+      .mockResolvedValue({ ok: true });
+    mocks.signOut.mockResolvedValue(undefined);
+    const syncing = syncSessionCookie({ getIdToken: async () => "token" });
+    await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledOnce());
+    const logout = signOutUser();
+    await Promise.resolve();
+    expect(fetchMock).toHaveBeenCalledOnce();
+    write.resolve(new Response(null, { status: 200 }));
+    const [synced] = await Promise.all([syncing, logout]);
+    expect(synced).toBe(false);
+    expect(fetchMock.mock.calls.map(([, options]) => options.method)).toEqual([
+      "POST",
+      "DELETE",
+    ]);
+  });
+
+  it("makes a later exchange wait for the stale cookie DELETE", async () => {
+    const del = Promise.withResolvers<Response>();
+    fetchMock.mockReturnValueOnce(del.promise).mockResolvedValue({ ok: true });
+    const clearing = clearStaleSessionCookie();
+    const syncing = syncSessionCookie({ getIdToken: async () => "token" });
+    await Promise.resolve();
+    await Promise.resolve();
+    expect(fetchMock).toHaveBeenCalledOnce();
+    del.resolve(new Response(null, { status: 200 }));
+    await Promise.all([clearing, syncing]);
+    expect(fetchMock.mock.calls.map(([, options]) => options.method)).toEqual([
+      "DELETE",
+      "POST",
+    ]);
+  });
+
+  it("does not recreate a session when token refresh finishes after logout", async () => {
+    const token = Promise.withResolvers<string>();
+    fetchMock.mockResolvedValue({ ok: true });
+    mocks.signOut.mockResolvedValue(undefined);
+    const syncing = syncSessionCookie({ getIdToken: () => token.promise });
+    await signOutUser();
+    token.resolve("obsolete-token");
+    await expect(syncing).resolves.toBe(false);
+    expect(fetchMock.mock.calls.map(([, options]) => options.method)).toEqual([
+      "DELETE",
+    ]);
   });
 
   it("force-refreshes the ID token and resolves true on success", async () => {

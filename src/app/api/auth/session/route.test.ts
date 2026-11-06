@@ -3,6 +3,8 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const mocks = vi.hoisted(() => ({
   cookies: new Map<string, { value: string; options?: unknown }>(),
   createSessionCookie: vi.fn(),
+  verifyIdToken: vi.fn(),
+  verifySessionCookie: vi.fn(),
 }));
 
 vi.mock("next/headers", () => ({
@@ -19,6 +21,8 @@ vi.mock("next/headers", () => ({
 vi.mock("@/lib/firebase/admin", () => ({
   getAdminAuth: () => ({
     createSessionCookie: mocks.createSessionCookie,
+    verifyIdToken: mocks.verifyIdToken,
+    verifySessionCookie: mocks.verifySessionCookie,
   }),
 }));
 
@@ -27,7 +31,9 @@ import { DELETE, POST } from "./route";
 
 describe("/api/auth/session", () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.resetAllMocks();
+    mocks.verifyIdToken.mockResolvedValue({ uid: "user" });
+    mocks.verifySessionCookie.mockResolvedValue({ uid: "user" });
     mocks.cookies.clear();
   });
 
@@ -50,6 +56,11 @@ describe("/api/auth/session", () => {
       });
       const response = await POST(request);
       expect(response.status).toBe(200);
+      expect(mocks.verifyIdToken).toHaveBeenCalledWith("valid-token-123", true);
+      expect(mocks.verifySessionCookie).toHaveBeenCalledWith(
+        "mocked-session-cookie",
+        true,
+      );
       expect(mocks.createSessionCookie).toHaveBeenCalledWith(
         "valid-token-123",
         expect.objectContaining({ expiresIn: 5 * 24 * 60 * 60 * 1000 }),
@@ -57,6 +68,57 @@ describe("/api/auth/session", () => {
       expect(mocks.cookies.get("__session")?.value).toBe(
         "mocked-session-cookie",
       );
+    });
+
+    it.each(["auth/id-token-revoked", "auth/user-disabled"])(
+      "rejects %s before minting a cookie",
+      async (code) => {
+        const log = vi.spyOn(console, "error").mockImplementation(() => {});
+        try {
+          mocks.cookies.set("__session", { value: "stale-cookie" });
+          mocks.verifyIdToken.mockRejectedValue(
+            Object.assign(new Error("Rejected identity"), { code }),
+          );
+          const response = await POST(
+            new NextRequest("http://localhost/api/auth/session", {
+              method: "POST",
+              body: JSON.stringify({ idToken: "refreshed-but-revoked" }),
+            }),
+          );
+          expect(response.status).toBe(401);
+          expect((await response.json()).code).toBe(code);
+          expect(mocks.createSessionCookie).not.toHaveBeenCalled();
+          expect(mocks.cookies.has("__session")).toBe(false);
+        } finally {
+          log.mockRestore();
+        }
+      },
+    );
+
+    it("does not acknowledge a newly minted cookie that the DAL would reject", async () => {
+      const log = vi.spyOn(console, "error").mockImplementation(() => {});
+      try {
+        mocks.cookies.set("__session", { value: "stale-cookie" });
+        mocks.createSessionCookie.mockResolvedValue("already-revoked-cookie");
+        mocks.verifySessionCookie.mockRejectedValue(
+          Object.assign(new Error("Revoked cookie"), {
+            code: "auth/session-cookie-revoked",
+          }),
+        );
+        const response = await POST(
+          new NextRequest("http://localhost/api/auth/session", {
+            method: "POST",
+            body: JSON.stringify({ idToken: "token" }),
+          }),
+        );
+        expect(response.status).toBe(401);
+        expect((await response.json()).code).toBe(
+          "auth/session-cookie-revoked",
+        );
+        expect(mocks.cookies.has("__session")).toBe(false);
+      } finally {
+        log.mockRestore();
+      }
     });
 
     it("returns status 401 and deletes the session cookie when createSessionCookie fails", async () => {

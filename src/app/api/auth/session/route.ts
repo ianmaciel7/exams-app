@@ -55,9 +55,14 @@ function logSessionCreationFailure(code: string | undefined, message: string) {
 
 async function setSessionCookie(idToken: string) {
   const adminAuth = getAdminAuth();
+  // Minting a cookie alone does not check revocation. A refreshed ID token can
+  // retain the revoked auth_time, so returning 200 here would restart the loop.
+  await adminAuth.verifyIdToken(idToken, true);
   const sessionCookie = await adminAuth.createSessionCookie(idToken, {
     expiresIn: FIVE_DAYS_MS,
   });
+  // Use the same verdict as the protected DAL before acknowledging the session.
+  await adminAuth.verifySessionCookie(sessionCookie, true);
 
   const cookieStore = await cookies();
   cookieStore.set(SESSION_COOKIE_NAME, sessionCookie, {
