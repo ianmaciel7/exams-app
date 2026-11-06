@@ -462,8 +462,9 @@ or move shared modules merely to satisfy a folder name.
 | A session changes during a profile operation.                     | `src/app/(protected)/profile/_lib/data.test.ts` checks that later profile/preference writes do not start after session validation fails. Keep Firebase Security Rules as the authoritative authorization boundary. |
 | Root audit misses a separately deployed dependency graph.         | `pnpm audit:functions` audits `functions/package-lock.json` explicitly; both `verify:security` and the CI security job run it.                                                                                     |
 
-`pnpm test` includes the component lifecycle regressions even where copied
-registry code is excluded from some lint/coverage analyses.
+`pnpm test` includes the component lifecycle regressions for copied registry
+code. All source files remain in analysis and coverage reports; the application
+coverage threshold has its own narrower scope.
 The existing `check:components` covers private hook file/export parity and
 follows local helper imports, including `_lib`, for boundary classification.
 Keep its valid/invalid fixtures when changing those policies.
@@ -509,15 +510,14 @@ from `require-component-props` HTML inheritance because Next.js supplies their
   still reads the directory (see [Tool exclusion policy](#tool-exclusion-policy)).
   Knip no longer lists it as an entry, so unused files there are reported. See
   [ADR 0008](docs/adr/0008-install-firebase-ui-registry.md).
-- **Vendored components are excluded from coverage, Fallow health, React Doctor,
-  and relaxed in Biome.** Formatting and import organization are disabled for the
-  distributed shadcn/ui and AI Elements files; the existing targeted lint
-  exceptions still apply. The exclusions cover the preinstalled shadcn/ui files
-  (`src/components/ui/*.tsx`) and `src/components/ai-elements/`. Project code
-  that lives beside them, such as `src/components/ui/extensions/`, is fully
-  checked. The upstream `src/app/typeset.css` is not auto-formatted, and
-  standalone `public/*.svg` assets are excluded from Biome; accessible names
-  must still be supplied at their points of use. Fallow's coverage-match count can include vendored functions in its
+- **Registry components remain visible in analysis and coverage.** All `src`
+  files are measured by Vitest; the 70% threshold applies to application code
+  and `src/components/ui/extensions/`, not the complete reporting scope.
+  Fallow and React Doctor also inspect registry files. Biome's category-specific
+  severities remain defined in `biome.json`; see
+  [Tool exclusion policy](#tool-exclusion-policy) before interpreting results.
+  Accessible names for assets must still be supplied at their points of use.
+  Fallow's coverage-match count can include vendored functions in its
   denominator. Inspect the current report before interpreting that count; it is
   not a fixed project metric.
 - **CI hotspot analysis needs history.** The `static` job checks out with
@@ -710,6 +710,15 @@ endpoint matches `firebase.json`. Restart Next.js after changing its environment
 Dependency installation addresses missing or stale packages; other load or
 network errors still require the emulator's own diagnostics. Keep callable
 authentication and the configured production App Check enforcement enabled.
+
+The required `auth-emulator` job discovers both `tests/firebase-auth.spec.ts`
+and `tests/firebase-usage.spec.ts` through the `firebase-*.spec.ts` Playwright
+pattern. Usage regressions check real CORS preflight and browser transport,
+authentication failures, accepted event IDs, the application's own screen-view
+acknowledgment, and recovery on a new navigation after a refused connection.
+Run them with `pnpm test:auth` after installing Functions dependencies and setting
+the emulator environment described in [TESTING.md](TESTING.md). Ordinary E2E
+projects exclude these suites; unit coverage does not replace this required job.
 
 See [Firebase setup](https://firebase.google.com/docs/auth/web/start) and
 [OAuth domain guidance](https://firebase.google.com/docs/auth/web/redirect-best-practices).

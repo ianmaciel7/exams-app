@@ -25,8 +25,8 @@ const e2eBaseUrl = `http://127.0.0.1:${e2ePort}`;
 
 export default defineConfig({
   testDir: "./tests",
-  testMatch: authEmulator ? "**/firebase-auth.spec.ts" : "**/*.spec.ts",
-  testIgnore: authEmulator ? undefined : "**/firebase-auth.spec.ts",
+  testMatch: authEmulator ? "**/firebase-*.spec.ts" : "**/*.spec.ts",
+  testIgnore: authEmulator ? undefined : "**/firebase-*.spec.ts",
   fullyParallel: !authEmulator,
   forbidOnly: Boolean(process.env.CI),
   // A retry passing does not erase the original failure.
@@ -56,7 +56,7 @@ export default defineConfig({
     : [
         {
           name: "chromium",
-          testIgnore: ["**/firebase-auth.spec.ts", "**/mobile.spec.ts"],
+          testIgnore: ["**/firebase-*.spec.ts", "**/mobile.spec.ts"],
           use: { ...devices["Desktop Chrome"] },
         },
         {
