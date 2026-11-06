@@ -25,8 +25,14 @@ describe("getSafeReturnUrl", () => {
 describe("getAuthLinkHref", () => {
   it.each([
     [undefined, "/register"],
-    ["/profile?tab=security", "/register?next=%2Fprofile%3Ftab%3Dsecurity"],
-    [["/profile", "/other"], "/register?next=%2Fprofile"],
+    [
+      "/profile?tab=security",
+      `/register?next=${encodeURIComponent("/profile?tab=security")}`,
+    ],
+    [
+      ["/profile", "/other"],
+      `/register?next=${encodeURIComponent("/profile")}`,
+    ],
     ["https://evil.example", "/register"],
     ["/sign-in", "/register"],
   ])("builds the href for next=%j", (next, href) => {
