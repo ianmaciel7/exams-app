@@ -2,6 +2,16 @@
 
 Exam App: study app for exams (certifications and Brazilian public-service exams).
 
+> [!IMPORTANT]
+> ### Regra Obrigatória de Sincronização com Claude Cloud
+> Todo agente trabalhando neste repositório DEVE OBRIGATORIAMENTE sincronizar com a sessão remota do Claude Cloud:
+> - **Link do projeto/thread:** https://claude.ai/code/project/chan_013qMDV6HM5kW8Z4atVzkN6s?thread=cmsg_013qMDV6HM5kW8Z4atVzkN6sK8bH1qZiXjDNuMib8czmAu
+> 
+> **Procedimento:**
+> 1. Sempre execute `git fetch origin` antes de iniciar qualquer trabalho e verifique as branches remotas (`origin/claude/project-thread-*` e `origin/dev`).
+> 2. Verifique qual dos dois lados está desatualizado (o repositório local/dev ou o Claude remoto).
+> 3. Ambos os lados PRECISAM SEMPRE estar sincronizados. Se o Claude remoto enviou commits novos, faça o merge imediatamente em `dev`. Se você fizer alterações na `dev`, faça o push ou abra/atualize o PR correspondente para que o Claude remoto tenha o código atualizado.
+
 ## Run the prototype (any tool)
 
 The prototypes are static HTML. No build step, no dependencies beyond Python 3.
@@ -50,6 +60,7 @@ When continuing work across different AI agents or recovering context from past 
   - `~/.claude/projects/<project-slug>/memory/MEMORY.md` and related topic markdown files (e.g. `cross-tool-session-recovery.md`).
 - **Cloud branches & PRs**:
   - Cloud sessions push branches named: `origin/claude/project-thread-*`.
+  - Active Cloud Thread: [chan_013qMDV6HM5kW8Z4atVzkN6s](https://claude.ai/code/project/chan_013qMDV6HM5kW8Z4atVzkN6s?thread=cmsg_013qMDV6HM5kW8Z4atVzkN6sK8bH1qZiXjDNuMib8czmAu) (message ID: `cmsg_013qMDV6HM5kW8Z4atVzkN6sK8bH1qZiXjDNuMib8czmAu`).
   - Check PRs and review comments via GitHub CLI:
     ```powershell
     gh pr list --state all
