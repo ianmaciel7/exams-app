@@ -1,3 +1,4 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><style>
 /* Layout follows the available reading pane, including an open context panel. */
 .view{container-type:inline-size}
@@ -999,6 +1000,14 @@ a.rp-link:hover{background:var(--active)}
 .ws-tabs .ws-tablist{flex:0 1 auto;max-width:calc(100% - 154px)}
 .ws-tabs #rpToggle{margin-left:auto}
 @media(max-width:700px){.ws-tabs .ws-tablist{max-width:calc(100% - 138px)}}
+/* botão de recolher: aparece sobre o avatar do espaço (C) ao passar o mouse, (padrão Capacities) */
+@media (min-width:821px) and (hover:hover){
+  .side-top #collapse{position:absolute;z-index:3;left:16px;top:14px;width:24px;height:24px;border-radius:6px;background:var(--side);color:var(--text);opacity:0;transition:opacity .12s}
+  .side-top #collapse:hover,.side-top #collapse:focus-visible{opacity:1;background:var(--hover)}
+  .side-top #collapse svg{width:16px;height:16px}
+  .app.collapsed .side-top #collapse{left:16px}
+  .side-top .space-btn{flex:1}
+}
 </style>
 
 <button class="skip" id="skip">Ir para o conteúdo</button>
@@ -3384,6 +3393,12 @@ $('wsTabs').insertBefore($('wsNew'),$('wsOverflow'));
 overflowButton('rpOverflow','Todas as abas laterais',$('rpTabs'),()=>RP.tabs.map(t=>({t:t.views.map(vTitle).join(' + '),ic:RT[t.views[0].type].ic,fn:()=>rpSelect(t.id)})));
 $('rpOverflow').style.gridColumn='2';$('rpOverflow').style.gridRow='1';$('rpAdd').style.gridColumn='3';$('rpStack').style.gridColumn='4';$('rpHide').style.gridColumn='5';
 $('rpTabs').style.gridColumn='1 / -1';
+/* o botão "todas as abas" só aparece quando as abas não cabem */
+(function(){const pairs=[[$('wsTabList'),$('wsOverflow')],[$('rpTabs'),$('rpOverflow')]];
+ const upd=()=>pairs.forEach(([l,b])=>{if(l&&b)b.hidden=!(l.scrollWidth>l.clientWidth+1);});
+ if(window.ResizeObserver){const ro=new ResizeObserver(upd);pairs.forEach(([l])=>l&&ro.observe(l));}
+ if(window.MutationObserver){const mo=new MutationObserver(upd);pairs.forEach(([l])=>l&&mo.observe(l,{childList:true,subtree:true,characterData:true}));}
+ addEventListener('resize',upd);upd();})();
 function tabMenu(anchor,id,right){const t=(right?RP.tabs:WS.tabs).find(t=>t.id===id);if(!t)return;miniMenu(anchor,right?[
 {t:'Fechar aba lateral',ic:WI.x,fn:()=>rpCloseTab(id)},
 {t:'Mover aba para a esquerda',ic:WI.left,fn:()=>{const i=RP.tabs.indexOf(t);if(i>0){RP.tabs.splice(i,1);RP.tabs.splice(i-1,0,t);wsSave();rpPaintAll();}}}
@@ -3421,5 +3436,7 @@ if(typeof loadQuestions==='function'&&!questionBank) loadQuestions().then(()=>{ 
 paintSpaces(); paintNav(); route(false); if(location.hash==='#/simulado/exec')beginExamTicker();
 })();
 </script>
+
+</body></html>
 
 </body></html>
