@@ -299,7 +299,7 @@ svg{flex:none}
 .app{display:flex;height:100vh;height:100dvh}
 
 /* ---------- sidebar ---------- */
-.side{width:260px;flex:none;background:var(--side);border-right:1px solid var(--line);display:flex;flex-direction:column;transition:width .18s ease;position:relative;z-index:20}
+.side{width:288px;flex:none;background:var(--side);border-right:1px solid var(--line);display:flex;flex-direction:column;transition:width .18s ease;position:relative;z-index:20}
 .side-top{display:flex;align-items:center;gap:4px;padding:8px;padding-left:max(8px,env(safe-area-inset-left));position:relative}
 .icon-btn{width:34px;height:34px;display:grid;place-items:center;border-radius:8px;color:var(--muted)}
 .icon-btn:hover{background:var(--hover);color:var(--text)}
@@ -432,7 +432,7 @@ svg{flex:none}
 .app.collapsed .space-btn{flex:none;width:36px;justify-content:center;padding:0}
 .app.collapsed .actions{padding:2px 8px;display:flex;flex-direction:column;align-items:center}
 .app.collapsed .actions .row{width:36px;justify-content:center;padding:0}
-.app.collapsed .side-foot{margin-top:auto;display:flex;justify-content:center}
+.app.collapsed .side-foot{margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:4px}
 .app.collapsed .user-btn{width:40px;justify-content:center;padding:0}
 .app.collapsed .pop{left:52px}
 .app.collapsed .side-top .pop{top:8px}
@@ -485,6 +485,8 @@ svg{flex:none}
 .body{flex:1;min-height:0;display:flex}
 .body .view{flex:1;min-width:0}
 .props{flex:none;width:272px;border-left:1px solid var(--line);background:var(--bg);padding:16px;padding-right:max(16px,env(safe-area-inset-right));overflow:auto}
+.props .doc-summary{margin:0 0 16px;font-size:13px;line-height:1.5;color:var(--muted)}
+.props details{border-top:1px solid var(--line);padding-top:12px}.props summary{cursor:pointer;color:var(--text);font-size:13px;font-weight:600}.props details .pgrid{margin-top:14px}
 .props .ph{font-size:12px;font-weight:600;color:var(--muted);margin:0 0 14px}
 .props .pgrid{grid-template-columns:1fr;gap:14px;max-width:none}
 .pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px 20px;max-width:1040px;margin:0 auto}
@@ -889,11 +891,14 @@ a.ot{display:block;padding:3px 0;min-height:24px}
 .rp-search:focus-within{border-color:var(--ring)}
 .rp-search input{flex:1;min-width:0;border:0;outline:0;background:transparent;font-size:13px;color:var(--text)}
 .rp-search svg{width:15px;height:15px;flex:none}
+.rp-intro{margin:0 0 12px;font-size:12.5px;line-height:1.45;color:var(--muted)}
 .rp-chips{display:flex;flex-wrap:wrap;gap:5px;margin:0 0 8px}
+.rp-filters{margin:0 0 8px}.rp-filters summary{cursor:pointer;color:var(--muted);font-size:12px;list-style:none}.rp-filters summary::-webkit-details-marker{display:none}.rp-filters summary::after{content:'+';margin-left:6px}.rp-filters[open] summary::after{content:'−'}.rp-filters .rp-chips{margin-top:8px}
 .rp-chip{height:26px;padding:0 10px;border-radius:13px;border:1px solid var(--line);font-size:12px;color:var(--muted)}
 .rp-chip:hover{background:var(--hover);color:var(--text)}
 .rp-chip[aria-pressed="true"]{background:var(--text);color:var(--bg);border-color:var(--text)}
 .rp-list{display:flex;flex-direction:column}
+.rp-group{margin:14px 0 0}.rp-group:first-child{margin-top:0}.rp-group-title{display:flex;align-items:center;justify-content:space-between;padding:0 0 5px;font-size:11px;font-weight:600;letter-spacing:.02em;color:var(--muted);text-transform:uppercase}.rp-group-title span{font-variant-numeric:tabular-nums;font-weight:500}
 .rp-row{display:flex;align-items:center;gap:10px;min-height:40px;padding:5px 8px;margin:0 -8px;border-radius:8px;color:var(--text)}
 .rp-row:hover{background:var(--hover)}
 .rp-ri,.g-n{--k:var(--muted)}
@@ -918,6 +923,7 @@ a.rp-link:hover{background:var(--active)}
 .rp-acts{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}
 .rp-sec{font-size:11.5px;font-weight:600;color:var(--muted);margin:12px 0 4px;letter-spacing:.01em}
 .rp-graph{width:100%;height:auto;display:block;max-height:300px}
+.rp-graph.rp-graph-single{height:118px;max-height:none;margin:4px 0 8px}
 .rp-graph text{fill:var(--text);font-size:9.5px;font-family:inherit}
 .rp-graph .g-e{stroke:var(--line);stroke-width:1}
 .rp-graph .g-e.c{stroke:var(--faint);stroke-width:1.2}
@@ -998,12 +1004,12 @@ a.rp-link:hover{background:var(--active)}
 .ws-tabs .ws-tablist{flex:0 1 auto;max-width:calc(100% - 154px)}
 .ws-tabs #rpToggle{margin-left:auto}
 @media(max-width:700px){.ws-tabs .ws-tablist{max-width:calc(100% - 138px)}}
-/* botão de recolher: aparece sobre o avatar do espaço (C) ao passar o mouse, (padrão Capacities) */
+/* Barra aberta mantém o controle visível; no trilho recolhido, ele aparece sobre o avatar em hover/foco. */
 @media (min-width:821px) and (hover:hover){
-  .side-top #collapse{position:absolute;z-index:3;left:16px;top:14px;width:24px;height:24px;border-radius:6px;background:var(--side);color:var(--text);opacity:0;transition:opacity .12s}
-  .side-top #collapse:hover,.side-top #collapse:focus-visible{opacity:1;background:var(--hover)}
-  .side-top #collapse svg{width:16px;height:16px}
-  .app.collapsed .side-top #collapse{left:16px}
+  .side-top #collapse{opacity:1}
+  .app.collapsed .side-top #collapse{position:absolute;z-index:3;left:16px;top:14px;width:24px;height:24px;border-radius:6px;background:var(--side);color:var(--text);opacity:0;transition:opacity .12s}
+  .app.collapsed .side-top #collapse:hover,.app.collapsed .side-top #collapse:focus-visible{opacity:1;background:var(--hover)}
+  .app.collapsed .side-top #collapse svg{width:16px;height:16px}
   .side-top .space-btn{flex:1}
 }
 @media(max-width:700px){.ws-tabs .ws-tablist{max-width:none}}
@@ -1011,23 +1017,25 @@ a.rp-link:hover{background:var(--active)}
 /* ===== abas v2 (barra superior e painel) ===== */
 .ws-tabs{height:46px;min-height:46px;padding:0 8px;gap:4px;align-items:center;box-sizing:border-box}
 .bar{height:46px}
-.ws-tabs .ws-tablist{flex:1 1 0;min-width:0;max-width:none;display:flex;align-items:center;gap:5px;overflow:hidden;height:46px}
+.ws-tabs .ws-tablist{flex:0 1 auto;min-width:0;max-width:calc(100% - 154px);display:flex;align-items:center;gap:5px;overflow:hidden;height:46px}
 .ws-tabs .ws-tab,.rp-top .rp-tabs .ws-tab{flex:none;box-sizing:border-box;height:32px;display:flex;align-items:center;gap:0;padding:3px 2px 3px 6px;border:.5px solid transparent;border-radius:8px;font-size:13px;margin:0;background:transparent;color:var(--muted);position:relative;min-width:82px;cursor:pointer;overflow:visible;transition:background-color .15s ease,color .15s ease,border-color .15s ease;order:0;position:relative}
 .ws-tabs .ws-tab.pinned{order:0;position:relative;background:transparent;flex-basis:auto}
 .ws-tabs .ws-tab.pinned .ws-ti:after{content:none}
 .ws-tabs .ws-tab:hover,.rp-top .rp-tabs .ws-tab:hover{background:var(--hover);color:var(--text)}
-.ws-tabs .ws-tab.on,.ws-tabs .ws-tab.pinned.on,.rp-top .rp-tabs .ws-tab.on{background:var(--bg);border-color:var(--line);color:var(--text);font-weight:500;box-shadow:none}
+.ws-tabs .ws-tab.on,.ws-tabs .ws-tab.pinned.on,.rp-top .rp-tabs .ws-tab.on{background:transparent;border-color:transparent;color:var(--text);font-weight:500;box-shadow:none}
 .ws-tab+.ws-tab:before{content:'';position:absolute;left:-3px;top:50%;width:.5px;height:18px;margin-top:-9px;background:var(--line);transition:opacity .15s ease;pointer-events:none}
 .ws-tab:hover:before,.ws-tab:hover+.ws-tab:before,.ws-tab.on:before,.ws-tab.on+.ws-tab:before{opacity:0}
 .ws-tmain{flex:1 1 0;min-width:44px;min-height:32px;height:100%;display:flex;align-items:center;gap:7px}
 .ws-tabs .ws-tab .ws-tt{flex:1;min-width:0}
 .ws-tact{flex:none;width:20px;height:100%;display:flex;align-items:center;justify-content:flex-end;gap:2px;overflow:hidden;transition:width .2s ease}
-.ws-tab:hover .ws-tact,.ws-tab:focus-within .ws-tact,.ws-tab.on .ws-tact{width:38px}
+.ws-tab:hover .ws-tact,.ws-tab:focus-within .ws-tact{width:38px}
 .ws-tab.narrow:hover .ws-tact,.ws-tab.narrow:focus-within .ws-tact,.ws-tab.narrow.on .ws-tact{width:20px}
 .ws-tab.narrow .ws-tp{display:none}
 .ws-tact button{width:18px;height:18px;border-radius:5px;display:grid;place-items:center;flex:none;color:var(--muted);opacity:0;transition:opacity .15s ease,background-color .15s ease}
 .ws-tact button svg{width:12px;height:12px}
-.ws-tab:hover .ws-tact button,.ws-tab:focus-within .ws-tact button,.ws-tab.on .ws-tact button,.ws-tact .ws-tp.pinned{opacity:1}
+.ws-tab:hover .ws-tact button,.ws-tab:focus-within .ws-tact button,.ws-tact .ws-tp.pinned{opacity:1}
+.ws-tabs .ws-tab.on .ws-tact .ws-tx{opacity:0}
+.ws-tabs .ws-tab:hover .ws-tact .ws-tx,.ws-tabs .ws-tab:focus-within .ws-tact .ws-tx,.ws-tabs .ws-tab .ws-tact .ws-tx:focus-visible{opacity:1}
 .ws-tact button:hover{background:var(--active);color:var(--text)}
 .ws-tab.drop-before{box-shadow:inset 2px 0 var(--accent,var(--text))}
 .ws-tab.drop-after{box-shadow:inset -2px 0 var(--accent,var(--text))}
@@ -1045,12 +1053,13 @@ a.rp-link:hover{background:var(--active)}
 .ws-tabmenu .row .t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ws-tabmenu .row small{color:var(--faint);font-size:11px;flex:none}
 .ws-tabmenu .tm-empty{padding:10px 8px;color:var(--muted);font-size:13px}
-.rp-top{display:flex;grid-template-columns:none;height:46px;min-height:46px;padding:0 8px;gap:4px;align-items:center;box-sizing:border-box}
+.rp-top{display:flex;grid-template-columns:none;height:52px;min-height:52px;padding:0 12px;gap:6px;align-items:center;box-sizing:border-box}
 .rp-panel-label{display:none}
 .rp-top .rp-tabs{grid-column:auto;grid-row:auto;flex:1 1 0;min-width:0;height:46px;min-height:0;align-items:center;gap:5px;overflow-x:auto}
 .rp-top .rp-tabs .ws-tab{min-width:110px;max-width:170px}
 .rp-top .ws-tab .ws-tx{width:20px;height:20px}
 .rp-top .icon-btn{width:30px;height:30px;margin:0}
+.ws-nav #histFwd:disabled{display:none}
 @media(max-width:700px){.ws-tabs{height:46px;padding:0 5px}.ws-tabs>.icon-btn{height:36px}}
 @media(prefers-reduced-motion:reduce){.ws-tab,.ws-tact,.ws-tact button,.ws-tab:before{transition:none!important}}
 </style>
@@ -1936,7 +1945,11 @@ async function open(d){
   const my=++token;
   setTimeout(()=>{ if(my===token&&cur&&!cur.pdf&&cur.d.id===d.id){ const m=view.querySelector('.msg'); if(m) m.innerHTML='<div role="status"><span class="spin" aria-hidden="true"></span> Ainda abrindo “'+esc(d.t)+'”…<br>Está demorando mais que o normal. Documentos grandes levam mais tempo.<br><a class="cta" href="#/quadro">Cancelar e voltar ao Quadro</a></div>'; } },4000);
   if(cur&&cur.pdf){ try{cur.pdf.destroy();}catch(e){} }
-  cur={d}; markCurrent(); paintProps(d);
+  cur={d}; markCurrent();
+  // A PDF is a reading task: keep its canvas clear and leave the contextual
+  // workspace available from the toolbar when the user needs it.
+  if(rpVisible()) openRP(false);
+  paintProps(d);
   try{
     const pdf=await Promise.race([pdfjsLib.getDocument(d.data?{data:d.data.slice()}:'pdfs/'+d.f).promise,new Promise((_,rj)=>setTimeout(()=>rj(new Error('timeout')),25000))]);
     if(my!==token){ pdf.destroy(); return; }
@@ -2271,17 +2284,13 @@ function showBoard(){
 /* ---- objetos: propriedades, tipos e listas (todo valor é link) ---- */
 const chipA=(txt,href)=>href&&txt?'<a class="chip" href="'+href+'" title="'+esc(txt)+'">'+esc(txt)+'</a>':'<span class="chip none">—</span>';
 function paintProps(d){
-  const sp=spaces.find(x=>x.id===d.sp); let items=[
-    {l:'Tipo',v:typeName(d.type),h:'#/tipo/'+d.type}
-  ].concat(typeProps(d.type).map(({k})=>{ const v=PROPS[k].get(d); return {l:PROPS[k].n,k,v,h:v?(k==='edicao'?'#/edicao/'+d.edicao:k==='cargo'?'#/cargo/'+d.cargo:valHref(k,v)):null}; }));
+  let items=[{l:'Tipo',v:typeName(d.type),h:'#/tipo/'+d.type}].concat(typeProps(d.type).map(({k})=>{ const v=PROPS[k].get(d); return {l:PROPS[k].n,k,v,h:v?(k==='edicao'?'#/edicao/'+d.edicao:k==='cargo'?'#/cargo/'+d.cargo:valHref(k,v)):null}; }));
   items=items.filter(i=>!(i.k==='cargo'&&!i.v)&&!(i.k&&PROPS[i.k]&&PROPS[i.k].custom));
-  const box=$('props');
-  const o0=OV();
+  const box=$('props'), o0=OV();
   const cust=typeProps(d.type).filter(x=>PROPS[x.k].custom).map(x=>{ const kind=pkOf(x.from,x.k), v=o0['cv:doc:'+d.id+'|'+x.k]; return '<div class="pi"><small>'+esc(PROPS[x.k].n)+'</small><button type="button" class="op-ed" data-edit-cv="'+esc('doc:'+d.id+'|'+x.k)+'" aria-label="Editar '+esc(PROPS[x.k].n)+'">'+cvShow(x.k,kind,v)+'</button></div>'; }).join('');
-  box.innerHTML='<p class="ph">Propriedades</p><div class="pgrid">'+items.map(i=>'<div class="pi"><small>'+esc(i.l)+'</small>'+chipA(i.v,i.h)+'</div>').join('')+cust+'</div>'+(()=>{ const sib=d.edicao?docsOf(d.sp).filter(x=>x.edicao===d.edicao):[]; if(sib.length<2) return '';
-    const ed=edicaoById(d.edicao); const grp=[...new Set(sib.map(x=>x.g))];
-    return '<p class="ph rel-h">Nesta edição'+(ed?' · '+ed.ano:'')+'</p><nav class="rel" aria-label="Documentos desta edição">'+grp.map(g=>'<small>'+esc(g)+'</small>'+sib.filter(x=>x.g===g).map(x=>'<a href="#'+x.id+'"'+(x.id===d.id?' aria-current="page"':'')+'>'+esc(x.t)+'</a>').join('')).join('')+'</nav>'; })();
-  const open_=store.get('propsOpen'); box.hidden=!(open_===null?!isPhone():open_);
+  const pages=store.get('pages:'+d.id), ed=d.edicao&&edicaoById(d.edicao);
+  box.innerHTML='<p class="ph">Sobre este documento</p><p class="doc-summary">'+esc(d.g)+(pages?' · '+pages+' páginas':'')+(ed?' · '+esc(ed.ano):'')+'</p><details><summary>Ver detalhes do arquivo</summary><div class="pgrid">'+items.map(i=>'<div class="pi"><small>'+esc(i.l)+'</small>'+chipA(i.v,i.h)+'</div>').join('')+cust+'</div></details>';
+  const open_=store.get('propsOpen'); box.hidden=!(open_===null?false:open_);
   $('propBtn').classList.toggle('on',!box.hidden); $('propBtn').setAttribute('aria-expanded',String(!box.hidden));
 }
 $('propBtn').onclick=()=>{ const b=$('props'); b.hidden=!b.hidden; store.set('propsOpen',!b.hidden); $('propBtn').classList.toggle('on',!b.hidden); $('propBtn').setAttribute('aria-expanded',String(!b.hidden)); };
@@ -3111,7 +3120,7 @@ const WI={x:IX('<path d="M6 6l12 12M18 6L6 18"/>',2),plus:IX('<path d="M12 5v14M
   panel:IX('<rect x="3" y="4" width="18" height="16" rx="3"/><path d="M15 4v16"/>'),stack:IX('<rect x="4" y="4" width="16" height="7" rx="2"/><rect x="4" y="13" width="16" height="7" rx="2"/>'),
   out:IX('<path d="M7 17L17 7M9 7h8v8"/>'),left:IX('<path d="M15 6l-6 6 6 6"/>'),side:IX('<rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/>'),
   minus:IX('<path d="M5 12h14"/>',2),fit:IX('<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>')};
-const RT={explorar:{n:'Explorar',ic:WI.search},graf:{n:'Gráfico',ic:WI.graph},back:{n:'Backlinks',ic:WI.back},rel:{n:'Conteúdo relacionado',ic:WI.rel},ia:{n:'Assistente de IA',ic:WI.spark},obj:{n:'Objeto',ic:WI.obj}};
+const RT={explorar:{n:'Navegar',ic:WI.search},graf:{n:'Gráfico',ic:WI.graph},back:{n:'Backlinks',ic:WI.back},rel:{n:'Conteúdo relacionado',ic:WI.rel},ia:{n:'Assistente de IA',ic:WI.spark},obj:{n:'Objeto',ic:WI.obj}};
 const KORD=['concurso','edicao','cargo','pdf','questao','orgao','banca','disciplina'];
 const kn=k=>TYPES[k]?TYPES[k].n:k;
 const kIcon=k=>k==='grafico'?WI.graph:(TYI()[k]||(k==='espaco'?SI.collection:SI.file));
@@ -3146,7 +3155,7 @@ const okTab=t=>t&&typeof t.id==='string'&&Array.isArray(t.hist)&&t.hist.length&&
 const WS={tabs:(Array.isArray(SV.tabs)?SV.tabs.filter(okTab):[]).map(t=>({id:t.id,hist:t.hist.slice(),i:Math.min(Math.max(+t.i||0,0),t.hist.length-1),title:String(t.title||''),pinned:!!t.pinned,sc:t.sc&&typeof t.sc==='object'?t.sc:{},ui:t.ui&&typeof t.ui==='object'?t.ui:{}})),active:SV.active};
 if(!WS.tabs.length) WS.tabs=[{id:uid(),hist:[location.hash],i:0,title:'',sc:{}}];
 if(!WS.tabs.some(t=>t.id===WS.active)) WS.active=WS.tabs[0].id;
-const RPD=()=>({open:innerWidth>=1360,w:340,active:'t1',tabs:[{id:'t1',views:[{id:uid(),type:'back',f:1},{id:uid(),type:'rel',f:1}]},{id:'t2',views:[{id:uid(),type:'explorar',f:1}]}]});
+const RPD=()=>({open:false,w:360,active:'t1',tabs:[{id:'t1',views:[{id:uid(),type:'explorar',f:1}]}]});
 const RP=Object.assign(RPD(),(SV.rp&&Array.isArray(SV.rp.tabs))?SV.rp:{});
 RP.tabs=RP.tabs.filter(t=>t&&t.id&&Array.isArray(t.views)); RP.tabs.forEach(t=>{ t.views=t.views.filter(v=>v&&RT[v.type]).slice(0,3); });
 RP.tabs=RP.tabs.filter(t=>t.views.length); if(!RP.tabs.some(t=>t.id===RP.active)) RP.active=RP.tabs[0]?RP.tabs[0].id:null;
@@ -3248,8 +3257,8 @@ function miniMenu(anchor,items){ closeMini(); const r=anchor.getBoundingClientRe
 let ovOpen=false;
 const rpVisible=()=>MQT.matches?ovOpen:!!RP.open;
 function applyRP(focusBack){ const on=rpVisible(); const el=$('rpanel'); el.hidden=!on; el.style.setProperty('--rpw',RP.w+'px'); app.classList.toggle('rp-open',on);
-  const tg=$('rpToggle'); tg.setAttribute('aria-pressed',on); tg.setAttribute('aria-label',on?'Ocultar painel contextual':'Mostrar painel contextual');
-  if(on){ rpPaintAll(); ensureRoom(); if(MQT.matches){ const a=$('rpTabs').querySelector('.on')||$('rpAdd'); a&&a.focus(); } } else if(focusBack&&MQT.matches) tg.focus(); }
+  const tg=$('rpToggle'); tg.hidden=on; tg.setAttribute('aria-pressed',on); tg.setAttribute('aria-label',on?'Ocultar painel contextual':'Mostrar painel contextual');
+  if(on){ rpPaintAll(); ensureRoom(); const a=$('rpTabs').querySelector('.on')||$('rpAdd'); a&&a.focus(); } else if(focusBack) tg.focus(); }
 function openRP(on){ if(MQT.matches) ovOpen=on; else { RP.open=on; wsSave(); } applyRP(!on); }
 function ensureRoom(){ if(MQT.matches) return; const m=document.querySelector('.main'); if(m&&m.offsetWidth<520&&!app.classList.contains('collapsed')) setCollapsed(true); }
 MQT.addEventListener('change',()=>{ ovOpen=false; applyRP(false); wsPaintNav(); });
@@ -3269,12 +3278,14 @@ function ctxBar(v,n){ if(!v.ref&&!n) return ''; return '<div class="rp-ctx">'+(v
 const needCtx=()=>{const m=/^#\/tipo\/([^/]+)/.exec(curHref()); if(m)return rpEmpty('Tipo de objeto: '+kn(m[1]),'Você está vendo a coleção deste tipo. Selecione um objeto para consultar seus backlinks e conteúdo relacionado.'); return rpEmpty('Contexto do workspace','Selecione um objeto na área principal para consultar suas relações. As abas laterais permanecem disponíveis.');};
 function bodyExplorar(v){
   const all=[...gr().N.values()], kinds=KORD.filter(k=>all.some(n=>n.kind===k));
-  return '<div class="rp-search">'+WI.search+'<input type="search" id="ex-'+v.id+'" data-ex-q="'+v.id+'" placeholder="Buscar objetos do espaço" aria-label="Buscar objetos do espaço" value="'+esc(v.q||'')+'" autocomplete="off"></div><div class="rp-chips" role="group" aria-label="Filtrar por tipo" data-ex-chips>'+exChips(v,kinds)+'</div><div class="rp-list" data-ex-list>'+exRows(v)+'</div>'; }
+  const filter=v.kind?'Filtro: '+kn(v.kind):'Filtrar por tipo';
+  return '<p class="rp-intro">Encontre um item do espaço. O contexto aparece somente quando você pedir.</p><div class="rp-search">'+WI.search+'<input type="search" id="ex-'+v.id+'" data-ex-q="'+v.id+'" placeholder="Buscar no espaço" aria-label="Buscar no espaço" value="'+esc(v.q||'')+'" autocomplete="off"></div><details class="rp-filters"'+(v.kind?' open':'')+'><summary><span data-ex-filter-label>'+esc(filter)+'</span></summary><div class="rp-chips" role="group" aria-label="Filtrar por tipo" data-ex-chips>'+exChips(v,kinds)+'</div></details><div class="rp-list" data-ex-list>'+exRows(v)+'</div>'; }
 const exChips=(v,kinds)=>['']. concat(kinds).map(k=>'<button type="button" class="rp-chip" data-ex-kind="'+k+'" aria-pressed="'+((v.kind||'')===k)+'">'+(k?esc(kn(k)):'Tudo')+'</button>').join('');
 function exRows(v){ const q=norm(String(v.q||'')), all=[...gr().N.values()].filter(n=>(!v.kind||n.kind===v.kind)&&(!q||norm(n.title+' '+n.sub).includes(q)));
   all.sort((a,b)=>KORD.indexOf(a.kind)-KORD.indexOf(b.kind)||a.title.localeCompare(b.title,'pt-BR',{numeric:true}));
   if(!all.length) return '<div class="rp-empty">'+(q?'<b>Nada encontrado para “'+esc(v.q)+'”</b>Tente outra palavra ou outro tipo.':'<b>Nenhum objeto ainda</b>Crie um concurso na barra lateral.')+'</div>';
-  return all.slice(0,80).map(n=>rpRow(n)).join('')+(all.length>80?'<div class="rp-more">Mostrando 80 de '+all.length+'. Refine a busca.</div>':''); }
+  const rows=all.slice(0,80), groups=new Map(); rows.forEach(n=>{ const g=groups.get(n.kind)||[]; g.push(n); groups.set(n.kind,g); });
+  return [...groups].map(([kind,items])=>'<section class="rp-group" aria-label="'+esc(kn(kind))+'"><div class="rp-group-title">'+esc(kn(kind))+'<span>'+items.length+'</span></div>'+items.map(n=>rpRow(n)).join('')+'</section>').join('')+(all.length>80?'<div class="rp-more">Mostrando 80 de '+all.length+'. Refine a busca.</div>':''); }
 function bodyBack(v){ const n=vNode(v); if(!n) return needCtx();
   if(!n.inn.length) return ctxBar(v,n)+rpEmpty('Nada aponta para cá ainda','Quando outro objeto citar “'+n.title+'”, ele aparece nesta lista.');
   const g=gr().N; return ctxBar(v,n)+'<div class="rp-list">'+n.inn.map(([h,l])=>{ const m=g.get(h); return m?rpRow(m,kn(m.kind)+' · como '+l):''; }).join('')+'</div>'; }
@@ -3283,7 +3294,7 @@ function bodyRel(v){ const n=vNode(v); if(!n) return needCtx(); const g=gr().N, 
   const L=[...sc.values()].sort((a,b)=>b.c-a.c||a.n.title.localeCompare(b.n.title,'pt-BR',{numeric:true})).slice(0,12);
   if(!L.length) return ctxBar(v,n)+rpEmpty('Sem conteúdo relacionado','Objetos que compartilham banca, edição, cargo ou disciplina com “'+n.title+'” aparecem aqui.');
   return ctxBar(v,n)+'<div class="rp-list">'+L.map(s=>rpRow(s.n,'via '+s.via.join(', '))).join('')+'</div>'; }
-function bodyGraf(v){ const n=vNode(v); if(!n) return needCtx(); const all=nbrs(n), MAX=14, ns=all.slice(0,MAX), W=300,H=250,cx=W/2,cy=H/2-6,R=Math.min(96,40+ns.length*6);
+function bodyGraf(v){ const n=vNode(v); if(!n) return needCtx(); const all=nbrs(n); if(!all.length) return ctxBar(v,n)+rpEmpty('Sem ligações diretas','Este objeto ainda não possui relações para mostrar no gráfico.')+'<div class="rp-acts"><a class="rp-btn" href="#/grafico" data-main-link>'+WI.graph+' Abrir gráfico completo</a></div>'; if(all.length===1){ const m=all[0], cut=x=>x.title.length>16?x.title.slice(0,15)+'…':x.title; const single='<svg class="rp-graph rp-graph-single" viewBox="0 0 300 110" role="group" aria-label="Ligação entre '+esc(n.title)+' e '+esc(m.title)+'"><line class="g-e c" x1="92" y1="43" x2="208" y2="43"/><a href="'+esc(n.href)+'" class="g-n g-c k-'+n.kind+'" aria-label="'+esc(kn(n.kind)+': '+n.title)+'"><title>'+esc(n.title)+'</title><circle cx="80" cy="43" r="11"/><text x="80" y="76" text-anchor="middle">'+esc(cut(n))+'</text></a><a href="'+esc(m.href)+'" class="g-n g-c k-'+m.kind+'" aria-label="'+esc(kn(m.kind)+': '+m.title)+'"><title>'+esc(m.title)+'</title><circle cx="220" cy="43" r="11"/><text x="220" y="76" text-anchor="middle">'+esc(cut(m))+'</text></a></svg>'; return ctxBar(v,n)+single+'<div class="rp-acts"><a class="rp-btn" href="#/grafico" data-main-link>'+WI.graph+' Abrir gráfico completo</a></div>'; } const MAX=14, ns=all.slice(0,MAX), W=300,H=250,cx=W/2,cy=H/2-6,R=Math.min(96,40+ns.length*6);
   const pos=new Map(); ns.forEach((m,i)=>{ const a=-Math.PI/2+i*2*Math.PI/Math.max(ns.length,1); pos.set(m.href,[cx+R*Math.cos(a)*1.25,cy+R*Math.sin(a)]); }); pos.set(n.href,[cx,cy]);
   let s='<svg class="rp-graph" viewBox="0 0 '+W+' '+H+'" role="group" aria-label="Gráfico de ligações de '+esc(n.title)+'">'; const seen=new Set();
   ns.concat([n]).forEach(a=>a.out.forEach(([h])=>{ if(!pos.has(h)) return; const k=[a.href,h].sort().join('|'); if(seen.has(k)) return; seen.add(k); const p=pos.get(a.href),q=pos.get(h); s+='<line class="g-e'+(a===n||h===n.href?' c':'')+'" x1="'+p[0].toFixed(1)+'" y1="'+p[1].toFixed(1)+'" x2="'+q[0].toFixed(1)+'" y2="'+q[1].toFixed(1)+'"/>'; }));
@@ -3343,7 +3354,7 @@ $('rpBody').addEventListener('click',e=>{ const T=e.target;
   b=T.closest('[data-vmain]'); if(b){ wsOpenMain(b.dataset.vmain); if(MQT.matches) openRP(false); return; }
   b=T.closest('[data-vtab]'); if(b){ wsOpenTab(b.dataset.vtab); if(MQT.matches) openRP(false); return; }
   b=T.closest('[data-unpin]'); if(b){ const v=viewById(b.dataset.unpin); if(v){ delete v.ref; wsSave(); rpPaintBody(); } return; }
-  b=T.closest('[data-ex-kind]'); if(b){ const v=viewById(b.closest('.rp-view').dataset.v); if(v){ v.kind=b.dataset.exKind; wsSave(); const body=b.closest('.rp-vb'); body.querySelectorAll('[data-ex-kind]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.exKind===v.kind)); body.querySelector('[data-ex-list]').innerHTML=exRows(v); } return; }
+  b=T.closest('[data-ex-kind]'); if(b){ const v=viewById(b.closest('.rp-view').dataset.v); if(v){ v.kind=b.dataset.exKind; wsSave(); const body=b.closest('.rp-vb'); body.querySelectorAll('[data-ex-kind]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.exKind===v.kind)); const label=body.querySelector('[data-ex-filter-label]'); if(label) label.textContent=v.kind?'Filtro: '+kn(v.kind):'Filtrar por tipo'; body.querySelector('[data-ex-list]').innerHTML=exRows(v); } return; }
   const a=T.closest('a[href^="#"]'); if(a){ e.preventDefault(); const h=a.getAttribute('href'); if(a.hasAttribute('data-main-link')){ wsOpenMain(h); if(MQT.matches) openRP(false); return; }
     if(e.ctrlKey||e.metaKey){ wsOpenTab(h); return; } const sec=a.closest('.rp-view'); rpFromView(viewById(sec&&sec.dataset.v),h); return; }
   const ai=T.closest('[data-ai]'); if(ai){ aiAct(ai.dataset.ai,ai.dataset.aiArg||'',ai.dataset.aiFresh==='1'); return; }
