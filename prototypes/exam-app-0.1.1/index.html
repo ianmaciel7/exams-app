@@ -1062,6 +1062,12 @@ a.rp-link:hover{background:var(--active)}
 .ws-nav #histFwd:disabled{display:none}
 @media(max-width:700px){.ws-tabs{height:46px;padding:0 5px}.ws-tabs>.icon-btn{height:36px}}
 @media(prefers-reduced-motion:reduce){.ws-tab,.ws-tact,.ws-tact button,.ws-tab:before{transition:none!important}}
+/* ---- painel direito: revisão ---- */
+.rp-top .rp-tabs .ws-tab{gap:7px}
+.rp-view.solo .rp-vb{padding-top:12px}
+.rp-vh.solo-h{height:30px;justify-content:flex-start;padding:0 6px;background:transparent;border-bottom:0}
+.rp-note.ai-only{display:block}
+.rp-graph text{paint-order:stroke;stroke:var(--bg);stroke-width:3px;stroke-linejoin:round}
 </style>
 
 <button class="skip" id="skip">Ir para o conteúdo</button>
@@ -3270,7 +3276,8 @@ function curHref(){ const t=curTab(); let h=t.hist[t.i]||''; h=h.replace(/^(#\/(
 function vNode(v){ return nodeOf(v.ref||curHref()); }
 function vTitle(v){ if(v.type==='obj'){ const n=nodeOf(v.ref); return n?n.title:'Objeto'; } return RT[v.type].n; }
 function rpPaintTabs(){ gr(); $('rpTabs').innerHTML=RP.tabs.map(t=>{ const on=t.id===RP.active, v=t.views[0], ttl=t.views.length>1&&t.views.every(v=>['back','rel'].includes(v.type))?'Contexto':vTitle(v)+(t.views.length>1?' +'+(t.views.length-1):'');
-  return '<div class="ws-tab'+(on?' on':'')+'" role="tab" aria-label="'+esc(ttl)+'" aria-selected="'+on+'" tabindex="'+(on?0:-1)+'" data-rp-tab="'+t.id+'" title="'+esc(t.views.map(vTitle).join(' + '))+'"><span class="ws-ti" aria-hidden="true">'+RT[v.type].ic+'</span><span class="ws-tt">'+esc(ttl)+'</span><button type="button" class="ws-tx" tabindex="'+(on?0:-1)+'" data-rp-tabx="'+t.id+'" aria-label="Fechar aba '+esc(ttl)+'">'+WI.x+'</button></div>'; }).join(''); }
+  return '<div class="ws-tab'+(on?' on':'')+'" role="tab" aria-label="'+esc(ttl)+'" aria-selected="'+on+'" tabindex="'+(on?0:-1)+'" data-rp-tab="'+t.id+'" title="'+esc(t.views.map(vTitle).join(' + '))+'"><span class="ws-ti" aria-hidden="true">'+RT[v.type].ic+'</span><span class="ws-tt">'+esc(ttl)+'</span><button type="button" class="ws-tx" tabindex="'+(on?0:-1)+'" data-rp-tabx="'+t.id+'" aria-label="Fechar aba '+esc(ttl)+'">'+WI.x+'</button></div>'; }).join('');
+  const L=$('rpTabs'), on=L.querySelector('.on'); if(on&&L.scrollWidth>L.clientWidth){ const a=on.offsetLeft, b=a+on.offsetWidth; if(a<L.scrollLeft) L.scrollLeft=a-4; else if(b>L.scrollLeft+L.clientWidth) L.scrollLeft=b-L.clientWidth+4; } }
 const rpRow=(n,sub)=>'<a class="rp-row" href="'+esc(n.href)+'"><span class="rp-ri k-'+n.kind+'" aria-hidden="true">'+kIcon(n.kind)+'</span><span class="rp-rt"><b>'+esc(n.title)+'</b><small>'+esc(sub||n.sub||kn(n.kind))+'</small></span></a>';
 const rpEmpty=(t,s,extra)=>'<div class="rp-empty"><b>'+esc(t)+'</b>'+esc(s||'')+(extra||'')+'</div>';
 const toolBtns=(cls)=>'<div class="rp-tools">'+['explorar','graf','back','rel','ia'].map(k=>'<button type="button" class="rp-btn '+(cls||'')+'" data-rp-new="'+k+'">'+RT[k].ic+' '+RT[k].n+'</button>').join('')+'</div>';
@@ -3284,8 +3291,8 @@ const exChips=(v,kinds)=>['']. concat(kinds).map(k=>'<button type="button" class
 function exRows(v){ const q=norm(String(v.q||'')), all=[...gr().N.values()].filter(n=>(!v.kind||n.kind===v.kind)&&(!q||norm(n.title+' '+n.sub).includes(q)));
   all.sort((a,b)=>KORD.indexOf(a.kind)-KORD.indexOf(b.kind)||a.title.localeCompare(b.title,'pt-BR',{numeric:true}));
   if(!all.length) return '<div class="rp-empty">'+(q?'<b>Nada encontrado para “'+esc(v.q)+'”</b>Tente outra palavra ou outro tipo.':'<b>Nenhum objeto ainda</b>Crie um concurso na barra lateral.')+'</div>';
-  const rows=all.slice(0,80), groups=new Map(); rows.forEach(n=>{ const g=groups.get(n.kind)||[]; g.push(n); groups.set(n.kind,g); });
-  return [...groups].map(([kind,items])=>'<section class="rp-group" aria-label="'+esc(kn(kind))+'"><div class="rp-group-title">'+esc(kn(kind))+'<span>'+items.length+'</span></div>'+items.map(n=>rpRow(n)).join('')+'</section>').join('')+(all.length>80?'<div class="rp-more">Mostrando 80 de '+all.length+'. Refine a busca.</div>':''); }
+  const rows=all.slice(0,80), groups=new Map(), tot={}; all.forEach(n=>{ tot[n.kind]=(tot[n.kind]||0)+1; }); rows.forEach(n=>{ const g=groups.get(n.kind)||[]; g.push(n); groups.set(n.kind,g); });
+  return [...groups].map(([kind,items])=>'<section class="rp-group" aria-label="'+esc(kn(kind))+'"><div class="rp-group-title">'+esc(kn(kind))+'<span>'+tot[kind]+'</span></div>'+items.map(n=>rpRow(n)).join('')+'</section>').join('')+(all.length>80?'<div class="rp-more">Mostrando 80 de '+all.length+'. Refine a busca.</div>':''); }
 function bodyBack(v){ const n=vNode(v); if(!n) return needCtx();
   if(!n.inn.length) return ctxBar(v,n)+rpEmpty('Nada aponta para cá ainda','Quando outro objeto citar “'+n.title+'”, ele aparece nesta lista.');
   const g=gr().N; return ctxBar(v,n)+'<div class="rp-list">'+n.inn.map(([h,l])=>{ const m=g.get(h); return m?rpRow(m,kn(m.kind)+' · como '+l):''; }).join('')+'</div>'; }
@@ -3311,12 +3318,17 @@ function bodyObj(v){ const m=/^#\/tipo\/([^/]+)/.exec(v.ref||''); if(m){const ro
    +'<div class="rp-acts"><button type="button" class="rp-btn pri" data-vmain="'+esc(n.href)+'">'+WI.out+' Abrir na área principal</button><button type="button" class="rp-btn" data-vtab="'+esc(n.href)+'">'+WI.plus+' Nova aba</button></div>'
    +(inn.length?'<div class="rp-sec">Citado por '+inn.length+'</div><div class="rp-list">'+inn.slice(0,8).map(m=>rpRow(m)).join('')+(inn.length>8?'<div class="rp-more">e mais '+(inn.length-8)+'</div>':'')+'</div>':''); }
 function bodyIa(v){ const m=/^#\/questao\/(.+)$/.exec(curHref()||''), q=m&&nodeOf(curHref());
-  return '<div class="rp-ai"><p class="ai-off">O Claude ainda não está disponível neste protótipo. Quando você permitir o uso nas configurações do artefato, as ações de IA aparecem aqui.</p>'
+  return '<div class="rp-ai">'
    +'<p class="rp-note ai-only">'+(q?'Questão em foco: <b>'+esc(q.title)+'</b>':'Abra uma questão na área principal para explicá-la ou criar cartões a partir dela.')+'</p>'
    +(m?aiRow(decodeURIComponent(m[1])):'')
-   +'<div class="ai-row ai-only"><button type="button" class="op-btn ai-btn" data-ai="plan">'+aiSpark+' Sugerir o que revisar</button><div class="ai-boxes">'+aiBox('plan')+'</div></div></div>'; }
+   +'<div class="ai-row ai-only">'+(m?'':'<p class="ai-hint">'+AI_WHY+'</p>')+'<button type="button" class="op-btn ai-btn" data-ai="plan">'+aiSpark+' Sugerir o que revisar</button><div class="ai-boxes">'+aiBox('plan')+'</div></div></div>'; }
 const BODY={explorar:bodyExplorar,back:bodyBack,rel:bodyRel,graf:bodyGraf,obj:bodyObj,ia:bodyIa};
-function viewHtml(v){ const T=RT[v.type];
+function viewHtml(v,solo){ const T=RT[v.type], nav=(v.hist&&v.hist.length)||(v.future&&v.future.length);
+  if(solo&&!nav) return '<section class="rp-view solo" data-v="'+v.id+'" style="flex-grow:1" aria-label="'+esc(vTitle(v))+'"><div class="rp-vb" data-vb="'+v.id+'">'+BODY[v.type](v)+'</div></section>';
+  if(solo) return '<section class="rp-view solo" data-v="'+v.id+'" style="flex-grow:1" aria-label="'+esc(vTitle(v))+'"><header class="rp-vh solo-h">'
+   +((v.hist&&v.hist.length)?'<button type="button" data-vback="'+v.id+'" aria-label="Voltar" title="Voltar">'+WI.left+'</button>':'')
+   +((v.future&&v.future.length)?'<button type="button" data-vforward="'+v.id+'" aria-label="Avançar no painel" title="Avançar">'+WI.out+'</button>':'')
+   +'</header><div class="rp-vb" data-vb="'+v.id+'">'+BODY[v.type](v)+'</div></section>';
   return '<section class="rp-view" data-v="'+v.id+'" style="flex-grow:'+(v.f||1)+'" aria-label="'+esc(vTitle(v))+'"><header class="rp-vh" draggable="true" title="Arraste para reorganizar este painel"><span class="vi" aria-hidden="true">'+T.ic+'</span><b>'+esc(vTitle(v))+'</b>'
    +((v.hist&&v.hist.length)?'<button type="button" data-vback="'+v.id+'" aria-label="Voltar" title="Voltar">'+WI.left+'</button>':'')
    +((v.future&&v.future.length)?'<button type="button" data-vforward="'+v.id+'" aria-label="Avançar no painel" title="Avançar">'+WI.out+'</button>':'')
@@ -3324,13 +3336,15 @@ function viewHtml(v){ const T=RT[v.type];
    +'<button type="button" data-vclose="'+v.id+'" aria-label="Fechar visualização" title="Fechar">'+WI.x+'</button></header><div class="rp-vb" data-vb="'+v.id+'">'+BODY[v.type](v)+'</div></section>'; }
 function rpCapture(){ $('rpBody').querySelectorAll('[data-vb]').forEach(el=>{const v=viewById(el.dataset.vb);if(v)v.scroll=el.scrollTop;}); }
 $('rpBody').addEventListener('scroll',e=>{ const el=e.target;if(el.dataset&&el.dataset.vb){const v=viewById(el.dataset.vb);if(v){v.scroll=el.scrollTop;wsSave();}}},true);
-function rpPaintBody(){ gr(); const t=rpTab(), b=$('rpBody'); const ys={}; b.querySelectorAll('[data-vb]').forEach(el=>{ ys[el.dataset.vb]=el.scrollTop; });
+function rpPaintBody(){ rpSig=gr().sig+'|'+curHref(); const t=rpTab(), b=$('rpBody'); const ys={}; b.querySelectorAll('[data-vb]').forEach(el=>{ ys[el.dataset.vb]=el.scrollTop; });
   if(!t){ b.innerHTML='<div class="rp-empty"><b>Painel vazio</b>Escolha uma ferramenta para trabalhar ao lado do conteúdo principal.'+toolBtns()+'</div>'; return; }
-  b.innerHTML=t.views.map((v,i)=>(i?'<div class="rp-split" role="separator" aria-orientation="horizontal" tabindex="0" data-split="'+(i-1)+'" aria-label="Redimensionar visualizações"></div>':'')+viewHtml(v)).join('');
+  b.innerHTML=t.views.map((v,i)=>(i?'<div class="rp-split" role="separator" aria-orientation="horizontal" tabindex="0" data-split="'+(i-1)+'" aria-label="Redimensionar visualizações"></div>':'')+viewHtml(v,t.views.length===1)).join('');
   b.querySelectorAll('[data-vb]').forEach(el=>{ el.scrollTop=ys[el.dataset.vb]??(viewById(el.dataset.vb)||{}).scroll??0; });
   b.querySelectorAll('[data-ai-box]').forEach(el=>{ if(aiMem[el.dataset.aiBox]) aiPaint(el.dataset.aiBox); }); }
 function rpPaintAll(){ gr(); rpPaintTabs(); rpPaintBody(); }
-function rpRefresh(){ const a=document.activeElement; if(a&&a.matches&&a.matches('#rpanel input')){ gr(); rpPaintTabs(); return; } rpPaintAll(); }
+let rpSig=null;
+function rpRefresh(){ const a=document.activeElement; if(a&&a.matches&&a.matches('#rpanel input')){ gr(); rpPaintTabs(); return; }
+  const t=rpTab(), sig=gr().sig+'|'+curHref(); if(t&&rpSig===sig&&t.views.every(v=>v.type==='explorar'||v.type==='obj')) return; rpPaintAll(); }
 function rpSelect(id){ rpCapture(); RP.active=id; wsSave(); rpPaintAll(); }
 function rpAddTab(type,ref){ const t={id:uid(),views:[{id:uid(),type,f:1,ref:ref||undefined}]}; RP.tabs.push(t); RP.active=t.id; wsSave(); if(!rpVisible()) openRP(true); else rpPaintAll(); }
 function rpStack(type,ref){ const t=rpTab(); if(!t){ rpAddTab(type,ref); return; } if(t.views.length>=3){ toast('Cada aba do painel aceita até 3 visualizações empilhadas'); return; } t.views.forEach(v=>{ v.f=1; }); const v={id:uid(),type,f:1,ref:ref||undefined};if(type==='back')t.views.unshift(v);else t.views.push(v); wsSave(); rpPaintAll(); }
