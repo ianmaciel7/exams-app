@@ -34,3 +34,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# extracted legacy bundles (local, regenerable from docs/archives/*.bundle)
+/.archive-extracted/
