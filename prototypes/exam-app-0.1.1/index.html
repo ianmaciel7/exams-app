@@ -299,7 +299,7 @@ svg{flex:none}
 .app{display:flex;height:100vh;height:100dvh}
 
 /* ---------- sidebar ---------- */
-.side{width:260px;flex:none;background:var(--side);border-right:1px solid var(--line);display:flex;flex-direction:column;transition:width .18s ease;position:relative;z-index:20}
+.side{width:288px;flex:none;background:var(--side);border-right:1px solid var(--line);display:flex;flex-direction:column;transition:width .18s ease;position:relative;z-index:20}
 .side-top{display:flex;align-items:center;gap:4px;padding:8px;padding-left:max(8px,env(safe-area-inset-left));position:relative}
 .icon-btn{width:34px;height:34px;display:grid;place-items:center;border-radius:8px;color:var(--muted)}
 .icon-btn:hover{background:var(--hover);color:var(--text)}
@@ -432,7 +432,7 @@ svg{flex:none}
 .app.collapsed .space-btn{flex:none;width:36px;justify-content:center;padding:0}
 .app.collapsed .actions{padding:2px 8px;display:flex;flex-direction:column;align-items:center}
 .app.collapsed .actions .row{width:36px;justify-content:center;padding:0}
-.app.collapsed .side-foot{margin-top:auto;display:flex;justify-content:center}
+.app.collapsed .side-foot{margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:4px}
 .app.collapsed .user-btn{width:40px;justify-content:center;padding:0}
 .app.collapsed .pop{left:52px}
 .app.collapsed .side-top .pop{top:8px}
@@ -918,6 +918,7 @@ a.rp-link:hover{background:var(--active)}
 .rp-acts{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}
 .rp-sec{font-size:11.5px;font-weight:600;color:var(--muted);margin:12px 0 4px;letter-spacing:.01em}
 .rp-graph{width:100%;height:auto;display:block;max-height:300px}
+.rp-graph.rp-graph-single{height:118px;max-height:none;margin:4px 0 8px}
 .rp-graph text{fill:var(--text);font-size:9.5px;font-family:inherit}
 .rp-graph .g-e{stroke:var(--line);stroke-width:1}
 .rp-graph .g-e.c{stroke:var(--faint);stroke-width:1.2}
@@ -998,12 +999,12 @@ a.rp-link:hover{background:var(--active)}
 .ws-tabs .ws-tablist{flex:0 1 auto;max-width:calc(100% - 154px)}
 .ws-tabs #rpToggle{margin-left:auto}
 @media(max-width:700px){.ws-tabs .ws-tablist{max-width:calc(100% - 138px)}}
-/* botão de recolher: aparece sobre o avatar do espaço (C) ao passar o mouse, (padrão Capacities) */
+/* Barra aberta mantém o controle visível; no trilho recolhido, ele aparece sobre o avatar em hover/foco. */
 @media (min-width:821px) and (hover:hover){
-  .side-top #collapse{position:absolute;z-index:3;left:16px;top:14px;width:24px;height:24px;border-radius:6px;background:var(--side);color:var(--text);opacity:0;transition:opacity .12s}
-  .side-top #collapse:hover,.side-top #collapse:focus-visible{opacity:1;background:var(--hover)}
-  .side-top #collapse svg{width:16px;height:16px}
-  .app.collapsed .side-top #collapse{left:16px}
+  .side-top #collapse{opacity:1}
+  .app.collapsed .side-top #collapse{position:absolute;z-index:3;left:16px;top:14px;width:24px;height:24px;border-radius:6px;background:var(--side);color:var(--text);opacity:0;transition:opacity .12s}
+  .app.collapsed .side-top #collapse:hover,.app.collapsed .side-top #collapse:focus-visible{opacity:1;background:var(--hover)}
+  .app.collapsed .side-top #collapse svg{width:16px;height:16px}
   .side-top .space-btn{flex:1}
 }
 @media(max-width:700px){.ws-tabs .ws-tablist{max-width:none}}
@@ -1011,23 +1012,25 @@ a.rp-link:hover{background:var(--active)}
 /* ===== abas v2 (barra superior e painel) ===== */
 .ws-tabs{height:46px;min-height:46px;padding:0 8px;gap:4px;align-items:center;box-sizing:border-box}
 .bar{height:46px}
-.ws-tabs .ws-tablist{flex:1 1 0;min-width:0;max-width:none;display:flex;align-items:center;gap:5px;overflow:hidden;height:46px}
+.ws-tabs .ws-tablist{flex:0 1 auto;min-width:0;max-width:calc(100% - 154px);display:flex;align-items:center;gap:5px;overflow:hidden;height:46px}
 .ws-tabs .ws-tab,.rp-top .rp-tabs .ws-tab{flex:none;box-sizing:border-box;height:32px;display:flex;align-items:center;gap:0;padding:3px 2px 3px 6px;border:.5px solid transparent;border-radius:8px;font-size:13px;margin:0;background:transparent;color:var(--muted);position:relative;min-width:82px;cursor:pointer;overflow:visible;transition:background-color .15s ease,color .15s ease,border-color .15s ease;order:0;position:relative}
 .ws-tabs .ws-tab.pinned{order:0;position:relative;background:transparent;flex-basis:auto}
 .ws-tabs .ws-tab.pinned .ws-ti:after{content:none}
 .ws-tabs .ws-tab:hover,.rp-top .rp-tabs .ws-tab:hover{background:var(--hover);color:var(--text)}
-.ws-tabs .ws-tab.on,.ws-tabs .ws-tab.pinned.on,.rp-top .rp-tabs .ws-tab.on{background:var(--bg);border-color:var(--line);color:var(--text);font-weight:500;box-shadow:none}
+.ws-tabs .ws-tab.on,.ws-tabs .ws-tab.pinned.on,.rp-top .rp-tabs .ws-tab.on{background:transparent;border-color:transparent;color:var(--text);font-weight:500;box-shadow:none}
 .ws-tab+.ws-tab:before{content:'';position:absolute;left:-3px;top:50%;width:.5px;height:18px;margin-top:-9px;background:var(--line);transition:opacity .15s ease;pointer-events:none}
 .ws-tab:hover:before,.ws-tab:hover+.ws-tab:before,.ws-tab.on:before,.ws-tab.on+.ws-tab:before{opacity:0}
 .ws-tmain{flex:1 1 0;min-width:44px;min-height:32px;height:100%;display:flex;align-items:center;gap:7px}
 .ws-tabs .ws-tab .ws-tt{flex:1;min-width:0}
 .ws-tact{flex:none;width:20px;height:100%;display:flex;align-items:center;justify-content:flex-end;gap:2px;overflow:hidden;transition:width .2s ease}
-.ws-tab:hover .ws-tact,.ws-tab:focus-within .ws-tact,.ws-tab.on .ws-tact{width:38px}
+.ws-tab:hover .ws-tact,.ws-tab:focus-within .ws-tact{width:38px}
 .ws-tab.narrow:hover .ws-tact,.ws-tab.narrow:focus-within .ws-tact,.ws-tab.narrow.on .ws-tact{width:20px}
 .ws-tab.narrow .ws-tp{display:none}
 .ws-tact button{width:18px;height:18px;border-radius:5px;display:grid;place-items:center;flex:none;color:var(--muted);opacity:0;transition:opacity .15s ease,background-color .15s ease}
 .ws-tact button svg{width:12px;height:12px}
-.ws-tab:hover .ws-tact button,.ws-tab:focus-within .ws-tact button,.ws-tab.on .ws-tact button,.ws-tact .ws-tp.pinned{opacity:1}
+.ws-tab:hover .ws-tact button,.ws-tab:focus-within .ws-tact button,.ws-tact .ws-tp.pinned{opacity:1}
+.ws-tabs .ws-tab.on .ws-tact .ws-tx{opacity:0}
+.ws-tabs .ws-tab:hover .ws-tact .ws-tx,.ws-tabs .ws-tab:focus-within .ws-tact .ws-tx,.ws-tabs .ws-tab .ws-tact .ws-tx:focus-visible{opacity:1}
 .ws-tact button:hover{background:var(--active);color:var(--text)}
 .ws-tab.drop-before{box-shadow:inset 2px 0 var(--accent,var(--text))}
 .ws-tab.drop-after{box-shadow:inset -2px 0 var(--accent,var(--text))}
@@ -1051,6 +1054,7 @@ a.rp-link:hover{background:var(--active)}
 .rp-top .rp-tabs .ws-tab{min-width:110px;max-width:170px}
 .rp-top .ws-tab .ws-tx{width:20px;height:20px}
 .rp-top .icon-btn{width:30px;height:30px;margin:0}
+.ws-nav #histFwd:disabled{display:none}
 @media(max-width:700px){.ws-tabs{height:46px;padding:0 5px}.ws-tabs>.icon-btn{height:36px}}
 @media(prefers-reduced-motion:reduce){.ws-tab,.ws-tact,.ws-tact button,.ws-tab:before{transition:none!important}}
 </style>
@@ -3248,8 +3252,8 @@ function miniMenu(anchor,items){ closeMini(); const r=anchor.getBoundingClientRe
 let ovOpen=false;
 const rpVisible=()=>MQT.matches?ovOpen:!!RP.open;
 function applyRP(focusBack){ const on=rpVisible(); const el=$('rpanel'); el.hidden=!on; el.style.setProperty('--rpw',RP.w+'px'); app.classList.toggle('rp-open',on);
-  const tg=$('rpToggle'); tg.setAttribute('aria-pressed',on); tg.setAttribute('aria-label',on?'Ocultar painel contextual':'Mostrar painel contextual');
-  if(on){ rpPaintAll(); ensureRoom(); if(MQT.matches){ const a=$('rpTabs').querySelector('.on')||$('rpAdd'); a&&a.focus(); } } else if(focusBack&&MQT.matches) tg.focus(); }
+  const tg=$('rpToggle'); tg.hidden=on; tg.setAttribute('aria-pressed',on); tg.setAttribute('aria-label',on?'Ocultar painel contextual':'Mostrar painel contextual');
+  if(on){ rpPaintAll(); ensureRoom(); const a=$('rpTabs').querySelector('.on')||$('rpAdd'); a&&a.focus(); } else if(focusBack) tg.focus(); }
 function openRP(on){ if(MQT.matches) ovOpen=on; else { RP.open=on; wsSave(); } applyRP(!on); }
 function ensureRoom(){ if(MQT.matches) return; const m=document.querySelector('.main'); if(m&&m.offsetWidth<520&&!app.classList.contains('collapsed')) setCollapsed(true); }
 MQT.addEventListener('change',()=>{ ovOpen=false; applyRP(false); wsPaintNav(); });
@@ -3283,7 +3287,7 @@ function bodyRel(v){ const n=vNode(v); if(!n) return needCtx(); const g=gr().N, 
   const L=[...sc.values()].sort((a,b)=>b.c-a.c||a.n.title.localeCompare(b.n.title,'pt-BR',{numeric:true})).slice(0,12);
   if(!L.length) return ctxBar(v,n)+rpEmpty('Sem conteúdo relacionado','Objetos que compartilham banca, edição, cargo ou disciplina com “'+n.title+'” aparecem aqui.');
   return ctxBar(v,n)+'<div class="rp-list">'+L.map(s=>rpRow(s.n,'via '+s.via.join(', '))).join('')+'</div>'; }
-function bodyGraf(v){ const n=vNode(v); if(!n) return needCtx(); const all=nbrs(n), MAX=14, ns=all.slice(0,MAX), W=300,H=250,cx=W/2,cy=H/2-6,R=Math.min(96,40+ns.length*6);
+function bodyGraf(v){ const n=vNode(v); if(!n) return needCtx(); const all=nbrs(n); if(!all.length) return ctxBar(v,n)+rpEmpty('Sem ligações diretas','Este objeto ainda não possui relações para mostrar no gráfico.')+'<div class="rp-acts"><a class="rp-btn" href="#/grafico" data-main-link>'+WI.graph+' Abrir gráfico completo</a></div>'; if(all.length===1){ const m=all[0], cut=x=>x.title.length>16?x.title.slice(0,15)+'…':x.title; const single='<svg class="rp-graph rp-graph-single" viewBox="0 0 300 110" role="group" aria-label="Ligação entre '+esc(n.title)+' e '+esc(m.title)+'"><line class="g-e c" x1="92" y1="43" x2="208" y2="43"/><a href="'+esc(n.href)+'" class="g-n g-c k-'+n.kind+'" aria-label="'+esc(kn(n.kind)+': '+n.title)+'"><title>'+esc(n.title)+'</title><circle cx="80" cy="43" r="11"/><text x="80" y="76" text-anchor="middle">'+esc(cut(n))+'</text></a><a href="'+esc(m.href)+'" class="g-n g-c k-'+m.kind+'" aria-label="'+esc(kn(m.kind)+': '+m.title)+'"><title>'+esc(m.title)+'</title><circle cx="220" cy="43" r="11"/><text x="220" y="76" text-anchor="middle">'+esc(cut(m))+'</text></a></svg>'; return ctxBar(v,n)+single+'<div class="rp-acts"><a class="rp-btn" href="#/grafico" data-main-link>'+WI.graph+' Abrir gráfico completo</a></div>'; } const MAX=14, ns=all.slice(0,MAX), W=300,H=250,cx=W/2,cy=H/2-6,R=Math.min(96,40+ns.length*6);
   const pos=new Map(); ns.forEach((m,i)=>{ const a=-Math.PI/2+i*2*Math.PI/Math.max(ns.length,1); pos.set(m.href,[cx+R*Math.cos(a)*1.25,cy+R*Math.sin(a)]); }); pos.set(n.href,[cx,cy]);
   let s='<svg class="rp-graph" viewBox="0 0 '+W+' '+H+'" role="group" aria-label="Gráfico de ligações de '+esc(n.title)+'">'; const seen=new Set();
   ns.concat([n]).forEach(a=>a.out.forEach(([h])=>{ if(!pos.has(h)) return; const k=[a.href,h].sort().join('|'); if(seen.has(k)) return; seen.add(k); const p=pos.get(a.href),q=pos.get(h); s+='<line class="g-e'+(a===n||h===n.href?' c':'')+'" x1="'+p[0].toFixed(1)+'" y1="'+p[1].toFixed(1)+'" x2="'+q[0].toFixed(1)+'" y2="'+q[1].toFixed(1)+'"/>'; }));
