@@ -840,7 +840,7 @@ a.ot{display:block;padding:3px 0;min-height:24px}
 .ws-tabs>.icon-btn,.rp-top>.icon-btn{width:30px;height:30px;align-self:center;margin-bottom:3px;flex:none}
 .ws-tabs>.icon-btn svg,.rp-top>.icon-btn svg{width:17px;height:17px}
 .ws-tabs>.icon-btn[aria-pressed="true"]{background:var(--active);color:var(--text)}
-#wsSide{display:none}
+#wsSide{display:grid;place-items:center}
 .ws-tablist,.rp-tabs{flex:1;min-width:0;display:flex;align-items:flex-end;gap:2px;overflow-x:auto;scrollbar-width:none;height:100%}
 .ws-tablist::-webkit-scrollbar,.rp-tabs::-webkit-scrollbar{display:none}
 .ws-tab{flex:0 1 200px;min-width:96px;height:34px;display:flex;align-items:center;gap:7px;padding:0 5px 0 10px;border:1px solid transparent;border-bottom:0;border-radius:9px 9px 0 0;color:var(--muted);cursor:pointer;margin-bottom:-1px;font-size:13px;position:relative}
@@ -1015,10 +1015,19 @@ a.rp-link:hover{background:var(--active)}
 @media(max-width:700px){.ws-tabs .ws-tablist{max-width:none}}
 
 /* ===== abas v2 (barra superior e painel) ===== */
-.ws-tabs{height:46px;min-height:46px;padding:0 8px;gap:4px;align-items:center;box-sizing:border-box;background:var(--app-tab-bg-back)}
+.ws-tabs{height:46px;min-height:46px;padding:0 8px;gap:6px;align-items:center;box-sizing:border-box;background:var(--app-tab-bg-back)}
 .rp-top{background:var(--app-tab-bg-back)}
-.bar{height:46px}
-.ws-tabs .ws-tablist{flex:0 1 auto;min-width:0;max-width:calc(100% - 154px);display:flex;align-items:center;gap:5px;overflow:hidden;height:46px}
+.bar{display:none;height:46px}
+.main.has-pdf .bar,.main.study-mode .bar{display:flex}
+.ws-sp-btn{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 8px;border-radius:8px;border:none;background:transparent;color:var(--text);font-size:13px;font-weight:600;cursor:pointer;flex:none;transition:background-color .15s ease}
+.ws-sp-btn:hover{background:var(--app-tab-bg-back-hover)}
+.ws-sp-btn .sp-ic{font-size:14px;line-height:1}
+.ws-sp-btn .sp-lbl{white-space:nowrap;max-width:140px;overflow:hidden;text-overflow:ellipsis}
+.ws-sp-btn .sp-chev{width:11px;height:11px;color:var(--muted);opacity:.75}
+#wsTabs .hist.ws-nav{display:flex;align-items:center;gap:2px;flex:none;margin:0 2px}
+#wsTabs .hist.ws-nav .icon-btn{width:28px;height:28px}
+#wsTabs #rpToggle{margin-left:auto}
+.ws-tabs .ws-tablist{flex:0 1 auto;min-width:0;max-width:calc(100% - 240px);display:flex;align-items:center;gap:5px;overflow:hidden;height:46px}
 .ws-tabs .ws-tab,.rp-top .rp-tabs .ws-tab{flex:none;box-sizing:border-box;height:32px;display:flex;align-items:center;gap:0;padding:3px 2px 3px 6px;border:.5px solid transparent;border-radius:8px;font-size:13px;margin:0;background:transparent;color:var(--app-tab-text-subtle);position:relative;min-width:82px;cursor:pointer;overflow:visible;transition:background-color .15s ease,color .15s ease,border-color .15s ease;order:0;position:relative}
 .ws-tabs .ws-tab.pinned{order:0;position:relative;background:transparent;flex-basis:auto}
 .ws-tabs .ws-tab.pinned .ws-ti:after{content:none}
@@ -1129,7 +1138,9 @@ a.rp-link:hover{background:var(--active)}
 
   <main class="main">
     <div class="ws-tabs" id="wsTabs">
-      <button class="icon-btn" id="wsSide" aria-label="Abrir barra lateral" title="Barra lateral"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/></svg></button>
+      <button class="ws-sp-btn" id="spTopBtn" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Alternar espaço"><span class="sp-ic" id="spTopAv">💡</span><b class="sp-lbl" id="spTopName">Concurso de TI</b><svg class="sp-chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg></button>
+      <button class="icon-btn" id="wsSide" aria-label="Alternar barra lateral" title="Barra lateral (Ctrl+\)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/></svg></button>
+      <div class="hist ws-nav"><button class="icon-btn" id="histBack" aria-label="Voltar (Alt+←)" title="Voltar (Alt+←)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button><button class="icon-btn" id="histFwd" aria-label="Avançar (Alt+→)" title="Avançar (Alt+→)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></div>
       <div class="ws-tablist" id="wsTabList" role="tablist" aria-label="Abas principais"></div>
       <button class="icon-btn" id="wsNew" aria-label="Nova aba" title="Nova aba (Ctrl+T)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
       <button class="icon-btn" id="rpToggle" aria-pressed="false" aria-controls="rpanel" aria-label="Painel contextual" title="Painel contextual (Ctrl+\)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M15 4v16"/></svg></button>
@@ -1139,7 +1150,6 @@ a.rp-link:hover{background:var(--active)}
       <button class="icon-btn open-side" id="openSide" aria-label="Abrir barra lateral">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/></svg>
       </button>
-      <div class="hist"><button class="icon-btn" id="histBack" aria-label="Voltar (Alt+←)" title="Voltar (Alt+←)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button><button class="icon-btn" id="histFwd" aria-label="Avançar (Alt+→)" title="Avançar (Alt+→)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></div>
       <div class="title"><b id="docTitle">…</b><span id="docMeta"></span></div>
       <div class="tools">
         <button id="propBtn" aria-expanded="false" aria-controls="props" aria-label="Propriedades" title="Propriedades do objeto"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5h0"/></svg></button>
@@ -1413,14 +1423,28 @@ function paintSpaces(){
   const sp=spaces.find(x=>x.id===space);
   $('spAv').textContent=sp.name[0].toUpperCase(); $('spAv').style.background=spColor(sp);
   $('spName').textContent=sp.name;
+  if($('spTopName')) $('spTopName').textContent=sp.name;
   $('spPop').innerHTML=spaces.map(x=>
     '<div class="row" role="menuitem" tabindex="0" data-sp="'+x.id+'"><span class="av" style="background:'+spColor(x)+'">'+esc(x.name[0].toUpperCase())+'</span><span class="t">'+esc(x.name)+'</span>'+(x.id===space?CHECK:'')+'<button class="more" data-spmore="'+x.id+'" aria-label="Ações do espaço" title="Mais ações">'+I.more+'</button></div>').join('')+
     '<hr><button class="row" role="menuitem" data-sp="+"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span class="t">Criar espaço</span></button>';
 }
 
 /* ---- popovers ---- */
-function closePops(){ ['spPop','usPop'].forEach(i=>$(i).classList.remove('open')); ['spBtn','usBtn'].forEach(i=>$(i).setAttribute('aria-expanded','false')); }
-function togglePop(btn,pop){ const o=!$(pop).classList.contains('open'); closePops(); if(o){ $(pop).classList.add('open'); $(btn).setAttribute('aria-expanded','true'); const f=$(pop).querySelector('button'); f&&f.focus({preventScroll:true}); } }
+function closePops(){ ['spPop','usPop'].forEach(i=>$(i).classList.remove('open')); ['spBtn','usBtn','spTopBtn'].forEach(i=>{ const el=$(i); if(el) el.setAttribute('aria-expanded','false'); }); }
+function togglePop(btn,pop){
+  const el=$(pop), b=$(btn); const o=!el.classList.contains('open'); closePops();
+  if(o){
+    el.classList.add('open'); if(b) b.setAttribute('aria-expanded','true');
+    if(btn==='spTopBtn'){
+      const r=b.getBoundingClientRect();
+      el.style.position='fixed'; el.style.left=Math.max(8,r.left)+'px'; el.style.top=(r.bottom+6)+'px'; el.style.zIndex='999';
+    } else {
+      el.style.position=''; el.style.left=''; el.style.top=''; el.style.zIndex='';
+    }
+    const f=el.querySelector('button, [tabindex="0"]'); f&&f.focus({preventScroll:true});
+  }
+}
+if($('spTopBtn')) $('spTopBtn').onclick=e=>{ e.stopPropagation(); togglePop('spTopBtn','spPop'); };
 $('spBtn').onclick=e=>{ e.stopPropagation(); togglePop('spBtn','spPop'); };
 $('usBtn').onclick=e=>{ e.stopPropagation(); togglePop('usBtn','usPop'); };
 document.addEventListener('click',e=>{ if(!e.target.closest('.pop')) closePops(); });
@@ -3433,10 +3457,40 @@ function buildGraph(){
   const toW=(px,py)=>[(px-st.tx)/st.k,(py-st.ty)/st.k];
   const weak=(p,q)=>{ const hi=Math.max(p.deg,q.deg), lo=Math.min(p.deg,q.deg); return hi>40&&lo<=8; };
   const tick=()=>{ const a=st.alpha, N=nodes.length;
-    for(let i=0;i<N;i++){ const p=nodes[i]; if(!p.on) continue; for(let j=i+1;j<N;j++){ const q=nodes[j]; if(!q.on) continue; let dx=p.x-q.x,dy=p.y-q.y,d2=dx*dx+dy*dy; if(d2>250000) continue; if(d2<1){ dx=Math.random()-.5; dy=Math.random()-.5; d2=1; } const f=(3200*a*(1+Math.sqrt(p.deg*q.deg)*.08))/d2, d=Math.sqrt(d2); p.vx+=dx/d*f*d; p.vy+=dy/d*f*d; q.vx-=dx/d*f*d; q.vy-=dy/d*f*d; } }
-    edges.forEach(([i,j])=>{ const p=nodes[i],q=nodes[j]; if(!p.on||!q.on||weak(p,q)) return; const dx=q.x-p.x,dy=q.y-p.y,d=Math.sqrt(dx*dx+dy*dy)||1,mx=Math.max(p.deg,q.deg),f=(d-(34+Math.min(46,Math.sqrt(mx)*7)))*.09*Math.max(a,.15)/Math.pow(Math.max(1,mx),.8); p.vx+=dx/d*f; p.vy+=dy/d*f; q.vx-=dx/d*f; q.vy-=dy/d*f; });
-    nodes.forEach((p,i)=>{ if(!p.on||i===st.drag) { p.vx=0; p.vy=0; return; } p.vx-=p.x*.006; p.vy-=p.y*.006; p.vx*=.7; p.vy*=.7; p.x+=p.vx; p.y+=p.vy; });
-    st.alpha*=.988; };
+    for(let i=0;i<N;i++){ const p=nodes[i]; if(!p.on) continue;
+      for(let j=i+1;j<N;j++){ const q=nodes[j]; if(!q.on) continue;
+        let dx=p.x-q.x, dy=p.y-q.y, d2=dx*dx+dy*dy;
+        if(d2>360000) continue;
+        if(d2<1){ dx=(Math.random()-.5)*2; dy=(Math.random()-.5)*2; d2=dx*dx+dy*dy||1; }
+        const d=Math.sqrt(d2);
+        const rMin=rad(p)+rad(q)+14;
+        if(d<rMin){ const overlap=(rMin-d)*0.4, nx=dx/d, ny=dy/d; p.vx+=nx*overlap; p.vy+=ny*overlap; q.vx-=nx*overlap; q.vy-=ny*overlap; }
+        const str=3800*(1+Math.sqrt(p.deg*q.deg)*0.1);
+        const f=(str*a)/(d2+280);
+        const fx=(dx/d)*f, fy=(dy/d)*f;
+        p.vx+=fx; p.vy+=fy; q.vx-=fx; q.vy-=fy;
+      }
+    }
+    edges.forEach(([i,j])=>{ const p=nodes[i], q=nodes[j];
+      if(!p.on||!q.on||weak(p,q)) return;
+      const dx=q.x-p.x, dy=q.y-p.y, d=Math.hypot(dx,dy)||1;
+      const targetDist=58+Math.min(32,Math.sqrt(Math.max(p.deg,q.deg))*5);
+      const disp=d-targetDist;
+      const k=0.048*Math.max(a,0.16)/Math.pow(Math.max(1,Math.min(p.deg,q.deg)),0.32);
+      const fx=(dx/d)*disp*k, fy=(dy/d)*disp*k;
+      p.vx+=fx; p.vy+=fy; q.vx-=fx; q.vy-=fy;
+    });
+    const t=Date.now()*0.001;
+    nodes.forEach((p,i)=>{
+      if(!p.on||i===st.drag){ p.vx=0; p.vy=0; return; }
+      p.vx-=p.x*0.0035; p.vy-=p.y*0.0035;
+      p.vx+=Math.cos(t+i*1.618)*0.045;
+      p.vy+=Math.sin(t*0.9+i*2.1)*0.045;
+      p.vx*=0.88; p.vy*=0.88;
+      p.x+=p.vx; p.y+=p.vy;
+    });
+    st.alpha=Math.max(st.alpha*0.992, 0.018);
+  };
   const fit=(anim)=>{ const v=nodes.filter(o=>o.on); if(!v.length||!st.W) return; let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9; v.forEach(o=>{ x0=Math.min(x0,o.x); y0=Math.min(y0,o.y); x1=Math.max(x1,o.x); y1=Math.max(y1,o.y); }); const pad=70, k=Math.max(.25,Math.min(2.2,Math.min((st.W-pad*2)/Math.max(x1-x0,60),(st.H-pad*2)/Math.max(y1-y0,60)))); st.k=k; st.tx=st.W/2-(x0+x1)/2*k; st.ty=st.H/2-(y0+y1)/2*k; };
   const draw=()=>{ const dark=css.getPropertyValue('--text').trim()||'#222', faint=css.getPropertyValue('--faint').trim()||'#888', bg=css.getPropertyValue('--bg').trim()||'#fff';
     ctx.setTransform(st.dpr,0,0,st.dpr,0,0); ctx.clearRect(0,0,st.W,st.H); ctx.setTransform(st.dpr*st.k,0,0,st.dpr*st.k,st.dpr*st.tx,st.dpr*st.ty);
@@ -3447,10 +3501,10 @@ function buildGraph(){
     ctx.textAlign='center'; ctx.textBaseline='top'; ctx.font='500 '+(11.5/st.k)+'px Inter,system-ui,sans-serif';
     nodes.forEach((o,i)=>{ if(!o.on) return; const show=(hn&&hn.has(i))||(mt&&mt.has(i))||(!hn&&!mt&&(o.deg>=7?true:(o.n.kind!=='questao'?st.k>.9:st.k>2.2))); if(!show) return; ctx.globalAlpha=1; const t=o.n.title.length>34?o.n.title.slice(0,33)+'…':o.n.title; ctx.lineWidth=3/st.k; ctx.strokeStyle=bg; ctx.strokeText(t,o.x,o.y+rad(o)+3/st.k); ctx.fillStyle=dark; ctx.fillText(t,o.x,o.y+rad(o)+3/st.k); });
     ctx.globalAlpha=1; };
-  const loop=()=>{ if(st.stop||!document.body.contains(cv)){ st.stop=true; return; } if(st.alpha>.012||st.drag>=0){ tick(); if(st.drag>=0) st.alpha=Math.max(st.alpha,.3); st.dirty=true; } if(st.dirty){ draw(); st.dirty=false; } st.raf=requestAnimationFrame(loop); };
+  const loop=()=>{ if(st.stop||!document.body.contains(cv)){ st.stop=true; return; } if(st.drag>=0) st.alpha=Math.max(st.alpha,.4); tick(); draw(); st.raf=requestAnimationFrame(loop); };
   const size=()=>{ const r=wrap.getBoundingClientRect(); st.dpr=Math.min(2,devicePixelRatio||1); st.W=Math.max(200,r.width); st.H=Math.max(200,r.height); cv.width=st.W*st.dpr; cv.height=st.H*st.dpr; cv.style.width=st.W+'px'; cv.style.height=st.H+'px'; st.dirty=true; };
   size(); if(window.ResizeObserver){ st.ro=new ResizeObserver(()=>{ const first=!st.sized; const ow=st.W; size(); if(first||!ow) fit(); st.sized=true; }); st.ro.observe(wrap); }
-  if(matchMedia('(prefers-reduced-motion:reduce)').matches){ for(let i=0;i<400;i++) tick(); st.alpha=0; } else { for(let i=0;i<260;i++) tick(); st.alpha=.2; }
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches){ for(let i=0;i<400;i++) tick(); draw(); } else { for(let i=0;i<180;i++) tick(); fit(); st.sized=true; st.dirty=true; loop(); }
   fit(); st.sized=true; st.dirty=true; loop();
   const hit=(px,py)=>{ const [wx,wy]=toW(px,py); let b=-1,bd=1e9; nodes.forEach((o,i)=>{ if(!o.on) return; const dx=o.x-wx,dy=o.y-wy,d=Math.sqrt(dx*dx+dy*dy),r=rad(o)+5/st.k; if(d<r&&d<bd){ b=i; bd=d; } }); return b; };
   const rel=e=>{ const r=cv.getBoundingClientRect(); return [e.clientX-r.left,e.clientY-r.top]; };
@@ -3463,7 +3517,7 @@ function buildGraph(){
   cv.addEventListener('pointermove',e=>{ const [px,py]=rel(e); if(ptrs.has(e.pointerId)) ptrs.set(e.pointerId,[px,py]);
     if(ptrs.size===2){ const v=[...ptrs.values()], d=Math.hypot(v[0][0]-v[1][0],v[0][1]-v[1][1]); if(pinch) zoomAt((v[0][0]+v[1][0])/2,(v[0][1]+v[1][1])/2,d/pinch); pinch=d; return; }
     if(down){ if(Math.hypot(e.clientX-down.x,e.clientY-down.y)>4) down.moved=true; }
-    if(st.drag>=0&&down&&down.moved){ const [wx,wy]=toW(px,py), o=nodes[st.drag]; o.x=wx; o.y=wy; st.alpha=Math.max(st.alpha,.3); tip.hidden=true; st.dirty=true; }
+    if(st.drag>=0&&down&&down.moved){ const [wx,wy]=toW(px,py), o=nodes[st.drag]; o.vx=(wx-o.x)*0.35; o.vy=(wy-o.y)*0.35; o.x=wx; o.y=wy; st.alpha=Math.max(st.alpha,.35); tip.hidden=true; st.dirty=true; }
     else if(pan){ st.tx=pan.tx+(px-pan.x); st.ty=pan.ty+(py-pan.y); st.dirty=true; }
     else if(!ptrs.size||e.pointerType==='mouse') setHover(hit(px,py),e); });
   const end=e=>{ ptrs.delete(e.pointerId); pinch=0; if(down&&!down.moved&&down.i>=0&&e.type==='pointerup'){ const h=nodes[down.i].n.href; if(e.ctrlKey||e.metaKey) wsOpenTab(h); else if(e.shiftKey) rpOpenObj(h); else wsOpenMain(h); }
@@ -3492,7 +3546,7 @@ document.addEventListener('keydown',e=>{ const t=e.target; if(t&&(t.isContentEdi
 
 
 // Workspace management: separate tab sets, explicit overflow, context menus and drag targets.
-const historyGroup=document.querySelector('.hist');historyGroup.classList.add('ws-nav');$('wsTabs').insertBefore(historyGroup,$('wsTabList'));
+const historyGroup=document.querySelector('#wsTabs .hist');
 function overflowButton(id,label,list,fn){const b=document.createElement('button');b.id=id;b.className='icon-btn';b.setAttribute('aria-label',label);b.title=label;b.setAttribute('aria-haspopup','menu');b.textContent='⌄';list.parentNode.insertBefore(b,list.nextSibling);b.onclick=()=>miniMenu(b,fn());}
 { const b=document.createElement('button'); b.id='wsOverflow'; b.className='icon-btn'; b.type='button'; b.setAttribute('aria-label','Lista de abas'); b.title='Lista de abas'; b.setAttribute('aria-haspopup','dialog'); b.setAttribute('aria-expanded','false');
   b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>'; $('wsTabList').after(b); b.after($('wsNew')); b.onclick=()=>openTabMenu(); }
