@@ -421,7 +421,7 @@ svg{flex:none}
 .sec-hw .add:hover{background:var(--active)}
 .sec-hw .add[data-sort]{background:none;color:var(--muted)}
 .sec-hw .add[data-sort]:hover{background:var(--hover);color:var(--text)}
-.sec-hw:hover .cnt,.sec-hw:hover .add,.sec-hw:focus-within .cnt,.sec-hw:focus-within .add{opacity:1}
+.sec-hw:hover .cnt,.sec-hw:hover .add,.sec-hw:has(:focus-visible) .cnt,.sec-hw:has(:focus-visible) .add{opacity:1}
 @media (hover:none){.sec-hw .add{opacity:1}}
 /* collapsed rail (desktop) */
 .app.collapsed .side{width:56px}
