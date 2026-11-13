@@ -1,0 +1,12 @@
+{
+  "color": "yellow",
+  "h": 340,
+  "kind": "rounded",
+  "size": "small",
+  "text": "**Ordem de prioridade**\n1. Organização visual\n2. Acessibilidade (WCAG AA)\n3. Densidade e espaçamento compactos\n4. Estados: carregando, vazio, erro com nova tentativa\n5. Manter todas as funções\nResumo completo: referencias/diretrizes-ui-ux-2026.md",
+  "textAlign": "left",
+  "type": "shape",
+  "w": 700,
+  "x": 24,
+  "y": 6556
+}

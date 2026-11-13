@@ -1,0 +1,12 @@
+{
+  "color": "green",
+  "h": 200,
+  "kind": "rounded",
+  "size": "small",
+  "text": "**Banca (Exam Board)**\ntítulo (ex.: FGV)\nconcursos: automático\nedições: automático",
+  "textAlign": "left",
+  "type": "shape",
+  "w": 300,
+  "x": 752,
+  "y": 2920
+}

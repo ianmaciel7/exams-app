@@ -1,0 +1,12 @@
+{
+  "color": "green",
+  "h": 230,
+  "kind": "rounded",
+  "size": "small",
+  "text": "**Questão (Question)**\nenunciado e instrução (conteúdo)\nformato: única, múltipla, certo/errado, lacuna\ngabarito e anulada (caixa)\ngabarito comentado (conteúdo)\ndificuldade e situação (rótulos)\n**origem (Source): Oficial, Gerada por IA ou Manual (rótulo); Oficial liga ao PDF da prova e à edição**\nano (número)\ndisciplina, banca, órgão, edição e cargo (relações)",
+  "textAlign": "left",
+  "type": "shape",
+  "w": 300,
+  "x": 388,
+  "y": 2680
+}

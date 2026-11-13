@@ -1,0 +1,12 @@
+{
+  "color": "green",
+  "h": 230,
+  "kind": "rounded",
+  "size": "small",
+  "text": "**Questão (Question): campos da página (v109)**\nmétricas calculadas das Respostas: tentativas, acertos, erros, % de acerto, sequência, última resposta, alternativa errada mais marcada, simulados que a incluíram\nsituação (rótulo): nunca respondida, acertei, errei ou para revisar\npara revisar e favorita (marcações)\nanotações (conteúdo)\ngabarito oficial (letra) com link ao PDF do gabarito\nposição na lista e questões relacionadas por disciplina\nfalta: tempo médio, etiquetas",
+  "textAlign": "left",
+  "type": "shape",
+  "w": 300,
+  "x": 1520,
+  "y": 2680
+}

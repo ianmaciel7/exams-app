@@ -1,0 +1,12 @@
+{
+  "color": "green",
+  "h": 340,
+  "kind": "rounded",
+  "size": "small",
+  "text": "**Feito na 0.1.1**\nContraste ajustado nas cores de texto\nLink de pular para o conteúdo e rótulos de navegação\nMigalhas no lugar de caixas repetidas\nNavegação de seções fixa no topo\nBotão Continuar leitura (página x de y)\nPDF com limite de tempo e botão Tentar de novo\nMovimento reduzido respeitado\n**Falta:** banco de questões, filtros e simulados (ainda não existem)",
+  "textAlign": "left",
+  "type": "shape",
+  "w": 720,
+  "x": 756,
+  "y": 6556
+}

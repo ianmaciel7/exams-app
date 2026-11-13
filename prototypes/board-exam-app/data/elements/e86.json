@@ -1,0 +1,12 @@
+{
+  "color": "blue",
+  "h": 240,
+  "kind": "rounded",
+  "size": "small",
+  "text": "**Tipo de Objeto (Object Type)**\nnome e ícone\nlista de definições de propriedade\nPode estender outro tipo e herdar suas propriedades\nEx.: Arquivo → Documento → PDF",
+  "textAlign": "left",
+  "type": "shape",
+  "w": 300,
+  "x": 752,
+  "y": 1552
+}

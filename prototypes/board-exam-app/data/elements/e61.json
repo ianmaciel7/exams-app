@@ -1,0 +1,12 @@
+{
+  "color": "green",
+  "h": 200,
+  "kind": "rounded",
+  "size": "small",
+  "text": "**Edição (Edition)**\nconcurso (relação)\ntítulo e ano (ex.: Dataprev 2026)\nbanca (relação)\ntipo (rótulo): concurso ou certificação\ndocumentos, cargos e provas: automático",
+  "textAlign": "left",
+  "type": "shape",
+  "w": 300,
+  "x": 388,
+  "y": 2200
+}

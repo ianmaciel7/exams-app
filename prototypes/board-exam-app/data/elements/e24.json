@@ -1,0 +1,12 @@
+{
+  "color": "peach",
+  "h": 220,
+  "kind": "rounded",
+  "size": "small",
+  "text": "**Espaço**\nnome e ícone\ndono (conta)\nisolado: nada cruza entre espaços\nEx.: Concurso de TI",
+  "textAlign": "left",
+  "type": "shape",
+  "w": 300,
+  "x": 24,
+  "y": 1110
+}

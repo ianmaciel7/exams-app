@@ -1,0 +1,12 @@
+{
+  "color": "peach",
+  "h": 400,
+  "kind": "rounded",
+  "size": "small",
+  "text": "**Fluxo de questões**\nfornecedor → exame → tópico → questão\nquestão tem: enunciado, imagem (exhibit),\nalternativas ou áreas de resposta,\nresposta sugerida, votação da comunidade e discussão\ndiscussão → comentários\ncomentário tem: usuário, resposta selecionada, votos positivos\n\nJá temos no modelo: fornecedor em Exame, exame → tópico → questão, alternativas.",
+  "textAlign": "left",
+  "type": "shape",
+  "w": 700,
+  "x": 2352,
+  "y": 2630
+}

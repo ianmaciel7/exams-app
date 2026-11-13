@@ -1,0 +1,12 @@
+{
+  "color": "peach",
+  "h": 150,
+  "kind": "rounded",
+  "size": "small",
+  "text": "**Questão em 4 grupos**\nmetadados: prova ou concurso, disciplina e assunto, modalidade e dificuldade, situação\nconteúdo: texto associado, enunciado, alternativas ou itens, imagens e anexos\ncorreção: gabarito, explicação, comentários\nestudo: respostas do usuário, anotações, marcações, cadernos, aulas, estatísticas",
+  "textAlign": "left",
+  "type": "shape",
+  "w": 1404,
+  "x": 1628,
+  "y": 2355
+}

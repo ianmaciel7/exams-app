@@ -1,0 +1,12 @@
+{
+  "color": "green",
+  "h": 200,
+  "kind": "rounded",
+  "size": "small",
+  "text": "**Simulado (Mock Exam)**\nedição e cargo (relações)\nano\nquestões em ordem\ntempo limite e modo: prova ou estudo\ntentativas: histórico de respostas e resultado",
+  "textAlign": "left",
+  "type": "shape",
+  "w": 300,
+  "x": 752,
+  "y": 2440
+}

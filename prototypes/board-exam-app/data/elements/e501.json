@@ -1,0 +1,12 @@
+{
+  "color": "green",
+  "h": 360,
+  "kind": "rounded",
+  "size": "small",
+  "text": "**Esquerda: sidebar**\nnavegação global, recolhível; espaços, tipos, fixados, busca e criar\nnova opção Gráfico (abre o grafo completo, estilo Capacities)\n\n**Centro: área principal**\nbarra superior com voltar/avançar, abas independentes (histórico e estado próprios) e botão nova aba\nestados de carregando, vazio e erro\n\n**Direita: painel contextual**\nbarra própria, abas independentes e botão +\nvisões: Explorar, Gráfico, Backlinks, Relacionados, Assistente de IA\nvisões empilhadas e redimensionáveis; ocultar e reabrir (Ctrl+\\)",
+  "textAlign": "left",
+  "type": "shape",
+  "w": 700,
+  "x": 3324,
+  "y": -940
+}

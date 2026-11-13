@@ -1,0 +1,12 @@
+{
+  "color": "blue",
+  "h": 120,
+  "kind": "rounded",
+  "size": "small",
+  "text": "**Roadmap**: layout de três painéis + Gráfico na sidebar entregue na 0.1.1. Pendente: refinos de fluidez e revisão do Ian.",
+  "textAlign": "left",
+  "type": "shape",
+  "w": 1124,
+  "x": 3324,
+  "y": -540
+}

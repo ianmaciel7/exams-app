@@ -1,0 +1,12 @@
+{
+  "color": "peach",
+  "h": 200,
+  "kind": "rounded",
+  "size": "small",
+  "text": "**Estudo do usuário**\nusuário tem: prova salva, resumo, pasta, caderno, anotação,\nmarcação, filtro salvo, comentário, simulado e curso\ncaderno, anotação e marcação apontam para questão\nsimulado → tentativa → resposta e resultado → estatísticas\ncurso → progresso e trilha de estudos → aula → material didático",
+  "textAlign": "left",
+  "type": "shape",
+  "w": 700,
+  "x": 1628,
+  "y": 1930
+}

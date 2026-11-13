@@ -1,0 +1,12 @@
+{
+  "color": "blue",
+  "h": 120,
+  "kind": "rounded",
+  "size": "small",
+  "text": "**0.5.0**\nDestaque em documento vira nota ou cartão; resumo do Documento.",
+  "textAlign": "left",
+  "type": "shape",
+  "w": 200,
+  "x": 1828,
+  "y": 6384
+}

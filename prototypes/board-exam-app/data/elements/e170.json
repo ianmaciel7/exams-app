@@ -1,0 +1,12 @@
+{
+  "color": "green",
+  "h": 200,
+  "kind": "rounded",
+  "size": "small",
+  "text": "**Órgão (Agency)**\ntítulo e sigla\nconcursos: automático\nedições: automático\n(ex.: Dataprev)",
+  "textAlign": "left",
+  "type": "shape",
+  "w": 300,
+  "x": 24,
+  "y": 2920
+}

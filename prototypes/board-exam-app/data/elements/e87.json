@@ -1,0 +1,12 @@
+{
+  "color": "blue",
+  "h": 240,
+  "kind": "rounded",
+  "size": "small",
+  "text": "**Definição de Propriedade (Property Definition)**\nnome\ntipo de valor: texto, número, caixa, data e hora, relação\norigem: padrão do sistema ou adicional",
+  "textAlign": "left",
+  "type": "shape",
+  "w": 300,
+  "x": 1116,
+  "y": 1552
+}

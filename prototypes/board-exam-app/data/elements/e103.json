@@ -1,0 +1,7 @@
+{
+  "size": "small",
+  "text": "A seta vai do tipo base para o que o estende.\nO filho herda as propriedades do pai e acrescenta as suas.\nCada objeto tem um único tipo: o mais específico (ex.: PDF).",
+  "type": "text",
+  "x": 24,
+  "y": 3650
+}

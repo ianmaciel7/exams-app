@@ -1,0 +1,12 @@
+{
+  "color": "green",
+  "h": 200,
+  "kind": "rounded",
+  "size": "small",
+  "text": "**PDF**\nestende: Documento\nnº de páginas\ncamada de texto (busca)\nmodo: original ou texto\nzoom e página atual",
+  "textAlign": "left",
+  "type": "shape",
+  "w": 300,
+  "x": 752,
+  "y": 3412
+}

@@ -1,0 +1,12 @@
+{
+  "color": "green",
+  "h": 300,
+  "kind": "rounded",
+  "size": "small",
+  "text": "**Feito na 0.1.1**\nCarregando com aviso de demora e cancelar\nErro de PDF explica causa e mantém o ponto de leitura\nTentar de novo ou ir ao Quadro\nDocumento não encontrado (link errado)\nBusca sem resultados com dica\nAviso de sem conexão e de conexão de volta\nToasts de erro ficam mais tempo\n**Falta:** erro inline em formulários, confirmação com diálogo próprio, estado desatualizado",
+  "textAlign": "left",
+  "type": "shape",
+  "w": 720,
+  "x": 756,
+  "y": 6916
+}
