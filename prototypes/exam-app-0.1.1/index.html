@@ -1124,7 +1124,7 @@ a.rp-link:hover{background:var(--active)}
     <div class="ws-tabs" id="wsTabs">
       <button class="icon-btn" id="wsSide" aria-label="Abrir barra lateral" title="Barra lateral"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/></svg></button>
       <div class="ws-tablist" id="wsTabList" role="tablist" aria-label="Abas principais"></div>
-      <button class="icon-btn" id="wsNew" aria-label="Nova aba" title="Nova aba (Alt+T)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
+      <button class="icon-btn" id="wsNew" aria-label="Nova aba" title="Nova aba (Ctrl+T)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
       <button class="icon-btn" id="rpToggle" aria-pressed="false" aria-controls="rpanel" aria-label="Painel contextual" title="Painel contextual (Ctrl+\)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M15 4v16"/></svg></button>
       <div class="ws-load" id="wsLoad" aria-hidden="true"><i></i></div>
     </div>
@@ -3203,7 +3203,7 @@ var wsWin=0;
 function wsLabels(){ const cnt={}; WS.tabs.forEach(t=>{ const k=t.title||'Nova aba'; cnt[k]=(cnt[k]||0)+1; });
   const out=WS.tabs.map(t=>{ const base=t.title||'Nova aba'; if(cnt[base]<2) return base; const n=nodeOf(t.hist[t.i]); let ctx=''; if(n&&n.sub){ const p=String(n.sub).split('·').map(x=>x.trim()).filter(Boolean); ctx=p.length>1?p[1]:p[0]; } return ctx&&ctx!==base?base+' · '+ctx:base; });
   const seen={}, tot={}; out.forEach(l=>{ tot[l]=(tot[l]||0)+1; }); return out.map(l=>{ if(tot[l]<2) return l; seen[l]=(seen[l]||0)+1; return l+' ('+seen[l]+')'; }); }
-const WI_PIN='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17v5M9 3h6l-1 6 3 3H7l3-3z"/></svg>';
+const WI_PIN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17v5M9 3h6l-1 6 3 3H7l3-3z"/></svg>';
 function wsPaint(){
   const t0=curTab(), one=WS.tabs.length===1; WS.tabs.sort((a,b)=>Number(!!b.pinned)-Number(!!a.pinned));
   const list=$('wsTabList'), n=WS.tabs.length, GAP=5, MIN=82, MAXW=200;
