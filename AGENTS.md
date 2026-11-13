@@ -12,6 +12,12 @@ Exam App: study app for exams (certifications and Brazilian public-service exams
 > 2. Verifique qual dos dois lados está desatualizado (o repositório local/dev ou o Claude remoto).
 > 3. Ambos os lados PRECISAM SEMPRE estar sincronizados. Se o Claude remoto enviou commits novos, faça o merge imediatamente em `dev`. Se você fizer alterações na `dev`, faça o push ou abra/atualize o PR correspondente para que o Claude remoto tenha o código atualizado.
 
+> [!IMPORTANT]
+> ### Regra Obrigatória de Preservação e Memória no Board
+> **Todas as informações, fotos, evidências, descobertas e tudo que for sendo memorizado ou decidido durante o desenvolvimento DEVE SEMPRE ser guardado no board (`prototypes/board-exam-app/board.json` e `BOARD.md`).**
+> **Qualquer informação importante DEVE ser guardada no board.**
+> Nenhum contexto de arquitetura, print de referência visual, análise de UX ou progresso de implementação pode ficar solto ou ser esquecido entre as sessões dos agentes.
+
 ## Run the prototype (any tool)
 
 The prototypes are static HTML. No build step, no dependencies beyond Python 3.
