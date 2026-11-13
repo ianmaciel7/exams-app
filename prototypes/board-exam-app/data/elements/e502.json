@@ -1,0 +1,12 @@
+{
+  "color": "peach",
+  "h": 360,
+  "kind": "rounded",
+  "size": "small",
+  "text": "**Regras de interação**\nabrir no painel não substitui a visão principal\nCtrl/⌘+clique: nova aba; Shift+clique: painel lateral\nAlt+←/→: histórico da aba; Alt+T nova aba; Alt+W fecha aba; Esc fecha painel\n\n**Responsivo**\ndesktop largo: três regiões\n≤1100px: sidebar vira gaveta e o painel vira sobreposição\n≤820px: painel vira folha inferior\n\nRegra visual: um único ambiente integrado, não três páginas",
+  "textAlign": "left",
+  "type": "shape",
+  "w": 700,
+  "x": 3748,
+  "y": -940
+}

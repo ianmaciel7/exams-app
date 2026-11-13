@@ -1,0 +1,12 @@
+{
+  "color": "blue",
+  "h": 200,
+  "kind": "rounded",
+  "size": "small",
+  "text": "**Cartão de revisão (Review Card)**\nquestão de origem (relação)\nformato: pergunta e resposta ou lacuna\nfrente e verso\npróxima revisão\nhistórico: data e resposta\nresposta: esqueci, difícil, bom, fácil",
+  "textAlign": "left",
+  "type": "shape",
+  "w": 300,
+  "x": 1116,
+  "y": 2680
+}

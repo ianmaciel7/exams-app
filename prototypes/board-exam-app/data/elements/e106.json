@@ -1,0 +1,12 @@
+{
+  "color": "blue",
+  "h": 200,
+  "kind": "rounded",
+  "size": "small",
+  "text": "**Coleção (Collection)**\ntítulo\ntipo de objeto (relação)\nmembros: objetos desse tipo\nmanual, sem aninhar\nvisibilidade: privada ou pública\nEx.: caderno de questões",
+  "textAlign": "left",
+  "type": "shape",
+  "w": 300,
+  "x": 752,
+  "y": 2200
+}

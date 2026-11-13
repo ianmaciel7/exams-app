@@ -1,0 +1,182 @@
+{
+  "cols": {
+    "c1": {
+      "at": 1,
+      "w": 300
+    },
+    "c2": {
+      "at": 2,
+      "w": 1060
+    }
+  },
+  "rows": {
+    "r1": {
+      "at": 1,
+      "c1": "Termo",
+      "c2": "Significado"
+    },
+    "r10": {
+      "at": 10,
+      "c1": "Propriedade padrão (Default)",
+      "c2": "Fornecida pelo sistema: título, aliases, descrição, ícone, etiquetas e data de criação."
+    },
+    "r11": {
+      "at": 11,
+      "c1": "Propriedade adicional (Normal)",
+      "c2": "Criada para o tipo: texto, número, caixa de seleção, data e hora ou relação."
+    },
+    "r12": {
+      "at": 12,
+      "c1": "Relação (Relation)",
+      "c2": "Propriedade que aponta para outro objeto (ex.: Questão aponta para Edição)."
+    },
+    "r13": {
+      "at": 13,
+      "c1": "Tipo de Objeto Básico",
+      "c2": "Predefinido pelo sistema (ex.: Documento). Oferece estrutura padrão para documentos, sem personalização."
+    },
+    "r14": {
+      "at": 14,
+      "c1": "Tipo de Objeto Personalizado",
+      "c2": "Criado pelo usuário conforme necessário (ex.: Questão, Concurso, Meta). Cada tipo guarda propriedades únicas."
+    },
+    "r15": {
+      "at": 15,
+      "c1": "Nome singular e plural",
+      "c2": "Cada tipo tem nomes singular e plural (ex.: Questão / Questões, Edição / Edições) para exibição na interface."
+    },
+    "r16": {
+      "at": 16,
+      "c1": "Todo Objeto possui um Tipo",
+      "c2": "Relação fundamental: cada objeto sempre pertence a exatamente um tipo, que define sua estrutura e propriedades."
+    },
+    "r17": {
+      "at": 17,
+      "c1": "Tipo de Propriedade",
+      "c2": "Determina como o valor é armazenado e interpretado. Tipos: Texto, Número, Caixa de Seleção (true/false), Data e Hora, Rótulo (seleção única/múltipla), Conteúdo com Blocos, Imagem de Capa, Seleção de Objetos (para relações)."
+    },
+    "r18": {
+      "at": 18,
+      "c1": "Herança (Estende)",
+      "c2": "Um Tipo de Objeto pode estender outro e herdar suas propriedades, acrescentando as suas. Ex.: PDF estende Documento, que estende Arquivo. O objeto continua com um único tipo (o mais específico)."
+    },
+    "r19": {
+      "at": 19,
+      "c1": "Texto (Text)",
+      "c2": "Informação textual, simples ou formatada. Endereços (URL) também ficam em Texto. Ex.: autor = Maria Silva."
+    },
+    "r2": {
+      "at": 2,
+      "c1": "Espaço (Space)",
+      "c2": "Ambiente independente de uma conta. Nada cruza entre espaços: sem links nem busca."
+    },
+    "r20": {
+      "at": 20,
+      "c1": "Número (Number)",
+      "c2": "Valores numéricos: quantidades, preços, pontuações. Códigos e identificadores sem sentido de quantidade ficam em Texto."
+    },
+    "r21": {
+      "at": 21,
+      "c1": "Caixa de Seleção (Checkbox)",
+      "c2": "Marcado (true) ou desmarcado (false). Desmarcado ainda é um valor, não é vazio. Ex.: acertou."
+    },
+    "r22": {
+      "at": 22,
+      "c1": "Data e Hora (Datetime)",
+      "c2": "Uma data, data com horário ou intervalo de datas. Ex.: data da prova."
+    },
+    "r23": {
+      "at": 23,
+      "c1": "Rótulo (Label)",
+      "c2": "Escolha entre opções predefinidas, de seleção única ou múltipla. Ex.: dificuldade = difícil."
+    },
+    "r24": {
+      "at": 24,
+      "c1": "Conteúdo (Content)",
+      "c2": "Área estruturada com Blocos, não só um texto. Ex.: anotações, explicação de uma questão."
+    },
+    "r25": {
+      "at": 25,
+      "c1": "Seleção de Objetos (Object Select)",
+      "c2": "Propriedade que referencia outros objetos de um tipo definido. É a forma da Relação."
+    },
+    "r26": {
+      "at": 26,
+      "c1": "Alterar valor vs. definição",
+      "c2": "Mudar um valor afeta só aquele objeto. Mudar a definição (nome, tipo) afeta todos os objetos do tipo."
+    },
+    "r27": {
+      "at": 27,
+      "c1": "Etiqueta (Tag)",
+      "c2": "Palavra-chave que diz sobre o que o objeto trata (ex.: #python). É um objeto de tipo próprio, reutilizável e sem texto livre."
+    },
+    "r28": {
+      "at": 28,
+      "c1": "Etiqueta do objeto / do bloco",
+      "c2": "Do objeto: classifica o objeto inteiro. Do bloco: classifica um trecho do texto com #."
+    },
+    "r29": {
+      "at": 29,
+      "c1": "Página da Etiqueta (Tag Page)",
+      "c2": "Lista os objetos ligados à etiqueta, de qualquer tipo. É uma visão, não um documento para escrever."
+    },
+    "r3": {
+      "at": 3,
+      "c1": "Objeto (Object)",
+      "c2": "Unidade individual de informação: título, tipo, propriedades e conteúdo. Pertence a um Espaço."
+    },
+    "r30": {
+      "at": 30,
+      "c1": "Etiqueta vs. Tipo de Objeto",
+      "c2": "O tipo diz o que a informação é (Livro). A etiqueta diz sobre o que ela trata (Python). Aplicar etiqueta não move nem duplica o objeto."
+    },
+    "r31": {
+      "at": 31,
+      "c1": "Coleção (Collection)",
+      "c2": "Grupo manual de objetos de um único tipo (ex.: PDFs para Estudar). Um objeto pode estar em várias coleções, sem cópia."
+    },
+    "r32": {
+      "at": 32,
+      "c1": "Participação na Coleção",
+      "c2": "Liga um objeto a uma coleção. Remover o objeto da coleção não o exclui. Coleção não contém outra coleção."
+    },
+    "r33": {
+      "at": 33,
+      "c1": "Coleção vs. Etiqueta",
+      "c2": "Coleção: grupo manual, de um só tipo. Etiqueta: assunto, de qualquer tipo. Coleção não é propriedade do objeto."
+    },
+    "r4": {
+      "at": 4,
+      "c1": "Tipo de Objeto (Object Type)",
+      "c2": "Categoria do objeto (Documento, Questão, Edição...). Define quais propriedades ele tem."
+    },
+    "r5": {
+      "at": 5,
+      "c1": "Título (Title)",
+      "c2": "Nome principal do objeto, o que o usuário vê."
+    },
+    "r6": {
+      "at": 6,
+      "c1": "Conteúdo (Content)",
+      "c2": "Corpo principal do objeto, quando existe (ex.: anotações)."
+    },
+    "r7": {
+      "at": 7,
+      "c1": "Propriedade (Property)",
+      "c2": "Característica que descreve o objeto de forma estruturada."
+    },
+    "r8": {
+      "at": 8,
+      "c1": "Definição de Propriedade",
+      "c2": "Diz o que a propriedade guarda (ex.: banca é texto). Compartilhada por todos os objetos do tipo."
+    },
+    "r9": {
+      "at": 9,
+      "c1": "Valor de Propriedade",
+      "c2": "A informação guardada em um objeto (ex.: banca = FGV). Pode ficar vazio."
+    }
+  },
+  "type": "table",
+  "x": 24,
+  "y": 3872
+}

@@ -1,0 +1,12 @@
+{
+  "color": "green",
+  "h": 200,
+  "kind": "rounded",
+  "size": "small",
+  "text": "**Resposta (Answer)**\nquestão (relação)\nsimulado (relação, opcional)\nalternativa marcada\nacertou (resultado)\nrespondida em",
+  "textAlign": "left",
+  "type": "shape",
+  "w": 300,
+  "x": 752,
+  "y": 2680
+}

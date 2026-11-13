@@ -1,0 +1,93 @@
+{
+  "cols": {
+    "c1": {
+      "at": 1,
+      "w": 360
+    },
+    "c2": {
+      "at": 2,
+      "w": 470
+    },
+    "c3": {
+      "at": 3,
+      "w": 570
+    }
+  },
+  "rows": {
+    "r1": {
+      "at": 1,
+      "c1": "Arquivo",
+      "c2": "O que é",
+      "c3": "Pasta do projeto"
+    },
+    "r10": {
+      "at": 10,
+      "c1": "Diretrizes de UI/UX 2026",
+      "c2": "Leis de UX, estados e erros, componentes (ver bloco 8)",
+      "c3": "referencias/diretrizes-ui-ux-2026.md, diretrizes-estados-feedback-erros.md, diretrizes-componentes-interacao.md"
+    },
+    "r11": {
+      "at": 11,
+      "c1": "Fonte do protótipo 0.1.1",
+      "c2": "HTML do app e cópia antes do redesign das páginas",
+      "c3": "recuperado/prototipo-dataprev-2026/ e recuperado/versao-0.1.1-antes-redesign-paginas/"
+    },
+    "r12": {
+      "at": 12,
+      "c1": "Prints do redesign (antes e depois)",
+      "c2": "4 imagens, também no bloco 9",
+      "c3": "prints/redesign-paginas-objeto/"
+    },
+    "r2": {
+      "at": 2,
+      "c1": "Edital de abertura (DOU 03/07/2026)",
+      "c2": "Edital oficial do concurso Dataprev 2026 (FGV)",
+      "c3": "concursos/dataprev-2026/edital-dou-03-07-2026.pdf"
+    },
+    "r3": {
+      "at": 3,
+      "c1": "1ª e 2ª retificações do edital",
+      "c2": "Mudanças no edital de abertura",
+      "c3": "concursos/dataprev-2026/edital-1a-retificacao.pdf, edital-2a-retificacao.pdf"
+    },
+    "r4": {
+      "at": 4,
+      "c1": "Cronograma",
+      "c2": "Datas do concurso",
+      "c3": "concursos/dataprev-2026/cronograma.pdf"
+    },
+    "r5": {
+      "at": 5,
+      "c1": "Edital completo (89 MB)",
+      "c2": "PDF que o Ian usou como referência do fluxo de prova",
+      "c3": "edital_concurso_dataprev_2026_0.pdf"
+    },
+    "r6": {
+      "at": 6,
+      "c1": "Provas do Analista de TI, Desenvolvimento, tipos 1 a 4",
+      "c2": "Caderno de questões, 70 questões cada",
+      "c3": "concursos/dataprev-2026/prova-objetiva-2026-analista-ti-dev/"
+    },
+    "r7": {
+      "at": 7,
+      "c1": "Gabarito preliminar FGV (13/10/2026)",
+      "c2": "PDF oficial, mais versão extraída em JSON e Markdown",
+      "c3": "concursos/dataprev-2026/gabarito/"
+    },
+    "r8": {
+      "at": 8,
+      "c1": "70 questões extraídas (tipo 1)",
+      "c2": "Enunciados, alternativas e gabarito em JSON; já usadas na 0.1.1",
+      "c3": "concursos/dataprev-2026/questoes/dataprev-2026-analista-ti-dev-tipo1.json"
+    },
+    "r9": {
+      "at": 9,
+      "c1": "QConcursos, ExamTopics, Readwise e Reader",
+      "c2": "Modelos de entidades dos concorrentes (ver bloco 5)",
+      "c3": "referencias/qconcursos.md, examtopics.md, readwise-reader.md"
+    }
+  },
+  "type": "table",
+  "x": 24,
+  "y": 12718
+}

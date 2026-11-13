@@ -1,0 +1,8 @@
+{
+  "size": "body",
+  "text": "Filtro de questões (0.1.1): botão Filtrar com popover pesquisável, vários valores por categoria (Banca, Disciplina, Edição, Origem, Situação), chips removíveis, busca por palavra, total filtrado de total e Limpar tudo. Mesmo componente na página do tipo Questão e nas abas Questões de Concurso, Edição e Cargo.",
+  "type": "text",
+  "wrap": 640,
+  "x": 1604,
+  "y": 1180
+}

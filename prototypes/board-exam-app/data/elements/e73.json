@@ -1,0 +1,8 @@
+{
+  "size": "small",
+  "text": "Relação é escrita em um lado só (a seta sai de quem guarda); o lado de volta é automático. Edição aponta para Concurso e Cargo aponta para Edição (setas omitidas para não cruzar). Etiqueta, Meta e Arquivo não têm seta.\nTítulo, aliases, descrição, ícone, etiquetas e criado_em já existem em todo objeto. Verde: já é Tipo de Objeto na 0.1.1. Azul: futuro.",
+  "type": "text",
+  "wrap": 1400,
+  "x": 24,
+  "y": 3200
+}

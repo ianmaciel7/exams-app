@@ -1,0 +1,12 @@
+{
+  "color": "blue",
+  "h": 200,
+  "kind": "rounded",
+  "size": "small",
+  "text": "**Prova (Exam Paper)**\nedição (relação)\ncargo (relação)\nano e data de aplicação\ncaderno: tipo 1, 2, 3 ou 4\nquestões: automático",
+  "textAlign": "left",
+  "type": "shape",
+  "w": 300,
+  "x": 388,
+  "y": 2440
+}

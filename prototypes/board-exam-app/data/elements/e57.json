@@ -1,0 +1,12 @@
+{
+  "color": "blue",
+  "h": 200,
+  "kind": "rounded",
+  "size": "small",
+  "text": "**Meta (Goal)**\ntipo: nota, % de acerto, questões, revisões em dia\nvalor alvo\nperíodo\nprogresso",
+  "textAlign": "left",
+  "type": "shape",
+  "w": 300,
+  "x": 1116,
+  "y": 2200
+}

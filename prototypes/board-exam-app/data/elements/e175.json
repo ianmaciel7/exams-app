@@ -1,0 +1,8 @@
+{
+  "size": "body",
+  "text": "Tipos de Objeto na 0.1.1:\n- Concurso, Órgão, Banca, Edição, Cargo\n- Arquivo → Documento → PDF\n- Questão, Disciplina, Simulado\nBarra lateral: seções livres ou por tipo, plural por padrão, arrastar para ordenar. Fixar só pelo menu ⋯.",
+  "type": "text",
+  "wrap": 640,
+  "x": 1604,
+  "y": 990
+}

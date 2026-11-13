@@ -1,0 +1,12 @@
+{
+  "color": "green",
+  "h": 300,
+  "kind": "rounded",
+  "size": "small",
+  "text": "**Revisão das 3 diretrizes na 0.1.1 (feita)**\nConfirmações com alert dialog, foco seguro no cancelar e foco devolvido\nErro de campo inline com aria-invalid\nChips de filtros ativos nas questões, com contagem anunciada\nTeclado de árvore na barra lateral\nContraste do botão principal e alvos de 24 px corrigidos\nIdioma pt-BR declarado\n**Falta:** role=tree completo, textos e datas com Intl, skeleton de carregamento",
+  "textAlign": "left",
+  "type": "shape",
+  "w": 720,
+  "x": 756,
+  "y": 7248
+}

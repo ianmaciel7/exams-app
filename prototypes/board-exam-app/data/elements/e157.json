@@ -1,0 +1,12 @@
+{
+  "color": "blue",
+  "h": 360,
+  "kind": "rounded",
+  "size": "small",
+  "text": "**0.2.0 (quase pronta)**\nQuestões reais\n70 questões do Dataprev 2026 como objetos, com filtros e navegador\nSimulado com tentativas e histórico\nSeção Desempenho\nFalta: gabarito por cargo",
+  "textAlign": "left",
+  "type": "shape",
+  "w": 184,
+  "x": 440,
+  "y": 6024
+}

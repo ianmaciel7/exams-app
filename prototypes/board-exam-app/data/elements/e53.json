@@ -1,0 +1,12 @@
+{
+  "color": "green",
+  "h": 240,
+  "kind": "rounded",
+  "size": "small",
+  "text": "**Espaço (Space)**\nnome e ícone\ndono (conta)\nisolado: sem links nem busca entre espaços\nao_abrir: onde parei, calendário ou objeto\nexcluído_em (30 dias para restaurar)\nexportação: manual ou automática",
+  "textAlign": "left",
+  "type": "shape",
+  "w": 300,
+  "x": 24,
+  "y": 1552
+}

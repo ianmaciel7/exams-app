@@ -1,0 +1,8 @@
+{
+  "name": "exams-app-prototypes",
+  "private": true,
+  "scripts": {
+    "dev": "python -m http.server 8765 --directory prototypes",
+    "board": "python prototypes/board-exam-app/board_to_md.py"
+  }
+}

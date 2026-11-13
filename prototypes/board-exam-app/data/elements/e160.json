@@ -1,0 +1,12 @@
+{
+  "color": "blue",
+  "h": 360,
+  "kind": "rounded",
+  "size": "small",
+  "text": "**0.5.0**\nLeitura\nDocumento de leitura com progresso %\nnotas a partir do Documento\nreferência sem progresso",
+  "textAlign": "left",
+  "type": "shape",
+  "w": 184,
+  "x": 1064,
+  "y": 6024
+}

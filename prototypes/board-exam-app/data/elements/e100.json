@@ -1,0 +1,12 @@
+{
+  "color": "green",
+  "h": 200,
+  "kind": "rounded",
+  "size": "small",
+  "text": "**Documento (Document)**\nestende: Arquivo\nclasse: referência ou leitura\ncategoria: edital, prova...\nprogresso: só em leitura",
+  "textAlign": "left",
+  "type": "shape",
+  "w": 300,
+  "x": 388,
+  "y": 3412
+}

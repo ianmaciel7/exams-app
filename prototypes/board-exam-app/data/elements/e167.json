@@ -1,0 +1,12 @@
+{
+  "color": "yellow",
+  "h": 300,
+  "kind": "rounded",
+  "size": "small",
+  "text": "**3ª diretriz: componentes e padrões de interação**\nEscolher componente pela finalidade, não pela aparência\nPágina, dialog, alert dialog, drawer, tabs vs navegação\nAção destrutiva usa alert dialog com consequência clara\nNão mexer no código só porque o documento existe\nResumo: referencias/diretrizes-componentes-interacao.md",
+  "textAlign": "left",
+  "type": "shape",
+  "w": 700,
+  "x": 24,
+  "y": 7248
+}

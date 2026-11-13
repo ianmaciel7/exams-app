@@ -1,0 +1,12 @@
+{
+  "color": "peach",
+  "h": 360,
+  "kind": "rounded",
+  "size": "small",
+  "text": "**Readwise em 4 diagramas**\nleitura (Reader): documento, vindo de fonte ou feed RSS, tem\ntag, destaque, anotação e progresso de leitura\ndestaque: posição, texto destacado, nota e tag\naprendizado (Highlights): destaque importado → anotação, tag,\nrevisão e mastery\nbiblioteca: tags, visualizações filtradas (consulta) e documentos\nrevisão: destaque → cartão mastery (pergunta e resposta ou lacuna)\n→ evento de revisão → avaliação de memorização\n\nJá temos: documento de leitura com progresso, cartão de revisão, etiqueta.\nDestaque fica só como referência por enquanto.",
+  "textAlign": "left",
+  "type": "shape",
+  "w": 700,
+  "x": 2352,
+  "y": 3885
+}

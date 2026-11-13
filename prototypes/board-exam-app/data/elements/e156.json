@@ -1,0 +1,12 @@
+{
+  "color": "green",
+  "h": 360,
+  "kind": "rounded",
+  "size": "small",
+  "text": "**0.1.1 (feito)**\nProtótipo 2\nbarra lateral com seções livres ou por tipo, nomes no plural, ordem por arrastar\nConcurso → Edição → Cargo, Órgão e Banca como tipos\nCargo herda a Banca da Edição\nArquivo → Documento → PDF\nQuestão, Disciplina, Simulado e Resposta como tipos",
+  "textAlign": "left",
+  "type": "shape",
+  "w": 184,
+  "x": 232,
+  "y": 6024
+}

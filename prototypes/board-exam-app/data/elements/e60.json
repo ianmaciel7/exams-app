@@ -1,0 +1,12 @@
+{
+  "color": "blue",
+  "h": 200,
+  "kind": "rounded",
+  "size": "small",
+  "text": "**Alternativa (Option)**\ntítulo: texto da alternativa\nrótulo (letra A a E)\nimagem (opcional)\ncorreta (caixa)\nquestão (relação)\nordem",
+  "textAlign": "left",
+  "type": "shape",
+  "w": 300,
+  "x": 24,
+  "y": 2680
+}

@@ -1,0 +1,8 @@
+{
+  "size": "small",
+  "text": "O protótipo chama o Claude direto, sem chave de API: o artefato usa a capacidade `sample`, na conta de quem abre. Se a IA não estiver disponível, os botões somem e o app segue igual.",
+  "type": "text",
+  "wrap": 650,
+  "x": 1604,
+  "y": 6076
+}

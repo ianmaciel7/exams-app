@@ -1,0 +1,12 @@
+{
+  "color": "green",
+  "h": 200,
+  "kind": "rounded",
+  "size": "small",
+  "text": "**Disciplina (Subject)**\ntítulo\ndisciplina pai (relação, para o assunto)\nordem\nquestões: automático",
+  "textAlign": "left",
+  "type": "shape",
+  "w": 300,
+  "x": 1116,
+  "y": 2440
+}

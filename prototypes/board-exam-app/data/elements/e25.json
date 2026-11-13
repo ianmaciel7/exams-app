@@ -1,0 +1,12 @@
+{
+  "color": "blue",
+  "h": 280,
+  "kind": "rounded",
+  "size": "small",
+  "text": "**Documento (PDF)**\ntítulo\nclasse: referência (fonte de verdade, sem % de leitura) ou leitura (com % de progresso, estilo Reader e Kindle)\ncategoria: edital, retificação, cronograma, prova, gabarito\narquivo\nespaço\nprogresso e posição: só em leitura",
+  "textAlign": "left",
+  "type": "shape",
+  "w": 300,
+  "x": 388,
+  "y": 1110
+}

@@ -1,0 +1,12 @@
+{
+  "color": "peach",
+  "h": 240,
+  "kind": "rounded",
+  "size": "small",
+  "text": "**Objeto (Object)**\ntítulo\nespaço\ntipo de objeto\nconteúdo (quando houver)\npropriedades padrão: aliases, descrição, ícone, etiquetas, criado_em",
+  "textAlign": "left",
+  "type": "shape",
+  "w": 300,
+  "x": 388,
+  "y": 1552
+}

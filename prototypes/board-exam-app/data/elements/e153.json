@@ -1,0 +1,8 @@
+{
+  "size": "small",
+  "text": "1. Alternativa é objeto próprio: guarda letra, texto, correta e estatística (% que marcou), como no QConcursos.\n2. Resposta pode existir sem Simulado (questão resolvida avulsa ou na revisão). Simulado é opcional.\n3. Cartão de revisão nasce de uma Questão ou de uma Nota. Um cartão por origem; guarda agendamento (próxima data, intervalo, facilidade).\n4. Concurso → Edição → Cargo. Concurso é recorrente (Dataprev), Edição é cada ano (Dataprev 2026) e Cargo guarda prova, gabarito, vagas e conteúdo. Certificação é uma Edição (AZ-104). Prova = cada caderno do Cargo.\n5. Disciplina é um tipo próprio, reaproveitado entre Edições (Português serve para vários concursos). Órgão e Banca também são tipos, não texto.\n6. Meta: métrica (acerto %, nº de questões, nota em simulado, dias seguidos), alvo, período (dia/semana/mês), prazo e escopo opcional (Edição ou Disciplina).\n7. Progresso de leitura fica no próprio Documento (só para categoria leitura). Referência não tem progresso.\n8. Sem Destaque: trecho importante vira uma Nota que aponta para o Documento (com página/posição) e pode gerar Cartão.\n9. Visualização filtrada (filtro salvo) fica para depois; Coleção já cobre o caderno manual.\n10. Questão, Disciplina e Simulado já são tipos na 0.1.1 (70 questões da Dataprev).",
+  "type": "text",
+  "wrap": 1440,
+  "x": 24,
+  "y": 5370
+}

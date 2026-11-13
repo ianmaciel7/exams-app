@@ -1,0 +1,12 @@
+{
+  "color": "peach",
+  "h": 200,
+  "kind": "rounded",
+  "size": "small",
+  "text": "**Conteúdo e questão**\nconcurso: segmento, órgão e banca → edital, cargo e prova\ndisciplina → assunto → questão; prova → questão\nopcionais: área de formação e de atuação, legislação, texto associado\nquestão: modalidade, alternativas, gabarito, gabarito comentado,\ncomentários, nível, dificuldade, situação e ano",
+  "textAlign": "left",
+  "type": "shape",
+  "w": 700,
+  "x": 2352,
+  "y": 1930
+}

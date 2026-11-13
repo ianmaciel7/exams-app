@@ -1,0 +1,12 @@
+{
+  "color": "yellow",
+  "h": 300,
+  "kind": "rounded",
+  "size": "small",
+  "text": "**2ª diretriz: estados, feedback e erros**\nNem todo estado é erro (vazio, sem resultados, lento)\nMensagem: o que houve, impacto, o que fazer\nToast só para evento curto; erro tem ação de recuperar\nSempre timeout, nunca carregamento infinito\nResumo: referencias/diretrizes-estados-feedback-erros.md",
+  "textAlign": "left",
+  "type": "shape",
+  "w": 700,
+  "x": 24,
+  "y": 6916
+}
