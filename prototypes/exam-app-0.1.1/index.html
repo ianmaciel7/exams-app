@@ -1053,10 +1053,10 @@ a.rp-link:hover{background:var(--active)}
 .ws-tabmenu .row .t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ws-tabmenu .row small{color:var(--faint);font-size:11px;flex:none}
 .ws-tabmenu .tm-empty{padding:10px 8px;color:var(--muted);font-size:13px}
-.rp-top{display:flex;grid-template-columns:none;height:52px;min-height:52px;padding:0 12px;gap:6px;align-items:center;box-sizing:border-box}
+.rp-top{display:flex;grid-template-columns:none;height:46px;min-height:46px;padding:0 8px;gap:4px;align-items:center;box-sizing:border-box}
 .rp-panel-label{display:none}
 .rp-top .rp-tabs{grid-column:auto;grid-row:auto;flex:1 1 0;min-width:0;height:46px;min-height:0;align-items:center;gap:5px;overflow-x:auto}
-.rp-top .rp-tabs .ws-tab{min-width:110px;max-width:170px}
+.rp-top .rp-tabs .ws-tab{min-width:64px;max-width:160px;height:32px;border-radius:8px}
 .rp-top .ws-tab .ws-tx{width:20px;height:20px}
 .rp-top .icon-btn{width:30px;height:30px;margin:0}
 .ws-nav #histFwd:disabled{display:none}
@@ -3362,6 +3362,8 @@ function rpStack(type,ref){ const t=rpTab(); if(!t){ rpAddTab(type,ref); return;
 function rpCloseView(id){ const t=rpTab(); if(!t) return; t.views=t.views.filter(v=>v.id!==id); if(!t.views.length){ RP.tabs=RP.tabs.filter(x=>x!==t); RP.active=RP.tabs[0]?RP.tabs[0].id:null; } wsSave(); rpPaintAll(); }
 function rpCloseTab(id){ const i=RP.tabs.findIndex(t=>t.id===id); if(i<0) return; const t=RP.tabs[i]; RP.tabs.splice(i,1); if(RP.active===id) RP.active=RP.tabs[Math.min(i,RP.tabs.length-1)]?RP.tabs[Math.min(i,RP.tabs.length-1)].id:null; wsSave(); rpPaintAll();
   toast('Aba do painel fechada',()=>{ RP.tabs.splice(Math.min(i,RP.tabs.length),0,t); RP.active=t.id; wsSave(); rpPaintAll(); }); }
+function rpCloseOthers(id){ const snap=RP.tabs.slice(), act=RP.active, keep=RP.tabs.filter(t=>t.id===id); if(!keep.length||keep.length===snap.length) return; RP.tabs=keep; RP.active=id; wsSave(); rpPaintAll();
+  toast('Outras abas do painel fechadas',()=>{ RP.tabs=snap; RP.active=act; wsSave(); rpPaintAll(); }); }
 function rpOpenObj(h){ if(!isObjHref(h)) return; const found=RP.tabs.find(t=>t.views.some(v=>v.type==='obj'&&v.ref===h)); if(found){rpSelect(found.id);openRP(true);return;} rpCapture();rpAddTab('obj',h); }
 function rpFromView(v,h){ if(!v) return; if(v.type==='explorar'||v.type==='obj'){ v.future=[];v.hist=(v.hist||[]).concat([{type:v.type,ref:v.ref,q:v.q,kind:v.kind}]).slice(-20); v.type='obj'; v.ref=h; wsSave(); rpPaintBody(); rpPaintTabs(); } else if(v.type==='graf'){ v.ref=h; wsSave(); rpPaintBody(); } else rpOpenObj(h); }
 const toolMenu=(anchor,fn)=>miniMenu(anchor,['explorar','graf','back','rel','ia'].map(k=>({t:RT[k].n,ic:RT[k].ic,fn:()=>fn(k)})));
@@ -3369,7 +3371,9 @@ $('rpAdd').onclick=e=>toolMenu(e.currentTarget,k=>rpAddTab(k));
 $('rpStack').onclick=e=>{ const t=rpTab(); if(t&&t.views.length>=3){ toast('Cada aba do painel aceita até 3 visualizações empilhadas'); return; } toolMenu(e.currentTarget,k=>rpStack(k)); };
 $('rpTabs').addEventListener('keydown',e=>tabKeys(e,$('rpTabs'),'[data-rp-tab]',t=>rpSelect(t.dataset.rpTab),t=>rpCloseTab(t.dataset.rpTab)));
 $('rpTabs').addEventListener('click',e=>{ const x=e.target.closest('[data-rp-tabx]'); if(x){ rpCloseTab(x.dataset.rpTabx); return; } const t=e.target.closest('[data-rp-tab]'); if(t) rpSelect(t.dataset.rpTab); });
+$('rpTabs').addEventListener('dblclick',e=>{ if(e.target.closest('button')) return; const t=e.target.closest('[data-rp-tab]'); if(t) rpCloseTab(t.dataset.rpTab); });
 $('rpTabs').addEventListener('auxclick',e=>{ if(e.button!==1) return; const t=e.target.closest('[data-rp-tab]'); if(t){ e.preventDefault(); rpCloseTab(t.dataset.rpTab); } });
+$('rpTabs').addEventListener('contextmenu',e=>{ const t=e.target.closest('[data-rp-tab]'); if(!t) return; e.preventDefault(); e.stopImmediatePropagation(); const id=t.dataset.rpTab, one=RP.tabs.length<=1; miniMenu(t,[{t:'Fechar aba',ic:WI.x,fn:()=>rpCloseTab(id)},{t:'Fechar outras abas',ic:WI.x,off:one,fn:()=>rpCloseOthers(id)}]); });
 $('rpBody').addEventListener('click',e=>{ const T=e.target;
   let b=T.closest('[data-vforward]');if(b){const v=viewById(b.dataset.vforward);if(v?.future?.length){v.hist=(v.hist||[]).concat([{type:v.type,ref:v.ref,q:v.q,kind:v.kind}]);Object.assign(v,v.future.pop());wsSave();rpPaintAll();}return;}
   b=T.closest('[data-vmove]');if(b){const t=rpTab(),v=viewById(b.dataset.vmove),i=t.views.indexOf(v);miniMenu(b,[{t:'Mover para cima',off:i===0,fn:()=>{t.views.splice(i,1);t.views.splice(i-1,0,v);wsSave();rpPaintAll();}},{t:'Mover para baixo',off:i===t.views.length-1,fn:()=>{t.views.splice(i,1);t.views.splice(i+1,0,v);wsSave();rpPaintAll();}}]);return;}
