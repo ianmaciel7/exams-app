@@ -600,77 +600,15 @@ Prints em /mnt/project-files/prints/redesign-paginas-objeto/
 
 ![imagem e305](assets/b7e3a67f5e62b599877bb5b3174ea4c0.png)
 
-**Concurso, antes e depois** (0.1.1). Ian: as páginas de objeto estavam feias e sem cara de 2026; pediu redesign.
-
-**Edição, antes e depois** (0.1.1).
-
-![imagem e307](assets/4916231707b4b56575f007bdc921fa91.png)
-
-![imagem e309](assets/fc38ad7f1771ecbdbcc5341596b58f24.png)
-
-**Cargo, antes e depois** (0.1.1).
-
-**Tipo PDF, antes e depois** (0.1.1).
-
-### Feedback do Ian sobre a 0.1.1 (prints do protótipo)
-
 Capturas enviadas por Ian durante a revisão da 0.1.1, em 12 e 13/11.
-
-![imagem e313](assets/265be9aa9703f3cc57f43d3c62f96de1.png)
-
-![imagem e315](assets/02126f3b520aaad9b5c9577b472379a8.png)
-
-**0.1.1, tela grande.** Ian sente vazio em tela larga; documentos do Concurso precisam mostrar de qual edição são.
-
-**0.1.1 (v97): "está um pouco estranho".** Painel direito apertado, rótulos quebrando, bloco Estudar repetindo as abas. Ajustado na v98.
-
-![imagem e317](assets/5e04fb915ee94b2c67a5adb37585e685.png)
 
 ![imagem e319](assets/731ecd45a56634184b7bcd8df6de8c5b.png)
 
 ![imagem e321](assets/cc0093684c5ae6f612afbbf6b91bd674.png)
 
-**0.1.1: "2026" e "Dataprev 2026" destacados juntos.** É o mesmo objeto aberto, igual ao Notion.
-
-**0.1.1: menu ⋯ do item** (Desafixar, Renomear, Copiar link, Excluir). Regra: fixar só pelo ⋯ da sidebar.
-
-**0.1.1: página da Edição** enviada junto com o mesmo feedback.
-
-![imagem e323](assets/831c50665375ea7ebd6bb067f3e09c4e.png)
-
-![imagem e325](assets/245371488f6e2d39a3dc98e934d488f4.png)
-
-![imagem e327](assets/791462f4696e4cfd2e62304ca7520faf.png)
-
-![imagem e329](assets/8852061c63b37547e1c657dda371bbee.png)
-
-**0.1.1:** seta de expandir e recolher (circulada) no item Dataprev.
-
-**0.1.1:** item "2026" (Edição) dentro do Dataprev.
-
 **0.1.1:** Arquivo, Documento e PDF na árvore, com contagem.
 
 **Referência:** item fixado com pin e ⋯ ao passar o mouse.
-
-![imagem e331](assets/474678ed59f7cc5b7fbf3494dd75704f.png)
-
-**Referência:** item com pin e ⋯ no hover.
-
-### Referências do Capacities (sidebar)
-
-O que Ian mostrou como modelo para a sidebar: tipos de objeto, ordenar, hover, lixeira.
-
-![imagem e335](assets/5dd2843391f7c5827e8905be47daf12d.png)
-
-![imagem e337](assets/8d42664c47e656b5f3b9c49ea3e6b134.png)
-
-![imagem e339](assets/346da48cb8ad25f2a7857b2d30933368.png)
-
-**Capacities:** cabeçalho "Tipos de objeto" com contagem, ⋯ e +. Ian: o + deve abrir diálogo para escolher o objeto.
-
-**Capacities:** menu Ordenar manualmente ou alfabeticamente.
-
-**Capacities:** lista de tipos de objeto.
 
 ![imagem e341](assets/cf85b4fdc73d3e37137c304ff737aadc.png)
 
@@ -715,6 +653,150 @@ Capturas da fase em que o Ian pediu um artefato só para o protótipo e outro pa
 ![imagem e361](assets/f9c476ddeb52b075e841baacdff748f1.png)
 
 **Board Exam App no canvas** (visão geral, 12/11).
+
+## 23. Especificação do Painel de Propriedades (Capacities & Obsidian Properties v1.4+)
+<!-- container e504 @ (0,8000) -->
+
+### Modernização do Painel de Propriedades (Capacities & Obsidian Parity)
+
+- **Container Estruturado (.props-card)**: Card com cantos arredondados (10px), borda sutil `var(--line)`, fundo secundário `var(--side)` e sombra delicada.
+- **Cabeçalho Compacto & Recolhível (.props-head)**:
+  - Título `Propriedades` acompanhado do contador de campos preenchidos (`• N`).
+  - Chevron interativo `▾` para colapsar e expandir com animação suave e `prefers-reduced-motion`.
+- **Linhas de Propriedade Tipadas (.op-prop)**:
+  - Coluna 1 (130px): Ícone semântico por tipo de dado (Etiqueta para Tipo, Calendário para Edição/Data, Prédio para Órgão, Bandeira para Banca, Maleta para Cargo, Alvo para Vagas, Gráfico para Remuneração/Pontuação) + rótulo com tipografia discreta (`12px; var(--muted)`).
+  - Coluna 2: Valor interativo (chip semântico com cor de entidade, badge, valor monetário/numérico ou placeholder clicável `+ Adicionar`).
+  - Hover suave na linha com highlight e botão de edição rápido (`.op-pen` / `.op-ed`).
+- **Governança & Preservação**:
+  - Implementação compatível com handlers existentes (`data-edit-chip`, `data-edit-prop`, `data-edit-cv`, `data-add-prop`).
+  - Memória contínua registrada no board conforme regra estrita de AGENTS.md.
+
+**Concurso, antes e depois** (0.1.1). Ian: as páginas de objeto estavam feias e sem cara de 2026; pediu redesign.
+
+**Edição, antes e depois** (0.1.1).
+
+![imagem e307](assets/4916231707b4b56575f007bdc921fa91.png)
+
+![imagem e309](assets/fc38ad7f1771ecbdbcc5341596b58f24.png)
+
+**Cargo, antes e depois** (0.1.1).
+
+**Tipo PDF, antes e depois** (0.1.1).
+
+### Feedback do Ian sobre a 0.1.1 (prints do protótipo)
+
+## 24. Dashboard Central de Estudos (#/espaco) - Especificação de UX
+<!-- container e506 @ (0,8600) -->
+
+![imagem e313](assets/265be9aa9703f3cc57f43d3c62f96de1.png)
+
+![imagem e315](assets/02126f3b520aaad9b5c9577b472379a8.png)
+
+### Reformulação da Home (#/espaco) em Dashboard de Estudos
+
+- **Hero do Concurso Alvo (Meta Principal)**:
+  - Destaque do certame ativo: Dataprev 2026 · FGV · Analista de Tecnologia da Informação (Engenharia de Software).
+  - Contagem regressiva em dias para a data da prova (13/10/2026).
+  - Termômetro do Edital: barra dinâmica de cobertura programática baseada no total de questões vistas.
+- **Seção Continuar de Onde Parou (Immediate Action Hero)**:
+  - Card 1 (Leitura): Retomada com 1 clique do último PDF acessado com indicação de página e % lido.
+  - Card 2 (Prática): Retomada com 1 clique da última sessão de resolução de questões ou simulado.
+- **KPIs de Estudo**:
+  - Taxa Geral de Acertos (com comparativo semanal).
+  - Questões respondidas hoje (com acompanhamento da meta diária de 25 questões).
+  - Ofensiva / Sequência de estudos (Streak em dias).
+  - Simulados concluídos e pontuações obtidas.
+- **Hub de Ações Rápidas**:
+  - Atalhos diretos para Simulado Rápido, Caderno de Erros, Grafo do Concurso e Importação de novos Editais/PDFs.
+- **Radar de Disciplinas Críticas**:
+  - Identificação das matérias com menor aproveitamento e CTA imediato 'Treinar Matéria'.
+
+**0.1.1, tela grande.** Ian sente vazio em tela larga; documentos do Concurso precisam mostrar de qual edição são.
+
+**0.1.1 (v97): "está um pouco estranho".** Painel direito apertado, rótulos quebrando, bloco Estudar repetindo as abas. Ajustado na v98.
+
+## 25. Telas Vitais: Navegação por Teclado, Grade Rápida e Relatório de Simulado
+<!-- container e508 @ (0,9200) -->
+
+![imagem e317](assets/5e04fb915ee94b2c67a5adb37585e685.png)
+
+### Auditoria e Modernização de Telas Vitais (Issues #17 & #19)
+
+- **Navegação por Teclado Completa**:
+  - Atalhos 1..5 ou A..E selecionam alternativas instantaneamente sem atraso.
+  - Tecla Enter confirma / avança de questão.
+  - Teclas J (Próxima) e K (Anterior) permitem fluidez total sem uso obrigatório de mouse.
+- **Navegador Rápido de Questões (Drawer / Grade)**:
+  - Gaveta com matriz 10x7 de todas as 70 questões do edital.
+  - Codificação semântica por cores: Verde (Acerto), Vermelho (Erro), Cinza (Pendente) e Borda Destacada (Questão Ativa).
+  - Salto direto e responsivo com zero layout shift ou scroll jumping.
+- **Relatório e Scorecard de Simulado**:
+  - Painel com nota final, tempo médio por item, taxa global de acertos e termômetro de nota de corte (mínimo de 57,5 pontos).
+  - Desempenho detalhado agrupado por disciplina com barras de progresso proporcionais.
+- **Governança & Board**:
+  - Alinhamento aos tokens de  e persistência no board.
+
+**0.1.1: "2026" e "Dataprev 2026" destacados juntos.** É o mesmo objeto aberto, igual ao Notion.
+
+**0.1.1: menu ⋯ do item** (Desafixar, Renomear, Copiar link, Excluir). Regra: fixar só pelo ⋯ da sidebar.
+
+**0.1.1: página da Edição** enviada junto com o mesmo feedback.
+
+![imagem e323](assets/831c50665375ea7ebd6bb067f3e09c4e.png)
+
+![imagem e325](assets/245371488f6e2d39a3dc98e934d488f4.png)
+
+![imagem e327](assets/791462f4696e4cfd2e62304ca7520faf.png)
+
+![imagem e329](assets/8852061c63b37547e1c657dda371bbee.png)
+
+**0.1.1:** seta de expandir e recolher (circulada) no item Dataprev.
+
+**0.1.1:** item "2026" (Edição) dentro do Dataprev.
+
+## 26. Integração do Explorar, Grafo Contextual e Navegação Tripartida (Issue #25)
+<!-- container e510 @ (0,9800) -->
+
+![imagem e331](assets/474678ed59f7cc5b7fbf3494dd75704f.png)
+
+### Unificação de Descoberta e Navegação Contextual (Issue #25)
+
+- **Explorar como Central de Descoberta**:
+  - Busca integrada, filtros dinâmicos por tipo e contagens em tempo real.
+  - Ações diretas e imediatas em cada item da listagem:
+    - [🕸️] Abrir no Grafo Contextual direto da linha.
+    - [🔗] Abrir Backlinks / referências.
+    - [+] Abrir em Nova Aba.
+- **Grafo Contextual por Objeto e por Tipo**:
+  - Suporte nativo ao grafo local focado no objeto ativo e em suas relações primárias/secundárias.
+  - Suporte à visualização de subgrafos para Coleções e Tipos de Objeto ().
+- **Sincronização e Fixação de Contexto (Pin/Follow)**:
+  - Botão 'Fixar neste objeto' () para congelar a inspeção enquanto o usuário navega livremente em outras abas.
+  - Botão 'Seguir contexto' () para restaurar a sincronia automática com a aba ativa.
+- **Navegação Coerente entre os 3 Painéis**:
+  - Clique simples: abre no centro.
+  - Shift + clique: abre ou foca no painel lateral.
+  - Ctrl / Cmd + clique: abre em nova aba.
+- **Preservação Contínua no Board**:
+  - Especificação e descobertas gravadas de forma permanente no Planning Board.
+
+**Referência:** item com pin e ⋯ no hover.
+
+### Referências do Capacities (sidebar)
+
+O que Ian mostrou como modelo para a sidebar: tipos de objeto, ordenar, hover, lixeira.
+
+![imagem e335](assets/5dd2843391f7c5827e8905be47daf12d.png)
+
+![imagem e337](assets/8d42664c47e656b5f3b9c49ea3e6b134.png)
+
+![imagem e339](assets/346da48cb8ad25f2a7857b2d30933368.png)
+
+**Capacities:** cabeçalho "Tipos de objeto" com contagem, ⋯ e +. Ian: o + deve abrir diálogo para escolher o objeto.
+
+**Capacities:** menu Ordenar manualmente ou alfabeticamente.
+
+**Capacities:** lista de tipos de objeto.
 
 ## 10. Arquivos do projeto (Dataprev 2026 e referências)
 <!-- container e363 @ (0,12666) -->
