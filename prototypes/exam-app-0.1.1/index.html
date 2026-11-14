@@ -3984,7 +3984,7 @@ function qfChipsHTML(key){
   return h;
 }
 function qfParts(key){
-  const c=qfCtx[key],st=qfSt(key),fl=qfFilter(key,c.all),n=QF_CATS.filter(x=>(st.f[x.id]||[]).length).length,act=n||st.text.trim()||QF_EXCLUSIONS.some(x=>!!(st.x||{})[x.id]!==!!x.default),T=c.all.length;
+  const c=qfCtx[key],st=qfSt(key),fl=qfFilter(key,c.all),n=QF_CATS.filter(x=>(st.f[x.id]||[]).length).length,T=c.all.length,act=n||st.text.trim()||fl.length!==T||QF_EXCLUSIONS.some(x=>!!(st.x||{})[x.id]!==!!x.default);
   return {fl,n,chips:qfChipsHTML(key),
     count:act?fl.length+' de '+T+' questões':T+(T===1?' questão':' questões'),
     list:fl.length?(c.o.renderList?c.o.renderList(fl,key):'<div class="op-list">'+qRows(fl)+'</div>'):'<div class="sc-empty"><b>Nenhuma questão com esses filtros.</b><p>Remova um filtro ou limpe tudo para ver as '+T+' questões.</p><button type="button" class="op-btn" data-qf-clear>Limpar tudo</button></div>'};
