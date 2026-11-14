@@ -572,18 +572,41 @@ svg{flex:none}
 @media (hover:none){.doc[aria-current="page"] .more{display:grid}}
 .empty button{color:var(--text);text-decoration:underline;text-underline-offset:2px}
 
-.side-foot{padding:8px;padding-left:max(8px,env(safe-area-inset-left));padding-bottom:max(8px,env(safe-area-inset-bottom));position:relative}
-.user-btn{display:flex;align-items:center;gap:10px;width:100%;height:44px;padding:0 8px;border-radius:10px;text-align:left}
-.user-btn:hover,.user-btn[aria-expanded="true"]{background:var(--hover)}
-.user-btn .who{flex:1;min-width:0;line-height:1.25}
-.user-btn .who b{display:block;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.user-btn .who small{display:block;color:var(--muted);font-size:12px}
+/* Linhas Utilitárias Inferiores da Sidebar (Issue #53: Gráfico, Lixeira, Ajuda & Recursos) */
+.side-utils{padding:4px 8px 4px;padding-left:max(8px,env(safe-area-inset-left));display:flex;flex-direction:column;gap:1px;border-top:1px solid var(--line);margin-top:auto}
+.side-utils .util-row{display:flex;align-items:center;gap:8px;width:100%;height:30px;min-height:30px;padding:0 8px;border-radius:6px;color:var(--text);font-size:13.5px;font-weight:400;text-decoration:none;cursor:pointer;border:none;background:transparent;text-align:left;transition:background-color .15s ease}
+.side-utils .util-row:hover{background:var(--hover)}
+.side-utils .util-row[aria-current="page"]{background:var(--active);font-weight:500}
+.side-utils .util-row svg{width:16px;height:16px;color:var(--muted);flex:none;transition:color .15s ease}
+.side-utils .util-row:hover svg{color:var(--text)}
+.side-utils .util-row .t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.side-utils .util-row .chev{width:14px;height:14px;color:var(--muted);transition:transform .18s ease;margin-left:auto}
+.side-help-sec{display:flex;flex-direction:column}
+.side-help-sec.open .chev{transform:rotate(180deg)}
+.side-help-menu{display:none;flex-direction:column;gap:1px;padding:2px 0 2px 12px}
+.side-help-sec.open .side-help-menu{display:flex}
+.side-help-subrow{display:flex;align-items:center;gap:8px;width:100%;height:28px;min-height:28px;padding:0 8px;border-radius:6px;color:var(--muted);font-size:13px;font-weight:400;text-decoration:none;cursor:pointer;border:none;background:transparent;text-align:left;transition:background-color .15s ease,color .15s ease}
+.side-help-subrow:hover{background:var(--hover);color:var(--text)}
+.side-help-subrow svg{width:15px;height:15px;color:var(--muted);flex:none}
+.side-help-subrow:hover svg{color:var(--text)}
+.side-help-subrow .t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* Rodapé Horizontal de Ícones do Capacities (.side-foot) - Issue #53 */
+.side-foot{height:38px;min-height:38px;padding:0 8px;padding-left:max(8px,env(safe-area-inset-left));padding-right:max(8px,env(safe-area-inset-right));padding-bottom:max(0px,env(safe-area-inset-bottom));display:flex;align-items:center;border-top:1px solid var(--line);position:relative;background:var(--side);box-sizing:border-box}
+.side-foot-group{display:flex;align-items:center;gap:4px}
+.side-foot-group.right{margin-left:auto}
+.side-foot-btn{width:27px;height:27px;min-width:27px;min-height:27px;display:grid;place-items:center;border-radius:6px;color:var(--muted);cursor:pointer;border:none;background:transparent;padding:0;transition:background-color .15s ease,color .15s ease}
+.side-foot-btn:hover{background:var(--hover);color:var(--text)}
+.side-foot-btn:focus-visible{outline:2px solid var(--ring);outline-offset:1px}
+.side-foot-btn svg{width:16px;height:16px}
+.badge-pro{display:inline-flex;align-items:center;justify-content:center;height:19px;padding:0 6px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--accent);background:color-mix(in srgb,var(--accent) 15%,transparent);border:1px solid color-mix(in srgb,var(--accent) 30%,transparent);cursor:pointer;line-height:1;margin:0 1px;transition:background-color .15s ease}
+.badge-pro:hover{background:color-mix(in srgb,var(--accent) 25%,transparent)}
 
 /* popovers */
 .pop{position:absolute;left:8px;width:244px;z-index:40;background:var(--pop);border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 32px rgba(0,0,0,.16);padding:6px;display:none}
 .pop.open{display:block}
 .side-top .pop{top:calc(100% - 2px)}
-.side-foot .pop{bottom:calc(100% + 2px)}
+.side-foot .pop{bottom:calc(100% + 4px);left:8px}
 .pop .lbl{font-size:12px;color:var(--muted);padding:6px 10px 4px}
 .pop .mail{font-size:12.5px;color:var(--muted);padding:6px 10px 8px;border-bottom:1px solid var(--line);margin-bottom:4px}
 .pop hr{border:0;border-top:1px solid var(--line);margin:4px 2px}
@@ -936,7 +959,7 @@ a.ot{display:block;padding:3px 0;min-height:24px}
 .sim-opts-row .q-radio:has(input:focus-visible){outline:2px solid var(--study-accent);outline-offset:2px}
 .sim-opts-row .q-radio input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:inherit}
 .trash-list{display:flex;flex-direction:column;gap:8px;margin-top:12px}.trash-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.trash-tx{display:flex;flex-direction:column;gap:2px}.trash-tx small{color:var(--muted);font-size:12px}
-.side-foot a.row{text-decoration:none;margin-bottom:4px}.side-foot .row[aria-current]{background:var(--active);color:var(--text)}
+.side-utils .util-row[aria-current]{background:var(--active);color:var(--text)}
 .study-shell .cx-head{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin:6px 0 14px}.cx-mark{width:44px;height:44px;flex:none}
 .cx-title{flex:1;min-width:180px}.cx-head h1{margin:0;font-size:26px;line-height:1.15;letter-spacing:-.01em}.cx-sub{margin:3px 0 0;font-size:13px;color:var(--muted)}
 .cx-context{display:flex;gap:10px;flex-wrap:wrap}.cx-sel,.cx-ctx{display:flex;flex-direction:column;gap:3px;font-size:11px;color:var(--muted)}.cx-ctx b{font-size:13px;color:var(--text);font-weight:600;padding:6px 0}
@@ -1486,22 +1509,71 @@ a.rp-link:hover{background:var(--active)}
 
     <nav class="nav" id="nav" aria-label="Navegação do espaço"></nav>
 
-    <div class="side-foot">
-      <a class="row" id="graphBtn" href="#/grafico" title="Gráfico">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="7" r="2.3"/><circle cx="18" cy="6" r="2.3"/><circle cx="12" cy="18" r="2.3"/><path d="M8 8l3 8M16 8l-3 8M8.3 6.8l7.4-.6"/></svg>
+    <div class="side-utils" id="sideUtils" role="navigation" aria-label="Navegação utilitária">
+      <a class="util-row" id="graphBtn" href="#/grafico" title="Gráfico global">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="7" r="2.3"/><circle cx="18" cy="6" r="2.3"/><circle cx="12" cy="18" r="2.3"/><path d="M8 8l3 8M16 8l-3 8M8.3 6.8l7.4-.6"/></svg>
         <span class="t">Gráfico</span>
       </a>
-      <a class="row study-side-link foot-trash" href="#/lixeira" title="Lixeira"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg><span class="t">Lixeira</span></a>
-      <button class="user-btn" id="usBtn" aria-expanded="false" aria-haspopup="menu" title="Conta">
-        <span class="av user">I</span>
-        <span class="who"><b>Ian</b><small>Plano pessoal</small></span>
-        <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color:var(--muted)"><path d="M7 10l5-5 5 5M7 14l5 5 5-5"/></svg>
-      </button>
-      <div class="pop" id="usPop" role="menu">
+      <a class="util-row" id="trashBtn" href="#/lixeira" title="Lixeira">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>
+        <span class="t">Lixeira</span>
+      </a>
+      <div class="side-help-sec" id="sideHelpSec">
+        <button type="button" class="util-row" id="sideHelpBtn" aria-expanded="false" aria-controls="sideHelpMenu" title="Ajuda &amp; Recursos">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5V14M12 17.5h0"/></svg>
+          <span class="t">Ajuda &amp; Recursos</span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="side-help-menu" id="sideHelpMenu" role="region" aria-label="Menu Ajuda &amp; Recursos">
+          <button type="button" class="side-help-subrow" id="helpSubSteps" title="Primeiros Passos">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <span class="t">Primeiros Passos</span>
+          </button>
+          <button type="button" class="side-help-subrow" id="helpSubDocs" title="Documentação">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            <span class="t">Documentação</span>
+          </button>
+          <button type="button" class="side-help-subrow" id="helpSubShortcuts" title="Atalhos de Teclado">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M6 12h.01M10 12h.01M14 12h.01M18 12h.01M8 16h8"/></svg>
+            <span class="t">Atalhos de Teclado</span>
+          </button>
+          <button type="button" class="side-help-subrow" id="helpSubFeedback" title="Feedback">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <span class="t">Feedback</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-foot" id="sideFoot" role="toolbar" aria-label="Barra de ferramentas do rodapé">
+      <div class="side-foot-group">
+        <button type="button" class="side-foot-btn" id="btnFootAccount" aria-expanded="false" aria-haspopup="menu" title="Perfil / Conta" aria-label="Perfil / Conta">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/></svg>
+        </button>
+        <button type="button" class="badge-pro" id="btnFootPro" title="Plano Pro" aria-label="Plano Pro">PRO</button>
+        <button type="button" class="side-foot-btn" id="btnFootSettings" title="Configurações" aria-label="Configurações">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </button>
+        <button type="button" class="side-foot-btn" id="btnFootTheme" title="Alternar tema (Claro / Escuro)" aria-label="Alternar tema">
+          <svg class="theme-icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <svg class="theme-icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+        <button type="button" class="side-foot-btn" id="btnFootSync" title="Sincronização: online e salvo localmente" aria-label="Status de sincronização">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+        </button>
+      </div>
+
+      <div class="side-foot-group right">
+        <button type="button" class="side-foot-btn" id="btnFootShortcuts" title="Atalhos de teclado" aria-label="Atalhos de teclado">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M6 12h.01M10 12h.01M14 12h.01M18 12h.01M8 16h8"/></svg>
+        </button>
+      </div>
+
+      <div class="pop" id="usPop" role="menu" aria-label="Menu de conta e perfil">
         <div class="mail">Ian · conta pessoal</div>
         <button class="row" id="usTheme"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor"/></svg><span class="t">Alternar tema</span></button>
-        <button class="row" id="usCfg"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg><span class="t">Configurações</span></button>
-        <button class="row" id="usHelp"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5V14M12 17.5h0"/></svg><span class="t">Atalhos de teclado</span></button>
+        <button class="row" id="usCfg"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span class="t">Configurações</span></button>
+        <button class="row" id="usHelp"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M6 12h.01M10 12h.01M14 12h.01M18 12h.01M8 16h8"/></svg><span class="t">Atalhos de teclado</span></button>
         <hr>
         <button class="row" id="usOut"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg><span class="t">Sair</span></button>
       </div>
@@ -1820,7 +1892,7 @@ function paintSpaces(){
 /* ---- popovers ---- */
 function closePops(){
   ['spPop','usPop','newMenu'].forEach(i=>{ const el=$(i); if(el) el.classList.remove('open'); });
-  ['spBtn','usBtn','sideNewBtn'].forEach(i=>{ const el=$(i); if(el) el.setAttribute('aria-expanded','false'); });
+  ['spBtn','btnFootAccount','sideNewBtn'].forEach(i=>{ const el=$(i); if(el) el.setAttribute('aria-expanded','false'); });
 }
 
 /* NewContentMenu (#newMenu) - Issue #50 */
@@ -1910,10 +1982,9 @@ function togglePop(btn,pop){
   }
 }
 $('spBtn').onclick=e=>{ e.stopPropagation(); togglePop('spBtn','spPop'); };
-$('usBtn').onclick=e=>{ e.stopPropagation(); togglePop('usBtn','usPop'); };
 $('sideNewBtn').onclick=e=>{ e.stopPropagation(); toggleNewMenu(); };
 $('sideSearchBtn').onclick=e=>{ e.stopPropagation(); openSearch(false); };
-document.addEventListener('click',e=>{ if(!e.target.closest('.pop')&&!e.target.closest('.new-menu')&&!e.target.closest('#sideNewBtn')) closePops(); });
+document.addEventListener('click',e=>{ if(!e.target.closest('.pop')&&!e.target.closest('.new-menu')&&!e.target.closest('#sideNewBtn')&&!e.target.closest('#btnFootAccount')) closePops(); });
 
 $('newMenuIn')?.addEventListener('input',()=>{ newMenuSel=0; renderNewMenu(); });
 $('newMenuIn')?.addEventListener('keydown',e=>{
@@ -1960,19 +2031,69 @@ $('spPop').onclick=e=>{
   } else space=b.dataset.sp;
   store.set('space',space); closePops(); paintSpaces(); paintNav(); route(true);
 };
-$('usTheme').onclick=()=>{ toggleTheme(); closePops(); };
-$('usOut').onclick=()=>{ closePops(); toast('Este protótipo não tem login: seus dados ficam neste navegador'); };
-$('usCfg').onclick=()=>{ closePops();
+/* Ajuda & Recursos Drawer (Issue #53) */
+$('sideHelpBtn')?.addEventListener('click',e=>{
+  e.stopPropagation();
+  const sec=$('sideHelpSec'), btn=$('sideHelpBtn');
+  if(!sec||!btn) return;
+  const open=!sec.classList.contains('open');
+  sec.classList.toggle('open',open);
+  btn.setAttribute('aria-expanded',String(open));
+});
+$('helpSubSteps')?.addEventListener('click',()=>{
+  dialog({title:'Primeiros Passos no Exam App',html:'<div class="s-note"><b>Bem-vindo ao Exam App</b><br>1. Navegue pelos concursos e disciplinas na barra lateral.<br>2. Abra cadernos de prova oficiais com leitura em PDF e anotações vinculadas.<br>3. Resolva questões de múltipla escolha e faça simulados com estatísticas reais.<br>4. Explore relações e conexões de conteúdo pelo Gráfico Global.</div>',ok:'Entendido',noCancel:true});
+});
+$('helpSubDocs')?.addEventListener('click',()=>{
+  dialog({title:'Documentação',html:'<div class="s-note">Consulte as especificações arquiteturais, modelo de domínio e guias do projeto em <code>docs/</code> e no quadro do app.</div>',ok:'Fechar',noCancel:true});
+});
+$('helpSubShortcuts')?.addEventListener('click',()=>{
+  openShortcutsDialog();
+});
+$('helpSubFeedback')?.addEventListener('click',()=>{
+  dialog({title:'Enviar Feedback',text:'Compartilhe suas sugestões de melhoria ou reporte problemas encontrados no protótipo:',input:'',placeholder:'Descreva seu feedback...',ok:'Enviar'}).then(t=>{
+    if(t&&t.trim()) toast('Obrigado pelo seu feedback!');
+  });
+});
+
+/* Rodapé Horizontal de Ícones do Capacities (#sideFoot) - Issue #53 */
+$('btnFootAccount')?.addEventListener('click',e=>{
+  e.stopPropagation();
+  togglePop('btnFootAccount','usPop');
+});
+$('btnFootPro')?.addEventListener('click',()=>{
+  toast('Você está utilizando o plano Pro local do Exam App.');
+});
+function openSettingsDialog(){
+  closePops();
   const cur_=root.dataset.theme||'auto', b=(k,l)=>'<button class="btn'+(cur_===k?' pri':'')+'" data-cfg="'+k+'" style="border:1px solid var(--line)">'+l+'</button>';
   dialog({title:'Configurações',html:'<div class="keys" style="grid-template-columns:1fr;gap:14px"><div><div style="color:var(--muted);font-size:12.5px;margin-bottom:6px">Tema</div><div style="display:flex;gap:8px">'+b('light','Claro')+b('dark','Escuro')+b('auto','Automático')+'</div></div><div><div style="color:var(--muted);font-size:12.5px;margin-bottom:6px">Leitura</div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" data-cfg="zoom" style="border:1px solid var(--line)">Zoom padrão (100%)</button></div></div></div>',ok:'Fechar',noCancel:true});
   $('dlg').querySelector('.dlg-box').addEventListener('click',e=>{ const x=e.target.closest('[data-cfg]'); if(!x) return; const k=x.dataset.cfg;
-    if(k==='light'||k==='dark'){ root.dataset.theme=k; store.set('theme',k); }
-    else if(k==='auto'){ delete root.dataset.theme; store.set('theme',null); }
+    if(k==='light'||k==='dark'){ root.dataset.theme=k; store.set('theme',k); syncThemeFootIcon(); }
+    else if(k==='auto'){ delete root.dataset.theme; store.set('theme',null); syncThemeFootIcon(); }
     else if(k==='zoom'){ store.set('zoom',1); if(cur&&cur.pdf) setZoom(1); toast('Zoom padrão restaurado'); }
     else if(k==='progress'){ BASE_DOCS.concat(uploads).forEach(d=>{ try{ localStorage.removeItem('leitor:pos:'+d.id); }catch(_){} }); paintNav(); toast('Progresso de leitura limpo'); }
     if(k==='light'||k==='dark'||k==='auto') $('dlg').querySelectorAll('[data-cfg]').forEach(y=>y.classList.toggle('pri',y.dataset.cfg===k));
-  }); };
-$('usHelp').onclick=()=>{ closePops(); dialog({title:'Atalhos de teclado',html:'<dl class="keys"><dt>Ctrl B</dt><dd>Recolher ou abrir a barra lateral</dd><dt>Ctrl K</dt><dd>Buscar documentos</dd><dt>J / K</dt><dd>Próximo / anterior documento</dd><dt>F2</dt><dd>Renomear o documento aberto</dd><dt>+ / −</dt><dd>Zoom</dd></dl>',ok:'Fechar',noCancel:true}); };
+  });
+}
+function openShortcutsDialog(){
+  closePops();
+  dialog({title:'Atalhos de teclado',html:'<dl class="keys"><dt>Ctrl B</dt><dd>Recolher ou abrir a barra lateral</dd><dt>Ctrl K</dt><dd>Buscar documentos</dd><dt>Ctrl Alt N</dt><dd>Criar novo objeto (NewContentMenu)</dd><dt>J / K</dt><dd>Próximo / anterior documento</dd><dt>F2</dt><dd>Renomear o documento aberto</dd><dt>+ / −</dt><dd>Zoom</dd></dl>',ok:'Fechar',noCancel:true});
+}
+$('btnFootSettings')?.addEventListener('click',openSettingsDialog);
+$('btnFootTheme')?.addEventListener('click',()=>{
+  toggleTheme();
+  closePops();
+});
+$('btnFootSync')?.addEventListener('click',()=>{
+  const online=navigator.onLine!==false;
+  toast(online?'Sincronizado: dados e estado salvos localmente':'Você está offline. Alterações salvas localmente.');
+});
+$('btnFootShortcuts')?.addEventListener('click',openShortcutsDialog);
+
+$('usTheme')?.addEventListener('click',()=>{ toggleTheme(); closePops(); });
+$('usOut')?.addEventListener('click',()=>{ closePops(); toast('Este protótipo não tem login: seus dados ficam neste navegador'); });
+$('usCfg')?.addEventListener('click',openSettingsDialog);
+$('usHelp')?.addEventListener('click',openShortcutsDialog);
 
 /* ---- collapse / drawer / sidebar resize ---- */
 let sideW = Math.max(224, Math.min(384, +(store.get('sidew') || 284)));
@@ -2524,8 +2645,23 @@ addEventListener('drop',e=>{ if(![...e.dataTransfer.types].includes('Files'))ret
 /* ---- theme ---- */
 const root=document.documentElement;
 const savedTheme=store.get('theme'); if(savedTheme) root.dataset.theme=savedTheme;
-function toggleTheme(){ const dark=root.dataset.theme?root.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;
-  root.dataset.theme=dark?'light':'dark'; store.set('theme',root.dataset.theme); }
+function syncThemeFootIcon(){
+  const dark=root.dataset.theme?root.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;
+  const btn=$('btnFootTheme');
+  if(!btn) return;
+  const icDark=btn.querySelector('.theme-icon-dark'), icLight=btn.querySelector('.theme-icon-light');
+  if(icDark&&icLight){
+    icDark.style.display=dark?'':'none';
+    icLight.style.display=dark?'none':'';
+  }
+}
+function toggleTheme(){
+  const dark=root.dataset.theme?root.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;
+  root.dataset.theme=dark?'light':'dark';
+  store.set('theme',root.dataset.theme);
+  syncThemeFootIcon();
+}
+syncThemeFootIcon();
 
 /* ---- viewer ---- */
 let cur=null, token=0, zoom=1, io=null, baseW=0;
@@ -3724,7 +3860,7 @@ function studyPage(title,meta,html){
   view.innerHTML='<div class="board">'+sWrap(html)+'</div>';
   if(_same){ const sh=view.querySelector('.study-shell'); if(sh) sh.classList.add('no-anim'); view.scrollTop=_sc; } else view.scrollTop=0;
   nav.querySelectorAll('a.doc.ty').forEach(a=>a.removeAttribute('aria-current'));
-  document.querySelectorAll('.actions a.row,.side-foot a.row').forEach(a=>a.toggleAttribute('aria-current',a.getAttribute('href')===location.hash));
+  document.querySelectorAll('.actions a.row,.side-utils .util-row').forEach(a=>a.toggleAttribute('aria-current',a.getAttribute('href')===location.hash));
 }
 function studyError(e,h){studyPage('Questões','Erro ao carregar','<div class="s-head"><h1>Não foi possível abrir o banco de questões</h1></div><p class="s-description">'+esc(e.message)+'</p><div class="s-inlineactions"><a class="s-button" href="'+h+'">Voltar</a><button class="s-button" data-study-retry>Tentar novamente</button></div>');}
 function sQuestionMarkup(q,answer,examMode,pend){
@@ -3854,7 +3990,7 @@ view.addEventListener('click',e=>{
    if(e.target.closest('[data-s-finish]')){const missing=examQs(s).length-Object.keys(s.answers).length;dialog({alert:true,title:'Entregar a prova agora?',text:(missing?'Há '+missing+' questões sem resposta, que contarão como não respondidas. ':'Todas as questões foram respondidas. ')+'Depois de entregar, você não poderá alterar as respostas.',ok:'Entregar prova',cancel:'Voltar à prova'}).then(ok=>{ if(ok) finishExam(); });}
  }
 });
-addEventListener('hashchange',()=>{if(location.hash==='#/simulado/exec')beginExamTicker();else stopExamTicker();document.querySelectorAll('.actions a.row,.side-foot a.row').forEach(a=>a.toggleAttribute('aria-current',a.getAttribute('href')===location.hash));});
+addEventListener('hashchange',()=>{if(location.hash==='#/simulado/exec')beginExamTicker();else stopExamTicker();document.querySelectorAll('.actions a.row,.side-utils .util-row').forEach(a=>a.toggleAttribute('aria-current',a.getAttribute('href')===location.hash));});
 
 /* ---- v0.1.1 · Camada de IA: Claude pela capability "sample" do artefato (sem chave de API) ---- */
 let AI=null; const aiMem={}, aiCtl={};
@@ -4343,7 +4479,7 @@ function stopGV(){ if(GV){ GV.stop=true; cancelAnimationFrame(GV.raf); GV.ro&&GV
 function showGraph(){
   blank('Gráfico',''); const sp=spaces.find(x=>x.id===space); document.title='Gráfico · '+sp.name; $('docMeta').textContent=sp.name;
   const mn=document.querySelector('.main'); mn.classList.add('on-board','on-graph'); $('boardBtn').removeAttribute('aria-current'); $('spaceRow').removeAttribute('aria-current');
-  document.querySelectorAll('.actions a.row').forEach(a=>a.toggleAttribute('aria-current',a.getAttribute('href')==='#/grafico')); if(isPhone()) app.classList.remove('open');
+  document.querySelectorAll('.actions a.row,.side-utils .util-row').forEach(a=>a.toggleAttribute('aria-current',a.getAttribute('href')==='#/grafico')); if(isPhone()) app.classList.remove('open');
   stopGV(); view.innerHTML='<div class="gv"><div class="gv-load" role="status"><i aria-hidden="true"></i>Montando o gráfico…</div></div>';
   const tk=(showGraph.tk=(showGraph.tk||0)+1); setTimeout(()=>{ if(tk===showGraph.tk&&location.hash==='#/grafico') buildGraph(); },16); }
 function buildGraph(){
