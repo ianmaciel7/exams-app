@@ -1097,6 +1097,41 @@ Estas são **16 entradas adicionais** de sucesso WCAG, além das já documentada
 5. **MUST** preservar semântica, foco, ordem de leitura, reflow, estado de seleção e suporte a tecnologias assistivas; mecanismos visuais de saliência não substituem WCAG.
 6. **MUST** registrar fonte, hipótese, caso de uso, limite, evidência no board quando existir e resultado **documentado / implementado / testado**. A inclusão destas referências é **somente documentação**, não teste da UI.
 
+
+### 22. Padrões de componentes UI 2026 — inventário oficial e leis relacionadas
+
+**Fonte obrigatória para criar/revisar componentes:** [docs/ux/componentes-ui-padroes-2026.md](docs/ux/componentes-ui-padroes-2026.md). Inventaria **30 padrões publicados no W3C WAI-ARIA APG** (de Accordion a Window Splitter), principais padrões de Material 3/Primer/React Aria e primitivas HTML/CSS atuais. **Padrões não são leis UX.** As leis e relações científicas continuam separadas nas seções 0–2; este complemento **mapeia** onde se aplicam, sem apresentar "30 novas leis".
+
+#### 22.1. Escolha semântica de componentes por tarefa
+
+| Necessidade | Componente e nome oficial pertinente | Contrato de escolha e lei/efeito aplicável |
+|---|---|---|
+| **Navegar** | **Link / Breadcrumb / Disclosure Navigation** | Preferir `<a href>` e landmarks `nav`; grupos expansíveis podem usar Disclosure. **Jakob's Law** (heurística de familiaridade), **Gestalt Proximity** (princípio perceptivo). Não criar `role=menu` só porque é sidebar. |
+| **Alternar painel** | **Tabs** | Usar tablist/tab/tabpanel apenas para painéis associados com teclado/estado adequados; **tabs visuais de rotas** continuam links quando mudam de página. |
+| **Escolher opção** | **Radio Group / Checkbox / Select / Listbox / Combobox / Segmented Buttons** | Usar exclusividade, quantidade e busca para decidir. **Hick–Hyman Law** para incerteza de escolha, não regra fixa de quantidade de opções. |
+| **Exibir ações de item** | **Button / Menu Button / Action Menu / Toolbar** | Ações com nome/estado e foco; menus compostos usam teclado correspondente. **Fitts's Law** para alvo, **Steering Law** somente para trajetórias/restrições de menu em cascata. |
+| **Confirmar decisão** | **Dialog (Modal) / Alert Dialog** | Modalidade real, foco contido e retorno; não usar `aria-modal=true` sem tornar fundo inerte nem dialog para qualquer explicação. |
+| **Ajuda contextual** | **Tooltip / Popover / Disclosure** | Tooltip sem controles; popover interativo não modal quando apropriado; conformidade com **WCAG 1.4.13 AA** onde aplicável. |
+| **Dados em coleção** | **Table / Grid / GridList / Tree View / Treegrid / DataTable** | Tabela para dados estáticos, Grid/Treegrid apenas com interatividade e modelo de teclado completos; grafo relacional não é automaticamente árvore ARIA. |
+| **Andamento/medição** | **Progress / Meter / Alert / Status** | `<progress>` para operação/conclusão; `<meter>` para medição em faixa; anúncio de falha/recuperação por texto; não usar toast transitório como único aviso crítico. |
+| **Painéis e drag** | **Window Splitter / Side Sheet / Drag Handle** | Resize/movimentação precisa de teclado e alternativa sem arraste quando o SC 2.5.7 (AA) exigir; Fitts/Steering informam esforço motor sem substituir WCAG. |
+
+#### 22.2. Novidades nativas da web que precisam de teste de suporte
+
+- **Popover API (`popover`/`popovertarget`)**: recurso Web não modal; **Baseline 2025**, não modal automático nem semântica de menu por si só. [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API).
+- **CSS Anchor Positioning (`anchor()`/`position-anchor`)**: posicionamento de popover/menu em relação a âncora com **Baseline 2026** para essas funcionalidades específicas, sujeito a browsers/recursos e fallback. [MDN — anchor()](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/anchor), [position-anchor](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/position-anchor).
+- **Customizable `<select>` (`appearance: base-select`, `::picker(select)`)**: funcionalidade web moderna com **suporte limitado** em 2026; manter comportamento nativo/fallback e conferir Firefox/SSR/hydration antes de adotar. [MDN](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Customizable_select).
+- **`<dialog>`/ `<details>` / `<meter>` / `<progress>`**: preferir semântica nativa adequada em vez de recriar widgets ARIA complexos sem necessidade. [MDN — HTML](https://developer.mozilla.org/en-US/docs/Web/HTML/Element).
+
+#### 22.3. Contrato obrigatório para agentes de componentes
+
+1. **MUST** consultar o [inventário de 30 padrões](docs/ux/componentes-ui-padroes-2026.md) antes de criar componente complexo e registrar **padrão escolhido, motivo, estados, semântica, teclado, foco, pointer/touch, feedback e fallback**. A origem pode ser W3C/HTML/design system; **não** chamá-la de lei científica.
+2. **MUST** distinguir **Link de Button**, **Tabs de rotas**, **Menu de navegação**, **Tooltip de Popover**, **Table de Grid**, **Switch de Checkbox**, **Meter de Progress**, **Tree de grafo relacional**, e **modal de painel não modal**; consultar fonte primária específica antes de implementar ARIA.
+3. **MUST** conferir **nome, função, estados, área clicável, foco visível, teclado, hover/focus tooltip, reduced motion, leitor de tela quando pertinente e mobile/zoom**. O padrão APG é orientação técnica, não prova de conformidade WCAG.
+4. **MUST** preservar seleção, foco, filtros, estado pendente e continuidade entre panes, responsive, abertura/fechamento de overlays e atualizações assíncronas. A aplicação deve controlar persistência, cancelamento, erro e recuperação.
+5. **SHOULD** vincular Fitts, Hick–Hyman, Steering, Gestalt, Jakob e outros **somente quando a hipótese for pertinente**, registrando como lei empírica, princípio perceptivo, heurística ou efeito. Não aplicar falsos números universais de botões, colunas ou duração.
+6. **MUST** indicar se o componente está **documentado, implementado ou testado**; qualquer edição real de protótipo deve ter evidência no board, sem inventar screenshot/GIF.
+
 <!-- UX-LAWS-CATALOG:END -->
 
 <!-- DESIGN-SYSTEM-INTEGRATION:START -->
