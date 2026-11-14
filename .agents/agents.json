@@ -86,6 +86,27 @@
         ],
         "enabled": true
       },
+      "serena": {
+        "label": "Serena",
+        "description": "Semantic code navigation, diagnostics, and safe symbol editing",
+        "transport": "stdio",
+        "command": "serena",
+        "args": [
+          "start-mcp-server",
+          "--project",
+          "${PROJECT_ROOT}",
+          "--context",
+          "desktop-app"
+        ],
+        "targets": [
+          "codex",
+          "claude",
+          "claude_desktop",
+          "gemini",
+          "antigravity"
+        ],
+        "enabled": true
+      },
       "git": {
         "label": "Git",
         "description": "Repository-aware git operations",

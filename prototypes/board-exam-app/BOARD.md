@@ -1865,6 +1865,25 @@ DEPOIS: página e camada de texto, DPR 2 / 200% | assets/pdf112_after_dpr2_zoom2
 > after DPR=2 zoom=1.5 página=1 canvas=1508×2132 CSS=754.0×1616.0 ratio=2.00 textSpans=157 status=ready
 > after DPR=2 zoom=2 página=1 canvas=1508×2132 CSS=754.0×2155.0 ratio=2.00 textSpans=157 status=ready
 
+## 34. Infraestrutura de agentes — correção MCP (Codex, Claude e Antigravity)
+<!-- container e1188 @ (19800,11000) -->
+
+### Diagnóstico P1 e correção verificável — 2026-11-14
+
+> **Escopo:** Codex, Claude Desktop e Antigravity no workspace `C:\Users\ianma\workspace\exams\dev`. Sem captura visual: evidência é a saída textual de `agents` e os arquivos de configuração materializados.
+> **Causas confirmadas (P1):**
+> 1. `.agents/agents.json` declarava somente `fetch`, `filesystem` e `git`; Serena não estava no conjunto MCP do projeto. A entrada Serena do Claude Desktop era de outro workspace (`notes-app`).
+> 2. `fetch` e `git` dependiam de `uvx`; o binário era um link do WinGet visível apenas no PATH da sessão.
+> 3. O Codex não confiava no projeto, podendo ignorar `.codex/config.toml`.
+> 4. O provável outro recurso citado, CodeGraph, não possui índice neste repositório (a pasta `.codegraph/` contém apenas `.gitignore`); não foi inicializado porque indexação requer decisão explícita.
+> **Correção aplicada:**
+> - Adicionado servidor `serena` à fonte compartilhada, para Codex, Claude, Claude Desktop, Gemini e Antigravity, iniciando no projeto correto com contexto `desktop-app`.
+> - Overrides locais usam `cmd.exe` para chamar os caminhos absolutos de `uvx.exe` e `serena.exe`, preservando portabilidade da fonte versionada e compatibilidade com a verificação do CLI.
+> - Executado `agents sync`: atualizou `.codex/config.toml`, `.mcp.json`, `.agents/mcp_config.json`, `.gemini/settings.json` e a configuração global do Claude Desktop.
+> - Projeto marcado como `trusted` no arquivo global do Codex.
+> **Aceite verificado:** `agents mcp test` retornou sucesso para `fetch`, `filesystem`, `git` e `serena`; `agents sync --check` retornou `No changes needed`; status registra quatro servidores e confiança Codex `trusted`.
+> **Limite de teste:** o CLI não consegue introspectar runtime dos apps GUI e os binários `codex`, `claude` e `agy` não estão no PATH. Fechar e reabrir os três apps carrega a nova configuração; no Claude Desktop os nomes aparecem com o prefixo gerenciado `agents__5c84344337b9__`.
+
 ## 10. Arquivos do projeto (Dataprev 2026 e referências)
 <!-- container e363 @ (0,12666) -->
 

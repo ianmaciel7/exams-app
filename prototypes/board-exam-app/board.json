@@ -573,7 +573,10 @@
     "e1184",
     "e1185",
     "e1186",
-    "e1187"
+    "e1187",
+    "e1188",
+    "e1189",
+    "e1190"
   ],
   "elements": {
     "e1": {
@@ -6064,6 +6067,36 @@
       "y": 12350,
       "w": 1550,
       "h": 120
+    },
+    "e1188": {
+      "type": "container",
+      "color": "white",
+      "x": 19800,
+      "y": 11000,
+      "w": 1600,
+      "h": 1500,
+      "text": "34. Infraestrutura de agentes — correção MCP (Codex, Claude e Antigravity)"
+    },
+    "e1189": {
+      "type": "text",
+      "size": "large",
+      "x": 19830,
+      "y": 11060,
+      "w": 1540,
+      "h": 70,
+      "text": "Diagnóstico P1 e correção verificável — 2026-11-14"
+    },
+    "e1190": {
+      "type": "shape",
+      "color": "blue",
+      "kind": "rounded",
+      "size": "small",
+      "textAlign": "left",
+      "x": 19830,
+      "y": 11150,
+      "w": 1540,
+      "h": 1280,
+      "text": "**Escopo:** Codex, Claude Desktop e Antigravity no workspace `C:\\Users\\ianma\\workspace\\exams\\dev`. Sem captura visual: evidência é a saída textual de `agents` e os arquivos de configuração materializados.\n**Causas confirmadas (P1):**\n1. `.agents/agents.json` declarava somente `fetch`, `filesystem` e `git`; Serena não estava no conjunto MCP do projeto. A entrada Serena do Claude Desktop era de outro workspace (`notes-app`).\n2. `fetch` e `git` dependiam de `uvx`; o binário era um link do WinGet visível apenas no PATH da sessão.\n3. O Codex não confiava no projeto, podendo ignorar `.codex/config.toml`.\n4. O provável outro recurso citado, CodeGraph, não possui índice neste repositório (a pasta `.codegraph/` contém apenas `.gitignore`); não foi inicializado porque indexação requer decisão explícita.\n**Correção aplicada:**\n- Adicionado servidor `serena` à fonte compartilhada, para Codex, Claude, Claude Desktop, Gemini e Antigravity, iniciando no projeto correto com contexto `desktop-app`.\n- Overrides locais usam `cmd.exe` para chamar os caminhos absolutos de `uvx.exe` e `serena.exe`, preservando portabilidade da fonte versionada e compatibilidade com a verificação do CLI.\n- Executado `agents sync`: atualizou `.codex/config.toml`, `.mcp.json`, `.agents/mcp_config.json`, `.gemini/settings.json` e a configuração global do Claude Desktop.\n- Projeto marcado como `trusted` no arquivo global do Codex.\n**Aceite verificado:** `agents mcp test` retornou sucesso para `fetch`, `filesystem`, `git` e `serena`; `agents sync --check` retornou `No changes needed`; status registra quatro servidores e confiança Codex `trusted`.\n**Limite de teste:** o CLI não consegue introspectar runtime dos apps GUI e os binários `codex`, `claude` e `agy` não estão no PATH. Fechar e reabrir os três apps carrega a nova configuração; no Claude Desktop os nomes aparecem com o prefixo gerenciado `agents__5c84344337b9__`."
     }
   }
 }
