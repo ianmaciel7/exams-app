@@ -1,0 +1,30 @@
+{
+  "date": "2026-11-14T17:01:27.462Z",
+  "cases": [
+    {
+      "phase": "before",
+      "interaction": "static-help",
+      "containsStaticLabels": true,
+      "screenshot": "issue139_before_help.png"
+    },
+    {
+      "phase": "after",
+      "interaction": "search-and-modal",
+      "searchFocus": true,
+      "modalSuppression": true,
+      "screenshot": "issue139_after_search.png"
+    },
+    {
+      "phase": "after",
+      "interaction": "global-chords",
+      "sidebarToggledTwice": true,
+      "newItemOptions": 2,
+      "screenshot": "issue139_after_new_item.png"
+    }
+  ],
+  "pageErrors": [],
+  "limitations": [
+    "Chromium desktop automation: OS-reserved shortcuts and physical keyboard IME require manual testing.",
+    "Covers global search, sidebar, new-item menu and shortcut help; graph, full questions and all contextual components are not exhaustively tested."
+  ]
+}

@@ -733,7 +733,17 @@
     "e1393",
     "e1394",
     "e1395",
-    "e1396"
+    "e1396",
+    "e1397",
+    "e1398",
+    "e1399",
+    "e1400",
+    "e1401",
+    "e1402",
+    "e1403",
+    "e1404",
+    "e1405",
+    "e1406"
   ],
   "elements": {
     "e1": {
@@ -7687,6 +7697,92 @@
       "text": "DEPOIS: seletor responsivo a 390 CSS px com busca e seleção por toque",
       "x": 40518,
       "y": 12623,
+      "w": 760,
+      "h": 50
+    },
+    "e1397": {
+      "type": "container",
+      "color": "white",
+      "text": "46. Atalhos de teclado — Issue #139: registro e roteamento centralizado",
+      "x": 43000,
+      "y": 11000,
+      "w": 1650,
+      "h": 1170
+    },
+    "e1398": {
+      "type": "text",
+      "size": "small",
+      "x": 43018,
+      "y": 11008,
+      "w": 1590,
+      "h": 82,
+      "text": "Roteador declarativo único para comandos globais, categorias, prioridade, chord normalizado Mod (Ctrl/Command), Alt e Shift e disponibilidade contextual. E2E Chromium valida busca Ctrl+K, alternância Ctrl+B, novo objeto Ctrl+Alt+N, proteção de campos e diálogos, janela de ajuda gerada do mesmo catálogo, sem erro JS. Capturas e medições em issue139_commands_e2e.json. Permanecem sem cobertura E2E integral os contextos de grafo, simulado, leitor e atalhos reservados do SO ou IME real; a issue #139 fica aberta até a paridade completa."
+    },
+    "e1399": {
+      "type": "image",
+      "src": "/_blob/issue139_before_help",
+      "x": 43018,
+      "y": 11100,
+      "w": 755,
+      "h": 430
+    },
+    "e1400": {
+      "type": "text",
+      "size": "small",
+      "text": "ANTES: janela de ajuda com tabela fixa de seis atalhos",
+      "x": 43018,
+      "y": 11538,
+      "w": 760,
+      "h": 50
+    },
+    "e1401": {
+      "type": "image",
+      "src": "/_blob/issue139_after_help",
+      "x": 43828,
+      "y": 11100,
+      "w": 755,
+      "h": 430
+    },
+    "e1402": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: janela gerada dinamicamente a partir do registro de comandos",
+      "x": 43828,
+      "y": 11538,
+      "w": 760,
+      "h": 50
+    },
+    "e1403": {
+      "type": "image",
+      "src": "/_blob/issue139_after_search",
+      "x": 43018,
+      "y": 11635,
+      "w": 755,
+      "h": 430
+    },
+    "e1404": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: Ctrl+K abre busca; campo editável impede Ctrl+B global",
+      "x": 43018,
+      "y": 12073,
+      "w": 760,
+      "h": 50
+    },
+    "e1405": {
+      "type": "image",
+      "src": "/_blob/issue139_after_new_item",
+      "x": 43828,
+      "y": 11635,
+      "w": 755,
+      "h": 430
+    },
+    "e1406": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: Ctrl+Alt+N abre o menu Novo; digitação não sequestra atalhos",
+      "x": 43828,
+      "y": 12073,
       "w": 760,
       "h": 50
     }
