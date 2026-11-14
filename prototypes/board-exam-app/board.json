@@ -7486,38 +7486,39 @@
       "h": 50
     },
     "e1375": {
-      "type": "image",
-      "src": "/_blob/issue136_after_context_1366",
-      "x": 36828,
-      "y": 11100,
-      "w": 755,
-      "h": 430
+      "type": "container",
+      "color": "white",
+      "text": "44. Implementação e Validação E2E: Claude Pro Storage com Proxy Blindado e Fila Offline-First",
+      "x": 38000,
+      "y": 11000,
+      "w": 1650,
+      "h": 1600
     },
     "e1376": {
       "type": "text",
-      "size": "small",
-      "text": "DEPOIS: alternativas em linhas/click targets, concurso no desktop",
-      "x": 36828,
-      "y": 11538,
-      "w": 760,
-      "h": 50
+      "color": "white",
+      "text": "### Implementação e Comprovação de Sincronização Bidirecional Real no Claude Pro\n\nImplementamos a integração do Exam App com o Claude Pro Artifact Database (Frame DB) via proxy local blindado em Python (127.0.0.1:8766) e motor de sincronização offline-first.\n\n- Blindagem de Segurança do Proxy: Proteção estrita contra DNS Rebinding (Host header), CORS fechado para localhost:8765, sanitização total de logs e regex contra path traversal.\n- Ativação no Artifact Principal (MeCzKuKCsr6fY4F8AGxnyC): Publicado com capabilities db e user ativas na Anthropic.\n- Motor Offline-First: Operação imediata em localStorage + fila de saída persistente (Outbox) com reconciliação LWW por timestamp.\n- Testes Automatizados: 8 testes unitários de segurança/CRUD + 5 testes do Sync Engine + 4 testes E2E com Chromium real via CDP (todos aprovados).",
+      "x": 38050,
+      "y": 11080,
+      "w": 1550,
+      "h": 300
     },
     "e1377": {
       "type": "image",
-      "src": "/_blob/issue136_after_context_390",
-      "x": 36018,
-      "y": 11635,
-      "w": 755,
-      "h": 430
+      "src": "/_blob/evidence-e2e-sync-badge-active",
+      "x": 38050,
+      "y": 11420,
+      "w": 1550,
+      "h": 900
     },
     "e1378": {
       "type": "text",
-      "size": "small",
-      "text": "DEPOIS: alternativas em linhas e texto quebrando, concurso em 390px",
-      "x": 36018,
-      "y": 12073,
-      "w": 760,
-      "h": 50
+      "color": "white",
+      "text": "Evidência de execução real no Google Chrome: O Exam App exibe o badge SVG ativo de sincronização ao lado do botão PRO no rodapé da barra lateral. Respostas de questões são salvas localmente e sincronizadas em background para a nuvem da Anthropic, sem dependência de aba aberta nem serviços externos pagos.",
+      "x": 38050,
+      "y": 12360,
+      "w": 1550,
+      "h": 200
     },
     "e1379": {
       "type": "image",

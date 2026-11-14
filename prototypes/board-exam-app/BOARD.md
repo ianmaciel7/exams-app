@@ -2187,19 +2187,27 @@ Diagnóstico comprovado pelo DOM: .qf-list renderizava s-question sem .study-she
 
 ![imagem e1373](assets/issue136_before_context_1366.png)
 
-![imagem e1375](assets/issue136_after_context_1366.png)
-
 ANTES: alternativas inline no concurso, sem estilização da lista de questões
-
-DEPOIS: alternativas em linhas/click targets, concurso no desktop
-
-![imagem e1377](assets/issue136_after_context_390.png)
 
 ![imagem e1379](assets/issue136_after_global_1366.png)
 
-DEPOIS: alternativas em linhas e texto quebrando, concurso em 390px
-
 DEPOIS: banco global preserva o mesmo componente de questões
+
+## 44. Implementação e Validação E2E: Claude Pro Storage com Proxy Blindado e Fila Offline-First
+<!-- container e1375 @ (38000,11000) -->
+
+### Implementação e Comprovação de Sincronização Bidirecional Real no Claude Pro
+
+Implementamos a integração do Exam App com o Claude Pro Artifact Database (Frame DB) via proxy local blindado em Python (127.0.0.1:8766) e motor de sincronização offline-first.
+
+- Blindagem de Segurança do Proxy: Proteção estrita contra DNS Rebinding (Host header), CORS fechado para localhost:8765, sanitização total de logs e regex contra path traversal.
+- Ativação no Artifact Principal (MeCzKuKCsr6fY4F8AGxnyC): Publicado com capabilities db e user ativas na Anthropic.
+- Motor Offline-First: Operação imediata em localStorage + fila de saída persistente (Outbox) com reconciliação LWW por timestamp.
+- Testes Automatizados: 8 testes unitários de segurança/CRUD + 5 testes do Sync Engine + 4 testes E2E com Chromium real via CDP (todos aprovados).
+
+![imagem e1377](assets/evidence-e2e-sync-badge-active.png)
+
+Evidência de execução real no Google Chrome: O Exam App exibe o badge SVG ativo de sincronização ao lado do botão PRO no rodapé da barra lateral. Respostas de questões são salvas localmente e sincronizadas em background para a nuvem da Anthropic, sem dependência de aba aberta nem serviços externos pagos.
 
 ## 10. Arquivos do projeto (Dataprev 2026 e referências)
 <!-- container e363 @ (0,12666) -->

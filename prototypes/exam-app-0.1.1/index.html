@@ -1562,6 +1562,13 @@ a.rp-link:hover{background:var(--active)}
 .rp-vh.solo-h{height:30px;justify-content:flex-start;padding:0 6px;background:transparent;border-bottom:0}
 .rp-note.ai-only{display:block}
 .rp-graph text{paint-order:stroke;stroke:var(--bg);stroke-width:3px;stroke-linejoin:round}
+/* ===== Claude Pro Storage Sync Badge ===== */
+.sync-badge{position:relative;display:inline-flex;align-items:center;justify-content:center;color:var(--muted);transition:color .2s ease}
+.sync-badge.synced{color:#10b981}
+.sync-badge.syncing svg{animation:spinSync 1.2s linear infinite}
+.sync-badge.offline{color:#f59e0b}
+.sync-badge.error{color:#ef4444}
+@keyframes spinSync{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
 </style>
 
 <button class="skip" id="skip">Ir para o conteúdo</button>
@@ -1684,6 +1691,11 @@ a.rp-link:hover{background:var(--active)}
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/></svg>
         </button>
         <button type="button" class="badge-pro" id="btnFootPro" title="Plano Pro" aria-label="Plano Pro">PRO</button>
+        <button type="button" class="side-foot-btn sync-badge synced" id="btnSyncStatus" title="Status de Sincronização Claude Pro" aria-label="Status de Sincronização Claude Pro">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+          </svg>
+        </button>
         <button type="button" class="side-foot-btn" id="btnFootSettings" title="Configurações" aria-label="Configurações">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
         </button>
@@ -1771,6 +1783,7 @@ a.rp-link:hover{background:var(--active)}
 <div class="toast" id="toast" role="status"><span id="toastTxt"></span><button id="toastUndo">Desfazer</button></div>
 
 <script src="pdf.min.js"></script>
+<script src="js/claude-storage-sync.js"></script>
 <script>
 (function(){
 const BASE_DOCS = [
@@ -3404,10 +3417,16 @@ async function loadQuestions(){
 }
 const answerStorage='study:answers:dataprev-2026-tipo1';
 const getAnswers=()=>{try{return JSON.parse(localStorage.getItem(answerStorage)||'{}')}catch(e){return {}}};
-const saveAnswers=a=>{try{localStorage.setItem(answerStorage,JSON.stringify(a))}catch(e){toast('Não foi possível salvar as respostas neste navegador')}};
+const saveAnswers=a=>{
+  try{localStorage.setItem(answerStorage,JSON.stringify(a))}catch(e){toast('Não foi possível salvar as respostas neste navegador')}
+  if(window.syncEngine){window.syncEngine.enqueue('exam_app_study','user_answers',{answers:a,updatedAt:Date.now()})}
+};
 const examStorage='study:exam:dataprev-2026-tipo1';
 const getExam=()=>{try{return JSON.parse(localStorage.getItem(examStorage)||'null')}catch(e){return null}};
-const saveExam=s=>{try{localStorage.setItem(examStorage,JSON.stringify(s))}catch(e){toast('Não foi possível salvar a tentativa')}};
+const saveExam=s=>{
+  try{localStorage.setItem(examStorage,JSON.stringify(s))}catch(e){toast('Não foi possível salvar a tentativa')}
+  if(window.syncEngine){window.syncEngine.enqueue('exam_app_study','exam_state',{exam:s,updatedAt:Date.now()})}
+};
 const examNames=['Língua Portuguesa','Língua Inglesa','Raciocínio Lógico-Matemático','Atualidades e IA','Legislação de SI e Proteção de Dados','Conhecimentos Específicos'];
 const examCounts=[12,12,5,6,5,30];
 const studyStats=()=>{const a=getAnswers(),done=Object.keys(a).length,correct=Object.values(a).filter(x=>x&&x.correct).length;return {total:70,done,correct,wrong:done-correct,remaining:70-done};};
@@ -4858,7 +4877,10 @@ const savedRpw=+(store.get('rpw')||RP.w);
 RP.w=Math.min(Math.max(savedRpw||420,240),640);
 function curTab(){ return (typeof WS!=='undefined'&&WS.tabs&&WS.tabs.find(t=>t.id===WS.active))||(typeof WS!=='undefined'&&WS.tabs&&WS.tabs[0])||null; }
 function rpTab(){ return (typeof RP!=='undefined'&&RP.tabs&&RP.tabs.find(t=>t.id===RP.active))||(typeof RP!=='undefined'&&RP.tabs&&RP.tabs[0])||null; }
-function wsSave(){ try{ localStorage.setItem(WS_KEY,JSON.stringify({active:WS.active,tabs:WS.tabs.map(t=>({id:t.id,hist:t.hist,i:t.i,title:t.title,pinned:!!t.pinned,sc:t.sc,ui:t.ui})),rp:RP})); }catch(e){} }
+function wsSave(){
+  try{ localStorage.setItem(WS_KEY,JSON.stringify({active:WS.active,tabs:WS.tabs.map(t=>({id:t.id,hist:t.hist,i:t.i,title:t.title,pinned:!!t.pinned,sc:t.sc,ui:t.ui})),rp:RP})); }catch(e){}
+  if(window.syncEngine){window.syncEngine.enqueue('exam_app_state','workspace_state',{active:WS.active,tabs:WS.tabs.map(t=>({id:t.id,title:t.title,pinned:!!t.pinned})),updatedAt:Date.now()})}
+}
 const isObjHref=h=>{ h=String(h||''); if(h.startsWith('#/')) return true; try{ return docsOf(space).some(d=>'#'+d.id===h); }catch(e){ return false; } };
 
 /* ---- navegação por aba (histórico e rolagem próprios) ---- */
@@ -5452,6 +5474,35 @@ wsReady=true; wsPaint(); wsPaintNav(); applyRP(false);
   wsPaint(); wsPaintNav(); afterNav(); }
 if(typeof loadQuestions==='function'&&!questionBank) loadQuestions().then(()=>{ if(rpVisible()) rpRefresh(); }).catch(()=>{});
 paintSpaces(); paintNav(); route(false); if(location.hash==='#/simulado/exec')beginExamTicker();
+// ===== Claude Pro Storage Sync Engine Initialization =====
+try {
+  if (typeof ClaudeStorageSyncEngine !== 'undefined') {
+    window.syncEngine = new ClaudeStorageSyncEngine({
+      slug: 'a728ae48-3fa2-4dbf-9092-0392c90b58f7',
+      proxyBase: 'http://127.0.0.1:8766'
+    });
+    const btnSync = document.getElementById('btnSyncStatus');
+    if (btnSync) {
+      window.syncEngine.onStatusChange(({state, message}) => {
+        btnSync.className = 'side-foot-btn sync-badge ' + state;
+        btnSync.title = 'Claude Pro Sync: ' + message;
+      });
+      btnSync.addEventListener('click', () => {
+        toast('Sincronizando com Claude Pro...');
+        window.syncEngine.flushOutbox();
+      });
+    }
+    // Reconciliação no boot
+    window.syncEngine.fetchRemote('exam_app_study', 'user_answers').then(remoteDoc => {
+      if (remoteDoc && remoteDoc.answers) {
+        const local = getAnswers();
+        const merged = window.syncEngine.reconcileAnswers(local, remoteDoc.answers);
+        try { localStorage.setItem(answerStorage, JSON.stringify(merged)); } catch(e){}
+        if (typeof rpRefresh === 'function' && typeof rpVisible === 'function' && rpVisible()) rpRefresh();
+      }
+    }).catch(()=>{});
+  }
+} catch(e) { console.warn('Erro ao inicializar sync engine:', e); }
 })();
 </script>
 
