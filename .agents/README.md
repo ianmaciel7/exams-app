@@ -35,10 +35,55 @@ Project-local standard for AGENTS.md + MCP + SKILLS.
 - `.windsurf/skills/`
 - `~/.codeium/windsurf/mcp_config.json` (global)
 
+## Claude Code: global MCPs apply inside projects (scope parity)
+
+The effective Claude Code MCP set in the Exam App must match the MCPs already
+configured in the Claude Code `user` scope. A globally registered MCP is
+available inside this workspace automatically; **do not duplicate it at the
+`project` scope** to achieve parity. Duplicated Serena entries with different
+commands/contexts cause `Conflicting scopes` diagnostics.
+
+`.agents/agents.json` keeps `claude` as an enabled integration, but deliberately
+excludes the `claude` target from `fetch`, `filesystem`, `git`, and `serena`.
+Claude Code has built-in file, shell and Git tools, and the existing global
+Serena supplies semantic code navigation. Other clients' MCP targets stay
+unchanged. Keep `claudeScope: "project"` for any *future* explicitly
+project-specific servers; switching it to `user` would unexpectedly publish
+project-specific MCP definitions globally.
+
+Recommended global Serena command for Claude Code (already installed on the
+developer workstation; **not** installed by this repository):
+
+```powershell
+claude mcp add --scope user serena -- serena start-mcp-server --context claude-code --project-from-cwd
+```
+
+For a workspace with older project-scope entries, remove only those stale
+entries (without removing the existing global registrations):
+
+```powershell
+claude mcp remove fetch --scope project
+claude mcp remove filesystem --scope project
+claude mcp remove git --scope project
+claude mcp remove serena --scope project
+claude mcp list
+claude mcp get serena
+```
+
+`inspo`, `codegraph`, and the official `figma` plugin are managed through
+their own global/plugin installers, not by this repository. Authenticate the
+Figma plugin interactively when its MCP reports `Needs authentication`.
+Do not copy global credentials or machine-specific paths into source control.
+
+After `agents sync` and `agents sync --check`, check that Claude Code still
+inherits the user-scoped tools and does not acquire duplicate project-scoped
+MCPs. These source declarations are **not** proof of runtime connectivity.
+
 ## Serena MCP (Issue #117)
 
-The shared source in `agents.json` now declares `serena` for Codex, Claude Code,
-Claude Desktop, Gemini and Antigravity. Its command uses the locally installed
+The shared source in `agents.json` declares `serena` for Codex,
+Claude Desktop, Gemini and Antigravity. Claude Code inherits the separately
+configured global Serena instead of receiving a project-scope duplicate. Its command uses the locally installed
 `serena` executable and activates this repository with `--project ${PROJECT_ROOT}`.
 This is a **declaration**, not evidence that Serena is running on every Windows
 client. Do not commit machine-specific absolute executable paths or credentials.
@@ -67,8 +112,9 @@ the actual local executable path in private configuration, not in Git.
 1. Run `agents sync`, then `agents sync --check`; the CI workflow validates
    **source-level synchronization** only.
 2. Run `agents mcp test` and `agents mcp test --runtime` on the Windows machine;
-   verify `fetch`, `filesystem`, `git` and `serena`, rather than assuming
-   a registered server has started successfully.
+   verify `fetch`, `filesystem`, `git` and `serena` on clients where they are
+   targeted; in Claude Code, verify the global `serena` plus native file/Git
+   tools without expecting redundant project-scoped MCPs.
 3. Check Serena tool discovery and project activation in Codex, Claude Desktop
    and Antigravity after restarting each application. Record the command,
    context, tool-list result and any PATH/timeout error without secrets.
