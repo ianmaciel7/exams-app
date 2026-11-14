@@ -897,6 +897,49 @@ Estas são **16 entradas adicionais** de sucesso WCAG, além das já documentada
 6. **MUST** registrar riscos de fallback/erro em gráficos e leitor PDF, sem inventar funcionalidade offline/no-JS ou declarar acessibilidade apenas por link de norma. A implementação continua sujeita a testes.
 7. **MUST** preservar as regras visuais e de estados em [DESIGN.md](DESIGN.md) e sincronizar os nomes e as fontes com [docs/ux/ux-ui-principles.md](docs/ux/ux-ui-principles.md).
 
+
+### 18. Avaliação e infraestrutura de design 2026 — complementos oficiais
+
+**Classificação:** os documentos abaixo **não são leis científicas de UI/UX**. São metodologia de avaliação W3C, formato de testes W3C, especificação comunitária de tokens, rascunho futuro de acessibilidade e capacidade de CSS. Foram conferidos em documentação publicada até **14/11/2026**, inclusive Context7 para DTCG e APG. Não declarar conformidade, implementação ou suporte sem evidência real; ver o [DESIGN.md](DESIGN.md) e o catálogo de [princípios de UX](docs/ux/ux-ui-principles.md).
+
+| Nome original publicado | Status em 2026 | Utilidade para o Exam App / cuidado | Fonte oficial |
+|---|---|---|---|
+| **WCAG Evaluation Methodology (WCAG-EM) 2.0** | **W3C Group Note**, publicada em **23/07/2026** | Método de avaliação da conformidade WCAG de **produtos digitais**, considerando páginas, vistas e processos completos; não acrescenta critérios WCAG. | [W3C WCAG-EM 2.0](https://www.w3.org/TR/wcag-em-2/), [WAI Overview](https://www.w3.org/WAI/test-evaluate/conformance/wcag-em/) |
+| **Accessibility Conformance Testing (ACT) Rules Format 1.1** | **W3C Recommendation**, de **05/02/2026** | Formato para escrever regras de teste reproduzíveis e comparáveis; **não é um novo nível WCAG**. As ACT Rules individuais são informativas para conformidade. | [W3C ACT Rules Format](https://www.w3.org/TR/act-rules-format/), [WAI ACT Overview](https://www.w3.org/WAI/standards-guidelines/act/) |
+| **Design Tokens Format Module 2025.10** | Relatório **estável** do Design Tokens Community Group, **28/10/2025**; **não** é W3C Recommendation | Vocabulário de tokens, grupos, tipos, referências/aliases e tokens compostos. Consultar ao **planejar interoperabilidade de tokens**; não converter os tokens CSS existentes para JSON sem necessidade/PR específico. | [DTCG — versão estável](https://www.designtokens.org/TR/2025.10/format/), [FAQ](https://www.designtokens.org/faq/) |
+| **W3C Accessibility Guidelines (WCAG) 3.0 Working Draft** | **Rascunho de trabalho**, atualizado em **10/09/2026** | Acompanhar evolução; **não** substituir WCAG 2.2 como critério vigente de aceite nem declarar certificação WCAG 3. | [WAI WCAG 3 Introduction](https://www.w3.org/WAI/standards-guidelines/wcag/wcag3-intro/) |
+| **CSS Container Size Queries** | Tecnologia CSS documentada; **não é lei de UX** | Componentes de sidebar, painéis e cards adaptam sua composição ao contêiner disponível, quando isso for mais útil que usar somente o viewport. Verificar suporte e fallback antes de usar. | [MDN — CSS Container Queries](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Containment/Container_queries) |
+
+#### 18.1. Protocolo WCAG-EM 2.0 para avaliar produto e jornadas
+
+**MUST** aplicar um processo proporcional em auditorias de conformidade abrangentes, usando os **cinco passos publicados**:
+
+1. **Define the evaluation scope:** delimitar rotas, views, tecnologias, nível WCAG e versão do protótipo.
+2. **Explore the target digital product:** identificar funcionalidade essencial e fluxos de Questões, Simulados, Revisão, Explorar, grafo, PDF, login e formulários.
+3. **Select a representative sample set:** selecionar tipos de telas, estados, componentes, rotas e **processos completos**; incluir amostra aleatória quando apropriado, não só screenshots convenientes.
+4. **Evaluate the selected sample set:** verificar critérios WCAG aplicáveis e os requisitos de conformidade sobre páginas e processos completos, com teclado, foco, leitor de tela quando possível, erros, zoom e mobile.
+5. **Report the evaluation findings:** documentar versão/escopo, amostras, resultados, exceções, limitações e passos reproduzíveis, indicando **passou, falhou, não aplicável ou não testado**.
+
+**MUST NOT** usar somente um resultado de scanner como prova de conformidade; **ACT Rules** servem para harmonização de testes e os resultados automáticos requerem avaliação humana para barreiras não detectáveis automaticamente. [WAI — Selecting Evaluation Tools](https://www.w3.org/WAI/test-evaluate/tools/selecting/).
+
+#### 18.2. Tokens, temas e adaptação sem migrações gratuitas
+
+- **SHOULD** manter um inventário de tokens semânticos, fontes de verdade, referências, tema claro/escuro, estados de componentes, unidades e resoluções; consultar o DTCG 2025.10 se for introduzir um formato intercambiável ou converter tokens para outras plataformas.
+- **MUST** distinguir **DTCG final estável 2025.10** do **Editors' Draft/preview experimental de 2026**; não implementar preview como norma final. Preservar a arquitetura atual e os tokens existentes de [DESIGN.md](DESIGN.md).
+- **SHOULD** avaliar Container Queries em cards, painéis, grid e sidebar que podem ter larguras diferentes no **mesmo viewport**, incluindo layout com sidebar redimensionada; usar fallback que preserve conteúdo/CTA se container queries não forem aplicáveis.
+- **MUST** testar a interação real e a semântica após mudanças de layout, evitando esconder foco, alterar contexto da tarefa ou quebrar componente por orientação/zoom.
+- **MUST** classificar melhorias como **documentado, implementado ou testado**; estas referências não comprovam que o protótipo atual as aplica.
+
+#### 18.3. Critérios WCAG 2.2 AAA complementares (não são obrigação AA)
+
+| Critério / nível | Nome oficial | Aplicação facultativa em metas AAA e limites |
+|---|---|---|
+| **2.5.6 (AAA)** | **Concurrent Input Mechanisms** | Não restringir modalidades de entrada disponíveis salvo exceções essenciais, segurança ou configurações do usuário. |
+| **3.3.6 (AAA)** | **Error Prevention (All)** | Para submissão de informação, oferecer reversão, verificação com correção **ou** revisão/confirmar conforme o critério; não exigir sempre modal. |
+| **3.3.9 (AAA)** | **Accessible Authentication (Enhanced)** | Referência adicional para remover testes cognitivos nas etapas de autenticação, observando exceções/alternativas do critério. |
+
+**Fonte:** [WCAG 2.2](https://www.w3.org/TR/WCAG22/). Estes são **AAA**, não critérios necessários para alegação AA. Não inflar a lista principal de A/AA nem substituir 3.3.8 AA pelo 3.3.9 AAA.
+
 <!-- UX-LAWS-CATALOG:END -->
 
 <!-- DESIGN-SYSTEM-INTEGRATION:START -->
