@@ -4822,27 +4822,68 @@ const kIcon=k=>k==='grafico'?WI.graph:(TYI()[k]||(k==='espaco'?SI.collection:SI.
 function hKind(h){ h=String(h||'').replace(/^#/,''); if(!h) return 'pdf'; const p=h.split('/'); if(p[0]!=='') return 'pdf'; const k=p[1]; if(k==='espaco'||k==='quadro') return 'espaco'; if(k==='tipo') return p[2]||'arquivo'; if(k==='valor') return 'arquivo'; if(k==='simulado'||k==='tentativa') return 'simulado'; if(k==='lixeira') return 'arquivo'; return k; }
 
 /* ---- grafo de objetos do espaço (usado no painel e na página Gráfico) ---- */
-function G(){
-  const N=new Map(), add=(href,title,kind,sub,extra,text)=>{ if(!N.has(href)) N.set(href,{href,title:String(title||'Sem título'),kind,sub:sub||'',extra:extra||[],text:text||'',out:[],inn:[]}); return N.get(href); };
+function G(spId){
+  const sp=spId||space, N=new Map(), add=(href,title,kind,sub,extra,text)=>{ if(!href) return null; if(!N.has(href)) N.set(href,{href,title:String(title||'Sem título'),kind,sub:sub||'',extra:extra||[],text:text||'',out:[],inn:[]}); return N.get(href); };
   const link=(a,b,l)=>{ const A=N.get(a),B=b&&N.get(b); if(!A||!B||A===B) return; if(A.out.some(x=>x[0]===b&&x[1]===l)) return; A.out.push([b,l]); B.inn.push([a,l]); };
-  const eh=e=>e?'#/'+e.type+'/'+e.id:null, guard=f=>{ try{ f(); }catch(err){} };
-  let eds=[]; guard(()=>{ eds=edicoesOf(space); });
-  guard(()=>entsAll().forEach(e=>add('#/'+e.type+'/'+e.id,e.t,e.type,kn(e.type))));
-  guard(()=>CONCURSOS.filter(c=>c.sp===space&&!isT(c.id)).forEach(c=>add('#/concurso/'+c.id,c.t,'concurso','Concurso')));
-  guard(()=>eds.forEach(e=>add('#/edicao/'+e.id,e.t,'edicao','Edição'+(e.ano?' · '+e.ano:''),e.ano?[['Ano',String(e.ano)]]:[])));
-  guard(()=>eds.forEach(e=>cargosOf(e.id).forEach(c=>add('#/cargo/'+c.id,c.t,'cargo','Cargo',c.resumo?[['Resumo',c.resumo]]:[]))));
-  guard(()=>docsOf(space).forEach(d=>add('#'+d.id,d.t,'pdf',d.g||'PDF',[['Categoria',d.cat],['Descrição',d.m]].filter(x=>x[1]))));
-  guard(()=>qObjs().forEach(q=>add('#/questao/'+q.id,qTitle(q),'questao',q.materia||'Questão',[],String(q.enunciado||'').replace(/\s+/g,' ').slice(0,420))));
-  guard(()=>CONCURSOS.forEach(c=>link('#/concurso/'+c.id,eh(findEnt('orgao',concOrgaoName(c))),'Órgão')));
-  guard(()=>eds.forEach(e=>{ const h='#/edicao/'+e.id; link(h,'#/concurso/'+e.conc,'Concurso'); link(h,eh(findEnt('banca',edBancaName(e))),'Banca'); link(h,eh(findEnt('orgao',edOrgaoName(e))),'Órgão'); cargosOf(e.id).forEach(c=>link('#/cargo/'+c.id,h,'Edição')); }));
-  guard(()=>docsOf(space).forEach(d=>{ if(d.edicao) link('#'+d.id,'#/edicao/'+d.edicao,'Edição'); if(d.cargo) link('#'+d.id,'#/cargo/'+d.cargo,'Cargo'); }));
-  guard(()=>qObjs().forEach(q=>{ const h='#/questao/'+q.id; if(q.ed) link(h,'#/edicao/'+q.ed,'Edição'); if(q.cg) link(h,'#/cargo/'+q.cg,'Cargo'); link(h,eh(discEnt(q.materia)),'Disciplina'); link(h,eh(findEnt('banca',q.banca)),'Banca'); }));
-  return {N};
+  const eh=e=>e?'#/'+e.type+'/'+e.id:null, guard=f=>{ try{ f(); }catch(err){ if(typeof console!=='undefined'&&console.warn) console.warn('[G] err:', err); } };
+  const addEnt=e=>{ if(!e||isT(e.id)) return null; return add('#/'+e.type+'/'+e.id,e.t,e.type,kn(e.type)); };
+  let concs=[], eds=[], docs=[], qList=[];
+  guard(()=>{ concs=CONCURSOS.filter(c=>c.sp===sp&&!isT(c.id)); });
+  guard(()=>{ eds=edicoesOf(sp).filter(e=>!isT(e.id)); });
+  const edsSet=new Set(eds.map(e=>e.id));
+  guard(()=>{ docs=docsOf(sp).filter(d=>!isT(d.id)); });
+  guard(()=>{ qList=qObjs().filter(q=>!isT(q.id)&&((q.sp===sp)||(q.conc&&(concursoById(q.conc)||{}).sp===sp)||(q.ed&&edsSet.has(q.ed))||(!q.ed&&!q.user&&sp==='dataprev'))); });
+
+  // 1. Entidades nativas do espaço
+  concs.forEach(c=>add('#/concurso/'+c.id,c.t,'concurso','Concurso'));
+  eds.forEach(e=>add('#/edicao/'+e.id,e.t,'edicao','Edição'+(e.ano?' · '+e.ano:''),e.ano?[['Ano',String(e.ano)]]:[]));
+  eds.forEach(e=>cargosOf(e.id).filter(c=>!isT(c.id)).forEach(c=>add('#/cargo/'+c.id,c.t,'cargo','Cargo',c.resumo?[['Resumo',c.resumo]]:[])));
+  docs.forEach(d=>add('#'+d.id,d.t,'pdf',d.g||'PDF',[['Categoria',d.cat],['Descrição',d.m]].filter(x=>x[1])));
+  qList.forEach(q=>add('#/questao/'+q.id,qTitle(q),'questao',q.materia||'Questão',[],String(q.enunciado||'').replace(/\s+/g,' ').slice(0,420)));
+
+  // 2. Vínculos e entidades de suporte (apenas as referenciadas pelo espaço)
+  concs.forEach(c=>{ const o=findEnt('orgao',concOrgaoName(c)); if(o&&!isT(o.id)){ addEnt(o); link('#/concurso/'+c.id,eh(o),'Órgão'); } });
+  eds.forEach(e=>{
+    const h='#/edicao/'+e.id; link(h,'#/concurso/'+e.conc,'Concurso');
+    const b=findEnt('banca',edBancaName(e)); if(b&&!isT(b.id)){ addEnt(b); link(h,eh(b),'Banca'); }
+    const o=findEnt('orgao',edOrgaoName(e)); if(o&&!isT(o.id)){ addEnt(o); link(h,eh(o),'Órgão'); }
+    cargosOf(e.id).filter(c=>!isT(c.id)).forEach(c=>link('#/cargo/'+c.id,h,'Edição'));
+  });
+  docs.forEach(d=>{ if(d.edicao&&edsSet.has(d.edicao)) link('#'+d.id,'#/edicao/'+d.edicao,'Edição'); if(d.cargo&&cargoById(d.cargo)&&!isT(d.cargo)) link('#'+d.id,'#/cargo/'+d.cargo,'Cargo'); });
+  qList.forEach(q=>{
+    const h='#/questao/'+q.id;
+    if(q.ed&&edsSet.has(q.ed)) link(h,'#/edicao/'+q.ed,'Edição');
+    if(q.cg&&cargoById(q.cg)&&!isT(q.cg)) link(h,'#/cargo/'+q.cg,'Cargo');
+    const d=discEnt(q.materia); if(d&&!isT(d.id)){ addEnt(d); link(h,eh(d),'Disciplina'); }
+    const b=findEnt('banca',q.banca); if(b&&!isT(b.id)){ addEnt(b); link(h,eh(b),'Banca'); }
+  });
+  return {N, space:sp};
 }
-let GR=null; const gsig=()=>{ try{ return [space,entsAll().map(e=>e.id+e.t).join('|'),CONCURSOS.length,docsOf(space).length,qObjs().length].join('~'); }catch(e){ return Math.random(); } };
-const gr=()=>{ const t=performance.now(); if(GR&&t-GR.at<400) return GR; const sg=gsig(); if(!GR||GR.sig!==sg){ GR=G(); GR.sig=sg; } GR.at=t; return GR; };
-const nodeOf=h=>{ if(!h) return null; const N=gr().N; if(N.has(h)) return N.get(h); try{ return N.get(decodeURIComponent(h))||null; }catch(e){ return null; } };
-const nbrs=n=>{ const s=new Set(); n.out.forEach(x=>s.add(x[0])); n.inn.forEach(x=>s.add(x[0])); return [...s].map(h=>gr().N.get(h)).filter(Boolean); };
+const GR_CACHE=new Map();
+const gsig=(spId)=>{
+  const sp=spId||space;
+  try{
+    const concs=CONCURSOS.filter(c=>c.sp===sp&&!isT(c.id));
+    const cSig=concs.map(c=>c.id+':'+c.t+':'+concOrgaoName(c)).join(';');
+    const eds=edicoesOf(sp).filter(e=>!isT(e.id));
+    const eSig=eds.map(e=>e.id+':'+e.t+':'+e.conc+':'+edBancaName(e)+':'+edOrgaoName(e)).join(';');
+    const cgSig=eds.flatMap(e=>cargosOf(e.id).filter(c=>!isT(c.id))).map(c=>c.id+':'+c.t+':'+(c.resumo||'')).join(';');
+    const dSig=docsOf(sp).filter(d=>!isT(d.id)).map(d=>d.id+':'+d.t+':'+(d.edicao||'')+':'+(d.cargo||'')).join(';');
+    const edsSet=new Set(eds.map(e=>e.id));
+    const qList=qObjs().filter(q=>!isT(q.id)&&((q.sp===sp)||(q.conc&&(concursoById(q.conc)||{}).sp===sp)||(q.ed&&edsSet.has(q.ed))||(!q.ed&&!q.user&&sp==='dataprev')));
+    const qSig=qList.map(q=>q.id+':'+qTitle(q)+':'+(q.ed||'')+':'+(q.cg||'')+':'+(q.materia||'')+':'+(q.banca||'')).join(';');
+    const trSig=(typeof trashSet!=='undefined'&&trashSet)?[...trashSet].sort().join(','):'';
+    const ovSig=typeof store!=='undefined'&&store.get?JSON.stringify(store.get('ov')||{}):'';
+    return [sp,cSig,eSig,cgSig,dSig,qSig,trSig,ovSig].join('~');
+  }catch(e){ return sp+'~'+Math.random(); }
+};
+const gr=(spId,force)=>{
+  const sp=spId||space, t=performance.now(), cached=GR_CACHE.get(sp), sg=gsig(sp);
+  if(!force&&cached&&cached.sig===sg) return cached;
+  const g=G(sp); g.sig=sg; g.at=t; GR_CACHE.set(sp,g); return g;
+};
+const nodeOf=(h,spId)=>{ if(!h) return null; const N=gr(spId).N; if(N.has(h)) return N.get(h); try{ return N.get(decodeURIComponent(h))||null; }catch(e){ return null; } };
+const nbrs=(n,spId)=>{ const s=new Set(), g=gr(spId); n.out.forEach(x=>s.add(x[0])); n.inn.forEach(x=>s.add(x[0])); return [...s].map(h=>g.N.get(h)).filter(Boolean); };
 
 /* ---- estado das abas principais e do painel ---- */
 let SV={}; try{ SV=JSON.parse(localStorage.getItem(WS_KEY))||{}; }catch(e){ SV={}; }
@@ -4998,6 +5039,7 @@ const rpRow=(n,sub)=>{
 const rpEmpty=(t,s,extra)=>'<div class="rp-empty"><b>'+esc(t)+'</b>'+esc(s||'')+(extra||'')+'</div>';
 const toolBtns=(cls)=>'<div class="rp-tools">'+['explorar','graf','back','rel','ia'].map(k=>'<button type="button" class="rp-btn '+(cls||'')+'" data-rp-new="'+k+'">'+RT[k].ic+' '+RT[k].n+'</button>').join('')+'</div>';
 function ctxBar(v,n){
+  if(v.ref&&!n) return '<div class="rp-ctx"><span>Objeto de outro espaço</span><button type="button" class="rp-link" data-unpin="'+v.id+'">Seguir contexto</button></div>';
   if(!v.ref&&!n) return '';
   return '<div class="rp-ctx">'+
     (v.ref?'<span>Fixado em</span>':'<span>Sobre</span>')+
@@ -5018,16 +5060,21 @@ function exRows(v){ const q=norm(String(v.q||'')), all=[...gr().N.values()].filt
   if(!all.length) return '<div class="rp-empty">'+(q?'<b>Nada encontrado para “'+esc(v.q)+'”</b>Tente outra palavra ou outro tipo.':'<b>Nenhum objeto ainda</b>Crie um concurso na barra lateral.')+'</div>';
   const rows=all.slice(0,80), groups=new Map(), tot={}; all.forEach(n=>{ tot[n.kind]=(tot[n.kind]||0)+1; }); rows.forEach(n=>{ const g=groups.get(n.kind)||[]; g.push(n); groups.set(n.kind,g); });
   return [...groups].map(([kind,items])=>'<section class="rp-group" aria-label="'+esc(kn(kind))+'"><div class="rp-group-title">'+esc(kn(kind))+'<span>'+tot[kind]+'</span></div>'+items.map(n=>rpRow(n)).join('')+'</section>').join('')+(all.length>80?'<div class="rp-more">Mostrando 80 de '+all.length+'. Refine a busca.</div>':''); }
-function bodyBack(v){ const n=vNode(v); if(!n) return needCtx();
+function bodyBack(v){ const n=vNode(v);
+  if(v.ref&&!n) return ctxBar(v,n)+rpEmpty('Objeto não pertence a este espaço','O contexto fixado pertence a outro espaço ou não existe mais.','<div class="rp-tools"><button type="button" class="rp-btn" data-unpin="'+v.id+'">Seguir contexto do espaço atual</button></div>');
+  if(!n) return needCtx();
   if(!n.inn.length) return ctxBar(v,n)+rpEmpty('Nada aponta para cá ainda','Quando outro objeto citar “'+n.title+'”, ele aparece nesta lista.');
   const g=gr().N; return ctxBar(v,n)+'<div class="rp-list">'+n.inn.map(([h,l])=>{ const m=g.get(h); return m?rpRow(m,kn(m.kind)+' · como '+l):''; }).join('')+'</div>'; }
-function bodyRel(v){ const n=vNode(v); if(!n) return needCtx(); const g=gr().N, direct=new Set([n.href].concat(nbrs(n).map(x=>x.href))), sc=new Map();
+function bodyRel(v){ const n=vNode(v);
+  if(v.ref&&!n) return ctxBar(v,n)+rpEmpty('Objeto não pertence a este espaço','O contexto fixado pertence a outro espaço ou não existe mais.','<div class="rp-tools"><button type="button" class="rp-btn" data-unpin="'+v.id+'">Seguir contexto do espaço atual</button></div>');
+  if(!n) return needCtx(); const g=gr().N, direct=new Set([n.href].concat(nbrs(n).map(x=>x.href))), sc=new Map();
   nbrs(n).forEach(x=>nbrs(x).forEach(y=>{ if(direct.has(y.href)) return; const s=sc.get(y.href)||{n:y,c:0,via:[]}; s.c++; if(s.via.length<2&&!s.via.includes(x.title)) s.via.push(x.title); sc.set(y.href,s); }));
   const L=[...sc.values()].sort((a,b)=>b.c-a.c||a.n.title.localeCompare(b.n.title,'pt-BR',{numeric:true})).slice(0,12);
   if(!L.length) return ctxBar(v,n)+rpEmpty('Sem conteúdo relacionado','Objetos que compartilham banca, edição, cargo ou disciplina com “'+n.title+'” aparecem aqui.');
   return ctxBar(v,n)+'<div class="rp-list">'+L.map(s=>rpRow(s.n,'via '+s.via.join(', '))).join('')+'</div>'; }
 function bodyGraf(v){
   let n=vNode(v);
+  if(v.ref&&!n) return ctxBar(v,n)+rpEmpty('Objeto não pertence a este espaço','O contexto fixado pertence a outro espaço ou não existe mais.','<div class="rp-tools"><button type="button" class="rp-btn" data-unpin="'+v.id+'">Seguir contexto do espaço atual</button></div>');
   const curH=curHref()||'';
   if(!n && curH.startsWith('#/tipo/')){
     const tKind=curH.replace('#/tipo/','');

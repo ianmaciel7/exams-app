@@ -733,7 +733,9 @@
     "e1393",
     "e1394",
     "e1395",
-    "e1396"
+    "e1396",
+    "e1397",
+    "e1398"
   ],
   "elements": {
     "e1": {
@@ -7689,6 +7691,24 @@
       "y": 12623,
       "w": 760,
       "h": 50
+    },
+    "e1397": {
+      "type": "container",
+      "color": "white",
+      "text": "46. Graph State & Space Isolation — Issue #145: isolamento por espaço e invalidação reativa",
+      "x": 42500,
+      "y": 11000,
+      "w": 1650,
+      "h": 1720
+    },
+    "e1398": {
+      "type": "text",
+      "color": "white",
+      "text": "Implementação e Auditoria Issue #145:\n\n1. Isolamento Estrito por Espaço:\n- A função G(spId) passa a construir o subgrafo restrito às entidades nativas do espaço (concursos, edições, cargos, documentos, questões vinculadas).\n- Entidades globais de suporte (órgão, banca, disciplina) só entram no subgrafo se forem ativamente referenciadas por um objeto nativo do espaço.\n- Nenhuma entidade privada ou questão de outro espaço vaza para o grafo, contagens ou backlinks.\n\n2. Invalidação Reativa e Eliminação de Stale Cache de 400ms:\n- O hash gsig(spId) agora monitora a assinatura completa de cada entidade, vínculos ativos (órgão, banca, edição, cargo, disciplina), overrides do store ('ov') e exclusões na lixeira (trashSet).\n- Removido o bypass cego de 400ms em gr(); se gsig alterar por edição de relação ou troca de espaço, a reconstrução é imediata.\n- Cache GR_CACHE mapeado por ID de espaço, permitindo alternância instantânea entre espaços sem recálculo desnecessário e sem dados cruzados.\n\n3. Tratamento Explícito de Contexto Fixado Estrangeiro (Painel Contextual):\n- Quando uma aba lateral foi fixada em um objeto do Espaço A e o usuário altera para o Espaço B, o painel exibe aviso explícito: 'Objeto não pertence a este espaço' com botão 'Seguir contexto do espaço atual' (data-unpin).\n- Eliminação de links órfãos ou nós fantasmas quando uma entidade da extremidade é excluída.\n\n4. Testes Automatizados de Regressão:\n- Criada suíte de testes unitários em tests/graph-space-isolation.test.mjs com 5 cenários verificando:\n  * Isolamento Espaço A vs B;\n  * Alternância instantânea de espaço;\n  * Invalidação imediata por mudança de relações/metadados/overrides;\n  * Exclusão e ausência de arestas órfãs;\n  * Alerta explícito de contexto estrangeiro fixado no painel direito.",
+      "x": 42540,
+      "y": 11100,
+      "w": 1570,
+      "h": 1500
     }
   }
 }

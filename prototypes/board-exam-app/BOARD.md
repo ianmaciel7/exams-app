@@ -2245,6 +2245,33 @@ DEPOIS: arraste por Pointer Events altera ordem sem perda de contexto
 
 DEPOIS: seletor responsivo a 390 CSS px com busca e seleção por toque
 
+## 46. Graph State & Space Isolation — Issue #145: isolamento por espaço e invalidação reativa
+<!-- container e1397 @ (42500,11000) -->
+
+Implementação e Auditoria Issue #145:
+
+1. Isolamento Estrito por Espaço:
+- A função G(spId) passa a construir o subgrafo restrito às entidades nativas do espaço (concursos, edições, cargos, documentos, questões vinculadas).
+- Entidades globais de suporte (órgão, banca, disciplina) só entram no subgrafo se forem ativamente referenciadas por um objeto nativo do espaço.
+- Nenhuma entidade privada ou questão de outro espaço vaza para o grafo, contagens ou backlinks.
+
+2. Invalidação Reativa e Eliminação de Stale Cache de 400ms:
+- O hash gsig(spId) agora monitora a assinatura completa de cada entidade, vínculos ativos (órgão, banca, edição, cargo, disciplina), overrides do store ('ov') e exclusões na lixeira (trashSet).
+- Removido o bypass cego de 400ms em gr(); se gsig alterar por edição de relação ou troca de espaço, a reconstrução é imediata.
+- Cache GR_CACHE mapeado por ID de espaço, permitindo alternância instantânea entre espaços sem recálculo desnecessário e sem dados cruzados.
+
+3. Tratamento Explícito de Contexto Fixado Estrangeiro (Painel Contextual):
+- Quando uma aba lateral foi fixada em um objeto do Espaço A e o usuário altera para o Espaço B, o painel exibe aviso explícito: 'Objeto não pertence a este espaço' com botão 'Seguir contexto do espaço atual' (data-unpin).
+- Eliminação de links órfãos ou nós fantasmas quando uma entidade da extremidade é excluída.
+
+4. Testes Automatizados de Regressão:
+- Criada suíte de testes unitários em tests/graph-space-isolation.test.mjs com 5 cenários verificando:
+  * Isolamento Espaço A vs B;
+  * Alternância instantânea de espaço;
+  * Invalidação imediata por mudança de relações/metadados/overrides;
+  * Exclusão e ausência de arestas órfãs;
+  * Alerta explícito de contexto estrangeiro fixado no painel direito.
+
 ## 10. Arquivos do projeto (Dataprev 2026 e referências)
 <!-- container e363 @ (0,12666) -->
 
