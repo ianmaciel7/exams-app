@@ -112,8 +112,7 @@ try{
     await page.goto(url('8765','/questoes'),{waitUntil:'domcontentloaded'});
     await page.locator('[data-qf="study"] .qf-panel-toggle').click();
     await page.locator('[data-qf-flag="anuladas"]').uncheck();
-    const active=await page.locator('[data-qf="study"] .qf-chip').allInnerTexts();
-    assert.ok(active.some(v=>v.includes('Excluir')), 'other exclusions may remain in active chip bar');
+    await expectCount(page,/72/); // With default exclusion disabled, the annulled manual question is visible.
     await page.locator('[data-qf-clear]').last().click();
     await expectCount(page,/71/); // default "Anuladas" excludes one manual question from 72
     await shot(page,'after_clear_defaults');
