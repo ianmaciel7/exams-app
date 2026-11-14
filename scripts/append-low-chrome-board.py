@@ -9,7 +9,8 @@ data = json.loads(board_path.read_text(encoding="utf-8"))
 elements = data["elements"]
 order = data["order"]
 if any("31. Low-Chrome" in str(v.get("text", "")) for v in elements.values() if v.get("type") == "container"):
-    raise SystemExit("Low-Chrome board section already exists; refusing to append twice")
+    board_path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    raise SystemExit(0)  # Idempotent recapture: reuse image references and refresh formatting
 
 id_number = max(int(k[1:]) for k in elements if k.startswith("e") and k[1:].isdigit())
 
@@ -44,5 +45,5 @@ for width in (1366, 1024, 768):
                      "x": x, "y": y + 422, "w": 740, "h": 32})
             row += 1
 data["order"] = order
-board_path.write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8")
+board_path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 print(f"Added {row * 2} screenshot elements and captions for Issue #97")
