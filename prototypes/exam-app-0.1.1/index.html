@@ -2597,7 +2597,8 @@ const opProps=(rows,iid)=>{
   const allRows=baseItems+cu;
   if(!allRows) return '';
   const count=r.length+(cu?(cu.match(/class="op-prop"/g)||[]).length:0);
-  return '<div class="props-card'+((iid||'').startsWith('questao:')?' is-collapsed':'')+'" data-props-for="'+esc(iid||'')+'">'+
+  const collapsedByDefault=/^questao:[^:]+$/.test(iid||'');
+  return '<div class="props-card'+(collapsedByDefault?' is-collapsed':'')+'" data-props-for="'+esc(iid||'')+'">'+
     '<div class="props-head" role="button" tabindex="0" data-props-toggle aria-label="Recolher ou expandir propriedades">'+
       '<span class="props-title"><span class="props-title-txt">Propriedades</span><small class="props-count">• '+count+'</small></span>'+
       '<span class="props-chev">▾</span>'+
