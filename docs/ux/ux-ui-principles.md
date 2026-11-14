@@ -487,6 +487,24 @@ Espelho de [AGENTS.md §20](../../AGENTS.md) e [DESIGN.md §8.23](../../DESIGN.m
 
 **Critério de qualidade:** priorizar tarefas, testar localização de ações, compreensão, leitura e retorno; registrar limitação e evidência de DOM/CSS/JS quando realmente testado. O material acima **não demonstra implementação**.
 
+
+### U. Componentes UI 2026 — padrões W3C e leis aplicáveis
+
+**Índice canônico:** [Catálogo de 30 padrões WAI-ARIA APG e componentes web atuais](componentes-ui-padroes-2026.md). Contratos operacionais: [AGENTS.md §22](../../AGENTS.md) e [DESIGN.md §8.25](../../DESIGN.md). Foram revisados no Context7 os padrões do **W3C APG**, **Material 3**, **GitHub Primer** e **Adobe React Aria**, além do **MDN** para recursos HTML/CSS/Web atuais. **Os 30 itens W3C não são novas leis UX.**
+
+| Família | Nomes oficiais representativos | Leis/heurísticas que podem fundamentar uma hipótese |
+|---|---|---|
+| **Navegação e expansão** | Accordion, Breadcrumb, Disclosure, Link, Tabs, Tree View | Gestalt Proximity, Jakob's Law (heurística), Fitts's Law; distinguir tabs de rotas. |
+| **Ações e overlays** | Button, Menu Button, Menu and Menubar, Toolbar, Tooltip, Dialog (Modal), Alert Dialog | Fitts's Law, Hick–Hyman Law, Steering Law em cascatas, reconhecimento/controle (heurísticas). |
+| **Escolhas e valores** | Checkbox, Combobox, Listbox, Radio Group, Slider, Slider (Multi-Thumb), Spinbutton, Switch | Hick–Hyman para escolhas, Fitts para alvos e Weber para diferenças perceptuais; não impõem número de opções. |
+| **Dados, leitura e status** | Table, Grid, Treegrid, Feed, Carousel, Meter, Alert, Landmarks | Proximity/Common Region, Cognitive Fit (teoria), controle e visibilidade de status; distinguir meter de progress. |
+| **Painéis e espaço** | Window Splitter, barras, trilhos e side sheets de M3 | Steering/Fitts para alças e proximidade funcional; APG Splitter ainda tem revisão/exemplo pendentes. |
+| **Componentes web atualizados** | Popover API, CSS Anchor Positioning, Customizable select | Tecnologias Web, **não leis**. Popover Baseline 2025; funcionalidades anchor Baseline 2026; customizable select com suporte limitado. |
+
+**Exemplos específicos para o Exam App:** sidebar com disclosure, abas de rotas como links quando apropriado, ícones com nome acessível, DataTable com ações de linha, filtros select/combobox, graph+panes sem árvores falsas, toolbar PDF operável, reorder com alternativa sem arraste.
+
+**Fonte normativa ou de padrão:** [W3C APG](https://www.w3.org/WAI/ARIA/apg/patterns/), [WCAG 2.2](https://www.w3.org/TR/WCAG22/), [MDN Popover API](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API), [MDN Customizable Select](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Customizable_select). **Não há implementação/teste novo de UI nesta atualização.**
+
 ## Matriz de decisão por superfície
 
 | Superfície | Padrão principal | Primeiro viewport e CTA | Secundário | Mobile e exceção | Verificação |
