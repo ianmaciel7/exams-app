@@ -292,7 +292,8 @@
               }
             }
           } catch (mergeErr) {
-            // Em caso de falha transitória de leitura, segue com op.data original
+            // Nunca sobrescreva um documento composto sem leitura/mesclagem remota.
+            throw new Error(`Leitura remota obrigatória antes da mesclagem: ${mergeErr.message || mergeErr}`);
           }
 
           // 2. Envia para o servidor remoto

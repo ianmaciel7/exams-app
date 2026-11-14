@@ -2268,6 +2268,8 @@ Evidencia de auditoria do Claude Web: O acesso web automatizado ao Artifact real
 
 Evidencia de Homologacao: Recuperacao completa e deterministica de dados (respostas, cadernos, espacos e workspaces) em navegador limpo e virgem a partir do Claude Pro DB.
 
+Revalidação 14/11/2026: o teste integrado deve rodar serialmente (proxy singleton 127.0.0.1:8766). Lacuna corrigida: se a leitura para mesclagem falha, a mutação composta permanece no outbox e não sobrescreve o remoto. Limite explícito: o upstream não expõe escrita condicional documentada; concorrência simultânea entre dispositivos não é garantia absoluta.
+
 ## 46. Atalhos de teclado — Issue #139: registro e roteamento centralizado
 <!-- container e1397 @ (43000,11000) -->
 

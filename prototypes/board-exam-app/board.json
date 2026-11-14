@@ -755,7 +755,8 @@
     "e1446",
     "e1447",
     "e1450",
-    "e1451"
+    "e1451",
+    "e1452"
   ],
   "elements": {
     "e1": {
@@ -7884,6 +7885,15 @@
       "y": 14280,
       "w": 1550,
       "h": 120
+    },
+    "e1452": {
+      "type": "text",
+      "color": "white",
+      "text": "Revalidação 14/11/2026: o teste integrado deve rodar serialmente (proxy singleton 127.0.0.1:8766). Lacuna corrigida: se a leitura para mesclagem falha, a mutação composta permanece no outbox e não sobrescreve o remoto. Limite explícito: o upstream não expõe escrita condicional documentada; concorrência simultânea entre dispositivos não é garantia absoluta.",
+      "x": 42050,
+      "y": 14420,
+      "w": 1550,
+      "h": 70
     },
     "e1450": {
       "type": "container",

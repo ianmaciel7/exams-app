@@ -172,6 +172,20 @@ test('Suite de Testes do ClaudeStorageSyncEngine (Offline-First & Concurrency)',
     engine2.destroy();
   });
 
+  await t.test('5b. Falha ao ler documento composto retém a mutação sem sobrescrita cega', async () => {
+    const engine = new ClaudeStorageSyncEngine({ slug: 'test-slug' });
+    let sent = false;
+    engine.fetchRemote = async () => { throw new Error('leitura indisponível'); };
+    engine.sendToRemote = async () => { sent = true; };
+    engine.enqueue('exam_app_study', 'user_answers', { answers: { '1': { selected: 'A' } } });
+    await engine.flushOutbox();
+    const [queued] = engine.getOutbox();
+    assert.equal(sent, false, 'não deve gravar sem leitura/mesclagem remota');
+    assert.equal(queued.status, 'pending');
+    assert.match(queued.lastError, /Leitura remota obrigatória/);
+    engine.destroy();
+  });
+
   await t.test('6. Reconciliacao de Simulados (reconcileExam) com Fusao de Respostas e Marcadas', () => {
     const engine = new ClaudeStorageSyncEngine({ slug: 'test-slug' });
 

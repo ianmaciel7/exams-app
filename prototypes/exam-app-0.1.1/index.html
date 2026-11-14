@@ -2114,7 +2114,10 @@ if(typeof ClaudeStorageSyncEngine==="undefined"){
                 payloadToSend = { ...op.data, uq: merged.uq, uqAns: merged.uqAns, updatedAt: Date.now() };
               }
             }
-          } catch (mergeErr) {}
+          } catch (mergeErr) {
+            // Nunca sobrescreva um documento composto sem leitura/mesclagem remota.
+            throw new Error(`Leitura remota obrigatória antes da mesclagem: ${mergeErr.message || mergeErr}`);
+          }
 
           await this.sendToRemote(op.collection, op.docId, payloadToSend);
 
