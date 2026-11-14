@@ -5,8 +5,8 @@
 .op-nav{flex-wrap:wrap;row-gap:4px}
 .op-sech{flex-wrap:wrap}
 .op-head .op-actions{max-width:100%}
-.op-head .op-ht{flex:1 1 220px;min-width:max-content}
-.op-head .op-ht h1{white-space:nowrap;overflow-wrap:normal}
+.op-head .op-ht{flex:1 1 220px;min-width:0}
+.op-head .op-ht h1{white-space:normal;overflow-wrap:anywhere}
 .op-prop dd{overflow-wrap:anywhere}
 @container(max-width:840px){
  .op{display:block}
@@ -866,6 +866,7 @@ a.ot{display:block;padding:3px 0;min-height:24px}
 .props .pi{display:grid;grid-template-columns:84px minmax(0,1fr);gap:8px;align-items:baseline}.props .pi small{margin:0}.props .chip{justify-self:start}.props .pgrid{gap:10px}
 @media(max-width:820px){.view:has(.op){padding:0 17px 60px}}
 @media(max-width:620px){.op-head{flex-wrap:nowrap;align-items:flex-start;gap:14px}.op-icon{width:46px!important;height:46px!important}.op-icon svg{width:23px;height:23px}.op-icon img{width:27px;height:27px}.op{padding-top:18px}.op-ht h1{font-size:26px}.op-prop{grid-template-columns:1fr;gap:3px;padding:8px 0}.op-tl li{grid-template-columns:92px 1fr}.op-icon{width:50px;height:50px}}
+@media(max-width:620px){.op-head{flex-wrap:wrap}.op-head .op-ht{flex:1 1 0;min-width:0}.op-head .op-actions{flex:1 0 100%;width:100%;box-sizing:border-box}}
 @keyframes sfade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 .study-shell{animation:sfade .22s ease-out}
 .study-shell.no-anim,.study-shell.no-anim .s-tabbar a.active:after{animation:none}
