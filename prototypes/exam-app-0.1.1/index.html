@@ -1517,6 +1517,10 @@ a.rp-link:hover{background:var(--active)}
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/><path d="m9 16 2 2 4-4"/></svg>
         <span class="t">Revisar erros</span>
       </a>
+      <a class="row" id="notebooksRow" href="#/cadernos" title="Meus cadernos de questões">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 3h12a3 3 0 0 1 3 3v15H7a3 3 0 0 0-3 3z"/><path d="M4 21V6a3 3 0 0 1 3-3"/><path d="M8 9h7M8 13h7"/></svg>
+        <span class="t">Meus Cadernos</span>
+      </a>
       <a class="row" id="exploreRow" href="#/explorar" title="Explorar e conexões">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
         <span class="t">Explorar</span>
@@ -1688,6 +1692,7 @@ const TYPES={
   documento:{n:'Documento',en:'Document',parent:'arquivo',own:['classe','cat','edicao','cargo']},
   pdf:{n:'PDF',en:'PDF',parent:'documento',own:['paginas']},
   questao:{n:'Questão',en:'Question',parent:null,own:['disciplina','ano','banca','orgao','edicao','cargo']},
+  caderno:{n:'Caderno',en:'Question notebook',parent:null,own:[]},
   disciplina:{n:'Disciplina',en:'Subject',parent:null,own:[]},
   simulado:{n:'Simulado',en:'Mock exam',parent:null,own:['edicao','cargo','ano']},
   resposta:{n:'Resposta',en:'Answer',parent:null,own:['questao','simulado','data','alternativa','resultado']}
@@ -3719,6 +3724,126 @@ const QF_CATS=[
  {id:'sit',t:'Situação',get:q=>{const r=qSel(q),f=qFlag(q.id),a=[!r?'pendentes':(r===q.gabarito?'certas':'erradas')];if(r)a.push('resolvidas');if(f.rev)a.push('rev');if(f.fav)a.push('fav');return a;},fmt:v=>QF_SIT[v]||v,fixed:Object.keys(QF_SIT),always:true}
 ];
 const qfS={},qfCtx={},qScopedPage={};
+
+/* Persistent question notebooks and reusable saved filters. Local-only by design. */
+const nbAll=()=>{const v=store.get('cadernos');return Array.isArray(v)?v:[];};
+const nbSave=items=>store.set('cadernos',items);
+const nbFind=id=>nbAll().find(x=>x.id===id&&x.sp===space);
+const nbAnswerMap=()=>{const v=store.get('cadernoAnswers');return v&&typeof v==='object'?v:{};};
+const nbAnswer=(id,qid)=>((nbAnswerMap()[id]||{})[qid]||{}).selected||null;
+const sfAll=()=>{const v=store.get('savedQuestionFilters');return Array.isArray(v)?v:[];};
+const sfSave=items=>store.set('savedQuestionFilters',items);
+function sfHref(item){
+  const st=item.query||{},params=new URLSearchParams();
+  if(st.text)params.set('busca',st.text);
+  for(const [cat,values] of Object.entries(st.f||{}))for(const v of values||[])params.append(cat,v);
+  return '#/questoes'+(params.toString()?'?'+params.toString():'');
+}
+function sfScope(key,f){
+  const parts=String(key).split(':'),cat=({concurso:'conc',edicao:'ed',cargo:'cg'})[parts[0]];
+  if(cat&&parts[1])f[cat]=[parts[1]];
+  return f;
+}
+function sfLinks(){
+  const items=sfAll().filter(f=>f.sp===space);
+  return items.length?'<div class="op-list">'+items.map(f=>'<div class="nb-row"><a class="op-row" href="'+sfHref(f)+'"><span class="op-rt"><b>'+esc(f.name)+'</b><small>'+esc(f.query.text||'')+'</small></span><span class="op-go" aria-hidden="true">›</span></a><button type="button" class="op-btn" data-sf-delete="'+esc(f.id)+'" aria-label="Excluir filtro '+esc(f.name)+'">Excluir</button></div>').join('')+'</div>':
+    '<p class="op-empty">Nenhum filtro salvo. Use “Salvar filtro” no banco de questões.</p>';
+}
+async function sfCreate(key){
+  const context=qfCtx[key];if(!context)return;
+  const cur=qfSt(key),query={text:cur.text,f:sfScope(key,JSON.parse(JSON.stringify(cur.f||{})))};
+  const name=await dialog({title:'Salvar filtro de questões',input:'',label:'Nome do filtro',placeholder:'Ex.: FGV · Questões não resolvidas',
+    ok:'Salvar filtro',validate:v=>v.length<3?'Use pelo menos 3 caracteres.':''});
+  if(!name)return;
+  sfSave(sfAll().concat({id:'f'+Date.now().toString(36)+uid(),sp:space,name:name.trim(),query,created:Date.now()}));
+  toast('Filtro salvo em Meus filtros.');
+}
+async function nbCreate(qids,stay){
+  let goal=80;
+  const name=await dialog({title:'Gerar Caderno',text:(qids.length||0)+' questões selecionadas.',input:'',label:'Nome do caderno',
+    placeholder:'Ex.: Engenharia de Software · Revisão',
+    html:'<label class="nb-goal">Meta de acerto (%) <input type="number" id="nbGoal" min="1" max="100" value="80" required></label>',
+    ok:'Criar caderno',
+    validate:v=>{
+      if(v.length<3)return 'Use pelo menos 3 caracteres no nome.';
+      const num=Number(($('nbGoal')||{}).value);
+      if(!Number.isInteger(num)||num<1||num>100)return 'Informe uma meta entre 1 e 100%.';
+      goal=num;return '';
+    }
+  });
+  if(!name)return null;
+  const id='cb'+Date.now().toString(36)+uid(),unique=[...new Set(qids)];
+  nbSave(nbAll().concat({id,sp:space,name:name.trim(),goal,questionIds:unique,created:Date.now(),retakeIds:[]}));
+  toast('Caderno criado com '+unique.length+' questões.');
+  if(!stay)location.hash='/caderno/'+id;
+  else route(true);
+  return id;
+}
+function nbMembership(q){
+  const all=nbAll().filter(b=>b.sp===space);
+  return '<details class="nb-membership"><summary>Cadernos ('+all.filter(b=>b.questionIds.includes(q.id)).length+')</summary>'+
+    '<div class="nb-membership-body">'+(all.length?all.map(b=>'<label class="nb-check"><input type="checkbox" data-nb-member="'+esc(q.id+'|'+b.id)+'" '+(b.questionIds.includes(q.id)?'checked':'')+'><span>'+esc(b.name)+'</span></label>').join(''):'<p class="s-note">Esta questão ainda não está em nenhum caderno.</p>')+
+    '<button type="button" class="op-btn" data-nb-single="'+esc(q.id)+'">+ Novo caderno com esta questão</button></div></details>';
+}
+function nbQuestionList(book){
+  const byId=new Map(qObjs().map(q=>[q.id,q]));
+  return book.questionIds.map(id=>byId.get(id)).filter(Boolean);
+}
+function nbStats(book){
+  const items=nbQuestionList(book),done=items.filter(q=>nbAnswer(book.id,q.id)),correct=done.filter(q=>nbAnswer(book.id,q.id)===q.gabarito);
+  return {total:items.length,done:done.length,correct:correct.length,wrong:done.length-correct.length,
+    rate:done.length?pctOf(correct.length,done.length):0,progress:items.length?pctOf(done.length,items.length):0};
+}
+function nbRender(h){
+  const parts=h.split('?')[0].split('/'),id=parts[2],book=nbFind(id);
+  if(!book){studyPage('Caderno','Indisponível','<div class="s-empty">O caderno não existe neste espaço. <a class="s-button" href="#/cadernos">Meus Cadernos</a></div>');return;}
+  const state=nbStats(book),retake=parts[3]==='erradas';
+  const questions=nbQuestionList(book).filter(q=>!retake||book.retakeIds.includes(q.id));
+  const key='book:'+id+(retake?':erradas':'');
+  if(!Object.prototype.hasOwnProperty.call(qScopedPage,key)){
+    const at=Number(new URLSearchParams(h.split('?')[1]||'').get('at'));
+    qScopedPage[key]=Number.isInteger(at)&&at>=0?at:0;
+  }
+  const breadcrumbs=sBreadcrumb([['Meus Cadernos','#/cadernos'],[book.name,'']]);
+  const metrics='<div class="nb-stats"><span><b>'+state.done+' / '+state.total+'</b> resolvidas</span><span><b>'+state.rate+'%</b> de acerto</span><span>Meta: '+book.goal+'%</span></div>'+
+    '<progress class="nb-progress" value="'+state.done+'" max="'+Math.max(1,state.total)+'" aria-label="Progresso do caderno"></progress>';
+  const actions='<div class="nb-actions"><button type="button" class="op-btn pri" data-nb-continue="'+id+'">Continuar de onde parou</button>'+
+    '<button type="button" class="op-btn" data-nb-retake="'+id+'" '+(!state.wrong?'disabled':'')+'>Refazer apenas as que errei ('+state.wrong+')</button>'+
+    '<button type="button" class="op-btn" data-nb-reset="'+id+'">Zerar progresso do caderno</button>'+
+    '<a class="op-btn" href="#/cadernos">Meus Cadernos</a></div>';
+  const content=breadcrumbs+sHead('Caderno de questões',esc(book.name),retake?'Refazendo questões incorretas deste caderno.':'Progresso independente das respostas gerais: suas questões originais não são apagadas.','',sBadge(state.total+' questões'))+
+    metrics+actions+(questions.length?renderPracticeList(questions,key):'<div class="s-empty">Este caderno não contém questões'+(retake?' incorretas para refazer':'')+'. Adicione questões a partir do banco. <a href="#/questoes">Resolver questões</a></div>');
+  studyPage('Caderno','Meus Cadernos',content);
+}
+function nbIndex(){
+  const items=nbAll().filter(b=>b.sp===space);
+  const rows=items.map(b=>{const s=nbStats(b);return '<article class="nb-card" data-nb-id="'+esc(b.id)+'"><h2><a href="#/caderno/'+esc(b.id)+'">'+esc(b.name)+'</a></h2>'+
+    '<p class="s-note">Meta '+b.goal+'% · '+s.done+' de '+s.total+' resolvidas · '+s.rate+'% de acerto</p>'+
+    '<progress class="nb-progress" value="'+s.done+'" max="'+Math.max(1,s.total)+'" aria-label="Progresso do caderno '+esc(b.name)+'"></progress>'+
+    '<div class="nb-actions"><button type="button" class="op-btn pri" data-nb-continue="'+b.id+'">Continuar de onde parou</button>'+
+    '<a class="op-btn" href="#/caderno/'+b.id+'">Ver questões</a>'+
+    '<button type="button" class="op-btn" data-nb-retake="'+b.id+'" '+(!s.wrong?'disabled':'')+'>Refazer apenas as que errei ('+s.wrong+')</button>'+
+    '<button type="button" class="op-btn" data-nb-reset="'+b.id+'">Zerar progresso do caderno</button></div></article>';}).join('');
+  const content=sBreadcrumb([['Início','#/espaco'],['Meus Cadernos','']])+sHead('Organização','Meus Cadernos',
+    'Agrupe questões em baterias de estudo, acompanhe seu progresso e retome exatamente de onde parou.',
+    '<button type="button" class="s-button main-cta" data-nb-empty>+ Novo caderno</button>',sBadge(items.length+' cadernos'))+
+    (rows?'<div class="nb-list">'+rows+'</div>':'<div class="s-empty"><p>Você ainda não tem cadernos.</p><p>Use “Gerar Caderno” depois de filtrar questões, ou crie um caderno vazio.</p><a class="s-button" href="#/questoes">Abrir banco de questões</a></div>');
+  studyPage('Cadernos','Meus Cadernos',content);
+}
+function sfIndex(){
+  const content=sBreadcrumb([['Início','#/espaco'],['Meus Filtros','']])+sHead('Consultas salvas','Meus Filtros',
+    'Reaplique combinações de filtros sem configurar tudo novamente.',sBtn('Questões','#/questoes'))+
+    sSection('Queries de Questão','<div class="s-card">'+sfLinks()+'</div>');
+  studyPage('Filtros','Consultas salvas',content);
+}
+async function nbRoute(h){
+  studyPage('Cadernos','Carregando','<div class="s-empty" role="status">Abrindo cadernos…</div>');
+  try{
+    await loadQuestions();if(location.hash.slice(1)!==h)return;
+    if(h.startsWith('/caderno/'))nbRender(h);else if(h==='/filtros')sfIndex();else nbIndex();
+  }catch(e){if(location.hash.slice(1)===h)studyError(e,'#/espaco');}
+}
+
 const qfSt=k=>qfS[k]||(qfS[k]={f:{},text:'',open:false,cat:null,qs:''});
 const qfLbl=(c,v)=>c.fmt?c.fmt(v):v;
 const QF_IC='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 5h18M6 12h12M10 19h4"/></svg>';
