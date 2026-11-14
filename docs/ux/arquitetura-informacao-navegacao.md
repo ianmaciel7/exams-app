@@ -229,6 +229,6 @@ Para cada tarefa coletar: sucesso independente/assistido/falhou, tempo, primeiro
 ## 10. Auditoria final / limites
 
 - **SHA inicial (14/11/2026):** `bae7aca21afd57c7e8248b34e99105574449d70a`.
-- **SHA final:** registrar o HEAD real de `dev` ao concluir este PR; se divergir, revisar tabela de rotas e código antes de marcar a issue como concluída.
+- **SHA final da leitura da `dev` (pré-merge, 14/11/2026):** `bae7aca21afd57c7e8248b34e99105574449d70a`. O commit do merge desta documentação será diferente, mas não deve alterar as rotas; se a `dev` mudar antes do merge, comparar novamente o inventário.
 - Este documento verifica **código e documentação**, não atribui conformidade WCAG, não substitui estudo de campo e não altera a interface além do que já entrou em PRs anteriores.
 - Melhorias que dependem de dados próprios, screenshots externos ou entrevistas permanecem como **hipóteses** até haver evidência rastreável.
