@@ -2195,6 +2195,88 @@ $('newMenuList')?.addEventListener('mousemove',e=>{
     markNewMenuSel();
   }
 });
+const spacePicker=$('spPop');
+spacePicker.addEventListener('input',e=>{
+  if(e.target.id!=='spSearch') return;
+  spaceFilter=e.target.value;
+  paintSpaceItems();
+});
+spacePicker.addEventListener('keydown',e=>{
+  if(e.isComposing) return;
+  if(spaceDrag&&e.key==='Escape'){
+    e.preventDefault();e.stopPropagation();
+    const cancelId=spaceDrag.id; cancelSpaceDrag();
+    spacePicker.querySelector('[data-spdrag="'+cancelId+'"]')?.focus();
+    return;
+  }
+  if(e.key==='Escape'){
+    e.preventDefault();e.stopPropagation();closePops();$('spBtn').focus();
+    return;
+  }
+  const active=e.target;
+  const options=Array.from(spacePicker.querySelectorAll('.sp-select'));
+  if(active.id==='spSearch'){
+    if(e.key==='Enter'&&options.length){e.preventDefault();options[0].click();}
+    else if(e.key==='ArrowDown'&&options.length){e.preventDefault();options[0].focus();}
+    else if(e.key==='ArrowUp'&&options.length){e.preventDefault();options[options.length-1].focus();}
+    return;
+  }
+  const grip=active.closest('[data-spdrag]');
+  if(grip&&e.altKey&&(e.key==='ArrowUp'||e.key==='ArrowDown')){
+    e.preventDefault();
+    const id=grip.dataset.spdrag;
+    if(moveSpaceStep(id,e.key==='ArrowUp'?-1:1))
+      spacePicker.querySelector('[data-spdrag="'+id+'"]')?.focus();
+    return;
+  }
+  const option=active.closest('.sp-select');
+  if(!option) return;
+  const idx=options.indexOf(option);
+  if(e.key==='ArrowDown'&&idx>=0){e.preventDefault();options[(idx+1)%options.length].focus();}
+  else if(e.key==='ArrowUp'&&idx>=0){e.preventDefault();options[(idx+options.length-1)%options.length].focus();}
+  else if(e.key==='Home'){e.preventDefault();options[0]?.focus();}
+  else if(e.key==='End'){e.preventDefault();options[options.length-1]?.focus();}
+});
+let spaceDrag=null;
+function clearSpaceDropMarkers(){
+  spacePicker.querySelectorAll('.dragging,.drop-before,.drop-after').forEach(el=>
+    el.classList.remove('dragging','drop-before','drop-after'));
+}
+function cancelSpaceDrag(){
+  clearSpaceDropMarkers(); spaceDrag=null;
+}
+spacePicker.addEventListener('pointerdown',e=>{
+  const grip=e.target.closest('[data-spdrag]');
+  if(!grip||grip.disabled||e.button!==0) return;
+  spaceDrag={id:grip.dataset.spdrag,pointer:e.pointerId,
+    startX:e.clientX,startY:e.clientY,moved:false,dest:null,after:false};
+  grip.setPointerCapture(e.pointerId);
+});
+spacePicker.addEventListener('pointermove',e=>{
+  const drag=spaceDrag;
+  if(!drag||drag.pointer!==e.pointerId) return;
+  if(!drag.moved&&Math.hypot(e.clientX-drag.startX,e.clientY-drag.startY)<7) return;
+  drag.moved=true;
+  clearSpaceDropMarkers();
+  spacePicker.querySelector('[data-spentry="'+drag.id+'"]')?.classList.add('dragging');
+  const target=document.elementFromPoint(e.clientX,e.clientY)?.closest('[data-spentry]');
+  if(!target||target.dataset.spentry===drag.id){drag.dest=null;return;}
+  drag.dest=target.dataset.spentry;
+  const rect=target.getBoundingClientRect();
+  drag.after=e.clientY>rect.top+rect.height/2;
+  target.classList.add(drag.after?'drop-after':'drop-before');
+});
+spacePicker.addEventListener('pointerup',e=>{
+  const drag=spaceDrag;
+  if(!drag||drag.pointer!==e.pointerId)return;
+  const {id,dest,after,moved}=drag;
+  cancelSpaceDrag();
+  if(moved&&dest&&moveSpace(id,dest,after)){
+    spacePicker.querySelector('[data-spdrag="'+id+'"]')?.focus({preventScroll:true});
+    toast('Ordem dos espaços atualizada');
+  }
+});
+spacePicker.addEventListener('pointercancel',()=>cancelSpaceDrag());
 $('spPop').onclick=e=>{
   const mb=e.target.closest('[data-spmore]');
   if(mb){ e.stopPropagation(); spaceMenu(mb.dataset.spmore,mb); return; }
@@ -2207,7 +2289,7 @@ $('spPop').onclick=e=>{
       store.set('space',space); paintSpaces(); paintNav(); route(true); toast('Espaço “'+n+'” criado'); });
     return;
   } else space=b.dataset.sp;
-  store.set('space',space); closePops(); paintSpaces(); paintNav(); route(true);
+  store.set('space',space); closePops(); spaceFilter=''; paintSpaces(); paintNav(); route(true); $('spBtn').focus({preventScroll:true});
 };
 /* Ajuda & Recursos Drawer (Issue #53) */
 $('sideHelpBtn')?.addEventListener('click',e=>{
