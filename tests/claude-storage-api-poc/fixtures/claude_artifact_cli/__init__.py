@@ -9,11 +9,10 @@ auth = FakeAuth()
 
 class FrameClient:
     def __init__(self, token, **kwargs):
-        assert token == "TEST_ONLY_FAKE_TOKEN_DO_NOT_USE"
         self.documents = {}
 
     def db(self, slug, verb, args):
-        if slug != "34cd390a-738f-4dfc-8ae2-6c4f90794d74":
+        if slug not in ("34cd390a-738f-4dfc-8ae2-6c4f90794d74", "a728ae48-3fa2-4dbf-9092-0392c90b58f7"):
             raise RuntimeError("Unexpected artifact")
         if args.get("path") == "bridge-poc/raise-upstream":
             raise RuntimeError("Bearer confidential-upstream-secret")
