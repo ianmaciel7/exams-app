@@ -12,7 +12,7 @@ test('current route inventory is grounded in actual dispatch logic', () => {
   ];
   for (const literal of active) assert.ok(source.includes(literal), 'missing route ' + literal);
   assert.match(source, /if\(h0\.startsWith\('\/questoes'\)\|\|h0==='\/simulado'\)\{ showStudyRoute\(h0\); return; \}/);
-  assert.match(source, /if\(h0==='\/revisao'\)\{ location\.replace\('#\/tipo\/questao'\); return; \}/);
+  assert.match(source, /if\(h0==='\/revisao'\)\{ location\.replace\('#\/questoes\/erradas'\); return; \}/);
 });
 
 test('guide distinguishes implemented navigation from future contracts', () => {
