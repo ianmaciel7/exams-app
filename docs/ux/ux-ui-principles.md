@@ -469,6 +469,24 @@ Espelho de [AGENTS.md §20](../../AGENTS.md) e [DESIGN.md §8.23](../../DESIGN.m
 
 **Reconciliação:** já constam dos documentos Fitts, Hick, Gestalt (Proximity, Similarity, Common Region, Figure–Ground, Prägnanz, Good Continuation), Informação/Information Foraging, Progressive Disclosure, ISO e WCAG. **Não** duplicar suas definições como entradas científicas novas. Padrões F/Z e "tudo acima da dobra" não são leis universais. Registrar evidências reais por fluxo antes de considerar uma regra implementada.
 
+
+### T. Busca visual, densidade e organização didática — pesquisa complementar de layout
+
+Índice de [AGENTS.md §21](../../AGENTS.md) e aplicação em [DESIGN.md §8.24](../../DESIGN.md). São **modelos, teorias, princípios e efeitos empíricos**, não novas leis científicas de interface no índice estrito.
+
+| Nome original | Categoria / autores | Aplicação contextual ao Exam App | Fonte original |
+|---|---|---|---|
+| **Feature Integration Theory** | Teoria da atenção, Treisman & Gelade (1980) | Descoberta de alvos visuais em menus, filtros, cartões e estados; cor/formato não resolvem sozinhos semântica e acessibilidade. | [Artigo original](https://doi.org/10.1016/0010-0285(80)90005-5) |
+| **Guided Search 2.0** | Modelo de busca visual, Wolfe (1994) | Orientar atenção em páginas densas, resultados e sidebar sem impor padrão geométrico fixo. | [Artigo original](https://doi.org/10.3758/BF03200774) |
+| **Feature Congestion** | Modelo e medida de desordem visual, Rosenholtz et al. (2005) | Examinar se muitos cards/badges/arestas/contrastes dificultam busca; não pressupor que qualquer borda é ruim. | [CHI 2005, MIT](https://www.mit.edu/~yzli/clutter.pdf) |
+| **Segmenting Principle** | Princípio de aprendizagem multimídia, Mayer (2009) | Segmentar explicações **complexas** com controle do ritmo pelo estudante; não exigir wizard para todos os formulários. | [Mayer — Multimedia Learning](https://www.cambridge.org/core/books/multimedia-learning/7A62F072A71289E1E262980CB026A3F9/listing) |
+| **Worked-Example Effect** | Efeito de aprendizagem, Sweller & Cooper (1985) | Passos explicativos para iniciantes em revisão de questões; preservar prática e correção. | [Artigo original](https://doi.org/10.1207/s1532690xci0201_3) |
+| **Expertise Reversal Effect** | Efeito de aprendizagem, Kalyuga et al. (2003) | Informações/ajudas úteis para iniciantes podem atrapalhar experientes; validar apresentação de detalhes sob demanda. | [Artigo original](https://doi.org/10.1207/S15326985EP3801_4) |
+
+**Diretrizes consultadas via Context7 (não são leis):** [USWDS Typography / Measure](https://designsystem.digital.gov/components/typography/) recomenda largura contextual para leitura longa (frequentemente 45–90 caracteres por linha e alvo de referência ~66); [Carbon Layout Density](https://github.com/carbon-design-system/carbon/blob/main/packages/styles/docs/sass.md) descreve controle de densidade; [Material 3 Panes](https://m3.material.io/foundations/layout/scaffold/panes) descreve adaptar painéis por show/hide, levitate e reflow. **Não copiar medidas, bibliotecas ou tokens sem medir o contexto do Exam App.**
+
+**Critério de qualidade:** priorizar tarefas, testar localização de ações, compreensão, leitura e retorno; registrar limitação e evidência de DOM/CSS/JS quando realmente testado. O material acima **não demonstra implementação**.
+
 ## Matriz de decisão por superfície
 
 | Superfície | Padrão principal | Primeiro viewport e CTA | Secundário | Mobile e exceção | Verificação |
