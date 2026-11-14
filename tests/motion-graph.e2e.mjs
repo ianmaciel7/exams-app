@@ -81,7 +81,7 @@ try {
 
       const oldZoom = idle.zoom;
       await page.locator('#gvc').focus();
-      await page.keyboard.press('+');
+      await page.keyboard.press('Equal');
       await page.waitForTimeout(150);
       const zoomed = await state(page);
       assert.ok(zoomed.zoom > oldZoom, 'keyboard zoom + works in reduced mode');
