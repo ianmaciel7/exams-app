@@ -1518,6 +1518,164 @@ O que Ian mostrou como modelo para a sidebar: tipos de objeto, ordenar, hover, l
 
 #97 AFTER | dark | 768px | sidebar fechada | contexto fechado
 
+## 32. Dossiê Exaustivo Zero-Information-Loss: Readwise SRS & Readwise Reader — Todas as Telas, Hovers, Modais, Templates Jinja2, Schemas CSV, Action Tags, Fontes de Import/Export e Evidências de Texto (73 Capturas Verificadas)
+<!-- container e1090 @ (10200,11000) -->
+
+### Especificação Técnica Completa para Leitura por IA (Zero-Information-Loss antes do término do Trial) — Complementado por READWISE_DOSSIER.md (241 KB de DOM/Texto Bruto)
+
+> **1. Especificação Estrutural e Textual Completa — Readwise SRS (`https://readwise.io`)**
+> - **Catálogo Completo de Importação (`https://readwise.io/welcome/sync`):**
+>   - *Suggested:* `Kindle` (extensão 1-click), `Instapaper`, `Twitter/X`.
+>   - *Connected:* `Supplemental Books` (`/supp_library` / `/quick`), `Readwise Reader` (sincronização bidirecional automática).
+>   - *Connect & Sync (20 integrações de leitura):* `Apple Books` (Mac desktop app), `Medium`, `Hypothesis`, `Goodreads`, `Library` (BETA), `Diigo` (BETA), `Snipd` (podcasts iOS/Android), `Shortform`, `Kobo` (BETA), `BOOX`, `CrossPoint`, `Feedly` (BETA), `Raindrop.io` (BETA), `Command` (iOS browser), `BookFusion`, `Moon+ Reader`, `Inoreader`, `Refind`, `Web Highlighter`, `Voicenotes` (áudio/transcrições), `ChatGPT` (BETA).
+>   - *Import & Upload (12 métodos de entrada):* `My Clippings.txt` (Kindle USB), `Email Import` (`add@readwise.io`), `CSV Import` (`/import_bulk`), `Freeform Input` (`/add`), `Paper Books` (OCR via câmera), `Kobo Device import` (October project), `Readwise Discord Bot`, `PDF` (BETA), `Scribd`, `O'Reilly Learning`, `Google Play Books`, `Model Context Protocol (MCP)`.
+> - **Especificação do Importador CSV (`https://readwise.io/import_bulk`):**
+>   - Requer linha de cabeçalho (ordem das colunas irrelevante):
+>     - `Highlight` (**obrigatório**): texto literal do grifo.
+>     - `Title` (opcional): nome do livro ou artigo.
+>     - `Author` (opcional): autor do livro ou artigo.
+>     - `URL` (opcional): URL original do artigo.
+>     - `Note` (opcional): nota vinculada ao grifo (**processa Inline Action Tags** como `.h1`, `.c1`, `.qa`).
+>     - `Location` (opcional): inteiro indicando posição na obra (se omitido, assume a ordem das linhas no arquivo).
+>     - `Date` (opcional): timestamp no formato `YEAR-MONTH-DAY HOUR:MINUTE:SECOND`.
+> - **Catálogo Completo de Exportação (`https://readwise.io/export`):**
+>   - *Auto-Sync PKMs (16 destinos):* `Notion` (Official API), `Obsidian`, `Apple Notes`, `Craft`, `Evernote`, `NotebookLM` (via Google Docs), `Logseq`, `Tana`, `Reflect`, `Heptabase`, `RemNote`, `Mailbrew`, `OneNote`, `Roam` (Append API), `Workflowy`, `Capacities`.
+>   - *Arquivos e Protocolos (4 formatos):* `CSV`, `Markdown` (templates Jinja2 customizáveis para YAML Frontmatter, Título, Header e Highlights), `Model Context Protocol (MCP)` e `CLI`.
+> - **Visualização de Livro (`https://readwise.io/bookreview/<id>`) & Chat Semântico:**
+>   - Botão `+ Add Document Tags` aplica tags ao documento inteiro; cada card de highlight possui no rodapé: `Tag` (ícone etiqueta), `Favorite` (coração), `Edit/Note` (lápis/quadrado) e `Share` (seta upload).
+>   - No canto superior direito de cada card de highlight há 2 controles: **Ícone de Balões de Chat** (abre `https://readwise.io/chat` com o prompt automático: *"Please help me find conceptually similar highlights to the following text, across different documents (do not include quotes from the same document unless there are no options): '<texto>' (<Autor>, <Livro>)"*) e **Chevron Down (`v`)** para ações secundárias.
+> - **Configurações de Revisão (`https://readwise.io/preferences`):**
+>   - *Email Preferences:* `Account Email Address`, `Email Frequency` (`once per day` / `never` / custom), `Send Time` (`12:00am`..`11:00pm` com timezone `GMT -03:00`), toggle `Use the legacy email design`.
+>   - *Review Settings:* Slider `Highlights Per Day` (`1` a `15`, padrão `5`), slider `Highlight Recency` (`Older` ↔ `Newer`), toggles `Receive Bonus Highlights` e `Highlight Quality Filter`, link para `Themed Reviews`.
+>   - *Frequency Tuning:* Seletor de entidade (`Books`, `Supplemental Books`, `Articles`, `Tweets`, `Highlight Tags`) + busca rápida + tabela com colunas `Title`, `Author`, `Highlights`, `Last Highlighted` e slider contínuo `Review Frequency`.
+
+> **2. Especificação Estrutural, Atalhos, Queries e Templates Jinja2 — Readwise Reader (`https://read.readwise.io`)**
+> - **Dashboard Home (`https://read.readwise.io/home`) & Botão `Configure`:**
+>   - Exibe carrosséis horizontais baseados em Filtered Views (`📥 Recently added`, `⏱️ Quick reads`, `✨ New in Feed`, `Continue reading`) com capas, domínio, autor, indicador circular de progresso e tempo estimado (`6min`, `1min`).
+> - **Tabela Completa de `Filtered Views` Padrão (`https://read.readwise.io/views` — 14 Views Nativas e Suas Queries Exatas):**
+>   1. `PDFs` — Query: `category:pdf` (Uploaded PDFs)
+>   2. `Books` — Query: `category:epub` (Uploaded EPUBs)
+>   3. `Emails` — Query: `category:email` (Forwarded newsletters and one-off emails)
+>   4. `Tweets` — Query: `category:tweet` (Twitter threads and tweets)
+>   5. `Videos` — Query: `category:video` (YouTube videos manually saved)
+>   6. `Articles` — Query: `category:article` (Articles saved using extension or mobile)
+>   7. `Podcasts` — Query: `category:podcast` (Podcast episodes)
+>   8. `⭐️ Shortlist` — Query: `tag:shortlist AND (in:inbox OR in:later)`
+>   9. `⏳ Long reads` — Query: `minutes__gt:30 AND (in:inbox OR in:later)`
+>   10. `✨ New in Feed` — Query: `feed:true` (Unseen in the Feed section)
+>   11. `⏱️ Quick reads` — Query: `minutes__lt:10 AND (in:inbox OR in:later)`
+>   12. `📥 Recently added` — Query: `saved__gt:"1 week ago" AND (in:inbox OR in:later)`
+>   13. `📖 Continue reading` — Query: `progress__gt:5 AND last_opened__after:"1 week ago"`
+>   14. `💎 Recently highlighted` — Query: `has:highlights AND last_opened__gt:"1 week ago"`
+> - **Atalhos Globais da Command Palette (`Ctrl+K` / `?`):**
+>   - `Ctrl K` (`Open command palette`), `T` (`Add / Edit tags for document`), `Shift N` (`Add a document note`), `F` (`Add to favorites`), `S` (`Add to shortlist`), `Shift A` (`Add/remove RSS subscriptions`), `Shift B` (`Apply bulk actions`), `B` (`Bump document to top`), `Shift X` (`Collapse/Expand all items in sidebar`), `Shift L` (`Copy Reader URL`), `Shift C` (`Copy URL`), `Shift Alt C` (`Copy annotations to clipboard`), `Shift Alt D` (`Download annotations as markdown`), `Shift D` (`Download annotated PDF`), `Shift M` (`Edit metadata`), `Shift 1` (`Open Notebook`), `G` (`Invoke Ghostreader`), `H` (`Highlight`), `N` (`Add highlight note`), `Z` (`Undo`).
+> - **Motor de Prompts Jinja2 do Ghostreader (Variáveis, Subrotinas e Template Oficial de Sumarização):**
+>   - *Modelo padrão:* `GPT-5 Mini` (configurável por prompt em Preferences; alternar `Fast` / `Thinking` no chat altera apenas perguntas de follow-up).
+>   - *Variáveis Jinja2:* `{{ document.author }}`, `{{ document.category }}`, `{{ document.content }}`, `{{ document.domain }}`, `{{ document.length }}`, `{{ document.title }}`, `{{ document.source }}`, `{{ document.summary }}`, `{{ document.tags }}`, `{{ document.note }}`, `{{ document.language }}`, `{{ document.progress }}`, `{{ document.highlights }}`, `{{ document.html }}`, `{{ document.key_sentences }}`, `{{ selection }}`, `{{ selection.sentence }}`, `{{ selection.paragraph }}`.
+>   - *Template Jinja2 Oficial deControle de Janela de Contexto:*
+>     `{% if (document.content | num_tokens) > 25000 %}{{ document.html | central_paragraphs | join('\n\n') }}{% elif (document.content | num_tokens) > 2500 %}{{ document.content | central_sentences | join('\n\n') }}{% else %}{{ document.content }}{% endif %}`
+> - **Especificação Completa de Inline Action Tags (Sincronização Reader → Readwise Highlights):**
+>   - `.h1`, `.h2`, `.h3` em nota de grifo → converte o texto grifado em cabeçalho de seção no Notebook e gera Table of Contents lateral no Readwise Highlights.
+>   - `.c1`, `.c2`, `.c3`... → concatena fragmentos separados (ex.: *caput* e parágrafo único ou trechos entre páginas de PDF) em um único highlight unido por `…`.
+>   - `.qa [PERGUNTA?][RESPOSTA]` → cria instantaneamente um cartão Q&A de Mastery no Readwise.
+>   - `Shift + Enter` após qualquer Action Tag permite anexar uma nota explicativa normal abaixo da diretiva.
+
+![imagem e1100](assets/readwise_reader_home_dashboard.png)
+
+![imagem e1102](assets/readwise_reader_inbox_list.png)
+
+**Evidência 81 (Readwise Reader `/home` Carregado — Issue #81):** Dashboard Home completo com widgets `Recently added` e `Quick reads`, capas de documentos, tempo de leitura (`6min`, `1min`) e botão `Configure` no topo direito
+
+**Evidência 82 (Readwise Reader `/new` Inbox — Issue #81):** Lista da `Library > INBOX` carregada com hover de ações rápidas (`Archive`, `Later`, `More`), aba direita `Info` com `SUMMARY` por Ghostreader e `METADATA` completo
+
+![imagem e1104](assets/readwise_reader_shortcuts_palette.png)
+
+![imagem e1106](assets/readwise_reader_manage_views_table.png)
+
+**Evidência 83 (Readwise Reader `Ctrl+K` / `?` — Issue #77):** Command Palette (`Search a command`) e menu flutuante de ajuda (`Help documentation`, `Keyboard shortcuts ?`, `Get browser extension`, `Get desktop app`)
+
+**Evidência 84 (Readwise Reader `/views` — Issue #81):** Tabela `Filtered views` completa com todas as 14 views nativas, coluna `QUERY` com a sintaxe exata (`category:pdf`, `minutes__lt:10`, etc.), contador de documentos e botões de editar/fixar/excluir
+
+![imagem e1108](assets/readwise_reader_ghostreader_docs_prompts_1.png)
+
+![imagem e1110](assets/readwise_reader_ghostreader_docs_prompts_2.png)
+
+**Evidência 85 (Readwise Reader Docs — Issue #80):** Documentação oficial `Default Ghostreader Prompts` detalhando o modelo padrão (`GPT-5 Mini`) e prompts `Word-Level` (`Dictionary definition`, `Encyclopedia lookup`, `Internal x-ray`)
+
+**Evidência 86 (Readwise Reader Docs — Issue #80):** Documentação `Ghostreader Prompt Customization` explicando os 4 escopos (`Document`, `Paragraph`, `Word/phrase`, `Automatic`) e anatomia do prompt de sumarização
+
+![imagem e1112](assets/readwise_reader_ghostreader_docs_jinja2.png)
+
+![imagem e1114](assets/readwise_reader_pdf_docs_overview.png)
+
+**Evidência 87 (Readwise Reader Docs — Issue #80):** Referência oficial `Ghostreader References` com todas as 18 variáveis Jinja2 (`document.title`, `selection.sentence`, etc.) e subrotinas (`num_tokens`, `central_sentences`)
+
+**Evidência 88 (Readwise Reader PDF Docs — Issues #77, #78):** Especificação oficial de `PDFs` no Reader: `Edit Metadata (Shift + M)`, zoom (`Ctrl/Cmd + +/-`), `Snapshotting` de tabelas/figuras, `Enhanced text mode` e download anotado (`Shift + D`)
+
+![imagem e1116](assets/readwise_reader_pdf_docs_metadata.png)
+
+![imagem e1118](assets/readwise_reader_doc2_hover_discover.png)
+
+**Evidência 89 (Readwise Reader Exporting Docs — Issue #78):** Documentação oficial de exportação do `Notebook`: `Copy to clipboard (Shift + Option + C)`, `Download annotations (Shift + Option + D)` como Markdown e geração de CSV/OPML
+
+**Evidência 90 (Readwise Reader Leitura + TTS + Notebook — Issues #77, #78, #80):** Artigo aberto com foco azul no parágrafo, 2 grifos sincronizados na aba `Notebook 2`, botões `Export` / `Open` e barra inferior de TTS (`Arthur`, `1x`)
+
+![imagem e1120](assets/readwise_srs_import_sync_sources_top.png)
+
+![imagem e1122](assets/readwise_srs_import_sync_sources_mid1.png)
+
+**Evidência 91 (Readwise SRS `/welcome/sync` Topo — Issue #82):** Página `Import Highlights` mostrando fontes `Suggested` (`Kindle`, `Instapaper`, `Twitter`) e `Connected` (`Supplemental Books`, `Readwise Reader`)
+
+**Evidência 92 (Readwise SRS `/welcome/sync` Meio 1 — Issue #82):** Grade `Connect & Sync` com `Apple Books`, `Medium`, `Hypothesis`, `Goodreads`, `Library`, `Diigo`, `Snipd`, `Shortform`, `Kobo`, `BOOX`, `CrossPoint` e `Feedly`
+
+![imagem e1124](assets/readwise_srs_import_sync_sources_mid2.png)
+
+![imagem e1126](assets/readwise_srs_import_upload_bottom.png)
+
+**Evidência 93 (Readwise SRS `/welcome/sync` Meio 2 — Issue #82):** Continuação de `Connect & Sync` com `Raindrop.io`, `Command`, `BookFusion`, `Moon+ Reader`, `Inoreader`, `Refind`, `Web Highlighter`, `Voicenotes` e `ChatGPT`
+
+**Evidência 94 (Readwise SRS `/welcome/sync` Rodapé — Issue #82):** Seção `Import & Upload` com `My Clippings.txt`, `Email Import`, `CSV Import`, `Freeform Input`, `Paper Books`, `Kobo Device`, `Discord Bot`, `PDF`, `Scribd`, `O'Reilly`, `Google Play` e `MCP`
+
+![imagem e1128](assets/readwise_srs_csv_import_modal.png)
+
+![imagem e1130](assets/readwise_srs_export_highlights_top.png)
+
+**Evidência 95 (Readwise SRS `/import_bulk` — Issue #82):** Tela `CSV Highlights` com zona de drag-and-drop (`Upload a csv file`) e especificação completa das colunas (`Highlight`, `Title`, `Author`, `URL`, `Note`, `Location`, `Date`)
+
+**Evidência 96 (Readwise SRS `/export` Topo — Issue #83):** Tela `Export Highlights` com conectores automáticos para `Notion`, `Obsidian`, `Apple Notes`, `Craft`, `Evernote`, `NotebookLM`, `Logseq`, `Tana`, `Reflect`, `Heptabase`, `RemNote` e `Mailbrew`
+
+![imagem e1132](assets/readwise_srs_export_highlights_full.png)
+
+![imagem e1134](assets/readwise_srs_bookreview_deep_work_full.png)
+
+**Evidência 97 (Readwise SRS `/export` Rodapé — Issue #83):** Continuação de `Export Highlights` com `OneNote`, `Roam`, `Workflowy`, `Capacities` e exportadores diretos `CSV`, `Markdown`, `Model Context Protocol (MCP)` e `CLI`
+
+**Evidência 98 (Readwise SRS `/bookreview/65206299` — Issue #83):** Tela de revisão do livro `Deep Work` (`Cal Newport`) com `+ Add Document Tags`, cards de highlights, ícone de Chat semântico no topo direito do card e barra inferior de ações
+
+![imagem e1136](assets/readwise_srs_bookreview_ai_chat.png)
+
+![imagem e1138](assets/readwise_srs_bookreview_chat_panel_open.png)
+
+**Evidência 99 (Readwise SRS `/chat` — Issue #83):** Copiloto `Ask your highlights anything` com seletor de modelo (`Fast` vs `Thinking`), sugestões contextuais de perguntas e busca semântica em todos os destaques
+
+**Evidência 100 (Readwise SRS Semantic Chat Prompt — Issue #83):** Disparo do botão de chat dentro de um highlight de `Deep Work`, enviando automaticamente o prompt de busca de highlights conceitualmente similares entre documentos diferentes
+
+![imagem e1140](assets/readwise_srs_preferences_email_schedule_1.png)
+
+![imagem e1142](assets/readwise_srs_preferences_email_schedule_2.png)
+
+**Evidência 101 (Readwise SRS `/preferences` Email — Issue #82):** Aba `Email Preferences` em `Configure` com endereço de e-mail, frequência (`once per day`), horário (`12:00am GMT -03:00`) e toggle `Use the legacy email design`
+
+**Evidência 102 (Readwise SRS `/preferences` Review Settings — Issue #82):** Aba `Review Settings` com sliders `Highlights Per Day` (`1–15`) e `Highlight Recency` (`Older–Newer`), toggles `Receive Bonus Highlights` / `Highlight Quality Filter` e `Themed Reviews`
+
+![imagem e1144](assets/readwise_srs_frequency_tuning_dropdown.png)
+
+![imagem e1146](assets/readwise_srs_inline_action_tags_guide.png)
+
+**Evidência 103 (Readwise SRS `/configure/tune/books` — Issue #83):** Aba `Frequency Tuning` com dropdown de categoria aberto (`Books` / `Supplemental Books`), filtro de busca e slider individual `Review Frequency` por obra
+
+**Evidência 104 (Readwise SRS Inline Tagging Guide — Issue #79):** Guia oficial `How to Tag Your Highlights While You Read` detalhando o funcionamento de `inline tagging` e categorização em tempo de leitura
+
 ## 10. Arquivos do projeto (Dataprev 2026 e referências)
 <!-- container e363 @ (0,12666) -->
 
