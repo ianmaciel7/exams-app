@@ -2555,7 +2555,7 @@ const opProps=(rows,iid)=>{
   if(!allRows) return '';
   const count=r.length+(cu?(cu.match(/class="op-prop"/g)||[]).length:0);
   return '<div class="props-card" data-props-for="'+esc(iid||'')+'">'+
-    '<div class="props-head" role="button" tabindex="0" onclick="this.closest('.props-card').classList.toggle('is-collapsed')" aria-label="Recolher ou expandir propriedades">'+
+    '<div class="props-head" role="button" tabindex="0" data-props-toggle aria-label="Recolher ou expandir propriedades">'+
       '<span class="props-title"><span class="props-title-txt">Propriedades</span><small class="props-count">• '+count+'</small></span>'+
       '<span class="props-chev">▾</span>'+
     '</div>'+
@@ -3121,7 +3121,7 @@ function questaoPage(q){
   const drawerHtml='<div class="q-drawer" id="qDrawer"><div class="q-drawer-head"><span>Navegador Rápido de Questões</span><small>Legenda: Verde (Acerto) • Vermelho (Erro) • Cinza (Pendente)</small></div><div class="q-grid">'+qGridCells+'</div></div>';
   const nav='<div class="op-actions" style="margin-top:18px;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">'+
     (prev?'<a class="op-btn" href="#/questao/'+prev.id+'">← Anterior (K)</a>':'<span></span>')+
-    '<button type="button" class="op-btn" onclick="document.getElementById(\'qDrawer\').classList.toggle(\'open\')" aria-expanded="false">🧭 Grade ('+(i+1)+'/'+all.length+')</button>'+
+    '<button type="button" class="op-btn" data-drawer-toggle aria-expanded="false">🧭 Grade ('+(i+1)+'/'+all.length+')</button>'+
     (r?'<button type="button" class="op-btn" data-qo-reset="'+q.id+'">Refazer</button>':'<span></span>')+
     (next?'<a class="op-btn" href="#/questao/'+next.id+'">Próxima (J) →</a>':'<span></span>')+
   '</div>'+drawerHtml;
@@ -3424,6 +3424,8 @@ function route(spaceChanged){
   open(d);
 }
 const viewClick=e=>{
+  const ph=e.target.closest('[data-props-toggle]'); if(ph){ const c=ph.closest('.props-card'); if(c) c.classList.toggle('is-collapsed'); return; }
+  const dt=e.target.closest('[data-drawer-toggle]'); if(dt){ const d=document.getElementById('qDrawer'); if(d) d.classList.toggle('open'); return; }
   const tr=e.target.closest('[data-t-restore]'); if(tr){ restoreGroup(tr.dataset.tRestore); toast('Restaurado'); return; }
   const tp=e.target.closest('[data-t-purge]'); if(tp){ dialog({alert:true,danger:true,title:'Excluir de vez?',text:'“'+tp.dataset.tLabel+'” e tudo que estava ligado a ele sairão da lixeira e não poderão ser recuperados.',ok:'Excluir de vez',cancel:'Manter na lixeira'}).then(ok=>{ if(ok) purgeGroup(tp.dataset.tPurge); }); return; }
   if(e.target.closest('[data-t-empty]')){ dialog({alert:true,danger:true,title:'Esvaziar a lixeira?',text:'Todos os itens da lixeira serão excluídos de vez e não poderão ser recuperados.',ok:'Esvaziar lixeira',cancel:'Cancelar'}).then(ok=>{ if(ok){ trashList.forEach(x=>x.purged=true); saveTrash(); paintNav(); route(true); } }); return; }
