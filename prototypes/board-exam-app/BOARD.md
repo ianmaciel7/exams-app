@@ -6,6 +6,22 @@
 
 ### App para estudar para exames: certificações (estilo ExamTopics) ou concursos. Sem foco fixo.
 
+![imagem e985](assets/readwise_srs_review_settings_algorithm.png)
+
+![imagem e987](assets/readwise_srs_frequency_tuning_by_source.png)
+
+**Evidência 77 (Readwise SRS Algoritmo — Issue #82): Painel `Review Settings` (`Highlights Per Day`, `Highlight Recency` slider, `Bonus Highlights`)**
+
+**Evidência 78 (Readwise SRS Tuning — Issue #83): Tela `Frequency Tuning` (`/configure/tune/books`) com slider de prioridade para cada fonte/disciplina**
+
+![imagem e989](assets/readwise_srs_daily_review_completed_streak.png)
+
+![imagem e991](assets/readwise_srs_statistics_heatmap.png)
+
+**Evidência 79 (Readwise SRS Streak — Issue #83): Tela de conclusão da Revisão Diária (`6/6 reviewed today`), badge de `Streak` e botão `Review More Highlights`**
+
+**Evidência 80 (Readwise SRS Stats — Issue #83): Página `Statistics` (`/stats`) com Heatmap anual de revisões diárias, novos grifos e recordes de ofensiva**
+
 ## 8. Layout de três painéis (Three-Pane Workspace)
 <!-- container e500 @ (3300,-1000) -->
 
@@ -1022,6 +1038,191 @@ O que Ian mostrou como modelo para a sidebar: tipos de objeto, ordenar, hover, l
 **Evidência 35 (QConcursos Elite Live — Issue #71):** Confirmação em 2 etapas via botão `Responder`, destacando a alternativa correta B em verde e exibindo a barra inferior de abas pedagógicas
 
 **Evidência 36 (QConcursos Elite Live — Issue #72):** Aba pedagógica `Estatísticas` aberta sob a questão: gráfico Donut (`69% de acertos`), gráfico de barras `Alternativas mais respondidas (A–E)` e `Histórico de desempenho`
+
+## 30. Dossiê Funcional Completo: QConcursos (Todos os Botões/Dock), Readwise Reader (Hover/Popovers/PDF/TTS), Readwise SRS (Cloze/Mastery/Tuning) & Capacities Core (Issues #74 a #84)
+<!-- container e900 @ (6700,11000) -->
+
+### Mapeamento Funcional Exaustivo (Clique em Todos os Botões, Hovers, Modais e Motores de Estudo) — Issues #74, #75, #76, #77, #78, #79, #80, #81, #82, #83 e #84
+
+> **1. QConcursos Elite — Varredura Botão-a-Botão: Filtros, Modais, Card da Questão e Study Dock Lateral (Issues #70–#76)**
+> - **Dropdowns Individuais do Construtor de Filtros:** Cada botão (`Disciplina`, `Assunto`, `Banca`, `Instituição`, `Ano`, `Cargo`, `Nível`, `Dificuldade`) abre um popover multiselect pesquisável (`Busca rápida` + checkboxes hierárquicos com contagem de questões).
+> - **Modais de Gestão de Filtro e Caderno:** `Salvar filtro` (permite salvar novo filtro ou atualizar existente com resumo de pílulas ativas); `Gerar caderno` (drawer lateral para criar caderno de até 1.000 questões filtradas); `Configurações de exibição` (toggles: exibir apenas comentadas, ocultar alternativas descartadas, etc.).
+> - **Controles Interativos do Card de Questão:** `Texto associado (+)` expande o texto base inline; **Tesoura (`Descartar alternativa`)** aplica `line-through` + `opacity: 0.5` e exibe tooltip `Restaurar alternativa`; abas `Gabarito Comentado`, `Comentários`, `Estatísticas` (Donut + Barras A–E), `Cadernos` (salvar questão em caderno customizado), `Anotações` (editor rich text WYSIWYG) e modal `Reportar Erro` com 6 pílulas estruturadas (*Enunciado/alternativa errada*, *Disciplina/assunto errado*, *Gabarito errado*, *Questão anulada*, *Desatualizada*, *Duplicada*).
+> - **Study Dock Lateral Flutuante (`36px` pill à direita):** (1) **Tamanho da Fonte (`Aa`)** com slider `14px` e botões `- Menor` / `+ Maior` / Reset; (2) **Cronômetro / Timer** de ciclo de estudo (`45 min`, `Iniciar`, `Resetar`, `Aviso ON`); (3) **Marca-texto (Highlighter)** para grifar o enunciado; (4) **Desempenho no Filtro** (Donut em tempo real: Resolvidas / Acertei / Errei); (5) **Meus Resumos / Folha de Respostas**; (6) **Modo Foco / Zen** (oculta header e sidebar).
+> 
+> **2. Readwise Reader (`read.readwise.io/new` e `/new/read/01m7bwrzfjfdqqwwxfv4z1q1a8`) — Leitura Ativa, Hovers, Popovers, Action Tags, Ghostreader & TTS (Issues #77–#81)**
+> - **Enhanced Text Mode vs. Original PDF View (Issue #77):** Reflow semântico de PDFs de 2 colunas (DOU/Editais) com menu `Appearance (Aa)` (fonte, tamanho, espaçamento, largura), indicador azul de **Foco por Parágrafo (`j`/`k`)** na margem esquerda, atalhos de uma tecla (`h` grifar, `n` nota Marginalia, `t` tag, `z` undo) e Sumário dinâmico (`[`).
+> - **Painel Direito `Info | Notebook | Ghostreader` & Snapshot de PDF (Issue #78):** Aba `Notebook` com stream vivo de grifos ordenados por posição, salto em 1 clique, ferramenta de **Snapshot (recorte de tabelas/cronogramas de PDF como imagem)** e exportação Markdown/PDF anotado (`Shift+D`).
+> - **Action Tags em Grifos (Issue #79):** `.qa [Pergunta?][Resposta]` cria Flashcard SRS na hora; `.c1` + `.c2` concatena *caput* e parágrafo/exceção de artigo de lei em um único destaque; `.h1`/`.h2` cria cabeçalhos no Notebook.
+> - **Floating Highlight Popover, Copiloto Posicional & Player TTS (Issue #80):** Ao selecionar texto ou clicar num grifo, abre popover flutuante com `Delete`, `Add note (n)`, `Add/edit tags (t)` e menu `More (...)` (`Copy text`, `Chat about this (g)`, `Share as image`, `View in notebook`, `Auto highlight Shift+H`). Aba `Ghostreader` sabe a posição de leitura atual e oferece 15 skills (`Quiz Me`, `Explain from my Library`, `Extract key takeaways/deadlines`, `Simplify`). Botão `Listen` no topo abre o **Player Inferior de Text-to-Speech (TTS)** com velocidades `0.5x–2x` e seletor de voz neural.
+> - **Funil de Triagem & Filtered Views (Issue #81):** Estados `Inbox -> Later (l) -> Shortlist -> Archive (e)` e queries booleanas (`category:pdf AND tag:edital AND progress < 100`).
+> 
+> **3. Readwise SRS (`readwise.io`) — Daily Review, Cloze Deletion em 1 Clique, Frequency Tuning & Heatmap (Issues #82 e #83)**
+> - **Daily Review & Mastery Generator (Issue #82):** Deck diário com barra de progresso, TTS integrado, curadoria (`Keep`, `Discard`, `Master`, `Feedback`) e gerador de **Cloze Deletion (`{{c1::...}}`)** clicando nas palavras do artigo de lei + **Q&A** (`Use highlight text as Answer`), avaliado com 4 níveis (`Never`, `Soon`, `Later`, `Someday`).
+> - **Frequency Tuning, Edição Não-Destrutiva & Heatmap (Issue #83):** Sliders por livro/disciplina (`/configure/tune/books`) para priorizar matérias de Peso 2 ou com alto índice de erro; modal `Edited vs Original Highlight` + Chat Semântico entre fontes; página `/stats` com Heatmap estilo GitHub e contador de `Streak`.
+> 
+> **4. Capacities Functional Core — Object-Oriented PKM (Issue #84)**
+> - **Templates por Tipo de Objeto**, **Queries Dinâmicas Construtoras**, **Propriedades Tipadas Bidirecionais**, **Transclusão / Live Embed de Questões e Blocos** dentro de notas e **Diário de Estudo (`Daily Notes`)**.
+
+![imagem e905](assets/qconcursos_filter_disciplina_open.png)
+
+![imagem e907](assets/qconcursos_filter_assunto_open.png)
+
+**Evidência 37 (QConcursos Botões — Issue #70): Dropdown `Disciplina` aberto com busca rápida e árvore de checkboxes**
+
+**Evidência 38 (QConcursos Botões — Issue #70): Dropdown `Assunto` em cascata hierárquica com contadores de questões**
+
+![imagem e909](assets/qconcursos_filter_banca_open.png)
+
+![imagem e911](assets/qconcursos_filter_dificuldade_open.png)
+
+**Evidência 39 (QConcursos Botões — Issue #70): Dropdown `Banca` aberto (FGV, Cebraspe, FCC, VUNESP) com busca instantânea**
+
+**Evidência 40 (QConcursos Botões — Issue #70): Dropdown `Dificuldade` (`Muito Fácil` a `Muito Difícil`) e modal `Salvar Filtro`**
+
+![imagem e913](assets/qconcursos_salvar_filtros_modal.png)
+
+![imagem e915](assets/qconcursos_gerar_caderno_modal.png)
+
+**Evidência 41 (QConcursos Botões — Issue #75): Modal `Salvar Filtro` (novo ou atualizar existente) com resumo de pílulas ativas**
+
+**Evidência 42 (QConcursos Botões — Issue #75): Drawer `Gerar Caderno` a partir do filtro ativo (limite de até 1.000 questões)**
+
+![imagem e917](assets/qconcursos_configuracoes_questoes_drawer.png)
+
+![imagem e919](assets/qconcursos_texto_associado_expanded.png)
+
+**Evidência 43 (QConcursos Botões — Issue #70): Drawer `Configurações de Exibição` (mostrar apenas comentadas, ocultar alternativas descartadas)**
+
+**Evidência 44 (QConcursos Botões — Issue #71): `Texto associado (+)` expandido inline acima do enunciado da questão**
+
+![imagem e921](assets/qconcursos_alternative_scissors_struck.png)
+
+![imagem e923](assets/qconcursos_question_cadernos_tab.png)
+
+**Evidência 45 (QConcursos Botões — Issue #71): Alternativa A descartada com a **Tesoura** (`line-through`, `opacity: 0.5` e tooltip `Restaurar alternativa`)**
+
+**Evidência 46 (QConcursos Botões — Issues #72, #75): Aba `Cadernos` dentro da questão para adicionar o item a um caderno de estudo**
+
+![imagem e925](assets/qconcursos_question_anotacoes_editor.png)
+
+![imagem e927](assets/qconcursos_question_notificar_erro.png)
+
+**Evidência 47 (QConcursos Botões — Issue #72): Aba `Anotações` com editor rich text WYSIWYG aberto na questão**
+
+**Evidência 48 (QConcursos Botões — Issue #72): Modal `Reportar Erro` com 6 pílulas estruturadas de classificação do problema**
+
+![imagem e929](assets/qconcursos_dock_fonte_aa_active.png)
+
+![imagem e931](assets/qconcursos_dock_cronometro_open.png)
+
+**Evidência 49 (QConcursos Study Dock — Issue #74): Ferramenta `Tamanho do texto (Aa)` aberta no dock lateral flutuante (`14px`, `- Menor`, `+ Maior`)**
+
+**Evidência 50 (QConcursos Study Dock — Issue #74): Ferramenta `Cronômetro` aberta no dock lateral (`45 min`, `Iniciar`, `Resetar`, `Aviso ON`)**
+
+![imagem e933](assets/qconcursos_dock_marcatexto_open.png)
+
+![imagem e935](assets/qconcursos_dock_desempenho_active.png)
+
+**Evidência 51 (QConcursos Study Dock — Issue #74): Ferramenta `Marca-texto` ativa no dock lateral para grifar trechos do enunciado**
+
+**Evidência 52 (QConcursos Study Dock — Issue #74): Popover `Desempenho no Filtro` no dock lateral (Donut 39% acertos / 61% erros)**
+
+![imagem e937](assets/qconcursos_dock_modo_foco.png)
+
+![imagem e939](assets/qconcursos_live_question_tab_gabarito_comentado.png)
+
+**Evidência 53 (QConcursos Study Dock — Issue #74): `Modo Foco / Zen` ativado ocultando barras globais e maximizando a leitura**
+
+**Evidência 54 (QConcursos Abas — Issue #72): Aba `Gabarito Comentado` com análise estruturada alternativa por alternativa**
+
+![imagem e941](assets/readwise_reader_inbox_triage.png)
+
+![imagem e943](assets/readwise_reader_home_dashboard.png)
+
+**Evidência 55 (Readwise Reader `/new` — Issue #81): Interface de 3 painéis na `Inbox` (`/new`) com lista de triagem, metadados laterais e atalhos**
+
+**Evidência 56 (Readwise Reader `/home` — Issue #81): Dashboard Home configurável com seções `Continue Reading`, `Recently Added` e `Shortlist`**
+
+![imagem e945](assets/readwise_reader_filtered_views_query.png)
+
+![imagem e947](assets/readwise_reader_doc2_loaded.png)
+
+**Evidência 57 (Readwise Reader — Issue #81): Motor de `Filtered Views` com gramática de queries booleanas (`category:pdf AND tag:edital`)**
+
+**Evidência 58 (Readwise Reader `/new/read/...` — Issue #77): Leitura em 3 painéis com Sumário à esquerda, foco por parágrafo e aba `Info` à direita**
+
+![imagem e949](assets/readwise_reader_doc2_paragraph_focus_j.png)
+
+![imagem e951](assets/readwise_reader_doc2_highlight_popover.png)
+
+**Evidência 59 (Readwise Reader Hover/Teclado — Issue #77): Indicador azul de **Foco por Parágrafo** na margem esquerda navegável via teclas `j`/`k`**
+
+**Evidência 60 (Readwise Reader Popover — Issue #80): **Floating Highlight Popover** acima do grifo amarelo (`Delete`, `Add note`, `Add/edit tags`, `...`)**
+
+![imagem e953](assets/readwise_reader_doc2_highlight_more_dropdown.png)
+
+![imagem e955](assets/readwise_reader_doc2_highlight_add_note.png)
+
+**Evidência 61 (Readwise Reader Popover — Issue #80): Menu `More (...)` do grifo (`Copy text`, `Chat about this`, `Share as image`, `View in notebook`, `Auto highlight`)**
+
+**Evidência 62 (Readwise Reader Marginalia — Issues #77, #79): Gaveta inline `Add note (n)` acoplada ao grifo com suporte a Action Tags (`.qa`, `.c1`)**
+
+![imagem e957](assets/readwise_reader_doc2_highlight_tag_picker.png)
+
+![imagem e959](assets/readwise_reader_doc2_notebook_highlights.png)
+
+**Evidência 63 (Readwise Reader Tags — Issue #80): Popover pesquisável `Add/edit tags (t)` sobre o destaque**
+
+**Evidência 64 (Readwise Reader Notebook — Issue #78): Aba `Notebook` no painel direito listando todos os grifos em ordem com salto em 1 clique e `Export`**
+
+![imagem e961](assets/readwise_reader_ghostreader_skills.png)
+
+![imagem e963](assets/readwise_reader_appearance_menu.png)
+
+**Evidência 65 (Readwise Reader Ghostreader — Issue #80): Copiloto IA posicional (`Ghostreader`) com as 15 skills de estudo (`Quiz Me`, `Explain from Library`, etc.)**
+
+**Evidência 66 (Readwise Reader `Aa` — Issue #77): Menu `Appearance (Aa)` com controle de tipografia, tamanho, espaçamento e largura de coluna**
+
+![imagem e965](assets/readwise_reader_doc2_tts_player.png)
+
+![imagem e967](assets/readwise_reader_doc2_tts_speeds.png)
+
+**Evidência 67 (Readwise Reader TTS — Issue #80): Player inferior persistente de **Text-to-Speech (`Listen`)** com scrubber e pulo de 15s**
+
+**Evidência 68 (Readwise Reader TTS — Issue #80): Seletor de velocidade de leitura (`0.5x` a `2x`) e vozes neurais no player TTS**
+
+![imagem e969](assets/readwise_reader_pdf_enhanced_docs.png)
+
+![imagem e971](assets/readwise_srs_daily_review_deck.png)
+
+**Evidência 69 (Readwise Reader PDF — Issues #77, #78): Documentação oficial do `Enhanced Text Mode` para PDFs e ferramenta de `Snapshotting` de tabelas**
+
+**Evidência 70 (Readwise SRS — Issue #82): Deck de `Daily Review` (`/dailyreview`) com barra de progresso, player TTS e botões `Discard`, `Master`, `Feedback`, `Keep`**
+
+![imagem e973](assets/readwise_srs_feedback_tuning_modal.png)
+
+![imagem e975](assets/readwise_srs_mastery_cloze_creator.png)
+
+**Evidência 71 (Readwise SRS — Issue #82): Modal de calibração `Feedback` (`Never`, `Soon`, `Later`, `Someday`) para ajuste fino do intervalo**
+
+**Evidência 72 (Readwise SRS Mastery — Issue #82): Gerador de **Cloze Deletion (`{{c1::...}}`)** em 1 clique selecionando palavras-chave do texto**
+
+![imagem e977](assets/readwise_srs_mastery_qa_creator.png)
+
+![imagem e979](assets/readwise_srs_cloze_active_recall_prompt.png)
+
+**Evidência 73 (Readwise SRS Mastery — Issue #82): Gerador de **Flashcard Q&A** com botão `Use highlight text as Answer`**
+
+**Evidência 74 (Readwise SRS Active Recall — Issue #82): Cartão Cloze apresentando a lacuna `_____ (5 words)` e botão `Reveal Keyphrase`**
+
+![imagem e981](assets/readwise_srs_cloze_answer_reveal_grading.png)
+
+![imagem e983](assets/readwise_srs_highlight_edit_and_note.png)
+
+**Evidência 75 (Readwise SRS Grading — Issue #82): Resposta revelada no cartão Cloze com os 4 botões de estabilidade (`Never`, `Soon`, `Later`, `Someday`)**
+
+**Evidência 76 (Readwise SRS Edit — Issue #83): Modal de edição não-destrutiva (`Edited Highlight` vs `Original Highlight`) e campo `NOTE`**
 
 ## 10. Arquivos do projeto (Dataprev 2026 e referências)
 <!-- container e363 @ (0,12666) -->
