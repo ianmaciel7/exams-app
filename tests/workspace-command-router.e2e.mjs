@@ -60,7 +60,7 @@ try{
     collapsedAfter=await page.locator('#app').evaluate(x=>x.classList.contains('collapsed'));
     assert.equal(collapsedBefore,collapsedAfter,'typing search must not toggle sidebar');
     await page.locator('#palIn').press('Escape');
-    await page.locator('#pal:not(.on)').waitFor();
+    await page.locator('#pal:not(.on)').waitFor({state:'hidden'});
     report.cases.push({phase:'after',interaction:'search-and-modal',searchFocus:true,modalSuppression:true,screenshot:'issue139_after_search.png'});
 
     await page.locator('body').click({position:{x:1200,y:700}});
@@ -81,7 +81,7 @@ try{
     await page.keyboard.press('Control+b');
     assert.equal(await page.locator('#app').evaluate(x=>x.classList.contains('collapsed')),collapsedBefore,'new-item input must not dispatch global Ctrl+B');
     await page.locator('#newMenuIn').press('Escape');
-    await page.locator('#newMenu:not(.open)').waitFor();
+    await page.locator('#newMenu:not(.open)').waitFor({state:'hidden'});
     report.cases.push({phase:'after',interaction:'global-chords',sidebarToggledTwice:true,newItemOptions:count,screenshot:'issue139_after_new_item.png'});
 
     assert.deepEqual(report.pageErrors,[],'no uncaught browser JavaScript errors');
