@@ -4,10 +4,10 @@
 
 **Data da Homologação:** 14 de Novembro de 2026  
 **Ambiente:** Windows 11 Pro, Google Chrome 157.0, Node.js v22.19.0, Python 3.12, SimpleHTTP (8765), Hardened Proxy Local (8766)  
-**Repositório:** `C:\Users\ianma\workspace\exams\dev` (branch `feat/claude-storage-production-sync`, PR #155)  
-**Artifact Principal Homologado:** `https://claude.ai/code/artifact/a728ae48-3fa2-4dbf-9092-0392c90b58f7` (URL pública: `https://claude.ai/artifact/MeCzKuKCsr6fY4F8AGxnyC`)  
+**Repositório:** `C:\Users\ianma\workspace\exams\dev` (branch `feat/claude-storage-full-recovery`)  
+**Artifact Principal Homologado:** `https://claude.ai/code/artifact/a728ae48-3fa2-4dbf-9092-0392c90b58f7` (URL pública: `https://claude.ai/artifact/MeCzKuKCsr6fY4F8AGxnyC`, versão ativa: `1794682629-150e`)  
 **Artifact de Teste e Diagnóstico:** `https://claude.ai/code/artifact/34cd390a-738f-4dfc-8ae2-6c4f90794d74`  
-**Total de Testes Automatizados:** 35 testes aprovados (100% verde em 6 suítes)
+**Total de Testes Automatizados:** 42 testes aprovados (100% verde em 6 suítes)
 
 ---
 
@@ -17,8 +17,8 @@
 |---|---|---|---|---|
 | **T01** | Escrita Localhost -> Claude Pro DB | Funcional / E2E | **APROVADO** | `tests/.../e2e-sync.test.mjs` (Resolução grava no `/api/frame/db/agent` via proxy). |
 | **T02** | Leitura Claude Pro DB -> Localhost | Funcional / E2E | **APROVADO** | `tests/.../e2e-sync.test.mjs` (`fetchRemote` recupera e popula tela e badges). |
-| **T03** | Recuperação Completa em Navegador Limpo | Resiliência | **APROVADO** | `tests/.../homologation-matrix.test.mjs` (Perfil temporário virgem restaura 100% respostas, cadernos, espaços). |
-| **T04** | Concorrência entre Sessões sem Sobrescrita | Concorrência | **APROVADO** | `tests/.../homologation-matrix.test.mjs` (Resoluções simultâneas em abas convergem deterministamente). |
+| **T03** | Recuperação Completa em Navegador Limpo (5 Categorias) | Resiliência | **APROVADO** | `tests/.../homologation-matrix.test.mjs` (Perfil temporário virgem restaura 100% respostas, simulado, cadernos, espaços e workspaces). |
+| **T04** | Concorrência entre Sessões sem Sobrescrita (Read-Merge-Write) | Concorrência | **APROVADO** | `tests/.../homologation-matrix.test.mjs` (Resoluções simultâneas em abas convergem deterministamente via 3-way merge). |
 | **T05** | Persistência Offline + Fechamento de Navegador | Resiliência | **APROVADO** | `tests/.../homologation-matrix.test.mjs` (Outbox em `localStorage` sobrevive a crash/restart e flusha no boot). |
 | **T06** | Exclusão com Tombstone (Anti-Ressuscitação) | Integridade | **APROVADO** | `tests/.../homologation-matrix.test.mjs` (Tombstone `deleted: true` impede ressuscitação de questões). |
 | **T07** | Mutação In-Flight durante Transmissão Ativa | Concorrência | **APROVADO** | `tests/.../claude-storage-sync-engine.test.mjs` (Remoção atômica por `opId` impede descarte de itens novos). |
@@ -36,7 +36,7 @@
 | **T19** | Navegação Automatizada Headless no Claude Web | E2E Web UI | **NÃO EXECUTADO / NÃO VERIFICADO** | **Bloqueado por Cloudflare Turnstile** no domínio `claude.ai`. Acesso direto interativo humano no navegador opera normalmente; automação headless é intencionalmente bloqueada pela proteção anti-bot da Cloudflare. |
 
 **Total de Cenários:** 19  
-- **Aprovados:** 18 (100% de cobertura nos testes automatizados e de infraestrutura)  
+- **Aprovados:** 18 (100% de cobertura nos 42 testes automatizados e de infraestrutura)  
 - **Falhos:** 0 (Zero falhas detectadas)  
 - **Não Executados / Não Verificados:** 1 (Navegação automatizada headless no Claude Web devido à barreira Cloudflare Turnstile)
 

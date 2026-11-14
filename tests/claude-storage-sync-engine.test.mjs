@@ -171,4 +171,147 @@ test('Suite de Testes do ClaudeStorageSyncEngine (Offline-First & Concurrency)',
 
     engine2.destroy();
   });
+
+  await t.test('6. Reconciliacao de Simulados (reconcileExam) com Fusao de Respostas e Marcadas', () => {
+    const engine = new ClaudeStorageSyncEngine({ slug: 'test-slug' });
+
+    const localExam = {
+      started: 1000,
+      updatedAt: 1200,
+      index: 5,
+      answers: { '1': 'A', '2': 'B' },
+      marked: [2],
+      finished: null
+    };
+
+    const remoteExam = {
+      started: 1000,
+      updatedAt: 1500,
+      index: 8,
+      answers: { '2': 'C', '3': 'D' },
+      marked: [3],
+      finished: null
+    };
+
+    const merged = engine.reconcileExam(localExam, remoteExam);
+    assert.equal(merged.answers['1'], 'A', 'Resposta 1 preservada da sessao local');
+    assert.equal(merged.answers['2'], 'C', 'Resposta 2 atualizada pela versao remota mais recente');
+    assert.equal(merged.answers['3'], 'D', 'Resposta 3 integrada da sessao remota');
+    assert.deepEqual(merged.marked.sort(), [2, 3], 'Marcadas devem ser a uniao deterministica');
+    assert.equal(merged.index, 8, 'Indice do mais recente deve ser adotado');
+
+    engine.destroy();
+  });
+
+  await t.test('7. Reconciliacao de Cadernos (reconcileCadernos) com Tombstones e Uniao de Questoes', () => {
+    const engine = new ClaudeStorageSyncEngine({ slug: 'test-slug' });
+
+    const localCadernos = [
+      { id: 'c1', name: 'Direito Const', questionIds: ['10', '11'], updatedAt: 1000, deleted: false },
+      { id: 'c2', name: 'Informatica', questionIds: ['20'], updatedAt: 2000, deleted: true } // tombstone
+    ];
+
+    const remoteCadernos = [
+      { id: 'c1', name: 'Direito Const Atualizado', questionIds: ['11', '12'], updatedAt: 1500, deleted: false },
+      { id: 'c2', name: 'Informatica Antigo', questionIds: ['20'], updatedAt: 1000, deleted: false },
+      { id: 'c3', name: 'Raciocinio Logico', questionIds: ['30'], updatedAt: 1200, deleted: false }
+    ];
+
+    const merged = engine.reconcileCadernos(localCadernos, remoteCadernos);
+    assert.equal(merged.length, 2, 'c2 deve ter sido removido pelo tombstone local mais recente');
+
+    const c1 = merged.find(c => c.id === 'c1');
+    assert.equal(c1.name, 'Direito Const Atualizado');
+    assert.deepEqual(c1.questionIds.sort(), ['10', '11', '12'], 'Questoes devem ser a uniao');
+
+    const c3 = merged.find(c => c.id === 'c3');
+    assert.ok(c3, 'Caderno c3 remoto deve ser incluido');
+
+    engine.destroy();
+  });
+
+  await t.test('8. Reconciliacao de Espacos (reconcileSpaces) e Ordem de Sidebar', () => {
+    const engine = new ClaudeStorageSyncEngine({ slug: 'test-slug' });
+
+    const localSpaces = [
+      { id: 'sp1', name: 'Concurso BB', icon: 'bank', updatedAt: 1000 }
+    ];
+    const remoteSpaces = [
+      { id: 'sp1', name: 'Concurso Banco do Brasil', icon: 'bank', updatedAt: 2000 },
+      { id: 'sp2', name: 'INSS 2026', icon: 'file', updatedAt: 1500 }
+    ];
+
+    const { spaces, spaceOrder } = engine.reconcileSpaces(localSpaces, remoteSpaces, ['sp1'], ['dataprev', 'sp1', 'sp2']);
+    assert.equal(spaces.length, 2);
+    const sp1 = spaces.find(s => s.id === 'sp1');
+    assert.equal(sp1.name, 'Concurso Banco do Brasil');
+    assert.ok(spaceOrder.includes('dataprev'));
+    assert.ok(spaceOrder.includes('sp1'));
+    assert.ok(spaceOrder.includes('sp2'));
+
+    engine.destroy();
+  });
+
+  await t.test('9. Reconciliacao de Workspaces (reconcileWorkspace) sem Fechamento Inadvertido de Abas', () => {
+    const engine = new ClaudeStorageSyncEngine({ slug: 'test-slug' });
+
+    const localWs = {
+      active: 'tab_local',
+      tabs: [{ id: 'tab1', hist: ['#/concurso'], i: 0 }, { id: 'tab_local', hist: ['#/simulado'], i: 0 }],
+      updatedAt: 2000
+    };
+    const remoteWs = {
+      active: 'tab_remote',
+      tabs: [{ id: 'tab1', hist: ['#/concurso'], i: 0 }, { id: 'tab_remote', hist: ['#/cadernos'], i: 0 }],
+      updatedAt: 1000
+    };
+
+    const merged = engine.reconcileWorkspace(localWs, remoteWs);
+    assert.equal(merged.tabs.length, 3, 'Todas as 3 abas abertas devem ser preservadas');
+    assert.equal(merged.active, 'tab_local', 'Aba ativa do workspace mais recente deve prevalecer');
+
+    engine.destroy();
+  });
+
+  await t.test('10. Reconciliacao de Questoes Avulsas e Respostas (reconcileUserQuestions)', () => {
+    const engine = new ClaudeStorageSyncEngine({ slug: 'test-slug' });
+
+    const localUq = [{ id: 'u1', enunciado: 'Q1 local', updatedAt: 1000 }];
+    const remoteUq = [{ id: 'u1', enunciado: 'Q1 editada remota', updatedAt: 2000 }, { id: 'u2', enunciado: 'Q2 remota', updatedAt: 1500 }];
+    const localAns = { 'u1': 'A' };
+    const remoteAns = { 'u2': 'C' };
+
+    const merged = engine.reconcileUserQuestions(localUq, remoteUq, localAns, remoteAns);
+    assert.equal(merged.uq.length, 2);
+    const u1 = merged.uq.find(q => q.id === 'u1');
+    assert.equal(u1.enunciado, 'Q1 editada remota');
+    assert.equal(merged.uqAns['u1'], 'A');
+    assert.equal(merged.uqAns['u2'], 'C');
+
+    engine.destroy();
+  });
+
+  await t.test('11. Recuperacao Completa Multi-Categoria (recoverAllRemote)', async () => {
+    const engine = new ClaudeStorageSyncEngine({ slug: 'test-slug' });
+
+    engine.fetchRemote = async (col, doc) => {
+      if (col === 'exam_app_study' && doc === 'user_answers') return { answers: { '1': { selected: 'B' } } };
+      if (col === 'exam_app_study' && doc === 'exam_state') return { exam: { index: 3 } };
+      if (col === 'exam_app_study' && doc === 'cadernos') return { cadernos: [{ id: 'c1' }] };
+      if (col === 'exam_app_spaces' && doc === 'spaces_list') return { spaces: [{ id: 'sp1' }] };
+      if (col === 'exam_app_state' && doc === 'workspace_state') return { tabs: [{ id: 't1' }] };
+      if (col === 'exam_app_study' && doc === 'user_questions') return { uq: [{ id: 'u1' }], uqAns: { 'u1': 'A' } };
+      return null;
+    };
+
+    const res = await engine.recoverAllRemote();
+    assert.ok(res.answers);
+    assert.ok(res.exam);
+    assert.ok(res.cadernos);
+    assert.ok(res.spaces);
+    assert.ok(res.workspace);
+    assert.ok(res.userQuestions);
+
+    engine.destroy();
+  });
 });

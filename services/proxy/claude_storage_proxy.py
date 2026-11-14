@@ -155,19 +155,22 @@ class HardenedStorageProxyHandler(http.server.BaseHTTPRequestHandler):
         return False, "ORIGIN_OR_AUTH_REQUIRED"
 
     def send_json(self, status_code: int, data: dict, allowed_origin: str = "http://localhost:8765"):
-        body = json.dumps(data, ensure_ascii=False).encode("utf-8")
-        self.send_response(status_code)
-        if allowed_origin:
-            self.send_header("Access-Control-Allow-Origin", allowed_origin)
-        self.send_header("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type, X-Proxy-Auth")
-        self.send_header("Content-Type", "application/json; charset=utf-8")
-        self.send_header("Content-Length", str(len(body)))
-        self.send_header("X-Content-Type-Options", "nosniff")
-        self.send_header("X-Frame-Options", "DENY")
-        self.send_header("X-Upstream-API", "private-unsupported-anthropic-frame-db")
-        self.end_headers()
-        self.wfile.write(body)
+        try:
+            body = json.dumps(data, ensure_ascii=False).encode("utf-8")
+            self.send_response(status_code)
+            if allowed_origin:
+                self.send_header("Access-Control-Allow-Origin", allowed_origin)
+            self.send_header("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS")
+            self.send_header("Access-Control-Allow-Headers", "Content-Type, X-Proxy-Auth")
+            self.send_header("Content-Type", "application/json; charset=utf-8")
+            self.send_header("Content-Length", str(len(body)))
+            self.send_header("X-Content-Type-Options", "nosniff")
+            self.send_header("X-Frame-Options", "DENY")
+            self.send_header("X-Upstream-API", "private-unsupported-anthropic-frame-db")
+            self.end_headers()
+            self.wfile.write(body)
+        except (ConnectionResetError, BrokenPipeError):
+            pass
 
     def do_OPTIONS(self):
         if not self.validate_host_header():

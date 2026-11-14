@@ -34,6 +34,7 @@
       this.proxyBase = options.proxyBase || PROXY_BASE;
       this.isOnline = typeof navigator !== 'undefined' ? navigator.onLine : true;
       this.isSyncing = false;
+      this.needsFlushAgain = false;
       this.syncListeners = [];
       this.directDb = null;
       this.isClaudeArtifact = false;
@@ -249,8 +250,53 @@
         }
 
         try {
+          // 2. Read-Merge-Write (3-Way Merge determinístico) para documentos compostos:
+          // Se outros clientes alteraram o mesmo documento no servidor, unifica antes de gravar
+          let payloadToSend = op.data;
+          try {
+            if (op.collection === 'exam_app_study' && op.docId === 'user_answers') {
+              const remote = await this.fetchRemote('exam_app_study', 'user_answers');
+              if (remote && remote.answers) {
+                const merged = this.reconcileAnswers(op.data?.answers || {}, remote.answers);
+                payloadToSend = { ...op.data, answers: merged, updatedAt: Date.now() };
+              }
+            } else if (op.collection === 'exam_app_study' && op.docId === 'cadernos') {
+              const remote = await this.fetchRemote('exam_app_study', 'cadernos');
+              if (remote && remote.cadernos) {
+                const merged = this.reconcileCadernos(op.data?.cadernos || [], remote.cadernos);
+                payloadToSend = { ...op.data, cadernos: merged, updatedAt: Date.now() };
+              }
+            } else if (op.collection === 'exam_app_spaces' && op.docId === 'spaces_list') {
+              const remote = await this.fetchRemote('exam_app_spaces', 'spaces_list');
+              if (remote && remote.spaces) {
+                const merged = this.reconcileSpaces(op.data?.spaces || [], remote.spaces, op.data?.spaceOrder || [], remote.spaceOrder || []);
+                payloadToSend = { ...op.data, spaces: merged.spaces, spaceOrder: merged.spaceOrder, updatedAt: Date.now() };
+              }
+            } else if (op.collection === 'exam_app_study' && op.docId === 'exam_state') {
+              const remote = await this.fetchRemote('exam_app_study', 'exam_state');
+              if (remote && remote.exam) {
+                const merged = this.reconcileExam(op.data?.exam, remote.exam);
+                payloadToSend = { ...op.data, exam: merged, updatedAt: Date.now() };
+              }
+            } else if (op.collection === 'exam_app_state' && op.docId === 'workspace_state') {
+              const remote = await this.fetchRemote('exam_app_state', 'workspace_state');
+              if (remote && remote.tabs) {
+                const merged = this.reconcileWorkspace(op.data, remote);
+                payloadToSend = { ...op.data, ...merged, updatedAt: Date.now() };
+              }
+            } else if (op.collection === 'exam_app_study' && op.docId === 'user_questions') {
+              const remote = await this.fetchRemote('exam_app_study', 'user_questions');
+              if (remote) {
+                const merged = this.reconcileUserQuestions(op.data?.uq || [], remote.uq || [], op.data?.uqAns || {}, remote.uqAns || {});
+                payloadToSend = { ...op.data, uq: merged.uq, uqAns: merged.uqAns, updatedAt: Date.now() };
+              }
+            }
+          } catch (mergeErr) {
+            // Em caso de falha transitória de leitura, segue com op.data original
+          }
+
           // 2. Envia para o servidor remoto
-          await this.sendToRemote(op.collection, op.docId, op.data);
+          await this.sendToRemote(op.collection, op.docId, payloadToSend);
 
           // 3. Sucesso: Remove atomicamente APENAS esta operacao confirmada
           const curAfter = this.getOutbox();
@@ -286,9 +332,11 @@
       } else if (failedCount > 0) {
         this.notifyStatus('error', `${failedCount} alteração(ões) retidas com erro. Clique para retentar.`);
       } else {
-        // Backoff exponencial com jitter aleatorio (500ms - 2500ms)
-        const delay = Math.min(2000 * Math.pow(1.5, remainingQueue[0].attempts || 1), 30000) + Math.floor(Math.random() * 500);
-        this.notifyStatus('pending', `${remainingQueue.length} item(ns) pendente(s). Retentando...`);
+        const hasFresh = remainingQueue.some(op => op.status === 'pending' && (!op.attempts || op.attempts === 0));
+        const delay = hasFresh
+          ? 150
+          : Math.min(2000 * Math.pow(1.5, remainingQueue[0].attempts || 1), 30000) + Math.floor(Math.random() * 500);
+        this.notifyStatus('pending', `${remainingQueue.length} item(ns) pendente(s). Sincronizando...`);
 
         clearTimeout(this.flushTimer);
         this.flushTimer = setTimeout(() => this.flushOutbox(), delay);
@@ -352,12 +400,14 @@
      * Trata timestamps individuais, versoes e exclusoes sem perda de dados.
      */
     reconcileAnswers(localAnswers = {}, remoteAnswers = {}) {
+      const localMap = (localAnswers && typeof localAnswers === 'object') ? localAnswers : {};
+      const remoteMap = (remoteAnswers && typeof remoteAnswers === 'object') ? remoteAnswers : {};
       const merged = {};
-      const allQids = new Set([...Object.keys(localAnswers || {}), ...Object.keys(remoteAnswers || {})]);
+      const allQids = new Set([...Object.keys(localMap), ...Object.keys(remoteMap)]);
 
       for (const qid of allQids) {
-        const local = localAnswers[qid];
-        const remote = remoteAnswers[qid];
+        const local = localMap[qid];
+        const remote = remoteMap[qid];
 
         if (!local && remote) {
           merged[qid] = remote;
@@ -392,6 +442,213 @@
         }
       }
       return merged;
+    }
+
+    /**
+     * Reconcilia estado de simulado em andamento (respostas, marcadas e status).
+     */
+    reconcileExam(localExam = null, remoteExam = null) {
+      const l = (localExam && typeof localExam === 'object') ? localExam : null;
+      const r = (remoteExam && typeof remoteExam === 'object') ? remoteExam : null;
+      if (!l && r) return r;
+      if (l && !r) return l;
+      if (!l && !r) return null;
+
+      const localTime = Number(l.updatedAt || l.started || 0);
+      const remoteTime = Number(r.updatedAt || r.started || 0);
+
+      const base = remoteTime > localTime ? { ...r } : { ...l };
+      const other = remoteTime > localTime ? l : r;
+
+      const mergedAnswers = { ...(other.answers || {}), ...(base.answers || {}) };
+      const mergedMarked = Array.from(new Set([...(l.marked || []), ...(r.marked || [])]));
+
+      base.answers = mergedAnswers;
+      base.marked = mergedMarked;
+      base.updatedAt = Math.max(localTime, remoteTime);
+      base.finished = (l.finished || r.finished) ? (base.finished || other.finished) : null;
+      return base;
+    }
+
+    /**
+     * Reconcilia cadernos de estudo e de erros com preservacao de tombstone e uniao de questoes.
+     */
+    reconcileCadernos(localCadernos = [], remoteCadernos = []) {
+      const map = new Map();
+      const localList = Array.isArray(localCadernos) ? localCadernos : [];
+      const remoteList = Array.isArray(remoteCadernos) ? remoteCadernos : [];
+
+      for (const item of localList) {
+        if (item && item.id) map.set(item.id, { ...item, _source: 'local' });
+      }
+
+      for (const rItem of remoteList) {
+        if (!rItem || !rItem.id) continue;
+        if (!map.has(rItem.id)) {
+          map.set(rItem.id, { ...rItem, _source: 'remote' });
+        } else {
+          const lItem = map.get(rItem.id);
+          const lTime = Number(lItem.updatedAt || lItem.createdAt || 0);
+          const rTime = Number(rItem.updatedAt || rItem.createdAt || 0);
+
+          if (rItem.deleted && rTime >= lTime) {
+            map.set(rItem.id, { ...rItem, deleted: true });
+          } else if (lItem.deleted && lTime >= rTime) {
+            map.set(rItem.id, { ...lItem, deleted: true });
+          } else {
+            const winner = rTime > lTime ? rItem : lItem;
+            const qSet = new Set([...(lItem.questionIds || []), ...(rItem.questionIds || [])]);
+            map.set(rItem.id, {
+              ...winner,
+              questionIds: Array.from(qSet),
+              updatedAt: Math.max(lTime, rTime)
+            });
+          }
+        }
+      }
+
+      return Array.from(map.values()).filter(c => !c.deleted);
+    }
+
+    /**
+     * Reconcilia espacos de estudo e preserva ordenacao de sidebar.
+     */
+    reconcileSpaces(localSpaces = [], remoteSpaces = [], localOrder = [], remoteOrder = []) {
+      const map = new Map();
+      const lList = Array.isArray(localSpaces) ? localSpaces : [];
+      const rList = Array.isArray(remoteSpaces) ? remoteSpaces : [];
+
+      for (const s of lList) {
+        if (s && s.id && s.id !== 'dataprev') map.set(s.id, { ...s });
+      }
+
+      for (const s of rList) {
+        if (!s || !s.id || s.id === 'dataprev') continue;
+        if (!map.has(s.id)) {
+          map.set(s.id, { ...s });
+        } else {
+          const l = map.get(s.id);
+          const lTime = Number(l.updatedAt || 0);
+          const rTime = Number(s.updatedAt || 0);
+          map.set(s.id, rTime > lTime ? { ...l, ...s } : { ...s, ...l });
+        }
+      }
+
+      const orderSet = new Set([...(remoteOrder || []), ...(localOrder || [])]);
+      const spaces = Array.from(map.values());
+      const sortedOrder = Array.from(orderSet).filter(id => id === 'dataprev' || map.has(id));
+
+      return { spaces, spaceOrder: sortedOrder };
+    }
+
+    /**
+     * Reconcilia estado de workspaces (abas abertas e historico).
+     */
+    reconcileWorkspace(localWs = null, remoteWs = null) {
+      const l = (localWs && typeof localWs === 'object') ? localWs : null;
+      const r = (remoteWs && typeof remoteWs === 'object') ? remoteWs : null;
+      if (!l && r) return r;
+      if (l && !r) return l;
+      if (!l && !r) return null;
+
+      const lTabs = Array.isArray(l.tabs) ? l.tabs : [];
+      const rTabs = Array.isArray(r.tabs) ? r.tabs : [];
+
+      const tabMap = new Map();
+      for (const t of rTabs) if (t && t.id) tabMap.set(t.id, t);
+      for (const t of lTabs) if (t && t.id) tabMap.set(t.id, t);
+
+      const lTime = Number(l.updatedAt || 0);
+      const rTime = Number(r.updatedAt || 0);
+      const active = (lTime >= rTime ? l.active : r.active) || (Array.from(tabMap.keys())[0] || null);
+
+      return {
+        active,
+        tabs: Array.from(tabMap.values()),
+        updatedAt: Math.max(lTime, rTime)
+      };
+    }
+
+    /**
+     * Reconcilia questoes avulsas do usuario (uq) e suas respostas (uqAns).
+     */
+    reconcileUserQuestions(localUq = [], remoteUq = [], localAns = {}, remoteAns = {}) {
+      const qMap = new Map();
+      for (const q of (Array.isArray(localUq) ? localUq : [])) {
+        if (q && q.id) qMap.set(q.id, q);
+      }
+      for (const q of (Array.isArray(remoteUq) ? remoteUq : [])) {
+        if (!q || !q.id) continue;
+        if (!qMap.has(q.id)) {
+          qMap.set(q.id, q);
+        } else {
+          const l = qMap.get(q.id);
+          const lTime = Number(l.updatedAt || 0);
+          const rTime = Number(q.updatedAt || 0);
+          qMap.set(q.id, rTime > lTime ? q : l);
+        }
+      }
+
+      const mergedAns = { ...(localAns || {}), ...(remoteAns || {}) };
+
+      return {
+        uq: Array.from(qMap.values()),
+        uqAns: mergedAns
+      };
+    }
+
+    /**
+     * Recupera todas as 5 categorias de dados persistidos no Claude Pro DB:
+     * - user_answers
+     * - exam_state
+     * - cadernos
+     * - spaces_list
+     * - workspace_state
+     * - user_questions
+     */
+    async recoverAllRemote() {
+      const results = {
+        answers: null,
+        exam: null,
+        cadernos: null,
+        spaces: null,
+        workspace: null,
+        userQuestions: null
+      };
+
+      try {
+        const [ansDoc, examDoc, cadDoc, spDoc, wsDoc, uqDoc] = await Promise.allSettled([
+          this.fetchRemote('exam_app_study', 'user_answers'),
+          this.fetchRemote('exam_app_study', 'exam_state'),
+          this.fetchRemote('exam_app_study', 'cadernos'),
+          this.fetchRemote('exam_app_spaces', 'spaces_list'),
+          this.fetchRemote('exam_app_state', 'workspace_state'),
+          this.fetchRemote('exam_app_study', 'user_questions')
+        ]);
+
+        if (ansDoc.status === 'fulfilled' && ansDoc.value?.answers) {
+          results.answers = ansDoc.value.answers;
+        }
+        if (examDoc.status === 'fulfilled' && examDoc.value?.exam) {
+          results.exam = examDoc.value.exam;
+        }
+        if (cadDoc.status === 'fulfilled' && cadDoc.value?.cadernos) {
+          results.cadernos = cadDoc.value.cadernos;
+        }
+        if (spDoc.status === 'fulfilled' && spDoc.value) {
+          results.spaces = spDoc.value;
+        }
+        if (wsDoc.status === 'fulfilled' && wsDoc.value) {
+          results.workspace = wsDoc.value;
+        }
+        if (uqDoc.status === 'fulfilled' && uqDoc.value) {
+          results.userQuestions = uqDoc.value;
+        }
+      } catch (err) {
+        console.warn('[SyncEngine] Falha ao recuperar dados remotos no boot:', err);
+      }
+
+      return results;
     }
   }
 

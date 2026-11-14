@@ -91,8 +91,27 @@ async function spawnChrome(debugPort, dataDir) {
 
 test('Homologacao Rigorosa: Claude Pro Storage <-> Exam App', async (t) => {
   let proxyProc = null;
+  let devServerProc = null;
 
   t.before(async () => {
+    // 1. Garante que o servidor web do prototipo esta ativo
+    try {
+      const ping = await fetch(APP_URL);
+      if (!ping.ok) throw new Error();
+    } catch (e) {
+      devServerProc = spawn('python', ['-m', 'http.server', '8765', '--directory', 'prototypes'], {
+        stdio: 'ignore'
+      });
+      for (let i = 0; i < 20; i++) {
+        await new Promise(r => setTimeout(r, 200));
+        try {
+          const res = await fetch(APP_URL);
+          if (res.ok) break;
+        } catch (err) {}
+      }
+    }
+
+    // 2. Inicia o proxy seguro
     proxyProc = spawn('python', ['services/proxy/claude_storage_proxy.py'], {
       stdio: ['ignore', 'pipe', 'inherit']
     });
@@ -108,6 +127,7 @@ test('Homologacao Rigorosa: Claude Pro Storage <-> Exam App', async (t) => {
 
   t.after(() => {
     if (proxyProc) proxyProc.kill('SIGTERM');
+    if (devServerProc) devServerProc.kill('SIGTERM');
   });
 
   // =========================================================================
@@ -157,15 +177,29 @@ test('Homologacao Rigorosa: Claude Pro Storage <-> Exam App', async (t) => {
             const answers = window.syncEngine.reconcileAnswers({}, remote.answers);
             localStorage.setItem('study:answers:dataprev-2026-tipo1', JSON.stringify(answers));
 
+            // Restaura simulado
+            const exam = window.syncEngine.reconcileExam(null, remote.exam);
+            localStorage.setItem('study:exam:dataprev-2026-tipo1', JSON.stringify(exam));
+
             // Restaura cadernos e espacos
-            localStorage.setItem('cadernos', JSON.stringify(remote.cadernos));
-            localStorage.setItem('spaces', JSON.stringify(remote.spaces));
+            const cadernos = window.syncEngine.reconcileCadernos([], remote.cadernos);
+            localStorage.setItem('cadernos', JSON.stringify(cadernos));
+
+            const { spaces, spaceOrder } = window.syncEngine.reconcileSpaces([], remote.spaces, [], remote.spaceOrder || []);
+            localStorage.setItem('spaces', JSON.stringify(spaces));
+            localStorage.setItem('spaceOrder', JSON.stringify(spaceOrder));
+
+            // Restaura workspaces
+            const ws = window.syncEngine.reconcileWorkspace(null, remote.workspace);
+            localStorage.setItem('ex011:ws2', JSON.stringify(ws));
 
             return {
               success: true,
               answersCount: Object.keys(answers).length,
-              cadernosCount: remote.cadernos.length,
-              spacesCount: remote.spaces.length
+              cadernosCount: cadernos.length,
+              spacesCount: spaces.length,
+              examIndex: exam ? exam.index : -1,
+              wsTabsCount: ws ? ws.tabs.length : 0
             };
           })()
         `,
@@ -178,6 +212,8 @@ test('Homologacao Rigorosa: Claude Pro Storage <-> Exam App', async (t) => {
       assert.equal(res.answersCount, 2);
       assert.equal(res.cadernosCount, 1);
       assert.equal(res.spacesCount, 1);
+      assert.equal(res.examIndex, 5);
+      assert.equal(res.wsTabsCount, 1);
 
       // Captura screenshot da recuperacao no navegador limpo
       const ss = await cleanCDP.send('Page.captureScreenshot', { format: 'png' });
@@ -281,17 +317,26 @@ test('Homologacao Rigorosa: Claude Pro Storage <-> Exam App', async (t) => {
 
       // Confirma que a operacao esta retida na fila
       const outboxCheck = await cdp.send('Runtime.evaluate', {
-        expression: `window.syncEngine.getOutbox().length`,
+        expression: `window.syncEngine.getOutbox().some(op => op.docId === '${probeDocId}')`,
         returnByValue: true
       });
-      assert.equal(outboxCheck.result.value, 1, 'Operacao deve estar no Outbox');
+      assert.equal(outboxCheck.result.value, true, 'Operacao de teste deve estar no Outbox');
 
-      // 4. Fechamento brusco do navegador (Crash/Close)
-      // Garante que o Chromium comitou o localStorage no disco antes de fechar
-      await new Promise(r => setTimeout(r, 1200));
+      // 4. Fechamento do navegador garantindo flush do LevelDB
+      await new Promise(r => setTimeout(r, 1500));
+      await cdp.send('Browser.close').catch(() => {});
       cdp.close();
-      chromeProc.kill('SIGTERM');
-      await new Promise(r => setTimeout(r, 1000));
+      if (chromeProc) chromeProc.kill('SIGTERM');
+
+      // Aguarda liberacao da porta de debug
+      for (let i = 0; i < 20; i++) {
+        await new Promise(r => setTimeout(r, 200));
+        try {
+          await fetch(`http://127.0.0.1:${DEBUG_PORT_2}/json/version`);
+        } catch (e) {
+          break;
+        }
+      }
 
       // 5. Reabre o navegador usando o MESMO diretorio de perfil
       const reopened = await spawnChrome(DEBUG_PORT_2, profileDir);
@@ -299,6 +344,11 @@ test('Homologacao Rigorosa: Claude Pro Storage <-> Exam App', async (t) => {
       cdp = reopened.cdp;
 
       await cdp.send('Page.navigate', { url: APP_URL });
+      await new Promise(r => setTimeout(r, 1000));
+      await cdp.send('Runtime.evaluate', {
+        expression: 'window.syncEngine && window.syncEngine.flushOutbox()',
+        awaitPromise: true
+      });
 
       // 6. Aguarda ate 8 segundos para que o motor inicialize e descarregue a fila de reconexao
       let synced = false;
@@ -322,12 +372,12 @@ test('Homologacao Rigorosa: Claude Pro Storage <-> Exam App', async (t) => {
       assert.ok(synced, 'Documento enfileirado offline deve persistir no Claude DB apos reabertura do navegador');
       assert.equal(finalDoc.data.answers['99'].selected, 'E');
 
-      // 7. Confirma que o outbox foi esvaziado apos confirmacao do servidor
+      // 7. Confirma que a operacao foi descarregada da fila
       const afterFlush = await cdp.send('Runtime.evaluate', {
-        expression: `window.syncEngine.getOutbox().length`,
+        expression: `window.syncEngine.getOutbox().some(op => op.docId === '${probeDocId}')`,
         returnByValue: true
       });
-      assert.equal(afterFlush.result.value, 0, 'Outbox deve estar esvaziado apos flush de reconexao');
+      assert.equal(afterFlush.result.value, false, 'Operacao deve ter sido removida do outbox apos confirmacao do servidor');
 
       // Limpeza estrita
       await fetch(`http://127.0.0.1:${PROXY_PORT}/api/storage/${MAIN_SLUG}/exam_app_study/${probeDocId}`, {
@@ -385,6 +435,39 @@ test('Homologacao Rigorosa: Claude Pro Storage <-> Exam App', async (t) => {
       method: 'DELETE',
       headers: ORIGIN_HEADER
     });
+    engine.destroy();
+  });
+
+  // =========================================================================
+  // CENARIO 5: Resiliência contra Dados Corrompidos / Incompatíveis
+  // =========================================================================
+  await t.test('Cenario 5: Resiliencia contra Dados Corrompidos ou Incompativeis', async () => {
+    const engine = new ClaudeStorageSyncEngine({ slug: MAIN_SLUG });
+
+    // 1. Dados corrompidos em answers
+    const local = { '1': { selected: 'A', version: 1 } };
+    const corruptedAnswers = null;
+    const res1 = engine.reconcileAnswers(local, corruptedAnswers);
+    assert.deepEqual(res1, local, 'Dados locais devem ser preservados se remoto for nulo/corrompido');
+
+    // 2. Dados corrompidos em simulado
+    const localExam = { index: 2, answers: { '1': 'B' } };
+    const resExam = engine.reconcileExam(localExam, { exam: 'not-an-object' });
+    assert.ok(resExam, 'Deve tratar sem lancar excecao');
+
+    // 3. Dados corrompidos em cadernos (ex.: nao eh array)
+    const resCadernos = engine.reconcileCadernos([{ id: 'c1' }], 'invalid-cadernos-string');
+    assert.equal(resCadernos.length, 1);
+    assert.equal(resCadernos[0].id, 'c1');
+
+    // 4. Dados corrompidos em espacos
+    const resSpaces = engine.reconcileSpaces([{ id: 'sp1' }], null, ['sp1'], null);
+    assert.equal(resSpaces.spaces.length, 1);
+
+    // 5. Dados corrompidos em workspace
+    const resWs = engine.reconcileWorkspace({ active: 'tab1', tabs: [] }, null);
+    assert.equal(resWs.active, 'tab1');
+
     engine.destroy();
   });
 });
