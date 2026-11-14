@@ -1,152 +1,174 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { spawn } from 'node:child_process';
-import '../prototypes/exam-app-0.1.1/js/claude-storage-sync.js';
+import { ClaudeStorageSyncEngine } from '../prototypes/exam-app-0.1.1/js/claude-storage-sync.js';
 
-// Mock de localStorage para ambiente Node.js
-class LocalStorageMock {
-  constructor() { this.store = new Map(); }
-  getItem(key) { return this.store.get(key) || null; }
-  setItem(key, val) { this.store.set(key, String(val)); }
-  removeItem(key) { this.store.delete(key); }
-  clear() { this.store.clear(); }
+// Polyfill minimalista de localStorage em memoria para Node.js
+class MockLocalStorage {
+  constructor() {
+    this.store = new Map();
+  }
+  getItem(key) {
+    return this.store.has(key) ? this.store.get(key) : null;
+  }
+  setItem(key, value) {
+    this.store.set(key, String(value));
+  }
+  removeItem(key) {
+    this.store.delete(key);
+  }
+  clear() {
+    this.store.clear();
+  }
 }
 
-globalThis.localStorage = new LocalStorageMock();
-if (typeof navigator !== 'undefined') {
-  try {
-    Object.defineProperty(navigator, 'onLine', { value: true, configurable: true, writable: true });
-  } catch (e) {}
-}
+globalThis.localStorage = new MockLocalStorage();
 
-test('Suite de Testes do ClaudeStorageSyncEngine (Offline-First & Outbox Queue)', async (t) => {
-  let proxyProc = null;
-  const PROXY_PORT = 8766;
-  const TEST_SLUG = '34cd390a-738f-4dfc-8ae2-6c4f90794d74';
+test('Suite de Testes do ClaudeStorageSyncEngine (Offline-First & Concurrency)', async (t) => {
+  t.beforeEach(() => {
+    globalThis.localStorage.clear();
+  });
 
-  t.before(async () => {
-    localStorage.clear();
-    proxyProc = spawn('python', ['services/proxy/claude_storage_proxy.py'], {
-      stdio: ['ignore', 'pipe', 'inherit']
+  await t.test('1. Fila de Saida Persistente (Outbox) com ID Unico e Versao de Operacao', () => {
+    const engine = new ClaudeStorageSyncEngine({ slug: 'test-slug' });
+    const op1 = engine.enqueue('exam_app_study', 'doc1', { a: 1 });
+    const op2 = engine.enqueue('exam_app_study', 'doc2', { b: 2 });
+
+    const queue = engine.getOutbox();
+    assert.equal(queue.length, 2);
+    assert.equal(queue[0].opId, op1);
+    assert.equal(queue[1].opId, op2);
+    assert.equal(queue[0].status, 'pending');
+    assert.equal(queue[0].opVersion, 1);
+    engine.destroy();
+  });
+
+  await t.test('2. Preservacao de Alteracoes Inseridas Durante Envio em Voo (In-Flight Race Condition)', async () => {
+    const engine = new ClaudeStorageSyncEngine({ slug: 'test-slug' });
+
+    // Mock do envio remoto com latencia artificial
+    let remoteCallCount = 0;
+    engine.sendToRemote = async (col, doc, data) => {
+      remoteCallCount++;
+      // Simula tempo de rede de 50ms
+      await new Promise(r => setTimeout(r, 50));
+      return { ok: true };
+    };
+
+    // 1. Enfileira item A
+    engine.enqueue('exam_app_study', 'docA', { score: 10 });
+
+    // 2. Dispara flush manual
+    const flushPromise = engine.flushOutbox();
+
+    // 3. Durante o envio em voo (in-flight), usuario responde outra questao (item B)
+    await new Promise(r => setTimeout(r, 10));
+    engine.enqueue('exam_app_study', 'docB', { score: 20 });
+
+    // Aguarda termino do primeiro flush
+    await flushPromise;
+
+    // Item A foi confirmado e removido, mas Item B DEVE ter sido preservado intacto na fila!
+    const outboxAfterFirstFlush = engine.getOutbox();
+    assert.equal(outboxAfterFirstFlush.length, 1, 'Item B deve estar preservado no outbox');
+    assert.equal(outboxAfterFirstFlush[0].docId, 'docB');
+    assert.deepEqual(outboxAfterFirstFlush[0].data, { score: 20 });
+
+    // 4. Executa segundo flush para o item B
+    await engine.flushOutbox();
+    assert.equal(engine.getOutbox().length, 0, 'Outbox deve estar completamente vazio apos descarregar item B');
+    assert.equal(remoteCallCount, 2, 'Dois envios remotos independentes devem ter ocorrido');
+
+    engine.destroy();
+  });
+
+  await t.test('3. Reconciliação Deterministica LWW por Questão com Suporte a Tombstones e Versao', () => {
+    const engine = new ClaudeStorageSyncEngine({ slug: 'test-slug' });
+
+    // Caso 1: Versao superior vence independente do relogio
+    const local1 = { '1': { selected: 'A', version: 1, updatedAt: 1000 } };
+    const remote1 = { '1': { selected: 'B', version: 2, updatedAt: 900 } };
+    const res1 = engine.reconcileAnswers(local1, remote1);
+    assert.equal(res1['1'].selected, 'B');
+
+    // Caso 2: Em empate de versao, timestamp superior vence
+    const local2 = { '2': { selected: 'C', version: 1, updatedAt: 2000 } };
+    const remote2 = { '2': { selected: 'D', version: 1, updatedAt: 1500 } };
+    const res2 = engine.reconcileAnswers(local2, remote2);
+    assert.equal(res2['2'].selected, 'C');
+
+    // Caso 3: Tombstone (exclusao recente de resposta) vence versao anterior e nao e ressuscitada
+    const localDeleted = {
+      '3': { selected: null, correct: null, deleted: true, version: 2, updatedAt: 3000 }
+    };
+    const remoteOld = {
+      '3': { selected: 'A', correct: true, deleted: false, version: 1, updatedAt: 1000 }
+    };
+    const res3 = engine.reconcileAnswers(localDeleted, remoteOld);
+    assert.equal(res3['3'].deleted, true, 'Tombstone deve prevalecer sobre resposta antiga');
+    assert.equal(res3['3'].selected, null);
+
+    // Caso 4: Se o usuario responder novamente apos a exclusao (versao/timestamp maior), a nova resposta vence
+    const localNewAnswer = {
+      '3': { selected: 'E', correct: true, deleted: false, version: 3, updatedAt: 4000 }
+    };
+    const res4 = engine.reconcileAnswers(localNewAnswer, res3);
+    assert.equal(res4['3'].selected, 'E');
+    assert.equal(res4['3'].deleted, false);
+
+    engine.destroy();
+  });
+
+  await t.test('4. Retenção de Fila em Caso de Falha de Conexão e Estado de Erro sem Perda de Dados', async () => {
+    const engine = new ClaudeStorageSyncEngine({ slug: 'test-slug' });
+
+    // Simula falha persistente de rede
+    engine.sendToRemote = async () => {
+      throw new Error('ECONNREFUSED - Proxy fora do ar');
+    };
+
+    engine.enqueue('exam_app_study', 'doc_fail', { important: 'data' });
+
+    let reportedState = null;
+    engine.onStatusChange(({ state }) => {
+      reportedState = state;
     });
 
-    for (let i = 0; i < 20; i++) {
-      await new Promise(r => setTimeout(r, 200));
-      try {
-        const res = await fetch(`http://127.0.0.1:${PROXY_PORT}/api/health`);
-        if (res.status === 200) break;
-      } catch (e) {}
+    await engine.flushOutbox();
+
+    // A fila nao pode ter sido descartada silenciosamente
+    const outbox = engine.getOutbox();
+    assert.equal(outbox.length, 1);
+    assert.equal(outbox[0].docId, 'doc_fail');
+    assert.equal(outbox[0].attempts, 1);
+    assert.ok(outbox[0].lastError.includes('ECONNREFUSED'));
+    assert.equal(reportedState, 'pending');
+
+    // Forca atingir o limite maximo de tentativas
+    for (let i = 0; i < 5; i++) {
+      await engine.flushOutbox();
     }
-  });
 
-  t.after(() => {
-    if (proxyProc) proxyProc.kill('SIGTERM');
-  });
-
-  await t.test('1. Fila de Saida Persistente (Outbox) e Enfileiramento', () => {
-    const engine = new globalThis.ClaudeStorageSyncEngine({
-      slug: TEST_SLUG,
-      proxyBase: 'http://127.0.0.1:8766'
-    });
-
-    engine.enqueue('exam_app_study', 'user_answers', { q1: { alt: 'B', timestamp: 1000 } });
-    const outbox = engine.getOutbox();
-    assert.equal(outbox.length, 1);
-    assert.equal(outbox[0].collection, 'exam_app_study');
-    assert.equal(outbox[0].docId, 'user_answers');
-    assert.equal(outbox[0].data.q1.alt, 'B');
-
-    // Segundo enfileiramento mescla dados no mesmo documento pendente
-    engine.enqueue('exam_app_study', 'user_answers', { q2: { alt: 'C', timestamp: 2000 } });
-    const updatedOutbox = engine.getOutbox();
-    assert.equal(updatedOutbox.length, 1);
-    assert.equal(updatedOutbox[0].data.q1.alt, 'B');
-    assert.equal(updatedOutbox[0].data.q2.alt, 'C');
-    engine.destroy();
-  });
-
-  await t.test('2. Reconciliação Bidirecional Inteligente (LWW por Questão)', () => {
-    const engine = new globalThis.ClaudeStorageSyncEngine({ slug: TEST_SLUG });
-
-    const localAnswers = {
-      q1: { alt: 'A', timestamp: 1000 },
-      q2: { alt: 'B', timestamp: 5000 } // Local mais recente
-    };
-
-    const remoteAnswers = {
-      q1: { alt: 'D', timestamp: 2000 }, // Remoto mais recente
-      q2: { alt: 'A', timestamp: 3000 }, // Remoto mais antigo
-      q3: { alt: 'E', timestamp: 4000 }  // Apenas remoto
-    };
-
-    const merged = engine.reconcileAnswers(localAnswers, remoteAnswers);
-
-    // q1 deve pegar o remoto (t=2000 > t=1000)
-    assert.equal(merged.q1.alt, 'D');
-    // q2 deve manter o local (t=5000 > t=3000)
-    assert.equal(merged.q2.alt, 'B');
-    // q3 deve ser adicionado do remoto
-    assert.equal(merged.q3.alt, 'E');
-    engine.destroy();
-  });
-
-  await t.test('3. Sincronização Real e Esvaziamento da Fila para Claude Pro', async () => {
-    localStorage.clear();
-    const engine = new globalThis.ClaudeStorageSyncEngine({
-      slug: TEST_SLUG,
-      proxyBase: 'http://127.0.0.1:8766'
-    });
-
-    const testDocId = 'probe_test_flush_' + Date.now();
-    engine.enqueue('exam_app_study', testDocId, {
-      status: 'offline_first_synced',
-      itemsCount: 42,
-      timestamp: Date.now()
-    });
-
-    assert.equal(engine.getOutbox().length > 0, true);
-
-    // Executa flush
-    await engine.flushOutbox();
-
-    // Fila deve estar vazia após sucesso
-    assert.equal(engine.getOutbox().length, 0);
-
-    // Leitura direta do documento gravado para comprovar no servidor remoto
-    const remoteData = await engine.fetchRemote('exam_app_study', testDocId);
-    assert.ok(remoteData);
-    assert.equal(remoteData.status, 'offline_first_synced');
-    assert.equal(remoteData.itemsCount, 42);
-
-    // Cleanup
-    await fetch(`http://127.0.0.1:${PROXY_PORT}/api/storage/${TEST_SLUG}/exam_app_study/${testDocId}`, {
-      method: 'DELETE'
-    });
-    engine.destroy();
-  });
-
-  await t.test('4. Retenção de Fila em Caso de Falha de Conexão', async () => {
-    localStorage.clear();
-    // Aponta para porta inexistente simulando servidor offline
-    const origWarn = console.warn;
-    console.warn = () => {};
-
-    const engine = new globalThis.ClaudeStorageSyncEngine({
-      slug: TEST_SLUG,
-      proxyBase: 'http://127.0.0.1:9999'
-    });
-
-    engine.enqueue('exam_app_study', 'offline_doc_1', { data: 'test' });
-    assert.equal(engine.getOutbox().length, 1);
-
-    await engine.flushOutbox();
-
-    // Como falhou a conexao, o item DEVE permanecer na fila com attempts incrementado
-    const outbox = engine.getOutbox();
-    assert.equal(outbox.length, 1);
-    assert.ok(outbox[0].attempts >= 1);
+    const outboxMax = engine.getOutbox();
+    assert.equal(outboxMax[0].status, 'failed');
+    assert.equal(reportedState, 'error', 'Status deve ser de erro apos esgotar tentativas sem descarte de dados');
 
     engine.destroy();
-    console.warn = origWarn;
+  });
+
+  await t.test('5. Recuperacao de Fila Apos Reinicializacao do Navegador / Recarregamento da Pagina', () => {
+    // 1. Primeira sessao adiciona item e sofre crash/close no meio
+    const engine1 = new ClaudeStorageSyncEngine({ slug: 'test-slug' });
+    engine1.enqueue('exam_app_study', 'crash_doc', { state: 'saved_before_reload' });
+    engine1.destroy();
+
+    // 2. Segunda sessao inicializa com os mesmos dados em localStorage
+    const engine2 = new ClaudeStorageSyncEngine({ slug: 'test-slug' });
+    const recovered = engine2.getOutbox();
+
+    assert.equal(recovered.length, 1);
+    assert.equal(recovered[0].docId, 'crash_doc');
+    assert.deepEqual(recovered[0].data, { state: 'saved_before_reload' });
+
+    engine2.destroy();
   });
 });

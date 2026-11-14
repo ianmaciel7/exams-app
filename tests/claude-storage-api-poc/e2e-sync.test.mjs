@@ -10,6 +10,10 @@ const DEBUG_PORT = 9223;
 const PROXY_PORT = 8766;
 const MAIN_SLUG = 'a728ae48-3fa2-4dbf-9092-0392c90b58f7';
 const APP_URL = 'http://localhost:8765/exam-app-0.1.1/index.html';
+const ORIGIN_HEADER = { 'Origin': 'http://localhost:8765' };
+
+// Identificador exclusivo por execucao para isolamento absoluto e prevencao de exclusao de dados reais
+const TEST_RUN_DOC = `probe_e2e_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
 
 class CDPClient {
   constructor(wsUrl) {
@@ -75,7 +79,7 @@ test('E2E: Validacao de Sincronizacao Bidirecional no Artifact Principal e Exam 
     for (let i = 0; i < 25; i++) {
       await new Promise(r => setTimeout(r, 200));
       try {
-        const res = await fetch(`http://127.0.0.1:${PROXY_PORT}/api/health`);
+        const res = await fetch(`http://127.0.0.1:${PROXY_PORT}/api/health`, { headers: ORIGIN_HEADER });
         if (res.status === 200) break;
       } catch (e) {}
     }
@@ -136,22 +140,19 @@ test('E2E: Validacao de Sincronizacao Bidirecional no Artifact Principal e Exam 
     assert.equal(evalResult.result.value, true);
   });
 
-  await t.test('2. Resposta de Questão no Localhost e Sincronização Automática com Claude Pro', async () => {
-    // Simula resposta de questão via API nativa do app
+  await t.test('2. Resposta de Questão no Localhost e Sincronização Automática com Claude Pro (Isolado)', async () => {
     const answerPayload = {
-      '1': { alt: 'B', correct: true, timestamp: Date.now() },
-      '2': { alt: 'C', correct: false, timestamp: Date.now() }
+      '101': { selected: 'B', correct: true, updatedAt: Date.now(), version: 1, deleted: false },
+      '102': { selected: 'D', correct: false, updatedAt: Date.now(), version: 1, deleted: false }
     };
 
     const evalAnswer = await cdp.send('Runtime.evaluate', {
       expression: `
         (() => {
-          const a = JSON.parse(localStorage.getItem('study:answers:dataprev-2026-tipo1') || '{}');
-          Object.assign(a, ${JSON.stringify(answerPayload)});
-          localStorage.setItem('study:answers:dataprev-2026-tipo1', JSON.stringify(a));
-          window.syncEngine.enqueue('exam_app_study', 'user_answers', {
-            answers: a,
-            updatedAt: Date.now()
+          window.syncEngine.enqueue('exam_app_study', '${TEST_RUN_DOC}', {
+            answers: ${JSON.stringify(answerPayload)},
+            updatedAt: Date.now(),
+            testRun: true
           });
           return window.syncEngine.getOutbox().length;
         })()
@@ -169,19 +170,21 @@ test('E2E: Validacao de Sincronizacao Bidirecional no Artifact Principal e Exam 
     // Aguarda conclusão do envio à Anthropic
     await new Promise(r => setTimeout(r, 2000));
 
-    // Verifica que o outbox foi esvaziado
+    // Verifica que o outbox foi esvaziado com sucesso
     const outboxAfter = await cdp.send('Runtime.evaluate', {
       expression: `window.syncEngine.getOutbox().length`
     });
     assert.equal(outboxAfter.result.value, 0);
 
     // Validação Direta no Servidor Claude Pro via Proxy
-    const checkRes = await fetch(`http://127.0.0.1:${PROXY_PORT}/api/storage/${MAIN_SLUG}/exam_app_study/user_answers`);
+    const checkRes = await fetch(`http://127.0.0.1:${PROXY_PORT}/api/storage/${MAIN_SLUG}/exam_app_study/${TEST_RUN_DOC}`, {
+      headers: ORIGIN_HEADER
+    });
     assert.equal(checkRes.status, 200);
     const remoteDoc = await checkRes.json();
     assert.equal(remoteDoc.exists, true);
-    assert.equal(remoteDoc.data.answers['1'].alt, 'B');
-    assert.equal(remoteDoc.data.answers['2'].alt, 'C');
+    assert.equal(remoteDoc.data.answers['101'].selected, 'B');
+    assert.equal(remoteDoc.data.answers['102'].selected, 'D');
   });
 
   await t.test('3. Captura de Evidência Visual da UI com Badge de Sincronização Ativo', async () => {
@@ -201,10 +204,18 @@ test('E2E: Validacao de Sincronizacao Bidirecional no Artifact Principal e Exam 
     console.log(`[E2E] Screenshot salvo em ${ssPath} (${buffer.length} bytes)`);
   });
 
-  await t.test('4. Limpeza de Dados Temporários no Servidor Claude Pro', async () => {
-    const delRes = await fetch(`http://127.0.0.1:${PROXY_PORT}/api/storage/${MAIN_SLUG}/exam_app_study/user_answers`, {
-      method: 'DELETE'
+  await t.test('4. Limpeza Estrita e Isolada Apenas do Documento de Teste Temporário', async () => {
+    const delRes = await fetch(`http://127.0.0.1:${PROXY_PORT}/api/storage/${MAIN_SLUG}/exam_app_study/${TEST_RUN_DOC}`, {
+      method: 'DELETE',
+      headers: ORIGIN_HEADER
     });
     assert.equal(delRes.status, 200);
+
+    // Valida que o documento de teste foi de fato excluido
+    const verifyDel = await fetch(`http://127.0.0.1:${PROXY_PORT}/api/storage/${MAIN_SLUG}/exam_app_study/${TEST_RUN_DOC}`, {
+      headers: ORIGIN_HEADER
+    });
+    const verifyJson = await verifyDel.json();
+    assert.equal(verifyJson.exists, false);
   });
 });

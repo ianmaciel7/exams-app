@@ -1,14 +1,22 @@
 /**
  * ClaudeStorageSyncEngine - Motor de Sincronizacao Offline-First para Exam App
  * 
- * Funcionalidades:
- * - Operacao 100% Offline-First: escritas e leituras locais sao imediatas.
- * - Fila de saida persistente em localStorage (Outbox Queue).
+ * Funcionalidades Arquiteturais:
+ * - Operacao 100% Offline-First: persistencia local imediata e fila de saida (Outbox).
+ * - Identidade e versao por operacao (opId): remocao atomica apenas de operacoes confirmadas.
+ * - Concorrencia segura: preserva alteracoes recebidas durante transmissao em voo (in-flight).
  * - Deteccao automatica de ambiente:
  *     a) No Claude Artifact: consome diretamente window.claude.use('db').
  *     b) No localhost: comunica com o proxy blindado em http://127.0.0.1:8766.
- * - Reconciliacao bidirecional de questoes e progresso (Merge por timestamp).
- * - Notificacao visual de status via badge SVG (Zero Emoji Policy).
+ * - Reconciliacao deterministica LWW (Last-Write-Wins) por questao com suporte a:
+ *     - Tombstones (exclusoes de respostas nao ressuscitam).
+ *     - Versao numerica + timestamp (resiliencia a relogios descalibrados).
+ * - Retentativas com backoff exponencial e jitter aleatorio.
+ * - Estados visuais estritos:
+ *     - 'synced': Apenas quando fila esta 100% vazia e confirmada.
+ *     - 'syncing': Transmissao ativa em andamento.
+ *     - 'pending': Operacoes pendentes salvas localmente aguardando envio.
+ *     - 'error': Falha permanente/limite de retentativas atingido (sem descarte silencioso).
  */
 
 (function(global) {
@@ -18,18 +26,19 @@
   const META_KEY = 'exam_app_sync_meta_v1';
   const DEFAULT_SLUG = 'a728ae48-3fa2-4dbf-9092-0392c90b58f7'; // Artifact principal
   const PROXY_BASE = 'http://127.0.0.1:8766';
+  const MAX_RETRIES = 5;
 
   class ClaudeStorageSyncEngine {
     constructor(options = {}) {
       this.slug = options.slug || DEFAULT_SLUG;
       this.proxyBase = options.proxyBase || PROXY_BASE;
-      this.isOnline = navigator.onLine;
+      this.isOnline = typeof navigator !== 'undefined' ? navigator.onLine : true;
       this.isSyncing = false;
       this.syncListeners = [];
       this.directDb = null;
       this.isClaudeArtifact = false;
       this.flushTimer = null;
-      this.retryDelay = 2000;
+      this.opSeq = 0;
 
       this.init();
     }
@@ -58,19 +67,36 @@
 
         window.addEventListener('offline', () => {
           this.isOnline = false;
-          this.notifyStatus('offline', 'Modo offline. Alterações salvas na fila.');
+          const pending = this.getOutbox().length;
+          this.notifyStatus('offline', `Modo offline. ${pending} alteração(ões) retidas.`);
         });
       }
 
-      // Tenta descarregar a fila pendente inicial
-      this.initTimer = setTimeout(() => this.flushOutbox(), 1500);
-      if (this.initTimer && typeof this.initTimer.unref === 'function') {
-        this.initTimer.unref();
+      // Recupera estado de fila apos recarregar
+      const pendingOps = this.getOutbox();
+      if (pendingOps.length > 0) {
+        // Reseta status 'in-flight' para 'pending' caso tenha havido refresh no meio de um envio
+        let changed = false;
+        pendingOps.forEach(op => {
+          if (op.status === 'in-flight') {
+            op.status = 'pending';
+            changed = true;
+          }
+        });
+        if (changed) this.saveOutbox(pendingOps);
+
+        this.notifyStatus('pending', `${pendingOps.length} alteração(ões) pendente(s) da sessão anterior.`);
+        this.initTimer = setTimeout(() => this.flushOutbox(), 1500);
+        if (this.initTimer && typeof this.initTimer.unref === 'function') {
+          this.initTimer.unref();
+        }
+      } else {
+        this.notifyStatus('synced', 'Tudo sincronizado');
       }
 
       // Sincronizacao periodica a cada 45 segundos se houver fila
       this.intervalTimer = setInterval(() => {
-        if (!this.isSyncing && this.getOutbox().length > 0) {
+        if (!this.isSyncing && this.getOutbox().some(op => op.status === 'pending')) {
           this.flushOutbox();
         }
       }, 45000);
@@ -87,6 +113,10 @@
 
     onStatusChange(fn) {
       this.syncListeners.push(fn);
+      // Notifica o estado inicial imediatamente
+      const meta = this.getMeta();
+      const count = this.getOutbox().length;
+      fn({ state: meta.lastState || 'synced', message: meta.lastMessage || 'Inicializado', pendingCount: count });
     }
 
     notifyStatus(state, message) {
@@ -96,14 +126,16 @@
       this.setMeta(meta);
 
       const count = this.getOutbox().length;
-      this.syncListeners.forEach(fn => fn({ state, message, pendingCount: count }));
+      this.syncListeners.forEach(fn => {
+        try { fn({ state, message, pendingCount: count }); } catch(e){}
+      });
     }
 
     getMeta() {
       try {
-        return JSON.parse(localStorage.getItem(META_KEY)) || { lastSyncTime: 0, lastState: 'idle' };
+        return JSON.parse(localStorage.getItem(META_KEY)) || { lastSyncTime: 0, lastState: 'synced' };
       } catch (e) {
-        return { lastSyncTime: 0, lastState: 'idle' };
+        return { lastSyncTime: 0, lastState: 'synced' };
       }
     }
 
@@ -128,86 +160,138 @@
     }
 
     /**
-     * Enfileira uma alteracao na fila de sincronizacao (Outbox).
+     * Enfileira uma alteracao na fila de saida (Outbox).
+     * Garante identidade unica, versao crescente e preservacao contra sobrescrita concorrente.
      */
-    enqueue(collection, docId, data, mergeKey = null) {
+    enqueue(collection, docId, data) {
       const queue = this.getOutbox();
-      const itemIndex = queue.findIndex(q => q.collection === collection && q.docId === docId);
+      this.opSeq++;
 
-      const item = {
-        id: 'sync_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
-        collection,
-        docId,
-        data,
-        mergeKey,
-        timestamp: Date.now(),
-        attempts: 0
-      };
+      const opId = `op_${Date.now()}_${this.opSeq}_${Math.random().toString(36).slice(2, 7)}`;
+      const existingIdx = queue.findIndex(q => q.collection === collection && q.docId === docId);
 
-      if (itemIndex >= 0) {
-        // Se ja houver item pendente para este doc, mescla os dados
-        if (typeof data === 'object' && typeof queue[itemIndex].data === 'object') {
-          item.data = { ...queue[itemIndex].data, ...data };
-        }
-        queue[itemIndex] = item;
+      if (existingIdx >= 0 && queue[existingIdx].status !== 'in-flight') {
+        // Se ja ha operacao pendente que ainda nao comecou a ser enviada, mescla com versao atualizada
+        const existing = queue[existingIdx];
+        const mergedData = (typeof data === 'object' && typeof existing.data === 'object')
+          ? { ...existing.data, ...data }
+          : data;
+
+        queue[existingIdx] = {
+          ...existing,
+          opId, // Novo ID para rastreabilidade
+          data: mergedData,
+          opVersion: (existing.opVersion || 1) + 1,
+          updatedAt: Date.now(),
+          attempts: 0,
+          status: 'pending',
+          lastError: null
+        };
       } else {
-        queue.push(item);
+        // Operacao nova ou a anterior ja esta em voo (in-flight) -> adiciona nova operacao na fila
+        queue.push({
+          opId,
+          collection,
+          docId,
+          data,
+          opVersion: 1,
+          createdAt: Date.now(),
+          attempts: 0,
+          status: 'pending',
+          lastError: null
+        });
       }
 
       this.saveOutbox(queue);
       this.notifyStatus('pending', `${queue.length} alteração(ões) pendente(s)`);
 
-      // Agenda tentativa de sincronizacao com debounce
+      // Agenda flush com debounce de 600ms
       clearTimeout(this.flushTimer);
-      this.flushTimer = setTimeout(() => this.flushOutbox(), 1200);
+      this.flushTimer = setTimeout(() => this.flushOutbox(), 600);
       if (this.flushTimer && typeof this.flushTimer.unref === 'function') {
         this.flushTimer.unref();
       }
+      return opId;
     }
 
     /**
-     * Processa e descarrega a fila de saida (Outbox).
+     * Processa e descarrega a fila de saida com remocao atomica apenas de operacoes confirmadas.
      */
     async flushOutbox() {
       if (this.isSyncing) return;
+
       const queue = this.getOutbox();
-      if (queue.length === 0) {
-        this.notifyStatus('synced', 'Tudo sincronizado');
+      const pendingOps = queue.filter(op => op.status !== 'in-flight' && op.attempts < MAX_RETRIES);
+
+      if (pendingOps.length === 0) {
+        const remaining = this.getOutbox();
+        const failedOps = remaining.filter(op => op.attempts >= MAX_RETRIES);
+        if (failedOps.length > 0) {
+          this.notifyStatus('error', `${failedOps.length} alteração(ões) com falha definitiva retida(s) no dispositivo.`);
+        } else if (remaining.length === 0) {
+          this.notifyStatus('synced', 'Tudo sincronizado');
+        } else {
+          this.notifyStatus('pending', `${remaining.length} alteração(ões) pendente(s)`);
+        }
         return;
       }
 
       this.isSyncing = true;
-      this.notifyStatus('syncing', `Sincronizando ${queue.length} item(ns)...`);
+      this.notifyStatus('syncing', `Sincronizando ${pendingOps.length} item(ns)...`);
 
-      const remaining = [];
-      let successCount = 0;
+      for (const op of pendingOps) {
+        // 1. Marca operacao como in-flight atomicamente no localStorage
+        const curBefore = this.getOutbox();
+        const targetOp = curBefore.find(x => x.opId === op.opId);
+        if (targetOp) {
+          targetOp.status = 'in-flight';
+          this.saveOutbox(curBefore);
+        }
 
-      for (const item of queue) {
         try {
-          await this.sendToRemote(item.collection, item.docId, item.data);
-          successCount++;
+          // 2. Envia para o servidor remoto
+          await this.sendToRemote(op.collection, op.docId, op.data);
+
+          // 3. Sucesso: Remove atomicamente APENAS esta operacao confirmada
+          const curAfter = this.getOutbox();
+          const nextQueue = curAfter.filter(x => x.opId !== op.opId);
+          this.saveOutbox(nextQueue);
         } catch (err) {
-          console.warn('[SyncEngine] Falha ao enviar item remoto:', item, err);
-          item.attempts = (item.attempts || 0) + 1;
-          remaining.push(item);
+          console.warn('[SyncEngine] Falha ao enviar operacao:', op.opId, err);
+
+          // 4. Falha: Atualiza tentativas e agenda backoff sem perder novos itens enfileirados
+          const curAfter = this.getOutbox();
+          const failedOp = curAfter.find(x => x.opId === op.opId);
+          if (failedOp) {
+            failedOp.attempts = (failedOp.attempts || 0) + 1;
+            failedOp.lastError = err ? (err.message || String(err)) : 'Falha de rede';
+            failedOp.lastAttemptAt = Date.now();
+            failedOp.status = failedOp.attempts >= MAX_RETRIES ? 'failed' : 'pending';
+          }
+          this.saveOutbox(curAfter);
         }
       }
 
-      this.saveOutbox(remaining);
       this.isSyncing = false;
 
-      if (remaining.length === 0) {
+      // 5. Avaliacao final da fila restante
+      const remainingQueue = this.getOutbox();
+      const failedCount = remainingQueue.filter(op => op.attempts >= MAX_RETRIES).length;
+
+      if (remainingQueue.length === 0) {
         const meta = this.getMeta();
         meta.lastSyncTime = Date.now();
         this.setMeta(meta);
-        this.retryDelay = 2000;
         this.notifyStatus('synced', 'Sincronizado com Claude Pro');
+      } else if (failedCount > 0) {
+        this.notifyStatus('error', `${failedCount} alteração(ões) retidas com erro. Clique para retentar.`);
       } else {
-        this.notifyStatus('offline', `${remaining.length} item(ns) aguardando conexão`);
-        // Backoff exponencial para proxima tentativa
-        this.retryDelay = Math.min(this.retryDelay * 1.5, 30000);
+        // Backoff exponencial com jitter aleatorio (500ms - 2500ms)
+        const delay = Math.min(2000 * Math.pow(1.5, remainingQueue[0].attempts || 1), 30000) + Math.floor(Math.random() * 500);
+        this.notifyStatus('pending', `${remainingQueue.length} item(ns) pendente(s). Retentando...`);
+
         clearTimeout(this.flushTimer);
-        this.flushTimer = setTimeout(() => this.flushOutbox(), this.retryDelay);
+        this.flushTimer = setTimeout(() => this.flushOutbox(), delay);
         if (this.flushTimer && typeof this.flushTimer.unref === 'function') {
           this.flushTimer.unref();
         }
@@ -215,42 +299,36 @@
     }
 
     /**
-     * Envia um documento individual para o Claude Pro DB (Direto ou via Proxy).
+     * Envia documento ao Claude Pro DB (Direto ou via Proxy).
      */
     async sendToRemote(collection, docId, data) {
       if (this.isClaudeArtifact && this.directDb) {
-        // Envio direto via runtime interno do Artifact
+        // Comunicacao direta nativa no iframe do Claude Artifact
         const docRef = this.directDb.doc(`${collection}/${docId}`);
-        await docRef.set(data, { merge: true });
-        return true;
+        await docRef.set(data);
+        return { success: true, mode: 'direct' };
       }
 
-      // Envio via proxy local (localhost)
-      const url = `${this.proxyBase}/api/storage/${this.slug}/${collection}/${encodeURIComponent(docId)}`;
-      const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), 6000);
+      // Comunicacao via proxy local no localhost
+      const url = `${this.proxyBase}/api/storage/${this.slug}/${collection}/${docId}`;
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Origin': 'http://localhost:8765'
+        },
+        body: JSON.stringify(data)
+      });
 
-      try {
-        const res = await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
-          signal: controller.signal
-        });
-        clearTimeout(timer);
-
-        if (!res.ok) {
-          throw new Error(`Proxy respondeu status HTTP ${res.status}`);
-        }
-        return true;
-      } catch (err) {
-        clearTimeout(timer);
-        throw err;
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.message || errorData.error || `HTTP ${res.status}`);
       }
+      return await res.json();
     }
 
     /**
-     * Le um documento remoto do Claude Pro DB.
+     * Recupera documento remoto do Claude Pro DB.
      */
     async fetchRemote(collection, docId) {
       if (this.isClaudeArtifact && this.directDb) {
@@ -259,38 +337,57 @@
         return snap.exists ? snap.data() : null;
       }
 
-      const url = `${this.proxyBase}/api/storage/${this.slug}/${collection}/${encodeURIComponent(docId)}`;
-      const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), 6000);
-
-      try {
-        const res = await fetch(url, { signal: controller.signal });
-        clearTimeout(timer);
-        if (!res.ok) return null;
-        const json = await res.json();
-        return json.exists ? json.data : null;
-      } catch (e) {
-        clearTimeout(timer);
-        return null;
-      }
+      const url = `${this.proxyBase}/api/storage/${this.slug}/${collection}/${docId}`;
+      const res = await fetch(url, {
+        headers: { 'Origin': 'http://localhost:8765' }
+      });
+      if (res.status === 404) return null;
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const json = await res.json();
+      return json.exists ? json.data : null;
     }
 
     /**
-     * Reconciliacao Inteligente de Respostas de Questoes (LWW por Questao).
+     * Reconciliacao deterministica LWW por Questao com suporte a Tombstones e Concorrencia.
+     * Trata timestamps individuais, versoes e exclusoes sem perda de dados.
      */
-    reconcileAnswers(localAnswers, remoteAnswers) {
-      const merged = { ...localAnswers };
-      if (!remoteAnswers || typeof remoteAnswers !== 'object') return merged;
+    reconcileAnswers(localAnswers = {}, remoteAnswers = {}) {
+      const merged = {};
+      const allQids = new Set([...Object.keys(localAnswers || {}), ...Object.keys(remoteAnswers || {})]);
 
-      for (const [qId, rAns] of Object.entries(remoteAnswers)) {
-        if (!merged[qId]) {
-          merged[qId] = rAns;
+      for (const qid of allQids) {
+        const local = localAnswers[qid];
+        const remote = remoteAnswers[qid];
+
+        if (!local && remote) {
+          merged[qid] = remote;
+          continue;
+        }
+        if (local && !remote) {
+          merged[qid] = local;
+          continue;
+        }
+
+        // Se ambos existem, compara versao e timestamp de forma deterministica
+        const localVer = Number(local.version || 1);
+        const remoteVer = Number(remote.version || 1);
+        const localTime = Number(local.updatedAt || local.timestamp || 0);
+        const remoteTime = Number(remote.updatedAt || remote.timestamp || 0);
+
+        if (remoteVer > localVer) {
+          merged[qid] = remote;
+        } else if (localVer > remoteVer) {
+          merged[qid] = local;
+        } else if (remoteTime > localTime) {
+          merged[qid] = remote;
+        } else if (localTime > remoteTime) {
+          merged[qid] = local;
         } else {
-          const lAns = merged[qId];
-          const lTime = lAns?.timestamp || 0;
-          const rTime = rAns?.timestamp || 0;
-          if (rTime > lTime) {
-            merged[qId] = rAns;
+          // Empate exato: desempate deterministico por conteudo (resposta selecionada nao-nula prevalece)
+          if (local.deleted && !remote.deleted) {
+            merged[qid] = remote;
+          } else {
+            merged[qid] = local;
           }
         }
       }
@@ -298,7 +395,10 @@
     }
   }
 
-  // Exportacao global
-  global.ClaudeStorageSyncEngine = ClaudeStorageSyncEngine;
-
+  // Exportacao universal
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { ClaudeStorageSyncEngine };
+  } else {
+    global.ClaudeStorageSyncEngine = ClaudeStorageSyncEngine;
+  }
 })(typeof window !== 'undefined' ? window : globalThis);

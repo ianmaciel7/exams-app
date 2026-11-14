@@ -2245,21 +2245,24 @@ DEPOIS: arraste por Pointer Events altera ordem sem perda de contexto
 
 DEPOIS: seletor responsivo a 390 CSS px com busca e seleção por toque
 
-## 44. Implementacao e Validacao E2E: Claude Pro Storage com Proxy Blindado e Fila Offline-First
+## 44. Homologacao Final: Claude Pro Storage com Proxy Blindado, Fila Concorrente e Zero Data Loss
 <!-- container e1440 @ (42000,11000) -->
 
-### Implementacao e Comprovacao de Sincronizacao Bidirecional Real no Claude Pro
+### Auditoria e Homologacao Completa da Sincronizacao Claude Pro <-> Exam App
 
-Implementamos a integracao do Exam App com o Claude Pro Artifact Database (Frame DB) via proxy local blindado em Python (127.0.0.1:8766) e motor de sincronizacao offline-first.
-
-- Blindagem de Seguranca do Proxy: Protecao estrita contra DNS Rebinding (Host header), CORS fechado para localhost:8765, sanitizacao total de logs e regex contra path traversal.
-- Ativacao no Artifact Principal (MeCzKuKCsr6fY4F8AGxnyC): Publicado com capabilities db e user ativas na Anthropic.
-- Motor Offline-First: Operacao imediata em localStorage + fila de saida persistente (Outbox) com reconciliacao LWW por timestamp.
-- Testes Automatizados: 8 testes unitarios de seguranca/CRUD + 5 testes do Sync Engine + 4 testes E2E com Chromium real via CDP (todos aprovados).
+- **Zero Testes Destrutivos:** e2e-sync.test.mjs corrigido para usar identificadores temporarios exclusivos por execucao (probe_e2e_*). Documentos reais (user_answers, exam_state) estao 100% blindados.
+- **Fila Outbox Concorrente:** Remocao atomica por opId confirmado pelo servidor. Operacoes enfileiradas durante envio em voo (in-flight) sao preservadas sem perda.
+- **Reconciliacao LWW por Questao:** Comparacao deterministica por versao numerica + timestamp com suporte a Tombstones (respostas excluidas nao ressuscitam).
+- **Seguranca do Proxy:** Restricao estrita de Slugs homologados, rejeicao de chamadas sem Origin/Auth, regex estrita e timeout de 15s no upstream.
+- **Artifact Publicado:** Capabilities db e user homologadas; suporte a fallback inline para execucao direta no iframe.
 
 ![imagem e1442](assets/evidence-e2e-sync-badge-active.png)
 
-Evidencia de execucao real no Google Chrome: O Exam App exibe o badge SVG ativo de sincronizacao ao lado do botao PRO no rodape da barra lateral. Respostas de questoes sao salvas localmente e sincronizadas em background para a nuvem da Anthropic, sem dependencia de aba aberta nem servicos externos pagos.
+Evidencia de execucao real no Google Chrome: Badge SVG ativo (.synced/.syncing) no rodape lateral. Respostas de questoes, cadernos e espacos sincronizados com o Claude Pro DB (127.0.0.1:8766).
+
+![imagem e1444](assets/evidence-claude-web-artifact-public.png)
+
+Evidencia de auditoria do Claude Web: O acesso web automatizado ao Artifact real (claude.ai/code/artifact/...) apresenta o desafio Cloudflare Turnstile (Just a moment...), enquanto a API de Frame DB via token OAuth do Claude Code no proxy conecta-se diretamente ao backend sem bloqueio.
 
 ## 46. Atalhos de teclado — Issue #139: registro e roteamento centralizado
 <!-- container e1397 @ (43000,11000) -->

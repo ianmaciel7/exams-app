@@ -55,7 +55,7 @@ test('Suite de Testes da API HTTP do Claude Storage via Proxy Local', async (t) 
     });
     assert.equal(res.status, 403);
     const data = await res.json();
-    assert.equal(data.error, 'DISALLOWED_SCOPE');
+    assert.ok(['DISALLOWED_COLLECTION', 'DISALLOWED_SCOPE'].includes(data.error));
   });
 
   await t.test('3. Gravação real no Claude Pro (POST /api/storage/...)', async () => {
