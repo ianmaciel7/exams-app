@@ -697,7 +697,17 @@
     "e1357",
     "e1358",
     "e1359",
-    "e1360"
+    "e1360",
+    "e1361",
+    "e1362",
+    "e1363",
+    "e1364",
+    "e1365",
+    "e1366",
+    "e1367",
+    "e1368",
+    "e1369",
+    "e1370"
   ],
   "elements": {
     "e1": {
@@ -7340,6 +7350,92 @@
       "size": "small",
       "text": "1366px, controles de zoom/filtro e retorno à preferência reduzida",
       "x": 32828,
+      "y": 12073,
+      "w": 760,
+      "h": 50
+    },
+    "e1361": {
+      "type": "container",
+      "color": "white",
+      "text": "42. Grafo — Issue #68: exportar imagem PNG com botão e teclado",
+      "x": 34000,
+      "y": 11000,
+      "w": 1650,
+      "h": 1170
+    },
+    "e1362": {
+      "type": "text",
+      "size": "small",
+      "text": "Funcionalidade realmente testada: botão exportar PNG na toolbar do grafo global, acionado por teclado Enter. O arquivo local é gerado por canvas.toDataURL sem rede, nome exam-app-grafo.png. Teste Chromium valida cabeçalho PNG, arquivo nao vazio e dimensoes de pixels iguais ao backing canvas (DPR 2). Evidencia parcial da issue #68: filtros avancados, profundidade 1..5, popovers e timeline ainda nao foram implementados aqui. Manifesto: issue68_export_e2e.json.",
+      "x": 34018,
+      "y": 11008,
+      "w": 1590,
+      "h": 82
+    },
+    "e1363": {
+      "type": "image",
+      "src": "/_blob/issue68_graph_toolbar_390",
+      "x": 34018,
+      "y": 11100,
+      "w": 755,
+      "h": 430
+    },
+    "e1364": {
+      "type": "text",
+      "size": "small",
+      "text": "Botão de exportação na barra do grafo, viewport 390px",
+      "x": 34018,
+      "y": 11538,
+      "w": 760,
+      "h": 50
+    },
+    "e1365": {
+      "type": "image",
+      "src": "/_blob/issue68_export_graph_390",
+      "x": 34828,
+      "y": 11100,
+      "w": 755,
+      "h": 430
+    },
+    "e1366": {
+      "type": "text",
+      "size": "small",
+      "text": "PNG real gerado no canvas mobile, pixel ratio 2",
+      "x": 34828,
+      "y": 11538,
+      "w": 760,
+      "h": 50
+    },
+    "e1367": {
+      "type": "image",
+      "src": "/_blob/issue68_graph_toolbar_1366",
+      "x": 34018,
+      "y": 11635,
+      "w": 755,
+      "h": 430
+    },
+    "e1368": {
+      "type": "text",
+      "size": "small",
+      "text": "Botão de exportação na barra do grafo, viewport 1366px",
+      "x": 34018,
+      "y": 12073,
+      "w": 760,
+      "h": 50
+    },
+    "e1369": {
+      "type": "image",
+      "src": "/_blob/issue68_export_graph_1366",
+      "x": 34828,
+      "y": 11635,
+      "w": 755,
+      "h": 430
+    },
+    "e1370": {
+      "type": "text",
+      "size": "small",
+      "text": "PNG real gerado no canvas desktop, pixel ratio 2",
+      "x": 34828,
       "y": 12073,
       "w": 760,
       "h": 50

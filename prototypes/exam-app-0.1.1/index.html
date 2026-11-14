@@ -5003,7 +5003,7 @@ function buildGraph(){
   const kinds=KORD.filter(k=>list.some(n=>n.kind===k)), edgesN=list.reduce((s,n)=>s+n.out.length,0);
   view.innerHTML='<div class="gv" id="gv"><canvas id="gvc" tabindex="0" role="img" aria-label="Gráfico com '+list.length+' objetos e '+edgesN+' relações. Use a busca para abrir um objeto pelo teclado."></canvas>'
    +'<div class="gv-top"><div class="rp-search gv-search">'+WI.search+'<input type="search" id="gvq" placeholder="Buscar no gráfico" aria-label="Buscar objeto no gráfico" autocomplete="off"></div>'
-   +'<div class="gv-zoom" role="group" aria-label="Zoom"><button type="button" id="gvIn" aria-label="Aproximar">'+WI.plus+'</button><button type="button" id="gvOut" aria-label="Afastar">'+WI.minus+'</button><button type="button" id="gvFit" aria-label="Ajustar à tela">'+WI.fit+'</button></div></div>'
+   +'<div class="gv-zoom" role="group" aria-label="Zoom"><button type="button" id="gvIn" aria-label="Aproximar">'+WI.plus+'</button><button type="button" id="gvOut" aria-label="Afastar">'+WI.minus+'</button><button type="button" id="gvFit" aria-label="Ajustar à tela">'+WI.fit+'</button><button type="button" id="gvExport" aria-label="Exportar grafo como imagem PNG" title="Exportar PNG"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 17v4h16v-4"/></svg></button></div></div>'
    +'<div class="gv-footer"><div class="gv-leg" role="group" aria-label="Filtrar por tipo">'+kinds.map(k=>'<button type="button" class="gv-k k-'+k+'" data-gk="'+k+'" aria-pressed="'+(GVK[k]!==false)+'"><i aria-hidden="true"></i>'+esc(kn(k))+' <span>'+list.filter(n=>n.kind===k).length+'</span></button>').join('')+'</div>'
    +'<div class="gv-info" aria-live="polite">'+list.length+' objetos · '+edgesN+' relações'+(loading?' · carregando questões…':'')+'</div></div><div class="gv-tip" id="gvTip" hidden></div></div>';
   const wrap=$('gv'), cv=$('gvc'), ctx=cv.getContext('2d');
@@ -5124,6 +5124,21 @@ function buildGraph(){
   cv.addEventListener('dblclick',e=>{ if(hit(...rel(e))<0){ fit(); invalidate(); } });
   cv.addEventListener('keydown',e=>{ const s=40; if(e.key==='+'||e.key==='='){ zoomAt(st.W/2,st.H/2,1.2); } else if(e.key==='-'){ zoomAt(st.W/2,st.H/2,1/1.2); } else if(e.key==='0'){ fit(); invalidate(); } else if(e.key==='ArrowLeft'){ st.tx+=s; invalidate(); } else if(e.key==='ArrowRight'){ st.tx-=s; invalidate(); } else if(e.key==='ArrowUp'){ st.ty+=s; invalidate(); } else if(e.key==='ArrowDown'){ st.ty-=s; invalidate(); } else return; e.preventDefault(); });
   $('gvIn').onclick=()=>zoomAt(st.W/2,st.H/2,1.3); $('gvOut').onclick=()=>zoomAt(st.W/2,st.H/2,1/1.3); $('gvFit').onclick=()=>{ fit(); invalidate(); };
+  $('gvExport').onclick=()=>{
+    try{
+      // The canvas already contains devicePixelRatio-scaled pixels; no external service needed.
+      const png=cv.toDataURL('image/png');
+      if(!png.startsWith('data:image/png;base64,')) throw new Error('PNG canvas encoding unavailable');
+      const a=document.createElement('a');
+      a.href=png; a.download='exam-app-grafo.png';
+      document.body.appendChild(a); a.click(); a.remove();
+      toast('Imagem do grafo exportada em PNG');
+    }catch(err){
+      console.warn('Falha ao exportar imagem do grafo',err);
+      toast('Não foi possível exportar o grafo. Tente novamente.');
+    }
+  };
+
   const gq=$('gvq'); gq.addEventListener('input',()=>{ const q=norm(gq.value.trim()); if(!q){ st.match=null; invalidate(); return; } st.match=new Set(); nodes.forEach((o,i)=>{ if(o.on&&norm(o.n.title+' '+o.n.sub).includes(q)) st.match.add(i); }); invalidate(); });
   gq.addEventListener('keydown',e=>{ if(e.key==='Enter'&&st.match&&st.match.size){ const i=[...st.match][0]; wsOpenMain(nodes[i].n.href); } else if(e.key==='Escape'){ gq.value=''; st.match=null; invalidate(); } });
   wrap.querySelector('.gv-leg').addEventListener('click',e=>{ const b=e.target.closest('[data-gk]'); if(!b) return; const k=b.dataset.gk, on=b.getAttribute('aria-pressed')!=='true'; GVK[k]=on; b.setAttribute('aria-pressed',on); nodes.forEach(o=>{ if(o.n.kind===k) o.on=on; }); st.alpha=Math.max(st.alpha,.5); invalidate(); });
