@@ -142,6 +142,30 @@
   .practice-list .s-asidecol{display:block}
 }
 </style>
+<style>
+/* SpaceSwitcher: discoverable search, stable ordering and accessible drag handle (#138). */
+#spPop{width:min(310px,calc(100vw - 22px));max-height:min(70vh,520px);overflow:auto;overscroll-behavior:contain}
+#spPop .sp-search-label{display:block;font-size:11px;font-weight:600;color:var(--muted);padding:4px 6px}
+#spSearch{display:block;box-sizing:border-box;width:100%;min-height:38px;margin:0 0 6px;padding:8px 10px;color:var(--text);background:var(--bg);border:1px solid var(--line);border-radius:8px;font:inherit;font-size:13px}
+#spSearch:focus-visible,#spPop button:focus-visible{outline:2px solid var(--ring,var(--study-accent));outline-offset:2px}
+#spPop .sp-items{max-height:min(45vh,360px);overflow-y:auto;scrollbar-width:thin}
+#spPop .sp-entry{display:flex;align-items:center;gap:2px;min-width:0;border-radius:7px}
+#spPop .sp-entry:hover,#spPop .sp-entry:focus-within{background:var(--hover)}
+#spPop .sp-select{flex:1;min-width:0;height:40px;text-align:left}
+#spPop .sp-select[aria-selected="true"]{font-weight:600}
+#spPop .sp-grip,#spPop .sp-more{flex:none;display:grid;place-items:center;width:30px;height:36px;min-width:30px;border-radius:6px;color:var(--muted)}
+#spPop .sp-grip{cursor:grab;touch-action:none;user-select:none}
+#spPop .sp-grip:active{cursor:grabbing}
+#spPop .sp-grip:disabled{opacity:.35;cursor:not-allowed}
+#spPop .sp-grip svg,#spPop .sp-more svg{width:16px;height:16px}
+#spPop .sp-more:hover,#spPop .sp-grip:not(:disabled):hover{background:var(--active);color:var(--text)}
+#spPop .sp-entry.dragging{opacity:.65;background:var(--active)}
+#spPop .sp-entry.drop-before{box-shadow:inset 0 2px 0 var(--ring,var(--study-accent))}
+#spPop .sp-entry.drop-after{box-shadow:inset 0 -2px 0 var(--ring,var(--study-accent))}
+#spPop .sp-empty{padding:14px;color:var(--muted);font-size:13px}
+#spPop .sp-create{min-height:40px}
+@media (max-width:768px){#spPop .sp-select{min-height:44px}#spPop .sp-grip,#spPop .sp-more{height:44px;min-width:38px}}
+</style>
 </head><body>
 <style>
 /* ===== Exam App 0.1.1 — páginas de estudo e detalhes, 2026 ===== */
@@ -1552,7 +1576,7 @@ a.rp-link:hover{background:var(--active)}
       <button class="icon-btn" id="collapse" aria-label="Recolher barra lateral" title="Recolher barra lateral (Ctrl+B)">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/></svg>
       </button>
-      <div class="pop" id="spPop" role="menu"></div>
+      <div class="pop" id="spPop" role="dialog" aria-label="Alternar e organizar espaços"></div>
     </div>
 
     <div class="side-comb">
@@ -1980,6 +2004,14 @@ const BASE_SP={id:'dataprev',name:store.get('baseName')||'Concurso de TI'};
 (store.get('cprops')||[]).forEach(c=>{ if(TYPES[c.t]&&!PROPS[c.k]){ PROPS[c.k]={n:c.n,get:()=>undefined,custom:true}; PKIND[c.k]=c.kind; TYPES[c.t].own.push(c.k); } });
 applyOv();
 let spaces=[BASE_SP].concat(store.get('spaces')||[]);
+// Keep legacy space data unchanged; a separate stable-ID order survives renames and reloads.
+const persistedSpaceOrder=store.get('spaceOrder');
+if(Array.isArray(persistedSpaceOrder)){
+  const ranks=new Map(persistedSpaceOrder.map((id,index)=>[id,index]));
+  spaces=spaces.map((item,index)=>({item,index})).sort((a,b)=>
+    (ranks.get(a.item.id)??(ranks.size+a.index))-(ranks.get(b.item.id)??(ranks.size+b.index))
+  ).map(x=>x.item);
+}
 let space=store.get('space')||'dataprev';
 if(!spaces.some(x=>x.id===space)) space='dataprev';
 const COLORS=['#3F6B5A','#5B5BA8','#A4573E','#3E7A99','#8A6A3E','#7A4F86'];
@@ -1991,13 +2023,48 @@ function viewOf(d){ const m=meta[d.id]||{}; return Object.assign({},d,{t:m.t||d.
 const allDocs=()=>BASE_DOCS.concat(uploads).map(viewOf);
 const docsOf=id=>allDocs().filter(d=>d.sp===id&&!d.del&&!isT(d.id));
 
+let spaceFilter='';
+const spNormalized=t=>String(t||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('pt-BR').trim();
+function paintSpaceItems(){
+  const items=$('spItems'); if(!items) return;
+  const list=spaces.filter(x=>spNormalized(x.name).includes(spNormalized(spaceFilter)));
+  items.innerHTML=list.length?list.map(x=>
+    '<div class="sp-entry" data-spentry="'+esc(x.id)+'">'+
+    '<button type="button" class="sp-grip" data-spdrag="'+esc(x.id)+'" aria-label="Reordenar '+esc(x.name)+'. Alt mais seta para cima ou para baixo." title="Arraste para reordenar. Alt + ↑/↓ no teclado." '+(spaceFilter.trim()?'disabled':'')+'>'+I.move+'</button>'+
+    '<button type="button" class="row sp-select" role="option" aria-selected="'+(x.id===space)+'" data-sp="'+esc(x.id)+'">'+
+    '<span class="av" style="background:'+spColor(x)+'">'+esc(x.name[0].toUpperCase())+'</span><span class="t">'+esc(x.name)+'</span>'+(x.id===space?CHECK:'')+'</button>'+
+    '<button type="button" class="sp-more" data-spmore="'+esc(x.id)+'" aria-label="Ações do espaço '+esc(x.name)+'" title="Mais ações">'+I.more+'</button></div>'
+  ).join(''):'<div class="sp-empty" role="status">Nenhum espaço encontrado.</div>';
+}
 function paintSpaces(){
-  const sp=spaces.find(x=>x.id===space);
+  const sp=spaces.find(x=>x.id===space)||spaces[0];
   $('spAv').textContent=sp.name[0].toUpperCase(); $('spAv').style.background=spColor(sp);
   $('spName').textContent=sp.name;
-  $('spPop').innerHTML=spaces.map(x=>
-    '<div class="row" role="menuitem" tabindex="0" data-sp="'+x.id+'"><span class="av" style="background:'+spColor(x)+'">'+esc(x.name[0].toUpperCase())+'</span><span class="t">'+esc(x.name)+'</span>'+(x.id===space?CHECK:'')+'<button class="more" data-spmore="'+x.id+'" aria-label="Ações do espaço" title="Mais ações">'+I.more+'</button></div>').join('')+
-    '<hr><button class="row" role="menuitem" data-sp="+"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span class="t">Criar espaço</span></button>';
+  const wasFocused=document.activeElement&&document.activeElement.id==='spSearch';
+  $('spPop').innerHTML=
+    '<label class="sp-search-label" for="spSearch">Buscar espaço</label>'+
+    '<input id="spSearch" type="search" aria-label="Buscar espaço" placeholder="Buscar espaços…" value="'+esc(spaceFilter)+'" autocomplete="off" spellcheck="false">'+
+    '<div id="spItems" class="sp-items" role="listbox" aria-label="Espaços disponíveis"></div>'+
+    '<hr><button type="button" class="row sp-create" data-sp="+"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span class="t">Criar espaço</span></button>';
+  paintSpaceItems();
+  if(wasFocused){ const input=$('spSearch'); input.focus({preventScroll:true}); input.setSelectionRange(input.value.length,input.value.length); }
+}
+function moveSpace(id,destination,after=false){
+  if(spaceFilter.trim()) return false; // filtering never mutates the underlying order
+  if(id===destination) return false;
+  const from=spaces.findIndex(x=>x.id===id);
+  if(from<0||!spaces.some(x=>x.id===destination)) return false;
+  const [moving]=spaces.splice(from,1);
+  const target=spaces.findIndex(x=>x.id===destination)+(after?1:0);
+  spaces.splice(target,0,moving);
+  saveSpaces(); paintSpaces();
+  return true;
+}
+function moveSpaceStep(id,direction){
+  if(spaceFilter.trim()) return false;
+  const i=spaces.findIndex(x=>x.id===id),other=spaces[i+direction];
+  if(i<0||!other) return false;
+  return moveSpace(id,other.id,direction>0);
 }
 
 /* ---- popovers ---- */
@@ -2089,10 +2156,10 @@ function togglePop(btn,pop){
   if(o){
     el.classList.add('open'); if(b) b.setAttribute('aria-expanded','true');
     el.style.position=''; el.style.left=''; el.style.top=''; el.style.zIndex='';
-    const f=el.querySelector('button, [tabindex="0"]'); f&&f.focus({preventScroll:true});
+    const f=el.querySelector('input, button, [tabindex="0"]'); f&&f.focus({preventScroll:true});
   }
 }
-$('spBtn').onclick=e=>{ e.stopPropagation(); togglePop('spBtn','spPop'); };
+$('spBtn').onclick=e=>{ e.stopPropagation(); spaceFilter=''; paintSpaces(); togglePop('spBtn','spPop'); };
 $('sideNewBtn').onclick=e=>{ e.stopPropagation(); toggleNewMenu(); };
 $('sideSearchBtn').onclick=e=>{ e.stopPropagation(); openSearch(false); };
 document.addEventListener('click',e=>{ if(!e.target.closest('.pop')&&!e.target.closest('.new-menu')&&!e.target.closest('#sideNewBtn')&&!e.target.closest('#btnFootAccount')) closePops(); });
@@ -2128,6 +2195,88 @@ $('newMenuList')?.addEventListener('mousemove',e=>{
     markNewMenuSel();
   }
 });
+const spacePicker=$('spPop');
+spacePicker.addEventListener('input',e=>{
+  if(e.target.id!=='spSearch') return;
+  spaceFilter=e.target.value;
+  paintSpaceItems();
+});
+spacePicker.addEventListener('keydown',e=>{
+  if(e.isComposing) return;
+  if(spaceDrag&&e.key==='Escape'){
+    e.preventDefault();e.stopPropagation();
+    const cancelId=spaceDrag.id; cancelSpaceDrag();
+    spacePicker.querySelector('[data-spdrag="'+cancelId+'"]')?.focus();
+    return;
+  }
+  if(e.key==='Escape'){
+    e.preventDefault();e.stopPropagation();closePops();$('spBtn').focus();
+    return;
+  }
+  const active=e.target;
+  const options=Array.from(spacePicker.querySelectorAll('.sp-select'));
+  if(active.id==='spSearch'){
+    if(e.key==='Enter'&&options.length){e.preventDefault();options[0].click();}
+    else if(e.key==='ArrowDown'&&options.length){e.preventDefault();options[0].focus();}
+    else if(e.key==='ArrowUp'&&options.length){e.preventDefault();options[options.length-1].focus();}
+    return;
+  }
+  const grip=active.closest('[data-spdrag]');
+  if(grip&&e.altKey&&(e.key==='ArrowUp'||e.key==='ArrowDown')){
+    e.preventDefault();
+    const id=grip.dataset.spdrag;
+    if(moveSpaceStep(id,e.key==='ArrowUp'?-1:1))
+      spacePicker.querySelector('[data-spdrag="'+id+'"]')?.focus();
+    return;
+  }
+  const option=active.closest('.sp-select');
+  if(!option) return;
+  const idx=options.indexOf(option);
+  if(e.key==='ArrowDown'&&idx>=0){e.preventDefault();options[(idx+1)%options.length].focus();}
+  else if(e.key==='ArrowUp'&&idx>=0){e.preventDefault();options[(idx+options.length-1)%options.length].focus();}
+  else if(e.key==='Home'){e.preventDefault();options[0]?.focus();}
+  else if(e.key==='End'){e.preventDefault();options[options.length-1]?.focus();}
+});
+let spaceDrag=null;
+function clearSpaceDropMarkers(){
+  spacePicker.querySelectorAll('.dragging,.drop-before,.drop-after').forEach(el=>
+    el.classList.remove('dragging','drop-before','drop-after'));
+}
+function cancelSpaceDrag(){
+  clearSpaceDropMarkers(); spaceDrag=null;
+}
+spacePicker.addEventListener('pointerdown',e=>{
+  const grip=e.target.closest('[data-spdrag]');
+  if(!grip||grip.disabled||e.button!==0) return;
+  spaceDrag={id:grip.dataset.spdrag,pointer:e.pointerId,
+    startX:e.clientX,startY:e.clientY,moved:false,dest:null,after:false};
+  grip.setPointerCapture(e.pointerId);
+});
+spacePicker.addEventListener('pointermove',e=>{
+  const drag=spaceDrag;
+  if(!drag||drag.pointer!==e.pointerId) return;
+  if(!drag.moved&&Math.hypot(e.clientX-drag.startX,e.clientY-drag.startY)<7) return;
+  drag.moved=true;
+  clearSpaceDropMarkers();
+  spacePicker.querySelector('[data-spentry="'+drag.id+'"]')?.classList.add('dragging');
+  const target=document.elementFromPoint(e.clientX,e.clientY)?.closest('[data-spentry]');
+  if(!target||target.dataset.spentry===drag.id){drag.dest=null;return;}
+  drag.dest=target.dataset.spentry;
+  const rect=target.getBoundingClientRect();
+  drag.after=e.clientY>rect.top+rect.height/2;
+  target.classList.add(drag.after?'drop-after':'drop-before');
+});
+spacePicker.addEventListener('pointerup',e=>{
+  const drag=spaceDrag;
+  if(!drag||drag.pointer!==e.pointerId)return;
+  const {id,dest,after,moved}=drag;
+  cancelSpaceDrag();
+  if(moved&&dest&&moveSpace(id,dest,after)){
+    spacePicker.querySelector('[data-spdrag="'+id+'"]')?.focus({preventScroll:true});
+    toast('Ordem dos espaços atualizada');
+  }
+});
+spacePicker.addEventListener('pointercancel',()=>cancelSpaceDrag());
 $('spPop').onclick=e=>{
   const mb=e.target.closest('[data-spmore]');
   if(mb){ e.stopPropagation(); spaceMenu(mb.dataset.spmore,mb); return; }
@@ -2140,7 +2289,7 @@ $('spPop').onclick=e=>{
       store.set('space',space); paintSpaces(); paintNav(); route(true); toast('Espaço “'+n+'” criado'); });
     return;
   } else space=b.dataset.sp;
-  store.set('space',space); closePops(); paintSpaces(); paintNav(); route(true);
+  store.set('space',space); closePops(); spaceFilter=''; paintSpaces(); paintNav(); route(true); $('spBtn').focus({preventScroll:true});
 };
 /* Ajuda & Recursos Drawer (Issue #53) */
 $('sideHelpBtn')?.addEventListener('click',e=>{
@@ -3104,7 +3253,7 @@ function spaceMenu(id,anchor){
 }
 nav.addEventListener('contextmenu',e=>{ const a=e.target.closest('.doc'); if(!a) return; e.preventDefault(); docMenu(a.dataset.id,null,e.clientX,e.clientY); });
 document.addEventListener('click',e=>{ if(!e.target.closest('.ctx')&&!e.target.closest('[data-more],[data-spmore],[data-sort],[data-tree-more],[data-sec-more]')) closeCtx(); });
-function saveSpaces(){ store.set('spaces',spaces.filter(s=>s.id!=='dataprev')); store.set('baseName',BASE_SP.name); }
+function saveSpaces(){ store.set('spaces',spaces.filter(s=>s.id!=='dataprev')); store.set('spaceOrder',spaces.map(s=>s.id)); store.set('baseName',BASE_SP.name); }
 ctx.addEventListener('click',e=>{
   const b=e.target.closest('[data-act]'); if(!b||!ctxFor) return;
   const act=b.dataset.act, f=ctxFor; closeCtx(); closePops();
