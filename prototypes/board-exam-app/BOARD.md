@@ -980,6 +980,23 @@ O que Ian mostrou como modelo para a sidebar: tipos de objeto, ordenar, hover, l
 >   - Modo Overlay Sheet ativado entre `769px` e `1024px` (`matchMedia('(max-width:1024px)')`), garantindo que o painel contextual abra sobreposto sem esmagar o conteúdo central abaixo de `480px`.
 >   - Em mobile (<= `768px`), gavetas operam com scrim e redimensionamentos são desativados.
 
+> **Resolução Técnica: Linha Superior Combinada [+ Novo] [Buscar], NewContentMenu & Ações Globais de 31px (Issue #50)**
+> 
+> - **Linha Superior Combinada (`.side-comb`):**
+>   - Localizada logo abaixo de `.side-top` (`padding: 4px 10px 8px; gap: 6px`).
+>   - Botão `[+ Novo]` (`#sideNewBtn`): `flex: 1`, altura `33px`, `border-radius: 7px`, background sutil (`var(--hover)` / `var(--active)`), ícone SVG `[+]` de `16px` e label `Novo`.
+>   - Botão `[Buscar]` (`#sideSearchBtn`): quadrado `33px × 33px`, `border-radius: 7px`, ícone SVG de lupa `16px`, atalho `(Ctrl+K)`.
+> - **Popover Pesquisável NewContentMenu (`#newMenu`):**
+>   - Abre posicionado imediatamente abaixo do botão `[+ Novo]` ao clicar ou via atalho `Ctrl+Alt+N` / `Cmd+Alt+N`.
+>   - Campo de busca instantânea com foco automático (`#newMenuIn`), filtrando tipos de objetos por nome em português ou inglês.
+>   - Lista rolável (`#newMenuList`) exibindo todos os tipos ativos do espaço com badge quadrado colorido `20x20px` (`.nm-badge.tone-type-*`), rótulo no singular e contagem de instâncias no espaço.
+>   - Navegação completa por teclado: setas `↑↓` percorrem itens com destaque visual e `scrollIntoView`, `Enter` cria o tipo selecionado (`createObj(t)`), e `Esc` fecha o menu devolvendo o foco.
+>   - Rodapé fixo com convenção Capacities: `↑↓ navegar · Esc abortar · ↵ selecionar`.
+> - **Ações Globais da Sidebar de 31px:**
+>   - Itens padronizados com altura de `31px`, `border-radius: 6px`, `font-size: 14px`, peso regular (`font-weight: 400`), espaçamento `gap: 8px` e ícones SVG vetoriais monocromáticos de `16px` (`stroke-width: 1.8`).
+>   - Entradas primárias: `Início` (`#/espaco`), `Tarefas / Revisão` (`#/revisao`), `Explorar` (`#/explorar`).
+> - **Conformidade com a Zero Emoji Policy (Issue #42):** 100% livre de emojis Unicode em tags, botões, badges e comentários.
+
 ## 29. Engenharia da Barra Direita & Motor de Grafo do Capacities + Central de Preparação & Questões do QConcursos Elite (Issues #64 e #66 a #72)
 <!-- container e800 @ (5000,11000) -->
 

@@ -257,6 +257,7 @@
     "e726",
     "e728",
     "e729",
+    "e730",
     "e630",
     "e800",
     "e801",
@@ -2752,7 +2753,7 @@
       "x": 3300,
       "y": 11000,
       "w": 1600,
-      "h": 5250,
+      "h": 5800,
       "color": "white",
       "text": "28. Dossiê Comparativo: Web Shell Atual (0.1.1) vs. Branches Antigas (docs/archives/) & Capacities Live (Issues #47 a #50 e #52 a #58)"
     },
@@ -3984,6 +3985,14 @@
       "w": 700,
       "h": 530,
       "text": "**Resolução Técnica: Colapso Off-Canvas Total (0px) & ResizableHandle na Sidebar (Issue #49)**\n\n- **Colapso Off-Canvas Total (0px):**\n  - Substituição do rail residual de `56px` por recolhimento real para `0px` (`.app.collapsed .side { width: 0 !important; min-width: 0 !important; max-width: 0 !important; overflow: hidden !important; border-right: none !important; pointer-events: none; }`).\n  - Todo o espaço horizontal é imediatamente liberado para a superfície flutuante central (`AppShellSurface` / `.main`).\n- **Alça de Redimensionamento da Sidebar (`#sideRz`):**\n  - Inserido elemento `.side-rz` na borda direita da sidebar (`role=\"separator\"`, `aria-orientation=\"vertical\"`, `tabindex=\"0\"`, `touch-action: none`).\n  - Drag fluído via `pointerdown` / `setPointerCapture` e atalhos de teclado `ArrowLeft` / `ArrowRight` (passos de `24px`).\n  - Limites padronizados de `workspace-layout.ts`: mínimo `224px`, padrão `284px`, máximo `384px`.\n  - Duplo-clique restaura a largura padrão (`284px`).\n  - Persistência contínua em `localStorage` sob a chave `sidew`.\n  - Estilo Capacities: linha sutil translúcida no hover / drag (`linear-gradient(90deg, transparent 5px, var(--faint) 5px, var(--faint) 7px, transparent 7px)`).\n- **Ajustes e Breakpoints do Painel Contextual Direito (`#rpanel`):**\n  - Limites atualizados: mínimo `240px`, padrão `420px`, máximo `640px`.\n  - Duplo-clique em `#rpRz` restaura o padrão de `420px` e persiste sob a chave `rpw`.\n  - Modo Overlay Sheet ativado entre `769px` e `1024px` (`matchMedia('(max-width:1024px)')`), garantindo que o painel contextual abra sobreposto sem esmagar o conteúdo central abaixo de `480px`.\n  - Em mobile (<= `768px`), gavetas operam com scrim e redimensionamentos são desativados."
+    },
+    "e730": {
+      "type": "shape",
+      "x": 4070,
+      "y": 15580,
+      "w": 700,
+      "h": 500,
+      "text": "**Resolução Técnica: Linha Superior Combinada [+ Novo] [Buscar], NewContentMenu & Ações Globais de 31px (Issue #50)**\n\n- **Linha Superior Combinada (`.side-comb`):**\n  - Localizada logo abaixo de `.side-top` (`padding: 4px 10px 8px; gap: 6px`).\n  - Botão `[+ Novo]` (`#sideNewBtn`): `flex: 1`, altura `33px`, `border-radius: 7px`, background sutil (`var(--hover)` / `var(--active)`), ícone SVG `[+]` de `16px` e label `Novo`.\n  - Botão `[Buscar]` (`#sideSearchBtn`): quadrado `33px × 33px`, `border-radius: 7px`, ícone SVG de lupa `16px`, atalho `(Ctrl+K)`.\n- **Popover Pesquisável NewContentMenu (`#newMenu`):**\n  - Abre posicionado imediatamente abaixo do botão `[+ Novo]` ao clicar ou via atalho `Ctrl+Alt+N` / `Cmd+Alt+N`.\n  - Campo de busca instantânea com foco automático (`#newMenuIn`), filtrando tipos de objetos por nome em português ou inglês.\n  - Lista rolável (`#newMenuList`) exibindo todos os tipos ativos do espaço com badge quadrado colorido `20x20px` (`.nm-badge.tone-type-*`), rótulo no singular e contagem de instâncias no espaço.\n  - Navegação completa por teclado: setas `↑↓` percorrem itens com destaque visual e `scrollIntoView`, `Enter` cria o tipo selecionado (`createObj(t)`), e `Esc` fecha o menu devolvendo o foco.\n  - Rodapé fixo com convenção Capacities: `↑↓ navegar · Esc abortar · ↵ selecionar`.\n- **Ações Globais da Sidebar de 31px:**\n  - Itens padronizados com altura de `31px`, `border-radius: 6px`, `font-size: 14px`, peso regular (`font-weight: 400`), espaçamento `gap: 8px` e ícones SVG vetoriais monocromáticos de `16px` (`stroke-width: 1.8`).\n  - Entradas primárias: `Início` (`#/espaco`), `Tarefas / Revisão` (`#/revisao`), `Explorar` (`#/explorar`).\n- **Conformidade com a Zero Emoji Policy (Issue #42):** 100% livre de emojis Unicode em tags, botões, badges e comentários."
     }
   }
 }
