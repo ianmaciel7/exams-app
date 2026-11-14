@@ -600,20 +600,6 @@ Prints em /mnt/project-files/prints/redesign-paginas-objeto/
 
 ![imagem e305](assets/b7e3a67f5e62b599877bb5b3174ea4c0.png)
 
-**Concurso, antes e depois** (0.1.1). Ian: as páginas de objeto estavam feias e sem cara de 2026; pediu redesign.
-
-**Edição, antes e depois** (0.1.1).
-
-![imagem e307](assets/4916231707b4b56575f007bdc921fa91.png)
-
-![imagem e309](assets/fc38ad7f1771ecbdbcc5341596b58f24.png)
-
-**Cargo, antes e depois** (0.1.1).
-
-**Tipo PDF, antes e depois** (0.1.1).
-
-### Feedback do Ian sobre a 0.1.1 (prints do protótipo)
-
 Capturas enviadas por Ian durante a revisão da 0.1.1, em 12 e 13/11.
 
 ![imagem e313](assets/265be9aa9703f3cc57f43d3c62f96de1.png)
@@ -715,6 +701,37 @@ Capturas da fase em que o Ian pediu um artefato só para o protótipo e outro pa
 ![imagem e361](assets/f9c476ddeb52b075e841baacdff748f1.png)
 
 **Board Exam App no canvas** (visão geral, 12/11).
+
+## 23. Especificação do Painel de Propriedades (Capacities & Obsidian Properties v1.4+)
+<!-- container e504 @ (0,8000) -->
+
+### Modernização do Painel de Propriedades (Capacities & Obsidian Parity)
+
+- **Container Estruturado (.props-card)**: Card com cantos arredondados (10px), borda sutil `var(--line)`, fundo secundário `var(--side)` e sombra delicada.
+- **Cabeçalho Compacto & Recolhível (.props-head)**:
+  - Título `Propriedades` acompanhado do contador de campos preenchidos (`• N`).
+  - Chevron interativo `▾` para colapsar e expandir com animação suave e `prefers-reduced-motion`.
+- **Linhas de Propriedade Tipadas (.op-prop)**:
+  - Coluna 1 (130px): Ícone semântico por tipo de dado (Etiqueta para Tipo, Calendário para Edição/Data, Prédio para Órgão, Bandeira para Banca, Maleta para Cargo, Alvo para Vagas, Gráfico para Remuneração/Pontuação) + rótulo com tipografia discreta (`12px; var(--muted)`).
+  - Coluna 2: Valor interativo (chip semântico com cor de entidade, badge, valor monetário/numérico ou placeholder clicável `+ Adicionar`).
+  - Hover suave na linha com highlight e botão de edição rápido (`.op-pen` / `.op-ed`).
+- **Governança & Preservação**:
+  - Implementação compatível com handlers existentes (`data-edit-chip`, `data-edit-prop`, `data-edit-cv`, `data-add-prop`).
+  - Memória contínua registrada no board conforme regra estrita de AGENTS.md.
+
+**Concurso, antes e depois** (0.1.1). Ian: as páginas de objeto estavam feias e sem cara de 2026; pediu redesign.
+
+**Edição, antes e depois** (0.1.1).
+
+![imagem e307](assets/4916231707b4b56575f007bdc921fa91.png)
+
+![imagem e309](assets/fc38ad7f1771ecbdbcc5341596b58f24.png)
+
+**Cargo, antes e depois** (0.1.1).
+
+**Tipo PDF, antes e depois** (0.1.1).
+
+### Feedback do Ian sobre a 0.1.1 (prints do protótipo)
 
 ## 10. Arquivos do projeto (Dataprev 2026 e referências)
 <!-- container e363 @ (0,12666) -->

@@ -738,6 +738,23 @@ a.ot{display:block;padding:3px 0;min-height:24px}
 .op-icon{display:grid;place-items:center;width:60px;height:60px;border-radius:16px;flex:none;background:color-mix(in srgb,currentColor 12%,transparent)}.op-icon svg{width:30px;height:30px}.op-icon img{width:34px;height:34px}
 .op-kind{display:inline-block;font-size:12.5px;color:var(--muted);text-decoration:none;border-radius:4px}a.op-kind:hover{color:var(--text);text-decoration:underline}
 .op-ht h1{margin:3px 0 0;font-size:32px;line-height:1.14;letter-spacing:-.022em;font-weight:650;overflow-wrap:anywhere}
+/* ---- Modern Properties Panel (Capacities / Obsidian parity) ---- */
+.props-card{border:1px solid var(--line);border-radius:10px;background:var(--side);overflow:hidden;margin:0 0 16px;box-shadow:0 1px 3px rgba(0,0,0,.03);transition:border-color .15s ease}
+.props-card:hover{border-color:color-mix(in srgb, var(--line) 70%, var(--muted))}
+.props-head{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:transparent;cursor:pointer;user-select:none;font-size:12px;font-weight:600;letter-spacing:.02em;color:var(--muted);border-bottom:1px solid transparent;transition:background-color .15s ease}
+.props-head:hover{background:var(--hover);color:var(--text)}
+.props-title{display:inline-flex;align-items:center;gap:6px}
+.props-count{font-weight:400;opacity:.75;font-size:11px}
+.props-chev{font-size:10px;transition:transform .2s ease;opacity:.7}
+.props-card.is-collapsed .props-chev{transform:rotate(-90deg)}
+.props-card.is-collapsed .props-body{display:none}
+.props-card .op-props{margin:0;padding:4px 0;border:0;background:var(--bg)}
+.props-card .op-prop{display:grid;grid-template-columns:130px minmax(0,1fr);gap:8px;align-items:center;padding:5px 12px;font-size:12.5px;min-height:30px;transition:background-color .12s ease;border-radius:6px;margin:1px 4px}
+.props-card .op-prop:hover{background:var(--hover)}
+.props-card .op-prop dt{display:flex;align-items:center;gap:6px;color:var(--muted);font-weight:500;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.props-card .prop-ico{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;flex:none;opacity:.85;color:inherit}
+.props-card .prop-ico svg{width:14px;height:14px}
+.props-card .op-prop dd{margin:0;display:flex;align-items:center;flex-wrap:wrap;gap:6px;min-width:0;font-size:12.5px}
 .op-props{margin:0;padding:8px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.op-props.flat{border:0;padding:0}
 .op-prop{display:grid;grid-template-columns:150px minmax(0,1fr);gap:12px;align-items:baseline;padding:6px 0;font-size:13.5px}.op-prop dt{color:var(--muted)}.op-prop dd{margin:0;display:flex;flex-wrap:wrap;gap:6px;min-width:0}.op-val{color:var(--text);line-height:1.45}
 .op-sec{margin-top:34px}.op-sech{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
@@ -2403,14 +2420,25 @@ const OPI=()=>Object.assign(TYI(),{espaco:SI.collection});
 const opIcon=(k,iid)=>'<button type="button" class="op-icon op-ibtn t-'+k+'" data-pick-icon="'+esc(iid||'')+'" aria-label="Alterar ícone" title="Alterar ícone">'+iconSvg(iid,OPI()[k]||SI.file)+'</button>';
 const opTxt=t=>'<span class="op-val">'+esc(t)+'</span>';
 const EMPTYOK=['Órgão','Banca'];
-const opProps0=(rows,iid)=>{ const o=OV(); const r=rows.filter(x=>x&&(x[1]||(iid&&EMPTYOK.includes(x[0])))); return r.length?'<dl class="op-props">'+r.map(([l,v])=>{ const k='prop:'+iid+'|'+l; let inner=v;
-    const editable=iid&&(l==='Órgão'||l==='Banca'||(l==='Concurso'&&iid.startsWith('edicao:'))||(l==='Edição'&&iid.startsWith('cargo:')));
-    if(editable){ const ov=o[k], isT=(l==='Órgão'||l==='Banca'); const shown=(ov!==undefined&&isT)?chipA(ov,valHref(l==='Órgão'?'orgao':'banca',ov)):(v||'<span class="op-val op-ph">Adicionar</span>');
-      return '<div class="op-prop"><dt>'+esc(l)+'</dt><dd><span class="op-chipv">'+shown+'</span><button type="button" class="op-pen" data-edit-chip="'+esc(iid+'|'+l)+'" aria-label="Editar '+esc(l)+'" title="Editar '+esc(l)+'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg></button></dd></div>'; }
-    if(iid){ const ov=o[k]; const plain=!v||/^<span class="op-val">[^<]*<\/span>$/.test(v)||ov!==undefined;
-      if(ov!==undefined) inner=opTxt(ov); else if(!v) inner='<span class="op-val op-ph">Adicionar</span>';
-      if(plain||!v) inner='<button type="button" class="op-ed" data-edit-prop="'+esc(k)+'" aria-label="Editar '+esc(l)+'">'+inner+'</button>'; }
-    return '<div class="op-prop"><dt>'+esc(l)+'</dt><dd>'+inner+'</dd></div>'; }).join('')+'</dl>':''; };
+const propIcon=l=>{
+  const s=normN(l||'');
+  if(s==='tipo') return IC.tag;
+  if(s==='concurso'||s==='estende') return SI.collection;
+  if(s==='edicao'||s.includes('data')) return SI.calendar;
+  if(s==='cargo') return SI.briefcase;
+  if(s==='orgao') return IC.building;
+  if(s==='banca') return IC.flag;
+  if(s.includes('vaga')||s.includes('alvo')) return IC.target;
+  if(s.includes('remunera')||s.includes('ponto')||s.includes('nota')||s.includes('acerto')) return IC.chart;
+  if(s.includes('tempo')||s.includes('duracao')) return IC.timer;
+  if(s.includes('disciplina')||s.includes('materia')) return IC.cap;
+  if(s.includes('questao')||s.includes('resposta')) return IC.help;
+  return IC.bookmark;
+};
+const opPropRow=(l,inner)=>{
+  const ico='<span class="prop-ico" aria-hidden="true">'+propIcon(l)+'</span>';
+  return '<div class="op-prop"><dt>'+ico+'<span class="prop-txt">'+esc(l)+'</span></dt><dd>'+inner+'</dd></div>';
+};
 function relTargets(kind){ const sp=space;
   if(kind==='Concurso') return CONCURSOS.filter(c=>c.sp===sp&&!isT(c.id)).map(c=>({id:c.id,t:c.t,h:'#/concurso/'+c.id}));
   if(kind==='Edição') return edicoesOf(sp).map(e=>({id:e.id,t:e.t,h:'#/edicao/'+e.id}));
@@ -2427,8 +2455,35 @@ function custRows(iid){ if(!/^(concurso|edicao|cargo):/.test(iid||'')) return ''
   const t=iid.slice(0,iid.indexOf(':')), o=OV();
   return typeProps(t).filter(x=>PROPS[x.k].custom).map(x=>{ const kind=pkOf(x.from,x.k), key='cv:'+iid+'|'+x.k, v=o[key];
     const val=cvShow(x.k,kind,v);
-    return '<div class="op-prop"><dt>'+esc(PROPS[x.k].n)+'</dt><dd>'+(kind[0]==='rel'&&v?'<span class="op-relv">'+val+'</span> ':'')+'<button type="button" class="op-ed" data-edit-cv="'+esc(iid+'|'+x.k)+'" aria-label="Editar '+esc(PROPS[x.k].n)+'">'+(kind[0]==='rel'&&v?'<span class="op-val op-ph">Alterar</span>':val)+'</button></dd></div>'; }).join(''); }
-const opProps=(rows,iid)=>{ const base=opProps0(rows,iid), cu=custRows(iid); if(!cu) return base; if(!base) return '<dl class="op-props">'+cu+'</dl>'; return base.replace(/<\/dl>$/,cu+'</dl>'); };
+    const inner=(kind[0]==='rel'&&v?'<span class="op-relv">'+val+'</span> ':'')+'<button type="button" class="op-ed" data-edit-cv="'+esc(iid+'|'+x.k)+'" aria-label="Editar '+esc(PROPS[x.k].n)+'">'+(kind[0]==='rel'&&v?'<span class="op-val op-ph">Alterar</span>':val)+'</button>';
+    return opPropRow(PROPS[x.k].n,inner); }).join(''); }
+const opProps=(rows,iid)=>{
+  const o=OV(); const r=rows.filter(x=>x&&(x[1]||(iid&&EMPTYOK.includes(x[0]))));
+  const baseItems=r.map(([l,v])=>{ const k='prop:'+iid+'|'+l; let inner=v;
+    const editable=iid&&(l==='Órgão'||l==='Banca'||(l==='Concurso'&&iid.startsWith('edicao:'))||(l==='Edição'&&iid.startsWith('cargo:')));
+    if(editable){ const ov=o[k], isT=(l==='Órgão'||l==='Banca'); const shown=(ov!==undefined&&isT)?chipA(ov,valHref(l==='Órgão'?'orgao':'banca',ov)):(v||'<span class="op-val op-ph">Adicionar</span>');
+      inner='<span class="op-chipv">'+shown+'</span><button type="button" class="op-pen" data-edit-chip="'+esc(iid+'|'+l)+'" aria-label="Editar '+esc(l)+'" title="Editar '+esc(l)+'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg></button>';
+      return opPropRow(l,inner);
+    }
+    if(iid){ const ov=o[k]; const plain=!v||/^<span class="op-val">[^<]*<\/span>$/.test(v)||ov!==undefined;
+      if(ov!==undefined) inner=opTxt(ov); else if(!v) inner='<span class="op-val op-ph">Adicionar</span>';
+      if(plain||!v) inner='<button type="button" class="op-ed" data-edit-prop="'+esc(k)+'" aria-label="Editar '+esc(l)+'">'+inner+'</button>';
+    }
+    return opPropRow(l,inner);
+  }).join('');
+  const cu=custRows(iid);
+  const allRows=baseItems+cu;
+  if(!allRows) return '';
+  const count=r.length+(cu?(cu.match(/class="op-prop"/g)||[]).length:0);
+  return '<div class="props-card" data-props-for="'+esc(iid||'')+'">'+
+    '<div class="props-head" role="button" tabindex="0" onclick="this.closest('.props-card').classList.toggle('is-collapsed')" aria-label="Recolher ou expandir propriedades">'+
+      '<span class="props-title"><span class="props-title-txt">Propriedades</span><small class="props-count">• '+count+'</small></span>'+
+      '<span class="props-chev">▾</span>'+
+    '</div>'+
+    '<div class="props-body"><dl class="op-props">'+allRows+'</dl></div>'+
+  '</div>';
+};
+const opProps0=opProps;
 const objHref=d=>d.type==='questao'?'#/questao/'+d.id:isEntT(d.type)?'#/'+d.type+'/'+d.id:d.type==='concurso'?'#/concurso/'+d.id:d.type==='edicao'?'#/edicao/'+d.id:d.type==='cargo'?'#/cargo/'+d.id:'#'+d.id;
 const opRow0=o=>'<a class="op-row" href="'+o.href+'">'+(o.icon?'<span class="op-ri t-'+o.icon+'" aria-hidden="true">'+iconSvg(o.iid,OPI()[o.icon]||SI.file)+'</span>':'')+'<span class="op-rt"><b>'+esc(o.title)+'</b>'+(o.meta?'<small>'+esc(o.meta)+'</small>':'')+'</span>'+(o.tail?'<span class="op-tail">'+esc(o.tail)+'</span>':'')+'<span class="op-go" aria-hidden="true">›</span></a>';
 const opRow=o=>o.pinId?'<div class="op-rw">'+opRow0(o)+'</div>':opRow0(o);
