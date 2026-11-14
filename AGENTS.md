@@ -613,6 +613,87 @@ As 20 URLs estão **dentro do AGENTS.md**, não apenas em documento externo. **A
 
 **Fontes para as regras de formulários:** [NN/g — EAS](https://www.nngroup.com/articles/eas-framework-simplify-forms/), [NN/g — quatro princípios](https://www.nngroup.com/articles/4-principles-reduce-cognitive-load/), [WCAG 2.2](https://www.w3.org/TR/WCAG22/) e [WAI-ARIA APG](https://www.w3.org/WAI/ARIA/apg/). Essas regras são **diretrizes específicas do Exam App** fundamentadas nos conceitos, não citações literais nem novos critérios de conformidade.
 
+### 14. Critérios ergonômicos, formulários e acessibilidade — Context7 (14/11/2026)
+
+**Classificação e prevenção de duplicidade:** esta extensão reúne **8 critérios de Bastien & Scapin**, **10 princípios de Gerhardt-Powals**, **4 partes ISO 9241**, **7 critérios específicos WCAG 2.2** e diretrizes de sistemas de design verificadas com **Context7** (Material Design 3, GitHub Primer e Ant Design). A presença de um nome novo não significa necessariamente que o conceito fosse ausente: muitos itens ampliam as heurísticas de Nielsen/ISO e as seções 10–13. **Critérios ergonômicos, princípios cognitivos e padrões de produtos não são leis científicas nem normas WCAG.** Fontes ISO são identificadas por título e escopo publicamente disponível; não presumir acesso à íntegra licenciada nem declarar conformidade sem avaliação.
+
+#### 14.1. Bastien & Scapin (1993) — Ergonomic Criteria for the Evaluation of Human-Computer Interfaces
+
+| # | Nome original | Português | Critério de aplicação no Exam App | Fonte |
+|---:|---|---|---|---|
+| 1 | Guidance | Orientação | Ajudar a localizar e entender campos, ajuda, grupos, estados e feedback. | [Bastien & Scapin — Ergonomic Criteria (1993)](https://www.margaux-perrin.com/wp-content/uploads/2018/08/Bastien-and-Scapin-1993.pdf) |
+| 2 | Workload | Carga de trabalho | Reduzir carga motora e cognitiva, ações e densidade desnecessárias. | [Bastien & Scapin (1993)](https://www.margaux-perrin.com/wp-content/uploads/2018/08/Bastien-and-Scapin-1993.pdf) |
+| 3 | Explicit Control | Controle explícito | Diferenciar ação iniciada pelo usuário de efeitos automáticos, preservando controle, interrupção e reversibilidade. | [Bastien & Scapin (1993)](https://www.margaux-perrin.com/wp-content/uploads/2018/08/Bastien-and-Scapin-1993.pdf) |
+| 4 | Adaptability | Adaptabilidade | Atender níveis diferentes de experiência sem esconder ações essenciais. | [Bastien & Scapin (1993)](https://www.margaux-perrin.com/wp-content/uploads/2018/08/Bastien-and-Scapin-1993.pdf) |
+| 5 | Error Management | Gestão de erros | Prevenir erro, apresentar mensagens acionáveis e permitir correção sem apagar trabalho. | [Bastien & Scapin (1993)](https://www.margaux-perrin.com/wp-content/uploads/2018/08/Bastien-and-Scapin-1993.pdf) |
+| 6 | Consistency | Consistência | Usar controles, rótulos, apresentação e feedback coerentes em fluxos equivalentes. | [Bastien & Scapin (1993)](https://www.margaux-perrin.com/wp-content/uploads/2018/08/Bastien-and-Scapin-1993.pdf) |
+| 7 | Significance of Codes (and Denominations) | Significado dos códigos e denominações | Evitar abreviações obscuras, ícones sem significado e nomenclaturas inconsistentes. | [Bastien & Scapin (1993)](https://www.margaux-perrin.com/wp-content/uploads/2018/08/Bastien-and-Scapin-1993.pdf) |
+| 8 | Compatibility | Compatibilidade | Ajustar interface às tarefas, contexto e expectativas do estudante. | [Bastien & Scapin (1993)](https://www.margaux-perrin.com/wp-content/uploads/2018/08/Bastien-and-Scapin-1993.pdf) |
+
+**Subcritérios especialmente relevantes (nomes publicados):** **Prompting**, **Grouping/Distinction by Location**, **Grouping/Distinction by Format**, **Immediate Feedback**, **Legibility**, **Brevity**, **Concision**, **Minimal Actions**, **Information Density**, **Explicit User Action**, **User Control**, **Flexibility**, **User Experience**, **Error Protection**, **Quality of Error Messages** e **Error Correction**. O conjunto possui **18 critérios elementares** na organização original, sem tratar cada um como uma nova lei separada.
+
+- **MUST** usar **Explicit User Action** para questionar mudanças inesperadas de navegação ou submissões disparadas pela edição de um campo; **não confundir** com proibição universal de autosave ou atualização imediata de filtros.
+- **SHOULD** usar **Minimal Actions** e **Concision** para eliminar confirmações, campos e etapas redundantes, sem sacrificar prevenção de erros e acessibilidade.
+- **SHOULD** usar **Grouping/Distinction** e **Information Density** para controlar espaçamento semântico, agrupamentos, largura útil e ruído de cards/bordas, sem impor estética universal.
+
+#### 14.2. Gerhardt-Powals (1996) — Cognitive Engineering Principles for Enhancing Human-Computer Performance
+
+| # | Nome original | Aplicação sugerida no Exam App |
+|---:|---|---|
+| 1 | Automate Unwanted Workload | Evitar digitação e seleção repetitivas quando os dados já são conhecidos e confiáveis. |
+| 2 | Reduce Uncertainty | Explicitar o efeito de filtros, validação, envio e salvamento. |
+| 3 | Fuse Data | Integrar dados relacionados em resumos compreensíveis. |
+| 4 | Present New Information with Meaningful Aids to Interpretation | Mostrar exemplos, contexto e explicações quando introduzir campos complexos. |
+| 5 | Use Names That Are Conceptually Related to Function | Nomear ações pelo resultado real, em vez de rótulos técnicos obscuros. |
+| 6 | Group Data in Consistently Meaningful Ways | Organizar campos por assunto e dependência real. |
+| 7 | Limit Data-Driven Tasks | Apresentar sínteses úteis em vez de exigir comparação manual de dados brutos. |
+| 8 | Include Only Information Needed by the Operator | Priorizar informações relevantes no momento da tarefa. |
+| 9 | Provide Multiple Coding of Data | Sinalizar estados também por texto/forma/ícone acessível, não apenas cor. |
+| 10 | Practice Judicious Redundancy | Repetir informação só quando ajuda a executar ou verificar a tarefa. |
+
+**Fonte:** [Gerhardt-Powals, International Journal of Human-Computer Interaction 8(2), 189–211 (1996)](https://doi.org/10.1080/10447319609526147). Trata-se de princípios de engenharia cognitiva, com sobreposição intencional a Nielsen, Gestalt e regras já documentadas; evitar contar duplicatas como avanços de cobertura.
+
+#### 14.3. ISO 9241 — partes relevantes ainda não enumeradas
+
+| Parte / edição | Título oficial | Aplicação de escopo no Exam App | Fonte |
+|---|---|---|---|
+| ISO 9241-143:2012 (confirmada em 2024) | Forms | Referência específica para desenho e avaliação de formulários e campos identificados por rótulos. | [ISO 9241-143](https://www.iso.org/standard/53590.html) |
+| ISO 9241-161:2025 | Visual user-interface elements | Seleção, uso e relação de elementos visuais de UI. | [ISO 9241-161](https://www.iso.org/standard/85790.html) |
+| ISO 9241-115:2024 | Guidance on conceptual design, user-system interaction design, user interface design and navigation design | Arquitetura conceitual, interação, estrutura e navegação. | [ISO 9241-115](https://www.iso.org/standard/80773.html) |
+| ISO 9241-171:2025 | Software accessibility | Avaliação da acessibilidade do software além dos requisitos aplicáveis ao conteúdo web. | [ISO 9241-171](https://www.iso.org/standard/86308.html) |
+
+**Limite:** referências de escopo e títulos disponíveis publicamente, não transcrições de cláusulas ISO licenciadas. **MUST NOT** marcar conformidade com essas normas sem obter os textos integrais pertinentes e realizar avaliação apropriada. Para web, verificar os critérios WCAG aplicáveis independentemente.
+
+#### 14.4. WCAG 2.2 — sete critérios específicos para formulários e interações
+
+| Critério e nível | Nome oficial | Regra de auditoria do Exam App e cuidado de escopo |
+|---|---|---|
+| 3.2.2 (A) | On Input | Alterar valor/seleção não pode provocar inesperadamente **mudança de contexto** sem aviso prévio. Atualizar resultados sem trocar contexto não é automaticamente uma falha. |
+| 3.3.3 (AA) | Error Suggestion | Quando erro é detectado e há sugestão apropriada conhecida, orientar como corrigir, salvo impacto na segurança/finalidade. |
+| 3.3.4 (AA) | Error Prevention (Legal, Financial, Data) | Modificação/exclusão de dados controlados pelo usuário **ou envio de respostas de teste** deve atender **ao menos uma** condição: reversibilidade, verificação com correção ou revisão/confirmação antes de finalizar. **Não exige modal em todas as operações.** |
+| 3.3.7 (A) | Redundant Entry | Na mesma atividade/processo, reaproveitar ou permitir selecionar informação já fornecida, consideradas as exceções (essencial, segurança, validade). Não obriga retenção entre sessões. |
+| 3.3.8 (AA) | Accessible Authentication (Minimum) | No login, não exigir teste de função cognitiva sem uma das alternativas/exceções permitidas; permitir mecanismos adequados de apoio à autenticação. |
+| 1.3.5 (AA) | Identify Input Purpose | Campos sobre informações pessoais dos usuários devem expor programaticamente finalidade quando se enquadrarem na lista de propósitos especificada; não atribuir autocomplete arbitrário a qualquer campo. |
+| 2.5.7 (AA) | Dragging Movements | Interações por arraste devem ter alternativa de ponteiro único sem arraste, salvo exceção de essencialidade. |
+
+**Fonte normativa:** [WCAG 2.2](https://www.w3.org/TR/WCAG22/); orientação por critério em [WAI Understanding](https://www.w3.org/WAI/WCAG22/Understanding/). **MUST** registrar resultado por critério aplicável e evidência, não declarar conformidade apenas porque a regra existe no AGENTS.md.
+
+#### 14.5. Context7 — princípios/padrões oficiais dos design systems (não são leis universais)
+
+| Sistema e fonte | Nome publicado | Aplicação orientativa |
+|---|---|---|
+| [Ant Design — Form Page](https://ant.design/docs/spec/research-form/) | Efficient; Clear; Security | Organização, clareza de causa/efeito, salvamento e reversibilidade; verificar especialmente configuração de simulados. |
+| [Ant Design — Form Page](https://ant.design/docs/spec/research-form/) | Instant Effect Mode; Submission Effect Mode | Para ajustes independentes e reversíveis, atualização imediata é opção; para múltiplas configurações interdependentes, avaliar envio explícito. Não importar números de agrupamento como regras universais. |
+| [Material Design 3 — Text fields](https://m3.material.io/components/text-fields/guidelines) | Filled text fields; Outlined text fields | Variantes com funções equivalentes e ênfase visual distinta; escolher pela hierarquia, pelo contexto e pela distinção de outros componentes. |
+| [GitHub Primer — Forms](https://primer.style/product/ui-patterns/forms/) | Inline validation | Evitar primeira validação prematura enquanto o usuário digita; em geral validar após edição e perda de foco, revalidando um campo já inválido durante correção. Observar latência e leitores de tela. |
+| [GitHub Primer — Text input](https://primer.style/product/components/text-input/guidelines/) | Label; Required indicator; Caption; Validation message; Trailing action | Compor campo completo com nome, instrução, erro acionável e ação local quando pertinente; não usar placeholder como único label. |
+
+**Regra prática consolidada para o Exam App:**
+1. **MUST** distinguir **alterar preferência**, **aplicar filtro**, **editar objeto**, **criar registro** e **entregar simulado**, com consequência e comportamento de salvamento claros e testáveis.
+2. **MUST** validar **On Input (3.2.2)**, **Error Prevention (3.3.4)** e **Redundant Entry (3.3.7)** nos fluxos afetados; aplicar outras normas por escopo e nível, sem generalizações.
+3. **SHOULD** preferir formulários simples, agrupados por sentido, com largura de campo útil, labels e erro próximos do controle; justificar quando ação explícita, autosave, inline edit ou fluxo em etapas é melhor.
+4. **MUST** diferenciar material **consultado e documentado** de **código implementado** e **conformidade testada**. Registrar evidências do fluxo no board/issues quando houver mudança real de UI; esta inclusão documental isolada não exige capturas fabricadas.
+
 <!-- UX-LAWS-CATALOG:END -->
 
 <!-- DESIGN-SYSTEM-INTEGRATION:START -->
