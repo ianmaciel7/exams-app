@@ -444,6 +444,31 @@ Espelho das regras em [AGENTS.md §19](../../AGENTS.md), [DESIGN.md §8.22](../.
 
 **Verificações:** toda interação arrastável deve distinguir drag, teclado e **ponteiro único sem drag**, além de cancelamento, drop inválido, retorno de foco, reduced motion, anúncio do resultado e salvamento real. Animações de ícones devem comunicar estado ou feedback, nunca substituir rótulos ou bloquear ação. Registrar evidência quando houver implementação concreta.
 
+
+### S. Estrutura de páginas e layout — princípios de pesquisa e sistemas de design (2026)
+
+Espelho de [AGENTS.md §20](../../AGENTS.md) e [DESIGN.md §8.23](../../DESIGN.md). **A única categoria chamada estritamente de lei empírica neste catálogo continua na seção específica acima.** Os itens a seguir são **princípios experimentais, teorias e padrão observado** que orientam composição de informação; não devem ser promovidos a novas leis obrigatórias.
+
+| Nome original publicado | Classe | Quando usar na estrutura do Exam App | Fonte original |
+|---|---|---|---|
+| **Proximity Compatibility Principle** | Princípio de fatores humanos, com estudos experimentais | Aproximar informação necessária à comparação ou integração na mesma tarefa; separar quando o foco exclusivo numa dimensão favorecer a leitura. | [Wickens & Carswell (1995)](https://doi.org/10.1518/001872095779049408) |
+| **Spatial Contiguity Principle** | Princípio de aprendizagem multimídia | Manter legenda/explicação e figura instrucional correspondente próximas na questão, PDF e gráfico. | [Mayer / Cambridge](https://www.cambridge.org/core/books/abs/multimedia-learning/spatial-contiguity-principle/B9B79EDC777C375C7ED410B82EF80247) |
+| **Split-Attention Principle / Effect** | Efeito de carga cognitiva em instrução multimídia | Não exigir integrar mentalmente informação indispensável dispersa entre abas ou painéis. | [Ayres & Sweller](https://www.cambridge.org/core/books/abs/cambridge-handbook-of-multimedia-learning/splitattention-principle-in-multimedia-learning/497A2FCB9737E3009B3CF0E4D97F7B99) |
+| **Signaling / Cueing Principle** | Princípio de aprendizagem multimídia | Sinalizar estrutura e elementos relevantes de enunciados, resultados e gráficos por títulos, labels e destaques significativos. | [van Gog (2021)](https://doi.org/10.1017/9781108894333.022) |
+| **Coherence Principle** | Princípio de aprendizagem multimídia | Eliminar elementos instrucionais irrelevantes à tarefa, sem retirar conteúdo necessário. | [Mayer & Fiorella (2021)](https://doi.org/10.1017/9781108894333.019) |
+| **Cognitive Fit Theory** | Teoria de representação e tarefa | Escolher tabela para valores exatos e visualizações para relações/tendências quando adequado, com alternativa acessível. | [Vessey (1991)](https://doi.org/10.1111/j.1540-5915.1991.tb00344.x) |
+| **F-Shaped Reading Pattern** | Padrão observado, **não lei universal** | Títulos e parágrafos escaneáveis em textos longos; não impor toda página no formato F. | [NN/g (2006, revisão 2026)](https://www.nngroup.com/articles/f-shaped-pattern-reading-web-content/) |
+
+**Guias de composição consultados com Context7 (não são leis):**
+
+| Fonte oficial | Nomes publicados | Uso condicionado |
+|---|---|---|
+| [Material 3](https://m3.material.io/foundations/layout/layout-overview/adaptive-design) | **Adaptive Design, Layout Scaffold, Panes, Breakpoints; show and hide, levitate, reflow** | Ajustar barra de navegação, painel central e painel secundário ao espaço e tarefa; não importar diretamente medidas do Android para Web. |
+| [IBM Carbon](https://carbondesignsystem.com/elements/2x-grid/overview/) | **2x Grid; Spacing Tokens** | Coerência de alinhamento e espaçamento, sem impor grid ou tokens Carbon ao sistema atual. |
+| [USWDS](https://designsystem.digital.gov/utilities/layout-grid/) | **Layout Grid; Side Navigation** | Grid responsivo e navegação com indicação da localização e teclado. |
+
+**Reconciliação:** já constam dos documentos Fitts, Hick, Gestalt (Proximity, Similarity, Common Region, Figure–Ground, Prägnanz, Good Continuation), Informação/Information Foraging, Progressive Disclosure, ISO e WCAG. **Não** duplicar suas definições como entradas científicas novas. Padrões F/Z e "tudo acima da dobra" não são leis universais. Registrar evidências reais por fluxo antes de considerar uma regra implementada.
+
 ## Matriz de decisão por superfície
 
 | Superfície | Padrão principal | Primeiro viewport e CTA | Secundário | Mobile e exceção | Verificação |
