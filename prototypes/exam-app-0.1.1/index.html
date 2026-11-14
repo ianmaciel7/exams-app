@@ -738,6 +738,16 @@ a.ot{display:block;padding:3px 0;min-height:24px}
 .op-icon{display:grid;place-items:center;width:60px;height:60px;border-radius:16px;flex:none;background:color-mix(in srgb,currentColor 12%,transparent)}.op-icon svg{width:30px;height:30px}.op-icon img{width:34px;height:34px}
 .op-kind{display:inline-block;font-size:12.5px;color:var(--muted);text-decoration:none;border-radius:4px}a.op-kind:hover{color:var(--text);text-decoration:underline}
 .op-ht h1{margin:3px 0 0;font-size:32px;line-height:1.14;letter-spacing:-.022em;font-weight:650;overflow-wrap:anywhere}
+/* ---- Right Panel Contextual Exploration (Issue #25) ---- */
+.rp-item-row{display:flex;align-items:center;justify-content:space-between;border-radius:8px;position:relative;transition:background-color .12s ease}
+.rp-item-row:hover{background:var(--hover)}
+.rp-item-row .rp-row{flex:1;min-width:0;background:transparent}
+.rp-row-actions{display:none;align-items:center;gap:2px;padding-right:6px;flex:none}
+.rp-item-row:hover .rp-row-actions{display:flex}
+.rp-row-btn{display:grid;place-items:center;width:24px;height:24px;border:0;border-radius:6px;background:transparent;color:var(--muted);cursor:pointer}
+.rp-row-btn:hover{background:var(--active);color:var(--text)}
+.rp-row-btn svg{width:13px;height:13px}
+
 /* ---- Vital Screens UI Refinement (Issues #17 & #19) ---- */
 .q-drawer{border:1px solid var(--line);border-radius:10px;background:var(--side);padding:14px;margin:18px 0;display:none}
 .q-drawer.open{display:block}
@@ -3647,10 +3657,31 @@ function vTitle(v){ if(v.type==='obj'){ const n=nodeOf(v.ref); return n?n.title:
 function rpPaintTabs(){ gr(); $('rpTabs').innerHTML=RP.tabs.map(t=>{ const on=t.id===RP.active, v=t.views[0], ttl=t.views.length>1&&t.views.every(v=>['back','rel'].includes(v.type))?'Contexto':vTitle(v)+(t.views.length>1?' +'+(t.views.length-1):'');
   return '<div class="ws-tab'+(on?' on':'')+'" role="tab" aria-label="'+esc(ttl)+'" aria-selected="'+on+'" tabindex="'+(on?0:-1)+'" data-rp-tab="'+t.id+'" title="'+esc(t.views.map(vTitle).join(' + '))+'"><span class="ws-ti" aria-hidden="true">'+RT[v.type].ic+'</span><span class="ws-tt">'+esc(ttl)+'</span><button type="button" class="ws-tx" tabindex="'+(on?0:-1)+'" data-rp-tabx="'+t.id+'" aria-label="Fechar aba '+esc(ttl)+'">'+WI.x+'</button></div>'; }).join('');
   const L=$('rpTabs'), on=L.querySelector('.on'); if(on&&L.scrollWidth>L.clientWidth){ const a=on.offsetLeft, b=a+on.offsetWidth; if(a<L.scrollLeft) L.scrollLeft=a-4; else if(b>L.scrollLeft+L.clientWidth) L.scrollLeft=b-L.clientWidth+4; } }
-const rpRow=(n,sub)=>'<a class="rp-row" href="'+esc(n.href)+'"><span class="rp-ri k-'+n.kind+'" aria-hidden="true">'+kIcon(n.kind)+'</span><span class="rp-rt"><b>'+esc(n.title)+'</b><small>'+esc(sub||n.sub||kn(n.kind))+'</small></span></a>';
+const rpRow=(n,sub)=>{
+  return '<div class="rp-item-row">'+
+    '<a class="rp-row" href="'+esc(n.href)+'" title="Abrir '+esc(n.title)+' no centro">'+
+      '<span class="rp-ri k-'+n.kind+'" aria-hidden="true">'+kIcon(n.kind)+'</span>'+
+      '<span class="rp-rt"><b>'+esc(n.title)+'</b><small>'+esc(sub||n.sub||kn(n.kind))+'</small></span>'+
+    '</a>'+
+    '<div class="rp-row-actions">'+
+      '<button type="button" class="rp-row-btn" data-rp-open-graf="'+esc(n.href)+'" title="Ver no grafo contextual" aria-label="Ver no grafo">'+RT.graf.ic+'</button>'+
+      '<button type="button" class="rp-row-btn" data-rp-open-back="'+esc(n.href)+'" title="Ver referências e backlinks" aria-label="Ver referências">'+RT.back.ic+'</button>'+
+      '<button type="button" class="rp-row-btn" data-vtab="'+esc(n.href)+'" title="Abrir em nova aba" aria-label="Abrir em nova aba">'+WI.plus+'</button>'+
+    '</div>'+
+  '</div>';
+};
 const rpEmpty=(t,s,extra)=>'<div class="rp-empty"><b>'+esc(t)+'</b>'+esc(s||'')+(extra||'')+'</div>';
 const toolBtns=(cls)=>'<div class="rp-tools">'+['explorar','graf','back','rel','ia'].map(k=>'<button type="button" class="rp-btn '+(cls||'')+'" data-rp-new="'+k+'">'+RT[k].ic+' '+RT[k].n+'</button>').join('')+'</div>';
-function ctxBar(v,n){ if(!v.ref&&!n) return ''; return '<div class="rp-ctx">'+(v.ref?'<span>Fixado em</span>':'<span>Sobre</span>')+(n?'<b>'+esc(n.title)+'</b>':'')+(v.ref?'<button type="button" class="rp-link" data-unpin="'+v.id+'">Seguir o contexto</button>':'')+'</div>'; }
+function ctxBar(v,n){
+  if(!v.ref&&!n) return '';
+  return '<div class="rp-ctx">'+
+    (v.ref?'<span>Fixado em</span>':'<span>Sobre</span>')+
+    (n?'<b>'+esc(n.title)+'</b>':'')+
+    (v.ref?
+      '<button type="button" class="rp-link" data-unpin="'+v.id+'">Seguir contexto</button>':
+      (n?'<button type="button" class="rp-link" data-pin-to-ctx="'+esc(n.href)+'">Fixar neste objeto</button>':''))+
+  '</div>';
+}
 const needCtx=()=>{const m=/^#\/tipo\/([^/]+)/.exec(curHref()); if(m)return rpEmpty('Tipo de objeto: '+kn(m[1]),'Você está vendo a coleção deste tipo. Selecione um objeto para consultar seus backlinks e conteúdo relacionado.'); return rpEmpty('Contexto do workspace','Selecione um objeto na área principal para consultar suas relações. As abas laterais permanecem disponíveis.');};
 function bodyExplorar(v){
   const all=[...gr().N.values()], kinds=KORD.filter(k=>all.some(n=>n.kind===k));
@@ -3670,7 +3701,31 @@ function bodyRel(v){ const n=vNode(v); if(!n) return needCtx(); const g=gr().N, 
   const L=[...sc.values()].sort((a,b)=>b.c-a.c||a.n.title.localeCompare(b.n.title,'pt-BR',{numeric:true})).slice(0,12);
   if(!L.length) return ctxBar(v,n)+rpEmpty('Sem conteúdo relacionado','Objetos que compartilham banca, edição, cargo ou disciplina com “'+n.title+'” aparecem aqui.');
   return ctxBar(v,n)+'<div class="rp-list">'+L.map(s=>rpRow(s.n,'via '+s.via.join(', '))).join('')+'</div>'; }
-function bodyGraf(v){ const n=vNode(v); if(!n) return needCtx(); const all=nbrs(n); if(!all.length) return ctxBar(v,n)+rpEmpty('Sem ligações diretas','Este objeto ainda não possui relações para mostrar no gráfico.')+'<div class="rp-acts"><a class="rp-btn" href="#/grafico" data-main-link>'+WI.graph+' Abrir gráfico completo</a></div>'; if(all.length===1){ const m=all[0], cut=x=>x.title.length>16?x.title.slice(0,15)+'…':x.title; const single='<svg class="rp-graph rp-graph-single" viewBox="0 0 300 110" role="group" aria-label="Ligação entre '+esc(n.title)+' e '+esc(m.title)+'"><line class="g-e c" x1="92" y1="43" x2="208" y2="43"/><a href="'+esc(n.href)+'" class="g-n g-c k-'+n.kind+'" aria-label="'+esc(kn(n.kind)+': '+n.title)+'"><title>'+esc(n.title)+'</title><circle cx="80" cy="43" r="11"/><text x="80" y="76" text-anchor="middle">'+esc(cut(n))+'</text></a><a href="'+esc(m.href)+'" class="g-n g-c k-'+m.kind+'" aria-label="'+esc(kn(m.kind)+': '+m.title)+'"><title>'+esc(m.title)+'</title><circle cx="220" cy="43" r="11"/><text x="220" y="76" text-anchor="middle">'+esc(cut(m))+'</text></a></svg>'; return ctxBar(v,n)+single+'<div class="rp-acts"><a class="rp-btn" href="#/grafico" data-main-link>'+WI.graph+' Abrir gráfico completo</a></div>'; } const MAX=14, ns=all.slice(0,MAX), W=300,H=250,cx=W/2,cy=H/2-6,R=Math.min(96,40+ns.length*6);
+function bodyGraf(v){
+  let n=vNode(v);
+  const curH=curHref()||'';
+  if(!n && curH.startsWith('#/tipo/')){
+    const tKind=curH.replace('#/tipo/','');
+    const allT=[...gr().N.values()].filter(x=>x.kind===tKind);
+    if(allT.length){
+      const W=300,H=240,cx=W/2,cy=H/2,R=Math.min(90,30+allT.length*6);
+      const pos=new Map();
+      allT.slice(0,14).forEach((m,i)=>{
+        const a=-Math.PI/2+i*2*Math.PI/Math.max(Math.min(allT.length,14),1);
+        pos.set(m.href,[cx+R*Math.cos(a)*1.2,cy+R*Math.sin(a)]);
+      });
+      let s='<svg class="rp-graph" viewBox="0 0 '+W+' '+H+'" role="group" aria-label="Subgrafo da coleção '+esc(kn(tKind))+'">';
+      allT.slice(0,14).forEach(m=>{
+        const p=pos.get(m.href);
+        const t=m.title.length>16?m.title.slice(0,15)+'…':m.title;
+        s+='<a href="'+esc(m.href)+'" class="g-n k-'+m.kind+'" aria-label="'+esc(m.title)+'"><title>'+esc(m.title)+'</title><circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="8.5"/><text x="'+p[0].toFixed(1)+'" y="'+(p[1]+19).toFixed(1)+'" text-anchor="middle">'+esc(t)+'</text></a>';
+      });
+      s+='</svg>';
+      return '<div class="rp-ctx"><span>Coleção</span><b>'+esc(kn(tKind))+' ('+allT.length+' itens)</b></div>'+s+'<div class="rp-acts"><a class="rp-btn" href="#/grafico" data-main-link>'+WI.graph+' Abrir gráfico completo</a></div>';
+    }
+  }
+  if(!n) return needCtx();
+  const all=nbrs(n); if(!all.length) return ctxBar(v,n)+rpEmpty('Sem ligações diretas','Este objeto ainda não possui relações para mostrar no gráfico.')+'<div class="rp-acts"><a class="rp-btn" href="#/grafico" data-main-link>'+WI.graph+' Abrir gráfico completo</a></div>'; if(all.length===1){ const m=all[0], cut=x=>x.title.length>16?x.title.slice(0,15)+'…':x.title; const single='<svg class="rp-graph rp-graph-single" viewBox="0 0 300 110" role="group" aria-label="Ligação entre '+esc(n.title)+' e '+esc(m.title)+'"><line class="g-e c" x1="92" y1="43" x2="208" y2="43"/><a href="'+esc(n.href)+'" class="g-n g-c k-'+n.kind+'" aria-label="'+esc(kn(n.kind)+': '+n.title)+'"><title>'+esc(n.title)+'</title><circle cx="80" cy="43" r="11"/><text x="80" y="76" text-anchor="middle">'+esc(cut(n))+'</text></a><a href="'+esc(m.href)+'" class="g-n g-c k-'+m.kind+'" aria-label="'+esc(kn(m.kind)+': '+m.title)+'"><title>'+esc(m.title)+'</title><circle cx="220" cy="43" r="11"/><text x="220" y="76" text-anchor="middle">'+esc(cut(m))+'</text></a></svg>'; return ctxBar(v,n)+single+'<div class="rp-acts"><a class="rp-btn" href="#/grafico" data-main-link>'+WI.graph+' Abrir gráfico completo</a></div>'; } const MAX=14, ns=all.slice(0,MAX), W=300,H=250,cx=W/2,cy=H/2-6,R=Math.min(96,40+ns.length*6);
   const pos=new Map(); ns.forEach((m,i)=>{ const a=-Math.PI/2+i*2*Math.PI/Math.max(ns.length,1); pos.set(m.href,[cx+R*Math.cos(a)*1.25,cy+R*Math.sin(a)]); }); pos.set(n.href,[cx,cy]);
   let s='<svg class="rp-graph" viewBox="0 0 '+W+' '+H+'" role="group" aria-label="Gráfico de ligações de '+esc(n.title)+'">'; const seen=new Set();
   ns.concat([n]).forEach(a=>a.out.forEach(([h])=>{ if(!pos.has(h)) return; const k=[a.href,h].sort().join('|'); if(seen.has(k)) return; seen.add(k); const p=pos.get(a.href),q=pos.get(h); s+='<line class="g-e'+(a===n||h===n.href?' c':'')+'" x1="'+p[0].toFixed(1)+'" y1="'+p[1].toFixed(1)+'" x2="'+q[0].toFixed(1)+'" y2="'+q[1].toFixed(1)+'"/>'; }));
@@ -3741,6 +3796,9 @@ $('rpBody').addEventListener('click',e=>{ const T=e.target;
   b=T.closest('[data-vmain]'); if(b){ wsOpenMain(b.dataset.vmain); if(MQT.matches) openRP(false); return; }
   b=T.closest('[data-vtab]'); if(b){ wsOpenTab(b.dataset.vtab); if(MQT.matches) openRP(false); return; }
   b=T.closest('[data-unpin]'); if(b){ const v=viewById(b.dataset.unpin); if(v){ delete v.ref; wsSave(); rpPaintBody(); } return; }
+  b=T.closest('[data-pin-to-ctx]'); if(b){ const sec=b.closest('.rp-view'), v=viewById(sec&&sec.dataset.v); if(v){ v.ref=b.dataset.pinToCtx; wsSave(); rpPaintBody(); } return; }
+  b=T.closest('[data-rp-open-graf]'); if(b){ const sec=b.closest('.rp-view'), v=viewById(sec&&sec.dataset.v); if(v){ v.type='graf'; v.ref=b.dataset.rpOpenGraf; wsSave(); rpPaintTabs(); rpPaintBody(); } return; }
+  b=T.closest('[data-rp-open-back]'); if(b){ const sec=b.closest('.rp-view'), v=viewById(sec&&sec.dataset.v); if(v){ v.type='back'; v.ref=b.dataset.rpOpenBack; wsSave(); rpPaintTabs(); rpPaintBody(); } return; }
   b=T.closest('[data-ex-kind]'); if(b){ const v=viewById(b.closest('.rp-view').dataset.v); if(v){ v.kind=b.dataset.exKind; wsSave(); const body=b.closest('.rp-vb'); body.querySelectorAll('[data-ex-kind]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.exKind===v.kind)); const label=body.querySelector('[data-ex-filter-label]'); if(label) label.textContent=v.kind?'Filtro: '+kn(v.kind):'Filtrar por tipo'; body.querySelector('[data-ex-list]').innerHTML=exRows(v); } return; }
   const a=T.closest('a[href^="#"]'); if(a){ e.preventDefault(); const h=a.getAttribute('href'); if(a.hasAttribute('data-main-link')){ wsOpenMain(h); if(MQT.matches) openRP(false); return; }
     if(e.ctrlKey||e.metaKey){ wsOpenTab(h); return; } const sec=a.closest('.rp-view'); rpFromView(viewById(sec&&sec.dataset.v),h); return; }

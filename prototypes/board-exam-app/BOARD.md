@@ -610,26 +610,6 @@ Capturas enviadas por Ian durante a revisão da 0.1.1, em 12 e 13/11.
 
 **Referência:** item fixado com pin e ⋯ ao passar o mouse.
 
-![imagem e331](assets/474678ed59f7cc5b7fbf3494dd75704f.png)
-
-**Referência:** item com pin e ⋯ no hover.
-
-### Referências do Capacities (sidebar)
-
-O que Ian mostrou como modelo para a sidebar: tipos de objeto, ordenar, hover, lixeira.
-
-![imagem e335](assets/5dd2843391f7c5827e8905be47daf12d.png)
-
-![imagem e337](assets/8d42664c47e656b5f3b9c49ea3e6b134.png)
-
-![imagem e339](assets/346da48cb8ad25f2a7857b2d30933368.png)
-
-**Capacities:** cabeçalho "Tipos de objeto" com contagem, ⋯ e +. Ian: o + deve abrir diálogo para escolher o objeto.
-
-**Capacities:** menu Ordenar manualmente ou alfabeticamente.
-
-**Capacities:** lista de tipos de objeto.
-
 ![imagem e341](assets/cf85b4fdc73d3e37137c304ff737aadc.png)
 
 ![imagem e343](assets/c6f3efc2d1ce12dfa1331f679bdfb8a9.png)
@@ -773,6 +753,50 @@ Capturas da fase em que o Ian pediu um artefato só para o protótipo e outro pa
 **0.1.1:** seta de expandir e recolher (circulada) no item Dataprev.
 
 **0.1.1:** item "2026" (Edição) dentro do Dataprev.
+
+## 26. Integração do Explorar, Grafo Contextual e Navegação Tripartida (Issue #25)
+<!-- container e510 @ (0,9800) -->
+
+![imagem e331](assets/474678ed59f7cc5b7fbf3494dd75704f.png)
+
+### Unificação de Descoberta e Navegação Contextual (Issue #25)
+
+- **Explorar como Central de Descoberta**:
+  - Busca integrada, filtros dinâmicos por tipo e contagens em tempo real.
+  - Ações diretas e imediatas em cada item da listagem:
+    - [🕸️] Abrir no Grafo Contextual direto da linha.
+    - [🔗] Abrir Backlinks / referências.
+    - [+] Abrir em Nova Aba.
+- **Grafo Contextual por Objeto e por Tipo**:
+  - Suporte nativo ao grafo local focado no objeto ativo e em suas relações primárias/secundárias.
+  - Suporte à visualização de subgrafos para Coleções e Tipos de Objeto ().
+- **Sincronização e Fixação de Contexto (Pin/Follow)**:
+  - Botão 'Fixar neste objeto' () para congelar a inspeção enquanto o usuário navega livremente em outras abas.
+  - Botão 'Seguir contexto' () para restaurar a sincronia automática com a aba ativa.
+- **Navegação Coerente entre os 3 Painéis**:
+  - Clique simples: abre no centro.
+  - Shift + clique: abre ou foca no painel lateral.
+  - Ctrl / Cmd + clique: abre em nova aba.
+- **Preservação Contínua no Board**:
+  - Especificação e descobertas gravadas de forma permanente no Planning Board.
+
+**Referência:** item com pin e ⋯ no hover.
+
+### Referências do Capacities (sidebar)
+
+O que Ian mostrou como modelo para a sidebar: tipos de objeto, ordenar, hover, lixeira.
+
+![imagem e335](assets/5dd2843391f7c5827e8905be47daf12d.png)
+
+![imagem e337](assets/8d42664c47e656b5f3b9c49ea3e6b134.png)
+
+![imagem e339](assets/346da48cb8ad25f2a7857b2d30933368.png)
+
+**Capacities:** cabeçalho "Tipos de objeto" com contagem, ⋯ e +. Ian: o + deve abrir diálogo para escolher o objeto.
+
+**Capacities:** menu Ordenar manualmente ou alfabeticamente.
+
+**Capacities:** lista de tipos de objeto.
 
 ## 10. Arquivos do projeto (Dataprev 2026 e referências)
 <!-- container e363 @ (0,12666) -->

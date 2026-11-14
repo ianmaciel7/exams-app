@@ -2385,6 +2385,22 @@
       "type": "text",
       "x": 20,
       "y": 9260
+    },
+    "e510": {
+      "color": "white",
+      "h": 500,
+      "text": "26. Integração do Explorar, Grafo Contextual e Navegação Tripartida (Issue #25)",
+      "type": "container",
+      "w": 1500,
+      "x": 0,
+      "y": 9800
+    },
+    "e511": {
+      "size": "small",
+      "text": "### Unificação de Descoberta e Navegação Contextual (Issue #25)\n\n- **Explorar como Central de Descoberta**:\n  - Busca integrada, filtros dinâmicos por tipo e contagens em tempo real.\n  - Ações diretas e imediatas em cada item da listagem:\n    - [🕸️] Abrir no Grafo Contextual direto da linha.\n    - [🔗] Abrir Backlinks / referências.\n    - [+] Abrir em Nova Aba.\n- **Grafo Contextual por Objeto e por Tipo**:\n  - Suporte nativo ao grafo local focado no objeto ativo e em suas relações primárias/secundárias.\n  - Suporte à visualização de subgrafos para Coleções e Tipos de Objeto ().\n- **Sincronização e Fixação de Contexto (Pin/Follow)**:\n  - Botão 'Fixar neste objeto' () para congelar a inspeção enquanto o usuário navega livremente em outras abas.\n  - Botão 'Seguir contexto' () para restaurar a sincronia automática com a aba ativa.\n- **Navegação Coerente entre os 3 Painéis**:\n  - Clique simples: abre no centro.\n  - Shift + clique: abre ou foca no painel lateral.\n  - Ctrl / Cmd + clique: abre em nova aba.\n- **Preservação Contínua no Board**:\n  - Especificação e descobertas gravadas de forma permanente no Planning Board.",
+      "type": "text",
+      "x": 20,
+      "y": 9860
     }
   }
 }
