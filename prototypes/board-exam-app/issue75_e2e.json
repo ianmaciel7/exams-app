@@ -1,0 +1,42 @@
+{
+  "date": "2026-11-14T14:48:27.243Z",
+  "scenarios": [
+    {
+      "screenshot": "issue75_before_no_notebooks.png",
+      "url": "http://127.0.0.1:8766/exam-app-0.1.1/index.html#/questoes"
+    },
+    {
+      "screenshot": "issue75_after_filter.png",
+      "url": "http://127.0.0.1:8765/exam-app-0.1.1/index.html#/questoes?busca=QUESTAO+DO+CADERNO"
+    },
+    {
+      "screenshot": "issue75_after_book_created.png",
+      "url": "http://127.0.0.1:8765/exam-app-0.1.1/index.html#/caderno/cbmwgite9w9m3klu"
+    },
+    {
+      "screenshot": "issue75_after_book_answer.png",
+      "url": "http://127.0.0.1:8765/exam-app-0.1.1/index.html#/caderno/cbmwgite9w9m3klu"
+    },
+    {
+      "screenshot": "issue75_after_retake_errors.png",
+      "url": "http://127.0.0.1:8765/exam-app-0.1.1/index.html#/caderno/cbmwgite9w9m3klu/erradas"
+    },
+    {
+      "screenshot": "issue75_after_question_member.png",
+      "url": "http://127.0.0.1:8765/exam-app-0.1.1/index.html#/questao/q1"
+    },
+    {
+      "screenshot": "issue75_after_saved_query.png",
+      "url": "http://127.0.0.1:8765/exam-app-0.1.1/index.html#/tipo/questao"
+    },
+    {
+      "screenshot": "issue75_after_continue_pending.png",
+      "url": "http://127.0.0.1:8765/exam-app-0.1.1/index.html#/caderno/cbmwgite9w9m3klu?at=1"
+    },
+    {
+      "screenshot": "issue75_after_mobile.png",
+      "url": "http://127.0.0.1:8765/exam-app-0.1.1/index.html#/cadernos"
+    }
+  ],
+  "errors": []
+}

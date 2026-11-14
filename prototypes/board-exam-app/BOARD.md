@@ -1865,6 +1865,47 @@ DEPOIS: página e camada de texto, DPR 2 / 200% | assets/pdf112_after_dpr2_zoom2
 > after DPR=2 zoom=1.5 página=1 canvas=1508×2132 CSS=754.0×1616.0 ratio=2.00 textSpans=157 status=ready
 > after DPR=2 zoom=2 página=1 canvas=1508×2132 CSS=754.0×2155.0 ratio=2.00 textSpans=157 status=ready
 
+## 35. Cadernos e Queries de Questões — Issue #75: jornadas E2E
+<!-- container e1188 @ (20000,11000) -->
+
+Origem: testes Playwright Chromium em tests/notebooks-saved-filters.e2e.mjs. Caminhos testados: filtro -> gerar caderno, meta 80%, progresso independente das respostas globais, zerar, refazer erros, associar questão individual, Queries do Tipo Questão, filtros persistidos, retorno à primeira pendente e mobile 390px. Não representa teste moderado com usuários nem compara com QConcursos Live.
+
+![imagem e1190](assets/issue75_before_no_notebooks.png)
+
+![imagem e1192](assets/issue75_after_filter.png)
+
+ANTES — Banco de questões sem ação de Cadernos
+
+DEPOIS — Questão manual filtrada, pronta para Gerar Caderno
+
+![imagem e1194](assets/issue75_after_book_created.png)
+
+![imagem e1196](assets/issue75_after_book_answer.png)
+
+DEPOIS — Novo Caderno criado com meta de 80%
+
+DEPOIS — Resposta correta dentro do caderno; progresso 1/1
+
+![imagem e1198](assets/issue75_after_retake_errors.png)
+
+![imagem e1200](assets/issue75_after_question_member.png)
+
+DEPOIS — Refazer somente questões erradas sem apagar histórico geral
+
+DEPOIS — Inclusão avulsa da Questão 1 via painel Cadernos
+
+![imagem e1202](assets/issue75_after_saved_query.png)
+
+![imagem e1204](assets/issue75_after_continue_pending.png)
+
+DEPOIS — Filtro salvo aparece nas Queries do Tipo Questão
+
+DEPOIS — Retomada na primeira questão pendente do caderno
+
+![imagem e1206](assets/issue75_after_mobile.png)
+
+DEPOIS — Gerenciador de Cadernos em mobile 390px
+
 ## 10. Arquivos do projeto (Dataprev 2026 e referências)
 <!-- container e363 @ (0,12666) -->
 
