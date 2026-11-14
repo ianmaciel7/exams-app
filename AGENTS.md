@@ -14,7 +14,7 @@ All agents working in this repository must keep the codebase and the live Claude
 1. **Fetch & Align Git Branches**:
    - Always run `git fetch origin` before starting and inspect remote branches.
    - If Claude pushed new commits remotely, merge/rebase them into `dev`.
-   - If changes are committed to `dev`, push them back to `origin/claude/project-thread-6zihkn` to keep the cloud thread up to date.
+   - **Automated Branch Mirroring:** Both local git hooks (`.githooks/post-commit`, `post-merge`) and GitHub Actions (`.github/workflows/sync-artifact.yml`) automatically mirror every commit/merge on `dev` directly to `origin/claude/project-thread-6zihkn`. Manual push is only needed as a fallback: `git push origin dev:claude/project-thread-6zihkn`.
 2. **Sync the Live Claude Artifact (Zero-Token CLI & Automated Hooks)**:
    - **Automated Git Hooks:** Git hooks are configured in `.githooks/` (`post-commit` and `post-merge`). Whenever `prototypes/exam-app-0.1.1/index.html` is committed or merged/pulled on `dev`, the hook runs `sync:artifact` automatically. Enable in any clone with:
      ```bash
@@ -32,11 +32,13 @@ All agents working in this repository must keep the codebase and the live Claude
      uvx --from claude-artifact-cli claude-artifact status --url https://claude.ai/artifact/MeCzKuKCsr6fY4F8AGxnyC prototypes/exam-app-0.1.1/index.html
      ```
 
-## Planning board and memory preservation
+## Planning board, evidence capture, and memory preservation (MANDATORY)
 
-- **Mandatory rule:** All information, visual references, screenshots, discoveries, UX decisions, and cross-session memories must always be recorded and preserved in the Planning Board (`prototypes/board-exam-app/board.json` / `BOARD.md` and `assets/`).
+- **Mandatory rule — Zero Information Loss:** Everything captured as evidence during any task — including browser screenshots, live reference app inspections (e.g., Capacities, QConcursos), historical branch/archive comparisons (`docs/archives/`), measured DOM/CSS metrics, UI/UX regressions, and architectural decisions — **MUST be immediately persisted in two places**:
+  1. **The Planning Board:** Add structured cards/containers and image references to `prototypes/board-exam-app/board.json`, copy all screenshot/evidence files into `prototypes/board-exam-app/assets/`, and regenerate `prototypes/board-exam-app/BOARD.md` using `npm run board`.
+  2. **GitHub Issues & Pull Requests:** Open or update corresponding GitHub Issues (`gh issue create` / `gh issue comment`) and Pull Requests (`gh pr create`) documenting the evidence, file paths, and acceptance criteria, and land the board updates into `dev` via PR so no evidence or context is ever lost between sessions or AI assistants.
 - `board.json` is the source of truth; never edit `BOARD.md` by hand. Regenerate it with `npm run board`.
-- No architectural decision, UX finding, or implementation progress should be lost between AI assistant sessions.
+- **Zero-Emoji UI Policy (Issue #42):** Never use Unicode emojis in the application UI, buttons, headers, badges, or KPIs; always use clean monochrome or semantic vector `<svg>` icons (`stroke-width: 1.75`–`1.9`).
 
 ## Run the prototype (any tool)
 

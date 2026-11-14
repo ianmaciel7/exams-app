@@ -12,3 +12,9 @@ if git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD | grep -q "prototy
     echo "=========================================================="
     uvx --from claude-artifact-cli claude-artifact publish --mode patch --url https://claude.ai/artifact/MeCzKuKCsr6fY4F8AGxnyC prototypes/exam-app-0.1.1/index.html || true
 fi
+
+# 3. Mirror dev to Claude tracking branch if on dev
+CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+if [ "$CURRENT_BRANCH" = "dev" ]; then
+    git push origin dev:claude/project-thread-6zihkn --quiet || true
+fi
