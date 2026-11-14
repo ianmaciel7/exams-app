@@ -899,7 +899,7 @@ Antes de concluir uma mudança visual/interativa, o agente **MUST**:
 - Publicar antes/depois com texto reconstrutível e evidência no board (`board.json` e assets), regenerando `BOARD.md` com `npm run board` quando a tarefa envolva UI real. **Mudança apenas documental** não exige screenshot inventado.
 - Reportar **implementado × especificado × não testado**; não declarar conformidade M3, Apple HIG ou WCAG sem evidência.
 
-**Consulta por tópico:** tokens, superfícies, tipografia, componentes, layout e critérios em [DESIGN.md](DESIGN.md); springs, easing, tempo, continuidade espacial, grafo, performance e motion reduzido em [MOTION.md](MOTION.md). Inventário dos 22 skills de referência e separação entre fontes oficiais/comunidade em `DESIGN.md`.
+**Consulta por tópico:** tokens, superfícies, tipografia, componentes, layout e critérios em [DESIGN.md](DESIGN.md); springs, easing, tempo, continuidade espacial, grafo, performance e motion reduzido em [MOTION.md](MOTION.md). Inventário de 22 referências (21 candidatos a skills e um agregador, sem auditoria integral) e separação entre fontes oficiais/comunidade em `DESIGN.md`.
 
 ### Auditoria de lacunas de design — evidência antes de declarar "implementado"
 
@@ -917,6 +917,13 @@ Para cada alteração de **formulário, navegação, componente, efeito ou tema*
 - **MUST** conferir cada atalho anunciado na documentação, tooltip e modal com o dispatcher realmente implementado, em Windows/macOS, sem prometer `Ctrl+W`/`Ctrl+T` ou outro comando reservado pelo navegador. O usuário precisa de alternativa visível por clique/menu e os campos em edição não podem capturar atalhos globais.
 - **MUST** medir contrastes de pares de cores e estados; OKLCH, Material 3 ou Apple HIG não comprovam automaticamente WCAG. Guardar resultado e contexto do cálculo quando declarar conformidade.
 - **MUST** diferenciar foco de diálogo modal (Tab contido quando modal) de padrão menu (setas, Enter, Escape e retorno ao invocador) e de popover não modal. Preferir elementos nativos com semântica correta; auditar no DOM real.
-- **SHOULD** testar conteúdo longo/localizado, idiomas e formatos de data/número, tamanho de fonte aumentado e ordem de leitura quando layout adaptativo reorganizar elementos. Ver [DESIGN.md §8.14](DESIGN.md).
+- **SHOULD** testar conteúdo longo/localizado, idiomas e formatos de data/número, tamanho de fonte aumentado e ordem de leitura quando layout adaptativo reorganizar elementos. Ver [DESIGN.md §8.15](DESIGN.md).
+
+### Princípios Apple 2026, UX Writing e decisão de expressividade
+
+- **SHOULD** consultar [DESIGN.md §8.16](DESIGN.md) para identificar os **oito princípios oficiais Apple (Purpose, Agency, Responsibility, Familiarity, Flexibility, Simplicity, Craft, Delight)** relevantes à tarefa; são orientações de design, não leis universais nem requisitos WCAG.
+- **MUST** seguir [DESIGN.md §8.17](DESIGN.md) ao criar/alterar labels, tooltips, mensagens de erro, recuperação, estados vazios, avisos de IA e CTAs; a microcopy precisa explicar contexto e consequência, especialmente em ações irreversíveis.
+- **SHOULD** seguir [DESIGN.md §8.18](DESIGN.md) para justificar contenção, tamanho, forma, cor, tipografia e movimento expressivo como mecanismos funcionais, em vez de copiar uma aparência Apple/Google.
+- **MUST** separar candidatos a skills, catálogos agregadores e fontes primárias. O inventário de 22 URLs em `DESIGN.md` inclui um agregador (M09), **não 22 skills individuais verificados**. Na issue #156, registrar o arquivo `SKILL.md` exato ou marcar como não confirmado, sem supor leitura integral.
 
 <!-- DESIGN-SYSTEM-INTEGRATION:END -->
