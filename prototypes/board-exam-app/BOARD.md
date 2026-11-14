@@ -2195,9 +2195,20 @@ Testamos a comunicação entre o Exam App em localhost (porta 8765) e o Claude P
 
 Evidência técnica registrada em docs/reports/claude-storage-bridge/CLAUDE_STORAGE_BRIDGE_INVESTIGATION.md.
 
+![imagem e1373](assets/evidence-iframe-csp-blocked.png)
+
+Evidência de execução real no Google Chrome: O navegador acusa 'Framing https://claude.ai/ violates Content Security Policy: frame-ancestors... The request has been blocked'. O iframe renderiza em branco e o canal postMessage é recusado pela Same-Origin Policy. Recomendação: Manter armazenamento local estruturado (localStorage/IndexedDB) e publicação estática via claude-artifact publish.
+
+## 44. Questões contextuais — Issue #136: alternativas alinhadas e CSS compartilhado
+<!-- container e1381 @ (38500,11000) -->
+
+Restaurado após conflito de IDs introduzido pela PR #142. Causa original validada por DOM: alternativas em páginas contextuais perdiam display:flex fora de .study-shell. As quatro capturas reais da PR #141 e o relatório issue136_e2e.json documentam o antes/depois em desktop, 390px e banco global. Implementação: CSS compartilhado com :is(.study-shell,.practice-list). Não equivale à conclusão de todos os critérios da issue #136; permanecem zoom, painel lateral, navegação por teclado e demais rotas.
+
+![imagem e1383](assets/issue136_before_context_1366.png)
+
 ![imagem e1375](assets/issue136_after_context_1366.png)
 
-![imagem e1373](assets/evidence-iframe-csp-blocked.png)
+ANTES: alternativas inline no concurso, sem estilização da lista de questões
 
 DEPOIS: alternativas em linhas/click targets, concurso no desktop
 
@@ -2209,7 +2220,30 @@ DEPOIS: alternativas em linhas e texto quebrando, concurso em 390px
 
 DEPOIS: banco global preserva o mesmo componente de questões
 
-Evidência de execução real no Google Chrome: O navegador acusa 'Framing https://claude.ai/ violates Content Security Policy: frame-ancestors... The request has been blocked'. O iframe renderiza em branco e o canal postMessage é recusado pela Same-Origin Policy. Recomendação: Manter armazenamento local estruturado (localStorage/IndexedDB) e publicação estática via claude-artifact publish.
+## 45. SpaceSwitcher — Issue #138: busca, reordenação e persistência
+<!-- container e1385 @ (40500,11000) -->
+
+Implementação observável: o SpaceSwitcher passa a oferecer busca por nome com normalização de acentos, estado vazio, seleção/aria-selected, drag handle e reordenação por teclado Alt+ArrowUp/Down. A ordem é salva por ID em spaceOrder, distinta dos objetos de espaço persistidos em spaces; nomes e seleção sobrevivem à recarga. Arraste por Pointer Events tem threshold de 7px, indicação de destino e cancelamento Escape/pointercancel sem mudança. E2E real Chromium: reprodução anterior, busca, criação de dois espaços, reordenação por teclado e mouse, recarga, cancelamento e viewport 390px; ver issue138_spaces_e2e.json. Limite: toque físico, leitores de tela e sincronização entre dispositivos não foram validados.
+
+![imagem e1387](assets/issue138_before_desktop.png)
+
+![imagem e1389](assets/issue138_search_desktop.png)
+
+ANTES: seletor sem campo de busca e sem alças de reordenação no desktop
+
+DEPOIS: pesquisa incremental, nomes de espaços filtrados sem distinção de acentos
+
+![imagem e1391](assets/issue138_after_keyboard_desktop.png)
+
+![imagem e1393](assets/issue138_after_drag_desktop.png)
+
+DEPOIS: Alt + seta reordena por identidade sem trocar o espaço ativo
+
+DEPOIS: arraste por Pointer Events altera ordem sem perda de contexto
+
+![imagem e1395](assets/issue138_after_mobile_390.png)
+
+DEPOIS: seletor responsivo a 390 CSS px com busca e seleção por toque
 
 ## 10. Arquivos do projeto (Dataprev 2026 e referências)
 <!-- container e363 @ (0,12666) -->
