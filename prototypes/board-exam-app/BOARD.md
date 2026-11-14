@@ -2159,6 +2159,27 @@ E2E Chromium sobre o grafo global: preferencia de movimento reduzido ao abrir, a
 
 1366px, controles de zoom/filtro e retorno à preferência reduzida
 
+## 42. Grafo — Issue #68: exportar imagem PNG com botão e teclado
+<!-- container e1361 @ (34000,11000) -->
+
+Funcionalidade realmente testada: botão exportar PNG na toolbar do grafo global, acionado por teclado Enter. O arquivo local é gerado por canvas.toDataURL sem rede, nome exam-app-grafo.png. Teste Chromium valida cabeçalho PNG, arquivo nao vazio e dimensoes de pixels iguais ao backing canvas (DPR 2). Evidencia parcial da issue #68: filtros avancados, profundidade 1..5, popovers e timeline ainda nao foram implementados aqui. Manifesto: issue68_export_e2e.json.
+
+![imagem e1363](assets/issue68_graph_toolbar_390.png)
+
+![imagem e1365](assets/issue68_export_graph_390.png)
+
+Botão de exportação na barra do grafo, viewport 390px
+
+PNG real gerado no canvas mobile, pixel ratio 2
+
+![imagem e1367](assets/issue68_graph_toolbar_1366.png)
+
+![imagem e1369](assets/issue68_export_graph_1366.png)
+
+Botão de exportação na barra do grafo, viewport 1366px
+
+PNG real gerado no canvas desktop, pixel ratio 2
+
 ## 10. Arquivos do projeto (Dataprev 2026 e referências)
 <!-- container e363 @ (0,12666) -->
 
