@@ -675,7 +675,19 @@
     "e1335",
     "e1336",
     "e1337",
-    "e1338"
+    "e1338",
+    "e1339",
+    "e1340",
+    "e1341",
+    "e1342",
+    "e1343",
+    "e1344",
+    "e1345",
+    "e1346",
+    "e1347",
+    "e1348",
+    "e1349",
+    "e1350"
   ],
   "elements": {
     "e1": {
@@ -7132,6 +7144,109 @@
       "w": 1580,
       "h": 80,
       "text": "**Evidência 119 (Readwise SRS Freeform Manual Import Form):** Formulário de inserção manual de citações e anotações para o motor de SRS."
+    },
+    "e1339": {
+      "type": "container",
+      "color": "white",
+      "text": "40. Responsividade Home — Issue #132: eliminar undefined e validar CTA em 12 larguras",
+      "x": 30000,
+      "y": 11000,
+      "w": 1650,
+      "h": 1705
+    },
+    "e1340": {
+      "type": "text",
+      "size": "small",
+      "x": 30018,
+      "y": 11008,
+      "w": 1580,
+      "h": 82,
+      "text": "Causa comprovada por inspeção do código: UIICON.timer era referenciado, mas não declarado, criando 'undefined' no slot de ícone. Correção: SVG inline e grid com reflow em 320px. E2E Chromium verifica 12 larguras, ícone, rótulos, bounds e navegação ao simulado. Evidência real da branch do PR, não de dispositivo Android físico. Cobertura PARCIAL de #132: não equivale a auditoria completa dos painéis, PDF e grafo."
+    },
+    "e1341": {
+      "type": "image",
+      "src": "/_blob/issue132_before_390",
+      "x": 30018,
+      "y": 11100,
+      "w": 755,
+      "h": 430
+    },
+    "e1342": {
+      "type": "text",
+      "size": "small",
+      "text": "ANTES: a Home exibia o texto literal 'undefined' no lugar do SVG do simulado, em 390px",
+      "x": 30018,
+      "y": 11538,
+      "w": 760,
+      "h": 50
+    },
+    "e1343": {
+      "type": "image",
+      "src": "/_blob/issue132_after_320",
+      "x": 30828,
+      "y": 11100,
+      "w": 755,
+      "h": 430
+    },
+    "e1344": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: 320px, ícone SVG restaurado; CTA refluindo no grid",
+      "x": 30828,
+      "y": 11538,
+      "w": 760,
+      "h": 50
+    },
+    "e1345": {
+      "type": "image",
+      "src": "/_blob/issue132_after_390",
+      "x": 30018,
+      "y": 11635,
+      "w": 755,
+      "h": 430
+    },
+    "e1346": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: 390px, ícone SVG sem sobreposição de texto",
+      "x": 30018,
+      "y": 12073,
+      "w": 760,
+      "h": 50
+    },
+    "e1347": {
+      "type": "image",
+      "src": "/_blob/issue132_after_768",
+      "x": 30828,
+      "y": 11635,
+      "w": 755,
+      "h": 430
+    },
+    "e1348": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: 768px, ações primárias preservadas",
+      "x": 30828,
+      "y": 12073,
+      "w": 760,
+      "h": 50
+    },
+    "e1349": {
+      "type": "image",
+      "src": "/_blob/issue132_after_1280",
+      "x": 30018,
+      "y": 12170,
+      "w": 755,
+      "h": 430
+    },
+    "e1350": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: 1280px, alinhamento do CTA no desktop",
+      "x": 30018,
+      "y": 12608,
+      "w": 760,
+      "h": 50
     }
   }
 }
