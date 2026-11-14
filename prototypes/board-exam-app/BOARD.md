@@ -2180,6 +2180,27 @@ Botão de exportação na barra do grafo, viewport 1366px
 
 PNG real gerado no canvas desktop, pixel ratio 2
 
+## 43. Questões contextuais — Issue #136: alternativas alinhadas e CSS compartilhado
+<!-- container e1371 @ (36000,11000) -->
+
+Diagnóstico comprovado pelo DOM: .qf-list renderizava s-question sem .study-shell, então label.s-option perdia display:flex e hitboxes. CSS compartilhado via :is(.study-shell,.practice-list), sem duplicar implementação do componente. E2E Chromium verifica baseline antes, card contextual desktop/mobile e banco global, separação Questão / Disciplina, seleção por label. Capturas reais desta PR; a screenshot original do usuário permanece fora do repositório. Não demonstra validação em todos os browsers, zoom 200% ou com painel Gráfico aberto.
+
+![imagem e1373](assets/issue136_before_context_1366.png)
+
+![imagem e1375](assets/issue136_after_context_1366.png)
+
+ANTES: alternativas inline no concurso, sem estilização da lista de questões
+
+DEPOIS: alternativas em linhas/click targets, concurso no desktop
+
+![imagem e1377](assets/issue136_after_context_390.png)
+
+![imagem e1379](assets/issue136_after_global_1366.png)
+
+DEPOIS: alternativas em linhas e texto quebrando, concurso em 390px
+
+DEPOIS: banco global preserva o mesmo componente de questões
+
 ## 10. Arquivos do projeto (Dataprev 2026 e referências)
 <!-- container e363 @ (0,12666) -->
 
