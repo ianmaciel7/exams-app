@@ -31,12 +31,26 @@ import time
 import urllib.parse
 from pathlib import Path
 
-# Localizacao dinamica do pacote claude_artifact_cli no cache do uv
-uv_cache = Path(os.environ.get("LOCALAPPDATA", "")) / "uv" / "cache" / "archive-v0"
-for p in uv_cache.glob("*/Lib/site-packages"):
+# Localizacao dinamica do pacote claude_artifact_cli
+# 1. Localizacao dinamica no cache uv (Windows e Linux/macOS)
+uv_cache_win = Path(os.environ.get("LOCALAPPDATA", "")) / "uv" / "cache" / "archive-v0"
+for p in uv_cache_win.glob("*/Lib/site-packages"):
     if (p / "claude_artifact_cli").is_dir():
         sys.path.insert(0, str(p))
         break
+
+uv_cache_nix = Path.home() / ".cache" / "uv" / "archive-v0"
+if uv_cache_nix.exists():
+    for p in uv_cache_nix.glob("*/lib/python*/site-packages"):
+        if (p / "claude_artifact_cli").is_dir():
+            sys.path.insert(0, str(p))
+            break
+
+# 2. Fixture de teste local se presente (prioridade maxima em testes/CI)
+_repo_root = Path(__file__).resolve().parents[2]
+_fixture = _repo_root / "tests" / "claude-storage-api-poc" / "fixtures"
+if (_fixture / "claude_artifact_cli").is_dir():
+    sys.path.insert(0, str(_fixture))
 
 try:
     from claude_artifact_cli import api, auth
@@ -358,6 +372,7 @@ class HardenedStorageProxyHandler(http.server.BaseHTTPRequestHandler):
 
 
 def main():
+    socketserver.TCPServer.allow_reuse_address = True
     server_address = (HOST, PORT)
     with socketserver.TCPServer(server_address, HardenedStorageProxyHandler) as httpd:
         print(f"[HardenedProxy] Servidor iniciado e blindado em http://{HOST}:{PORT}")

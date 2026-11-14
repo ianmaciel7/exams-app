@@ -8,7 +8,7 @@ auth = FakeAuth()
 
 
 class FrameClient:
-    def __init__(self, token):
+    def __init__(self, token, **kwargs):
         assert token == "TEST_ONLY_FAKE_TOKEN_DO_NOT_USE"
         self.documents = {}
 
