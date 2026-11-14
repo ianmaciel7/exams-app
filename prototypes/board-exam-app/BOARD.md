@@ -1323,6 +1323,201 @@ O que Ian mostrou como modelo para a sidebar: tipos de objeto, ordenar, hover, l
 
 **Evidência 76 (Readwise SRS Edit — Issue #83): Modal de edição não-destrutiva (`Edited Highlight` vs `Original Highlight`) e campo `NOTE`**
 
+## 31. Low-Chrome — Issue #97: evidências antes/depois por tema, largura e estado dos painéis
+<!-- container e993 @ (8500,11000) -->
+
+![imagem e994](assets/lowchrome_97_before_light_1366_sideopen_rightopen.png)
+
+![imagem e996](assets/lowchrome_97_after_light_1366_sideopen_rightopen.png)
+
+#97 BEFORE | light | 1366px | sidebar aberta | contexto aberto
+
+#97 AFTER | light | 1366px | sidebar aberta | contexto aberto
+
+![imagem e998](assets/lowchrome_97_before_light_1366_sideopen_rightclosed.png)
+
+![imagem e1000](assets/lowchrome_97_after_light_1366_sideopen_rightclosed.png)
+
+#97 BEFORE | light | 1366px | sidebar aberta | contexto fechado
+
+#97 AFTER | light | 1366px | sidebar aberta | contexto fechado
+
+![imagem e1002](assets/lowchrome_97_before_light_1366_sideclosed_rightopen.png)
+
+![imagem e1004](assets/lowchrome_97_after_light_1366_sideclosed_rightopen.png)
+
+#97 BEFORE | light | 1366px | sidebar fechada | contexto aberto
+
+#97 AFTER | light | 1366px | sidebar fechada | contexto aberto
+
+![imagem e1006](assets/lowchrome_97_before_light_1366_sideclosed_rightclosed.png)
+
+![imagem e1008](assets/lowchrome_97_after_light_1366_sideclosed_rightclosed.png)
+
+#97 BEFORE | light | 1366px | sidebar fechada | contexto fechado
+
+#97 AFTER | light | 1366px | sidebar fechada | contexto fechado
+
+![imagem e1010](assets/lowchrome_97_before_dark_1366_sideopen_rightopen.png)
+
+![imagem e1012](assets/lowchrome_97_after_dark_1366_sideopen_rightopen.png)
+
+#97 BEFORE | dark | 1366px | sidebar aberta | contexto aberto
+
+#97 AFTER | dark | 1366px | sidebar aberta | contexto aberto
+
+![imagem e1014](assets/lowchrome_97_before_dark_1366_sideopen_rightclosed.png)
+
+![imagem e1016](assets/lowchrome_97_after_dark_1366_sideopen_rightclosed.png)
+
+#97 BEFORE | dark | 1366px | sidebar aberta | contexto fechado
+
+#97 AFTER | dark | 1366px | sidebar aberta | contexto fechado
+
+![imagem e1018](assets/lowchrome_97_before_dark_1366_sideclosed_rightopen.png)
+
+![imagem e1020](assets/lowchrome_97_after_dark_1366_sideclosed_rightopen.png)
+
+#97 BEFORE | dark | 1366px | sidebar fechada | contexto aberto
+
+#97 AFTER | dark | 1366px | sidebar fechada | contexto aberto
+
+![imagem e1022](assets/lowchrome_97_before_dark_1366_sideclosed_rightclosed.png)
+
+![imagem e1024](assets/lowchrome_97_after_dark_1366_sideclosed_rightclosed.png)
+
+#97 BEFORE | dark | 1366px | sidebar fechada | contexto fechado
+
+#97 AFTER | dark | 1366px | sidebar fechada | contexto fechado
+
+![imagem e1026](assets/lowchrome_97_before_light_1024_sideopen_rightopen.png)
+
+![imagem e1028](assets/lowchrome_97_after_light_1024_sideopen_rightopen.png)
+
+#97 BEFORE | light | 1024px | sidebar aberta | contexto aberto
+
+#97 AFTER | light | 1024px | sidebar aberta | contexto aberto
+
+![imagem e1030](assets/lowchrome_97_before_light_1024_sideopen_rightclosed.png)
+
+![imagem e1032](assets/lowchrome_97_after_light_1024_sideopen_rightclosed.png)
+
+#97 BEFORE | light | 1024px | sidebar aberta | contexto fechado
+
+#97 AFTER | light | 1024px | sidebar aberta | contexto fechado
+
+![imagem e1034](assets/lowchrome_97_before_light_1024_sideclosed_rightopen.png)
+
+![imagem e1036](assets/lowchrome_97_after_light_1024_sideclosed_rightopen.png)
+
+#97 BEFORE | light | 1024px | sidebar fechada | contexto aberto
+
+#97 AFTER | light | 1024px | sidebar fechada | contexto aberto
+
+![imagem e1038](assets/lowchrome_97_before_light_1024_sideclosed_rightclosed.png)
+
+![imagem e1040](assets/lowchrome_97_after_light_1024_sideclosed_rightclosed.png)
+
+#97 BEFORE | light | 1024px | sidebar fechada | contexto fechado
+
+#97 AFTER | light | 1024px | sidebar fechada | contexto fechado
+
+![imagem e1042](assets/lowchrome_97_before_dark_1024_sideopen_rightopen.png)
+
+![imagem e1044](assets/lowchrome_97_after_dark_1024_sideopen_rightopen.png)
+
+#97 BEFORE | dark | 1024px | sidebar aberta | contexto aberto
+
+#97 AFTER | dark | 1024px | sidebar aberta | contexto aberto
+
+![imagem e1046](assets/lowchrome_97_before_dark_1024_sideopen_rightclosed.png)
+
+![imagem e1048](assets/lowchrome_97_after_dark_1024_sideopen_rightclosed.png)
+
+#97 BEFORE | dark | 1024px | sidebar aberta | contexto fechado
+
+#97 AFTER | dark | 1024px | sidebar aberta | contexto fechado
+
+![imagem e1050](assets/lowchrome_97_before_dark_1024_sideclosed_rightopen.png)
+
+![imagem e1052](assets/lowchrome_97_after_dark_1024_sideclosed_rightopen.png)
+
+#97 BEFORE | dark | 1024px | sidebar fechada | contexto aberto
+
+#97 AFTER | dark | 1024px | sidebar fechada | contexto aberto
+
+![imagem e1054](assets/lowchrome_97_before_dark_1024_sideclosed_rightclosed.png)
+
+![imagem e1056](assets/lowchrome_97_after_dark_1024_sideclosed_rightclosed.png)
+
+#97 BEFORE | dark | 1024px | sidebar fechada | contexto fechado
+
+#97 AFTER | dark | 1024px | sidebar fechada | contexto fechado
+
+![imagem e1058](assets/lowchrome_97_before_light_768_sideopen_rightopen.png)
+
+![imagem e1060](assets/lowchrome_97_after_light_768_sideopen_rightopen.png)
+
+#97 BEFORE | light | 768px | sidebar aberta | contexto aberto
+
+#97 AFTER | light | 768px | sidebar aberta | contexto aberto
+
+![imagem e1062](assets/lowchrome_97_before_light_768_sideopen_rightclosed.png)
+
+![imagem e1064](assets/lowchrome_97_after_light_768_sideopen_rightclosed.png)
+
+#97 BEFORE | light | 768px | sidebar aberta | contexto fechado
+
+#97 AFTER | light | 768px | sidebar aberta | contexto fechado
+
+![imagem e1066](assets/lowchrome_97_before_light_768_sideclosed_rightopen.png)
+
+![imagem e1068](assets/lowchrome_97_after_light_768_sideclosed_rightopen.png)
+
+#97 BEFORE | light | 768px | sidebar fechada | contexto aberto
+
+#97 AFTER | light | 768px | sidebar fechada | contexto aberto
+
+![imagem e1070](assets/lowchrome_97_before_light_768_sideclosed_rightclosed.png)
+
+![imagem e1072](assets/lowchrome_97_after_light_768_sideclosed_rightclosed.png)
+
+#97 BEFORE | light | 768px | sidebar fechada | contexto fechado
+
+#97 AFTER | light | 768px | sidebar fechada | contexto fechado
+
+![imagem e1074](assets/lowchrome_97_before_dark_768_sideopen_rightopen.png)
+
+![imagem e1076](assets/lowchrome_97_after_dark_768_sideopen_rightopen.png)
+
+#97 BEFORE | dark | 768px | sidebar aberta | contexto aberto
+
+#97 AFTER | dark | 768px | sidebar aberta | contexto aberto
+
+![imagem e1078](assets/lowchrome_97_before_dark_768_sideopen_rightclosed.png)
+
+![imagem e1080](assets/lowchrome_97_after_dark_768_sideopen_rightclosed.png)
+
+#97 BEFORE | dark | 768px | sidebar aberta | contexto fechado
+
+#97 AFTER | dark | 768px | sidebar aberta | contexto fechado
+
+![imagem e1082](assets/lowchrome_97_before_dark_768_sideclosed_rightopen.png)
+
+![imagem e1084](assets/lowchrome_97_after_dark_768_sideclosed_rightopen.png)
+
+#97 BEFORE | dark | 768px | sidebar fechada | contexto aberto
+
+#97 AFTER | dark | 768px | sidebar fechada | contexto aberto
+
+![imagem e1086](assets/lowchrome_97_before_dark_768_sideclosed_rightclosed.png)
+
+![imagem e1088](assets/lowchrome_97_after_dark_768_sideclosed_rightclosed.png)
+
+#97 BEFORE | dark | 768px | sidebar fechada | contexto fechado
+
+#97 AFTER | dark | 768px | sidebar fechada | contexto fechado
+
 ## 10. Arquivos do projeto (Dataprev 2026 e referências)
 <!-- container e363 @ (0,12666) -->
 
