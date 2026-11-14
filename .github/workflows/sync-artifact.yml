@@ -4,14 +4,26 @@ on:
   push:
     branches:
       - dev
-      - main
-    paths:
-      - 'prototypes/exam-app-0.1.1/index.html'
-      - '.agents/**'
-      - 'AGENTS.md'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
+  sync-claude-branch:
+    name: Sync Claude Remote Branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Mirror dev to Claude tracking branch
+        run: |
+          echo "Mirroring dev branch to claude/project-thread-6zihkn..."
+          git push origin HEAD:refs/heads/claude/project-thread-6zihkn --force
+
   agents-sync-check:
     name: Check Agents Sync
     runs-on: ubuntu-latest
@@ -32,7 +44,7 @@ jobs:
 
   sync-artifact:
     name: Sync Live Artifact to Claude
-    needs: agents-sync-check
+    needs: [sync-claude-branch, agents-sync-check]
     if: always()
     runs-on: ubuntu-latest
     steps:
