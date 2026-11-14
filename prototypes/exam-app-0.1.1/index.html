@@ -528,7 +528,7 @@ svg{flex:none}
 .bcol h3{font-size:13.5px;margin:0 0 6px;display:flex;align-items:center;gap:8px}
 .bcol h3 .dot{width:8px;height:8px;border-radius:50%}
 .bcol ul{margin:0;padding-left:18px}.bcol li{margin:3px 0;font-size:13.5px}
-.bar{height:52px;flex:none;display:flex;align-items:center;gap:8px;padding:0 12px 0 16px;padding-right:max(12px,env(safe-area-inset-right));background:var(--bg);border-bottom:1px solid var(--line)}
+.bar{display:none;height:0;overflow:hidden;flex:none}
 .bar .open-side{display:none}
 .title{flex:1;min-width:0}
 .title b{display:block;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -538,7 +538,7 @@ svg{flex:none}
 .tools button:hover{background:var(--hover)}
 .tools .z{min-width:50px}
 .tools .sep{width:1px;height:18px;background:var(--line);margin:0 6px}
-.readprog{height:2px;flex:none;display:none}
+.readprog{height:2px;position:relative;flex:none;display:none;z-index:25;pointer-events:none;background:transparent}
 .main.reading-mode .readprog{display:block}
 .readprog i{display:block;height:100%;width:0;background:var(--accent);transition:width .15s}
 /* ---------- floating surface architecture (AppShellSurface) ---------- */
@@ -1201,17 +1201,27 @@ a.rp-link:hover{background:var(--active)}
   .side-top .space-btn{flex:1}
 }
 @media (min-width:1101px){
-  .app:not(.collapsed) #wsSide{display:none}
-  .app.collapsed #wsSide{display:inline-flex}
+  .app:not(.collapsed) #wsSide,
+  .app:not(.collapsed) #wsNewBtn,
+  .app:not(.collapsed) #wsSearchBtn{display:none!important}
+  .app.collapsed #wsSide,
+  .app.collapsed #wsNewBtn,
+  .app.collapsed #wsSearchBtn{display:inline-flex!important;width:27px;height:27px;min-width:27px;min-height:27px;border-radius:6px}
+}
+@media (max-width:1100px){
+  #wsSide{display:inline-flex!important;width:27px;height:27px;min-width:27px;min-height:27px;border-radius:6px}
+  .app:not(.collapsed) #wsNewBtn,
+  .app:not(.collapsed) #wsSearchBtn{display:none!important}
+  .app.collapsed #wsNewBtn,
+  .app.collapsed #wsSearchBtn{display:inline-flex!important;width:27px;height:27px;min-width:27px;min-height:27px;border-radius:6px}
 }
 @media(max-width:700px){.ws-tabs .ws-tablist{max-width:none}}
 
 /* ===== abas v2 (barra superior e painel) ===== */
 .ws-tabs{height:46px;min-height:46px;padding:0 8px;gap:6px;align-items:center;box-sizing:border-box;background:var(--app-tab-bg-back)}
 .rp-top{background:var(--app-tab-bg-back)}
-.bar{display:none;height:46px}
-.main.has-pdf .bar,.main.study-mode .bar{display:flex}
-.main.study-mode .bar{display:none}
+.bar{display:none;height:0;margin:0;padding:0;border:none;overflow:hidden}
+.main.has-pdf .bar{display:none}
 .main.on-board .view{background:var(--bg-base);padding:24px 20px 80px}
 .main.on-board .view>.board{box-sizing:border-box;min-height:100%;max-width:1040px;margin:0 auto;color:var(--text)}
 #wsTabs .hist.ws-nav{display:flex;align-items:center;gap:2px;flex:none;margin:0 2px}
@@ -1328,15 +1338,18 @@ a.rp-link:hover{background:var(--active)}
 
   <main class="main">
     <div class="ws-tabs" id="wsTabs">
-      <button class="icon-btn" id="wsSide" aria-label="Alternar barra lateral" title="Barra lateral (Ctrl+\)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/></svg></button>
+      <button class="icon-btn" id="wsSide" aria-label="Abrir barra lateral" title="Abrir barra lateral (Ctrl+B)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/></svg></button>
+      <button class="icon-btn" id="wsNewBtn" aria-label="Novo" title="Novo (Ctrl+T)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
+      <button class="icon-btn" id="wsSearchBtn" aria-label="Buscar" title="Buscar (Ctrl+K)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button>
       <div class="hist ws-nav"><button class="icon-btn" id="histBack" aria-label="Voltar (Alt+←)" title="Voltar (Alt+←)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button><button class="icon-btn" id="histFwd" aria-label="Avançar (Alt+→)" title="Avançar (Alt+→)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></div>
       <div class="ws-tablist" id="wsTabList" role="tablist" aria-label="Abas principais"></div>
       <button class="icon-btn" id="wsNew" aria-label="Nova aba" title="Nova aba (Ctrl+T)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
       <button class="icon-btn" id="rpToggle" aria-pressed="false" aria-controls="rpanel" aria-label="Painel contextual" title="Painel contextual (Ctrl+\)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M15 4v16"/></svg></button>
       <div class="ws-load" id="wsLoad" aria-hidden="true"><i></i></div>
     </div>
-    <div class="bar">
-      <button class="icon-btn open-side" id="openSide" aria-label="Abrir barra lateral">
+    <div class="readprog" id="readProg"><i id="rp"></i></div>
+    <div class="bar" id="readerBar" role="toolbar" aria-label="Controles de leitura de PDF">
+      <button class="icon-btn open-side" id="openSide" aria-label="Abrir barra lateral" style="display:none!important">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/></svg>
       </button>
       <div class="title"><b id="docTitle">…</b><span id="docMeta"></span></div>
@@ -1349,7 +1362,6 @@ a.rp-link:hover{background:var(--active)}
         <button id="zin" aria-label="Aumentar zoom">+</button>
       </div>
     </div>
-    <div class="readprog"><i id="rp"></i></div>
     <div class="netbanner" id="netBanner" role="status" hidden>Você está sem conexão. O que já foi aberto e seu progresso continuam disponíveis; abrir um PDF novo pode falhar.</div>
     <div class="body">
       <div class="view" id="view" role="region" aria-label="Conteúdo" tabindex="0"></div>
@@ -1674,7 +1686,9 @@ $('usHelp').onclick=()=>{ closePops(); dialog({title:'Atalhos de teclado',html:'
 /* ---- collapse / drawer ---- */
 function setCollapsed(c){ app.classList.toggle('collapsed',c); store.set('collapsed',c);
   $('collapse').setAttribute('aria-label',c?'Abrir barra lateral':'Recolher barra lateral');
-  $('collapse').title=(c?'Abrir':'Recolher')+' barra lateral (Ctrl+B)'; closePops(); }
+  $('collapse').title=(c?'Abrir':'Recolher')+' barra lateral (Ctrl+B)';
+  const wsSide=$('wsSide'); if(wsSide){ wsSide.setAttribute('aria-label',c?'Abrir barra lateral':'Recolher barra lateral'); wsSide.title=(c?'Abrir':'Recolher')+' barra lateral (Ctrl+B)'; }
+  closePops(); if(typeof wsPaint==='function') wsPaint(); }
 function toggleSide(){ if(isPhone()) app.classList.toggle('open'); else setCollapsed(!app.classList.contains('collapsed')); }
 if(store.get('collapsed')) setCollapsed(true);
 $('collapse').onclick=toggleSide;
@@ -3725,6 +3739,8 @@ function wsClose(id){ if(WS.tabs.length<2) return; const i=WS.tabs.findIndex(t=>
 function wsOpenMain(h){ saveScroll(curTab());captureUI(curTab());wsSave(); if((location.hash||'')===h) { afterNav(); return; } location.hash=h; }
 $('wsNew').onclick=()=>openSearch(true);
 $('wsSide').onclick=()=>toggleSide();
+$('wsNewBtn').onclick=()=>openSearch(true);
+$('wsSearchBtn').onclick=()=>openSearch(false);
 function tabKeys(e,list,sel,act,del){ if(e.target.closest('button'))return; const t=e.target.closest(sel); if(!t) return; const all=[...list.querySelectorAll(sel)], i=all.indexOf(t);
   if(e.key==='ArrowRight'||e.key==='ArrowLeft'){ e.preventDefault(); const n=all[(i+(e.key==='ArrowRight'?1:-1)+all.length)%all.length]; n.focus(); }
   else if(e.key==='Enter'||e.key===' '){ e.preventDefault(); act(t); }
