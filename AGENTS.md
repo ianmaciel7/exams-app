@@ -1220,3 +1220,31 @@ Para cada alteração de **formulário, navegação, componente, efeito ou tema*
 - **MUST** separar candidatos a skills, catálogos agregadores e fontes primárias. O inventário de 22 URLs em `DESIGN.md` inclui um agregador (M09), **não 22 skills individuais verificados**. Na issue #156, registrar o arquivo `SKILL.md` exato ou marcar como não confirmado, sem supor leitura integral.
 
 <!-- DESIGN-SYSTEM-INTEGRATION:END -->
+
+<!-- DATAVIZ-AGENTS-2026:START -->
+## Data Visualization e dashboards — contrato obrigatório para agentes (2026)
+
+**Leitura obrigatória em tarefas de KPI, dashboard, relatório, gráfico ou grafo:** [docs/ux/data-visualization-dashboards-2026.md](docs/ux/data-visualization-dashboards-2026.md), além de [docs/ux/ux-ui-principles.md](docs/ux/ux-ui-principles.md), [DESIGN.md](DESIGN.md) e, para visualização com animação, [MOTION.md](MOTION.md). O catálogo original de leis/heurísticas deste arquivo continua sendo a referência geral; **não multiplicar “leis” fictícias por tipo de gráfico**. A skill do plugin privado `especialista-ui-ux` é fonte adicional de orientação, não dependência de execução nem ferramenta instalada no repositório.
+
+### Regra de produto e dados
+
+- **MUST** formular pergunta do usuário, decisão suportada e métrica antes de escolher gráfico; para cada KPI, definir fórmula, denominador, origem, janela/fuso, unidade, filtros, atualização e comportamento para dados ausentes.
+- **MUST** escolher visual segundo tarefa e precisão: tabela para valores exatos; barras com baseline quantitativo honesto para categorias; linhas para tendências; dispersão para relações; grafo somente quando conexões forem a pergunta. **AVOID** 3D, dual-axis ambíguo, barras truncadas, falsos intervalos e porcentagens sem base.
+- **MUST** preservar semântica e sincronização de filtros entre cards, charts e tabela; permitir limpar, voltar, drill-down e exportar sem perder contexto. Não duplicar abas de visualização nem filtros globais sem motivação documentada.
+- **MUST** diferenciar zero de ausência de dado, série parcial, falha, staleness e loading. Estados de erro/timeout devem terminar e oferecer recuperação; nunca spinner indefinido ou progresso fictício.
+- **MUST** garantir título, unidades, legenda, resumo interpretativo, dados alternativos acessíveis, teclado/foco e codificação que não dependa só de cor ou hover. Avaliar critérios **WCAG 2.2 AA aplicáveis**, inclusive 1.1.1, 1.4.1, 1.4.3, 1.4.11, 2.1.1, 2.4.7, 2.4.11, 2.5.8, 4.1.2 e 4.1.3, conforme escopo e exceções; **não declarar conformidade** sem testes reais.
+- **MUST** testar dados extremos, nulos, negativos, outliers, séries densas, trocas rápidas de filtros, timezone, mobile, zoom, forced colors, reduced motion, leitor de tela e consistência com dados de origem. Screenshot isolada não comprova exatidão ou acessibilidade.
+- **MUST** preservar privacidade em logs, tooltip, screenshot e export; validação de permissões no backend quando houver. Não instalar biblioteca/skill nova por mera existência no catálogo.
+- **SHOULD** aplicar com crítica **Graphical Perception (Cleveland–McGill)**, **Cognitive Fit (Vessey)**, **Visual Information-Seeking Mantra (Shneiderman)** e **Nested Model (Munzner)**; são pesquisa/teoria/heurística, não novas regras WCAG nem exigências de layout universal.
+- **SHOULD** manter visual limpo, com baixa ornamentação e comparação útil, mas nunca remover eixos, contexto, erros ou valores importantes só para reduzir bordas.
+
+### Workflow e critérios de entrega
+
+1. Inspecionar a branch **dev** atual e os protótipos/evidências antes de mudar código; diferenciar documentação, implementação, teste e publicação.
+2. Registrar definição das métricas, hipótese de visualização, alternativa textual, escopo de filtros e casos-limite no PR/issue; consultar o [guia especializado](docs/ux/data-visualization-dashboards-2026.md).
+3. Em mudanças reais de interface, validar comportamento e dados no navegador, gerar evidências verificáveis no board conforme as regras anteriores, documentar antes/depois e efeitos da mudança.
+4. Entregar PR para `dev` com teste/resultado verificável e, ao final, inspecionar novamente o estado remoto da `dev`; merge squash apenas quando checks e proteção permitirem.
+5. Para protótipo HTML/CSS/JS, não introduzir React/Next.js ou Power BI sem requisito. Para React/Next.js futuro, conferir a stack e os pacotes instalados antes de escolher D3/Recharts/ECharts etc.
+
+**Fontes:** [WAI Complex Images](https://www.w3.org/WAI/tutorials/images/complex/), [USWDS Data Visualizations](https://designsystem.digital.gov/components/data-visualizations/), [WCAG 2.2](https://www.w3.org/TR/WCAG22/), [ISO 9241-112:2025](https://www.iso.org/standard/87518.html) (texto integral licenciado), [Cleveland & McGill](https://doi.org/10.1080/01621459.1984.10478080), [Vessey](https://doi.org/10.1111/j.1540-5915.1991.tb00344.x), [Shneiderman](https://doi.org/10.1109/VL.1996.545307) e [Munzner](https://doi.org/10.1109/TVCG.2009.111).
+<!-- DATAVIZ-AGENTS-2026:END -->
