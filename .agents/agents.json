@@ -33,7 +33,6 @@
         ],
         "targets": [
           "codex",
-          "claude",
           "claude_desktop",
           "gemini",
           "copilot_vscode",
@@ -66,7 +65,6 @@
         },
         "targets": [
           "codex",
-          "claude",
           "claude_desktop",
           "gemini",
           "copilot_vscode",
@@ -101,7 +99,6 @@
         },
         "targets": [
           "codex",
-          "claude",
           "claude_desktop",
           "gemini",
           "copilot_vscode",
@@ -133,7 +130,6 @@
         ],
         "targets": [
           "codex",
-          "claude",
           "claude_desktop",
           "gemini",
           "antigravity"
