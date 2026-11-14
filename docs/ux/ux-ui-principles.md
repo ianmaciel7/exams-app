@@ -352,6 +352,28 @@ Fonte: [WCAG 2.2](https://www.w3.org/TR/WCAG22/). Níveis, escopo e exceções i
 
 **Priorização da auditoria**: IA de navegação Questões/Simulados; adaptação de sidebar e painel direito; grafo com overview/filter/detail/history; gráficos com títulos/alternativas; leitura de PDFs; operações por teclado/touch; métricas de sucesso de tarefa. Validar antes e depois por cenários reais. Este índice é uma **curadoria documental**, não uma avaliação executada do protótipo.
 
+
+### P. HCI, avaliação e widgets acessíveis — auditoria incremental Context7 (2026)
+
+Espelho resumido de [AGENTS.md §17](../../AGENTS.md) e do contrato de implementação de [DESIGN.md §8.19](../../DESIGN.md). Os nomes abaixo **não alteram os 86 itens do catálogo original** e representam categorias diferentes de conhecimento, sem pretensão de que sejam leis científicas novas.
+
+| Nome original publicado | Tipo, autoria / instituição | Uso no Exam App e limite | Fonte |
+|---|---|---|---|
+| **Information Foraging Theory** | Teoria de HCI; Pirolli e Card (1995/1999) | Avaliar pistas de navegação, agrupamento e encontrabilidade de Questões, Simulados, Revisão e Explorar. O conceito Information Scent já existia. | [Pirolli e Card (1995)](https://chi1995.acm.org/proceedings/papers/ppp_bdy.htm); [1999](https://doi.org/10.1037/0033-295X.106.4.643) |
+| **Cognitive Walkthrough** | Método de inspeção; Polson, Lewis, Rieman e Wharton (1992) | Verificar cada etapa de descoberta/ação/feedback de um iniciante; não substitui teste com usuários. | [Artigo original](https://doi.org/10.1016/0020-7373(92)90039-N) |
+| **Keystroke-Level Model (KLM)** | Modelo preditivo de desempenho; Card, Moran e Newell (1980) | Estimar esforço temporal em operação repetitiva de usuário experiente; não estima satisfação ou aprendizagem. | [Artigo original](https://doi.org/10.1145/358886.358895) |
+| **Progressive Enhancement** | Filosofia de desenvolvimento web | Manter conteúdo/ações essenciais com fallback realista de APIs e visualizações avançadas. | [MDN](https://developer.mozilla.org/en-US/docs/Glossary/Progressive_Enhancement) |
+| **Disclosure (Show/Hide) Pattern** | W3C WAI-ARIA APG | Sidebar de grupos simples; botão com expansão, Enter/Espaço e foco consistente. | [APG Disclosure](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/) |
+| **Tree View Pattern** | W3C WAI-ARIA APG | Hierarquia navegável por setas, foco e seleção; **não** aplicar automaticamente a sidebar comum ou grafo canvas. | [APG Tree View](https://www.w3.org/WAI/ARIA/apg/patterns/treeview/) |
+| **Grid Pattern** | W3C WAI-ARIA APG | Grade realmente interativa com foco/células; preferir tabela HTML simples para dados estáticos. | [APG Grid](https://www.w3.org/WAI/ARIA/apg/patterns/grid/) |
+| **Treegrid Pattern** | W3C WAI-ARIA APG | Somente para grade hierárquica interativa, com semântica e teclado completos. | [APG Treegrid](https://www.w3.org/WAI/ARIA/apg/patterns/treegrid/) |
+| **Keyboard Interface / Focus in Composites** | Prática W3C APG | Distinguir foco, seleção, expansão, ativação e retorno de foco, inclusive em coleções que mudam. | [APG Keyboard Interface](https://www.w3.org/WAI/ARIA/apg/practices/keyboard-interface/) |
+| **Complex Images** | Tutorial W3C WAI | Texto equivalente para gráfico estático; para grafo interativo, alternativa em lista/tabela navegável. | [WAI Complex Images](https://www.w3.org/WAI/tutorials/images/complex/) |
+| **In-page Navigation** | Componente/padrão USWDS | Índice orientador para páginas longas, não tab duplicada. | [USWDS](https://designsystem.digital.gov/components/in-page-navigation/) |
+| **Graceful Degradation** | Filosofia complementar de desenvolvimento web | Explicitar fallback e recuperação quando função avançada falhar, sem alegar suporte no-JS/offline não testado. | [MDN](https://developer.mozilla.org/en-US/docs/Glossary/Graceful_degradation) |
+
+**Aplicação por prioridade:** P0 — perda de foco, seleção não recuperável, navegação por teclado inviável, visualização sem alternativa para dados essenciais; P1 — sidebar/árvore mal classificados, nomes que não comunicam destinos, erros sem fallback e primeiro uso confuso; P2 — previsão de esforço com KLM ou índice de página quando facilitar tarefas reais. A classificação é proposta de auditoria e **não declaração de falhas presentes no código**. Usar as evidências do board, do protótipo e de testes antes de abrir regressões ou afirmar implementação.
+
 ## Matriz de decisão por superfície
 
 | Superfície | Padrão principal | Primeiro viewport e CTA | Secundário | Mobile e exceção | Verificação |
