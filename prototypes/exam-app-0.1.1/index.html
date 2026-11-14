@@ -1496,9 +1496,9 @@ a.rp-link:hover{background:var(--active)}
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg>
         <span class="t">Simulados</span>
       </a>
-      <a class="row" id="reviewRow" href="#/revisao" title="Tarefas e revisão espaçada">
+      <a class="row" id="reviewRow" href="#/questoes/erradas" title="Revisar questões respondidas incorretamente">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/><path d="m9 16 2 2 4-4"/></svg>
-        <span class="t">Tarefas / Revisão</span>
+        <span class="t">Revisar erros</span>
       </a>
       <a class="row" id="exploreRow" href="#/explorar" title="Explorar e conexões">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
@@ -4068,7 +4068,7 @@ function route(spaceChanged){
   if(h0==='/simulado/exec'||h0==='/simulado/resultado'){showStudyRoute(h0);return;}
   if(h0==='/lixeira'){ showTrash(); return; }
   if(h0==='/grafico'||h0==='/explorar'){ showGraph(); return; }
-  if(h0==='/revisao'){ location.replace('#/tipo/questao'); return; }
+  if(h0==='/revisao'){ location.replace('#/questoes/erradas'); return; }
   if(h0==='/quadro'){ $('spaceRow')?.removeAttribute('aria-current'); showBoard(); return; }
   if(h0.startsWith('/questoes')||h0==='/simulado'){ showStudyRoute(h0); return; }
   if(h0==='/espaco'||h0.startsWith('/concurso/')||h0.startsWith('/questao/')||h0.startsWith('/tentativa/')||h0.startsWith('/resposta/')||h0.startsWith('/disciplina/')||h0.startsWith('/edicao/')||h0.startsWith('/cargo/')||h0.startsWith('/tipo/')||h0.startsWith('/valor/')||h0.startsWith('/orgao/')||h0.startsWith('/banca/')){ showObjs(h0); return; }

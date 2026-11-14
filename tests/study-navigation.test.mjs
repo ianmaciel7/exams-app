@@ -18,7 +18,7 @@ test('inline application JavaScript parses without syntax errors', () => {
 test('study tasks are primary sidebar actions', () => {
   assert.match(html, /id="questionsRow" href="#\/questoes"/);
   assert.match(html, /id="examsRow" href="#\/simulado"/);
-  assert.match(html, /id="reviewRow"/);
+  assert.match(html, /id="reviewRow" href="#\/questoes\/erradas"/);
 });
 
 test('practice and exam routes render study screens instead of redirecting to object types', () => {

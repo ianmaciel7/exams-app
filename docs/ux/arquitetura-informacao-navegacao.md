@@ -53,7 +53,7 @@ Fontes internas inspecionadas na `dev`: `prototypes/exam-app-0.1.1/index.html`, 
 | `#/tipo/questao` | Catálogo único de *objetos* via `qObjs()` (questões oficiais + próprias), filtros e comando para iniciar simulado | I | Catálogo não é o mesmo que prática inline global |
 | `#/questao/:id` | Ficha da questão, alternativas, respostas e metadados | I | Não confundir “objeto” com tarefa de prática |
 | `#/tipo/:tipo`, `#/disciplina/:id` | Catálogo de tipos e entidade contextual | I | Navegação focada em taxonomia |
-| `#/revisao` | Redireciona a `#/tipo/questao` | P | Revisão de erros não tem jornada própria; #76 |
+| `#/revisao` | Redireciona para o filtro `#/questoes/erradas` | P | Apenas respostas do banco oficial; recuperação automática permanece em #76 |
 | `#/grafico`, `#/explorar` | Grafo global/exploração | I/P | Melhorias de motor e controles #67/#68 |
 | `#/quadro` | Quadro visual do espaço | I | Não é o fluxo principal de resolução |
 
@@ -73,7 +73,7 @@ flowchart TD
   H --> I["Resultado #/simulado/resultado"]
   D --> J["Tipo de objeto Questão"]
   J --> K["Ficha #/questao/:id (oficial + manual)"]
-  A --> L["Revisão #/revisao (redireciona para Tipo)"]
+  A --> L["Revisão #/revisao (atalho legado para Erradas)"]
 ~~~
 
 Os dois bancos não são bases de dados necessariamente distintas: `qObjs()` já concatena oficiais e manuais. O **problema é duplicação de superfícies de tarefa, estado de filtro e modos de resposta**.
@@ -188,7 +188,7 @@ Criar duas árvores de navegação **sem aparência visual**: “Atual em dev”
 |---|---|---|---|
 | T1 | “Quero resolver uma questão nova agora” | Questões → primeira questão | Escolher Tipo de Objeto antes de Estudar |
 | T2 | “Quero simular uma prova com tempo marcado” | Simulados → configurar | Confundir simulados contextuais com global |
-| T3 | “Errei questões e quero revisá-las” | Revisar erros / filtro Errei | Redirecionamento `#/revisao` para tipo |
+| T3 | “Errei questões e quero revisá-las” | Revisar erros / filtro Errei | Atalho de revisão ainda limitado ao banco oficial |
 | T4 | “Quero editar uma questão que eu mesmo criei” | Questões → localizar objeto → editar | Separação de banco manual e prática |
 | T5 | “Quero treinar apenas questões do meu cargo” | Conteúdo → cargo → resolver questões **ou** Questões → cargo | Filtro de contexto escondido |
 | T6 | “Quero continuar uma prova interrompida” | Simulados → continuar tentativa | Recomeço e perda de respostas |
