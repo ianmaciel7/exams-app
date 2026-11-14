@@ -1510,7 +1510,7 @@ a.rp-link:hover{background:var(--active)}
   </aside>
   <div class="scrim" id="scrim"></div>
 
-  <main class="main">
+  <main class="main" id="main">
     <div class="ws-tabs" id="wsTabs">
       <button class="icon-btn" id="wsSide" aria-label="Abrir barra lateral" title="Abrir barra lateral (Ctrl+B)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/></svg></button>
       <button class="icon-btn" id="wsNewBtn" aria-label="Novo" title="Novo (Ctrl+T)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
@@ -3910,6 +3910,7 @@ function route(spaceChanged){
   document.querySelector('.main').classList.remove('study-mode');
   if(location.hash!=='#/grafico'){ stopGV(); document.querySelector('.main').classList.remove('on-graph'); }
   const h0=(location.hash||'').slice(1);
+  if(!h0 || h0==='/'){ location.replace('#/espaco'); return; }
   if(h0==='/simulado/exec'||h0==='/simulado/resultado'){showStudyRoute(h0);return;}
   if(h0==='/lixeira'){ showTrash(); return; }
   if(h0==='/grafico'||h0==='/explorar'){ showGraph(); return; }
@@ -4044,7 +4045,7 @@ const nbrs=n=>{ const s=new Set(); n.out.forEach(x=>s.add(x[0])); n.inn.forEach(
 let SV={}; try{ SV=JSON.parse(localStorage.getItem(WS_KEY))||{}; }catch(e){ SV={}; }
 const okTab=t=>t&&typeof t.id==='string'&&Array.isArray(t.hist)&&t.hist.length&&t.hist.every(x=>typeof x==='string');
 const WS={tabs:(Array.isArray(SV.tabs)?SV.tabs.filter(okTab):[]).map(t=>({id:t.id,hist:t.hist.slice(),i:Math.min(Math.max(+t.i||0,0),t.hist.length-1),title:String(t.title||''),pinned:!!t.pinned,sc:t.sc&&typeof t.sc==='object'?t.sc:{},ui:t.ui&&typeof t.ui==='object'?t.ui:{}})),active:SV.active};
-if(!WS.tabs.length) WS.tabs=[{id:uid(),hist:[location.hash],i:0,title:'',sc:{}}];
+if(!WS.tabs.length) WS.tabs=[{id:uid(),hist:[location.hash||'#/espaco'],i:0,title:'',sc:{}}];
 if(!WS.tabs.some(t=>t.id===WS.active)) WS.active=WS.tabs[0].id;
 const RPD=()=>({open:false,w:420,active:'t1',tabs:[{id:'t1',views:[{id:uid(),type:'explorar',f:1}]}]});
 const RP=Object.assign(RPD(),(SV.rp&&Array.isArray(SV.rp.tabs))?SV.rp:{});
@@ -4575,7 +4576,8 @@ wsPaint(); wsPaintNav(); applyRP(false);
 { let rq=0, rpAuto=false; const fit=()=>{ rq=0; wsPaint(); if(MQT.matches) return; const mainEl=document.querySelector('.main'); const w=mainEl.offsetWidth-(rpVisible()?0:(RP.w||420));
     if(rpVisible()&&w<480){ RP.open=false; rpAuto=true; applyRP(false); wsPaint(); } else if(!rpVisible()&&rpAuto&&w>=560){ RP.open=true; rpAuto=false; applyRP(false); wsPaint(); } };
   const kick=()=>{ if(!rq) rq=requestAnimationFrame(fit); }; addEventListener('resize',kick); if(window.ResizeObserver) new ResizeObserver(kick).observe($('wsTabList')); setTimeout(kick,50); }
-{ const t=curTab(), h=location.hash||''; if(t.hist[t.i]!==h){ if(!h&&t.hist[t.i]){ wsSilent=true; setTimeout(()=>{ wsSilent=false; },500); location.hash=t.hist[t.i]; } else { pushHist(t,h); wsSave(); wsPaint(); wsPaintNav(); } } else afterNav(); }
+{ const t=curTab(); let h=location.hash||''; if(!h || h==='#'){ if(!t.hist[t.i] || t.hist[t.i]==='#') t.hist[t.i]='#/espaco'; h=t.hist[t.i]; location.replace(h); }
+  if(t.hist[t.i]!==h){ if(!h&&t.hist[t.i]){ wsSilent=true; setTimeout(()=>{ wsSilent=false; },500); location.hash=t.hist[t.i]; } else { pushHist(t,h); wsSave(); wsPaint(); wsPaintNav(); } } else afterNav(); }
 if(typeof loadQuestions==='function'&&!questionBank) loadQuestions().then(()=>{ if(rpVisible()) rpRefresh(); }).catch(()=>{});
 paintSpaces(); paintNav(); route(false); if(location.hash==='#/simulado/exec')beginExamTicker();
 })();
