@@ -602,29 +602,9 @@ Prints em /mnt/project-files/prints/redesign-paginas-objeto/
 
 Capturas enviadas por Ian durante a revisão da 0.1.1, em 12 e 13/11.
 
-![imagem e317](assets/5e04fb915ee94b2c67a5adb37585e685.png)
-
 ![imagem e319](assets/731ecd45a56634184b7bcd8df6de8c5b.png)
 
 ![imagem e321](assets/cc0093684c5ae6f612afbbf6b91bd674.png)
-
-**0.1.1: "2026" e "Dataprev 2026" destacados juntos.** É o mesmo objeto aberto, igual ao Notion.
-
-**0.1.1: menu ⋯ do item** (Desafixar, Renomear, Copiar link, Excluir). Regra: fixar só pelo ⋯ da sidebar.
-
-**0.1.1: página da Edição** enviada junto com o mesmo feedback.
-
-![imagem e323](assets/831c50665375ea7ebd6bb067f3e09c4e.png)
-
-![imagem e325](assets/245371488f6e2d39a3dc98e934d488f4.png)
-
-![imagem e327](assets/791462f4696e4cfd2e62304ca7520faf.png)
-
-![imagem e329](assets/8852061c63b37547e1c657dda371bbee.png)
-
-**0.1.1:** seta de expandir e recolher (circulada) no item Dataprev.
-
-**0.1.1:** item "2026" (Edição) dentro do Dataprev.
 
 **0.1.1:** Arquivo, Documento e PDF na árvore, com contagem.
 
@@ -754,6 +734,45 @@ Capturas da fase em que o Ian pediu um artefato só para o protótipo e outro pa
 **0.1.1, tela grande.** Ian sente vazio em tela larga; documentos do Concurso precisam mostrar de qual edição são.
 
 **0.1.1 (v97): "está um pouco estranho".** Painel direito apertado, rótulos quebrando, bloco Estudar repetindo as abas. Ajustado na v98.
+
+## 25. Telas Vitais: Navegação por Teclado, Grade Rápida e Relatório de Simulado
+<!-- container e508 @ (0,9200) -->
+
+![imagem e317](assets/5e04fb915ee94b2c67a5adb37585e685.png)
+
+### Auditoria e Modernização de Telas Vitais (Issues #17 & #19)
+
+- **Navegação por Teclado Completa**:
+  - Atalhos 1..5 ou A..E selecionam alternativas instantaneamente sem atraso.
+  - Tecla Enter confirma / avança de questão.
+  - Teclas J (Próxima) e K (Anterior) permitem fluidez total sem uso obrigatório de mouse.
+- **Navegador Rápido de Questões (Drawer / Grade)**:
+  - Gaveta com matriz 10x7 de todas as 70 questões do edital.
+  - Codificação semântica por cores: Verde (Acerto), Vermelho (Erro), Cinza (Pendente) e Borda Destacada (Questão Ativa).
+  - Salto direto e responsivo com zero layout shift ou scroll jumping.
+- **Relatório e Scorecard de Simulado**:
+  - Painel com nota final, tempo médio por item, taxa global de acertos e termômetro de nota de corte (mínimo de 57,5 pontos).
+  - Desempenho detalhado agrupado por disciplina com barras de progresso proporcionais.
+- **Governança & Board**:
+  - Alinhamento aos tokens de  e persistência no board.
+
+**0.1.1: "2026" e "Dataprev 2026" destacados juntos.** É o mesmo objeto aberto, igual ao Notion.
+
+**0.1.1: menu ⋯ do item** (Desafixar, Renomear, Copiar link, Excluir). Regra: fixar só pelo ⋯ da sidebar.
+
+**0.1.1: página da Edição** enviada junto com o mesmo feedback.
+
+![imagem e323](assets/831c50665375ea7ebd6bb067f3e09c4e.png)
+
+![imagem e325](assets/245371488f6e2d39a3dc98e934d488f4.png)
+
+![imagem e327](assets/791462f4696e4cfd2e62304ca7520faf.png)
+
+![imagem e329](assets/8852061c63b37547e1c657dda371bbee.png)
+
+**0.1.1:** seta de expandir e recolher (circulada) no item Dataprev.
+
+**0.1.1:** item "2026" (Edição) dentro do Dataprev.
 
 ## 10. Arquivos do projeto (Dataprev 2026 e referências)
 <!-- container e363 @ (0,12666) -->

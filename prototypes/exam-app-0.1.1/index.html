@@ -738,6 +738,28 @@ a.ot{display:block;padding:3px 0;min-height:24px}
 .op-icon{display:grid;place-items:center;width:60px;height:60px;border-radius:16px;flex:none;background:color-mix(in srgb,currentColor 12%,transparent)}.op-icon svg{width:30px;height:30px}.op-icon img{width:34px;height:34px}
 .op-kind{display:inline-block;font-size:12.5px;color:var(--muted);text-decoration:none;border-radius:4px}a.op-kind:hover{color:var(--text);text-decoration:underline}
 .op-ht h1{margin:3px 0 0;font-size:32px;line-height:1.14;letter-spacing:-.022em;font-weight:650;overflow-wrap:anywhere}
+/* ---- Vital Screens UI Refinement (Issues #17 & #19) ---- */
+.q-drawer{border:1px solid var(--line);border-radius:10px;background:var(--side);padding:14px;margin:18px 0;display:none}
+.q-drawer.open{display:block}
+.q-drawer-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;font-size:12.5px;font-weight:600;color:var(--text)}
+.q-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(36px, 1fr));gap:6px}
+.q-grid-cell{display:grid;place-items:center;height:34px;border-radius:6px;border:1px solid var(--line);background:var(--bg);color:var(--text);font-size:12px;font-weight:600;text-decoration:none;transition:transform .1s ease, border-color .15s ease}
+.q-grid-cell:hover{border-color:var(--text);transform:scale(1.05)}
+.q-grid-cell.cur{border-color:var(--text);background:var(--text);color:var(--bg)}
+.q-grid-cell.ok{background:rgba(16,185,129,.14);border-color:rgba(16,185,129,.4);color:#10b981}
+.q-grid-cell.bad{background:rgba(239,68,68,.14);border-color:rgba(239,68,68,.4);color:#ef4444}
+.q-grid-cell.ok.cur{background:#10b981;color:#fff}
+.q-grid-cell.bad.cur{background:#ef4444;color:#fff}
+
+.sim-scorecard{border:1px solid var(--line);border-radius:12px;background:var(--side);padding:18px;margin-bottom:20px;display:flex;flex-direction:column;gap:16px}
+.sim-score-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(160px, 1fr));gap:12px}
+.sim-score-box{border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:12px;display:flex;flex-direction:column;gap:4px}
+.sim-score-lbl{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
+.sim-score-val{font-size:22px;font-weight:700;color:var(--text);font-variant-numeric:tabular-nums}
+.sim-score-sub{font-size:11px;color:var(--muted)}
+.sim-disc-item{display:flex;align-items:center;justify-content:space-between;padding:6px 0;font-size:13px;border-bottom:1px solid var(--line)}
+.sim-disc-item:last-child{border-bottom:0}
+
 /* ---- Home Study Dashboard (#/espaco) ---- */
 .dash-wrap{display:flex;flex-direction:column;gap:24px;margin-bottom:32px}
 .dash-hero{background:linear-gradient(135deg, color-mix(in srgb, var(--hover) 70%, var(--bg)), var(--side));border:1px solid var(--line);border-radius:14px;padding:24px;display:flex;flex-direction:column;gap:16px;box-shadow:0 2px 8px rgba(0,0,0,.03)}
@@ -2848,8 +2870,59 @@ function tentativaPage(x){
   const ed=x.ed&&edicaoById(x.ed), cg=x.cg&&cargoById(x.cg), cc=x.conc&&concursoById(x.conc);
   const ch=(t,h)=>'<a class="chip" href="'+h+'">'+esc(t)+'</a>';
   const props=[['Tipo',ch('Simulado','#/tipo/simulado')],['Data',opTxt(fmtDT(x.at))],['Pontuação',opTxt(x.score.toLocaleString('pt-BR')+' de '+x.max.toLocaleString('pt-BR')+' pontos')],['Acerto',opTxt(pctOf(x.correct,x.total)+'% ('+x.correct+' de '+x.total+')')],['Respondidas',opTxt(x.answered+' de '+x.total)],['Tempo',opTxt(fmtDur(x.secs))],['Edição',ed?ch(ed.t,'#/edicao/'+ed.id):''],['Cargo',cg?ch(cg.t,'#/cargo/'+cg.id):''],['Concurso',cc?ch(cc.t,'#/concurso/'+cc.id):'']];
+  
+  // Scorecard e nota de corte
+  const avgSec=Math.round(x.secs/(x.answered||1));
+  const cutoffPass=x.score>=57.5;
+  const scoreCardHtml=`
+  <div class="sim-scorecard">
+    <div class="sim-score-grid">
+      <div class="sim-score-box">
+        <span class="sim-score-lbl">Pontuação Final</span>
+        <span class="sim-score-val">${x.score.toLocaleString('pt-BR')} <small style="font-size:14px;color:var(--muted)">/ ${x.max}</small></span>
+        <span class="sim-score-sub">${pctOf(x.correct,x.total)}% de aproveitamento</span>
+      </div>
+      <div class="sim-score-box">
+        <span class="sim-score-lbl">Situação vs Nota de Corte</span>
+        <span class="sim-score-val" style="color:${cutoffPass?'#10b981':'#ef4444'}">${cutoffPass?'Aprovado (>= 57.5)':'Abaixo do Corte'}</span>
+        <span class="sim-score-sub">Mínimo: 57,5 pontos</span>
+      </div>
+      <div class="sim-score-box">
+        <span class="sim-score-lbl">Tempo Médio / Questão</span>
+        <span class="sim-score-val">${fmtDur(avgSec)}</span>
+        <span class="sim-score-sub">Total: ${fmtDur(x.secs)}</span>
+      </div>
+      <div class="sim-score-box">
+        <span class="sim-score-lbl">Taxa de Acertos</span>
+        <span class="sim-score-val">${x.correct} / ${x.total}</span>
+        <span class="sim-score-sub">${x.total - x.correct} erros cometidos</span>
+      </div>
+    </div>
+  </div>`;
+
+  // Desempenho por disciplina
+  const discMap={};
+  const allQ=qObjs();
+  x.res.forEach(r=>{
+    const q=allQ.find(item=>item.id===r.id);
+    const m=(q&&q.materia)||'Geral';
+    const entry=discMap[m]||(discMap[m]={total:0,ok:0});
+    entry.total++;
+    if(r.r==='ok') entry.ok++;
+  });
+  const discRows=Object.entries(discMap).map(([m,stats])=>{
+    const pct=pctOf(stats.ok,stats.total);
+    return `<div class="sim-disc-item">
+      <span><b>${esc(m)}</b> <small style="color:var(--muted)">(${stats.ok}/${stats.total} acertos)</small></span>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="s-progress" style="width:120px" aria-hidden="true"><i style="width:${pct}%"></i></div>
+        <b style="font-size:12.5px;min-width:38px;text-align:right">${pct}%</b>
+      </div>
+    </div>`;
+  }).join('');
+
   const rows=x.res.map(r=>'<a class="op-row sc-q" href="#/questao/'+r.id+'"><span class="op-rt"><b>'+esc(r.n)+'</b></span><span class="sc-st '+(r.r==='ok'?'ok':r.r==='err'?'bad':'')+'">'+(r.r==='ok'?'✓':r.r==='err'?'✗':'—')+'</span><span class="op-go" aria-hidden="true">›</span></a>').join('');
-  return opPage({iid:'tentativa:'+x.id,crumb:[['Espaço','#/espaco'],['Simulado','#/tipo/simulado'],[fmtDT(x.at),'']],icon:'simulado',kind:'Simulado',kindHref:'#/tipo/simulado',title:'Simulado de '+fmtDT(x.at),props,body:opSec('Questões',rows?'<div class="op-list">'+rows+'</div>':opEmpty('Sem questões.'),{count:x.res.length})+(()=>{const rs=respAll().filter(r=>r.sim===x.id);return opSec('Respostas',rs.length?'<div class="op-list">'+respRows(rs)+'</div>':opEmpty('Sem respostas registradas.'),{count:rs.length});})()});
+  return opPage({iid:'tentativa:'+x.id,crumb:[['Espaço','#/espaco'],['Simulado','#/tipo/simulado'],[fmtDT(x.at),'']],icon:'simulado',kind:'Simulado',kindHref:'#/tipo/simulado',title:'Simulado de '+fmtDT(x.at),props,body:scoreCardHtml+opSec('Desempenho por Disciplina',discRows)+opSec('Questões',rows?'<div class="op-list">'+rows+'</div>':opEmpty('Sem questões.'),{count:x.res.length})+(()=>{const rs=respAll().filter(r=>r.sim===x.id);return opSec('Respostas',rs.length?'<div class="op-list">'+respRows(rs)+'</div>':opEmpty('Sem respostas registradas.'),{count:rs.length});})()});
 }
 
 
@@ -3028,8 +3101,21 @@ function questaoPage(q){
   const de=discEnt(q.materia), ed=q.ed&&edicaoById(q.ed), cg=q.cg&&cargoById(q.cg), cc=q.conc&&concursoById(q.conc);
   const props=[['Tipo',ch('Questão','#/tipo/questao')],['Disciplina',q.materia?ch(q.materia,de?'#/disciplina/'+de.id:''):''],['Banca',q.banca?ch(q.banca,valHref('banca',q.banca)):''],['Órgão',q.orgao?ch(q.orgao,valHref('orgao',q.orgao)):''],['Ano',q.ano?ch(q.ano,'#/valor/ano/'+q.ano):''],['Edição',ed?ch(ed.t,'#/edicao/'+ed.id):''],['Cargo',cg?ch(cg.t,'#/cargo/'+cg.id):''],['Concurso',cc?ch(cc.t,'#/concurso/'+cc.id):''],['Origem',ch(ORIGENS[qOrig(q)],'')+(qOrig(q)==='oficial'&&q.doc?' '+ch('Caderno tipo 1 (PDF)','#'+q.doc):'')],['Gabarito oficial',r?opTxt(q.gabarito)+(qOrig(q)==='oficial'?' '+ch('Gabarito (PDF)','#gabarito'):''):opTxt('Liberado depois que você responder')],['Posição',opTxt((i+1)+' de '+all.length)]];
   const alts=Object.entries(q.alternativas).map(([l,v])=>'<button type="button" class="sc-alt'+(r?(l===q.gabarito?' good':(l===r?' bad':'')):'')+'" data-qo-ans="'+q.id+'|'+l+'"'+(r?' disabled':'')+'><b>'+l+'</b><span>'+esc(v)+'</span>'+(r&&l===q.gabarito?'<em class="alt-t good">✓ Correta</em>':(r&&l===r?'<em class="alt-t bad">✗ Sua resposta</em>':''))+'</button>').join('');
-  const nav='<div class="op-actions" style="margin-top:18px;justify-content:space-between">'+(prev?'<a class="op-btn" href="#/questao/'+prev.id+'">← Anterior</a>':'<span></span>')+(r?'<button type="button" class="op-btn" data-qo-reset="'+q.id+'">Refazer</button>':'<span></span>')+(next?'<a class="op-btn" href="#/questao/'+next.id+'">Próxima →</a>':'<span></span>')+'</div>';
-  const body='<div class="qo"><p class="sc-stm qo-stm">'+esc(q.enunciado)+'</p><div class="qo-alts">'+alts+'</div>'+(r?'<p class="s-note">'+(r===q.gabarito?'Resposta correta.':'Resposta incorreta. Gabarito: '+q.gabarito+'.')+'</p>':'')+(r?aiRow(q.id):'')+qMarks(q)+nav+'</div>';
+  const ansMap=getAnswers();
+  const qGridCells=all.map((item,idx)=>{
+    const an=ansMap[item.n];
+    const okSt=an?(an.correct?'ok':'bad'):'';
+    const isCur=item.id===q.id?' cur':'';
+    return '<a class="q-grid-cell '+okSt+isCur+'" href="#/questao/'+item.id+'" title="Questão '+(idx+1)+'">'+(idx+1)+'</a>';
+  }).join('');
+  const drawerHtml='<div class="q-drawer" id="qDrawer"><div class="q-drawer-head"><span>Navegador Rápido de Questões</span><small>Legenda: Verde (Acerto) • Vermelho (Erro) • Cinza (Pendente)</small></div><div class="q-grid">'+qGridCells+'</div></div>';
+  const nav='<div class="op-actions" style="margin-top:18px;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">'+
+    (prev?'<a class="op-btn" href="#/questao/'+prev.id+'">← Anterior (K)</a>':'<span></span>')+
+    '<button type="button" class="op-btn" onclick="document.getElementById(\'qDrawer\').classList.toggle(\'open\')" aria-expanded="false">🧭 Grade ('+(i+1)+'/'+all.length+')</button>'+
+    (r?'<button type="button" class="op-btn" data-qo-reset="'+q.id+'">Refazer</button>':'<span></span>')+
+    (next?'<a class="op-btn" href="#/questao/'+next.id+'">Próxima (J) →</a>':'<span></span>')+
+  '</div>'+drawerHtml;
+  const body='<div class="qo"><p class="sc-stm qo-stm">'+esc(q.enunciado)+'</p><div class="qo-alts">'+alts+'</div>'+(r?'<p class="s-note">'+(r===q.gabarito?'✓ Resposta correta!':'✗ Resposta incorreta. Gabarito oficial: '+q.gabarito+'.')+'</p>':'')+(r?aiRow(q.id):'')+qMarks(q)+nav+'</div>';
   const hh=histAll().filter(h=>h.q===q.id).sort((a,b)=>b.t-a.t); const hist=opSec('Respostas',hh.length?'<div class="op-list">'+hh.map(h=>{const rid=h.id||('r'+h.t.toString(36)+'-'+h.q);return '<a class="op-row" href="#/resposta/'+rid+'"><span class="op-rt"><b>'+fmtDT(h.t)+'</b><small>'+esc(h.src)+(h.a?' · marcou '+esc(h.a):'')+'</small></span><span class="sc-st '+(h.ok?'ok':'bad')+'">'+(h.ok?'✓ Acertou':'✗ Errou')+'</span><span class="op-go" aria-hidden="true">›</span></a>';}).join('')+'</div>':opEmpty('Você ainda não respondeu esta questão.'),{count:hh.length});
   return opPage({iid:'questao:'+q.id,crumb:[['Espaço','#/espaco'],['Questão','#/tipo/questao'],[qTitle(q),'']],icon:'questao',kind:'Questão',kindHref:'#/tipo/questao',title:qTitle(q),props,body:body+qMetrics(q,hh,r)+hist+qNote(q)+qRelated(q,all)});
 }
@@ -3778,6 +3864,45 @@ function buildGraph(){
   gq.addEventListener('keydown',e=>{ if(e.key==='Enter'&&st.match&&st.match.size){ const i=[...st.match][0]; wsOpenMain(nodes[i].n.href); } else if(e.key==='Escape'){ gq.value=''; st.match=null; st.dirty=true; } });
   wrap.querySelector('.gv-leg').addEventListener('click',e=>{ const b=e.target.closest('[data-gk]'); if(!b) return; const k=b.dataset.gk, on=b.getAttribute('aria-pressed')!=='true'; GVK[k]=on; b.setAttribute('aria-pressed',on); nodes.forEach(o=>{ if(o.n.kind===k) o.on=on; }); st.alpha=Math.max(st.alpha,.5); st.dirty=true; });
   cv.style.cursor='grab'; }
+
+/* ---- Atalhos de Teclado para Resolução de Questões (Issues #17 & #19) ---- */
+document.addEventListener('keydown', e => {
+  const t = e.target;
+  if(t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+  if(e.ctrlKey || e.metaKey || e.altKey) return;
+  
+  // Teclas 1..5 ou A..E para marcar alternativa na questão ativa
+  const keyUpper = e.key.toUpperCase();
+  const altMap = {'1':'A','2':'B','3':'C','4':'D','5':'E','A':'A','B':'B','C':'C','D':'D','E':'E'};
+  if(altMap[keyUpper]){
+    const letter = altMap[keyUpper];
+    const btn = document.querySelector('[data-qo-ans$="|' + letter + '"]:not([disabled])') ||
+                document.querySelector('.s-choice[data-alt="' + letter + '"]') ||
+                document.querySelector('.sc-alt[data-qo-ans$="|' + letter + '"]');
+    if(btn){
+      e.preventDefault();
+      btn.click();
+      return;
+    }
+  }
+
+  // Tecla Enter para confirmar ou avançar
+  if(e.key === 'Enter'){
+    const cta = document.querySelector('.op-actions .op-btn[href*="/questao/"]:last-child') ||
+                document.querySelector('[data-st-next]');
+    if(cta){ e.preventDefault(); cta.click(); return; }
+  }
+
+  // Navegação J (próxima) / K (anterior)
+  if(e.key === 'j' || e.key === 'J'){
+    const nextBtn = document.querySelector('.op-actions a.op-btn[href*="/questao/"]:last-child');
+    if(nextBtn){ e.preventDefault(); nextBtn.click(); return; }
+  }
+  if(e.key === 'k' || e.key === 'K'){
+    const prevBtn = document.querySelector('.op-actions a.op-btn[href*="/questao/"]:first-child');
+    if(prevBtn){ e.preventDefault(); prevBtn.click(); return; }
+  }
+});
 
 /* ---- atalhos ---- */
 document.addEventListener('keydown',e=>{ const t=e.target; if(t&&(t.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) { if(e.key==='Escape'&&t.closest&&t.closest('#rpanel')) t.blur(); return; }

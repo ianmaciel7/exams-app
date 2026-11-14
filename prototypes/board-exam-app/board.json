@@ -2369,6 +2369,22 @@
       "type": "text",
       "x": 20,
       "y": 8660
+    },
+    "e508": {
+      "color": "white",
+      "h": 500,
+      "text": "25. Telas Vitais: Navegação por Teclado, Grade Rápida e Relatório de Simulado",
+      "type": "container",
+      "w": 1500,
+      "x": 0,
+      "y": 9200
+    },
+    "e509": {
+      "size": "small",
+      "text": "### Auditoria e Modernização de Telas Vitais (Issues #17 & #19)\n\n- **Navegação por Teclado Completa**:\n  - Atalhos 1..5 ou A..E selecionam alternativas instantaneamente sem atraso.\n  - Tecla Enter confirma / avança de questão.\n  - Teclas J (Próxima) e K (Anterior) permitem fluidez total sem uso obrigatório de mouse.\n- **Navegador Rápido de Questões (Drawer / Grade)**:\n  - Gaveta com matriz 10x7 de todas as 70 questões do edital.\n  - Codificação semântica por cores: Verde (Acerto), Vermelho (Erro), Cinza (Pendente) e Borda Destacada (Questão Ativa).\n  - Salto direto e responsivo com zero layout shift ou scroll jumping.\n- **Relatório e Scorecard de Simulado**:\n  - Painel com nota final, tempo médio por item, taxa global de acertos e termômetro de nota de corte (mínimo de 57,5 pontos).\n  - Desempenho detalhado agrupado por disciplina com barras de progresso proporcionais.\n- **Governança & Board**:\n  - Alinhamento aos tokens de  e persistência no board.",
+      "type": "text",
+      "x": 20,
+      "y": 9260
     }
   }
 }
