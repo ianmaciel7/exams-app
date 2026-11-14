@@ -696,6 +696,29 @@ Este contrato complementa [AGENTS.md §17](AGENTS.md) e as seções 8.14–8.18.
 - **SHOULD** avaliar jornadas por **Cognitive Walkthrough**, rótulos/destinos por **Information Foraging Theory** e esforço de tarefas repetitivas pelo **Keystroke-Level Model** apenas quando a previsão de usuário experiente for pertinente. Nenhum substitui teste real nem métricas da ISO 9241-11.
 - **MUST** separar em evidências: documentado / implementado / testado. Se só houver documentação, não registrar screenshots ou conformidade fictícias.
 
+
+### 8.20 Design tokens e container queries — governança 2026
+
+Complementa as seções de cores, tokens e responsividade: o [Design Tokens Format Module 2025.10](https://www.designtokens.org/TR/2025.10/format/) é uma **especificação comunitária estável, não uma norma W3C**. Fornece vocabulário para decisões semânticas com valor, tipo, grupos, referências/aliases e tokens compostos. É relevante ao sistema de design, mas **não demanda migração imediata dos tokens CSS**. O preview de setembro de 2026 é experimental e não deve ser referência de implementação normativa.
+
+| Cenário | Orientação para Exam App | Verificação |
+|---|---|---|
+| **Tokens de aparência** | Priorizar tokens semânticos existentes para superfícies, texto, foco, seleção, estados e espaçamento, mantendo tema claro/escuro e OKLCH quando já usado. | Listar o token usado, seu papel e valor computado por tema; evitar literais dispersos sem motivo. |
+| **Interoperabilidade futura** | Se houver exportação/transformação de tokens, adotar como base de comparação o DTCG **2025.10 estável**, após checar tipos, aliases, resolução de referências e formato final. | Registrar conversão e equivalência; não afirmar conformidade por similaridade superficial de nomenclatura. |
+| **Componentes em sidebars/painéis** | Usar [CSS Container Queries](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Containment/Container_queries) quando o espaço do componente variar independentemente do viewport (painel recolhido, resize, split view). | Redimensionar sidebar, painel direito e janela; o componente preserva ações e conteúdo, não depende somente de media query global. |
+| **Fallback responsivo** | Se container query não for suportada/aplicável, usar composição simples adequada e manter foco, scroll, CTA e informação principal. | Avaliar zoom/reflow, tradução, alto contraste, estado de animação e viewport dinâmico. |
+
+**MUST:** não substituir tokens semânticos aprovados pelo JSON do DTCG por estética ou apenas porque é mais recente. **SHOULD:** manter uma única fonte de verdade e conferir a dependência de tokens por estado de componentes. **MUST:** validar comportamento de componentes em contêineres estreitos e largos, não somente snapshots mobile/desktop. A acessibilidade do resultado deve ser verificada pelos critérios WCAG aplicáveis, independentemente do formato escolhido para tokens.
+
+### 8.21 Metodologia de auditoria abrangente — WCAG-EM 2.0 e ACT Rules
+
+A [WCAG-EM 2.0](https://www.w3.org/TR/wcag-em-2/) é uma **W3C Group Note publicada em 23/07/2026**. Seu processo de cinco etapas (escopo → exploração → seleção de amostra → avaliação → relatório) deve orientar auditorias amplas de UI/UX e acessibilidade. Para o Exam App, a amostra deve incluir navegação, campos, resposta/simulado, grafo, gráficos, PDF e estados de erro, com **jornadas completas**, e não apenas imagens estáticas.
+
+- **MUST** registrar: ref/commit da branch, escopo, nível WCAG alvo, amostra representativa, dispositivos/tecnologias assistivas utilizados, critério por cenário, resultado, evidência e limitações. Quando realizar auditoria amostral, indicar que não foi teste exaustivo.
+- **MUST** combinar verificação automatizada, inspeção manual e cenários reais. [ACT Rules Format 1.1](https://www.w3.org/TR/act-rules-format/) é uma **W3C Recommendation** para formato de regras de teste; as [ACT Rules](https://www.w3.org/WAI/standards-guidelines/act/rules/) são informativas e não demonstram, isoladamente, conformidade.
+- **MUST** manter WCAG **2.2** como referência normativa adotada no projeto. O [WCAG 3.0 Working Draft de setembro de 2026](https://www.w3.org/WAI/standards-guidelines/wcag/wcag3-intro/) está em evolução; não usar como substituto da versão vigente ou como requisito inventado.
+- **MUST** diferenciar o que a documentação **exige**, o que a implementação **faz** e o que a auditoria **testou**. Não promover um checklist de design a laudo de acessibilidade.
+
 ## 9. Referências catalogadas — 21 candidatos a skills + 1 agregador (auditoria em andamento)
 
 Os 22 itens abaixo são **21 candidatos a skills e 1 agregador comunitário (M09)**; **não correspondem a 22 SKILL.md individuais verificados**, e não são extensões oficiais de Apple ou Google. **Catalogar URL não comprova leitura integral de cada SKILL.md, README e referências internas.** Não afirmar que os 22 foram verificados ou que cada resumo corresponde ao estado atual do repositório sem registro de arquivo/revisão/data. Esta integração é uma síntese preliminar enquanto a análise aprofundada de cada fonte não estiver documentada. Alguns estão voltados a Android/SwiftUI; nem todo trecho de código se aplica a um protótipo HTML/CSS/JS. Para números ou requisitos, confrontar com a documentação oficial **vigente**.

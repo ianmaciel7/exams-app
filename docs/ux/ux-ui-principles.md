@@ -374,6 +374,25 @@ Espelho resumido de [AGENTS.md §17](../../AGENTS.md) e do contrato de implement
 
 **Aplicação por prioridade:** P0 — perda de foco, seleção não recuperável, navegação por teclado inviável, visualização sem alternativa para dados essenciais; P1 — sidebar/árvore mal classificados, nomes que não comunicam destinos, erros sem fallback e primeiro uso confuso; P2 — previsão de esforço com KLM ou índice de página quando facilitar tarefas reais. A classificação é proposta de auditoria e **não declaração de falhas presentes no código**. Usar as evidências do board, do protótipo e de testes antes de abrir regressões ou afirmar implementação.
 
+
+### Q. Avaliação, testes e tokens — publicações de 2026
+
+Espelho resumido de [AGENTS.md §18](../../AGENTS.md) e dos contratos de [DESIGN.md §§8.20–8.21](../../DESIGN.md). **Estes itens não são leis UI/UX novas.** Diferenciar especificação, método, padrão de tecnologia e rascunho.
+
+| Nome oficial | Tipo e status | Aplicação / cuidado | Fonte |
+|---|---|---|---|
+| **WCAG Evaluation Methodology (WCAG-EM) 2.0** | **W3C Group Note**, 23/07/2026 | Método em cinco etapas para avaliar acessibilidade de produtos digitais, incluindo jornadas completas. Não acrescenta critérios WCAG. | [W3C](https://www.w3.org/TR/wcag-em-2/), [WAI](https://www.w3.org/WAI/test-evaluate/conformance/wcag-em/) |
+| **Accessibility Conformance Testing (ACT) Rules Format 1.1** | **W3C Recommendation**, 05/02/2026 | Formato para produzir regras verificáveis e comparáveis; as regras ACT individuais são informativas. | [W3C](https://www.w3.org/TR/act-rules-format/) |
+| **Design Tokens Format Module 2025.10** | **Design Tokens Community Group**, relatório estável de 28/10/2025, **não** W3C Recommendation | Tokens, tipos, grupos, aliases e compostos; aplicar ao planejamento de interoperabilidade, não migrar tokens CSS existentes sem justificativa. | [DTCG estável](https://www.designtokens.org/TR/2025.10/format/) |
+| **WCAG 3.0 Working Draft** | **Rascunho**, atualizado em setembro de 2026, ainda não versão normativa vigente | Monitorar evolução, sem usá-lo para declarar conformidade. | [WAI](https://www.w3.org/WAI/standards-guidelines/wcag/wcag3-intro/) |
+| **CSS Container Size Queries** | Padrão/funcionalidade CSS; **não** lei UX | Adaptação de componentes por largura de contêiner, especialmente sidebar e painel direito, com fallback. | [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Containment/Container_queries) |
+
+**WCAG-EM 2.0, cinco passos publicados:** **Define the evaluation scope**; **Explore the target digital product**; **Select a representative sample set**; **Evaluate the selected sample set**; **Report the evaluation findings**. Auditar Questões, Simulados, PDF, grafo, estados interativos e processos completos com amostra representativa e relatório reproduzível.
+
+**WCAG 2.2 AAA complementares, não obrigatórios para AA:** **2.5.6 Concurrent Input Mechanisms**; **3.3.6 Error Prevention (All)**; **3.3.9 Accessible Authentication (Enhanced)**. [Fonte normativa WCAG 2.2](https://www.w3.org/TR/WCAG22/). Não confundí-los com os critérios A/AA já documentados.
+
+**Nota sobre testes:** scanners e ferramentas automáticas não determinam sozinhos se um produto é acessível; requerem interpretação e testes manuais de experiências e processos. [WAI — Selecting Evaluation Tools](https://www.w3.org/WAI/test-evaluate/tools/selecting/). A enumeração de fontes **não** equivale a teste de implementação.
+
 ## Matriz de decisão por superfície
 
 | Superfície | Padrão principal | Primeiro viewport e CTA | Secundário | Mobile e exceção | Verificação |
