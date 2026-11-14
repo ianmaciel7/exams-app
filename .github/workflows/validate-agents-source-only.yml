@@ -1,0 +1,30 @@
+name: Validate agents source-only synchronization
+
+on:
+  pull_request:
+    branches: [dev]
+    paths:
+      - '.agents/agents.json'
+      - 'AGENTS.md'
+      - '.github/workflows/sync-artifact.yml'
+      - '.github/workflows/validate-agents-source-only.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  agents:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install agent CLI
+        run: npm install -g @agents-dev/cli@latest
+      - name: Generate integrations in source-only mode
+        run: agents sync
+      - name: Check stable generated integrations and sources
+        run: |
+          agents sync --check
+          git diff --exit-code -- AGENTS.md .agents/agents.json
