@@ -11,6 +11,11 @@
 - **Componente de design system:** solução da plataforma/produto, não obrigação universal. Material 3 Android não determina implementação web; Primer React e React Aria servem como referências mesmo quando o protótipo usa HTML/CSS/JS.
 - **Primitiva nativa HTML/CSS:** recurso web com compatibilidade e semântica próprias; usar HTML nativo adequado antes de reimplementar ARIA complexo.
 
+
+## Complemento de 2026: variantes, dialogs e taxonomia de todas as famílias
+
+Para além dos **30 padrões APG** listados abaixo, consultar a [taxonomia de 28 famílias de componentes e variantes de dialogs](taxonomia-componentes-e-dialogs-2026.md). A nova pesquisa separa **semântica, finalidade, apresentação e estado**, incluindo **Basic/Full-screen M3**, **cinco variantes Carbon**, **Settings Dialog**, Form Dialog, Wizard, Picker, Sheets, Popovers, Menu, tabelas e gráficos. **Esses nomes adicionais não são novas roles APG nem novas leis científicas.**
+
 ## A. Inventário integral dos 30 padrões publicados no W3C WAI-ARIA APG
 
 Fonte principal: [WAI-ARIA APG — Patterns](https://www.w3.org/WAI/ARIA/apg/patterns/). **Total neste catálogo W3C: 30 padrões (lista consultada em 14/11/2026)**. Alguns padrões têm exemplos em desenvolvimento; não confundir documentação de padrão com implementação nativa disponível em todos os browsers.

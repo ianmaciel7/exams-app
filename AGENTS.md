@@ -1132,6 +1132,19 @@ Estas são **16 entradas adicionais** de sucesso WCAG, além das já documentada
 5. **SHOULD** vincular Fitts, Hick–Hyman, Steering, Gestalt, Jakob e outros **somente quando a hipótese for pertinente**, registrando como lei empírica, princípio perceptivo, heurística ou efeito. Não aplicar falsos números universais de botões, colunas ou duração.
 6. **MUST** indicar se o componente está **documentado, implementado ou testado**; qualquer edição real de protótipo deve ter evidência no board, sem inventar screenshot/GIF.
 
+
+### 23. Taxonomia de componentes e variantes de dialogs — pesquisa 2026
+
+**Consulta obrigatória** ao [catálogo de 28 famílias de componentes e variantes de dialogs](docs/ux/taxonomia-componentes-e-dialogs-2026.md), além do [inventário dos 30 padrões W3C APG](docs/ux/componentes-ui-padroes-2026.md), antes de desenhar, alterar ou auditar qualquer widget composto. **Não confundir:** lei científica de UX/HCI, heurística/modelo, padrão semântico WAI-ARIA, variante de design system, composição visual e primitiva HTML.
+
+- **MUST** classificar o componente por **tarefa, semântica, apresentação e estado**; escolher HTML nativo ou padrão APG apropriado antes do estilo. Usar fontes oficiais do catálogo, sem instalar nova biblioteca apenas porque um padrão existe.
+- **MUST** decidir explicitamente entre **Dialog, AlertDialog, Non-modal Dialog, Popover, Menu, Combobox, SelectPanel, Sheet ou página**. Dialog de configurações com navegação interna não é AlertDialog; uma grade visual de tiles não é Listbox sem contrato de seleção.
+- **MUST** respeitar foco inicial, foco contido quando modal, retorno ao trigger, Escape/cancelamento apropriado, nome e descrição acessíveis, fundo inerte somente se modal, rolagem, validação, persistência, erro e recuperação. Sem fechar silenciosamente com dados não salvos.
+- **SHOULD** consultar variantes oficiais **Material 3 Basic/Full-screen**, **Carbon Passive/Transactional/Danger/Acknowledgment/Progress**, **Primer Dialog responsive**, **Apple Alerts/Sheets/Action Sheets/Popovers**, distinguindo variante do design system de role W3C.
+- **MUST** selecionar formatos de dados conforme finalidade: Lista/Galeria/Kanban/Tabela/Embed compartilham dados e filtros; gráficos exigem título, unidade, valores e alternativa textual; grafo relacional não vira automaticamente uma árvore ARIA.
+- **MUST** auditar componentes atuais de configuração, seleção de tipo, abas e painéis da dev antes de criar outro sistema paralelo. A imagem de referência do Settings Dialog é evidência de aparência, não prova de DOM/teclado do produto retratado.
+- **MUST** registrar estado **documentado / implementado / testado** e screenshots/GIF reais no board quando a UI for alterada. Este catálogo é **somente documentação**; não significa correção ou teste de protótipo.
+
 <!-- UX-LAWS-CATALOG:END -->
 
 <!-- DESIGN-SYSTEM-INTEGRATION:START -->
