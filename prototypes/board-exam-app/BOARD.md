@@ -2113,6 +2113,31 @@ Todos os 7 gaps de produto e de fluxo identificados na sessão anterior foram au
 
 **Evidência 119 (Readwise SRS Freeform Manual Import Form):** Formulário de inserção manual de citações e anotações para o motor de SRS.
 
+## 40. Responsividade Home — Issue #132: eliminar undefined e validar CTA em 12 larguras
+<!-- container e1339 @ (30000,11000) -->
+
+Causa comprovada por inspeção do código: UIICON.timer era referenciado, mas não declarado, criando 'undefined' no slot de ícone. Correção: SVG inline e grid com reflow em 320px. E2E Chromium verifica 12 larguras, ícone, rótulos, bounds e navegação ao simulado. Evidência real da branch do PR, não de dispositivo Android físico. Cobertura PARCIAL de #132: não equivale a auditoria completa dos painéis, PDF e grafo.
+
+![imagem e1341](assets/issue132_before_390.png)
+
+![imagem e1343](assets/issue132_after_320.png)
+
+ANTES: a Home exibia o texto literal 'undefined' no lugar do SVG do simulado, em 390px
+
+DEPOIS: 320px, ícone SVG restaurado; CTA refluindo no grid
+
+![imagem e1345](assets/issue132_after_390.png)
+
+![imagem e1347](assets/issue132_after_768.png)
+
+DEPOIS: 390px, ícone SVG sem sobreposição de texto
+
+DEPOIS: 768px, ações primárias preservadas
+
+![imagem e1349](assets/issue132_after_1280.png)
+
+DEPOIS: 1280px, alinhamento do CTA no desktop
+
 ## 10. Arquivos do projeto (Dataprev 2026 e referências)
 <!-- container e363 @ (0,12666) -->
 
