@@ -574,3 +574,52 @@ As 20 URLs estão **dentro do AGENTS.md**, não apenas em documento externo. **A
 **Estado verificável desta integração:** 30/30 entradas do catálogo editorial Laws of UX listadas acima; 86/86 entradas da curadoria aplicada transcritas integralmente aqui; 20/20 URLs fornecidas indexadas aqui; demais famílias (Gestalt, Nielsen, Shneiderman, ISO e WCAG) mantidas acima. **Cobertura de todas as entradas individuais dos 20 sites: não verificada.** Não declarar que essa etapa está concluída antes de uma auditoria por fonte.
 
 <!-- UX-LAWS-CATALOG:END -->
+
+<!-- DESIGN-SYSTEM-INTEGRATION:START -->
+## Material 3 Expressive + Apple HIG — contrato de integração para agentes (14/11/2026)
+
+**Leitura obrigatória em alterações de interface:** [DESIGN.md](DESIGN.md) é a autoridade interna para aparência, componentes e tokens; [MOTION.md](MOTION.md) é a autoridade interna para animação e física; este `AGENTS.md` é a autoridade para execução, evidências e critérios de aceite. Complementar com [arquitetura de informação](docs/ux/arquitetura-informacao-navegacao.md), [princípios de UX/UI](docs/ux/ux-ui-principles.md), documentação oficial [Material Design 3](https://m3.material.io/) e [Apple HIG](https://developer.apple.com/design/human-interface-guidelines/). **Não substituir silenciosamente** tokens, navegação ou comportamento existentes pelo visual de outra plataforma.
+
+### Hierarquia de autoridade, fontes e modo de decisão
+
+1. **MUST** priorizar tarefa real, acessibilidade e contratos existentes do Exam App sobre efeitos estéticos. Documentar objetivo, ação principal, estados e critérios de aceitação antes de redesenhar.
+2. **MUST** diferenciar: (a) normas verificáveis WCAG/WAI-ARIA; (b) orientação oficial M3/HIG de escopo/plataforma específicos; (c) convenções próprias do Exam App; (d) sínteses, heurísticas e recomendações de skills comunitários. **Não chamar conselhos de terceiros de exigência oficial**.
+3. **MUST** ler a fonte oficial atual quando a decisão depender de um valor exato (contraste, dimensão, componente, design token, motion token, licença ou API). Não fixar números de terceiros como especificação universal.
+4. **MUST** usar tokens semânticos próprios do produto; tratar roles M3 `primary/on-primary/surface/on-surface` e Apple `label/fill/background` como **vocabulários de referência**, não como ordem para renomear os tokens `--app-*`, `--k-*` e `--motion-*` existentes. Preservar OKLCH e temas claro/escuro.
+5. **MUST** escolher um vocabulário visual predominante por superfície. No Exam App o padrão é **produto próprio, low-chrome e orientado a leitura**; usar princípios de M3 Expressive para ênfase funcional e Apple HIG para clareza/continuidade, sem introduzir glassmorphism como estilo global.
+6. **MUST** respeitar a arquitetura atual: protótipo HTML/CSS/JS sem build. Não instalar React, Motion, GSAP, Material Web, MUI ou bibliotecas de componentes apenas por referência de skill. Em migração futura para Next.js, reavaliar trade-offs e preferir componentes acessíveis já adotados no projeto.
+7. **SHOULD** ler apenas a referência específica da tarefa em vez de copiar repositórios inteiros ou adicionar dezenas de instruções redundantes. Preservar licença e atribuição; snippets externos não são automaticamente compatíveis nem seguros.
+
+### Design visual, estrutura e componentes
+
+8. **MUST** comunicar hierarquia por layout, espaços, alinhamento, tipografia e papéis de cor **antes** de adicionar sombras, bordas, transparências e animações; manter a política low-chrome da issue #97. Não remover divisores funcionais só para ficar "sem bordas".
+9. **MUST** manter uma única navegação primária coerente. Abas representam vistas irmãs do mesmo contexto; filtros são controles de refinamento, não abas duplicadas; wizard representa etapa sequencial. Resolução de questões e simulados preservam o próprio fluxo e estados.
+10. **MUST** escolher controles por semântica: botão/CTA para ação, link para navegação, tab para alternância de vista, chip para filtro/atributo, select/radio para escolha e dialog apenas para interrupção adequada. Não disfarçar ação primária como chip ou menu oculto.
+11. **SHOULD** aplicar expressividade pontualmente onde melhora localização da ação/resultado, mudança de contexto ou descoberta de relação: seleção ativa, gráfico/grafo, onboarding, sucesso importante. **AVOID** formas decorativas em enunciados, tabelas densas, provas ou painéis textuais.
+12. **MUST** preservar tipografia legível mesmo com zoom, tradução e fontes substitutas. Não importar SF Pro/SF Symbols proprietários indiscriminadamente na web; seguir licença e manter SVGs semânticos conforme política de ícones.
+13. **MUST** distinguir o tamanho visível do componente da sua área efetiva de interação. Para WCAG 2.2 AA, avaliar o critério 2.5.8 de **24×24 CSS px ou exceção válida**. Alvos Apple **44 pt** e Material **48 dp** são diretrizes de plataforma, não o mínimo universal WCAG AA; preferir alvos confortáveis em touch e testar espaçamento.
+14. **MUST** suportar teclado, leitor de tela, foco visível/não oculto, estados `disabled/hover/pressed/focus/selected`, contraste, modo escuro, zoom/reflow, alto contraste quando aplicável e mensagens que não dependem só de cor.
+15. **SHOULD** adotar layouts **adaptativos**, não apenas reduzir a largura: verificar sidebar, painel direito, barras de abas, filtros, gráficos/grafo, leitor de PDF e questões em viewport estreito, amplo e zoom de 200%/400% conforme critério aplicável; declarar limitações reais.
+16. **AVOID** efeito Liquid Glass por padrão. Se uma superfície de controle flutuante precisar de translucidez, documentar propósito, contraste sobre conteúdos variáveis, fallback opaco, legibilidade em alto contraste, preferências de transparência e custo de `backdrop-filter`. O conteúdo principal de estudo deve permanecer estável e legível.
+
+### Motion, feedback e integridade da tarefa
+
+17. **MUST** seguir [MOTION.md](MOTION.md) para tokens e física. Diferenciar transições de estado (opacidade/cor, sem overshoot) das espaciais (posição, escala, raio, eventualmente spring); as equações e presets de skills são **referências**, não implementação automática.
+18. **MUST** garantir animações **interrompíveis e reversíveis** a partir do estado visual atual, inclusive cliques rápidos, duplo clique, Escape, drag, novo filtro ou navegação em meio à transição; não enfileirar animações que causem atraso.
+19. **MUST** impedir `scroll jump`, perda de foco, alteração acidental de resposta, atrasos na correção e movimento automático do grafo sem benefício. Não transformar a interface de estudos em demonstração de efeitos físicos.
+20. **MUST** observar `prefers-reduced-motion` no CSS e JS/canvas e usar alternativa sem movimento espacial preservando significado, estado e feedback. Evitar reiniciar loops de física em abas ocultas ou quando estáveis.
+21. **MUST** oferecer estado terminal de erro e recuperação para operações assíncronas, com timeout/deadline e retries limitados conforme a operação. Não usar animação de loading infinita como substituta de tratamento de erro.
+
+### Procedimento de alteração e aceite
+
+Antes de concluir uma mudança visual/interativa, o agente **MUST**:
+- Conferir `origin/dev` **no início e no fim**; preservar mudanças concorrentes; abrir PR para `dev` conforme o fluxo do projeto.
+- Levantar tarefa/problema, registrar baseline (DOM/ARIA, screenshot ou gravação/GIF onde movimento importar), URL/viewport/tema e comparar com evidências existentes em `docs/`, `prototypes/`, issues e `docs/archives/`.
+- Registrar decisão de design: qual padrão interno foi mantido, qual princípio M3/HIG foi **adaptado**, qual alternativa foi rejeitada e por quê. Anotar fontes primárias e as referências comunitárias quando úteis.
+- Validar teclado, leitor de tela onde possível, claro/escuro, touch/desktop, zoom, motion normal/reduzido, ações repetidas, navegação de volta, carregamento lento e erros. Para protótipos, verificar console e executar testes existentes relevantes.
+- Publicar antes/depois com texto reconstrutível e evidência no board (`board.json` e assets), regenerando `BOARD.md` com `npm run board` quando a tarefa envolva UI real. **Mudança apenas documental** não exige screenshot inventado.
+- Reportar **implementado × especificado × não testado**; não declarar conformidade M3, Apple HIG ou WCAG sem evidência.
+
+**Consulta por tópico:** tokens, superfícies, tipografia, componentes, layout e critérios em [DESIGN.md](DESIGN.md); springs, easing, tempo, continuidade espacial, grafo, performance e motion reduzido em [MOTION.md](MOTION.md). Inventário dos 22 skills de referência e separação entre fontes oficiais/comunidade em `DESIGN.md`.
+
+<!-- DESIGN-SYSTEM-INTEGRATION:END -->
