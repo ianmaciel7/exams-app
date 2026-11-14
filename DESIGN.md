@@ -443,6 +443,34 @@ Checklist básico: foco na ordem certa, foco não oculto por sticky UI; ícones 
 
 Fontes: [Apple HIG — Text fields](https://developer.apple.com/design/human-interface-guidelines/text-fields), [Apple HIG — Buttons](https://developer.apple.com/design/human-interface-guidelines/buttons), [GOV.UK — Text input](https://design-system.service.gov.uk/components/text-input/), [GOV.UK — Error message](https://design-system.service.gov.uk/components/error-message/), [WAI-ARIA APG](https://www.w3.org/WAI/ARIA/apg/) e [WCAG 2.2](https://www.w3.org/TR/WCAG22/).
 
+
+#### 8.10.1 Formulários: implementação acessível e hierarquia low-chrome
+
+Complementa a matriz de persistência e a anatomia de campos desta seção com as verificações de [AGENTS.md §15](AGENTS.md). **Não é necessário reestilizar todos os formulários para um único padrão.** Exigir evidência de tarefa, legibilidade, responsividade e estados antes de concluir que um novo visual é melhor.
+
+| Ponto de decisão | Contrato visual e de comportamento | Evidência a verificar |
+|---|---|---|
+| **Forma do campo** | Campo deve ser reconhecível como interativo, sem depender de uma caixa pesada ou de uma borda invisível. Pode usar variante preenchida ou contornada conforme contraste e hierarquia do contexto; não tornar todas as superfícies idênticas. | Descoberta dos campos, foco e estado disabled em claro/escuro e forced-colors. [Material 3](https://m3.material.io/components/text-fields/guidelines) |
+| **Label, hint e erro** | Rótulo persistente; ajuda curta perto do campo, não só placeholder; mensagem específica de erro em texto e associada programaticamente ao input. Prefixo, sufixo e ação local não devem competir com o valor. | HTML acessível e leitor de tela, incluindo erro após submissão. [WAI Instructions](https://www.w3.org/WAI/tutorials/forms/instructions/) |
+| **Grupo e alinhamento** | Proximidade visual e agrupamento semântico com fieldset/legend quando apropriado; evitar cartões e divisores para cada input isolado. Agrupar por sentido e usar fluxo vertical em formulários sequenciais. | Ordem de leitura/Tab, mobile, zoom e conteúdo longo. [WAI Grouping](https://www.w3.org/WAI/tutorials/forms/grouping/) |
+| **Largura, densidade e espaçamento** | Alinhar campos a uma largura útil e proporcional à entrada prevista; não esticar um valor curto em toda a coluna. Usar espaçamento e tipografia semânticos existentes, não um número arbitrário de pixels só por estética. | Leitura, digitação e reflow em viewports e idiomas diferentes. |
+| **Estado e foco** | Estados default/hover/focus-visible/invalid/disabled/readonly/pending/saved distintos sem depender só de cor, sombra ou placeholder. Foco claro em alto contraste; considerar o critério AAA 2.4.13 como meta de melhoria, sem alegar AA por ele. | WCAG 2.4.7, 2.4.11, 2.4.13 e 1.4.11 conforme aplicabilidade. |
+| **Validação** | Não interromper primeira digitação com erro prematuro; ajustar blur/submit e revalidação ao contexto. Em erro, preservar o valor, associar ajuda/erro e guiar ao campo, com sumário quando fizer sentido. | Erro no cliente e servidor, foco no envio, correção e recuperação. [Primer Forms](https://primer.style/product/ui-patterns/forms/) |
+| **Ações e persistência** | Evitar CTA de Salvar/Aplicar para preferências reversíveis de efeito imediato. Exigir ação clara para criar, enviar, excluir ou concluir operação composta/cara; exibir dirty, salvando, salvo, falhou quando houver persistência. | Duplo clique, latência, concorrência, offline, retorno e reversibilidade. |
+| **Ajuda e overlays** | Se tooltip/popover de ajuda for acionado por hover/foco, observar 1.4.13 AA; mecanismos de ajuda repetidos seguem 3.2.6 A. | Mouse, teclado, toque, Escape e leitor de tela quando aplicável. |
+| **Etapas** | Formulário em etapas apenas se houver grupos lógicos extensos; progresso e retorno claros, preservando preenchimento. | Voltar/avançar, etapa opcional, interrupção e retomada. [WAI Multi-page Forms](https://www.w3.org/WAI/tutorials/forms/multi-page/) |
+
+**Especificação visual de aceite para redesign de campos:**
+
+- **MUST** mostrar pelo menos exemplos reais de campo vazio, preenchido, foco, erro, desabilitado e carregamento/estado salvo quando aplicável, em tema claro e escuro.
+- **MUST** validar que o texto visível da ação integra seu nome acessível (WCAG 2.5.3); foco sozinho não muda de contexto (3.2.1); erro detectado é descrito em texto (3.3.1).
+- **MUST** verificar vínculos semânticos do grupo (1.3.1), consistência de mecanismos de ajuda repetidos (3.2.6) e conteúdo adicional por hover/foco (1.4.13) quando aplicáveis.
+- **SHOULD** medir identificação do controle, sucesso da tarefa, tempo de preenchimento e recuperação de erro no protótipo — não declarar aparência moderna só porque o raio ou a borda mudou.
+- **MUST** preservar componentes e tokens existentes e propor variações de densidade/ênfase como hipóteses verificáveis; o código atual usa HTML/CSS/JS, sem exigir bibliotecas novas.
+- **MUST** distinguir documentação de implementação: esta seção define requisitos e critérios, **não demonstra** que os formulários atuais passaram nos testes.
+
+**Guias oficiais adicionais:** [WAI Form Instructions](https://www.w3.org/WAI/tutorials/forms/instructions/), [WAI Validating Input](https://www.w3.org/WAI/tutorials/forms/validation/), [WCAG 2.2](https://www.w3.org/TR/WCAG22/), [GitHub Primer — Forms](https://primer.style/product/ui-patterns/forms/).
+
 ### 8.11 Contrato de estados e governança dos componentes
 
 Nenhum componente é aprovado apenas pelo estado "bonito" em screenshot estático. O agente deve registrar sua matriz de estados, **sem criar estados irrelevantes**:
