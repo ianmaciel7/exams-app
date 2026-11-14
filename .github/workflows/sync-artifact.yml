@@ -1,0 +1,60 @@
+name: Sync Dev Automation
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+    paths:
+      - 'prototypes/exam-app-0.1.1/index.html'
+      - '.agents/**'
+      - 'AGENTS.md'
+  workflow_dispatch:
+
+jobs:
+  agents-sync-check:
+    name: Check Agents Sync
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install @agents-dev/cli
+        run: npm install -g @agents-dev/cli@latest
+
+      - name: Validate Agents Sync
+        run: agents sync --check
+
+  sync-artifact:
+    name: Sync Live Artifact to Claude
+    needs: agents-sync-check
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: "latest"
+
+      - name: Check token & Deploy Artifact
+        env:
+          CLAUDE_TOKEN: ${{ secrets.CLAUDE_ARTIFACT_TOKEN }}
+        run: |
+          if [ -z "$CLAUDE_TOKEN" ]; then
+            echo "::notice ::CLAUDE_ARTIFACT_TOKEN is not configured in repository secrets. Skipping remote CI artifact sync. Local git hooks handle artifact deployment."
+            exit 0
+          fi
+          echo "Deploying prototypes/exam-app-0.1.1/index.html to live Claude artifact..."
+          uvx --from claude-artifact-cli claude-artifact publish \
+            --mode patch \
+            --token "$CLAUDE_TOKEN" \
+            --url "https://claude.ai/artifact/MeCzKuKCsr6fY4F8AGxnyC" \
+            prototypes/exam-app-0.1.1/index.html

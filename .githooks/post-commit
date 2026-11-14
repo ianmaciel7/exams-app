@@ -1,0 +1,14 @@
+#!/bin/sh
+# 1. Auto-sync cross-agent configurations (AGENTS.md, MCP, skills)
+if which agents >/dev/null 2>&1; then
+    agents sync || true
+fi
+
+# 2. Auto-sync Claude live artifact whenever prototypes/exam-app-0.1.1/index.html changes in a commit
+if git diff-tree -r --name-only --no-commit-id HEAD | grep -q "prototypes/exam-app-0.1.1/index.html"; then
+    echo "=========================================================="
+    echo " [Sync] prototypes/exam-app-0.1.1/index.html changed."
+    echo " Syncing Claude live artifact..."
+    echo "=========================================================="
+    uvx --from claude-artifact-cli claude-artifact publish --mode patch --url https://claude.ai/artifact/MeCzKuKCsr6fY4F8AGxnyC prototypes/exam-app-0.1.1/index.html || true
+fi
