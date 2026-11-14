@@ -868,3 +868,38 @@ Os 22 itens abaixo são **21 candidatos a skills e 1 agregador comunitário (M09
 **Fontes primárias para validação:** [Material 3](https://m3.material.io/), [Apple HIG](https://developer.apple.com/design/human-interface-guidelines/), [Apple Liquid Glass](https://developer.apple.com/documentation/technologyoverviews/liquid-glass), [WCAG 2.2](https://www.w3.org/TR/WCAG22/), [WAI-ARIA APG](https://www.w3.org/WAI/ARIA/apg/). As alegações técnicas dos skills e recomendações numéricas de terceiros devem ser revalidadas contra o arquivo original e a origem oficial antes de qualquer uso normativo. **Evidência de leitura integral dos 21 SKILL.md candidatos: não registrada nesta versão; M09 é um agregador.**
 
 <!-- MATERIAL-APPLE-INTEGRATION:END -->
+
+<!-- DATAVIZ-DESIGN-2026:START -->
+## 10. Data Visualization e dashboards — design system aplicado (2026)
+
+**Referência especializada:** [docs/ux/data-visualization-dashboards-2026.md](docs/ux/data-visualization-dashboards-2026.md). Este capítulo **complementa**, sem substituir, as diretrizes de gráficos da seção 8.14.3, os tokens atuais, a filosofia low-chrome e a distinção entre normas, princípios empíricos e heurísticas.
+
+### 10.1 Linguagem visual e hierarquia
+
+| Decisão | Diretriz do Exam App | Anti-padrão a rejeitar |
+|---|---|---|
+| Primeira leitura | Mostrar pergunta/tarefa e poucos KPIs definidos; permitir passar da visão geral ao detalhe | Página ocupada por cards redundantes e métricas sem definição |
+| Comparação de quantidade | Barras/posição legível, unidade e base coerentes; valores exatos em tabela quando necessários | 3D, área/ângulo sem necessidade, eixo de barras cortado |
+| Comparação no tempo | Linha/pontos com período, frequência, dados ausentes e timezone | Ligar pontos inexistentes ou sugerir tendência com amostra insuficiente |
+| Cores e forma | Tokens semânticos existentes, redundância por texto/traço/forma | Vermelho/verde como única distinção ou séries confundíveis |
+| Legenda e eixos | Visíveis quando informam interpretação; correspondentes à tabela/dados | Remover eixos, legenda ou fonte para “limpar” UI |
+| Tipografia | Distinguir título, período, unidade, valor e nota metodológica | Número gigante sem denominador, ou informação-chave apenas em tooltip |
+| Filtros | Escopo corrente e filtros ativos sempre identificáveis, com ação de limpar | Contagem, gráfico e tabela com filtros divergentes |
+| Adaptação | Reflow e organização responsiva; tabela/lista equivalente se gráfico perder legibilidade | Apertar chart desktop até rótulos se tornarem inúteis |
+| Semântica e teclado | Navegação por teclado, foco, alternativa textual e status de atualização | Canvas/hover como único meio de chegar aos dados |
+| Motion | Movimento útil e opcional, com reduced-motion e pausas | Física de grafo infinita ou animação decorativa que impede leitura |
+
+### 10.2 Composição por fluxo — não por quantidade de dados
+
+- **Home:** ação de estudo e contexto primeiro; indicadores não competem com “Resolver questões” e “Fazer simulado”.
+- **Resultado:** explicar denominador da nota/acertos, mostrar áreas de melhoria e permitir “Revisar erradas” com filtro verdadeiro.
+- **Histórico:** período, escala, lacunas, origem, atualização e comparação temporal claros; sem supor métricas ainda não implementadas.
+- **Exploração de objetos:** lista/busca acessível e grafo complementar, overview/filtros/detalhes sob demanda; preservar seleção e contexto ao abrir painel.
+- **Densidade:** preferir agrupamento funcional e comparações significativas; low-chrome não significa eliminar divisores que sejam essenciais para distinguir categorias, escalas ou estados.
+
+### 10.3 Definição das métricas, auditoria e liberação
+
+Antes da aprovação de uma nova visualização, registrar **pergunta, fórmula, unidade, denominador, janela temporal, atualização, escopo de filtros, estados e evidências de teste**. Testar com vazio, zero, nulos, negativos, outliers, muitos dados, mudança de tema/locale, zoom, mobile, teclado e leitores de tela. Dados de chart e tabela devem concordar, assim como o estado exportado.
+
+**Critérios:** WCAG 2.2 AA aplicáveis; fontes [W3C WAI Complex Images](https://www.w3.org/WAI/tutorials/images/complex/), [USWDS](https://designsystem.digital.gov/components/data-visualizations/), [Microsoft Power BI Accessibility](https://learn.microsoft.com/pt-br/power-bi/create-reports/desktop-accessibility-creating-reports), [Carbon](https://carbondesignsystem.com/data-visualization/overview/). **Essas orientações não certificam a interface.** Para animações e o grafo, [MOTION.md](MOTION.md) é canônico. A lista de skills (OpenAI, Anthropic, Microsoft, Atlassian e comunidade) está no guia especializado; não é uma lista de dependências instaladas.
+<!-- DATAVIZ-DESIGN-2026:END -->
