@@ -255,6 +255,7 @@
     "e724",
     "e725",
     "e726",
+    "e630",
     "e800",
     "e801",
     "e802",
@@ -2478,7 +2479,7 @@
     },
     "e511": {
       "size": "small",
-      "text": "### Unificação de Descoberta e Navegação Contextual (Issue #25)\n\n- **Explorar como Central de Descoberta**:\n  - Busca integrada, filtros dinâmicos por tipo e contagens em tempo real.\n  - Ações diretas e imediatas em cada item da listagem:\n    - [🕸️] Abrir no Grafo Contextual direto da linha.\n    - [🔗] Abrir Backlinks / referências.\n    - [+] Abrir em Nova Aba.\n- **Grafo Contextual por Objeto e por Tipo**:\n  - Suporte nativo ao grafo local focado no objeto ativo e em suas relações primárias/secundárias.\n  - Suporte à visualização de subgrafos para Coleções e Tipos de Objeto ().\n- **Sincronização e Fixação de Contexto (Pin/Follow)**:\n  - Botão 'Fixar neste objeto' () para congelar a inspeção enquanto o usuário navega livremente em outras abas.\n  - Botão 'Seguir contexto' () para restaurar a sincronia automática com a aba ativa.\n- **Navegação Coerente entre os 3 Painéis**:\n  - Clique simples: abre no centro.\n  - Shift + clique: abre ou foca no painel lateral.\n  - Ctrl / Cmd + clique: abre em nova aba.\n- **Preservação Contínua no Board**:\n  - Especificação e descobertas gravadas de forma permanente no Planning Board.",
+      "text": "### Unificação de Descoberta e Navegação Contextual (Issue #25)\n\n- **Explorar como Central de Descoberta**:\n  - Busca integrada, filtros dinâmicos por tipo e contagens em tempo real.\n  - Ações diretas e imediatas em cada item da listagem:\n    - Ação de grafo: abrir no Grafo Contextual direto da linha.\n    - Ação de backlinks: abrir referências relacionadas.\n    - [+] Abrir em Nova Aba.\n- **Grafo Contextual por Objeto e por Tipo**:\n  - Suporte nativo ao grafo local focado no objeto ativo e em suas relações primárias/secundárias.\n  - Suporte à visualização de subgrafos para Coleções e Tipos de Objeto ().\n- **Sincronização e Fixação de Contexto (Pin/Follow)**:\n  - Botão 'Fixar neste objeto' () para congelar a inspeção enquanto o usuário navega livremente em outras abas.\n  - Botão 'Seguir contexto' () para restaurar a sincronia automática com a aba ativa.\n- **Navegação Coerente entre os 3 Painéis**:\n  - Clique simples: abre no centro.\n  - Shift + clique: abre ou foca no painel lateral.\n  - Ctrl / Cmd + clique: abre em nova aba.\n- **Preservação Contínua no Board**:\n  - Especificação e descobertas gravadas de forma permanente no Planning Board.",
       "type": "text",
       "x": 20,
       "y": 9860
@@ -2507,7 +2508,7 @@
       "y": 11180,
       "w": 1500,
       "h": 450,
-      "text": "**1. Proibição Total de Emojis na UI — Zero Emoji Policy (Issue #42)**\n- É estritamente proibido usar emojis Unicode (`💡`, `🎯`, `📅`, `📖`, `🎉`, `🔥`, `⚠️`, `🕸️`, `📄`, `🧭`) na UI, botões, KPIs ou docs. Todos devem ser substituídos por ícones `<svg>` vetoriais monocromáticos/semânticos (`stroke-width: 1.8`).\n**2. Shell & Barra Superior Unificada (Issue #34)**\n- Duplicação lado a lado de `[C Concurso de TI]` (na sidebar) e `[Concurso de TI]` (na topbar central) quando a sidebar está aberta.\n- Linha laranja residual `.readprog` visível em páginas que não são de leitura de PDF.\n- Barra `.bar` secundária redundante exibida durante `#/simulado/exec` e `#/simulado/resultado`.\n- Ausência de cartões de superfície flutuantes (`border-radius: 12px` sobre `--app-tab-bg-back`, padrão `notes-app-old-4`).\n**3. Quebra de Layout em `#/tipo/questao` e Inputs Nativos (Issue #35)**\n- Título `Questão` comprimido em `57.68px`, quebrando em 3 linhas (`Qu / est / ão`), e `<input type=\"radio\">` nativos sem estilização.\n**4. Ergonomia de Resolução em `#/questao/*` (Issue #36)**\n- `.props-card` inicia expandido com 11 linhas (~320px), empurrando enunciado e alternativas A–E para fora da dobra (below the fold). Deve iniciar `is-collapsed` em questões.\n**5. Diagramação do Simulado `#/simulado/exec` e Scorecard `#/simulado/resultado` (Issue #37)**\n- Enunciado espremido em ~250px (4–6 palavras/linha) quando a grade de 70 questões divide espaço com o Painel Direito; disciplinas truncadas no resultado (`Língua Portu...`).\n**6. Colisão no Rodapé do Grafo `#/grafico` (Issue #38)**\n- Pílulas de filtro `.gv-leg` em 2 linhas colidem diretamente sobre `.gv-info` (`90 objetos · 299 relações`).\n**7. Corte de Rótulos em `.props-card` e Abas do Painel Direito (Issue #39)**\n- `dt` corta `'Cadastro de reserv'` e `'Remuneração inici'`; abas do painel direito truncam `'Navegar'` para `'ir'`.\n**8. Home `#/espaco` e Modais (Issue #40)**\n- KPIs com valores hardcoded (`5 dias`, `38 dias`, `5% lido`), grid 3+1 com card órfão, contraste fraco no Light Mode e falta de fechamento consistente com `Escape` em `#pal`."
+      "text": "**1. Proibição Total de Emojis na UI — Zero Emoji Policy (Issue #42)**\n- É estritamente proibido usar emojis Unicode na UI, botões, KPIs ou docs. Substituir símbolos pictográficos (lâmpada, alvo, calendário, livro aberto, celebração, chama, aviso, rede, documento e bússola) por ícones `<svg>` vetoriais monocromáticos/semânticos (`stroke-width: 1.8`).\n**2. Shell & Barra Superior Unificada (Issue #34)**\n- Duplicação lado a lado de `[C Concurso de TI]` (na sidebar) e `[Concurso de TI]` (na topbar central) quando a sidebar está aberta.\n- Linha laranja residual `.readprog` visível em páginas que não são de leitura de PDF.\n- Barra `.bar` secundária redundante exibida durante `#/simulado/exec` e `#/simulado/resultado`.\n- Ausência de cartões de superfície flutuantes (`border-radius: 12px` sobre `--app-tab-bg-back`, padrão `notes-app-old-4`).\n**3. Quebra de Layout em `#/tipo/questao` e Inputs Nativos (Issue #35)**\n- Título `Questão` comprimido em `57.68px`, quebrando em 3 linhas (`Qu / est / ão`), e `<input type=\"radio\">` nativos sem estilização.\n**4. Ergonomia de Resolução em `#/questao/*` (Issue #36)**\n- `.props-card` inicia expandido com 11 linhas (~320px), empurrando enunciado e alternativas A–E para fora da dobra (below the fold). Deve iniciar `is-collapsed` em questões.\n**5. Diagramação do Simulado `#/simulado/exec` e Scorecard `#/simulado/resultado` (Issue #37)**\n- Enunciado espremido em ~250px (4–6 palavras/linha) quando a grade de 70 questões divide espaço com o Painel Direito; disciplinas truncadas no resultado (`Língua Portu...`).\n**6. Colisão no Rodapé do Grafo `#/grafico` (Issue #38)**\n- Pílulas de filtro `.gv-leg` em 2 linhas colidem diretamente sobre `.gv-info` (`90 objetos · 299 relações`).\n**7. Corte de Rótulos em `.props-card` e Abas do Painel Direito (Issue #39)**\n- `dt` corta `'Cadastro de reserv'` e `'Remuneração inici'`; abas do painel direito truncam `'Navegar'` para `'ir'`.\n**8. Home `#/espaco` e Modais (Issue #40)**\n- KPIs com valores hardcoded (`5 dias`, `38 dias`, `5% lido`), grid 3+1 com card órfão, contraste fraco no Light Mode e falta de fechamento consistente com `Escape` em `#pal`."
     },
     "e610": {
       "type": "image",
@@ -3136,6 +3137,14 @@
       "w": 700,
       "h": 60,
       "text": "**Evidência 36 (QConcursos Elite Live — Issue #72):** Aba pedagógica `Estatísticas` aberta sob a questão: gráfico Donut (`69% de acertos`), gráfico de barras `Alternativas mais respondidas (A–E)` e `Histórico de desempenho`"
+    },
+    "e630": {
+      "type": "text",
+      "x": 1630,
+      "y": 14010,
+      "w": 1500,
+      "h": 90,
+      "text": "**Implementação das Issues #34 e #42 (branch codex/issue-34-42)**\n- Topbar sem duplicação do espaço ou toggle da sidebar com navegação expandida no desktop; seletor compacto mostra monograma quando recolhida.\n- Progresso aparece somente em documentos de leitura; barra secundária removida do modo simulado; páginas do app usam superfície elevada arredondada.\n- UI sem emojis: ícones vetoriais semânticos substituem os pictogramas e marcas Unicode; regra Zero Emoji Policy registrada em AGENTS.md e DESIGN.md."
     }
   }
 }

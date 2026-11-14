@@ -764,8 +764,8 @@ Capturas da fase em que o Ian pediu um artefato só para o protótipo e outro pa
 - **Explorar como Central de Descoberta**:
   - Busca integrada, filtros dinâmicos por tipo e contagens em tempo real.
   - Ações diretas e imediatas em cada item da listagem:
-    - [🕸️] Abrir no Grafo Contextual direto da linha.
-    - [🔗] Abrir Backlinks / referências.
+    - Ação de grafo: abrir no Grafo Contextual direto da linha.
+    - Ação de backlinks: abrir referências relacionadas.
     - [+] Abrir em Nova Aba.
 - **Grafo Contextual por Objeto e por Tipo**:
   - Suporte nativo ao grafo local focado no objeto ativo e em suas relações primárias/secundárias.
@@ -804,7 +804,7 @@ O que Ian mostrou como modelo para a sidebar: tipos de objeto, ordenar, hover, l
 ### Diagnóstico Especialista UI/UX Enterprise 2026 (Capacities, Linear, Raycast, Notion, QConcursos) — Issues #34 a #40 e #42
 
 > **1. Proibição Total de Emojis na UI — Zero Emoji Policy (Issue #42)**
-> - É estritamente proibido usar emojis Unicode (`💡`, `🎯`, `📅`, `📖`, `🎉`, `🔥`, `⚠️`, `🕸️`, `📄`, `🧭`) na UI, botões, KPIs ou docs. Todos devem ser substituídos por ícones `<svg>` vetoriais monocromáticos/semânticos (`stroke-width: 1.8`).
+> - É estritamente proibido usar emojis Unicode na UI, botões, KPIs ou docs. Substituir símbolos pictográficos (lâmpada, alvo, calendário, livro aberto, celebração, chama, aviso, rede, documento e bússola) por ícones `<svg>` vetoriais monocromáticos/semânticos (`stroke-width: 1.8`).
 > **2. Shell & Barra Superior Unificada (Issue #34)**
 > - Duplicação lado a lado de `[C Concurso de TI]` (na sidebar) e `[Concurso de TI]` (na topbar central) quando a sidebar está aberta.
 > - Linha laranja residual `.readprog` visível em páginas que não são de leitura de PDF.
@@ -858,6 +858,11 @@ O que Ian mostrou como modelo para a sidebar: tipos de objeto, ordenar, hover, l
 ![imagem e626](assets/audit2026_tipo_questao_wrap.png)
 
 **Evidência 9:** Página Tipo Questão (#/tipo/questao): quebra do título em 3 linhas ('Qu / est / ão') e inputs radio nativos sem estilização
+
+**Implementação das Issues #34 e #42 (branch codex/issue-34-42)**
+- Topbar sem duplicação do espaço ou toggle da sidebar com navegação expandida no desktop; seletor compacto mostra monograma quando recolhida.
+- Progresso aparece somente em documentos de leitura; barra secundária removida do modo simulado; páginas do app usam superfície elevada arredondada.
+- UI sem emojis: ícones vetoriais semânticos substituem os pictogramas e marcas Unicode; regra Zero Emoji Policy registrada em AGENTS.md e DESIGN.md.
 
 ## 28. Dossiê Comparativo: Web Shell Atual (0.1.1) vs. Branches Antigas (docs/archives/) & Capacities Live (Issues #47 a #50 e #52 a #58)
 <!-- container e700 @ (3300,11000) -->
