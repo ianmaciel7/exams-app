@@ -717,7 +717,19 @@
     "e1377",
     "e1378",
     "e1379",
-    "e1380"
+    "e1380",
+    "e1381",
+    "e1382",
+    "e1383",
+    "e1384",
+    "e1385",
+    "e1386",
+    "e1387",
+    "e1388",
+    "e1389",
+    "e1390",
+    "e1391",
+    "e1392"
   ],
   "elements": {
     "e1": {
@@ -7533,6 +7545,109 @@
       "text": "DEPOIS: banco global preserva o mesmo componente de questões",
       "x": 36828,
       "y": 12073,
+      "w": 760,
+      "h": 50
+    },
+    "e1381": {
+      "type": "container",
+      "color": "white",
+      "text": "44. SpaceSwitcher — Issue #138: busca, reordenação e persistência",
+      "x": 38000,
+      "y": 11000,
+      "w": 1650,
+      "h": 1720
+    },
+    "e1382": {
+      "type": "text",
+      "size": "small",
+      "text": "Implementação observável: o SpaceSwitcher passa a oferecer busca por nome com normalização de acentos, estado vazio, seleção/aria-selected, drag handle e reordenação por teclado Alt+ArrowUp/Down. A ordem é salva por ID em spaceOrder, distinta dos objetos de espaço persistidos em spaces; nomes e seleção sobrevivem à recarga. Arraste por Pointer Events tem threshold de 7px, indicação de destino e cancelamento Escape/pointercancel sem mudança. E2E real Chromium: reprodução anterior, busca, criação de dois espaços, reordenação por teclado e mouse, recarga, cancelamento e viewport 390px; ver issue138_spaces_e2e.json. Limite: toque físico, leitores de tela e sincronização entre dispositivos não foram validados.",
+      "x": 38018,
+      "y": 11008,
+      "w": 1590,
+      "h": 95
+    },
+    "e1383": {
+      "type": "image",
+      "src": "/_blob/issue138_before_desktop",
+      "x": 38018,
+      "y": 11115,
+      "w": 755,
+      "h": 430
+    },
+    "e1384": {
+      "type": "text",
+      "size": "small",
+      "text": "ANTES: seletor sem campo de busca e sem alças de reordenação no desktop",
+      "x": 38018,
+      "y": 11553,
+      "w": 760,
+      "h": 50
+    },
+    "e1385": {
+      "type": "image",
+      "src": "/_blob/issue138_search_desktop",
+      "x": 38828,
+      "y": 11115,
+      "w": 755,
+      "h": 430
+    },
+    "e1386": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: pesquisa incremental, nomes de espaços filtrados sem distinção de acentos",
+      "x": 38828,
+      "y": 11553,
+      "w": 760,
+      "h": 50
+    },
+    "e1387": {
+      "type": "image",
+      "src": "/_blob/issue138_after_keyboard_desktop",
+      "x": 38018,
+      "y": 11650,
+      "w": 755,
+      "h": 430
+    },
+    "e1388": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: Alt + seta reordena por identidade sem trocar o espaço ativo",
+      "x": 38018,
+      "y": 12088,
+      "w": 760,
+      "h": 50
+    },
+    "e1389": {
+      "type": "image",
+      "src": "/_blob/issue138_after_drag_desktop",
+      "x": 38828,
+      "y": 11650,
+      "w": 755,
+      "h": 430
+    },
+    "e1390": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: arraste por Pointer Events altera ordem sem perda de contexto",
+      "x": 38828,
+      "y": 12088,
+      "w": 760,
+      "h": 50
+    },
+    "e1391": {
+      "type": "image",
+      "src": "/_blob/issue138_after_mobile_390",
+      "x": 38018,
+      "y": 12185,
+      "w": 755,
+      "h": 430
+    },
+    "e1392": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: seletor responsivo a 390 CSS px com busca e seleção por toque",
+      "x": 38018,
+      "y": 12623,
       "w": 760,
       "h": 50
     }

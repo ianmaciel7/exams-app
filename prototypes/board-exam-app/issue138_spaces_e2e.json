@@ -1,0 +1,43 @@
+{
+  "date": "2026-11-14T16:47:43.595Z",
+  "cases": [
+    {
+      "phase": "before",
+      "search": false,
+      "photo": "issue138_before_desktop.png"
+    },
+    {
+      "phase": "after",
+      "interaction": "keyboard",
+      "names": [
+        "Concurso de TI",
+        "Área Beta",
+        "Área Alfa"
+      ],
+      "selected": "Área Beta",
+      "photo": "issue138_after_keyboard_desktop.png"
+    },
+    {
+      "phase": "after",
+      "interaction": "pointer",
+      "names": [
+        "Concurso de TI",
+        "Área Alfa",
+        "Área Beta"
+      ],
+      "selected": "Área Beta",
+      "photo": "issue138_after_drag_desktop.png"
+    },
+    {
+      "phase": "after",
+      "interaction": "mobile-search-and-select",
+      "width": 390,
+      "photo": "issue138_after_mobile_390.png"
+    }
+  ],
+  "pageErrors": [],
+  "limitations": [
+    "Chromium pointer/keyboard and mobile emulation tested; physical touch hardware and a screen reader were not tested.",
+    "Scope is the space switcher only; the app still stores spaces in browser-local storage, not a cloud database."
+  ]
+}
