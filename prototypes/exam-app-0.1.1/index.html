@@ -4970,7 +4970,15 @@ const viewById=id=>{ for(const t of RP.tabs) for(const v of t.views) if(v.id===i
 let rpT=null; function rpSoon(){ clearTimeout(rpT); rpT=setTimeout(()=>{ if(rpVisible()) rpRefresh(); },140); }
 function curHref(){ const t=curTab(); let h=t.hist[t.i]||''; h=h.replace(/^(#\/(?:concurso|edicao|cargo|questao|disciplina|banca|orgao)\/[^/?]+)\/.*$/,'$1'); if(!h||h==='#') h=(cur&&cur.d)?'#'+cur.d.id:''; return h; }
 function vNode(v){ return nodeOf(v.ref||curHref()); }
-function vTitle(v){ if(v.type==='obj'){ const n=nodeOf(v.ref); return n?n.title:'Objeto'; } return RT[v.type].n; }
+function vTitle(v){
+  if(v.type==='obj'){ const n=nodeOf(v.ref); return n?n.title:'Objeto'; }
+  if(v.type==='graf'){
+    const n=nodeOf(v.ref||curHref());
+    const fallback=(spaces.find(s=>s.id===space)||{}).name||'Espaço';
+    return RT.graf.n+' · '+(n?n.title:fallback);
+  }
+  return RT[v.type].n;
+}
 function rpPaintTabs(){ gr(); $('rpTabs').innerHTML=RP.tabs.map(t=>{ const on=t.id===RP.active, v=t.views[0], ttl=t.views.length>1&&t.views.every(v=>['back','rel'].includes(v.type))?'Contexto':vTitle(v)+(t.views.length>1?' +'+(t.views.length-1):'');
   return '<div class="ws-tab'+(on?' on':'')+'" role="tab" aria-label="'+esc(ttl)+'" aria-selected="'+on+'" tabindex="'+(on?0:-1)+'" data-rp-tab="'+t.id+'" title="'+esc(t.views.map(vTitle).join(' + '))+'"><span class="ws-ti" aria-hidden="true">'+RT[v.type].ic+'</span><span class="ws-tt">'+esc(ttl)+'</span><button type="button" class="ws-tx" tabindex="'+(on?0:-1)+'" data-rp-tabx="'+t.id+'" aria-label="Fechar aba '+esc(ttl)+'">'+WI.x+'</button></div>'; }).join('');
   const L=$('rpTabs'), on=L.querySelector('.on'); if(on&&L.scrollWidth>L.clientWidth){ const a=on.offsetLeft, b=a+on.offsetWidth; if(a<L.scrollLeft) L.scrollLeft=a-4; else if(b>L.scrollLeft+L.clientWidth) L.scrollLeft=b-L.clientWidth+4; } }
@@ -5089,15 +5097,50 @@ let rpSig=null;
 function rpRefresh(){ const a=document.activeElement; if(a&&a.matches&&a.matches('#rpanel input')){ gr(); rpPaintTabs(); return; }
   const t=rpTab(), sig=gr().sig+'|'+curHref(); if(t&&rpSig===sig&&t.views.every(v=>v.type==='explorar'||v.type==='obj')) return; rpPaintAll(); }
 function rpSelect(id){ rpCapture(); RP.active=id; wsSave(); rpPaintAll(); }
-function rpAddTab(type,ref){ const t={id:uid(),views:[{id:uid(),type,f:1,ref:ref||undefined}]}; RP.tabs.push(t); RP.active=t.id; wsSave(); if(!rpVisible()) openRP(true); else rpPaintAll(); }
+/* Identity includes the tool, pinned ref (or following context), and current space.
+   Multiple instances require an explicit duplicate action, not repeated clicks. */
+function rpTabMatches(t,type,ref){
+  const v=t.views.length===1?t.views[0]:null;
+  return !!v&&v.type===type&&(v.ref||'')===(ref||'')&&(!t.sp||t.sp===space);
+}
+function rpAddTab(type,ref){
+  const found=RP.tabs.find(t=>rpTabMatches(t,type,ref));
+  if(found){ rpSelect(found.id); if(!rpVisible()) openRP(true); return; }
+  const first=RP.tabs.length===1?RP.tabs[0]:null;
+  const initial=first&&first.views.length===1&&first.views[0].type==='explorar'&&
+    !first.views[0].q&&!first.views[0].kind&&!first.views[0].ref&&type!=='explorar'&&
+    (!first.sp||first.sp===space);
+  if(initial){
+    first.views=[{id:uid(),type,f:1,ref:ref||undefined}];
+    first.sp=space; RP.active=first.id;
+  }else{
+    const t={id:uid(),sp:space,views:[{id:uid(),type,f:1,ref:ref||undefined}]};
+    RP.tabs.push(t); RP.active=t.id;
+  }
+  wsSave(); if(!rpVisible()) openRP(true); else rpPaintAll();
+}
 function rpStack(type,ref){ const t=rpTab(); if(!t){ rpAddTab(type,ref); return; } if(t.views.length>=3){ toast('Cada aba do painel aceita até 3 visualizações empilhadas'); return; } t.views.forEach(v=>{ v.f=1; }); const v={id:uid(),type,f:1,ref:ref||undefined};if(type==='back')t.views.unshift(v);else t.views.push(v); wsSave(); rpPaintAll(); }
 function rpCloseView(id){ const t=rpTab(); if(!t) return; t.views=t.views.filter(v=>v.id!==id); if(!t.views.length){ RP.tabs=RP.tabs.filter(x=>x!==t); RP.active=RP.tabs[0]?RP.tabs[0].id:null; } wsSave(); rpPaintAll(); }
-function rpCloseTab(id){ const i=RP.tabs.findIndex(t=>t.id===id); if(i<0) return; const t=RP.tabs[i]; RP.tabs.splice(i,1); if(RP.active===id) RP.active=RP.tabs[Math.min(i,RP.tabs.length-1)]?RP.tabs[Math.min(i,RP.tabs.length-1)].id:null; wsSave(); rpPaintAll();
-  toast('Aba do painel fechada',()=>{ RP.tabs.splice(Math.min(i,RP.tabs.length),0,t); RP.active=t.id; wsSave(); rpPaintAll(); }); }
+function rpCloseTab(id){
+  const i=RP.tabs.findIndex(t=>t.id===id); if(i<0) return;
+  const t=RP.tabs[i]; RP.tabs.splice(i,1);
+  if(RP.active===id) RP.active=RP.tabs[Math.min(i,RP.tabs.length-1)]?.id||null;
+  let fallback=null;
+  if(!RP.tabs.length){
+    fallback={id:uid(),sp:space,views:[{id:uid(),type:'explorar',f:1}]};
+    RP.tabs.push(fallback); RP.active=fallback.id;
+  }
+  wsSave(); rpPaintAll();
+  toast('Aba do painel fechada',()=>{
+    if(fallback) RP.tabs=RP.tabs.filter(x=>x.id!==fallback.id);
+    RP.tabs.splice(Math.min(i,RP.tabs.length),0,t);
+    RP.active=t.id; wsSave(); rpPaintAll();
+  });
+}
 function rpCloseOthers(id){ const snap=RP.tabs.slice(), act=RP.active, keep=RP.tabs.filter(t=>t.id===id); if(!keep.length||keep.length===snap.length) return; RP.tabs=keep; RP.active=id; wsSave(); rpPaintAll();
   toast('Outras abas do painel fechadas',()=>{ RP.tabs=snap; RP.active=act; wsSave(); rpPaintAll(); }); }
-function rpOpenObj(h){ if(!isObjHref(h)) return; const found=RP.tabs.find(t=>t.views.some(v=>v.type==='obj'&&v.ref===h)); if(found){rpSelect(found.id);openRP(true);return;} rpCapture();rpAddTab('obj',h); }
-function rpFromView(v,h){ if(!v) return; if(v.type==='explorar'||v.type==='obj'){ v.future=[];v.hist=(v.hist||[]).concat([{type:v.type,ref:v.ref,q:v.q,kind:v.kind}]).slice(-20); v.type='obj'; v.ref=h; wsSave(); rpPaintBody(); rpPaintTabs(); } else if(v.type==='graf'){ v.ref=h; wsSave(); rpPaintBody(); } else rpOpenObj(h); }
+function rpOpenObj(h){ if(!isObjHref(h)) return; const found=RP.tabs.find(t=>(!t.sp||t.sp===space)&&t.views.some(v=>v.type==='obj'&&v.ref===h)); if(found){rpSelect(found.id);openRP(true);return;} rpCapture();rpAddTab('obj',h); }
+function rpFromView(v,h){ if(!v) return; if(v.type==='explorar'||v.type==='obj'){ v.future=[];v.hist=(v.hist||[]).concat([{type:v.type,ref:v.ref,q:v.q,kind:v.kind}]).slice(-20); v.type='obj'; v.ref=h; wsSave(); rpPaintBody(); rpPaintTabs(); } else if(v.type==='graf'){ v.ref=h; wsSave(); rpPaintBody(); rpPaintTabs(); } else rpOpenObj(h); }
 const toolMenu=(anchor,fn)=>miniMenu(anchor,['explorar','graf','back','rel','ia'].map(k=>({t:RT[k].n,ic:RT[k].ic,fn:()=>fn(k)})));
 $('rpAdd').onclick=e=>toolMenu(e.currentTarget,k=>rpAddTab(k));
 $('rpStack').onclick=e=>{ const t=rpTab(); if(t&&t.views.length>=3){ toast('Cada aba do painel aceita até 3 visualizações empilhadas'); return; } toolMenu(e.currentTarget,k=>rpStack(k)); };
