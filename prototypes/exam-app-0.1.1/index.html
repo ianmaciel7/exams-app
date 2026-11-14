@@ -276,6 +276,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
+  --sidew:284px;
   /* 4 Camadas OKLCH / Tokens Capacities (Light Mode) */
   --bg-back:#faf9f7;
   --bg-base:#ffffff;
@@ -362,8 +363,10 @@ a{color:inherit;text-decoration:none}
 svg{flex:none}
 .app{display:flex;height:100vh;height:100dvh;background:var(--bg-back);color:var(--text)}
 
-/* ---------- sidebar ---------- */
-.side{width:288px;flex:none;background:var(--side);border-right:1px solid var(--line);display:flex;flex-direction:column;transition:width .18s ease;position:relative;z-index:20}
+.side{width:var(--sidew,284px);flex:none;background:var(--side);border-right:1px solid var(--line);display:flex;flex-direction:column;transition:width .18s ease;position:relative;z-index:20;box-sizing:border-box}
+.side-rz{position:absolute;right:-6px;top:0;bottom:0;width:12px;cursor:col-resize;z-index:25;touch-action:none}
+.side-rz:hover,.side-rz.drag,.side-rz:focus-visible{background:linear-gradient(90deg,transparent 5px,var(--faint) 5px,var(--faint) 7px,transparent 7px)}
+.side-rz:focus-visible{outline:none}
 .side-top{height:46px;min-height:46px;box-sizing:border-box;display:flex;align-items:center;gap:4px;padding:0 8px;padding-left:max(8px,env(safe-area-inset-left));position:relative}
 .icon-btn{width:34px;height:34px;display:grid;place-items:center;border-radius:8px;color:var(--muted)}
 .icon-btn:hover{background:var(--hover);color:var(--text)}
@@ -492,20 +495,10 @@ svg{flex:none}
 .sec-hw .add[data-sort]:hover{background:var(--hover);color:var(--text)}
 .sec-hw:hover .cnt,.sec-hw:hover .add,.sec-hw:has(:focus-visible) .cnt,.sec-hw:has(:focus-visible) .add{opacity:1}
 @media (hover:none){.sec-hw .add{opacity:1}}
-/* collapsed rail (desktop) */
-.app.collapsed .side{width:56px}
-.app.collapsed .space-btn b,.app.collapsed .space-btn .chev,
-.app.collapsed .actions .row .t,.app.collapsed .actions .row .kbd,.app.collapsed .nav,.app.collapsed .search,
-.app.collapsed .user-btn .who,.app.collapsed .user-btn .chev{display:none}
-.app.collapsed .side-top{flex-direction:column;align-items:center;padding:8px}
-.app.collapsed .space-btn{flex:none;width:36px;justify-content:center;padding:0}
-.app.collapsed .actions{padding:2px 8px;display:flex;flex-direction:column;align-items:center}
-.app.collapsed .actions .row{width:36px;justify-content:center;padding:0}
-.app.collapsed .side-foot{margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:4px}
-.app.collapsed .user-btn{width:40px;justify-content:center;padding:0}
-.app.collapsed .pop{left:52px}
-.app.collapsed .side-top .pop{top:8px}
-.app.collapsed .side-foot .pop{bottom:8px}
+/* collapsed sidebar: real off-canvas collapse (0px) */
+.app.collapsed .side{width:0!important;min-width:0!important;max-width:0!important;overflow:hidden!important;border-right:none!important;pointer-events:none;padding:0!important}
+.app.collapsed .side *{pointer-events:none}
+.app.collapsed .side .side-rz{display:none!important}
 
 /* ---------- main ---------- */
 .main{flex:1;min-width:0;display:flex;flex-direction:column}
@@ -627,16 +620,17 @@ a.ot:hover{text-decoration:underline;text-underline-offset:2px}
 .chip,.secnav .chip{min-height:28px}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
 /* ---------- phone: drawer ---------- */
-@media (max-width:820px){
-  .side{position:fixed;inset:0 auto 0 0;width:min(300px,86vw);transform:translateX(-100%);transition:transform .2s ease;box-shadow:0 0 40px rgba(0,0,0,.2)}
-  .app.open .side{transform:none}
+@media (max-width:768px){
+  .side{position:fixed;inset:0 auto 0 0;width:min(300px,86vw)!important;transform:translateX(-100%);transition:transform .2s ease;box-shadow:0 0 40px rgba(0,0,0,.2);z-index:30}
+  .app.open .side{transform:none;width:min(300px,86vw)!important;max-width:min(300px,86vw)!important;pointer-events:auto;overflow:visible!important}
+  .app.open .side *{pointer-events:auto}
   .app.open .scrim{display:block;position:fixed;inset:0;z-index:15;background:rgba(0,0,0,.3)}
   .bar .open-side{display:grid}
   .tools .hide-s{display:none}
   .kbd{display:none}
   .title span{display:none}
   .view{padding-top:12px}
-  .app.collapsed .side{width:min(300px,86vw)}
+  .side-rz{display:none!important}
 }
 /* Sidebar: hierarquia expansível no hover e cores semânticas (estilo Capacities) */
 /* Object hierarchy: icon -> expand/collapse chevron on hover, same slot (Capacities pattern) */
@@ -790,7 +784,7 @@ a.ot{display:block;padding:3px 0;min-height:24px}
 .sim-opts-row .q-radio:has(input:focus-visible){outline:2px solid var(--study-accent);outline-offset:2px}
 .sim-opts-row .q-radio input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:inherit}
 .trash-list{display:flex;flex-direction:column;gap:8px;margin-top:12px}.trash-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.trash-tx{display:flex;flex-direction:column;gap:2px}.trash-tx small{color:var(--muted);font-size:12px}
-.side-foot a.row{text-decoration:none;margin-bottom:4px}.side-foot .row[aria-current]{background:var(--active);color:var(--text)}.app.collapsed .side-foot a.row .t{display:none}.app.collapsed .side-foot a.row{width:36px;justify-content:center;padding:0}
+.side-foot a.row{text-decoration:none;margin-bottom:4px}.side-foot .row[aria-current]{background:var(--active);color:var(--text)}
 .study-shell .cx-head{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin:6px 0 14px}.cx-mark{width:44px;height:44px;flex:none}
 .cx-title{flex:1;min-width:180px}.cx-head h1{margin:0;font-size:26px;line-height:1.15;letter-spacing:-.01em}.cx-sub{margin:3px 0 0;font-size:13px;color:var(--muted)}
 .cx-context{display:flex;gap:10px;flex-wrap:wrap}.cx-sel,.cx-ctx{display:flex;flex-direction:column;gap:3px;font-size:11px;color:var(--muted)}.cx-ctx b{font-size:13px;color:var(--text);font-weight:600;padding:6px 0}
@@ -1044,7 +1038,7 @@ a.ot{display:block;padding:3px 0;min-height:24px}
 .ws-load i{display:block;height:100%;width:35%;background:var(--accent);animation:wsl 1s ease-in-out infinite}
 @keyframes wsl{0%{transform:translateX(-100%)}100%{transform:translateX(300%)}}
 
-.rp{width:var(--rpw,340px);flex:none;display:flex;flex-direction:column;background:var(--bg-back);border-left:none;padding:0 10px 10px 0;box-sizing:border-box;position:relative;min-width:0}
+.rp{width:var(--rpw,420px);flex:none;display:flex;flex-direction:column;background:var(--bg-back);border-left:none;padding:0 10px 10px 0;box-sizing:border-box;position:relative;min-width:0}
 .rp-top{height:46px;flex:none;display:flex;align-items:center;gap:2px;padding:0 6px 0 8px;background:var(--bg-back);border-bottom:none}
 .rp-rz{position:absolute;left:-6px;top:0;bottom:0;width:12px;cursor:col-resize;z-index:6;touch-action:none}
 .rp-rz:hover,.rp-rz.drag,.rp-rz:focus-visible{background:linear-gradient(90deg,transparent 5px,var(--faint) 5px,var(--faint) 7px,transparent 7px)}
@@ -1122,18 +1116,18 @@ a.rp-link:hover{background:var(--active)}
 .ai-on .ai-off{display:none}
 .rp-ai .ai-row{margin:0 0 12px}
 .ws-menu{position:fixed}
-@media(max-width:1100px){
-  .side{position:fixed;inset:0 auto 0 0;width:min(300px,86vw);transform:translateX(-100%);transition:transform .2s ease;box-shadow:0 0 40px rgba(0,0,0,.2)}
-  .app.open .side{transform:none}
-  .app.open .scrim{display:block;position:fixed;inset:0;z-index:15;background:rgba(0,0,0,.3)}
-  .app.collapsed .side{width:min(300px,86vw)}
-  #wsSide{display:grid}
+@media (max-width:1024px){
   .rp{position:fixed;top:0;right:0;bottom:0;width:min(400px,92vw)!important;z-index:30;box-shadow:-10px 0 40px rgba(0,0,0,.2);padding:0;background:var(--bg-base)}
   .rp-rz{display:none}
   .rp-body{border:none;border-radius:0;box-shadow:none}
   .app.rp-open .rp-scrim{display:block;position:fixed;inset:0;z-index:25;background:rgba(0,0,0,.3)}
 }
-@media(max-width:820px){
+@media(max-width:768px){
+  .side{position:fixed;inset:0 auto 0 0;width:min(300px,86vw)!important;transform:translateX(-100%);transition:transform .2s ease;box-shadow:0 0 40px rgba(0,0,0,.2);z-index:30}
+  .app.open .side{transform:none;width:min(300px,86vw)!important;max-width:min(300px,86vw)!important;pointer-events:auto;overflow:visible!important}
+  .app.open .side *{pointer-events:auto}
+  .app.open .scrim{display:block;position:fixed;inset:0;z-index:15;background:rgba(0,0,0,.3)}
+  .side-rz{display:none!important}
   .rp{top:auto;left:0;right:0;width:auto!important;height:74vh;height:74dvh;border-left:0;border-top:1px solid var(--line);border-radius:14px 14px 0 0;box-shadow:0 -10px 40px rgba(0,0,0,.25);padding-bottom:env(safe-area-inset-bottom,0px)}
   .rp-top{border-radius:14px 14px 0 0}
   .ws-tab{flex-basis:150px;min-width:110px}
@@ -1192,15 +1186,9 @@ a.rp-link:hover{background:var(--active)}
 .ws-tabs .ws-tablist{flex:0 1 auto;max-width:calc(100% - 154px)}
 .ws-tabs #rpToggle{margin-left:auto}
 @media(max-width:700px){.ws-tabs .ws-tablist{max-width:calc(100% - 138px)}}
-/* Barra aberta mantém o controle visível; no trilho recolhido, ele aparece sobre o avatar em hover/foco. */
-@media (min-width:821px) and (hover:hover){
-  .side-top #collapse{opacity:1}
-  .app.collapsed .side-top #collapse{position:absolute;z-index:3;left:16px;top:14px;width:24px;height:24px;border-radius:6px;background:var(--side);color:var(--text);opacity:0;transition:opacity .12s}
-  .app.collapsed .side-top #collapse:hover,.app.collapsed .side-top #collapse:focus-visible{opacity:1;background:var(--hover)}
-  .app.collapsed .side-top #collapse svg{width:16px;height:16px}
-  .side-top .space-btn{flex:1}
-}
-@media (min-width:1101px){
+.side-top #collapse{opacity:1}
+.side-top .space-btn{flex:1}
+@media (min-width:769px){
   .app:not(.collapsed) #wsSide,
   .app:not(.collapsed) #wsNewBtn,
   .app:not(.collapsed) #wsSearchBtn{display:none!important}
@@ -1208,7 +1196,7 @@ a.rp-link:hover{background:var(--active)}
   .app.collapsed #wsNewBtn,
   .app.collapsed #wsSearchBtn{display:inline-flex!important;width:27px;height:27px;min-width:27px;min-height:27px;border-radius:6px}
 }
-@media (max-width:1100px){
+@media (max-width:768px){
   #wsSide{display:inline-flex!important;width:27px;height:27px;min-width:27px;min-height:27px;border-radius:6px}
   .app:not(.collapsed) #wsNewBtn,
   .app:not(.collapsed) #wsSearchBtn{display:none!important}
@@ -1333,6 +1321,7 @@ a.rp-link:hover{background:var(--active)}
         <button class="row" id="usOut"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg><span class="t">Sair</span></button>
       </div>
     </div>
+    <div class="side-rz" id="sideRz" role="separator" aria-orientation="vertical" tabindex="0" title="Arrastar para redimensionar (duplo-clique restaura 284px)"></div>
   </aside>
   <div class="scrim" id="scrim"></div>
 
@@ -1613,7 +1602,7 @@ const store={
 const $=id=>document.getElementById(id);
 const app=$('app'), nav=$('nav'), view=$('view');
 const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const isPhone=()=>matchMedia('(max-width:1100px)').matches;
+const isPhone=()=>matchMedia('(max-width:768px)').matches;
 
 /* ---- spaces ---- */
 const BASE_SP={id:'dataprev',name:store.get('baseName')||'Concurso de TI'};
@@ -1683,7 +1672,47 @@ $('usCfg').onclick=()=>{ closePops();
   }); };
 $('usHelp').onclick=()=>{ closePops(); dialog({title:'Atalhos de teclado',html:'<dl class="keys"><dt>Ctrl B</dt><dd>Recolher ou abrir a barra lateral</dd><dt>Ctrl K</dt><dd>Buscar documentos</dd><dt>J / K</dt><dd>Próximo / anterior documento</dd><dt>F2</dt><dd>Renomear o documento aberto</dd><dt>+ / −</dt><dd>Zoom</dd></dl>',ok:'Fechar',noCancel:true}); };
 
-/* ---- collapse / drawer ---- */
+/* ---- collapse / drawer / sidebar resize ---- */
+let sideW = Math.max(224, Math.min(384, +(store.get('sidew') || 284)));
+function applySideW(w, persist){
+  sideW = Math.max(224, Math.min(384, Math.round(w)));
+  document.documentElement.style.setProperty('--sidew', sideW + 'px');
+  if(persist) store.set('sidew', sideW);
+}
+applySideW(sideW, false);
+{
+  const srz = $('sideRz');
+  if(srz){
+    srz.addEventListener('pointerdown', e => {
+      e.preventDefault();
+      srz.setPointerCapture(e.pointerId);
+      srz.classList.add('drag');
+      const mv = ev => applySideW(ev.clientX, false);
+      const up = () => {
+        srz.classList.remove('drag');
+        srz.removeEventListener('pointermove', mv);
+        srz.removeEventListener('pointerup', up);
+        srz.removeEventListener('pointercancel', up);
+        applySideW(sideW, true);
+        if(typeof wsPaint === 'function') wsPaint();
+      };
+      srz.addEventListener('pointermove', mv);
+      srz.addEventListener('pointerup', up);
+      srz.addEventListener('pointercancel', up);
+    });
+    srz.addEventListener('keydown', e => {
+      if(e.key === 'ArrowLeft' || e.key === 'ArrowRight'){
+        e.preventDefault();
+        applySideW(sideW + (e.key === 'ArrowRight' ? 24 : -24), true);
+        if(typeof wsPaint === 'function') wsPaint();
+      }
+    });
+    srz.addEventListener('dblclick', () => {
+      applySideW(284, true);
+      if(typeof wsPaint === 'function') wsPaint();
+    });
+  }
+}
 function setCollapsed(c){ app.classList.toggle('collapsed',c); store.set('collapsed',c);
   $('collapse').setAttribute('aria-label',c?'Abrir barra lateral':'Recolher barra lateral');
   $('collapse').title=(c?'Abrir':'Recolher')+' barra lateral (Ctrl+B)';
@@ -3622,7 +3651,7 @@ const netUp=()=>{ const b=$('netBanner'); if(b) b.hidden=navigator.onLine!==fals
 addEventListener('online',()=>{ netUp(); toast('Conexão restabelecida'); }); addEventListener('offline',netUp); netUp();
 
 /* ===== 0.1.1 · Espaço de trabalho em três painéis: barra lateral | abas principais | painel contextual ===== */
-const WS_KEY='ex011:ws2', MQT=matchMedia('(max-width:1100px)');
+const WS_KEY='ex011:ws2', MQT=matchMedia('(max-width:1024px)');
 const uid=()=>Math.random().toString(36).slice(2,8);
 const IX=(p,w)=>'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="'+(w||1.8)+'" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+p+'</svg>';
 const WI={x:IX('<path d="M6 6l12 12M18 6L6 18"/>',2),plus:IX('<path d="M12 5v14M5 12h14"/>',2),search:IX('<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>'),
@@ -3667,11 +3696,12 @@ const okTab=t=>t&&typeof t.id==='string'&&Array.isArray(t.hist)&&t.hist.length&&
 const WS={tabs:(Array.isArray(SV.tabs)?SV.tabs.filter(okTab):[]).map(t=>({id:t.id,hist:t.hist.slice(),i:Math.min(Math.max(+t.i||0,0),t.hist.length-1),title:String(t.title||''),pinned:!!t.pinned,sc:t.sc&&typeof t.sc==='object'?t.sc:{},ui:t.ui&&typeof t.ui==='object'?t.ui:{}})),active:SV.active};
 if(!WS.tabs.length) WS.tabs=[{id:uid(),hist:[location.hash],i:0,title:'',sc:{}}];
 if(!WS.tabs.some(t=>t.id===WS.active)) WS.active=WS.tabs[0].id;
-const RPD=()=>({open:false,w:360,active:'t1',tabs:[{id:'t1',views:[{id:uid(),type:'explorar',f:1}]}]});
+const RPD=()=>({open:false,w:420,active:'t1',tabs:[{id:'t1',views:[{id:uid(),type:'explorar',f:1}]}]});
 const RP=Object.assign(RPD(),(SV.rp&&Array.isArray(SV.rp.tabs))?SV.rp:{});
 RP.tabs=RP.tabs.filter(t=>t&&t.id&&Array.isArray(t.views)); RP.tabs.forEach(t=>{ t.views=t.views.filter(v=>v&&RT[v.type]).slice(0,3); });
 RP.tabs=RP.tabs.filter(t=>t.views.length); if(!RP.tabs.some(t=>t.id===RP.active)) RP.active=RP.tabs[0]?RP.tabs[0].id:null;
-RP.w=Math.min(Math.max(+RP.w||340,280),640);
+const savedRpw=+(store.get('rpw')||RP.w);
+RP.w=Math.min(Math.max(savedRpw||420,240),640);
 const curTab=()=>WS.tabs.find(t=>t.id===WS.active)||WS.tabs[0];
 const rpTab=()=>RP.tabs.find(t=>t.id===RP.active)||RP.tabs[0];
 function wsSave(){ try{ localStorage.setItem(WS_KEY,JSON.stringify({active:WS.active,tabs:WS.tabs.map(t=>({id:t.id,hist:t.hist,i:t.i,title:t.title,pinned:!!t.pinned,sc:t.sc,ui:t.ui})),rp:RP})); }catch(e){} }
@@ -3777,7 +3807,7 @@ function applyRP(focusBack){ const on=rpVisible(); const el=$('rpanel'); el.hidd
   const tg=$('rpToggle'); tg.hidden=on; tg.setAttribute('aria-pressed',on); tg.setAttribute('aria-label',on?'Ocultar painel contextual':'Mostrar painel contextual');
   if(on){ rpPaintAll(); ensureRoom(); const a=$('rpTabs').querySelector('.on')||$('rpAdd'); a&&a.focus(); } else if(focusBack) tg.focus(); }
 function openRP(on){ if(MQT.matches) ovOpen=on; else { RP.open=on; wsSave(); } applyRP(!on); }
-function ensureRoom(){ if(MQT.matches) return; const m=document.querySelector('.main'); if(m&&m.offsetWidth<520&&!app.classList.contains('collapsed')) setCollapsed(true); }
+function ensureRoom(){ if(MQT.matches) return; const m=document.querySelector('.main'); if(m&&m.offsetWidth<480&&!app.classList.contains('collapsed')) setCollapsed(true); }
 MQT.addEventListener('change',()=>{ ovOpen=false; applyRP(false); wsPaintNav(); });
 $('rpToggle').onclick=()=>openRP(!rpVisible()); $('rpHide').onclick=()=>openRP(false); $('rpScrim').onclick=()=>openRP(false);
 
@@ -3951,10 +3981,10 @@ function splitBy(i,dy,fix){ const t=rpTab(), secs=[...$('rpBody').querySelectorA
   if(!fix) secs.forEach((s,k)=>{ t.views[k].f=s.offsetHeight; }); const d=Math.max(-(ha-MINV),Math.min(hb-MINV,dy)); t.views[i].f=ha+d; t.views[i+1].f=hb-d; secs.forEach((s,k)=>{ s.style.flexGrow=t.views[k].f; }); wsSave(); }
 $('rpBody').addEventListener('pointerdown',e=>{ const sp=e.target.closest('[data-split]'); if(!sp) return; e.preventDefault(); sp.setPointerCapture(e.pointerId); const i=+sp.dataset.split, y0=e.clientY, t=rpTab(), secs=[...$('rpBody').querySelectorAll('.rp-view')]; const ha=secs[i].offsetHeight, hb=secs[i+1].offsetHeight; secs.forEach((s,k)=>{ t.views[k].f=s.offsetHeight; });
   const mv=ev=>{ const d=Math.max(-(ha-MINV),Math.min(hb-MINV,ev.clientY-y0)); secs[i].style.flexGrow=ha+d; secs[i+1].style.flexGrow=hb-d; t.views[i].f=ha+d; t.views[i+1].f=hb-d; }, up=()=>{ sp.removeEventListener('pointermove',mv); sp.removeEventListener('pointerup',up); sp.removeEventListener('pointercancel',up); wsSave(); }; sp.addEventListener('pointermove',mv); sp.addEventListener('pointerup',up); sp.addEventListener('pointercancel',up); });
-{ const rz=$('rpRz'); const setW=w=>{ RP.w=Math.max(280,Math.min(640,Math.round(Math.min(w,innerWidth*.6)))); $('rpanel').style.setProperty('--rpw',RP.w+'px'); };
+{ const rz=$('rpRz'); const setW=w=>{ RP.w=Math.max(240,Math.min(640,Math.round(Math.min(w,innerWidth*.6)))); $('rpanel').style.setProperty('--rpw',RP.w+'px'); store.set('rpw',RP.w); };
   rz.addEventListener('pointerdown',e=>{ e.preventDefault(); rz.setPointerCapture(e.pointerId); rz.classList.add('drag'); const mv=ev=>setW(innerWidth-ev.clientX), up=()=>{ rz.classList.remove('drag'); rz.removeEventListener('pointermove',mv); rz.removeEventListener('pointerup',up); rz.removeEventListener('pointercancel',up); wsSave(); }; rz.addEventListener('pointermove',mv); rz.addEventListener('pointerup',up); rz.addEventListener('pointercancel',up); });
   rz.addEventListener('keydown',e=>{ if(e.key==='ArrowLeft'||e.key==='ArrowRight'){ e.preventDefault(); setW(RP.w+(e.key==='ArrowLeft'?24:-24)); wsSave(); } });
-  rz.addEventListener('dblclick',()=>{ setW(340); wsSave(); }); }
+  rz.addEventListener('dblclick',()=>{ setW(420); wsSave(); }); }
 
 /* ---- Gráfico do espaço (página inteira, barra lateral) ---- */
 let GV=null; const GVK={};
@@ -4192,8 +4222,8 @@ $('wsTabList').addEventListener('pointerleave',clearPreview);$('wsTabList').addE
 document.addEventListener('contextmenu',e=>{const a=e.target.closest('a[href^="#"]');if(!a||!a.closest('#nav,#view,#props'))return;const h=a.getAttribute('href');if(!isObjHref(h))return;e.preventDefault();e.stopImmediatePropagation();miniMenu(a,[{t:'Abrir na aba atual',ic:WI.obj,fn:()=>wsOpenMain(h)},{t:'Abrir em nova aba',ic:WI.plus,fn:()=>wsOpenTab(h)},{t:'Abrir no painel direito',ic:WI.panel,fn:()=>rpOpenObj(h)}]);},true);
 
 wsPaint(); wsPaintNav(); applyRP(false);
-{ let rq=0, rpAuto=false; const fit=()=>{ rq=0; wsPaint(); if(MQT.matches) return; const mainEl=document.querySelector('.main'); const w=mainEl.offsetWidth-(rpVisible()?0:(RP.w||340));
-    if(rpVisible()&&w<560){ RP.open=false; rpAuto=true; applyRP(false); wsPaint(); } else if(!rpVisible()&&rpAuto&&w>=620){ RP.open=true; rpAuto=false; applyRP(false); wsPaint(); } };
+{ let rq=0, rpAuto=false; const fit=()=>{ rq=0; wsPaint(); if(MQT.matches) return; const mainEl=document.querySelector('.main'); const w=mainEl.offsetWidth-(rpVisible()?0:(RP.w||420));
+    if(rpVisible()&&w<480){ RP.open=false; rpAuto=true; applyRP(false); wsPaint(); } else if(!rpVisible()&&rpAuto&&w>=560){ RP.open=true; rpAuto=false; applyRP(false); wsPaint(); } };
   const kick=()=>{ if(!rq) rq=requestAnimationFrame(fit); }; addEventListener('resize',kick); if(window.ResizeObserver) new ResizeObserver(kick).observe($('wsTabList')); setTimeout(kick,50); }
 { const t=curTab(), h=location.hash||''; if(t.hist[t.i]!==h){ if(!h&&t.hist[t.i]){ wsSilent=true; setTimeout(()=>{ wsSilent=false; },500); location.hash=t.hist[t.i]; } else { pushHist(t,h); wsSave(); wsPaint(); wsPaintNav(); } } else afterNav(); }
 if(typeof loadQuestions==='function'&&!questionBank) loadQuestions().then(()=>{ if(rpVisible()) rpRefresh(); }).catch(()=>{});

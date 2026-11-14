@@ -256,6 +256,7 @@
     "e725",
     "e726",
     "e728",
+    "e729",
     "e630",
     "e800",
     "e801",
@@ -2751,7 +2752,7 @@
       "x": 3300,
       "y": 11000,
       "w": 1600,
-      "h": 4700,
+      "h": 5250,
       "color": "white",
       "text": "28. Dossiê Comparativo: Web Shell Atual (0.1.1) vs. Branches Antigas (docs/archives/) & Capacities Live (Issues #47 a #50 e #52 a #58)"
     },
@@ -3975,6 +3976,14 @@
       "w": 700,
       "h": 490,
       "text": "**Resolução Técnica: Top Rail de 46px em 3 Cabeçalhos & Controles Migrados (Issue #48)**\n\n- **Zona 1 — SidebarHeader (`.side-top`):** Altura `46px` sobre `var(--bg-back)`, Space Switcher (`.space-btn`, `31px`) à esquerda e botão de recolher `[◧]` (`#collapse`, `27px × 27px`) à direita.\n- **Zona 2 — AppHeader (`#wsTabs`):** Altura `46px` sobre `var(--bg-back)`:\n  - *Sidebar Aberta (`:not(.collapsed)`):* Inicia diretamente nos botões de histórico `< >` (`.hist.ws-nav`, `28px`). `#wsSide` e controles migrados ficam estritamente ocultos (`display: none !important`).\n  - *Sidebar Recolhida (`.app.collapsed`):* Migram para o início de `#wsTabs` antes de `< >` exatamente 3 botões compactos `27px × 27px`: `[◧ Abrir barra lateral]` (`#wsSide`), `[+ Novo]` (`#wsNewBtn`) e `[🔍 Buscar]` (`#wsSearchBtn`).\n  - Space Switcher purgado de `#wsTabs` (sem `#spTopBtn`).\n  - À direita: botão `[◨]` (`#rpToggle`) para alternar o painel contextual.\n- **Zona 3 — AppSidePanelHeader (`.rp-top`):** Altura `46px` sobre `var(--bg-back)`, perfeitamente nivelado com `#wsTabs`, contendo abas contextuais, `[+]` e `[◨]` (`#rpHide`).\n- **Eliminação da Barra Residual `.bar`:** Altura fixa removida do fluxo do layout (`height: 0; display: none; overflow: hidden;`). O leitor de PDF e a barra de progresso de leitura `.readprog` (`2px`) são exibidos apenas em documentos PDF (`.main.reading-mode`), preservando os seletores DOM (`docTitle`, `docMeta`, `propBtn`, `zfit`, `zin`, `zout`, `pg`) sem consumo de espaço global."
+    },
+    "e729": {
+      "type": "shape",
+      "x": 4070,
+      "y": 15020,
+      "w": 700,
+      "h": 530,
+      "text": "**Resolução Técnica: Colapso Off-Canvas Total (0px) & ResizableHandle na Sidebar (Issue #49)**\n\n- **Colapso Off-Canvas Total (0px):**\n  - Substituição do rail residual de `56px` por recolhimento real para `0px` (`.app.collapsed .side { width: 0 !important; min-width: 0 !important; max-width: 0 !important; overflow: hidden !important; border-right: none !important; pointer-events: none; }`).\n  - Todo o espaço horizontal é imediatamente liberado para a superfície flutuante central (`AppShellSurface` / `.main`).\n- **Alça de Redimensionamento da Sidebar (`#sideRz`):**\n  - Inserido elemento `.side-rz` na borda direita da sidebar (`role=\"separator\"`, `aria-orientation=\"vertical\"`, `tabindex=\"0\"`, `touch-action: none`).\n  - Drag fluído via `pointerdown` / `setPointerCapture` e atalhos de teclado `ArrowLeft` / `ArrowRight` (passos de `24px`).\n  - Limites padronizados de `workspace-layout.ts`: mínimo `224px`, padrão `284px`, máximo `384px`.\n  - Duplo-clique restaura a largura padrão (`284px`).\n  - Persistência contínua em `localStorage` sob a chave `sidew`.\n  - Estilo Capacities: linha sutil translúcida no hover / drag (`linear-gradient(90deg, transparent 5px, var(--faint) 5px, var(--faint) 7px, transparent 7px)`).\n- **Ajustes e Breakpoints do Painel Contextual Direito (`#rpanel`):**\n  - Limites atualizados: mínimo `240px`, padrão `420px`, máximo `640px`.\n  - Duplo-clique em `#rpRz` restaura o padrão de `420px` e persiste sob a chave `rpw`.\n  - Modo Overlay Sheet ativado entre `769px` e `1024px` (`matchMedia('(max-width:1024px)')`), garantindo que o painel contextual abra sobreposto sem esmagar o conteúdo central abaixo de `480px`.\n  - Em mobile (<= `768px`), gavetas operam com scrim e redimensionamentos são desativados."
     }
   }
 }
