@@ -201,10 +201,10 @@ When continuing work across different AI agents or recovering context from past 
 
 - **MUST** justificar animação por feedback, mudança de estado, continuidade espacial ou hierarquia; **AVOID** animação puramente decorativa em Questões, Simulados e Revisão.
 - **MUST** preservar seleção, resposta, tempo útil, foco, hitbox, rolagem e dados; animação **não** pode atrasar envio, fechamento, navegação nem recuperação de erros.
-- **MUST** oferecer caminho intencional para \`prefers-reduced-motion: reduce\` em CSS e em animações por JS/canvas; preservar feedback sem exigir deslocamento espacial. Verificar **WCAG 2.2 2.3.1 e 2.2.2 (A)** quando aplicáveis; **2.3.3 é AAA**, não AA.
+- **MUST** oferecer caminho intencional para `prefers-reduced-motion: reduce` em CSS e em animações por JS/canvas; preservar feedback sem exigir deslocamento espacial. Verificar **WCAG 2.2 2.3.1 e 2.2.2 (A)** quando aplicáveis; **2.3.3 é AAA**, não AA.
 - **MUST** tornar transições interrompíveis/reversíveis, sem filas e sem bloquear teclado, Escape, foco ou leitor de tela. Pausar loops quando invisíveis e limitar consumo de CPU/bateria.
-- **SHOULD** reutilizar os tokens de \`MOTION.md\`, escolhendo easing/duração pela tarefa e testando em mobile; preferir CSS/WAAPI quando bastarem e **não** instalar Motion/React só por um efeito.
-- **AVOID** tratar 60/120/200/350/500 ms como SLAs, impor física contínua em todo lugar, proibir \`linear\` universalmente, animar propriedades de layout sem medição ou aplicar resets globais de animação sem avaliar perda de feedback.
+- **SHOULD** reutilizar os tokens de `MOTION.md`, escolhendo easing/duração pela tarefa e testando em mobile; preferir CSS/WAAPI quando bastarem e **não** instalar Motion/React só por um efeito.
+- **AVOID** tratar 60/120/200/350/500 ms como SLAs, impor física contínua em todo lugar, proibir `linear` universalmente, animar propriedades de layout sem medição ou aplicar resets globais de animação sem avaliar perda de feedback.
 - **MUST** testar com movimento normal e reduzido, teclado, cliques rápidos/repetidos, latência, aba oculta e viewport estreita; registrar evidência e limites no PR.
 
 **Índice dos 12 princípios (não normativos):** Squash and Stretch; Anticipation; Staging; Straight Ahead Action and Pose to Pose; Follow Through and Overlapping Action; Slow In and Slow Out; Arcs; Secondary Action; Timing; Exaggeration; Solid Drawing; Appeal. Tradução, uso apropriado, anti-padrões e exemplos estão em [MOTION.md](MOTION.md).
