@@ -1,0 +1,84 @@
+name: Restore Board Evidence 136 and 138
+
+on:
+  pull_request:
+    branches: [dev]
+    paths:
+      - 'scripts/restore-contextual-evidence-board.py'
+      - 'scripts/append-space-switcher-board.py'
+      - '.github/workflows/restore-board-evidence-136-138.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  evidence-integrity:
+    if: github.head_ref == 'fix/restore-board-evidence-136-138' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check original feature contracts
+        run: node --test tests/space-switcher.test.mjs tests/contextual-question-layout.test.mjs
+      - name: Install Chromium Playwright
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Recover overwritten board and recapture missing switcher evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          if test -f prototypes/board-exam-app/issue138_spaces_e2e.json; then
+            echo 'Issue #138 evidence already persisted in branch.'
+            exit 0
+          fi
+          git worktree add --detach /tmp/exams-before-138 b410b044cac80819d952744b29072744d6df59b9
+          python3 -m http.server 8765 --directory prototypes >/tmp/exams-after-138.log 2>&1 &
+          python3 -m http.server 8766 --directory /tmp/exams-before-138/prototypes >/tmp/exams-before-138.log 2>&1 &
+          for i in $(seq 1 20); do
+            if curl -fsS http://127.0.0.1:8765/exam-app-0.1.1/index.html -o /dev/null &&
+               curl -fsS http://127.0.0.1:8766/exam-app-0.1.1/index.html -o /dev/null; then break; fi
+            sleep 1
+          done
+          node tests/space-switcher.e2e.mjs
+          python3 scripts/restore-contextual-evidence-board.py
+          python3 scripts/append-space-switcher-board.py
+          npm run board
+          grep -q '43. Prova de Conceito' prototypes/board-exam-app/BOARD.md
+          grep -q '44. Questões contextuais' prototypes/board-exam-app/BOARD.md
+          grep -q '45. SpaceSwitcher' prototypes/board-exam-app/BOARD.md
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('prototypes/board-exam-app')
+          data=json.loads((p/'board.json').read_text(encoding='utf-8'))
+          names=[x.get('text','') for x in data['elements'].values() if x.get('type')=='container']
+          assert sum(x.startswith('43. Prova de Conceito') for x in names)==1
+          assert sum(x.startswith('44. Questões contextuais') for x in names)==1
+          assert sum(x.startswith('45. SpaceSwitcher') for x in names)==1
+          assert len([x for x in (p/'assets').iterdir() if x.name.startswith('issue138_')])>=5
+          print('All three board sections and screenshots preserved')
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add prototypes/board-exam-app/board.json prototypes/board-exam-app/BOARD.md prototypes/board-exam-app/issue138_spaces_e2e.json
+          git add prototypes/board-exam-app/assets/issue138_*.png
+          if ! git diff --cached --quiet; then
+            git commit -m 'fix(board): restore Issue #136 and #138 real evidence alongside Claude storage POC'
+            git push origin "HEAD:${{ github.head_ref }}"
+          fi
+      - name: Preserve screenshots as CI artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: restore-136-138-board-evidence
+          path: |
+            prototypes/board-exam-app/assets/issue138_*.png
+            prototypes/board-exam-app/issue138_spaces_e2e.json
+          if-no-files-found: warn
