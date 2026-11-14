@@ -242,3 +242,194 @@ Unicode emoji e caracteres pictográficos não são usados na interface, em bot�
    - Abas utilizam `role="tablist"`, `role="tab"`, `aria-selected="true|false"` e `aria-controls`.
    - Alternativas utilizam `role="radiogroup"` e `role="radio"` com `aria-checked`.
    - Modais e painéis suspensos utilizam `role="dialog"` ou `role="menu"` com gerenciamento de foco (focus trap).
+
+<!-- MATERIAL-APPLE-INTEGRATION:START -->
+## 8. Síntese aplicada — Material Design 3 Expressive × Apple HIG
+
+> **Status:** diretriz interna proposta para o Exam App, derivada de documentação oficial e de skills comunitários consultados em 14/11/2026. **Não significa que todos os itens já estejam implementados.** As seções 1–7 e os tokens implementados no protótipo continuam válidos; se houver divergência, registrar a decisão em issue/PR antes de alterar o produto.
+
+### 8.1 Modelo de referência e precedência
+
+| Fonte | O que aproveitamos | O que não importamos automaticamente |
+|---|---|---|
+| **Exam App** (canônico) | Identidade low-chrome, leitura concentrada, entidades semânticas, grafo, barra de abas, OKLCH e organização de estudos | Nenhuma refatoração visual sem observar comportamento real |
+| [Material Design 3](https://m3.material.io/) | Papéis de cor, design tokens, variações de estado, componentes escolhidos por finalidade, adaptatividade | Nomenclatura de tokens/controles Android obrigatória no HTML |
+| Material 3 **Expressive** | Ênfase direcionada por peso tipográfico, cor, forma, hierarquia e movimento funcional | Overshoot em texto ou efeitos excessivos em tarefas repetitivas |
+| [Apple HIG](https://developer.apple.com/design/human-interface-guidelines/) | Clareza, conteúdo em primeiro plano, previsibilidade, continuidade espacial e acessibilidade | UI nativa iOS literal em aplicativo web multiplataforma |
+| [Apple Liquid Glass](https://developer.apple.com/documentation/technologyoverviews/liquid-glass) | Tratamento cuidadoso de sobreposições **funcionais** e contraste dinâmico | Glassmorphism como decoração em cards, enunciados e relatórios |
+| [WCAG 2.2](https://www.w3.org/TR/WCAG22/) + [WAI-ARIA APG](https://www.w3.org/WAI/ARIA/apg/) | Critérios verificáveis de acessibilidade Web e padrões de interação | Inferir conformidade apenas pela aparência |
+
+**Regra de decisão:** conteúdo e tarefa → arquitetura da informação → estado/comportamento → ergonomia → acessibilidade → geometria/cores → efeitos. Um componente não deve parecer mais importante por motivo puramente estético.
+
+### 8.2 Tradução de tokens, sem substituir a identidade do projeto
+
+Referências externas mostram duas linguagens de tokens. A aplicação **não deve** criar três paletas independentes para a mesma interface.
+
+| Intenção semântica | Vocabulário M3 de referência | Vocabulário Apple de referência | Decisão Exam App |
+|---|---|---|---|
+| Superfície principal | \`surface\`, \`surface-container\` | \`background\` / \`secondary-system-background\` | Preservar \`--app-tab-bg-base\` e papéis existentes |
+| Superfície rebaixada | \`surface-container-low\` | \`secondary/grouped background\` | Preservar \`--app-tab-bg-back\`, gutters e low-chrome |
+| Conteúdo principal | \`on-surface\` | \`label\` | Manter alto contraste e tokens de texto do produto |
+| Conteúdo secundário | \`on-surface-variant\` | \`secondary-label\` | Preferir peso/contraste calibrados a opacidade arbitrária |
+| Ação principal | \`primary\` / \`on-primary\` | \`tint\` / \`accent\` | Um CTA primário por contexto, com par de contraste |
+| Estado selecionado | \`primary-container\`, \`on-primary-container\` | \`selected/active fill\` | Estado consistente entre sidebar, abas, filtros e grafo |
+| Erro | \`error\`, \`on-error\` | \`systemRed\` + texto de status | Usar semântica de erro; não confundir com cor de entidade PDF |
+| Cores de entidades | N/A: brand/semantic extensions | N/A: custom semantic colors | **Manter** \`--k-concurso\`, \`--k-edicao\`, \`--k-questao\` etc. |
+| Movimento | \`motion\` / spatial/effects | Springs, interruption, gesture | **Manter** \`--motion-*\`, conforme [MOTION.md](MOTION.md) |
+
+**Contrato:**
+- Definir **roles semânticos** na camada de design; componentes não recebem cores hardcoded para representar sucesso, erro, seleção ou entidade. Valores literais documentados na seção 2 são baselines existentes, não licença para espalhar novas cores no HTML.
+- OKLCH é a preferência atual do Exam App. Tokens M3 derivados de *seed color* podem inspirar paletas, mas não justificam trocar cores de entidade já reconhecidas; testar contraste em claro/escuro e com conteúdo variável.
+- Cores \`on-X\` sempre devem formar pares legíveis sobre as superfícies \`X\`; contraste não pode depender de uma combinação presumida por um plugin.
+- Light/dark/high-contrast devem preservar **significado** e estados, não apenas inverter valores. Não representar dados só pela cor; combinar forma, texto/ícone, legenda ou padrão.
+- Dynamic color conforme wallpaper é capacidade de determinadas plataformas M3; na Web é uma **opção de personalização**, não requisito do Exam App. Não inferir paletas do dispositivo sem intenção de produto e controle do usuário.
+- O padrão de código é \`var(--token)\`/classes semânticas; usar \`oklch()\` e fallback suportado quando necessário; não renomear todos os tokens para \`--md-sys-*\` ou \`--apple-*\`.
+
+### 8.3 Tipografia e hierarquia expressiva
+
+1. Manter **Inter e a pilha de fallback existente** da seção 3. Referências a SF Pro/SF Symbols indicam padrões tipográficos nativos Apple, **não autorização para distribuir assets proprietários**.
+2. Dar prioridade, nesta ordem, a: título/contexto, tarefa atual, enunciado, opções de resposta, feedback e metadados. Quanto mais densa a tela, menor deve ser a variedade de estilos simultâneos.
+3. Aplicar a ideia M3 Expressive de **emphasized typography** em pontos escassos (ação primária, seção selecionada, marco de conclusão). Preferir mudança de peso/cor sem mexer no tamanho, caso a alteração de tamanho provoque layout shift.
+4. **Não reduzir texto crítico** de enunciados, alternativas e feedback por vontade de encaixar mais cards na dobra. As medidas históricas da seção 3 devem ser avaliadas com zoom e testes de legibilidade antes de serem promovidas a novos padrões.
+5. Usar line-height confortável em longas leituras; comprimento de linha controlado, parágrafos escaneáveis, títulos informativos e números com estabilidade visual em cronômetros/contadores.
+6. Respeitar aumento de fonte e preferências do navegador; nunca bloquear zoom nem resolver truncamento crítico somente com ellipsis.
+
+### 8.4 Formas, raios e elevação — do M3 Expressive ao low-chrome
+
+- A família M3 Expressive ilustra escalas de raio **0, 4, 8, 12, 16, 20, 28, 32, 48 e full** e *expressive shapes* decorativas. **No Exam App**, os valores existentes da seção 3.2 continuam canônicos até revisão baseada em evidência.
+- **Raios aninhados:** quando painel externo e elemento interno são ambos arredondados, considerar aproximadamente \`r_interno = max(0, r_externo - padding)\` como heurística geométrica, não como regra obrigatória para todos os componentes.
+- Sombra, tom e contraste de superfície são alternativas à borda contínua. Usar poucos níveis de profundidade; preservar separadores funcionais para resize, colunas de dados, grupos e controles.
+- Formas assimétricas, *bursts*, *cookies*, blobs ou morphing pertencem a ilustrações/feedback especial, nunca a contêineres textuais de questões, PDFs e simulados.
+- **Não animar border-radius em listas densas** sem propósito. Bordas e elevação devem manter indicação de hover, foco, selecionado e drag.
+- O exemplo Apple de material translúcido é **contextual**; o paradigma M3 de superfície tonal opaca é o default apropriado a áreas de conteúdo do Exam App.
+
+### 8.5 Componentes: intenção antes da aparência
+
+| Componente / superfície | Aplicação no Exam App | Anti-padrão a evitar |
+|---|---|---|
+| CTA primário | Começar/resumir simulado, responder/confirmar quando apropriado | Dois ou três botões igualmente dominantes |
+| Botão secundário / ícone | Preferências, expandir painel, ação contextual; nome acessível em icon-only | Clique sem ação, hover exclusivo para descobrir |
+| Chip | Filtro aplicado, entidade, estado ou propriedade curta | Chip agindo como navegação primária oculta |
+| Abas | Vistas equivalentes de uma ficha ou workspace | Abas duplicadas em gráfico, tabs para passos sequenciais |
+| Menu / Popover | Ações opcionais de baixo uso, ancoradas ao disparador | Esconder tarefa principal em menu de reticências |
+| Sidebar / Navigation Rail | Destinos principais persistentes em desktop; versão adaptada em mobile | Navegação fragmentada entre sidebar e toolbar |
+| Right Panel | Contexto e propriedades auxiliares da seleção atual | Duplicar toda a página ou deslocar a questão |
+| Dialog | Confirmação irreversível, escolha curta, erro que requer decisão | Formulário longo e frequente sem justificativa |
+| Drawer / Sheet | Filtros e navegação em largura restrita; retorno preservado | Overlay que cobre todo o enunciado sem saída clara |
+| Card / List | Agrupamento quando a superfície realmente tem unidade própria | Card em card em card e divisores permanentes inúteis |
+| Grafo | Relações entre objetos, foco no nó selecionado, filtros/legendas | Animação incessante, seleções sem estado ou controles repetidos |
+| Leitor PDF / Questões | Conteúdo primeiro, zoom e navegação estáveis, progresso e contexto | Toolbars infladas, rolagem inesperada, gabarito antecipado |
+
+**Estados mínimos por controle:** default, hover quando houver mouse, active/pressed, focus-visible, selected quando aplicável, disabled, loading, success, error, empty e offline/indisponível quando relevantes. \`disabled\` não substitui explicação de motivo; feedback textual não substitui affordance.
+
+### 8.6 Densidade, navegação e arquitetura adaptativa
+
+A responsividade é uma mudança na **composição** conforme espaço e tarefa, não uma versão miniaturizada do desktop:
+
+| Situação | Composição recomendada (hipótese a validar) | Continuidade exigida |
+|---|---|---|
+| Desktop amplo | Sidebar, workspace primário, painel de contexto opcional | Mesmo objeto selecionado entre painel/grafo/leitor |
+| Desktop compacto/tablet | Sidebar recolhível e painel secundário sob demanda | Nenhuma aba ou CTA inacessível |
+| Mobile / largura estreita | Área principal com prioridade ao estudo, navegação/drawer contextual | Enunciado legível e alternativas clicáveis sem scroll horizontal |
+| Zoom 200%/400% e texto ampliado | Reflow real, barras envolventes ou overflow acessível | Foco visível; controles não sobrepostos/truncados |
+
+- Usar breakpoints reais de **conteúdo**, não pressupor que \`1024px\` equivalha a tablet ou que orientação determine uso de mouse.
+- Flex/Grid/\`minmax()\`/\`clamp()\`/\`rem\` e container queries podem ser usados **se houver suporte adequado**; em protótipo HTML manter progressão compatível sem build.
+- Resolver primeiro cortes/overflows da sidebar, conteúdo duplicado de tabs, painéis que obscurecem estudo e gráficos que perdem legenda em mobile.
+- Em grafo: filtros por tipo de entidade, níveis de relação, foco e controles explícitos devem ter **representação textual acessível** (lista/árvore) além de canvas/SVG.
+- Em leitor/PDF: zoom não pode quebrar navegação, leitura nem foco; toolbar usa espaço proporcional à tarefa.
+- Apoiar teclado, mouse, toque e tecnologias assistivas; drag sempre precisa de alternativa não baseada só em arrastar.
+
+### 8.7 Liquid Glass funcional: política de uso limitada
+
+Liquid Glass é um **material de interface nas plataformas Apple**, não uma API padrão Web. Um efeito CSS inspirado nele pode ser proposto para **uma camada de controle flutuante**, jamais como efeito global de conteúdo.
+
+**Pode ser avaliado** em: barra flutuante transitória de grafo, popover não textual denso, overlay de ferramenta com benefício claro de contexto. **Não aplicar por padrão** em: corpo de enunciado, alternativas, tabelas, formulários, modal com texto longo, cartão de revisão, visualização de PDF.
+
+Requisitos para aceitar qualquer protótipo de translucidez:
+- Substrato visual suficientemente estável; **contraste medido sobre fundos reais de pior caso**, tema claro/escuro, zoom e modo alto contraste.
+- Fallback **opaco** para ausência de \`backdrop-filter\`, preferências de transparência/contraste e dispositivos lentos; permitir desligar o efeito se ele prejudicar leitura.
+- Separação clara de conteúdo, contorno de foco e affordance sem depender de refração/brilho; não usar blur para esconder fronteiras de interação.
+- Custo de renderização medido; limitar superfícies com blur e não animar blur grande continuamente.
+- Em CSS, a camada de vidro pode combinar base, borda especular discreta, saturação/blur; **\`backdrop-filter: blur()\` isolado não reproduz o material nativo**. Não prometer equivalência perfeita ao iOS.
+
+Exemplo **ilustrativo, não aplicado ao protótipo**:
+
+\`\`\`css
+/* Padrão opt-in, somente em controles flutuantes aprovados */
+.contextual-overlay {
+  color: var(--app-tab-text-active);
+  background: var(--app-tab-bg-base); /* fallback opaco */
+}
+@supports (backdrop-filter: blur(12px)) {
+  .contextual-overlay[data-translucent="true"] {
+    background: color-mix(in oklch, var(--app-tab-bg-base) 92%, transparent);
+    backdrop-filter: blur(12px);
+  }
+}
+@media (prefers-contrast: more) {
+  .contextual-overlay[data-translucent="true"] {
+    background: var(--app-tab-bg-base);
+    backdrop-filter: none;
+  }
+}
+\`\`\`
+
+A interface de leitura continua preferindo **superfícies opacas, espaçamento coerente e pouco chrome**, como descrito na issue #97.
+
+### 8.8 Acessibilidade — separar os mínimos por plataforma
+
+| Referência | Escopo | Interpretação correta |
+|---|---|---|
+| WCAG 2.2 SC 2.5.8 (AA) | Web | Alvo mínimo **24×24 CSS px**, considerando espaçamento ou exceções do critério |
+| WCAG 2.2 SC 2.5.5 (AAA) | Web | Alvo ampliado **44×44 CSS px**, ressalvadas exceções |
+| Apple HIG (44 pt) | iOS/iPadOS | Recomendação de área de interação **em pontos**, não pixels CSS |
+| Material 3 (48 dp) | Android/Material | Alvo confortável **em dp**; não equivaler automaticamente a CSS px |
+| WCAG 2.2 1.4.3/1.4.11 | Web | Texto comum **4,5:1**, texto grande **3:1**, componentes gráficos essenciais **3:1**, com exceções normativas |
+| WAI-ARIA APG | Web | Teclado, roles/estados, nome acessível e foco dos padrões de UI |
+
+**Política de produto:** preferir área interativa confortável (frequentemente maior que o mínimo AA) sem aumentar indiscriminadamente a **altura visual** de chips/abas densos: hit area pode incluir espaço adicional que não se sobreponha indevidamente a vizinhos. Sempre medir o resultado, não deduzir conformidade da dimensão CSS declarada.
+
+Checklist básico: foco na ordem certa, foco não oculto por sticky UI; ícones rotulados; leitura do enunciado por tecnologias assistivas; status de acerto/erro anunciado no momento correto; filtros removíveis por teclado; alternativas com nome/papel/valor; gráficos com dados textuais; contraste em overlays; zoom e reflow; motion reduzido.
+
+### 8.9 Critérios de aceite para futuras mudanças visuais
+
+- Capturar **antes e depois** por viewport, tema, estado, navegação e conteúdo representativo. Para animação relevante capturar vídeo/GIF e narrar o comportamento em texto.
+- Validar **foco, teclado, touch e leitor de tela** quando possível, inclusive sem mouse e em viewport estreita.
+- Comparar com a implementação \`dev\`, evidências de \`docs/\`, \`prototypes/\` e \`docs/archives/\`, não só com screenshots de sites externos.
+- Registrar *trade-offs*: performance, densidade, acessibilidade e convenção da plataforma. Citar fonte oficial/skill no PR.
+- Critérios de qualidade: sem CTAs mortos, abas duplicadas, ação primária perdida, contornos decorativos em excesso, scroll jumping, loading infinito ou gesto sem alternativa.
+- Não declarar que a aplicação está "conforme Apple/M3" porque um token, radius ou efeito se parece com referência.
+
+## 9. Registro de referências dos 22 skills analisados
+
+Os repositórios abaixo são **fontes comunitárias de aprendizado**, não extensões oficiais de Apple ou Google. Alguns estão voltados a Android/SwiftUI; nem todo trecho de código se aplica a um protótipo HTML/CSS/JS. Para números ou requisitos, confrontar com a documentação oficial **vigente**.
+
+| # | Projeto / skill | Conhecimento reaproveitado | Fonte |
+|---|---|---|---|
+| M01 | skydashnet — Material 3 UI | Checklists, hierarquia, tokens, auditoria | https://github.com/skydashnet/material-design-3-ui-skill |
+| M02 | hamen — Material 3 | Roles, temas e componentes multiplataforma | https://github.com/hamen/material-3-skill |
+| M03 | abhixv — M3 Expressive | Ênfase, escala de formas, motion spatial/effects | https://github.com/abhixv/google-m3-expressive-design-skill |
+| M04 | Softengineit — Material Web | CSS tokens, React/Tailwind, auditoria estática | https://github.com/Softengineit/material-design-skill |
+| M05 | gdlbo — Material | Hierarquia antes de estética, superfícies estáveis, gate expressive | https://github.com/gdlbo/material-skill |
+| M06 | macsystems — M3 Agent | Mapa de papéis e componentes oficiais | https://github.com/macsystems/m3-agent-skill |
+| M07 | yhongm — Material | Sistema multiplataforma, tipografia, motion e temas | https://github.com/yhongm/material-design-skill |
+| M08 | shelbeely — Material Shape | Raios, formas expressivas, casos de uso | https://github.com/shelbeely/Shelbeely-Agent-skills/tree/main/skills/material-design-3-shape |
+| M09 | majiayu000 — M3 Expressive (arquivo/espelho) | Tailwind, spring, tokens e acessibilidade | https://github.com/majiayu000/claude-skill-registry/blob/main/skills/data/material-design-3-expressive/SKILL.md |
+| M10 | MadAppGang — Design References | Quadro comparativo M3/HIG, heurísticas | https://github.com/MadAppGang/magus/blob/main/plugins/designer/skills/design-references/SKILL.md |
+| A01 | gotired — Apple Design Skills | Auditoria HIG, crítica visual, consistência | https://github.com/gotired/Apple-Design-Skills |
+| A02 | oye-rahul — Apple Web Design | Camadas funcionais, Liquid Glass e web responsiva | https://github.com/oye-rahul/Apple-Design-Skill |
+| A03 | BuilderIO — Apple Design | Interfaces fluidas, springs e gestos interrompíveis | https://github.com/BuilderIO/agent-native-product-visuals/tree/main/.agents/skills/apple-design |
+| A04 | bowen31337 — Apple Design Web | CSS/SVG, physics, motion/GSAP, componentes | https://github.com/bowen31337/apple-design |
+| A05 | dickwu — Apple Design | Revisão HIG, padrões, acessibilidade | https://github.com/dickwu/apple-design-skill |
+| A06 | tzzs — Apple Design | Separar afirmação fundamentada de palpite | https://github.com/tzzs/apple-design-skill |
+| A07 | sharmahr — iOS HIG | Navegação, interação, áreas-alvo e revisão | https://github.com/sharmahr/ios-human-interface-guidelines |
+| A08 | ykswang — Apple HIG | Índice e atualização de referências HIG | https://github.com/ykswang/apple-hig-skill |
+| A09 | alirezarezvani — Apple HIG Expert | Auditoria e checagem de conformidade | https://github.com/alirezarezvani/claude-skills/tree/main/product-team/apple-hig-expert |
+| A10 | ehmo — Platform Design iOS | Regras de adaptação, safe areas e touch | https://github.com/ehmo/platform-design-skills/tree/main/skills/ios |
+| A11 | rshankras — Apple Design Skills | Liquid Glass, tipografia, animação, microcopy | https://github.com/rshankras/claude-code-apple-skills/tree/main/skills/design |
+| A12 | Sunwood-ai-labs — Apple HIG | Fluxo evidence-first e verificação pós-alteração | https://github.com/Sunwood-ai-labs/design-with-apple-hig |
+
+**Leituras primárias:** [Material 3](https://m3.material.io/), [Apple HIG](https://developer.apple.com/design/human-interface-guidelines/), [Apple Liquid Glass](https://developer.apple.com/documentation/technologyoverviews/liquid-glass), [WCAG 2.2](https://www.w3.org/TR/WCAG22/), [WAI-ARIA APG](https://www.w3.org/WAI/ARIA/apg/). Todas as recomendações numéricas da tabela de terceiros devem ser revalidadas contra a origem antes de uso normativo.
+
+<!-- MATERIAL-APPLE-INTEGRATION:END -->
