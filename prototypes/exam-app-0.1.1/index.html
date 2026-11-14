@@ -70,6 +70,26 @@
 .pdf-page-notice button:hover{background:var(--hover)}
 .pdf-page-notice button:disabled{opacity:.6;cursor:wait}
 </style>
+<style>
+/* Question notebooks and reusable Queries — responsive, semantic and zero emojis. */
+.qf-saved-actions,.nb-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.qf-saved-actions{padding-left:8px}
+.nb-list{display:grid;gap:14px;margin:16px 0}
+.nb-card{background:var(--bg-base);border:1px solid var(--line);padding:16px;border-radius:12px;box-shadow:var(--surface-shadow)}
+.nb-card h2{font-size:16px;margin:0 0 6px;font-weight:600}
+.nb-stats{display:flex;gap:12px;flex-wrap:wrap;margin:10px 0;font-variant-numeric:tabular-nums}
+.nb-progress{display:block;width:100%;height:10px;accent-color:var(--study-accent);margin:8px 0 16px}
+.nb-actions{margin:14px 0}
+.nb-row{display:flex;align-items:center;gap:8px}.nb-row .op-row{flex:1}
+.nb-membership{margin-top:12px;border-top:1px solid var(--line);padding-top:10px}
+.nb-membership>summary{cursor:pointer;color:var(--text);font-size:13px;font-weight:600}
+.nb-membership-body{display:flex;gap:9px;flex-direction:column;padding:10px 0}
+.nb-check{display:flex;align-items:center;gap:9px;min-height:32px;font-size:13px;color:var(--text)}
+.nb-check input{width:17px;height:17px;accent-color:var(--study-accent)}
+.nb-goal{display:flex;gap:8px;align-items:center;padding:8px 0;font-size:13px}
+.nb-goal input{width:75px;padding:7px;border:1px solid var(--line);border-radius:6px}
+@media(max-width:768px){.qf-saved-actions{padding-left:0}.nb-list{gap:10px}.nb-card{padding:12px}}
+</style>
 </head><body>
 <style>
 /* ===== Exam App 0.1.1 — páginas de estudo e detalhes, 2026 ===== */
@@ -1517,6 +1537,10 @@ a.rp-link:hover{background:var(--active)}
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/><path d="m9 16 2 2 4-4"/></svg>
         <span class="t">Revisar erros</span>
       </a>
+      <a class="row" id="notebooksRow" href="#/cadernos" title="Meus cadernos de questões">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 3h12a3 3 0 0 1 3 3v15H7a3 3 0 0 0-3 3z"/><path d="M4 21V6a3 3 0 0 1 3-3"/><path d="M8 9h7M8 13h7"/></svg>
+        <span class="t">Meus Cadernos</span>
+      </a>
       <a class="row" id="exploreRow" href="#/explorar" title="Explorar e conexões">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
         <span class="t">Explorar</span>
@@ -1688,6 +1712,7 @@ const TYPES={
   documento:{n:'Documento',en:'Document',parent:'arquivo',own:['classe','cat','edicao','cargo']},
   pdf:{n:'PDF',en:'PDF',parent:'documento',own:['paginas']},
   questao:{n:'Questão',en:'Question',parent:null,own:['disciplina','ano','banca','orgao','edicao','cargo']},
+  caderno:{n:'Caderno',en:'Question notebook',parent:null,own:[]},
   disciplina:{n:'Disciplina',en:'Subject',parent:null,own:[]},
   simulado:{n:'Simulado',en:'Mock exam',parent:null,own:['edicao','cargo','ano']},
   resposta:{n:'Resposta',en:'Answer',parent:null,own:['questao','simulado','data','alternativa','resultado']}
@@ -3554,7 +3579,7 @@ function opEspacoPage(sp,mine){
   </div>`:'<p class="op-empty">Resolva questões por disciplina para calcular seu radar de matérias deficitárias.</p>';
 
   // Secoes secundarias
-  const tipos=Object.keys(TYPES).filter(t=>!hiddenTypes.has(t)).map(t=>{ const n=t==='questao'?(70+uqAll().length):t==='simulado'?simsAll().length:t==='resposta'?histAll().length:isEntT(t)?entsOf(t).length:mine.filter(d=>isA(d.type,t)).length; return {icon:t,iid:'tipo:'+t,title:TYPES[t].n,meta:n+(n===1?' objeto':' objetos')+(TYPES[t].parent?' · estende '+TYPES[TYPES[t].parent].n:''),href:'#/tipo/'+t}; });
+  const tipos=Object.keys(TYPES).filter(t=>!hiddenTypes.has(t)).map(t=>{ const n=t==='questao'?(70+uqAll().length):t==='caderno'?nbAll().filter(b=>b.sp===space).length:t==='simulado'?simsAll().length:t==='resposta'?histAll().length:isEntT(t)?entsOf(t).length:mine.filter(d=>isA(d.type,t)).length; return {icon:t,iid:'tipo:'+t,title:TYPES[t].n,meta:n+(n===1?' objeto':' objetos')+(TYPES[t].parent?' · estende '+TYPES[TYPES[t].parent].n:''),href:'#/tipo/'+t}; });
   const rows=mine.map(d=>({icon:d.type,title:d.t,meta:[TYPES[d.type].n,d.cat].filter(Boolean).join(' · '),href:objHref(d)}));
 
   const studyEntries='<div class="dash-actions"><a class="dash-act-btn" href="#/questoes"><span class="dash-act-ico">'+UIICON.book+'</span><div class="dash-act-txt"><b>Resolver questões</b><small>Prática individual com correção imediata</small></div></a><a class="dash-act-btn" href="#/simulado"><span class="dash-act-ico">'+UIICON.timer+'</span><div class="dash-act-txt"><b>Fazer simulado</b><small>Configure a prova e acompanhe seu resultado</small></div></a></div>';
@@ -3719,6 +3744,184 @@ const QF_CATS=[
  {id:'sit',t:'Situação',get:q=>{const r=qSel(q),f=qFlag(q.id),a=[!r?'pendentes':(r===q.gabarito?'certas':'erradas')];if(r)a.push('resolvidas');if(f.rev)a.push('rev');if(f.fav)a.push('fav');return a;},fmt:v=>QF_SIT[v]||v,fixed:Object.keys(QF_SIT),always:true}
 ];
 const qfS={},qfCtx={},qScopedPage={};
+
+/* Persistent question notebooks and reusable saved filters. Local-only by design. */
+const nbAll=()=>{const v=store.get('cadernos');return Array.isArray(v)?v:[];};
+const nbSave=items=>store.set('cadernos',items);
+const nbFind=id=>nbAll().find(x=>x.id===id&&x.sp===space);
+const nbAnswerMap=()=>{const v=store.get('cadernoAnswers');return v&&typeof v==='object'?v:{};};
+const nbAnswer=(id,qid)=>((nbAnswerMap()[id]||{})[qid]||{}).selected||null;
+const sfAll=()=>{const v=store.get('savedQuestionFilters');return Array.isArray(v)?v:[];};
+const sfSave=items=>store.set('savedQuestionFilters',items);
+function sfHref(item){
+  const st=item.query||{},params=new URLSearchParams();
+  if(st.text)params.set('busca',st.text);
+  for(const [cat,values] of Object.entries(st.f||{}))for(const v of values||[])params.append(cat,v);
+  return '#/questoes'+(params.toString()?'?'+params.toString():'');
+}
+function sfScope(key,f){
+  const parts=String(key).split(':'),cat=({concurso:'conc',edicao:'ed',cargo:'cg'})[parts[0]];
+  if(cat&&parts[1])f[cat]=[parts[1]];
+  return f;
+}
+function sfLinks(){
+  const items=sfAll().filter(f=>f.sp===space);
+  return items.length?'<div class="op-list">'+items.map(f=>'<div class="nb-row"><a class="op-row" href="'+sfHref(f)+'"><span class="op-rt"><b>'+esc(f.name)+'</b><small>'+esc(f.query.text||'')+'</small></span><span class="op-go" aria-hidden="true">›</span></a><button type="button" class="op-btn" data-sf-delete="'+esc(f.id)+'" aria-label="Excluir filtro '+esc(f.name)+'">Excluir</button></div>').join('')+'</div>':
+    '<p class="op-empty">Nenhum filtro salvo. Use “Salvar filtro” no banco de questões.</p>';
+}
+async function sfCreate(key){
+  const context=qfCtx[key];if(!context)return;
+  const cur=qfSt(key),query={text:cur.text,f:sfScope(key,JSON.parse(JSON.stringify(cur.f||{})))};
+  const name=await dialog({title:'Salvar filtro de questões',input:'',label:'Nome do filtro',placeholder:'Ex.: FGV · Questões não resolvidas',
+    ok:'Salvar filtro',validate:v=>v.length<3?'Use pelo menos 3 caracteres.':''});
+  if(!name)return;
+  sfSave(sfAll().concat({id:'f'+Date.now().toString(36)+uid(),sp:space,name:name.trim(),query,created:Date.now()}));
+  toast('Filtro salvo em Meus filtros.');
+}
+async function nbCreate(qids,stay){
+  let goal=80;
+  const name=await dialog({title:'Gerar Caderno',text:(qids.length||0)+' questões selecionadas.',input:'',label:'Nome do caderno',
+    placeholder:'Ex.: Engenharia de Software · Revisão',
+    html:'<label class="nb-goal">Meta de acerto (%) <input type="number" id="nbGoal" min="1" max="100" value="80" required></label>',
+    ok:'Criar caderno',
+    validate:v=>{
+      if(v.length<3)return 'Use pelo menos 3 caracteres no nome.';
+      const num=Number(($('nbGoal')||{}).value);
+      if(!Number.isInteger(num)||num<1||num>100)return 'Informe uma meta entre 1 e 100%.';
+      goal=num;return '';
+    }
+  });
+  if(!name)return null;
+  const id='cb'+Date.now().toString(36)+uid(),unique=[...new Set(qids)];
+  nbSave(nbAll().concat({id,sp:space,name:name.trim(),goal,questionIds:unique,created:Date.now(),retakeIds:[]}));
+  toast('Caderno criado com '+unique.length+' questões.');
+  if(!stay)location.hash='/caderno/'+id;
+  else route(true);
+  return id;
+}
+function nbMembership(q){
+  const all=nbAll().filter(b=>b.sp===space);
+  return '<details class="nb-membership"><summary>Cadernos ('+all.filter(b=>b.questionIds.includes(q.id)).length+')</summary>'+
+    '<div class="nb-membership-body">'+(all.length?all.map(b=>'<label class="nb-check"><input type="checkbox" data-nb-member="'+esc(q.id+'|'+b.id)+'" '+(b.questionIds.includes(q.id)?'checked':'')+'><span>'+esc(b.name)+'</span></label>').join(''):'<p class="s-note">Esta questão ainda não está em nenhum caderno.</p>')+
+    '<button type="button" class="op-btn" data-nb-single="'+esc(q.id)+'">+ Novo caderno com esta questão</button></div></details>';
+}
+function nbQuestionList(book){
+  const byId=new Map(qObjs().map(q=>[q.id,q]));
+  return book.questionIds.map(id=>byId.get(id)).filter(Boolean);
+}
+function nbStats(book){
+  const items=nbQuestionList(book),done=items.filter(q=>nbAnswer(book.id,q.id)),correct=done.filter(q=>nbAnswer(book.id,q.id)===q.gabarito);
+  return {total:items.length,done:done.length,correct:correct.length,wrong:done.length-correct.length,
+    rate:done.length?pctOf(correct.length,done.length):0,progress:items.length?pctOf(done.length,items.length):0};
+}
+function nbRender(h){
+  const parts=h.split('?')[0].split('/'),id=parts[2],book=nbFind(id);
+  if(!book){studyPage('Caderno','Indisponível','<div class="s-empty">O caderno não existe neste espaço. <a class="s-button" href="#/cadernos">Meus Cadernos</a></div>');return;}
+  const state=nbStats(book),retake=parts[3]==='erradas';
+  const questions=nbQuestionList(book).filter(q=>!retake||book.retakeIds.includes(q.id));
+  const key='book:'+id+(retake?':erradas':'');
+  if(!Object.prototype.hasOwnProperty.call(qScopedPage,key)){
+    const at=Number(new URLSearchParams(h.split('?')[1]||'').get('at'));
+    qScopedPage[key]=Number.isInteger(at)&&at>=0?at:0;
+  }
+  const breadcrumbs=sBreadcrumb([['Meus Cadernos','#/cadernos'],[book.name,'']]);
+  const metrics='<div class="nb-stats"><span><b>'+state.done+' / '+state.total+'</b> resolvidas</span><span><b>'+state.rate+'%</b> de acerto</span><span>Meta: '+book.goal+'%</span></div>'+
+    '<progress class="nb-progress" value="'+state.done+'" max="'+Math.max(1,state.total)+'" aria-label="Progresso do caderno"></progress>';
+  const actions='<div class="nb-actions"><button type="button" class="op-btn pri" data-nb-continue="'+id+'">Continuar de onde parou</button>'+
+    '<button type="button" class="op-btn" data-nb-retake="'+id+'" '+(!state.wrong?'disabled':'')+'>Refazer apenas as que errei ('+state.wrong+')</button>'+
+    '<button type="button" class="op-btn" data-nb-reset="'+id+'">Zerar progresso do caderno</button>'+
+    '<a class="op-btn" href="#/cadernos">Meus Cadernos</a></div>';
+  const content=breadcrumbs+sHead('Caderno de questões',esc(book.name),retake?'Refazendo questões incorretas deste caderno.':'Progresso independente das respostas gerais: suas questões originais não são apagadas.','',sBadge(state.total+' questões'))+
+    metrics+actions+(questions.length?renderPracticeList(questions,key):'<div class="s-empty">Este caderno não contém questões'+(retake?' incorretas para refazer':'')+'. Adicione questões a partir do banco. <a href="#/questoes">Resolver questões</a></div>');
+  studyPage('Caderno','Meus Cadernos',content);
+}
+function nbIndex(){
+  const items=nbAll().filter(b=>b.sp===space);
+  const rows=items.map(b=>{const s=nbStats(b);return '<article class="nb-card" data-nb-id="'+esc(b.id)+'"><h2><a href="#/caderno/'+esc(b.id)+'">'+esc(b.name)+'</a></h2>'+
+    '<p class="s-note">Meta '+b.goal+'% · '+s.done+' de '+s.total+' resolvidas · '+s.rate+'% de acerto</p>'+
+    '<progress class="nb-progress" value="'+s.done+'" max="'+Math.max(1,s.total)+'" aria-label="Progresso do caderno '+esc(b.name)+'"></progress>'+
+    '<div class="nb-actions"><button type="button" class="op-btn pri" data-nb-continue="'+b.id+'">Continuar de onde parou</button>'+
+    '<a class="op-btn" href="#/caderno/'+b.id+'">Ver questões</a>'+
+    '<button type="button" class="op-btn" data-nb-retake="'+b.id+'" '+(!s.wrong?'disabled':'')+'>Refazer apenas as que errei ('+s.wrong+')</button>'+
+    '<button type="button" class="op-btn" data-nb-reset="'+b.id+'">Zerar progresso do caderno</button></div></article>';}).join('');
+  const content=sBreadcrumb([['Início','#/espaco'],['Meus Cadernos','']])+sHead('Organização','Meus Cadernos',
+    'Agrupe questões em baterias de estudo, acompanhe seu progresso e retome exatamente de onde parou.',
+    '<button type="button" class="s-button main-cta" data-nb-empty>+ Novo caderno</button>',sBadge(items.length+' cadernos'))+
+    (rows?'<div class="nb-list">'+rows+'</div>':'<div class="s-empty"><p>Você ainda não tem cadernos.</p><p>Use “Gerar Caderno” depois de filtrar questões, ou crie um caderno vazio.</p><a class="s-button" href="#/questoes">Abrir banco de questões</a></div>');
+  studyPage('Cadernos','Meus Cadernos',content);
+}
+function sfIndex(){
+  const content=sBreadcrumb([['Início','#/espaco'],['Meus Filtros','']])+sHead('Consultas salvas','Meus Filtros',
+    'Reaplique combinações de filtros sem configurar tudo novamente.',sBtn('Questões','#/questoes'))+
+    sSection('Queries de Questão','<div class="s-card">'+sfLinks()+'</div>');
+  studyPage('Filtros','Consultas salvas',content);
+}
+
+/* Caderno controls share the existing in-page dialog and route system. */
+view.addEventListener('change',e=>{
+  const t=e.target.closest('[data-nb-member]');if(!t)return;
+  const [qid,id]=t.dataset.nbMember.split('|'),book=nbFind(id);if(!book)return;
+  nbSave(nbAll().map(b=>{
+    if(b.id!==id)return b;
+    const ids=new Set(b.questionIds);if(t.checked)ids.add(qid);else ids.delete(qid);
+    return {...b,questionIds:[...ids]};
+  }));
+  toast(t.checked?'Questão adicionada ao caderno.':'Questão removida do caderno.');
+});
+view.addEventListener('click',async e=>{
+  let t;
+  if(t=e.target.closest('[data-qf-create-book]')){
+    const key=t.dataset.qfCreateBook,context=qfCtx[key];if(!context)return;
+    const list=qfFilter(key,context.all);if(!list.length){toast('Nenhuma questão com os filtros atuais.');return;}
+    await nbCreate(list.map(q=>q.id),false);return;
+  }
+  if(t=e.target.closest('[data-qf-save-filter]')){await sfCreate(t.dataset.qfSaveFilter);return;}
+  if(t=e.target.closest('[data-nb-single]')){await nbCreate([t.dataset.nbSingle],true);return;}
+  if(e.target.closest('[data-nb-empty]')){await nbCreate([],false);return;}
+  if(t=e.target.closest('[data-sf-delete]')){
+    const f=sfAll().find(x=>x.id===t.dataset.sfDelete&&x.sp===space);if(!f)return;
+    const ok=await dialog({alert:true,danger:true,title:'Excluir filtro salvo?',text:'O filtro “'+f.name+'” será removido. As questões não serão apagadas.',ok:'Excluir filtro'});
+    if(ok){sfSave(sfAll().filter(x=>x.id!==f.id));route(true);}return;
+  }
+  if(t=e.target.closest('[data-nb-continue]')){
+    const b=nbFind(t.dataset.nbContinue);if(!b)return;
+    const items=nbQuestionList(b),index=items.findIndex(q=>!nbAnswer(b.id,q.id));
+    qScopedPage['book:'+b.id]=Math.max(0,index);
+    const hash='/caderno/'+b.id+'?at='+qScopedPage['book:'+b.id];
+    if(location.hash==='#'+hash)nbRender(hash);else location.hash=hash;
+    return;
+  }
+  if(t=e.target.closest('[data-nb-retake]')){
+    const b=nbFind(t.dataset.nbRetake);if(!b)return;
+    const wrong=nbQuestionList(b).filter(q=>nbAnswer(b.id,q.id)&&nbAnswer(b.id,q.id)!==q.gabarito).map(q=>q.id);
+    if(!wrong.length){toast('Nenhuma questão errada para refazer.');return;}
+    const ok=await dialog({alert:true,title:'Refazer '+wrong.length+' questões erradas?',text:'O progresso desta tentativa será reiniciado apenas para essas questões. O histórico geral será preservado.',ok:'Refazer erradas'});
+    if(!ok)return;
+    const m=nbAnswerMap(),answers={...(m[b.id]||{})};
+    wrong.forEach(id=>delete answers[id]);m[b.id]=answers;store.set('cadernoAnswers',m);
+    nbSave(nbAll().map(x=>x.id===b.id?{...x,retakeIds:wrong}:x));
+    qScopedPage['book:'+b.id+':erradas']=0;location.hash='/caderno/'+b.id+'/erradas';
+    if(location.hash==='#/caderno/'+b.id+'/erradas')nbRender(location.hash.slice(1));
+    return;
+  }
+  if(t=e.target.closest('[data-nb-reset]')){
+    const b=nbFind(t.dataset.nbReset);if(!b)return;
+    const ok=await dialog({alert:true,danger:true,title:'Zerar progresso do caderno?',text:'Somente as respostas deste caderno serão limpas. As respostas originais das questões e o histórico geral permanecem.',ok:'Zerar progresso'});
+    if(!ok)return;
+    const answers=nbAnswerMap();delete answers[b.id];store.set('cadernoAnswers',answers);
+    nbSave(nbAll().map(x=>x.id===b.id?{...x,retakeIds:[]}:x));
+    qScopedPage['book:'+b.id]=0;route(true);return;
+  }
+});
+
+async function nbRoute(h){
+  studyPage('Cadernos','Carregando','<div class="s-empty" role="status">Abrindo cadernos…</div>');
+  try{
+    await loadQuestions();if(location.hash.slice(1)!==h)return;
+    if(h.startsWith('/caderno/'))nbRender(h);else if(h==='/filtros')sfIndex();else nbIndex();
+  }catch(e){if(location.hash.slice(1)===h)studyError(e,'#/espaco');}
+}
+
 const qfSt=k=>qfS[k]||(qfS[k]={f:{},text:'',open:false,cat:null,qs:''});
 const qfLbl=(c,v)=>c.fmt?c.fmt(v):v;
 const QF_IC='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 5h18M6 12h12M10 19h4"/></svg>';
@@ -3766,7 +3969,8 @@ function qfQuickHTML(key){const selected=(qfSt(key).f.sit||[])[0]||'todas';retur
 function qfHTML(key,all,o){
   o=o||{}; qfCtx[key]={all,o}; const st=qfSt(key); st.open=false; st.cat=null; st.qs='';
   const P=qfParts(key); if(o.onChange) o.onChange(P.fl);
-  return '<div class="qf" data-qf="'+key+'">'+qfQuickHTML(key)+'<div class="qf-bar"><div class="qf-wrap"><button type="button" class="op-btn qf-btn" data-qf-toggle aria-haspopup="dialog" aria-expanded="false">'+QF_IC+' Filtrar'+(P.n?'<em class="qf-n">'+P.n+'</em>':'')+'</button><div class="qf-pop" role="dialog" aria-label="Filtrar questões"></div></div><input type="search" class="qf-q" data-qf-text placeholder="Buscar nas questões…" aria-label="Buscar nas questões" autocomplete="off" value="'+esc(st.text)+'"><span class="sc-count qf-count" role="status" aria-live="polite">'+P.count+'</span>'+(o.extra||'')+'</div><div class="qf-chips">'+P.chips+'</div><div class="qf-list">'+P.list+'</div></div>';
+  const savedActions='<div class="qf-saved-actions"><button type="button" class="op-btn" data-qf-create-book="'+esc(key)+'">Gerar Caderno</button><button type="button" class="op-btn" data-qf-save-filter="'+esc(key)+'">Salvar filtro</button><a class="op-btn" href="#/filtros">Meus filtros</a></div>';
+  return '<div class="qf" data-qf="'+key+'">'+qfQuickHTML(key)+'<div class="qf-bar"><div class="qf-wrap"><button type="button" class="op-btn qf-btn" data-qf-toggle aria-haspopup="dialog" aria-expanded="false">'+QF_IC+' Filtrar'+(P.n?'<em class="qf-n">'+P.n+'</em>':'')+'</button><div class="qf-pop" role="dialog" aria-label="Filtrar questões"></div></div><input type="search" class="qf-q" data-qf-text placeholder="Buscar nas questões…" aria-label="Buscar nas questões" autocomplete="off" value="'+esc(st.text)+'"><span class="sc-count qf-count" role="status" aria-live="polite">'+P.count+'</span>'+(o.extra||'')+savedActions+'</div><div class="qf-chips">'+P.chips+'</div><div class="qf-list">'+P.list+'</div></div>';
 }
 function qfRefresh(root){
   const key=root.dataset.qf,c=qfCtx[key];if(key==='study'){qIndex=0;qfSyncURL();}else qScopedPage[key]=0;const P=qfParts(key);
@@ -3818,7 +4022,7 @@ function questaoTipoPage(sp){
   const props=[['Tipo',chipA('Tipo de objeto','#/espaco')]];
   return opPage({iid:'tipo:questao',crumb:[['Espaço','#/espaco'],['Questão','']],icon:'questao',kind:'Tipo de objeto',title:'Questão',wide:true,
     actions:'<div class="op-actions">'+ord+'<button type="button" class="op-btn pri" data-qt-sim>Fazer simulado'+(list.length!==all.length?' ('+list.length+')':'')+'</button></div>',
-    body:perfSec(null)+opSec('Objetos',qfHTML('tipo',all,{onChange:l=>{qtList=l;const b=document.querySelector('[data-qt-sim]');if(b)b.textContent='Fazer simulado'+(l.length!==all.length?' ('+l.length+')':'');}}),{count:all.length})});
+    body:perfSec(null)+opSec('Objetos',qfHTML('tipo',all,{onChange:l=>{qtList=l;const b=document.querySelector('[data-qt-sim]');if(b)b.textContent='Fazer simulado'+(l.length!==all.length?' ('+l.length+')':'');}}),{count:all.length})+opSec('Queries / Meus filtros',sfLinks(),{count:sfAll().filter(x=>x.sp===space).length})});
 }
 /* ---- v0.1.1 · Métricas e marcações da Questão ---- */
 const qFlags=()=>{const v=store.get('qflags');return v&&typeof v==='object'?v:{};};
@@ -3862,7 +4066,7 @@ function questaoPage(q){
   '</div>'+drawerHtml;
   const body='<div class="qo"><p class="sc-stm qo-stm">'+esc(q.enunciado)+'</p><div class="qo-alts">'+alts+'</div>'+(r?'<p class="s-note">'+(r===q.gabarito?UIICON.check+' Resposta correta!':UIICON.close+' Resposta incorreta. Gabarito oficial: '+q.gabarito+'.')+'</p>':'')+(r?aiRow(q.id):'')+qMarks(q)+nav+'</div>';
   const hh=histAll().filter(h=>h.q===q.id).sort((a,b)=>b.t-a.t); const hist=opSec('Respostas',hh.length?'<div class="op-list">'+hh.map(h=>{const rid=h.id||('r'+h.t.toString(36)+'-'+h.q);return '<a class="op-row" href="#/resposta/'+rid+'"><span class="op-rt"><b>'+fmtDT(h.t)+'</b><small>'+esc(h.src)+(h.a?' · marcou '+esc(h.a):'')+'</small></span><span class="sc-st '+(h.ok?'ok':'bad')+'">'+(h.ok?UIICON.check+' Acertou':UIICON.close+' Errou')+'</span><span class="op-go" aria-hidden="true">›</span></a>';}).join('')+'</div>':opEmpty('Você ainda não respondeu esta questão.'),{count:hh.length});
-  return opPage({iid:'questao:'+q.id,crumb:[['Espaço','#/espaco'],['Questão','#/tipo/questao'],[qTitle(q),'']],icon:'questao',kind:'Questão',kindHref:'#/tipo/questao',title:qTitle(q),props,body:body+qMetrics(q,hh,r)+hist+qNote(q)+qRelated(q,all)});
+  return opPage({iid:'questao:'+q.id,crumb:[['Espaço','#/espaco'],['Questão','#/tipo/questao'],[qTitle(q),'']],icon:'questao',kind:'Questão',kindHref:'#/tipo/questao',title:qTitle(q),props,body:body+qMetrics(q,hh,r)+opSec('Cadernos',nbMembership(q))+hist+qNote(q)+qRelated(q,all)});
 }
 function discPage(en){
   const all=qObjs().filter(q=>q.materia&&findEnt('disciplina',q.materia)&&findEnt('disciplina',q.materia).id===en.id);
@@ -3965,7 +4169,7 @@ function sQuestionMarkup(q,answer,examMode,pend){
    '<label class="s-option'+((!examMode&&answer)?(k===q.gabarito?' good':(k===answer.selected?' bad':'')):'')+'"><input type="radio" name="study-answer" value="'+esc(k)+'" '+(((examMode?answer:answer&&answer.selected)===k||(!examMode&&!answer&&pend===k))?'checked':'')+' '+(!examMode&&answer?'disabled':'')+'/><b>'+esc(k)+'</b><span>'+esc(v)+'</span>'+
    ((!examMode&&answer)?(k===q.gabarito?'<em class="alt-t good">'+UIICON.check+' Correta</em>':(k===answer.selected?'<em class="alt-t bad">'+UIICON.close+' Sua resposta</em>':'')):'')+'</label>').join('')+'</div>'+
    (!examMode&&answer?'<div class="s-feedback '+(answer.correct?'good':'bad')+'"><strong>'+(answer.correct?'Resposta correta.':'Resposta incorreta.')+'</strong> Gabarito: '+esc(q.gabarito)+'.</div>':'')+
-   (!examMode&&answer?aiRow(id):'')+'</div>';
+   (!examMode&&answer?aiRow(id):'')+(examMode?'':nbMembership(q))+'</div>';
 }
 const qProps=q=>{
   if(!q)return '<div class="s-card"><p class="s-note">Selecione uma questão para ver seus dados.</p></div>';
@@ -4006,14 +4210,14 @@ function qfSyncURL(){
   if(location.pathname+location.search+location.hash!==newUrl)history.replaceState(history.state,'',newUrl);
 }
 function renderPracticeList(filtered,key){
-  const study=key==='study',per=study?qPer:5;
+  const study=key==='study',bookId=key.startsWith('book:')?key.split(':')[1]:null,per=study?qPer:(bookId?1:5),select=q=>bookId?nbAnswer(bookId,q.id):qSel(q);
   let index=study?qIndex:(qScopedPage[key]||0);
   index=Math.floor(Math.min(Math.max(0,index),Math.max(0,filtered.length-1))/per)*per;
   if(study){qIndex=index;store.set('qIndex',qIndex);}else qScopedPage[key]=index;
   const cards=filtered.slice(index,index+per),cur=cards[0];
-  const stats=filtered.reduce((a,q)=>{const selected=qSel(q);if(selected){a.done++;if(selected===q.gabarito)a.correct++;}return a;},{done:0,correct:0});
+  const stats=filtered.reduce((a,q)=>{const selected=select(q);if(selected){a.done++;if(selected===q.gabarito)a.correct++;}return a;},{done:0,correct:0});
   const rows=cards.map(q=>{
-    const selected=qSel(q),answer=selected?{selected,correct:selected===q.gabarito}:null;
+    const selected=select(q),answer=selected?{selected,correct:selected===q.gabarito}:null;
     let markup=sQuestionMarkup(q,answer,false,qPend[q.id]).replace(/name="study-answer"/g,'name="qa-'+esc(q.id)+'"');
     if(!qAuto&&!answer)markup=markup.replace(/<\/div>$/,'<div class="s-inlineactions"><button class="s-button main-cta" data-q-check="'+esc(q.id)+'">Responder</button></div></div>');
     return markup;
@@ -4022,9 +4226,9 @@ function renderPracticeList(filtered,key){
     '<button type="button" class="s-button" data-q-page="'+esc(key)+'|prev" '+(index===0?'disabled':'')+'>← Anterior</button>'+
     '<span class="s-label">'+(index+1)+'–'+Math.min(index+per,filtered.length)+' de '+filtered.length+' encontradas</span>'+
     '<button type="button" class="s-button" data-q-page="'+esc(key)+'|next" '+(index+per>=filtered.length?'disabled':'')+'>Próxima →</button></div>';
-  const nav=filtered.length<=150?sSection('Questões','<div class="s-card"><div class="s-navigator">'+filtered.map((x,i)=>'<button type="button" class="s-qnum '+(index===i?'current ':'')+(qSel(x)?'answered':'')+'" data-q-goto="'+esc(key)+'|'+i+'" aria-label="'+esc(qTitle(x))+'">'+(x.user?'+':x.n)+'</button>').join('')+'</div></div>'):'';
+  const nav=filtered.length<=150?sSection('Questões','<div class="s-card"><div class="s-navigator">'+filtered.map((x,i)=>'<button type="button" class="s-qnum '+(index===i?'current ':'')+(select(x)?'answered':'')+'" data-q-goto="'+esc(key)+'|'+i+'" aria-label="'+esc(qTitle(x))+'">'+(x.user?'+':x.n)+'</button>').join('')+'</div></div>'):'';
   const props=cur?qProps(cur):'';
-  return '<div class="s-layout" style="margin-top:10px"><div class="s-maincol">'+rows+controls+'</div><aside class="s-asidecol">'+props+
+  return '<div class="s-layout" data-practice-key="'+esc(key)+'" style="margin-top:10px"><div class="s-maincol">'+rows+controls+'</div><aside class="s-asidecol">'+props+
     '<p class="op-stats q-prog"><span><b>'+stats.done+'</b> de '+filtered.length+' resolvidas</span>'+
     (stats.done?'<span><b>'+pctOf(stats.correct,stats.done)+'%</b> de acerto</span>':'')+'</p>'+nav+'</aside></div>';
 }
@@ -4099,8 +4303,26 @@ let timerId=null;
 function stopExamTicker(){if(timerId){clearInterval(timerId);timerId=null;}}
 function beginExamTicker(){stopExamTicker();if(location.hash==='#/simulado/exec')timerId=setInterval(()=>{if(location.hash==='#/simulado/exec'&&questionBank)sExamQuestion();else stopExamTicker()},1000)}
 /* Global and scoped practice use the same qfHTML input/refresh handlers above. */
-function qCorrect(id,val){ const q=qObjs().find(x=>x.id===id);if(!q||qSel(q))return; if(q.user){const a=uqAns();a[id]=val;store.set('uqAns',a);}else{const a=getAnswers();a[q.n]={selected:val,correct:val===q.gabarito};saveAnswers(a);}recHist(q,val===q.gabarito,'Prática',0,val);delete qPend[id];const y=view.scrollTop;if(location.hash.startsWith('#/questoes'))renderPractice();else showObjs(location.hash.slice(1));view.scrollTop=y; }
-view.addEventListener('change',e=>{if(e.target.id==='qtBanca'||e.target.id==='qtOrig'||e.target.id==='qtDisc'||e.target.id==='qtEd'||e.target.id==='qtSit'){const k={qtBanca:'banca',qtOrig:'orig',qtDisc:'disc',qtEd:'ed',qtSit:'sit'}[e.target.id];qtF[k]=e.target.value;showObjs(location.hash.slice(1));return;}if(e.target.id==='qtOrd'){simOrd=e.target.value;store.set('simOrd',simOrd);return;}if(e.target.id==='scMat'||e.target.id==='scSit'){if(e.target.id==='scMat')scMat=e.target.value;else scSit=e.target.value;showObjs(location.hash.slice(1));return;}if(e.target.name==='scCount'){scCount=e.target.value;store.set('scCount',scCount);return;}if(e.target.id==='cxEd'){cxEd=e.target.value;cxCargo=null;route(true);return;}if(e.target.id==='cxCargo'){cxCargo=e.target.value;route(true);return;}if(e.target.name==='simSrc'){simSrc=e.target.value;store.set('simSrc',simSrc);return;}if(e.target.name==='simOrd'){simOrd=e.target.value;store.set('simOrd',simOrd);return;}if(e.target.id==='simQty'){simQty=e.target.value;store.set('simQty',simQty);return;}if(e.target.id==='simDuration'){simDurationMin=Number(e.target.value)||0;store.set('simDurationMin',simDurationMin);return;}if(e.target.id==='qPer'){qPer=+e.target.value;store.set('qPer',qPer);qIndex=0;qfSyncURL();renderPractice();return;}if(e.target.id==='qAuto'){qAuto=e.target.checked;store.set('qAuto',qAuto);renderPractice();toast(qAuto?'Correção automática ligada':'Correção automática desligada');return;}if(e.target.name&&e.target.name.startsWith('qa-')){const id=e.target.name.slice(3);qPend[id]=e.target.value;if(qAuto)qCorrect(id,e.target.value);return;}if(e.target.id==='qFilter'){qFilter=e.target.value;qIndex=0;renderPractice();}if(e.target.id==='qMateria'){qMateria=e.target.value;qIndex=0;renderPractice();}if(e.target.name==='study-answer'&&location.hash==='#/simulado/exec'){const s=getExam();if(s&&!s.finished){const q=questionBank.questoes[s.index];s.answers[q.n]=e.target.value;saveExam(s); /* preserve input focus without full rerender */}}});
+function qCorrect(id,val,key){
+  const q=qObjs().find(x=>x.id===id),bookId=key&&key.startsWith('book:')?key.split(':')[1]:null;
+  if(!q)return;
+  if(bookId){
+    if(!nbFind(bookId)||nbAnswer(bookId,id))return;
+    const m=nbAnswerMap(),answers=m[bookId]||{};
+    answers[id]={selected:val,at:Date.now()};m[bookId]=answers;store.set('cadernoAnswers',m);
+  }else{
+    if(qSel(q))return;
+    if(q.user){const a=uqAns();a[id]=val;store.set('uqAns',a);}
+    else{const a=getAnswers();a[q.n]={selected:val,correct:val===q.gabarito};saveAnswers(a);}
+  }
+  recHist(q,val===q.gabarito,bookId?'Caderno':'Prática',0,val);
+  delete qPend[id];const y=view.scrollTop;
+  if(bookId)nbRender(location.hash.slice(1));
+  else if(location.hash.startsWith('#/questoes'))renderPractice();
+  else showObjs(location.hash.slice(1));
+  view.scrollTop=y;
+}
+view.addEventListener('change',e=>{if(e.target.id==='qtBanca'||e.target.id==='qtOrig'||e.target.id==='qtDisc'||e.target.id==='qtEd'||e.target.id==='qtSit'){const k={qtBanca:'banca',qtOrig:'orig',qtDisc:'disc',qtEd:'ed',qtSit:'sit'}[e.target.id];qtF[k]=e.target.value;showObjs(location.hash.slice(1));return;}if(e.target.id==='qtOrd'){simOrd=e.target.value;store.set('simOrd',simOrd);return;}if(e.target.id==='scMat'||e.target.id==='scSit'){if(e.target.id==='scMat')scMat=e.target.value;else scSit=e.target.value;showObjs(location.hash.slice(1));return;}if(e.target.name==='scCount'){scCount=e.target.value;store.set('scCount',scCount);return;}if(e.target.id==='cxEd'){cxEd=e.target.value;cxCargo=null;route(true);return;}if(e.target.id==='cxCargo'){cxCargo=e.target.value;route(true);return;}if(e.target.name==='simSrc'){simSrc=e.target.value;store.set('simSrc',simSrc);return;}if(e.target.name==='simOrd'){simOrd=e.target.value;store.set('simOrd',simOrd);return;}if(e.target.id==='simQty'){simQty=e.target.value;store.set('simQty',simQty);return;}if(e.target.id==='simDuration'){simDurationMin=Number(e.target.value)||0;store.set('simDurationMin',simDurationMin);return;}if(e.target.id==='qPer'){qPer=+e.target.value;store.set('qPer',qPer);qIndex=0;qfSyncURL();renderPractice();return;}if(e.target.id==='qAuto'){qAuto=e.target.checked;store.set('qAuto',qAuto);renderPractice();toast(qAuto?'Correção automática ligada':'Correção automática desligada');return;}if(e.target.name&&e.target.name.startsWith('qa-')){const id=e.target.name.slice(3),key=e.target.closest('[data-practice-key]')?.dataset.practiceKey||'study';qPend[id]=e.target.value;if(qAuto)qCorrect(id,e.target.value,key);return;}if(e.target.id==='qFilter'){qFilter=e.target.value;qIndex=0;renderPractice();}if(e.target.id==='qMateria'){qMateria=e.target.value;qIndex=0;renderPractice();}if(e.target.name==='study-answer'&&location.hash==='#/simulado/exec'){const s=getExam();if(s&&!s.finished){const q=questionBank.questoes[s.index];s.answers[q.n]=e.target.value;saveExam(s); /* preserve input focus without full rerender */}}});
 view.addEventListener('click',e=>{
  const rr0=()=>showObjs(location.hash.slice(1)); const rrKeep=()=>{ const y=view.scrollTop; rr0(); view.scrollTop=y; };
  const qa=e.target.closest('[data-qo-ans]'); if(qa){ const [id,l]=qa.dataset.qoAns.split('|'); const q=qObjs().find(x=>x.id===id); if(q&&!qSel(q)){ if(q.user){ const m=uqAns(); m[id]=l; store.set('uqAns',m); } else { const a=getAnswers(); a[q.n]={selected:l,correct:l===q.gabarito}; saveAnswers(a); } recHist(q,l===q.gabarito,'Prática',0,l); } rrKeep(); return; }
@@ -4128,15 +4350,15 @@ view.addEventListener('click',e=>{
   startSim(items);return;
  }
  if(e.target.closest('[data-study-retry]')){questionLoading=null;route(true);}
- const step=e.target.closest('[data-q-page]');if(step){const [key,dir]=step.dataset.qPage.split('|'),per=key==='study'?qPer:5;if(key==='study'){qIndex+=dir==='next'?per:-per;qIndex=Math.max(0,qIndex);qfSyncURL();renderPractice();}else{qScopedPage[key]=Math.max(0,(qScopedPage[key]||0)+(dir==='next'?per:-per));showObjs(location.hash.slice(1));}return;}
- const goTo=e.target.closest('[data-q-goto]');if(goTo){const [key,at]=goTo.dataset.qGoto.split('|');if(key==='study'){qIndex=+at;qfSyncURL();renderPractice();}else{qScopedPage[key]=+at;showObjs(location.hash.slice(1));}return;}
+ const step=e.target.closest('[data-q-page]');if(step){const [key,dir]=step.dataset.qPage.split('|'),per=key==='study'?qPer:(key.startsWith('book:')?1:5);if(key==='study'){qIndex+=dir==='next'?per:-per;qIndex=Math.max(0,qIndex);qfSyncURL();renderPractice();}else{qScopedPage[key]=Math.max(0,(qScopedPage[key]||0)+(dir==='next'?per:-per));if(key.startsWith('book:')){history.replaceState(history.state,'',location.pathname+location.search+location.hash.split('?')[0]+'?at='+qScopedPage[key]);nbRender(location.hash.slice(1));}else showObjs(location.hash.slice(1));}return;}
+ const goTo=e.target.closest('[data-q-goto]');if(goTo){const [key,at]=goTo.dataset.qGoto.split('|');if(key==='study'){qIndex=+at;qfSyncURL();renderPractice();}else{qScopedPage[key]=+at;if(key.startsWith('book:')){history.replaceState(history.state,'',location.pathname+location.search+location.hash.split('?')[0]+'?at='+qScopedPage[key]);nbRender(location.hash.slice(1));}else showObjs(location.hash.slice(1));}return;}
  const qSim=e.target.closest('[data-qf-sim]');if(qSim){const key=qSim.dataset.qfSim;const context=qfCtx[key];if(context)startSim(qfFilter(key,context.all));return;}
  if(e.target.closest('[data-q-prev]')){qIndex-=qPer;renderPractice();}
  if(e.target.closest('[data-q-next]')){qIndex+=qPer;renderPractice();}
  const rm=e.target.closest('[data-q-rm]'); if(rm){ const k=rm.dataset.qRm; if(k==='materia')qMateria='todas'; else if(k==='filter')qFilter='todas'; else qSearch=''; qIndex=0; renderPractice(); return; }
  if(e.target.closest('[data-q-clear]')){qFilter='todas';qMateria='todas';qSearch='';qIndex=0;renderPractice();}
  const jump=e.target.closest('[data-q-jump]');if(jump){qIndex=+jump.dataset.qJump;renderPractice();}
- const chk=e.target.closest('[data-q-check]'); if(chk){const id=chk.dataset.qCheck;if(!qPend[id]){toast('Escolha uma alternativa');return;}qCorrect(id,qPend[id]);return;}
+ const chk=e.target.closest('[data-q-check]'); if(chk){const id=chk.dataset.qCheck,key=chk.closest('[data-practice-key]')?.dataset.practiceKey||'study';if(!qPend[id]){toast('Escolha uma alternativa');return;}qCorrect(id,qPend[id],key);return;}
  if(e.target.closest('[data-s-start]')){
   let items=qObjs();
   if(simSrc==='erradas')items=items.filter(q=>qSel(q)&&qSel(q)!==q.gabarito);
@@ -4217,6 +4439,8 @@ function route(spaceChanged){
   }
   if(h0==='/simulado/exec'||h0==='/simulado/resultado'){showStudyRoute(h0);return;}
   if(h0==='/lixeira'){ showTrash(); return; }
+  if(h0==='/tipo/caderno'){ location.hash='/cadernos'; return; }
+  if(h0==='/cadernos'||h0==='/filtros'||h0.startsWith('/caderno/')){ nbRoute(h0); return; }
   if(h0==='/grafico'||h0==='/explorar'){ showGraph(); return; }
   if(h0==='/revisao'){ location.replace('#/questoes/erradas'); return; }
   if(h0==='/quadro'){ $('spaceRow')?.removeAttribute('aria-current'); showBoard(); return; }

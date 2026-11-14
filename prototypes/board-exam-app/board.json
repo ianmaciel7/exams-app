@@ -573,7 +573,27 @@
     "e1184",
     "e1185",
     "e1186",
-    "e1187"
+    "e1187",
+    "e1188",
+    "e1189",
+    "e1190",
+    "e1191",
+    "e1192",
+    "e1193",
+    "e1194",
+    "e1195",
+    "e1196",
+    "e1197",
+    "e1198",
+    "e1199",
+    "e1200",
+    "e1201",
+    "e1202",
+    "e1203",
+    "e1204",
+    "e1205",
+    "e1206",
+    "e1207"
   ],
   "elements": {
     "e1": {
@@ -6064,6 +6084,177 @@
       "y": 12350,
       "w": 1550,
       "h": 120
+    },
+    "e1188": {
+      "type": "container",
+      "color": "white",
+      "text": "35. Cadernos e Queries de Questões — Issue #75: jornadas E2E",
+      "x": 20000,
+      "y": 11000,
+      "w": 1660,
+      "h": 2810
+    },
+    "e1189": {
+      "type": "text",
+      "size": "small",
+      "text": "Origem: testes Playwright Chromium em tests/notebooks-saved-filters.e2e.mjs. Caminhos testados: filtro -> gerar caderno, meta 80%, progresso independente das respostas globais, zerar, refazer erros, associar questão individual, Queries do Tipo Questão, filtros persistidos, retorno à primeira pendente e mobile 390px. Não representa teste moderado com usuários nem compara com QConcursos Live.",
+      "x": 20020,
+      "y": 11008,
+      "w": 1580,
+      "h": 88
+    },
+    "e1190": {
+      "type": "image",
+      "src": "/_blob/issue75_before_no_notebooks",
+      "x": 20020,
+      "y": 11104,
+      "w": 755,
+      "h": 430
+    },
+    "e1191": {
+      "type": "text",
+      "size": "small",
+      "text": "ANTES — Banco de questões sem ação de Cadernos",
+      "x": 20020,
+      "y": 11544,
+      "w": 760,
+      "h": 55
+    },
+    "e1192": {
+      "type": "image",
+      "src": "/_blob/issue75_after_filter",
+      "x": 20830,
+      "y": 11104,
+      "w": 755,
+      "h": 430
+    },
+    "e1193": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS — Questão manual filtrada, pronta para Gerar Caderno",
+      "x": 20830,
+      "y": 11544,
+      "w": 760,
+      "h": 55
+    },
+    "e1194": {
+      "type": "image",
+      "src": "/_blob/issue75_after_book_created",
+      "x": 20020,
+      "y": 11644,
+      "w": 755,
+      "h": 430
+    },
+    "e1195": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS — Novo Caderno criado com meta de 80%",
+      "x": 20020,
+      "y": 12084,
+      "w": 760,
+      "h": 55
+    },
+    "e1196": {
+      "type": "image",
+      "src": "/_blob/issue75_after_book_answer",
+      "x": 20830,
+      "y": 11644,
+      "w": 755,
+      "h": 430
+    },
+    "e1197": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS — Resposta correta dentro do caderno; progresso 1/1",
+      "x": 20830,
+      "y": 12084,
+      "w": 760,
+      "h": 55
+    },
+    "e1198": {
+      "type": "image",
+      "src": "/_blob/issue75_after_retake_errors",
+      "x": 20020,
+      "y": 12184,
+      "w": 755,
+      "h": 430
+    },
+    "e1199": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS — Refazer somente questões erradas sem apagar histórico geral",
+      "x": 20020,
+      "y": 12624,
+      "w": 760,
+      "h": 55
+    },
+    "e1200": {
+      "type": "image",
+      "src": "/_blob/issue75_after_question_member",
+      "x": 20830,
+      "y": 12184,
+      "w": 755,
+      "h": 430
+    },
+    "e1201": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS — Inclusão avulsa da Questão 1 via painel Cadernos",
+      "x": 20830,
+      "y": 12624,
+      "w": 760,
+      "h": 55
+    },
+    "e1202": {
+      "type": "image",
+      "src": "/_blob/issue75_after_saved_query",
+      "x": 20020,
+      "y": 12724,
+      "w": 755,
+      "h": 430
+    },
+    "e1203": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS — Filtro salvo aparece nas Queries do Tipo Questão",
+      "x": 20020,
+      "y": 13164,
+      "w": 760,
+      "h": 55
+    },
+    "e1204": {
+      "type": "image",
+      "src": "/_blob/issue75_after_continue_pending",
+      "x": 20830,
+      "y": 12724,
+      "w": 755,
+      "h": 430
+    },
+    "e1205": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS — Retomada na primeira questão pendente do caderno",
+      "x": 20830,
+      "y": 13164,
+      "w": 760,
+      "h": 55
+    },
+    "e1206": {
+      "type": "image",
+      "src": "/_blob/issue75_after_mobile",
+      "x": 20020,
+      "y": 13264,
+      "w": 755,
+      "h": 430
+    },
+    "e1207": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS — Gerenciador de Cadernos em mobile 390px",
+      "x": 20020,
+      "y": 13704,
+      "w": 760,
+      "h": 55
     }
   }
 }

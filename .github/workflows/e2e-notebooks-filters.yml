@@ -1,0 +1,65 @@
+name: E2E Notebooks and Saved Question Filters
+
+on:
+  pull_request:
+    branches: [dev]
+    paths:
+      - 'prototypes/exam-app-0.1.1/index.html'
+      - 'tests/notebooks-saved-filters.e2e.mjs'
+      - 'scripts/append-question-notebooks-board.py'
+      - '.github/workflows/e2e-notebooks-filters.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  notebook-journeys:
+    if: github.head_ref == 'feat/question-notebooks-saved-filters-75' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Launch baseline and updated prototype
+        run: |
+          git worktree add --detach /tmp/exams-book-before cf4d6ad9c5aa5defdf5831d5a3f0a2efe29771c3
+          python3 -m http.server 8765 --directory prototypes >/tmp/book-after.log 2>&1 &
+          python3 -m http.server 8766 --directory /tmp/exams-book-before/prototypes >/tmp/book-before.log 2>&1 &
+          sleep 2
+          curl -f http://127.0.0.1:8765/exam-app-0.1.1/index.html -o /dev/null
+          curl -f http://127.0.0.1:8766/exam-app-0.1.1/index.html -o /dev/null
+      - name: E2E notebook creation, progress, retake, membership, saved filters
+        run: node tests/notebooks-saved-filters.e2e.mjs
+      - name: Upload screenshots and journal
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: issue75-notebooks-evidence
+          path: |
+            prototypes/board-exam-app/assets/issue75_*.png
+            prototypes/board-exam-app/issue75_e2e.json
+          if-no-files-found: warn
+      - name: Append verified screenshots and regenerate Board Markdown
+        run: |
+          python3 scripts/append-question-notebooks-board.py
+          npm run board
+          grep -q '35. Cadernos e Queries de Questões' prototypes/board-exam-app/BOARD.md
+      - name: Persist evidence in branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add prototypes/board-exam-app/board.json prototypes/board-exam-app/BOARD.md prototypes/board-exam-app/issue75_e2e.json
+          git add prototypes/board-exam-app/assets/issue75_*.png
+          if ! git diff --cached --quiet; then
+            git commit -m "test(cadernos): persist Issue #75 Chromium evidence in planning board"
+            git push origin HEAD:${{ github.head_ref }}
+          fi
