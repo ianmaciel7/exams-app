@@ -204,3 +204,191 @@ When continuing work across different AI agents or recovering context from past 
 30. **AVOID** declarar conformidade WCAG, superioridade sobre concorrentes ou melhoria de métricas sem medição verificável.
 
 **Fontes-base:** [WCAG 2.2](https://www.w3.org/TR/WCAG22/), [WAI-ARIA APG](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/), [10 heurísticas de Nielsen](https://www.nngroup.com/articles/ten-usability-heuristics/), [GOV.UK Design System](https://design-system.service.gov.uk/patterns/), [USWDS](https://designsystem.digital.gov/components/step-indicator/) e o catálogo com fontes independentes em docs/ux/ux-ui-principles.md.
+
+<!-- UX-LAWS-CATALOG:START -->
+## Catálogo de leis, heurísticas e normas de UI/UX — referência obrigatória
+
+Este catálogo fornece os **nomes originais** (em inglês, quando publicados assim), traduções e descrições curtas para que agentes fundamentem decisões de UI/UX. **Antes de desenhar, alterar ou auditar uma tela**, consultar este catálogo, as regras obrigatórias anteriores deste AGENTS.md e os dossiês [docs/ux/ux-ui-principles.md](docs/ux/ux-ui-principles.md) e [docs/ux/arquitetura-informacao-navegacao.md](docs/ux/arquitetura-informacao-navegacao.md). Não substituir a evidência do board e das issues por citações teóricas.
+
+**Grau de autoridade:** Laws of UX é um catálogo editorial de 30 leis/efeitos/modelos/heurísticas — nem todos são leis científicas. Gestalt são princípios perceptivos sem rol oficial único. Nielsen e Shneiderman são conjuntos de heurísticas. ISO são normas (observar edição, escopo e licenciamento). WCAG contém critérios de sucesso testáveis. Boas práticas de design systems **não** são requisitos normativos por si sós.
+
+**Regra para uso em issue/PR:** indicar qual princípio foi aplicado, por quê, efeito esperado, cenário reproduzível de teste, limites e exceções. Não impor números mágicos de 3 cliques, 7 itens, 400 ms ou 80/20. Priorizar acessibilidade, preservação de dados, segurança, sucesso da tarefa e evidências com usuários. Não declarar conformidade WCAG sem auditoria dos critérios aplicáveis.
+
+### 1. Laws of UX — 30 conceitos
+
+| Nome original | Português | Definição e aplicação |
+|---|---|---|
+| Aesthetic-Usability Effect | Efeito estética-usabilidade | Interfaces atraentes podem parecer mais fáceis de usar; aparência não demonstra usabilidade. |
+| Choice Overload | Sobrecarga de escolhas | Muitas alternativas podem dificultar decidir; agrupar e priorizar as relevantes. |
+| Chunking | Agrupamento em blocos | Unir informações em unidades significativas facilita compreensão e recordação. |
+| Cognitive Bias | Viés cognitivo | Tendências sistemáticas de julgamento influenciam escolhas; evitar manipulação. |
+| Cognitive Load | Carga cognitiva | Esforço mental necessário para entender e utilizar uma interface; reduzir esforço desnecessário. |
+| Doherty Threshold | Limiar de Doherty | Resposta rápida e feedback preservam continuidade; 400 ms não é SLA universal. |
+| Fitts’s Law | Lei de Fitts | Tamanho e distância do alvo afetam velocidade de seleção; ampliar áreas clicáveis. |
+| Flow | Estado de fluxo | Concentração profunda em atividade com desafios adequados e pouca interrupção. |
+| Goal-Gradient Effect | Efeito gradiente de objetivo | Proximidade de uma meta pode elevar motivação; apresentar progresso verdadeiro. |
+| Hick’s Law | Lei de Hick | Mais opções e maior complexidade podem elevar tempo de decisão; não prescreve tamanho fixo de menu. |
+| Jakob’s Law | Lei de Jakob | Experiências anteriores moldam expectativas; empregar padrões familiares quando pertinentes. |
+| Law of Common Region | Lei da região comum | Elementos dentro de uma região delimitada são percebidos como grupo. |
+| Law of Proximity | Lei da proximidade | Elementos próximos parecem relacionados; usar espaçamento semântico. |
+| Law of Prägnanz | Lei da boa forma | Percepção tende a organizar estímulos em estruturas simples e estáveis. |
+| Law of Similarity | Lei da similaridade | Elementos semelhantes em aparência parecem pertencer ao mesmo conjunto. |
+| Law of Uniform Connectedness | Lei da conexão uniforme | Elementos visualmente conectados são percebidos como relacionados. |
+| Mental Model | Modelo mental | Ideia que o usuário tem do funcionamento do sistema; alinhar rótulos e fluxos ao modelo observado. |
+| Miller’s Law | Lei de Miller | Pesquisa sobre limites da memória imediata; não é regra de 7 opções de navegação. |
+| Occam’s Razor | Navalha de Occam | Entre explicações adequadas, privilegiar a que requer menos suposições. |
+| Paradox of the Active User | Paradoxo do usuário ativo | Usuários começam a experimentar antes de ler instruções; permitir exploração segura. |
+| Pareto Principle | Princípio de Pareto | Pequena parte das causas pode concentrar efeitos; verificar dados e não presumir 80/20. |
+| Parkinson’s Law | Lei de Parkinson | Trabalho pode se expandir para preencher prazo disponível; definir escopo e conclusão. |
+| Peak-End Rule | Regra do pico-fim | Momentos intensos e encerramento influenciam lembrança retrospectiva. |
+| Postel’s Law | Lei de Postel | Princípio histórico de robustez; tolerância a entradas exige limites de segurança. |
+| Selective Attention | Atenção seletiva | Pessoas priorizam estímulos relevantes para a tarefa e ignoram concorrentes. |
+| Serial Position Effect | Efeito de posição serial | Início e fim de uma sequência podem ser mais lembrados. |
+| Tesler’s Law | Lei de Tesler | Parte da complexidade é inerente à tarefa; não a esconder de modo que cause erro. |
+| Von Restorff Effect | Efeito Von Restorff | Item distinto se destaca e pode ser mais lembrado. |
+| Working Memory | Memória de trabalho | Capacidade limitada para manter/manipular informações temporárias; preservar contexto visível. |
+| Zeigarnik Effect | Efeito Zeigarnik | Tarefas inacabadas podem ficar mais salientes; facilitar retomada sem pressionar usuários. |
+
+Fonte: https://lawsofux.com/laws/ — lista editorial de 30 entradas, distribuídas em três páginas.
+
+### 2. Gestalt — 10 princípios perceptivos frequentes
+
+| Nome original (uso corrente) | Português | Definição e aplicação |
+|---|---|---|
+| Proximity | Proximidade | Elementos espacialmente próximos parecem formar um grupo. |
+| Similarity | Similaridade | Elementos com aparência semelhante parecem relacionados. |
+| Good Continuation | Boa continuidade | Alinhamento e continuidade ajudam acompanhar uma sequência. |
+| Closure | Fechamento | A percepção completa formas parcialmente apresentadas. |
+| Figure-Ground | Figura-fundo | Separar objeto focal e fundo sustenta hierarquia perceptiva. |
+| Common Fate | Destino comum | Elementos que se movem juntos parecem pertencer ao mesmo conjunto. |
+| Common Region | Região comum | Contornos ou regiões agrupam objetos visualmente. |
+| Symmetry and Order | Simetria e ordem | Organização equilibrada pode facilitar reconhecimento. |
+| Prägnanz (Good Form) | Boa forma | A percepção procura formas simples e estáveis. |
+| Uniform Connectedness | Conexão uniforme | Linhas e conexões comunicam associação. |
+
+**Nota:** enumeração didática; não afirmar que exista uma lista normativa fechada de exatamente dez princípios da Gestalt. Parte deles reaparece em Laws of UX.
+
+### 3. Nielsen — 10 Usability Heuristics for User Interface Design
+
+| Nome original | Português | Definição e aplicação |
+|---|---|---|
+| Visibility of System Status | Visibilidade do estado do sistema | Feedback adequado sobre progresso, resultado e falhas. |
+| Match Between the System and the Real World | Correspondência com o mundo real | Empregar conceitos e linguagem reconhecíveis para estudantes. |
+| User Control and Freedom | Controle e liberdade | Permitir cancelar, voltar ou desfazer quando possível. |
+| Consistency and Standards | Consistência e padrões | Mesma terminologia e interação para funções equivalentes. |
+| Error Prevention | Prevenção de erros | Evitar erros previsíveis antes do envio. |
+| Recognition Rather Than Recall | Reconhecimento em vez de memorização | Mostrar opções e contexto sem exigir lembrança de passos anteriores. |
+| Flexibility and Efficiency of Use | Flexibilidade e eficiência | Oferecer caminhos acessíveis a iniciantes e atalhos a experientes. |
+| Aesthetic and Minimalist Design | Estética e minimalismo | Priorizar o conteúdo necessário; não esconder informações indispensáveis. |
+| Help Users Recognize, Diagnose, and Recover from Errors | Reconhecer, diagnosticar e recuperar de erros | Explicar problema, causa útil e próximo passo preservando dados. |
+| Help and Documentation | Ajuda e documentação | Oferecer apoio contextual localizável e claro. |
+
+Fonte: https://www.nngroup.com/articles/ten-usability-heuristics/
+
+### 4. Shneiderman — The Eight Golden Rules of Interface Design
+
+| Nome original | Português | Definição e aplicação |
+|---|---|---|
+| Strive for Consistency | Buscar consistência | Manter ações, linguagem e estilo consistentes. |
+| Seek Universal Usability | Buscar usabilidade universal | Considerar experiência, dispositivos, diversidade e necessidades especiais. |
+| Offer Informative Feedback | Oferecer feedback informativo | Resposta proporcional à importância da ação. |
+| Design Dialogs to Yield Closure | Criar diálogos com encerramento | Indicar o término reconhecível de uma sequência de ações. |
+| Prevent Errors | Prevenir erros | Impedir falhas e orientar recuperação construtiva. |
+| Permit Easy Reversal of Actions | Permitir reversão fácil | Viabilizar desfazer e correções sem perda desnecessária. |
+| Keep Users in Control | Manter usuários no controle | Não surpreender ou impedir autonomia sem justificativa. |
+| Reduce Short-Term Memory Load | Reduzir a carga de memória imediata | Evitar exigir lembrança de detalhes entre telas. |
+
+Fonte original do autor: https://www.cs.umd.edu/users/ben/goldenrules.html
+
+### 5. ISO 9241-110:2020 — 7 Interaction Principles
+
+| Nome original | Português | Definição e aplicação |
+|---|---|---|
+| Suitability for the User’s Tasks | Adequação às tarefas | Apoiar objetivos reais, com esforço proporcional. |
+| Self-Descriptiveness | Autodescrição | Tornar ação e estado compreensíveis no contexto. |
+| Conformity with User Expectations | Conformidade com expectativas | Respostas previsíveis segundo convenções e contexto. |
+| Learnability | Facilidade de aprendizagem | Favorecer descoberta, exploração e retenção. |
+| Controllability | Controlabilidade | Permitir interrupção e direcionamento pelo usuário. |
+| Use Error Robustness | Robustez a erros de utilização | Prevenir, tolerar e recuperar erros. |
+| User Engagement | Envolvimento do usuário | Apoiar confiança, participação e motivação. |
+
+Fonte: https://www.iso.org/standard/75258.html (edição de 2020, confirmada em 2025).
+
+### 6. ISO 9241-112:2025 — 6 Principles for the Presentation of Information
+
+| Nome original | Português | Definição e aplicação |
+|---|---|---|
+| Detectability | Detectabilidade | Informações e controles importantes devem ser perceptíveis. |
+| Discriminability | Distinguibilidade | Diferenciar grupos, estados e objetos sem ambiguidades. |
+| Conciseness | Concisão | Evitar conteúdo ou passos que não acrescentem valor. |
+| Unambiguous Interpretability | Interpretabilidade inequívoca | Informação deve ter sentido compreensível e claro. |
+| Freedom from Distraction | Ausência de distrações | Reduzir interferências concorrentes na tarefa. |
+| Consistency (Internal and External) | Consistência interna e externa | Preservar organização lógica e convenções conhecidas. |
+
+Fonte: https://www.iso.org/standard/87518.html (edição de 2025, substitui 2017).
+
+### 7. ISO 9241-210:2019 — 6 princípios de Human-Centred Design
+
+| Princípio (rótulo descritivo em inglês) | Português | Definição e aplicação |
+|---|---|---|
+| Explicit Understanding of Users, Tasks, and Environments | Compreensão explícita | Basear o design em usuários, tarefas e ambientes. |
+| User Involvement Throughout Design and Development | Envolvimento de usuários | Incluir usuários ao longo do processo. |
+| User-Centred Evaluation Drives and Refines Design | Avaliação centrada no usuário | Avaliações devem orientar revisões. |
+| Iterative Process | Processo iterativo | Investigar, projetar, testar e refinar. |
+| Address the Whole User Experience | Experiência completa | Considerar jornada, contexto e resultados. |
+| Multidisciplinary Skills and Perspectives | Perspectivas multidisciplinares | Integrar competências e pontos de vista diferentes. |
+
+**Nota:** estes rótulos são sínteses em inglês, **não uma alegação de transcrição literal dos títulos normativos**. Fonte: https://www.iso.org/standard/77520.html
+
+### 8. ISO/IEC 25010:2023 — 9 Product Quality Characteristics
+
+| Nome original | Português | Definição e aplicação |
+|---|---|---|
+| Functional Suitability | Adequação funcional | Funções atendem necessidades e objetivos. |
+| Performance Efficiency | Eficiência de desempenho | Boa relação entre tempo, recursos e capacidade. |
+| Compatibility | Compatibilidade | Coexistência e interoperabilidade. |
+| Interaction Capability | Capacidade de interação | Facilidade de aprender, operar, prevenir erros e receber ajuda. |
+| Reliability | Confiabilidade | Disponibilidade, tolerância a falhas e recuperação. |
+| Security | Segurança da informação | Proteção de confidencialidade, integridade e autenticidade. |
+| Maintainability | Manutenibilidade | Capacidade de modificar e testar de forma sustentável. |
+| Flexibility | Flexibilidade | Adaptação, escalabilidade e substituição. |
+| Safety | Segurança contra danos | Redução de riscos e efeitos prejudiciais. |
+
+Fonte: https://www.iso.org/standard/78176.html (2023; Safety é diferente de Security).
+
+### 9. WCAG 2.2 — 4 princípios, 13 diretrizes
+
+| Princípio oficial | Diretriz oficial | Português e aplicação |
+|---|---|---|
+| Perceivable | 1.1 Text Alternatives | Alternativas textuais para conteúdo não textual. |
+| Perceivable | 1.2 Time-based Media | Alternativas para áudio e vídeo. |
+| Perceivable | 1.3 Adaptable | Conteúdo preserva significado em apresentações diversas. |
+| Perceivable | 1.4 Distinguishable | Separação, contraste e legibilidade do conteúdo. |
+| Operable | 2.1 Keyboard Accessible | Operação por teclado. |
+| Operable | 2.2 Enough Time | Tempo suficiente para interagir. |
+| Operable | 2.3 Seizures and Physical Reactions | Evitar estímulos que provoquem crises e reações. |
+| Operable | 2.4 Navigable | Localização, navegação, headings e foco. |
+| Operable | 2.5 Input Modalities | Entradas alternativas ao teclado. |
+| Understandable | 3.1 Readable | Leitura e idioma compreensíveis. |
+| Understandable | 3.2 Predictable | Comportamento previsível. |
+| Understandable | 3.3 Input Assistance | Ajuda com entrada de dados e erros. |
+| Robust | 4.1 Compatible | Compatibilidade com tecnologias assistivas. |
+
+Fonte normativa: https://www.w3.org/TR/WCAG22/ . Consultar **cada critério de sucesso aplicável** (A/AA/AAA), exceções e métodos de teste em https://www.w3.org/WAI/WCAG22/quickref/ . Estas 13 diretrizes **não substituem** os critérios de sucesso.
+
+### 10. Práticas complementares de interface — não são leis universais
+
+| Área | Práticas a avaliar conforme tarefa e contexto |
+|---|---|
+| Arquitetura da informação e navegação | Arquitetura e hierarquia do conteúdo; modelos mentais; taxonomia; ontologia; navegação global/local/contextual; breadcrumbs; divulgação progressiva; orientação por tarefas; encontrabilidade; rotulagem; pesquisa; filtros/facetas; ordenação; agrupamento; preservação de contexto; card sorting; tree testing. |
+| Design visual | Hierarquia visual; equilíbrio; contraste; proporção; alinhamento; ritmo; espaço negativo; densidade; tipografia; escala; legibilidade; leiturabilidade; cores semânticas; design tokens; espaçamento; grid; ênfase; agrupamento; consistência; ícones; affordances; bordas/divisores; responsividade e adaptação. |
+| Interação | Affordances; signifiers; feedback; mapeamento natural; restrições; controle; desfazer/refazer; prevenção e recuperação de erros; confirmação destrutiva; estados de loading/vazio/sucesso/erro/indisponibilidade/parcial; microinterações; animações funcionais; continuidade; transições; manipulação direta; previsibilidade; atalhos; etapas mínimas necessárias. |
+| Formulários e dados | Labels persistentes; agrupamento; input correto; validação contextual/oportuna; erros acionáveis; valores preservados; autocomplete; defaults; máscaras úteis; campos obrigatórios; prevenção de envio duplicado; envio assíncrono; feedback de sucesso; recuperação; etapas justificadas; retomada; evitar perda de dados. |
+| Estados, desempenho e confiabilidade | Percepção de desempenho; progresso; loading contextual; skeleton; timeout; retry limitado; cancelamento; offline; degradação controlada; mensagens de erro; falhas parciais; preservação de trabalho; continuidade; indicadores de operação longa; estados coerentes em todas as rotas. |
+| Acessibilidade, i18n e inclusão | HTML semântico; WAI-ARIA; ARIA APG; teclado e foco; tecnologias assistivas; contraste; zoom/reflow; alvos motores; clareza cognitiva; Unicode; BCP 47; ECMA-402; localização; direção LTR/RTL; linguagem inclusiva. |
+| Design systems (referências, não obrigações universais) | Material Design 3; Apple Human Interface Guidelines; WAI-ARIA APG; GOV.UK Design System; IBM Carbon; Microsoft Fluent 2. |
+
+**Fontes complementares oficiais:** https://www.w3.org/WAI/ARIA/apg/ ; https://m3.material.io/ ; https://developer.apple.com/design/human-interface-guidelines/ ; https://design-system.service.gov.uk/ ; https://carbondesignsystem.com/ ; https://fluent2.microsoft.design/ ; https://www.w3.org/International/ .
+
+**Precedência:** acessibilidade verificável, integridade de dados, segurança e sucesso de tarefas prevalecem sobre heurísticas estéticas. Não generalizar heurísticas como leis determinísticas nem alegar testes ou conformidade sem evidências.
+<!-- UX-LAWS-CATALOG:END -->
