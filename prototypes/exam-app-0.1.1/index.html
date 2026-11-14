@@ -63,6 +63,13 @@
 .qf-list .s-question+.s-question{margin-top:14px}
 @media(max-width:768px){.qf-fast{gap:4px}.qf-fast .qf-quick{min-height:36px;padding:6px 10px}}
 </style>
+<style>
+/* PDF errors must remain recoverable without hiding a successfully rendered page. */
+.pdf-page-notice{position:absolute;right:12px;bottom:12px;z-index:4;max-width:min(92%,320px);display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:var(--bg-base);color:var(--text);border:1px solid var(--line);border-radius:9px;padding:9px 11px;box-shadow:var(--shadow);font-size:12px;line-height:1.4}
+.pdf-page-notice button{color:var(--text);border:1px solid var(--line);border-radius:6px;min-height:30px;padding:4px 8px;font-weight:600}
+.pdf-page-notice button:hover{background:var(--hover)}
+.pdf-page-notice button:disabled{opacity:.6;cursor:wait}
+</style>
 </head><body>
 <style>
 /* ===== Exam App 0.1.1 — páginas de estudo e detalhes, 2026 ===== */
@@ -2733,20 +2740,79 @@ function layout(){
   io=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting) render(+e.target.dataset.p); }),{root:view,rootMargin:'800px 0px'});
   view.querySelectorAll('.page').forEach(p=>io.observe(p));
 }
-async function render(n){
-  if(!cur||!cur.pdf||cur.rendered.has(n)) return;
-  const c=cur; c.rendered.add(n);
-  const holder=view.querySelector('[data-p="'+n+'"]'); if(!holder) return;
-  const page=await c.pdf.getPage(n); if(c!==cur) return;
-  const dpr=Math.min(devicePixelRatio||1,2.5), vp=page.getViewport({scale:holder.clientWidth/c.w*dpr});
-  const cv=document.createElement('canvas'); cv.width=vp.width; cv.height=vp.height;
-  await page.render({canvasContext:cv.getContext('2d'),viewport:vp}).promise;
-  if(c!==cur||!holder.isConnected) return;
-  holder.querySelector('canvas')?.remove(); holder.prepend(cv);
-  try{ holder.querySelector('.textLayer')?.remove(); const tl=document.createElement('div'); tl.className='textLayer'; holder.appendChild(tl);
-    const tvp=page.getViewport({scale:holder.clientWidth/c.w}); tl.style.setProperty('--scale-factor',tvp.scale);
-    await pdfjsLib.renderTextLayer({textContentSource:await page.getTextContent(),container:tl,viewport:tvp,textDivs:[]}).promise; }catch(e){}
+/* PDF.js 3.11: canvas supplies visible pixels, textLayer supplies selectable text. Keep
+ * failures independent so a broken text layer never hides a rendered page. */
+function pdfPageNotice(holder,kind,message){
+  holder.querySelector('[data-pdf-notice]')?.remove();
+  const notice=document.createElement('div');notice.className='pdf-page-notice';
+  notice.dataset.pdfNotice=kind;notice.setAttribute('role','status');
+  const text=document.createElement('span');text.textContent=message;notice.appendChild(text);
+  const btn=document.createElement('button');btn.type='button';
+  btn.dataset.pdfRetry=kind;btn.dataset.pdfPage=holder.dataset.p;
+  btn.textContent='Tentar novamente';notice.appendChild(btn);holder.appendChild(notice);
 }
+async function renderPdfTextLayer(page,holder,c,n){
+  holder.querySelector('.textLayer')?.remove();
+  holder.querySelector('[data-pdf-notice="text"]')?.remove();
+  holder.dataset.textStatus='loading';
+  const tvp=page.getViewport({scale:holder.clientWidth/c.w});
+  const tl=document.createElement('div');tl.className='textLayer';
+  tl.style.setProperty('--scale-factor',String(tvp.scale));
+  try{
+    const textContent=await page.getTextContent();
+    if(c!==cur||!holder.isConnected)return;
+    if(!textContent.items.some(i=>i.str&&i.str.trim())){
+      holder.dataset.textStatus='unavailable';
+      pdfPageNotice(holder,'text','Esta página não contém texto selecionável no PDF original.');
+      return;
+    }
+    holder.appendChild(tl);
+    await pdfjsLib.renderTextLayer({textContentSource:textContent,container:tl,viewport:tvp,textDivs:[]}).promise;
+    if(c!==cur||!holder.isConnected){tl.remove();return;}
+    holder.dataset.textItems=String(tl.querySelectorAll('span').length);
+    holder.dataset.textStatus='ready';
+  }catch(e){
+    tl.remove();
+    if(c!==cur||!holder.isConnected)return;
+    holder.dataset.textStatus='error';
+    console.warn('Falha na camada de texto do PDF, página '+n,e);
+    pdfPageNotice(holder,'text','Não foi possível habilitar a seleção de texto nesta página.');
+  }
+}
+async function render(n){
+  if(!cur||!cur.pdf||cur.rendered.has(n))return;
+  const c=cur,holder=view.querySelector('[data-p="'+n+'"]');if(!holder)return;
+  c.rendered.add(n);holder.dataset.canvasStatus='loading';
+  try{
+    const page=await c.pdf.getPage(n);if(c!==cur||!holder.isConnected)return;
+    const cssWidth=holder.clientWidth,dpr=Math.min(devicePixelRatio||1,2.5);
+    const vp=page.getViewport({scale:cssWidth/c.w*dpr});
+    const cv=document.createElement('canvas');cv.width=vp.width;cv.height=vp.height;
+    await page.render({canvasContext:cv.getContext('2d'),viewport:vp}).promise;
+    if(c!==cur||!holder.isConnected)return;
+    holder.querySelector('canvas')?.remove();holder.prepend(cv);
+    holder.dataset.canvasStatus='ready';
+    holder.dataset.canvasDpr=String(dpr);
+    holder.dataset.canvasBackingWidth=String(cv.width);
+    holder.dataset.canvasCssWidth=String(cssWidth);
+    await renderPdfTextLayer(page,holder,c,n);
+  }catch(e){
+    if(c!==cur||!holder.isConnected)return;
+    c.rendered.delete(n);holder.dataset.canvasStatus='error';
+    console.warn('Falha ao desenhar o PDF, página '+n,e);
+    pdfPageNotice(holder,'canvas','Não foi possível exibir esta página do PDF.');
+  }
+}
+view.addEventListener('click',e=>{
+  const btn=e.target.closest('[data-pdf-retry]');if(!btn)return;
+  e.preventDefault();const n=Number(btn.dataset.pdfPage),holder=view.querySelector('[data-p="'+n+'"]');
+  if(!Number.isSafeInteger(n)||n<1||!holder||!cur?.pdf)return;
+  if(btn.dataset.pdfRetry==='canvas'){cur.rendered.delete(n);render(n);return;}
+  btn.disabled=true;btn.textContent='Tentando…';
+  const c=cur;
+  c.pdf.getPage(n).then(page=>{if(c===cur&&holder.isConnected)return renderPdfTextLayer(page,holder,c,n);})
+    .catch(err=>{if(c!==cur||!holder.isConnected)return;console.warn('Falha ao repetir camada de texto do PDF',err);pdfPageNotice(holder,'text','Não foi possível habilitar a seleção de texto nesta página.');});
+});
 let saveT;
 function onScroll(){
   if(!cur||!cur.pdf) return;
