@@ -852,6 +852,51 @@ Estas são **16 entradas adicionais** de sucesso WCAG, além das já documentada
 
 **Prioridades do Exam App (MUST avaliar conforme escopo):** (1) navegador de Questões e Simulados encontrável; (2) sidebar/painel contextual responsivos sem abas ou CTAs duplicados; (3) grafo com visão geral, filtros, relação, detalhes e retorno; (4) gráficos com legenda, explicação textual, alternativa de dados e interação de teclado; (5) leitor PDF com foco, leitura e progresso preservados; (6) internacionalização e acessibilidade cognitiva; (7) medição verificável de sucesso por tarefa. **Nenhuma destas diretrizes prova implementação ou conformidade sem testes.**
 
+
+### 17. Lacunas adicionais identificadas com Context7 — navegação, avaliação e fallback (14/11/2026)
+
+**Escopo e classificação:** revisão incremental das seções 1–16. Novos nomes são: **teoria de HCI** (Information Foraging Theory), **método de avaliação** (Cognitive Walkthrough), **modelo de desempenho** (Keystroke-Level Model), **filosofia de desenvolvimento** (Progressive Enhancement), **padrões técnicos de interação WAI-ARIA APG** e **técnicas WAI de descrição de gráficos**. Nenhum constitui nova "lei oficial de 2026"; estudos históricos continuam relevantes para projetos em 2026. Não repetir como novas descobertas as entradas anteriores sobre Information Scent, Wayfinding, teclado, Fitts, Hick, HEART, Shneiderman ou WCAG. Fontes originais e de documentação atual por entrada.
+
+#### 17.1. Modelos e métodos com nomes originais publicados
+
+| Nome original | Categoria e autoria | Aplicação e limitações | Fonte |
+|---|---|---|---|
+| **Information Foraging Theory** | Teoria de busca de informação — Peter Pirolli e Stuart Card, 1995/1999 | Explicar como pistas de navegação (information scent), agrupamento da informação (information patches) e custo-benefício orientam descoberta de páginas. No Exam App: testar rótulos de Questões, Simulados, Revisão e Explorar contra a intenção do estudante. **Information Scent já estava catalogado; a teoria aqui organiza os conceitos, não duplica uma lei.** | [Pirolli & Card (1995)](https://chi1995.acm.org/proceedings/papers/ppp_bdy.htm); [Psychological Review (1999)](https://doi.org/10.1037/0033-295X.106.4.643) |
+| **Cognitive Walkthrough** | Método de inspeção baseado em tarefas — Polson, Lewis, Rieman e Wharton, 1992 | Simular jornada de quem conhece pouco o app e avaliar por etapa objetivo, descoberta do controle, relação ação-resultado e feedback. **Não equivale a teste com usuários nem a auditoria de acessibilidade.** | [Artigo original (1992)](https://doi.org/10.1016/0020-7373(92)90039-N); [guia de aplicação (1994)](https://www.usabilitybok.org/cognitive-walkthrough/) |
+| **Keystroke-Level Model (KLM)** | Modelo preditivo de desempenho — Card, Moran e Newell, 1980 | Estimar esforço temporal em tarefas frequentes de usuário experiente conforme sequência de operações e respostas do sistema. Comparar alternativas para filtros/atalhos/retomada, **sem alegar tempo real, dificuldade de aprendizado, sucesso ou satisfação**. | [Communications of the ACM (1980)](https://doi.org/10.1145/358886.358895) |
+| **Progressive Enhancement** | Filosofia de desenvolvimento web | Preservar acesso ao conteúdo e às tarefas essenciais quando efeitos modernos, gráficos, animações ou APIs não são suportados; implementar alternativas proporcionais. **Não afirmar que todo o protótipo SPA funciona sem JavaScript se isso não foi implementado.** | [MDN — Progressive Enhancement](https://developer.mozilla.org/en-US/docs/Glossary/Progressive_Enhancement) |
+
+**Aplicação em pesquisa (SHOULD):** para cada fluxo principal, registrar a tarefa de um iniciante, o rótulo que ele espera encontrar, o primeiro clique/ação, o resultado observável, o ponto de dúvida e a oportunidade de recuperação. Validar achados de Cognitive Walkthrough com testes reais antes de concluir que a UI melhorou. KLM é opcional para operações repetitivas e comparações de métodos; não substitui as métricas de sucesso da ISO 9241-11 e HEART.
+
+#### 17.2. Padrões oficiais WAI-ARIA APG para componentes complexos (não são leis)
+
+| Nome original do padrão | Aplicação adequada | Evitar / atenção | Fonte |
+|---|---|---|---|
+| **Disclosure (Show/Hide) Pattern** | Agrupamentos simples expansíveis da sidebar, filtros e navegação usual. Usar botão com estado expandido, ativação por Enter/Espaço e foco previsível. | Não transformar navegação comum em árvore de teclado complexo sem necessidade. | [W3C WAI-ARIA APG — Disclosure](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/) |
+| **Tree View Pattern** | Hierarquia real de objetos, tipos ou pastas que exige navegação própria por setas, expansão/recolhimento, seleção e gerenciamento de foco. | Uma sidebar com grupos de links não vira automaticamente ARIA tree; **o grafo relacional em canvas também não é, necessariamente, um treeview**. | [W3C WAI-ARIA APG — Tree View](https://www.w3.org/WAI/ARIA/apg/patterns/treeview/) |
+| **Grid (Interactive Tabular Data and Layout Containers) Pattern** | Tabela ou grade interativa com navegação por células/setas, foco/seleção, ações ou edição. | Para tabela estática de resultados, preferir tabela HTML semântica simples; não usar role grid apenas para layout CSS. | [W3C WAI-ARIA APG — Grid](https://www.w3.org/WAI/ARIA/apg/patterns/grid/) |
+| **Treegrid Pattern** | Dados tabulares hierárquicos **e interativos** que exigem linhas expansíveis e foco no interior da grade. | Não aplicar ao grafo visual ou à lista comum; exige semântica e teclado complexos. | [W3C WAI-ARIA APG — Treegrid](https://www.w3.org/WAI/ARIA/apg/patterns/treegrid/) |
+| **Keyboard Interface / Focus in Composites** | Distinguir foco de seleção e seguir teclas convencionais do padrão escolhido. | Não misturar indiscriminadamente comportamento de tabs, listbox, grid e árvore; testar leitor de tela e teclado. | [W3C APG — Keyboard Interface](https://www.w3.org/WAI/ARIA/apg/practices/keyboard-interface/) |
+
+**MUST:** escolher primeiro a semântica mínima suficiente e documentar o motivo de usar ou não um widget composto. Foco, seleção, expansão e navegação são estados diferentes. **MUST** definir o comportamento ao fechar drawer/modal/popover, remover item focado, trocar painel, alternar viewport e interromper animação: retorno ou reposicionamento de foco tem de ser deliberado e verificável. Fonte de implementação complementar: [Adobe React Aria — interações e foco](https://react-aria.adobe.com/) (Context7; orientação para comportamento, **não ordem de instalar React**).
+
+#### 17.3. Visualizações complexas, navegação no conteúdo e degradação progressiva
+
+| Nome oficial da orientação | Aplicação no Exam App | Fonte |
+|---|---|---|
+| **Complex Images** | Para imagem estática de gráfico, diagrama ou mapa, fornecer identificação curta e descrição detalhada das informações essenciais, com dados/estrutura acessíveis quando necessários. Para **grafo interativo**, fornecer experiência equivalente em lista/estrutura operável, não apenas texto alternativo numa imagem. | [W3C WAI — Complex Images](https://www.w3.org/WAI/tutorials/images/complex/) |
+| **In-page Navigation** | Em páginas realmente longas (documentação, edital, análise de resultado), oferecer índice com âncoras e títulos descritivos, preservando ordem de leitura e foco. Evitar índice redundante em página curta. | [USWDS — In-page Navigation](https://designsystem.digital.gov/components/in-page-navigation/) |
+| **Progressive Enhancement / Graceful Degradation** | Se canvas, visualização 3D, filtros avançados ou animação falhar, manter informações e ações essenciais acessíveis em UI mais simples quando tecnicamente viável; exibir falha e recuperação explícitas. | [MDN — Progressive Enhancement](https://developer.mozilla.org/en-US/docs/Glossary/Progressive_Enhancement); [MDN — Graceful Degradation](https://developer.mozilla.org/en-US/docs/Glossary/Graceful_degradation) |
+
+**Critérios para revisão do Exam App:**
+1. **MUST** justificar a escolha entre lista, links expansíveis, árvore, grade e grafo pela tarefa e pela semântica, não por aparência. Sidebar simples: preferir Disclosure quando adequado; grafo relacional: interação visual com alternativa textual, não role tree automático.
+2. **MUST** verificar interações de foco e seleção com mouse, teclado e tecnologia assistiva em widgets complexos, inclusive abrir/fechar painéis, excluir itens, navegar entre nós e interromper animação.
+3. **MUST** distinguir descrição de imagem complexa estática de alternativa operável para grafo/gráfico interativo; preservar dados, relações relevantes e tarefa de navegação.
+4. **SHOULD** usar Cognitive Walkthrough para avaliar primeiro uso de Questões, Simulados, Revisão, PDF e Explorar; medir resultados de uso e complementar com evidência do board/issue.
+5. **SHOULD** aplicar Information Foraging Theory ao nome dos destinos, prévia de conteúdo, hierarquia e pistas para busca/volta; não mostrar todas as propriedades por padrão.
+6. **MUST** registrar riscos de fallback/erro em gráficos e leitor PDF, sem inventar funcionalidade offline/no-JS ou declarar acessibilidade apenas por link de norma. A implementação continua sujeita a testes.
+7. **MUST** preservar as regras visuais e de estados em [DESIGN.md](DESIGN.md) e sincronizar os nomes e as fontes com [docs/ux/ux-ui-principles.md](docs/ux/ux-ui-principles.md).
+
 <!-- UX-LAWS-CATALOG:END -->
 
 <!-- DESIGN-SYSTEM-INTEGRATION:START -->
