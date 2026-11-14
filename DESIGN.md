@@ -132,7 +132,7 @@ O sistema emprega a família **Inter** (`'Inter', -apple-system, BlinkMacSystemF
 - **O que adotamos**:
   - Grafo global e grafo local por entidade.
   - Densidade de nós configurável com filtragem visual por cores semânticas (`--k-*`).
-  - Física contínua e orgânica que nunca congela subitamente, preservando microflutuações sutis com baixo consumo de CPU (ver `MOTION.md`).
+  - Física de layout **condicional e interrompível**: estabiliza e pausa quando não há necessidade de movimento; desativa em `prefers-reduced-motion`, aba oculta ou grafo fora da viewport. Grafos com mais de 240 nós usam layout estático provisório para limitar custo `O(N²)` (ver `MOTION.md`; benchmark ainda pendente).
   - Abertura de nós com tecla de modificação (ex: Shift + Clique para abrir no painel lateral).
 
 ### 4.3 Quizlet (Resolução Focada & Repetição Espaçada)

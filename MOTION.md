@@ -1,6 +1,6 @@
-# Exam App — Motion & Continuous Physics Specification (`MOTION.md`)
+# Exam App — Motion & Graph Physics Specification (`MOTION.md`)
 
-Este documento especifica os princípios de movimento, curvas de aceleração (*easing*), tokens de duração e a física contínua para o grafo de conhecimento e microinterações da interface do **Exam App**.
+Este documento especifica princípios de movimento, curvas de aceleração (*easing*), tokens de duração e a **física condicional** do grafo de conhecimento e das microinterações do **Exam App**. O protótipo pode interromper a simulação quando estável, invisível ou em modo de movimento reduzido.
 
 ---
 
@@ -96,7 +96,7 @@ Os 12 princípios difundidos por Frank Thomas e Ollie Johnston em *The Illusion 
 | `--motion-duration-normal` | `200ms` | Transição de abas ativas, abertura de dropdowns e menus de contexto, acordeões |
 | `--motion-duration-smooth` | `350ms` | Expansão ou recolhimento de painéis laterais (Sidebar e Right Panel), diálogos modais |
 | `--motion-duration-extended` | `500ms` | Transições de tela completa, navegação entre modos de estudo |
-| `--motion-continuous` | Contínuo | Simulação de física do grafo de conhecimento |
+| Física do grafo (modo lógico, não token CSS) | Condicional | Ativa apenas em modo normal, para até 240 nós, enquanto há energia de layout |
 
 ### 2.2 Curvas de Easing Padronizadas
 
@@ -120,74 +120,34 @@ As curvas utilizam a sintaxe CSS `cubic-bezier` para garantir consistência em t
 
 ---
 
-## 3. Especificação da Física Contínua do Grafo
+## 3. Física do grafo — implementação e limites
 
-O grafo interativo de conexões do Exam App (nós de concurso, órgão, cargo, edital e questão) é inspirado na experiência do **Obsidian** e **Capacities**. A física contínua é **opcional e condicionada à visibilidade, preferência de movimento e orçamento de CPU/bateria**. Não impor movimento perpétuo: se a simulação não acrescentar compreensão ou prejudicar desempenho, estabilizar e pausar.
+O grafo de conhecimento oferece manipulação direta de nós, filtros, zoom e conexões visuais. **A física não é obrigatória nem contínua**: em modo normal, roda enquanto o layout precisa estabilizar ou após uma interação que o reaquece; em movimento reduzido, não há passos de física após a criação. Para grafos densos, o protótipo usa layout estático como proteção de desempenho.
 
-### 3.1 Modelo de Forças Físicas
+### 3.1 Modelo efetivamente implementado
 
-A simulação é regida por quatro forças principais resolvidas a cada passo de integração:
+No protótipo `prototypes/exam-app-0.1.1/index.html`, `tick()` implementa uma **integração explícita de velocidade e posição semelhante a Euler**, com amortecimento; **não é Velocity Verlet**. Os parâmetros são heurísticos de layout, não simulação física dimensionalmente calibrada.
 
-1. **Repulsão Eletrostática de Muitos Corpos (Coulomb Repulsion)**:
-   - Afasta os nós para evitar sobreposições e criar distribuição uniforme no plano.
-   - Fórmula com fator de amortecimento para proximidade extrema ($\epsilon$):
-     $$\vec{F}_{\text{rep}}(i, j) = \frac{k_{\text{rep}} \cdot q_i \cdot q_j}{\|\vec{r}_{ij}\|^2 + \epsilon} \cdot \hat{r}_{ij}$$
-   - Onde $q_i$ é a carga do nó (proporcional ao seu grau de conexão $\text{deg}(i)$ e raio visual).
+1. **Repulsão entre pares**: percorre pares de nós visíveis, ignora distâncias maiores que o limite do código e calcula força inversamente proporcional a `distância² + 280`, escalada por `alpha` e grau dos nós; também aplica separação quando há sobreposição.
+2. **Atração de arestas**: ajusta velocidade dos nós conectados segundo a diferença entre distância atual e alvo, ponderada por grau e `alpha`; arestas classificadas como fracas são ignoradas na atração.
+3. **Centralização**: aplica uma pequena correção de velocidade em direção ao centro do plano.
+4. **Amortecimento**: multiplica a velocidade por `0.88` a cada passo; a posição é atualizada com a velocidade amortecida. A perturbação visual é escalada por `alpha` e **não** constitui movimento perpétuo.
+5. **Decaimento**: `alpha *= 0.985` por passo; abaixo de `0.025`, o agendador deixa de executar a física até uma interação relevante. Não prometer comportamento temporal idêntico em dispositivos com FPS diferentes.
 
-2. **Atração Elástica por Vínculo (Hooke's Spring Law)**:
-   - Mantém nós conectados próximos uns aos outros ao longo de uma distância de repouso $L_0$:
-     $$\vec{F}_{\text{spring}}(i, j) = -k_{\text{spring}} \cdot (\|\vec{r}_{ij}\| - L_0) \cdot \hat{r}_{ij}$$
-   - Vínculos entre entidades hierárquicas principais (ex: Concurso $\leftrightarrow$ Edição) têm rigidez maior que vínculos periféricos (ex: Questão $\leftrightarrow$ Tag).
+**Custo:** a repulsão é `O(N²)`; o protótipo só habilita a física para **até 240 nós**. Acima disso, utiliza a disposição inicial em espiral com zoom de ajuste, sem loop de física. Esse limite é um **guardrail provisório**, não um resultado de benchmark; medir em dispositivos reais antes de aumentá-lo. A posição inicial e a simulação devem manter os controles de busca, filtros, drag, zoom e teclado operacionais.
 
-3. **Gravidade Central (Centering Pull)**:
-   - Uma força atrativa sutil em direção ao centro do canvas $(cx, cy)$ para impedir que componentes desconexos flutuem indefinidamente para o infinito:
-     $$\vec{F}_{\text{center}}(i) = -k_{\text{center}} \cdot (\vec{p}_i - \vec{c})$$
+### 3.2 Ciclo de vida e renderização
 
-4. **Arrasto & Amortecimento Viscoso (Damping)**:
-   - Reduz a velocidade linear gradualmente a cada passo de tempo para dissipar energia cinética:
-     $$\vec{v}_{t+1} = \vec{v}_t \cdot (1 - \gamma)$$
-   - Onde $\gamma \in [0.04, 0.08]$ fornece um amortecimento suave e orgânico sem oscilações violentas.
+- Um único agendador controla `requestAnimationFrame`. `invalidate()` solicita **um quadro** quando um evento altera o canvas, inclusive no modo reduzido; ele não inicia um loop contínuo.
+- A montagem não executa 180/400 passos síncronos de física. Primeiro mostra o layout inicial e o ajusta à viewport; no modo normal, a física evolui em quadros subsequentes, somente se habilitada.
+- `prefers-reduced-motion` é observado com `MediaQueryList.change`. Ao ativar redução, cancelar o frame pendente, zerar `alpha` e velocidades e redesenhar o estado estático. Ao desativar, retomar a física apenas se habilitada.
+- `visibilitychange` e `IntersectionObserver` pausam o agendamento em aba oculta ou grafo fora da viewport. A visibilidade restaurada permite redesenho e continuação condicional.
+- `stopGV()` cancela o frame e desconecta `ResizeObserver`, `IntersectionObserver` e listeners de preferência/visibilidade para evitar trabalho depois de navegar.
+- O drag em movimento reduzido atualiza somente a posição do nó arrastado e pede um redesenho; os outros nós não recebem impulso.
 
-### 3.2 Integração Numérica (Velocity Verlet)
+### 3.3 Limites e verificação necessária
 
-Em vez de simples Euler explícito (suscetível a explosões numéricas quando nós colidem), a simulação utiliza o integrador **Velocity Verlet**:
-
-```javascript
-// Passo de integração Verlet
-function stepVerlet(node, dt, fx, fy, damping) {
-  // Aceleração resultante
-  const ax = fx / node.mass;
-  const ay = fy / node.mass;
-
-  // Atualização de posição com base na velocidade e aceleração anteriores
-  node.x += node.vx * dt + 0.5 * ax * dt * dt;
-  node.y += node.vy * dt + 0.5 * ay * dt * dt;
-
-  // Atualização de velocidade amortecida
-  node.vx = (node.vx + ax * dt) * (1 - damping);
-  node.vy = (node.vy + ay * dt) * (1 - damping);
-}
-```
-
-### 3.3 Target de Alfa Contínuo (Continuous Living Graph)
-
-Diferente de implementações que desligam a animação assim que `alpha < 0.012`, o grafo mantém um **patamar mínimo de vitalidade orgânica**:
-
-1. **Meta de Alfa Dinâmica (`alphaTarget`)**:
-   - Durante carregamento inicial ou arrasto: `alphaTarget = 0.3` a `1.0`.
-   - Em repouso (equilíbrio dinâmico): `alphaTarget = 0.003`.
-   - A simulação decai exponencialmente em direção a `alphaTarget`:
-     $$\alpha_{t+1} = \alpha_t + (\alpha_{\text{target}} - \alpha_t) \cdot \lambda$$
-     com taxa de adaptação $\lambda = 0.02$.
-2. **Micro-flutuações Brownianas Sutis**:
-   - No patamar de equilíbrio (`alpha <= 0.005`), uma força estocástica infinitesimal ($\sim 10^{-4}\,\text{px}$) mantém os nós com um movimento de "respiração" sutil, similar ao comportamento dos nós no Obsidian Graph View.
-3. **Reaquecimento Térmico por Interação**:
-   - `pointermove` (hover sobre um nó): eleva `alpha` temporariamente para `0.1` nos nós vizinhos, realçando a cadeia de conexões.
-   - `drag` (arrastar nó): fixa o nó sob o cursor (`vx = vy = 0`), eleva `alpha` para `0.45` e propaga energia para a vizinhança conectada.
-   - `pan` / `zoom`: reaquece levemente para `0.05` para garantir nitidez de renderização sem travamentos.
-4. **Governança de CPU e Bateria**:
-   - Se o canvas não estiver visível na viewport (aba em segundo plano ou `display: none`), o loop de `requestAnimationFrame` é pausado imediatamente (`cancelAnimationFrame`) para economizar 100% de CPU.
-   - Retoma automaticamente assim que a visibilidade for restaurada (`document.visibilityState === 'visible'`).
+A estratégia de custo, as durações e o limite de 240 nós **não foram validados com medições de FPS, bateria, dispositivos ou leitores de tela** nesta alteração. O estado de implementação não equivale a conformidade WCAG. Validar abertura de grafos pequenos/densos, redimensionamento, mudança dinâmica da preferência, alternância de abas, scroll fora da viewport, retorno, teclado, drag, zoom e filtros. Registrar medições e evidências reais no board quando executadas.
 
 ---
 
@@ -210,16 +170,11 @@ O Exam App respeita a preferência do sistema por movimento reduzido. **WCAG 2.2
 }
 ```
 
-**Nota de migração:** o protótipo atual pode conter um reset global de animações. Não o substituir automaticamente sem auditoria; ao implementar componentes, preferir desativação **direcionada** de movimento espacial, mantendo estado/feedback visíveis e verificando CSS, JS e canvas. Testar alterações de preferência durante a sessão.
+**Implementação atual:** o protótipo removeu os dois resets globais e usa desativação **direcionada** para os componentes animados conhecidos, preservando transições de feedback não espacial. Ainda é necessário validar visualmente cada componente e o feedback de carregamento em modo reduzido, em CSS, JS e canvas.
 
 ### 4.1 Comportamento do Grafo sob Movimento Reduzido
 
 Quando a media query `(prefers-reduced-motion: reduce)` estiver ativa:
-1. **Pré-cálculo Síncrono Estático**:
-   - Calcular um layout inicial estável sem bloquear a primeira pintura; usar orçamento de tempo, lotes ou Worker quando necessário. **Não** impor 400 iterações síncronas como requisito.
-2. **Congelamento Imediato**:
-   - `alpha` é definido como `0`, e `alphaTarget = 0`.
-   - Todas as velocidades $\vec{v}$ são zeradas (`node.vx = node.vy = 0`).
-   - O loop contínuo de `requestAnimationFrame` **não é iniciado**.
-3. **Interações Estáticas**:
-   - Arrastar um nó move apenas as coordenadas fixas daquele nó, redesenhando um único quadro sob demanda (`draw()`) sem propagação de oscilações elásticas para o restante da rede.
+1. **Layout estático imediato**: apresentar a disposição inicial em espiral, com ajuste de zoom, **sem** 400 passos síncronos de física e sem bloquear a primeira pintura com simulação.
+2. **Congelamento da simulação**: `alpha = 0`, velocidades `vx = vy = 0` e nenhum loop contínuo de `requestAnimationFrame`. Um frame isolado é permitido para desenhar alterações reais de estado.
+3. **Interações estáticas**: drag modifica apenas a posição do nó; zoom, pan, busca e filtros solicitam redesenho sob demanda. A preferência pode mudar durante a sessão, sem recarregar a página.

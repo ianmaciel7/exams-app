@@ -71,6 +71,7 @@
 - Adotar "tudo é um Objeto" (tipo e propriedades)
 - Decidir onde ficam as questões
 - Testar as telas no celular
+- Motion (Issue #128): loop do grafo agora respeita movimento reduzido, aba oculta, viewport e repouso; tokens CSS alinhados. QA visual e benchmarks ainda pendentes.
 
 ## Pendente
 <!-- container e49 @ (1020,230) -->
