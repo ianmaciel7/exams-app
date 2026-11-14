@@ -23,6 +23,16 @@ O Exam App é uma plataforma de estudos de alta densidade cognitiva para concurs
 
 ---
 
+### 1.1 Política Low-Chrome (Issue #97)
+
+Separadores contínuos no *shell* (por exemplo, `.side` e `.ws-tabs`) são excepcionais. O layout prioriza fundos em camadas, *gutters* e sombras discretas para distinguir os três painéis sem desenhar uma grade permanente.
+
+- **Sem borda decorativa:** a lateral `.side` não recebe `border-right` e o trilho `.ws-tabs` não recebe `border-bottom` por padrão.
+- **Divisores funcionais preservados:** separadores condicionais entre abas, `.side-rz`, `.rp-split`, grupos, campos, listas e superfícies com elevação podem usar bordas quando a interação ou semântica exige.
+- **Rodapé e conteúdo preservados:** `.side-foot`, `.body .view` e `.rp-body` mantêm suas delimitações até validação visual específica.
+- **Não globalizar:** nunca redefinir `--line` para transparente nem aplicar `border: none` globalmente.
+- **Validação antes de concluir:** comparar tema claro/escuro e três larguras (1366, 1024, 768px), com sidebar e painel contextual expandidos/recolhidos. Capturar evidência visual antes/depois no board.
+
 ## 2. Design Tokens & Cores Semânticas (OKLCH)
 
 A paleta adota o espaço de cor **OKLCH**, garantindo uniformidade perceptiva de brilho (*lightness*) e contraste acessível em conformidade com as normas WCAG AA/AAA.
