@@ -94,7 +94,10 @@
 .study-shell .s-smallstat:first-child{border:0;padding-left:0}
 .study-shell .s-smallstat strong{font-size:21px;font-weight:640;letter-spacing:-.025em;line-height:1.1;display:block;font-variant-numeric:tabular-nums}
 .study-shell .s-smallstat small{color:var(--muted);font-size:11.5px;display:block;margin:7px 0 0}
-.study-shell .s-layout{display:grid;grid-template-columns:minmax(0,1.72fr) minmax(270px,.92fr);gap:34px;margin-top:26px;align-items:start}
+.study-shell .s-layout{display:grid;grid-template-columns:minmax(0,1fr);gap:28px;margin-top:26px;align-items:start}
+.sim-nav-drawer{border:1px solid var(--line);border-radius:10px;background:var(--side);padding:10px 14px}
+.sim-nav-drawer>summary{cursor:pointer;font-size:13px;font-weight:600;color:var(--text)}
+.sim-nav-drawer .s-section{margin:14px 0 2px}
 .study-shell .s-maincol,.study-shell .s-asidecol{min-width:0}
 .study-shell .s-section{margin:0 0 30px}
 .study-shell .s-sectionhead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
@@ -159,9 +162,9 @@
 .study-shell .s-tlrow .dot{width:7px;height:7px;border-radius:50%;margin-top:5px;background:var(--faint)}
 .study-shell .s-tlrow.upcoming .dot{background:var(--study-accent);box-shadow:0 0 0 3px var(--study-tint)}
 .study-shell .s-tlrow span:last-child{line-height:1.45}
-.study-shell .s-domain{display:grid;grid-template-columns:minmax(0,1fr) 74px;column-gap:18px;row-gap:5px;padding:11px 0;border-bottom:1px solid var(--line);align-items:center}
+.study-shell .s-domain{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,34%);column-gap:18px;row-gap:5px;padding:11px 0;border-bottom:1px solid var(--line);align-items:center}
 .study-shell .s-domain:last-child{border:0}
-.study-shell .s-domain .s-domainname{font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.study-shell .s-domain .s-domainname{font-size:13px;white-space:normal;overflow-wrap:anywhere}
 .study-shell .s-domain .s-domaincount{text-align:right;font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums}
 .study-shell .s-domain .s-progress{grid-column:1/-1;height:5px}
 .study-shell .s-chiprow{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}
@@ -780,7 +783,9 @@ a.ot{display:block;padding:3px 0;min-height:24px}
 .sim-score-lbl{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
 .sim-score-val{font-size:22px;font-weight:700;color:var(--text);font-variant-numeric:tabular-nums}
 .sim-score-sub{font-size:11px;color:var(--muted)}
-.sim-disc-item{display:flex;align-items:center;justify-content:space-between;padding:6px 0;font-size:13px;border-bottom:1px solid var(--line)}
+.sim-disc-item{display:grid;grid-template-columns:minmax(0,1fr) minmax(180px,34%);align-items:center;gap:12px;padding:10px 0;font-size:13px;border-bottom:1px solid var(--line)}
+.sim-disc-item>span{min-width:0;overflow-wrap:anywhere}
+.sim-disc-item .s-progress{width:100%!important}
 .sim-disc-item:last-child{border-bottom:0}
 
 /* ---- Home Study Dashboard (#/espaco) ---- */
@@ -890,7 +895,7 @@ a.ot{display:block;padding:3px 0;min-height:24px}
 .study-shell .s-smallstat{min-width:0;padding:0;border:0;display:flex;align-items:baseline;gap:6px}
 .study-shell .s-smallstat strong{font-size:13.5px;font-weight:600;display:inline}
 .study-shell .s-smallstat small{margin:0;font-size:13.5px;display:inline}
-.study-shell .s-layout{margin-top:6px;gap:56px;grid-template-columns:minmax(0,1fr) 300px}
+.study-shell .s-layout{margin-top:6px;gap:28px;grid-template-columns:minmax(0,1fr)}
 .study-shell .s-card,.study-shell .s-section .s-card{padding:0;border:0;background:none;border-radius:0;box-shadow:none}
 .study-shell .s-section{margin:0 0 26px}
 .study-shell .s-sectionhead h2{font-size:13.5px;font-weight:650}
@@ -908,7 +913,7 @@ a.ot{display:block;padding:3px 0;min-height:24px}
 .study-shell .q-prog{margin:0 0 20px}
 @media(max-width:1070px){.study-shell .s-layout{grid-template-columns:1fr;gap:12px}}
 .study-shell .s-filterbar input,.study-shell .s-filterbar select{font:inherit;font-size:13px;min-height:32px;padding:4px 10px;border:1px solid var(--line);border-radius:8px;background:transparent;color:var(--text)}
-.qo{max-width:720px}.qo-stm{font-size:15px;line-height:1.7;margin:0 0 16px}.qo-alts{display:flex;flex-direction:column;gap:6px}.qo-alts .sc-alt{border:0;margin:0 -10px;padding:9px 10px}
+.qo{max-width:75ch}.qo-stm{font-size:15px;line-height:1.7;margin:0 0 16px}.qo-alts{display:flex;flex-direction:column;gap:8px}.qo-alts .sc-alt{display:flex;gap:12px;align-items:flex-start;width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--side);text-align:left;color:var(--text);font:inherit;line-height:1.55;cursor:pointer;transition:background .15s,border-color .15s}.qo-alts .sc-alt:hover:not(:disabled){background:var(--hover);border-color:var(--muted)}.qo-alts .sc-alt kbd{flex:none;display:grid;place-items:center;min-width:24px;height:24px;border:1px solid var(--line);border-radius:6px;background:var(--bg);font:inherit;font-size:11px;font-weight:600;color:var(--muted)}.qo-alts .sc-alt>span{flex:1;min-width:0}
 .perf-h{margin:18px 0 4px;font-size:13px;font-weight:600;color:var(--muted)}
 
 /* tipos: ícone e cor próprios por tipo (sidebar e páginas de objeto) */
@@ -926,6 +931,8 @@ a.ot{display:block;padding:3px 0;min-height:24px}
 /* IA (Claude via capability sample): só aparece quando disponível */
 .ai-only{display:inline-flex}.ai-row.ai-only{display:flex}html:not(.ai-on) .ai-btn{opacity:.55;cursor:not-allowed}.ai-hint{display:none;flex-basis:100%;margin:0;font-size:12px;color:var(--muted)}html:not(.ai-on) .ai-hint{display:block}.qrel-more{margin-top:8px}.qrel-more>summary{list-style:none;cursor:pointer;display:inline-flex}.qrel-more>summary::-webkit-details-marker{display:none}.qrel-more[open]>summary{margin-bottom:6px}.qo-alts .sc-alt{color:var(--text);align-items:center;border:1px solid transparent}.qo-alts .sc-alt.good{border-color:var(--study-good);background:color-mix(in srgb,var(--study-good) 14%,transparent)}.qo-alts .sc-alt.bad{border-color:var(--study-warn);background:color-mix(in srgb,var(--study-warn) 14%,transparent)}.study-shell .s-option.good{border-color:var(--study-good);background:color-mix(in srgb,var(--study-good) 14%,transparent)}.study-shell .s-option.bad{border-color:var(--study-warn);background:color-mix(in srgb,var(--study-warn) 14%,transparent)}.alt-t{margin-left:auto;flex:none;font-style:normal;font-size:12px;font-weight:600;white-space:nowrap}.alt-t.good{color:var(--study-good)}.alt-t.bad{color:var(--study-warn)}.sc-alt>span{flex:1;min-width:0}
 .ai-row{gap:8px;flex-wrap:wrap;margin-top:12px}
+.ai-hint{display:none!important}
+.qo-alts .sc-alt{align-items:flex-start;border:1px solid var(--line);background:var(--side)}
 .ai-btn{gap:6px}.ai-btn .ai-spark,.ai-h .ai-spark{color:var(--accent)}
 .ai-box{margin-top:12px;border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:13.5px;line-height:1.55;text-align:left;white-space:normal}
 .ai-box:empty{display:none}.ai-boxes{flex-basis:100%}
@@ -2590,7 +2597,7 @@ const opProps=(rows,iid)=>{
   const allRows=baseItems+cu;
   if(!allRows) return '';
   const count=r.length+(cu?(cu.match(/class="op-prop"/g)||[]).length:0);
-  return '<div class="props-card" data-props-for="'+esc(iid||'')+'">'+
+  return '<div class="props-card'+((iid||'').startsWith('questao:')?' is-collapsed':'')+'" data-props-for="'+esc(iid||'')+'">'+
     '<div class="props-head" role="button" tabindex="0" data-props-toggle aria-label="Recolher ou expandir propriedades">'+
       '<span class="props-title"><span class="props-title-txt">Propriedades</span><small class="props-count">• '+count+'</small></span>'+
       '<span class="props-chev">▾</span>'+
@@ -3146,7 +3153,7 @@ function questaoPage(q){
   const ch=(t,h)=>t?(h?'<a class="chip" href="'+h+'">'+esc(t)+'</a>':'<span class="chip">'+esc(t)+'</span>'):'';
   const de=discEnt(q.materia), ed=q.ed&&edicaoById(q.ed), cg=q.cg&&cargoById(q.cg), cc=q.conc&&concursoById(q.conc);
   const props=[['Tipo',ch('Questão','#/tipo/questao')],['Disciplina',q.materia?ch(q.materia,de?'#/disciplina/'+de.id:''):''],['Banca',q.banca?ch(q.banca,valHref('banca',q.banca)):''],['Órgão',q.orgao?ch(q.orgao,valHref('orgao',q.orgao)):''],['Ano',q.ano?ch(q.ano,'#/valor/ano/'+q.ano):''],['Edição',ed?ch(ed.t,'#/edicao/'+ed.id):''],['Cargo',cg?ch(cg.t,'#/cargo/'+cg.id):''],['Concurso',cc?ch(cc.t,'#/concurso/'+cc.id):''],['Origem',ch(ORIGENS[qOrig(q)],'')+(qOrig(q)==='oficial'&&q.doc?' '+ch('Caderno tipo 1 (PDF)','#'+q.doc):'')],['Gabarito oficial',r?opTxt(q.gabarito)+(qOrig(q)==='oficial'?' '+ch('Gabarito (PDF)','#gabarito'):''):opTxt('Liberado depois que você responder')],['Posição',opTxt((i+1)+' de '+all.length)]];
-  const alts=Object.entries(q.alternativas).map(([l,v])=>'<button type="button" class="sc-alt'+(r?(l===q.gabarito?' good':(l===r?' bad':'')):'')+'" data-qo-ans="'+q.id+'|'+l+'"'+(r?' disabled':'')+'><b>'+l+'</b><span>'+esc(v)+'</span>'+(r&&l===q.gabarito?'<em class="alt-t good">'+UIICON.check+' Correta</em>':(r&&l===r?'<em class="alt-t bad">'+UIICON.close+' Sua resposta</em>':''))+'</button>').join('');
+  const alts=Object.entries(q.alternativas).map(([l,v])=>'<button type="button" class="sc-alt'+(r?(l===q.gabarito?' good':(l===r?' bad':'')):'')+'" data-qo-ans="'+q.id+'|'+l+'"'+(r?' disabled':'')+'><kbd>'+l+'</kbd><span>'+esc(v)+'</span>'+(r&&l===q.gabarito?'<em class="alt-t good">'+UIICON.check+' Correta</em>':(r&&l===r?'<em class="alt-t bad">'+UIICON.close+' Sua resposta</em>':''))+'</button>').join('');
   const ansMap=getAnswers();
   const qGridCells=all.map((item,idx)=>{
     const an=ansMap[item.n];
@@ -3156,10 +3163,10 @@ function questaoPage(q){
   }).join('');
   const drawerHtml='<div class="q-drawer" id="qDrawer"><div class="q-drawer-head"><span>Navegador Rápido de Questões</span><small>Legenda: Verde (Acerto) • Vermelho (Erro) • Cinza (Pendente)</small></div><div class="q-grid">'+qGridCells+'</div></div>';
   const nav='<div class="op-actions" style="margin-top:18px;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">'+
-    (prev?'<a class="op-btn" href="#/questao/'+prev.id+'">← Anterior (K)</a>':'<span></span>')+
+    (prev?'<a class="op-btn" href="#/questao/'+prev.id+'">← Anterior <kbd>K</kbd></a>':'<span></span>')+
     '<button type="button" class="op-btn" data-drawer-toggle aria-expanded="false">'+UIICON.grid+' Grade ('+(i+1)+'/'+all.length+')</button>'+
     (r?'<button type="button" class="op-btn" data-qo-reset="'+q.id+'">Refazer</button>':'<span></span>')+
-    (next?'<a class="op-btn" href="#/questao/'+next.id+'">Próxima (J) →</a>':'<span></span>')+
+    (next?'<a class="op-btn" href="#/questao/'+next.id+'">Próxima <kbd>J</kbd> →</a>':'<span></span>')+
   '</div>'+drawerHtml;
   const body='<div class="qo"><p class="sc-stm qo-stm">'+esc(q.enunciado)+'</p><div class="qo-alts">'+alts+'</div>'+(r?'<p class="s-note">'+(r===q.gabarito?UIICON.check+' Resposta correta!':UIICON.close+' Resposta incorreta. Gabarito oficial: '+q.gabarito+'.')+'</p>':'')+(r?aiRow(q.id):'')+qMarks(q)+nav+'</div>';
   const hh=histAll().filter(h=>h.q===q.id).sort((a,b)=>b.t-a.t); const hist=opSec('Respostas',hh.length?'<div class="op-list">'+hh.map(h=>{const rid=h.id||('r'+h.t.toString(36)+'-'+h.q);return '<a class="op-row" href="#/resposta/'+rid+'"><span class="op-rt"><b>'+fmtDT(h.t)+'</b><small>'+esc(h.src)+(h.a?' · marcou '+esc(h.a):'')+'</small></span><span class="sc-st '+(h.ok?'ok':'bad')+'">'+(h.ok?UIICON.check+' Acertou':UIICON.close+' Errou')+'</span><span class="op-go" aria-hidden="true">›</span></a>';}).join('')+'</div>':opEmpty('Você ainda não respondeu esta questão.'),{count:hh.length});
@@ -3292,7 +3299,7 @@ function sExamQuestion(){
  const hh=Math.floor(remainingSec/3600),mm=Math.floor(remainingSec%3600/60),ss=remainingSec%60;
  const inner=sBreadcrumb([['Dataprev','#/concurso/dataprev'],['Simulado','#/simulado'],['Em andamento','']])+sHead('Modo prova','Simulado · Dataprev 2026',N+(N===1?' questão':' questões')+(N===70?' originais':'')+' · '+(s.rand?'ordem aleatória':'ordem original')+' · gabarito oculto até a entrega.', '<button class="s-button" data-s-finish>Entregar prova</button>',sBadge('FGV · Caderno tipo 1'))+
  '<div class="s-smallstats"><div class="s-smallstat"><strong>'+answered+' / '+N+'</strong><small>Respondidas</small></div><div class="s-smallstat"><strong>'+String(hh).padStart(2,'0')+':'+String(mm).padStart(2,'0')+':'+String(ss).padStart(2,'0')+'</strong><small>Tempo restante</small></div><div class="s-smallstat"><strong>'+s.marked.length+'</strong><small>Marcadas para revisão</small></div></div>'+
- '<div class="s-layout"><div class="s-maincol">'+sQuestionMarkup(q,s.answers[q.n],true)+'<div class="s-inlineactions" style="justify-content:space-between"><button class="s-button" data-s-prev '+(s.index===0?'disabled':'')+'>← Anterior</button><button class="s-button" data-s-mark>'+(s.marked.includes(q.n)?UIICON.check+' Marcada para revisão':'Marcar para revisão')+'</button><button class="s-button main-cta" data-s-next '+(s.index===N-1?'disabled':'')+'>Próxima →</button></div></div><aside class="s-asidecol">'+sSection('Navegação','<div class="s-card"><p class="s-note" style="margin-top:0">As respostas são salvas no navegador.</p><div class="s-navigator">'+qs.map((x,i)=>'<button class="s-qnum '+(s.index===i?'current ':'')+(s.answers[x.n]?'answered':'')+'" data-s-jump="'+i+'">'+x.n+'</button>').join('')+'</div></div>')+'</aside></div>';
+ '<div class="s-layout"><div class="s-maincol">'+sQuestionMarkup(q,s.answers[q.n],true)+'<div class="s-inlineactions" style="justify-content:space-between"><button class="s-button" data-s-prev '+(s.index===0?'disabled':'')+'>← Anterior</button><button class="s-button" data-s-mark>'+(s.marked.includes(q.n)?UIICON.check+' Marcada para revisão':'Marcar para revisão')+'</button><button class="s-button main-cta" data-s-next '+(s.index===N-1?'disabled':'')+'>Próxima →</button></div></div><aside class="s-asidecol"><details class="sim-nav-drawer"><summary>Navegação · '+(s.index+1)+'/'+N+'</summary>'+sSection('Navegação','<div class="s-card"><p class="s-note" style="margin-top:0">As respostas são salvas no navegador.</p><div class="s-navigator">'+qs.map((x,i)=>'<button class="s-qnum '+(s.index===i?'current ':'')+(s.answers[x.n]?'answered':'')+'" data-s-jump="'+i+'">'+x.n+'</button>').join('')+'</div></div>')+'</details></aside></div>';
  studyPage('Simulado','Em andamento',inner);
 }
 function finishExam(){
@@ -3316,7 +3323,7 @@ function renderExamResult(){
  const T=s.total||70,MX=s.max||115,full=s.full!==false&&T===70,passed=full&&s.score>=57.5&&Object.values(s.byMatter).every(x=>x.correct>0);
  const content=sBreadcrumb([['Dataprev','#/concurso/dataprev'],['Simulado','#/simulado'],['Resultado','']])+sHead('Resultado da tentativa','Simulado concluído','Seu desempenho nesta tentativa, calculado usando os pesos e critérios cadastrados da prova.',sBtn('Praticar questões','#/questoes',true),sBadge((s.total||70)+((s.total||70)===1?' questão':' questões'))+sBadge('FGV · 2026'))+
  '<div class="s-smallstats"><div class="s-smallstat"><strong>'+s.score.toLocaleString('pt-BR')+' / '+MX.toLocaleString('pt-BR')+'</strong><small>Pontuação</small></div><div class="s-smallstat"><strong>'+s.correct+'</strong><small>Acertos</small></div><div class="s-smallstat"><strong>'+Object.keys(s.answers).length+'</strong><small>Respondidas</small></div><div class="s-smallstat"><strong>'+pctOf(s.correct,T)+'%</strong><small>Acerto geral</small></div></div>'+
- '<div class="s-layout"><div class="s-maincol">'+sSection('Resultado','<div class="s-card">'+(full?sBadge(passed?'Critérios de aprovação atendidos':'Critérios de aprovação não atendidos',passed):sBadge('Simulado parcial · '+T+(T===1?' questão':' questões')))+'<p class="s-note">Avaliação didática com base no gabarito preliminar cadastrado. Não representa resultado oficial.</p><div class="s-inlineactions"><button class="s-button" data-s-start>Refazer simulado</button></div></div>')+sSection('Desempenho por disciplina','<div class="s-card">'+Object.entries(s.byMatter).map(([name,v])=>'<div class="s-domain"><span class="s-domainname">'+esc(name)+'</span><span class="s-domaincount">'+v.correct+' / '+v.count+' acertos</span><div class="s-progress"><i style="width:'+pctOf(v.correct,v.count)+'%"></i></div></div>').join('')+'</div>')+'</div><aside class="s-asidecol">'+sSection('Próximas ações','<div class="s-card"><div class="s-quicklist"><a href="#/questoes"><span>Revisar questões no banco</span><span>›</span></a><a href="#/cargo/dataprev-2026-ti-dev"><span>Voltar ao cargo</span><span>›</span></a><a href="#tipo1"><span>Ver PDF original</span><span>›</span></a></div></div>')+'</aside></div>';
+ '<div class="s-layout"><div class="s-maincol">'+sSection('Resultado','<div class="s-card">'+(full?sBadge(passed?'Critérios de aprovação atendidos':'Critérios de aprovação não atendidos',passed):sBadge('Simulado parcial · '+T+(T===1?' questão':' questões')))+'<p class="s-note">Avaliação didática com base no gabarito preliminar cadastrado. Não representa resultado oficial.</p><div class="s-inlineactions"><button class="s-button" data-s-start>Refazer simulado</button></div></div>')+sSection('Desempenho por disciplina','<div class="s-card">'+Object.entries(s.byMatter).map(([name,v])=>'<div class="s-domain"><span class="s-domainname">'+esc(name)+'</span><span class="s-domaincount">'+v.correct+' / '+v.count+' · '+pctOf(v.correct,v.count)+'%</span><div class="s-progress"><i style="width:'+pctOf(v.correct,v.count)+'%"></i></div></div>').join('')+'</div>')+'</div><aside class="s-asidecol">'+sSection('Próximas ações','<div class="s-card"><div class="s-quicklist"><a href="#/questoes"><span>Revisar questões no banco</span><span>›</span></a><a href="#/cargo/dataprev-2026-ti-dev"><span>Voltar ao cargo</span><span>›</span></a><a href="#tipo1"><span>Ver PDF original</span><span>›</span></a></div></div>')+'</aside></div>';
  studyPage('Resultado','Simulado',content);
 }
 async function showStudyRoute(h){
@@ -3397,8 +3404,8 @@ const aiBox=k=>'<div class="ai-box" data-ai-box="'+esc(k)+'" aria-live="polite">
 const aiSpark=UIICON.spark;
 view.addEventListener('click',e=>{ const b=e.target.closest('[data-qflag]'); if(!b) return; const [k,id]=b.dataset.qflag.split(':'); const f=qFlag(id); qSetFlag(id,k==='rev'?{rev:!f.rev}:{fav:!f.fav}); const y=view.scrollTop; showObjs(location.hash.slice(1)); view.scrollTop=y; });
 view.addEventListener('change',e=>{ const t=e.target.closest&&e.target.closest('[data-qnote]'); if(t){ qSetFlag(t.dataset.qnote,{note:t.value}); toast('Anotação salva'); } });
-const AI_WHY='A IA só funciona quando o protótipo é aberto no visualizador de artefatos do claude.ai, com o uso do Claude permitido.';
-function aiRow(id){ return '<div class="ai-row ai-only"><p class="ai-hint">'+AI_WHY+'</p><button type="button" class="op-btn ai-btn" data-ai="expl" data-ai-arg="'+esc(id)+'">'+aiSpark+' Explicar com IA</button><button type="button" class="op-btn ai-btn" data-ai="cards" data-ai-arg="'+esc(id)+'">'+aiSpark+' Criar cartões</button><div class="ai-boxes">'+aiBox('expl:'+id)+aiBox('cards:'+id)+'</div></div>'; }
+const AI_WHY='Recurso de IA indisponível neste ambiente.';
+function aiRow(id){ return '<div class="ai-row ai-only"><button type="button" class="op-btn ai-btn" title="Disponível no visualizador compatível" data-ai="expl" data-ai-arg="'+esc(id)+'">'+aiSpark+' Explicar com IA</button><button type="button" class="op-btn ai-btn" title="Disponível no visualizador compatível" data-ai="cards" data-ai-arg="'+esc(id)+'">'+aiSpark+' Criar cartões</button><div class="ai-boxes">'+aiBox('expl:'+id)+aiBox('cards:'+id)+'</div></div>'; }
 function aiPaint(key){ document.querySelectorAll('[data-ai-box="'+key+'"]').forEach(el=>aiPaintEl(el,key)); }
 function aiPaintEl(el,key){ const m=aiMem[key]; if(!m){ el.innerHTML=''; return; }
   let h='<div class="ai-h">'+aiSpark+'<b>'+esc(m.title)+'</b>'+(m.state==='load'?'<button type="button" class="ai-link" data-ai-stop="'+esc(key)+'">Parar</button>':'<button type="button" class="ai-link" data-ai-close="'+esc(key)+'">Fechar</button>')+'</div>';
