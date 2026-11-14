@@ -770,6 +770,30 @@ As leis empíricas, princípios cognitivos e padrões documentados em [AGENTS.md
 - **MUST** distinguir **implementado/testado** de **documentado**. Qualquer screenshot ou GIF deve refletir uma interface real verificada, persistida no board quando aplicável; não registrar evidência fictícia.
 - **AVOID** tornar F-pattern, Z-pattern, regra de terços, largura de 16 colunas ou número fixo de panes em requisitos universais. São observações ou escolhas dependentes de conteúdo e plataforma.
 
+
+### 8.24 Atenção visual, densidade e apresentação didática — aplicação da pesquisa (2026)
+
+Complementa [AGENTS.md §21](AGENTS.md) e [catálogo UX/UI §T](docs/ux/ux-ui-principles.md). As referências científicas aqui são **teorias, modelos e efeitos**, não leis de layout universais. Context7 confirmou os guias de largura de linha do USWDS, densidade do Carbon e estratégias de painéis do Material 3. **Não instalar nem substituir CSS/tokens do protótipo** só por estas fontes.
+
+| Superfície | Problema a investigar | Decisão de design como hipótese verificável | Teste de aceite |
+|---|---|---|---|
+| **Home e sidebar** | Competição entre cards, indicadores, grupos e CTAs; usuário não encontra Questões/Simulados. | Usar alvos destacados por **função e rótulo**, com agrupamento e hierarquia visual coerentes. Feature Integration / Guided Search podem explicar dificuldade de busca. | Primeiro clique e conclusão da tarefa, inclusive zoom, teclado e mobile. |
+| **Filtros, lista e resultados** | Botões e chips semelhantes criam varredura longa e confusão de estado. | Distinguir filtro aplicado, limpar, contagem e itens; manter pistas consistentes em vez de só aumentar contraste/colorir tudo. | Localizar filtro, obter resultado correto, limpar e voltar sem perder seleção. |
+| **Dashboard e grafo** | Muitas bordas, badges, arestas, cards ou séries competem pela atenção. | Considerar **Feature Congestion** como investigação de desordem perceptiva, mantendo relações importantes e alternativa textual. | Comparar versões com mesmas tarefas/dados; registrar erros de interpretação e buscas. |
+| **Questões e enunciados extensos** | Linhas largas/estreitas demais ou blocos distantes prejudicam leitura. | Usar largura de conteúdo apropriada ao idioma, tipo de questão e zoom. [USWDS Measure](https://designsystem.digital.gov/design-tokens/typesetting/measure/) é referência contextual, **não largura normativa obrigatória**. | Leitura e rolagem sem corte, zoom 200%/400% conforme critérios WCAG pertinentes, mobile e leitor de tela quando possível. |
+| **Resolução comentada** | A explicação é longa, dispersa ou obriga alternar telas sem motivo. | Usar **Worked-Example Effect** quando apropriado para iniciantes, com passos claros próximos da parte explicada, sem comprometer a possibilidade de praticar. | Perguntas de compreensão e navegação entre passos; permitir voltar e pular ajuda. |
+| **Conteúdo instrucional/animado** | Uma sequência longa impede o estudante de acompanhar o raciocínio. | **Segmenting Principle**: considerar blocos controlados pelo usuário quando a explicação complexa se beneficiar disso; não aplicar como regra de wizard em formulários. | Estudante avança, pausa e retoma sem perder contexto/posição; reduced motion acessível. |
+| **Iniciante vs experiente** | Dicas ou passos detalhados atrapalham quem conhece a matéria. | Avaliar o **Expertise Reversal Effect** e permitir detalhes sob demanda, quando o ganho para experientes for comprovado. | Comparar conclusão, erros e satisfação por nível de experiência pertinente à matéria, não deduzido de cliques. |
+
+**Fontes científicas:** [Treisman & Gelade (1980)](https://doi.org/10.1016/0010-0285(80)90005-5), [Wolfe (1994)](https://doi.org/10.3758/BF03200774), [Rosenholtz e colaboradores (2005)](https://www.mit.edu/~yzli/clutter.pdf), [Mayer (Segmenting Principle)](https://www.cambridge.org/core/books/multimedia-learning/7A62F072A71289E1E262980CB026A3F9/listing), [Sweller & Cooper (1985)](https://doi.org/10.1207/s1532690xci0201_3), [Kalyuga e colaboradores (2003)](https://doi.org/10.1207/S15326985EP3801_4).
+
+**Regras de aplicação:**
+- **MUST** distinguir hierarquia visual de prioridade real na jornada: o destaque da interface deve corresponder ao resultado que a pessoa quer alcançar; sem informação crítica omitida.
+- **MUST** preservar largura adaptativa, ordem semântica e acesso às ações quando sidebar/painel recolher ou conteúdo for traduzido.
+- **SHOULD** manter guias de densidade e largura textual como **hipóteses**, não converter um número do USWDS/Carbon em limite arbitrário obrigatório do Exam App.
+- **MUST** diferenciar efeitos observados em **aprendizagem multimídia** de regras para todas as páginas; adotar progressão por passos somente quando a tarefa e testes indicarem ganho.
+- **MUST** verificar antes/depois e registrar evidências de implementação no board quando houver alteração real da interface. Este acréscimo documental não significa que o protótipo foi modificado ou auditado.
+
 ## 9. Referências catalogadas — 21 candidatos a skills + 1 agregador (auditoria em andamento)
 
 Os 22 itens abaixo são **21 candidatos a skills e 1 agregador comunitário (M09)**; **não correspondem a 22 SKILL.md individuais verificados**, e não são extensões oficiais de Apple ou Google. **Catalogar URL não comprova leitura integral de cada SKILL.md, README e referências internas.** Não afirmar que os 22 foram verificados ou que cada resumo corresponde ao estado atual do repositório sem registro de arquivo/revisão/data. Esta integração é uma síntese preliminar enquanto a análise aprofundada de cada fonte não estiver documentada. Alguns estão voltados a Android/SwiftUI; nem todo trecho de código se aplica a um protótipo HTML/CSS/JS. Para números ou requisitos, confrontar com a documentação oficial **vigente**.

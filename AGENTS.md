@@ -1059,6 +1059,44 @@ Estas são **16 entradas adicionais** de sucesso WCAG, além das já documentada
 7. **AVOID** afirmar que layout em F/Z, regra de terços, golden ratio, grids de 12/16 colunas ou “tudo acima da dobra” são **leis experimentais obrigatórias de sites**. Padrões de leitura e regras de design exigem contexto e teste.
 8. **MUST** registrar em PR/issue: problema observável, hipótese científica ou padrão utilizado, limitação, alternativas consideradas, evidência no board e teste de sucesso; **inclusão documental não equivale a protótipo implementado ou avaliado**.
 
+
+### 21. Busca visual e estrutura instrucional — revisão Context7 (14/11/2026)
+
+**Objetivo:** complementar [§20 — estrutura de páginas](AGENTS.md), [DESIGN.md §8.24](DESIGN.md) e [catálogo UX/UI](docs/ux/ux-ui-principles.md) com teoria de atenção, mensuração de desordem visual e pesquisas de organização didática. **Nenhuma das seis referências abaixo é nova lei universal de layout**. São **teorias, modelos e efeitos** em psicologia experimental e aprendizagem; investigar aplicação em tarefas reais em vez de transformar pesquisas sobre percepção em mandamentos de composição. A seção **0 — leis empíricas estritas** mantém suas categorias e não recebe estes itens.
+
+#### 21.1. Atenção visual, hierarquia e busca (três referências)
+
+| Nome original | Categoria / autores | Aplicação condicionada no Exam App | Fonte primária e restrições |
+|---|---|---|---|
+| **Feature Integration Theory** | Teoria de atenção visual, **Anne Treisman & Garry Gelade (1980)** | Distinção de características visuais simples versus alvos definidos por conjunção de características; testar descoberta de ação principal, indicador de erro, estado e filtro em páginas com muitos itens. | [Cognitive Psychology (1980)](https://doi.org/10.1016/0010-0285(80)90005-5). **Não** afirmar que qualquer cor/ícone sempre “salta aos olhos” ou substituir WCAG por saliência. |
+| **Guided Search 2.0 — A Revised Model of Visual Search** | Modelo de busca visual, **Jeremy M. Wolfe (1994)** | Orientar rótulos, localização, contraste e organização de resultados/controles em sidebar, filtros e busca; testar encontrar um elemento-alvo entre distrações. | [Psychonomic Bulletin & Review (1994)](https://doi.org/10.3758/BF03200774). É **modelo**, não “lei do grid”; combina orientação de busca por características e atenção limitada. |
+| **Feature Congestion: A Measure of Display Clutter** | Modelo/métrica experimental de desordem visual, **Rosenholtz, Li, Mansfield & Jin (2005)** | Comparar condições de alta/baixa competição visual de cards, badges, linhas e painéis, por tarefa de busca/atenção; investigar legibilidade além de preferência estética. | [CHI 2005 — texto do MIT](https://www.mit.edu/~yzli/clutter.pdf), [Measuring Visual Clutter (2007)](https://doi.org/10.1167/7.2.17). **Não** usar limiar numérico universal ou tratar “sem borda” como melhor layout. |
+
+#### 21.2. Organização de conteúdos educacionais (três referências)
+
+| Nome original | Categoria / autores | Aplicação condicionada no Exam App | Fonte e limites |
+|---|---|---|---|
+| **Segmenting Principle** | Princípio de aprendizagem multimídia, **Richard E. Mayer (2009)** | Dividir **explicação complexa ou animação didática** em blocos controlados pelo estudante; permitir avançar/rever sem perder contexto. | [Mayer, Multimedia Learning, cap. 9](https://www.cambridge.org/core/books/multimedia-learning/7A62F072A71289E1E262980CB026A3F9/listing). **Não** implica transformar toda página ou qualquer formulário em wizard; as evidências tratam sobretudo de mensagens multimídia complexas, autoiniciadas. |
+| **Worked-Example Effect** | Efeito de aprendizagem e teoria da carga cognitiva, **Sweller & Cooper (1985)** | Em revisão e resolução comentada, considerar um exemplo com **passos explicativos integrados** para usuários que ainda não dominam o conceito; testar transferência e compreensão. | [Sweller & Cooper, Cognition and Instruction (1985)](https://doi.org/10.1207/s1532690xci0201_3), [Ward & Sweller (1990)](https://doi.org/10.1207/s1532690xci0701_1). O ganho depende de domínio, organização e familiaridade; não substituir toda prática ativa por exemplos. |
+| **Expertise Reversal Effect** | Efeito experimental, **Kalyuga, Ayres, Chandler & Sweller (2003)** | Avaliar versões de ajuda, densidade e explicação para **iniciantes vs experientes**; instruções redundantes podem prejudicar quem já domina o assunto. | [Educational Psychologist (2003)](https://doi.org/10.1207/S15326985EP3801_4). **Não** deduzir expertise apenas de tempo de uso ou impor dois layouts sem testes. |
+
+#### 21.3. Guidelines oficiais de composição textual — não são leis
+
+| Fonte | Nome documentado | Condição de uso e cautela |
+|---|---|---|
+| [USWDS Typography](https://designsystem.digital.gov/components/typography/) e [Measure](https://designsystem.digital.gov/design-tokens/typesetting/measure/) | **Measure (line length)** | Para textos longos o USWDS recomenda faixa contextual aproximada **45–90 caracteres por linha**, com bom alvo em torno de 66; escolher largura pela fonte, idioma, zoom, tela e tarefa. **É diretriz de um design system**, não requisito rígido WCAG nem fórmula de usabilidade universal. |
+| [IBM Carbon — density](https://github.com/carbon-design-system/carbon/blob/main/packages/styles/docs/sass.md) | **Layout Density** | Variar espaçamento conforme tarefa de leitura ou análise sem esconder estados; não migrar tokens existentes só para replicar Carbon. |
+| [Material 3 — Panes](https://m3.material.io/foundations/layout/scaffold/panes) | **Show and hide; Levitate; Reflow** | Reorganizar painéis mantendo orientação, seleção e significado; evitar layout em três colunas quando reduzir a legibilidade do enunciado. |
+
+**Regras de auditoria e antirregressão:**
+
+1. **MUST** definir o alvo de atenção por tarefa (por exemplo, Enunciado → Responder; Filtro → Resultado; Nó → Relações). Verificar tempo/erros de descoberta comparando layout atual e alternativa, sem supor saliência universal.
+2. **SHOULD** medir **competição visual** separando componentes importantes de decoração, porém sem remover dados úteis; avaliar densidade em desktop, mobile, zoom e com texto mais longo.
+3. **SHOULD** separar **apresentação segmentada de explicação** de **navegação por telas**: Segmenting Principle não determina número de páginas, abas nem cliques.
+4. **SHOULD** testar exemplos resolvidos, explicações e progressão de ajuda conforme a experiência na matéria. O estudante experiente pode preferir detalhamento sob demanda; não ocultar alternativas acessíveis.
+5. **MUST** preservar semântica, foco, ordem de leitura, reflow, estado de seleção e suporte a tecnologias assistivas; mecanismos visuais de saliência não substituem WCAG.
+6. **MUST** registrar fonte, hipótese, caso de uso, limite, evidência no board quando existir e resultado **documentado / implementado / testado**. A inclusão destas referências é **somente documentação**, não teste da UI.
+
 <!-- UX-LAWS-CATALOG:END -->
 
 <!-- DESIGN-SYSTEM-INTEGRATION:START -->
