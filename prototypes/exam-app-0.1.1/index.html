@@ -1311,7 +1311,7 @@ a.rp-link:hover{background:var(--active)}
 <div class="dlg" id="dlg"></div>
 <div class="pal" id="pal"><div class="pal-box" role="dialog" aria-modal="true" aria-label="Buscar">
   <div class="pal-head"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
-  <input id="palIn" type="text" role="combobox" aria-autocomplete="list" aria-controls="palList" aria-expanded="true" placeholder="Buscar objetos e texto dos PDFs neste espaço" autocomplete="off" spellcheck="false">
+  <input id="palIn" type="text" role="combobox" aria-autocomplete="list" aria-controls="palList" aria-expanded="false" placeholder="Buscar objetos e texto dos PDFs neste espaço" autocomplete="off" spellcheck="false">
   <button class="icon-btn" data-close aria-label="Fechar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
   <div class="pal-list" id="palList" role="listbox" aria-label="Resultados da busca"></div>
 </div></div>
@@ -2031,9 +2031,9 @@ async function buildIndex(){
   })();
   return indexing;
 }
-let palOpen=false, palSel=0, palItems=[], palNewTab=false;
-function openSearch(newTab=false){ closePops(); closeCtx&&closeCtx(); palNewTab=newTab; palOpen=true; $('pal').classList.add('on'); $('pal').setAttribute('aria-label',newTab?'Abrir em nova aba':'Buscar'); $('palIn').placeholder=newTab?'Buscar conteúdo para abrir em nova aba':'Buscar objetos e texto dos PDFs neste espaço'; $('palIn').value=''; renderPal(); setTimeout(()=>$('palIn').focus(),10); if(hasPdf) buildIndex(); }
-function closePal(){ palOpen=false; palNewTab=false; $('pal').classList.remove('on'); }
+let palOpen=false, palSel=0, palItems=[], palNewTab=false, palOpener=null;
+function openSearch(newTab=false){ if(typeof newTab!=='boolean') newTab=false; palOpener=document.activeElement&&document.activeElement!==document.body?document.activeElement:$('searchBtn'); closePops(); closeCtx&&closeCtx(); palNewTab=newTab; palOpen=true; $('pal').classList.add('on'); $('palIn').setAttribute('aria-expanded','true'); $('pal').setAttribute('aria-label',newTab?'Abrir em nova aba':'Buscar'); $('palIn').placeholder=newTab?'Buscar conteúdo para abrir em nova aba':'Buscar objetos e texto dos PDFs neste espaço'; $('palIn').value=''; renderPal(); setTimeout(()=>$('palIn').focus(),10); if(hasPdf) buildIndex(); }
+function closePal(){ if(!palOpen) return; palOpen=false; palNewTab=false; $('pal').classList.remove('on'); $('palIn').setAttribute('aria-expanded','false'); $('palIn').removeAttribute('aria-activedescendant'); const opener=palOpener; palOpener=null; if(opener&&opener.isConnected&&typeof opener.focus==='function') opener.focus(); }
 function hl(t,q){ if(!q) return esc(t); const n=norm(t); let out='',k=0,i;
   while((i=n.indexOf(q,k))>-1){ out+=esc(t.slice(k,i))+'<mark>'+esc(t.slice(i,i+q.length))+'</mark>'; k=i+q.length; } return out+esc(t.slice(k)); }
 function renderPal(){
