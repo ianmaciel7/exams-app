@@ -1830,6 +1830,41 @@ DEPOIS: simulado criado a partir do filtro da questão manual | PNG real: assets
 
 DEPOIS: atalho de erros inclui resposta manual incorreta | PNG real: assets/issue100_after_erros.png
 
+## 34. PDF.js — diagnóstico de texto, canvas, DPR e zoom (#111 #112)
+<!-- container e1177 @ (18000,11000) -->
+
+Evidência nativa do Exam App: Playwright Chromium, PDF da segunda retificação edital-2a-retificacao.pdf. Capturas reais no mesmo documento e DPR 2 (100%/200%), antes e depois do PR. Canvas fornece pixels; textLayer fornece seleção/cópia. Este teste não prova paridade com Readwise nem visualizador nativo, e não substitui Firefox/Edge. Métricas por cenário em pdf112_diagnostic.json.
+
+![imagem e1179](assets/pdf112_before_dpr2_zoom1.png)
+
+![imagem e1181](assets/pdf112_after_dpr2_zoom1.png)
+
+ANTES: página e camada de texto, DPR 2 / 100% | assets/pdf112_before_dpr2_zoom1.png
+
+DEPOIS: página e camada de texto, DPR 2 / 100% | assets/pdf112_after_dpr2_zoom1.png
+
+![imagem e1183](assets/pdf112_before_dpr2_zoom2.png)
+
+![imagem e1185](assets/pdf112_after_dpr2_zoom2.png)
+
+ANTES: página e camada de texto, DPR 2 / 200% | assets/pdf112_before_dpr2_zoom2.png
+
+DEPOIS: página e camada de texto, DPR 2 / 200% | assets/pdf112_after_dpr2_zoom2.png
+
+> **Medições reais de canvas/textLayer**
+> before DPR=1 zoom=1 página=1 canvas=754×1066 CSS=754.0×1077.0 ratio=1.00 textSpans=157 status=untracked
+> before DPR=1 zoom=1.5 página=1 canvas=754×1066 CSS=754.0×1616.0 ratio=1.00 textSpans=157 status=untracked
+> before DPR=1 zoom=2 página=1 canvas=754×1066 CSS=754.0×2155.0 ratio=1.00 textSpans=157 status=untracked
+> before DPR=2 zoom=1 página=1 canvas=1508×2132 CSS=754.0×1077.0 ratio=2.00 textSpans=157 status=untracked
+> before DPR=2 zoom=1.5 página=1 canvas=1508×2132 CSS=754.0×1616.0 ratio=2.00 textSpans=157 status=untracked
+> before DPR=2 zoom=2 página=1 canvas=1508×2132 CSS=754.0×2155.0 ratio=2.00 textSpans=157 status=untracked
+> after DPR=1 zoom=1 página=1 canvas=754×1066 CSS=754.0×1077.0 ratio=1.00 textSpans=157 status=ready
+> after DPR=1 zoom=1.5 página=1 canvas=754×1066 CSS=754.0×1616.0 ratio=1.00 textSpans=157 status=ready
+> after DPR=1 zoom=2 página=1 canvas=754×1066 CSS=754.0×2155.0 ratio=1.00 textSpans=157 status=ready
+> after DPR=2 zoom=1 página=1 canvas=1508×2132 CSS=754.0×1077.0 ratio=2.00 textSpans=157 status=ready
+> after DPR=2 zoom=1.5 página=1 canvas=1508×2132 CSS=754.0×1616.0 ratio=2.00 textSpans=157 status=ready
+> after DPR=2 zoom=2 página=1 canvas=1508×2132 CSS=754.0×2155.0 ratio=2.00 textSpans=157 status=ready
+
 ## 10. Arquivos do projeto (Dataprev 2026 e referências)
 <!-- container e363 @ (0,12666) -->
 

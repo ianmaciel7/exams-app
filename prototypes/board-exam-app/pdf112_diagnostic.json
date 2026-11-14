@@ -1,0 +1,348 @@
+{
+  "source": "Playwright Chromium",
+  "viewport": {
+    "width": 1100,
+    "height": 850
+  },
+  "scenarios": [
+    {
+      "version": "before",
+      "dpr": 1,
+      "zoom": 1,
+      "page": 1,
+      "canvasBacking": {
+        "w": 754,
+        "h": 1066
+      },
+      "css": {
+        "w": 754,
+        "h": 1077
+      },
+      "ratio": 1,
+      "textSpanCount": 157,
+      "textLayer": {
+        "w": 754,
+        "h": 1066
+      },
+      "selectionProbe": "2",
+      "status": "untracked",
+      "horizontalDelta": 0,
+      "verticalDelta": 11
+    },
+    {
+      "version": "before",
+      "dpr": 1,
+      "zoom": 1.5,
+      "page": 1,
+      "canvasBacking": {
+        "w": 754,
+        "h": 1066
+      },
+      "css": {
+        "w": 754,
+        "h": 1616
+      },
+      "ratio": 1,
+      "textSpanCount": 157,
+      "textLayer": {
+        "w": 754,
+        "h": 1066
+      },
+      "selectionProbe": "2",
+      "status": "untracked",
+      "horizontalDelta": 0,
+      "verticalDelta": 550
+    },
+    {
+      "version": "before",
+      "dpr": 1,
+      "zoom": 2,
+      "page": 1,
+      "canvasBacking": {
+        "w": 754,
+        "h": 1066
+      },
+      "css": {
+        "w": 754,
+        "h": 2155
+      },
+      "ratio": 1,
+      "textSpanCount": 157,
+      "textLayer": {
+        "w": 754,
+        "h": 1066
+      },
+      "selectionProbe": "2",
+      "status": "untracked",
+      "horizontalDelta": 0,
+      "verticalDelta": 1089
+    },
+    {
+      "version": "before",
+      "dpr": 2,
+      "zoom": 1,
+      "page": 1,
+      "canvasBacking": {
+        "w": 1508,
+        "h": 2132
+      },
+      "css": {
+        "w": 754,
+        "h": 1077
+      },
+      "ratio": 2,
+      "textSpanCount": 157,
+      "textLayer": {
+        "w": 754,
+        "h": 1066
+      },
+      "selectionProbe": "2",
+      "status": "untracked",
+      "horizontalDelta": 0,
+      "verticalDelta": 11
+    },
+    {
+      "screenshot": "pdf112_before_dpr2_zoom1.png",
+      "version": "before",
+      "dpr": 2,
+      "zoom": 1,
+      "page": 1,
+      "textCount": 157
+    },
+    {
+      "version": "before",
+      "dpr": 2,
+      "zoom": 1.5,
+      "page": 1,
+      "canvasBacking": {
+        "w": 1508,
+        "h": 2132
+      },
+      "css": {
+        "w": 754,
+        "h": 1616
+      },
+      "ratio": 2,
+      "textSpanCount": 157,
+      "textLayer": {
+        "w": 754,
+        "h": 1066
+      },
+      "selectionProbe": "2",
+      "status": "untracked",
+      "horizontalDelta": 0,
+      "verticalDelta": 550
+    },
+    {
+      "version": "before",
+      "dpr": 2,
+      "zoom": 2,
+      "page": 1,
+      "canvasBacking": {
+        "w": 1508,
+        "h": 2132
+      },
+      "css": {
+        "w": 754,
+        "h": 2155
+      },
+      "ratio": 2,
+      "textSpanCount": 157,
+      "textLayer": {
+        "w": 754,
+        "h": 1066
+      },
+      "selectionProbe": "2",
+      "status": "untracked",
+      "horizontalDelta": 0,
+      "verticalDelta": 1089
+    },
+    {
+      "screenshot": "pdf112_before_dpr2_zoom2.png",
+      "version": "before",
+      "dpr": 2,
+      "zoom": 2,
+      "page": 1,
+      "textCount": 157
+    },
+    {
+      "version": "after",
+      "dpr": 1,
+      "zoom": 1,
+      "page": 1,
+      "canvasBacking": {
+        "w": 754,
+        "h": 1066
+      },
+      "css": {
+        "w": 754,
+        "h": 1077
+      },
+      "ratio": 1,
+      "textSpanCount": 157,
+      "textLayer": {
+        "w": 754,
+        "h": 1066
+      },
+      "selectionProbe": "2",
+      "status": "ready",
+      "horizontalDelta": 0,
+      "verticalDelta": 11
+    },
+    {
+      "version": "after",
+      "dpr": 1,
+      "zoom": 1.5,
+      "page": 1,
+      "canvasBacking": {
+        "w": 754,
+        "h": 1066
+      },
+      "css": {
+        "w": 754,
+        "h": 1616
+      },
+      "ratio": 1,
+      "textSpanCount": 157,
+      "textLayer": {
+        "w": 754,
+        "h": 1066
+      },
+      "selectionProbe": "2",
+      "status": "ready",
+      "horizontalDelta": 0,
+      "verticalDelta": 550
+    },
+    {
+      "version": "after",
+      "dpr": 1,
+      "zoom": 2,
+      "page": 1,
+      "canvasBacking": {
+        "w": 754,
+        "h": 1066
+      },
+      "css": {
+        "w": 754,
+        "h": 2155
+      },
+      "ratio": 1,
+      "textSpanCount": 157,
+      "textLayer": {
+        "w": 754,
+        "h": 1066
+      },
+      "selectionProbe": "2",
+      "status": "ready",
+      "horizontalDelta": 0,
+      "verticalDelta": 1089
+    },
+    {
+      "version": "after",
+      "dpr": 1,
+      "selection": "RETIFICAÇÃO",
+      "copy": "RETIFICAÇÃO"
+    },
+    {
+      "version": "after",
+      "dpr": 1,
+      "recovery": "synthetic textLayer error UI state + real retry handler succeeds, canvas preserved"
+    },
+    {
+      "version": "after",
+      "dpr": 2,
+      "zoom": 1,
+      "page": 1,
+      "canvasBacking": {
+        "w": 1508,
+        "h": 2132
+      },
+      "css": {
+        "w": 754,
+        "h": 1077
+      },
+      "ratio": 2,
+      "textSpanCount": 157,
+      "textLayer": {
+        "w": 754,
+        "h": 1066
+      },
+      "selectionProbe": "2",
+      "status": "ready",
+      "horizontalDelta": 0,
+      "verticalDelta": 11
+    },
+    {
+      "screenshot": "pdf112_after_dpr2_zoom1.png",
+      "version": "after",
+      "dpr": 2,
+      "zoom": 1,
+      "page": 1,
+      "textCount": 157
+    },
+    {
+      "version": "after",
+      "dpr": 2,
+      "zoom": 1.5,
+      "page": 1,
+      "canvasBacking": {
+        "w": 1508,
+        "h": 2132
+      },
+      "css": {
+        "w": 754,
+        "h": 1616
+      },
+      "ratio": 2,
+      "textSpanCount": 157,
+      "textLayer": {
+        "w": 754,
+        "h": 1066
+      },
+      "selectionProbe": "2",
+      "status": "ready",
+      "horizontalDelta": 0,
+      "verticalDelta": 550
+    },
+    {
+      "version": "after",
+      "dpr": 2,
+      "zoom": 2,
+      "page": 1,
+      "canvasBacking": {
+        "w": 1508,
+        "h": 2132
+      },
+      "css": {
+        "w": 754,
+        "h": 2155
+      },
+      "ratio": 2,
+      "textSpanCount": 157,
+      "textLayer": {
+        "w": 754,
+        "h": 1066
+      },
+      "selectionProbe": "2",
+      "status": "ready",
+      "horizontalDelta": 0,
+      "verticalDelta": 1089
+    },
+    {
+      "screenshot": "pdf112_after_dpr2_zoom2.png",
+      "version": "after",
+      "dpr": 2,
+      "zoom": 2,
+      "page": 1,
+      "textCount": 157
+    },
+    {
+      "version": "after",
+      "dpr": 2,
+      "selection": "RETIFICAÇÃO",
+      "copy": "RETIFICAÇÃO"
+    }
+  ],
+  "errors": [],
+  "generatedAt": "2026-11-14T14:40:04.029Z"
+}
