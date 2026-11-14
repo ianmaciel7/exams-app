@@ -2136,11 +2136,12 @@ applySideW(sideW, false);
     });
   }
 }
+let wsReady=false;
 function setCollapsed(c){ app.classList.toggle('collapsed',c); store.set('collapsed',c);
   $('collapse').setAttribute('aria-label',c?'Abrir barra lateral':'Recolher barra lateral');
   $('collapse').title=(c?'Abrir':'Recolher')+' barra lateral (Ctrl+B)';
   const wsSide=$('wsSide'); if(wsSide){ wsSide.setAttribute('aria-label',c?'Abrir barra lateral':'Recolher barra lateral'); wsSide.title=(c?'Abrir':'Recolher')+' barra lateral (Ctrl+B)'; }
-  closePops(); if(typeof curTab==='function' && typeof wsPaint==='function') wsPaint(); }
+  closePops(); if(wsReady && typeof wsPaint==='function') wsPaint(); }
 function toggleSide(){ if(isPhone()) app.classList.toggle('open'); else setCollapsed(!app.classList.contains('collapsed')); }
 if(store.get('collapsed')) setCollapsed(true);
 $('collapse').onclick=toggleSide;
@@ -4194,8 +4195,8 @@ RP.tabs=RP.tabs.filter(t=>t&&t.id&&Array.isArray(t.views)); RP.tabs.forEach(t=>{
 RP.tabs=RP.tabs.filter(t=>t.views.length); if(!RP.tabs.some(t=>t.id===RP.active)) RP.active=RP.tabs[0]?RP.tabs[0].id:null;
 const savedRpw=+(store.get('rpw')||RP.w);
 RP.w=Math.min(Math.max(savedRpw||420,240),640);
-const curTab=()=>WS.tabs.find(t=>t.id===WS.active)||WS.tabs[0];
-const rpTab=()=>RP.tabs.find(t=>t.id===RP.active)||RP.tabs[0];
+function curTab(){ return (typeof WS!=='undefined'&&WS.tabs&&WS.tabs.find(t=>t.id===WS.active))||(typeof WS!=='undefined'&&WS.tabs&&WS.tabs[0])||null; }
+function rpTab(){ return (typeof RP!=='undefined'&&RP.tabs&&RP.tabs.find(t=>t.id===RP.active))||(typeof RP!=='undefined'&&RP.tabs&&RP.tabs[0])||null; }
 function wsSave(){ try{ localStorage.setItem(WS_KEY,JSON.stringify({active:WS.active,tabs:WS.tabs.map(t=>({id:t.id,hist:t.hist,i:t.i,title:t.title,pinned:!!t.pinned,sc:t.sc,ui:t.ui})),rp:RP})); }catch(e){} }
 const isObjHref=h=>{ h=String(h||''); if(h.startsWith('#/')) return true; try{ return docsOf(space).some(d=>'#'+d.id===h); }catch(e){ return false; } };
 
@@ -4239,6 +4240,7 @@ function wsLabels(){ const cnt={}; WS.tabs.forEach(t=>{ const k=t.title||'Nova a
   const seen={}, tot={}; out.forEach(l=>{ tot[l]=(tot[l]||0)+1; }); return out.map(l=>{ if(tot[l]<2) return l; seen[l]=(seen[l]||0)+1; return l+' ('+seen[l]+')'; }); }
 const WI_PIN='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17v5M9 3h6l-1 6 3 3H7l3-3z"/></svg>';
 function wsPaint(){
+  if(!wsReady) return;
   const t0=curTab(), one=WS.tabs.length===1; WS.tabs.sort((a,b)=>Number(!!b.pinned)-Number(!!a.pinned));
   const list=$('wsTabList'), n=WS.tabs.length, GAP=5, MIN=82, MAXW=200;
   const ob=$('wsOverflow'), bar=$('wsTabs'), cs=getComputedStyle(bar); let used=0, cnt=0; [...bar.children].forEach(c=>{ if(c===list||c===ob||c.id==='wsLoad'||!c.offsetParent) return; used+=c.offsetWidth; cnt++; });
@@ -4713,7 +4715,7 @@ $('wsTabList').addEventListener('pointerleave',clearPreview);$('wsTabList').addE
 // Context actions work for every internal object link, including global navigation.
 document.addEventListener('contextmenu',e=>{const a=e.target.closest('a[href^="#"]');if(!a||!a.closest('#nav,#view,#props'))return;const h=a.getAttribute('href');if(!isObjHref(h))return;e.preventDefault();e.stopImmediatePropagation();miniMenu(a,[{t:'Abrir na aba atual',ic:WI.obj,fn:()=>wsOpenMain(h)},{t:'Abrir em nova aba',ic:WI.plus,fn:()=>wsOpenTab(h)},{t:'Abrir no painel direito',ic:WI.panel,fn:()=>rpOpenObj(h)}]);},true);
 
-wsPaint(); wsPaintNav(); applyRP(false);
+wsReady=true; wsPaint(); wsPaintNav(); applyRP(false);
 { let rq=0, rpAuto=false; const fit=()=>{ rq=0; wsPaint(); if(MQT.matches) return; const mainEl=document.querySelector('.main'); const w=mainEl.offsetWidth-(rpVisible()?0:(RP.w||420));
     if(rpVisible()&&w<480){ RP.open=false; rpAuto=true; applyRP(false); wsPaint(); } else if(!rpVisible()&&rpAuto&&w>=560){ RP.open=true; rpAuto=false; applyRP(false); wsPaint(); } };
   const kick=()=>{ if(!rq) rq=requestAnimationFrame(fit); }; addEventListener('resize',kick); if(window.ResizeObserver) new ResizeObserver(kick).observe($('wsTabList')); setTimeout(kick,50); }
