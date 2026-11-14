@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
-"""Proxy Local Seguro para Claude Pro Frame Database.
+"""Opt-in, local proof of concept for the private, unsupported Claude Artifact DB API.
 
-Escuta ESTRITAMENTE em 127.0.0.1.
-Permite exclusivamente operacoes sobre documentos e colecoes com prefixo 'bridge-poc'.
-Nunca expoe tokens de autenticacao para o cliente nem nos logs.
+No public interface and no credentials in browser responses. Not a production sync service.
 """
 
 import http.server
@@ -27,8 +25,8 @@ DOC_ID = re.compile(r"[A-Za-z0-9_-]{1,96}\Z")
 try:
     token = auth.get_token()
     client = api.FrameClient(token)
-except Exception as e:
-    print(f"[Proxy Init Error] Nao foi possivel carregar credenciais: {e}", file=sys.stderr)
+except Exception:
+    print("[Proxy Init Error] Install/authenticate claude-artifact-cli and retry.", file=sys.stderr)
     sys.exit(1)
 
 
