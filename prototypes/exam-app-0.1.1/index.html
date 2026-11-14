@@ -3083,11 +3083,14 @@ function command(id,title,shortcut,category,priority,available,execute){
 }
 const isMacShortcut=()=>/Mac|iPhone|iPad/.test(navigator.userAgentData?.platform||navigator.platform||'');
 function formatShortcut(shortcut){
-  return shortcut.split('|').map(binding=>binding
-    .replace(/Mod/g,isMacShortcut()?'⌘':'Ctrl')
-    .replace(/Alt/g,isMacShortcut()?'Option':'Alt')
-    .replace(/\+/g,' + ')
-    .replace(/Plus/g,'+')).join(' / ');
+  return shortcut.split('|').map(binding=>{
+    if(binding==='Plus') return '+';
+    return binding.split('+').map(part=>
+      part==='Mod'?(isMacShortcut()?'⌘':'Ctrl'):
+      part==='Alt'?(isMacShortcut()?'Option':'Alt'):
+      part.length===1?part.toUpperCase():part
+    ).join(' + ');
+  }).join(' / ');
 }
 function shortcutMatches(e,binding){
   if(binding==='Plus') return !e.altKey&&!e.ctrlKey&&!e.metaKey&&(e.key==='+'||e.key==='=');
