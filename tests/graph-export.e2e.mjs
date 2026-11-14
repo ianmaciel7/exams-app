@@ -48,7 +48,7 @@ try {
       assert.ok(bytes.length > 10000, 'PNG must not be empty');
       assert.equal(bytes.readUInt32BE(16), dims.width, 'export matches canvas pixel width');
       assert.equal(bytes.readUInt32BE(20), dims.height, 'export matches canvas pixel height');
-      report.cases.push({ width, ...dims, savedFile: filename, pngBytes: bytes.length,
+      report.cases.push({ viewportWidth: width, ...dims, savedFile: filename, pngBytes: bytes.length,
         screenshot: 'issue68_graph_toolbar_' + width + '.png', keyboardExport: true });
     } finally {
       await context.close();
