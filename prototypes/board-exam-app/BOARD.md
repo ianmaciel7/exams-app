@@ -2180,34 +2180,134 @@ Botão de exportação na barra do grafo, viewport 1366px
 
 PNG real gerado no canvas desktop, pixel ratio 2
 
-## 43. Questões contextuais — Issue #136: alternativas alinhadas e CSS compartilhado
+## 43. Prova de Conceito: Integração Claude Pro Storage Bridge (localhost vs claude.ai)
 <!-- container e1371 @ (36000,11000) -->
 
-Diagnóstico comprovado pelo DOM: .qf-list renderizava s-question sem .study-shell, então label.s-option perdia display:flex e hitboxes. CSS compartilhado via :is(.study-shell,.practice-list), sem duplicar implementação do componente. E2E Chromium verifica baseline antes, card contextual desktop/mobile e banco global, separação Questão / Disciplina, seleção por label. Capturas reais desta PR; a screenshot original do usuário permanece fora do repositório. Não demonstra validação em todos os browsers, zoom 200% ou com painel Gráfico aberto.
+### Veredito da Prova de Conceito: Inviável via Browser Bridge (Bloqueado por CSP e Sandbox)
 
-![imagem e1373](assets/issue136_before_context_1366.png)
+Testamos a comunicação entre o Exam App em localhost (porta 8765) e o Claude Pro Storage (window.storage no Artifact a728ae48).
+
+- Testes unitários do protocolo (MessageChannel, CRUD, timeout, validação de chaves e origens): 6/6 passaram.
+- Teste de incorporação em iframe: Bloqueado pelo navegador via CSP frame-ancestors self.
+- Teste de janela autenticada (window.open): Desacoplado pelo navegador via Cross-Origin-Opener-Policy (same-origin-allow-popups).
+- Teste de postMessage: Inalcançável devido ao sandboxing em 3 camadas do Claude (claude.ai -> frame.claudeusercontent.com -> index.html).
+- Fechamento de aba: Canais em memória são destruídos com a aba; não há persistência autônoma.
+
+Evidência técnica registrada em docs/reports/claude-storage-bridge/CLAUDE_STORAGE_BRIDGE_INVESTIGATION.md.
+
+![imagem e1373](assets/evidence-iframe-csp-blocked.png)
+
+Evidência de execução real no Google Chrome: O navegador acusa 'Framing https://claude.ai/ violates Content Security Policy: frame-ancestors... The request has been blocked'. O iframe renderiza em branco e o canal postMessage é recusado pela Same-Origin Policy. Recomendação: Manter armazenamento local estruturado (localStorage/IndexedDB) e publicação estática via claude-artifact publish.
+
+## 44. Questões contextuais — Issue #136: alternativas alinhadas e CSS compartilhado
+<!-- container e1381 @ (38500,11000) -->
+
+Restaurado após conflito de IDs introduzido pela PR #142. Causa original validada por DOM: alternativas em páginas contextuais perdiam display:flex fora de .study-shell. As quatro capturas reais da PR #141 e o relatório issue136_e2e.json documentam o antes/depois em desktop, 390px e banco global. Implementação: CSS compartilhado com :is(.study-shell,.practice-list). Não equivale à conclusão de todos os critérios da issue #136; permanecem zoom, painel lateral, navegação por teclado e demais rotas.
+
+![imagem e1383](assets/issue136_before_context_1366.png)
+
+![imagem e1375](assets/issue136_after_context_1366.png)
 
 ANTES: alternativas inline no concurso, sem estilização da lista de questões
 
+DEPOIS: alternativas em linhas/click targets, concurso no desktop
+
+![imagem e1377](assets/issue136_after_context_390.png)
+
 ![imagem e1379](assets/issue136_after_global_1366.png)
+
+DEPOIS: alternativas em linhas e texto quebrando, concurso em 390px
 
 DEPOIS: banco global preserva o mesmo componente de questões
 
-## 44. Implementação e Validação E2E: Claude Pro Storage com Proxy Blindado e Fila Offline-First
-<!-- container e1375 @ (38000,11000) -->
+## 45. SpaceSwitcher — Issue #138: busca, reordenação e persistência
+<!-- container e1385 @ (40500,11000) -->
 
-### Implementação e Comprovação de Sincronização Bidirecional Real no Claude Pro
+Implementação observável: o SpaceSwitcher passa a oferecer busca por nome com normalização de acentos, estado vazio, seleção/aria-selected, drag handle e reordenação por teclado Alt+ArrowUp/Down. A ordem é salva por ID em spaceOrder, distinta dos objetos de espaço persistidos em spaces; nomes e seleção sobrevivem à recarga. Arraste por Pointer Events tem threshold de 7px, indicação de destino e cancelamento Escape/pointercancel sem mudança. E2E real Chromium: reprodução anterior, busca, criação de dois espaços, reordenação por teclado e mouse, recarga, cancelamento e viewport 390px; ver issue138_spaces_e2e.json. Limite: toque físico, leitores de tela e sincronização entre dispositivos não foram validados.
 
-Implementamos a integração do Exam App com o Claude Pro Artifact Database (Frame DB) via proxy local blindado em Python (127.0.0.1:8766) e motor de sincronização offline-first.
+![imagem e1387](assets/issue138_before_desktop.png)
 
-- Blindagem de Segurança do Proxy: Proteção estrita contra DNS Rebinding (Host header), CORS fechado para localhost:8765, sanitização total de logs e regex contra path traversal.
-- Ativação no Artifact Principal (MeCzKuKCsr6fY4F8AGxnyC): Publicado com capabilities db e user ativas na Anthropic.
-- Motor Offline-First: Operação imediata em localStorage + fila de saída persistente (Outbox) com reconciliação LWW por timestamp.
-- Testes Automatizados: 8 testes unitários de segurança/CRUD + 5 testes do Sync Engine + 4 testes E2E com Chromium real via CDP (todos aprovados).
+![imagem e1389](assets/issue138_search_desktop.png)
 
-![imagem e1377](assets/evidence-e2e-sync-badge-active.png)
+ANTES: seletor sem campo de busca e sem alças de reordenação no desktop
 
-Evidência de execução real no Google Chrome: O Exam App exibe o badge SVG ativo de sincronização ao lado do botão PRO no rodapé da barra lateral. Respostas de questões são salvas localmente e sincronizadas em background para a nuvem da Anthropic, sem dependência de aba aberta nem serviços externos pagos.
+DEPOIS: pesquisa incremental, nomes de espaços filtrados sem distinção de acentos
+
+![imagem e1391](assets/issue138_after_keyboard_desktop.png)
+
+![imagem e1393](assets/issue138_after_drag_desktop.png)
+
+DEPOIS: Alt + seta reordena por identidade sem trocar o espaço ativo
+
+DEPOIS: arraste por Pointer Events altera ordem sem perda de contexto
+
+![imagem e1395](assets/issue138_after_mobile_390.png)
+
+DEPOIS: seletor responsivo a 390 CSS px com busca e seleção por toque
+
+## 44. Implementacao e Validacao E2E: Claude Pro Storage com Proxy Blindado e Fila Offline-First
+<!-- container e1440 @ (42000,11000) -->
+
+### Implementacao e Comprovacao de Sincronizacao Bidirecional Real no Claude Pro
+
+Implementamos a integracao do Exam App com o Claude Pro Artifact Database (Frame DB) via proxy local blindado em Python (127.0.0.1:8766) e motor de sincronizacao offline-first.
+
+- Blindagem de Seguranca do Proxy: Protecao estrita contra DNS Rebinding (Host header), CORS fechado para localhost:8765, sanitizacao total de logs e regex contra path traversal.
+- Ativacao no Artifact Principal (MeCzKuKCsr6fY4F8AGxnyC): Publicado com capabilities db e user ativas na Anthropic.
+- Motor Offline-First: Operacao imediata em localStorage + fila de saida persistente (Outbox) com reconciliacao LWW por timestamp.
+- Testes Automatizados: 8 testes unitarios de seguranca/CRUD + 5 testes do Sync Engine + 4 testes E2E com Chromium real via CDP (todos aprovados).
+
+![imagem e1442](assets/evidence-e2e-sync-badge-active.png)
+
+Evidencia de execucao real no Google Chrome: O Exam App exibe o badge SVG ativo de sincronizacao ao lado do botao PRO no rodape da barra lateral. Respostas de questoes sao salvas localmente e sincronizadas em background para a nuvem da Anthropic, sem dependencia de aba aberta nem servicos externos pagos.
+
+## 46. Atalhos de teclado — Issue #139: registro e roteamento centralizado
+<!-- container e1397 @ (43000,11000) -->
+
+Roteador declarativo único para comandos globais, categorias, prioridade, chord normalizado Mod (Ctrl/Command), Alt e Shift e disponibilidade contextual. E2E Chromium valida busca Ctrl+K, alternância Ctrl+B, novo objeto Ctrl+Alt+N, proteção de campos e diálogos, janela de ajuda gerada do mesmo catálogo, sem erro JS. Capturas e medições em issue139_commands_e2e.json. Permanecem sem cobertura E2E integral os contextos de grafo, simulado, leitor e atalhos reservados do SO ou IME real; a issue #139 fica aberta até a paridade completa.
+
+![imagem e1399](assets/issue139_before_help.png)
+
+![imagem e1401](assets/issue139_after_help.png)
+
+ANTES: janela de ajuda com tabela fixa de seis atalhos
+
+DEPOIS: janela gerada dinamicamente a partir do registro de comandos
+
+![imagem e1403](assets/issue139_after_search.png)
+
+![imagem e1405](assets/issue139_after_new_item.png)
+
+DEPOIS: Ctrl+K abre busca; campo editável impede Ctrl+B global
+
+DEPOIS: Ctrl+Alt+N abre o menu Novo; digitação não sequestra atalhos
+
+## 47. Graph State & Space Isolation — Issue #145: isolamento por espaço e invalidação reativa
+<!-- container e1407 @ (45000,11000) -->
+
+Implementação e Auditoria Issue #145:
+
+1. Isolamento Estrito por Espaço:
+- A função G(spId) passa a construir o subgrafo restrito às entidades nativas do espaço (concursos, edições, cargos, documentos, questões vinculadas).
+- Entidades globais de suporte (órgão, banca, disciplina) só entram no subgrafo se forem ativamente referenciadas por um objeto nativo do espaço.
+- Nenhuma entidade privada ou questão de outro espaço vaza para o grafo, contagens ou backlinks.
+
+2. Invalidação Reativa e Eliminação de Stale Cache de 400ms:
+- O hash gsig(spId) agora monitora a assinatura completa de cada entidade, vínculos ativos (órgão, banca, edição, cargo, disciplina), overrides do store ('ov') e exclusões na lixeira (trashSet).
+- Removido o bypass cego de 400ms em gr(); se gsig alterar por edição de relação ou troca de espaço, a reconstrução é imediata.
+- Cache GR_CACHE mapeado por ID de espaço, permitindo alternância instantânea entre espaços sem recálculo desnecessário e sem dados cruzados.
+
+3. Tratamento Explícito de Contexto Fixado Estrangeiro (Painel Contextual):
+- Quando uma aba lateral foi fixada em um objeto do Espaço A e o usuário altera para o Espaço B, o painel exibe aviso explícito: 'Objeto não pertence a este espaço' com botão 'Seguir contexto do espaço atual' (data-unpin).
+- Eliminação de links órfãos ou nós fantasmas quando uma entidade da extremidade é excluída.
+
+4. Testes Automatizados de Regressão:
+- Criada suíte de testes unitários em tests/graph-space-isolation.test.mjs com 5 cenários verificando:
+  * Isolamento Espaço A vs B;
+  * Alternância instantânea de espaço;
+  * Invalidação imediata por mudança de relações/metadados/overrides;
+  * Exclusão e ausência de arestas órfãs;
+  * Alerta explícito de contexto estrangeiro fixado no painel direito.
 
 ## 10. Arquivos do projeto (Dataprev 2026 e referências)
 <!-- container e363 @ (0,12666) -->

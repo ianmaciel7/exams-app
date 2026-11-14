@@ -2350,7 +2350,7 @@ function openSettingsDialog(){
 }
 function openShortcutsDialog(){
   closePops();
-  dialog({title:'Atalhos de teclado',html:'<dl class="keys"><dt>Ctrl B</dt><dd>Recolher ou abrir a barra lateral</dd><dt>Ctrl K</dt><dd>Buscar documentos</dd><dt>Ctrl Alt N</dt><dd>Criar novo objeto (NewContentMenu)</dd><dt>J / K</dt><dd>Próximo / anterior documento</dd><dt>F2</dt><dd>Renomear o documento aberto</dd><dt>+ / −</dt><dd>Zoom</dd></dl>',ok:'Fechar',noCancel:true});
+  dialog({title:'Atalhos de teclado',html:shortcutCatalogHtml(),ok:'Fechar',noCancel:true});
 }
 $('btnFootSettings')?.addEventListener('click',openSettingsDialog);
 $('btnFootTheme')?.addEventListener('click',()=>{
@@ -3087,22 +3087,115 @@ $('zfit').onclick=()=>setZoom(1);
 let rt; addEventListener('resize',()=>{ clearTimeout(rt); rt=setTimeout(()=>{ if(cur&&cur.pdf&&Math.abs(fitWidth()-baseW)>20) setZoom(zoom); },200); });
 new ResizeObserver(()=>{ clearTimeout(rt); rt=setTimeout(()=>{ if(cur&&cur.pdf&&Math.abs(fitWidth()-baseW)>20) setZoom(zoom); },220); }).observe(view);
 
-/* ---- keyboard ---- */
-document.addEventListener('keydown',e=>{
-  const mod=e.ctrlKey||e.metaKey;
-  if(mod&&e.altKey&&e.key.toLowerCase()==='n'){ e.preventDefault(); openNewMenu(); return; }
-  if(mod&&e.key.toLowerCase()==='b'){ e.preventDefault(); toggleSide(); return; }
-  if(mod&&e.key.toLowerCase()==='k'){ e.preventDefault(); openSearch(); return; }
-  if(e.key==='Escape'){ closePal(); closePops(); closeCtx(); app.classList.remove('open'); return; }
-  if(e.key==='F2'&&cur&&!e.target.closest('input')){ e.preventDefault(); startRename(cur.d.id); return; }
-  if(e.target.closest('input,textarea')||mod) return;
-  if(e.key==='+'||e.key==='=') setZoom(zoom+.1);
-  else if(e.key==='-') setZoom(zoom-.1);
-  else if(e.key==='j'||e.key==='k'){
-    const list=docsOf(space); const i=list.findIndex(x=>cur&&x.id===cur.d.id)+(e.key==='j'?1:-1);
-    if(list[i]) location.hash=list[i].id;
+/* ---- centralized workspace command registry (#139) ----
+   Contextual component handlers (graph, nav tree, dialogs, inputs) remain local.
+   This dispatcher owns application-wide chords and resolves collisions once. */
+const workspaceCommands=[];
+function command(id,title,shortcut,category,priority,available,execute){
+  workspaceCommands.push({id,title,shortcut,category,priority,available,execute});
+}
+const isMacShortcut=()=>/Mac|iPhone|iPad/.test(navigator.userAgentData?.platform||navigator.platform||'');
+function formatShortcut(shortcut){
+  return shortcut.split('|').map(binding=>{
+    if(binding==='Plus') return '+';
+    return binding.split('+').map(part=>
+      part==='Mod'?(isMacShortcut()?'⌘':'Ctrl'):
+      part==='Alt'?(isMacShortcut()?'Option':'Alt'):
+      part.length===1?part.toUpperCase():part
+    ).join(' + ');
+  }).join(' / ');
+}
+function shortcutMatches(e,binding){
+  if(binding==='Plus') return !e.altKey&&!e.ctrlKey&&!e.metaKey&&(e.key==='+'||e.key==='=');
+  const parts=binding.split('+'),key=parts.pop();
+  const mod=parts.includes('Mod'),alt=parts.includes('Alt'),shift=parts.includes('Shift');
+  if(Boolean(e.ctrlKey||e.metaKey)!==mod) return false;
+  if(Boolean(e.altKey)!==alt) return false;
+  if(Boolean(e.shiftKey)!==shift) return false;
+  return e.key.toLowerCase()===key.toLowerCase();
+}
+function commandAvailable(c){try{return !!c.available();}catch(_){return false;}}
+function shortcutCatalogHtml(){
+  const visible=workspaceCommands.filter(commandAvailable).sort((a,b)=>a.category.localeCompare(b.category)||b.priority-a.priority);
+  return '<dl class="keys">'+visible.map(c=>'<dt>'+esc(formatShortcut(c.shortcut))+'</dt><dd>'+esc(c.title)+'</dd>').join('')+'</dl>';
+}
+function commandTargetEditable(target){
+  return !!(target&&(target.isContentEditable||target.closest?.('input,textarea,select,[contenteditable="true"],[role="textbox"]')));
+}
+function routeWorkspaceShortcut(e){
+  if(e.defaultPrevented||e.isComposing||e.keyCode===229)return;
+  if($('dlg')?.classList.contains('on'))return; // modal owns focus, Enter and Escape
+  const target=e.target;
+  // A local editor/search controls its own shortcuts. No global key hijacking.
+  if(commandTargetEditable(target))return;
+  if(target?.closest?.('#gvc'))return; // graph owns +, -, arrows and fit
+  if(palOpen){
+    if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();closePal();return;}
+    if((e.key==='ArrowDown'||e.key==='ArrowUp')&&palItems.length){
+      e.preventDefault();e.stopImmediatePropagation();
+      palSel=e.key==='ArrowDown'?Math.min(palItems.length-1,palSel+1):Math.max(0,palSel-1);
+      markSel();return;
+    }
+    if(e.key==='Enter'){e.preventDefault();e.stopImmediatePropagation();choose(palSel);return;}
+    return;
   }
+  if(target?.closest?.('.sp-entry,.sp-items,.new-menu,.ws-tabmenu,.ctx,.mini-menu'))return;
+  const options=workspaceCommands
+    .filter(c=>c.shortcut.split('|').some(k=>shortcutMatches(e,k))&&commandAvailable(c))
+    .sort((a,b)=>b.priority-a.priority);
+  if(!options.length)return;
+  const chosen=options[0];
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  chosen.execute(e);
+}
+command('workspace.new-object','Criar novo objeto','Mod+Alt+n','Espaço',95,()=>true,()=>openNewMenu());
+command('workspace.sidebar','Abrir ou recolher barra lateral','Mod+b','Espaço',94,()=>true,()=>toggleSide());
+command('workspace.search','Buscar documentos','Mod+k','Espaço',94,()=>true,()=>openSearch(false));
+command('workspace.new-tab','Nova aba do espaço','Alt+t','Abas',80,()=>true,()=>openSearch(true));
+command('workspace.close-tab','Fechar aba atual','Alt+w','Abas',80,()=>!!WS?.tabs?.length,()=>wsClose(WS.active));
+command('workspace.panel','Alternar painel direito','Mod+\\','Abas',80,()=>true,()=>openRP(!rpVisible()));
+command('workspace.tab-prev','Voltar no histórico da aba','Alt+ArrowLeft|Mod+[','Abas',85,()=>true,()=>wsStep(-1));
+command('workspace.tab-next','Avançar no histórico da aba','Alt+ArrowRight|Mod+]','Abas',85,()=>true,()=>wsStep(1));
+command('workspace.tab-cycle','Próxima aba','Mod+Tab','Abas',80,()=>WS?.tabs?.length>1,()=>{
+  const i=WS.tabs.findIndex(t=>t.id===WS.active);wsActivate(WS.tabs[(i+1)%WS.tabs.length].id);
 });
+command('workspace.tab-cycle-back','Aba anterior','Mod+Shift+Tab','Abas',80,()=>WS?.tabs?.length>1,()=>{
+  const i=WS.tabs.findIndex(t=>t.id===WS.active);wsActivate(WS.tabs[(i+WS.tabs.length-1)%WS.tabs.length].id);
+});
+for(let n=1;n<=9;n++){
+  command('workspace.tab-'+n,'Ativar aba '+n,'Alt+'+n,'Abas',80,()=>WS?.tabs?.length>0,()=>{
+    const t=n===9?WS.tabs[WS.tabs.length-1]:WS.tabs[n-1];if(t)wsActivate(t.id);
+  });
+}
+command('workspace.escape','Fechar menus e painéis temporários','Escape','Espaço',10,
+  ()=>!!(document.querySelector('.pop.open,.ctx.open,.new-menu.open')||app.classList.contains('open')||(MQT.matches&&ovOpen)),
+  ()=>{closePal();closePops();closeCtx();if(MQT.matches&&ovOpen)openRP(false);app.classList.remove('open');});
+command('reader.rename','Renomear documento aberto','F2','Leitura',60,()=>!!cur?.d,()=>startRename(cur.d.id));
+command('reader.zoom-in','Aumentar zoom do PDF','Plus','Leitura',55,()=>!!cur?.pdf,()=>setZoom(zoom+.1));
+command('reader.zoom-out','Diminuir zoom do PDF','-','Leitura',55,()=>!!cur?.pdf,()=>setZoom(zoom-.1));
+command('reader.next','Próximo documento','j','Leitura',40,()=>!!cur?.pdf&&!document.querySelector('.s-question'),()=>{
+  const list=docsOf(space),i=list.findIndex(x=>cur&&x.id===cur.d.id)+1;if(list[i])location.hash=list[i].id;
+});
+command('reader.prev','Documento anterior','k','Leitura',40,()=>!!cur?.pdf&&!document.querySelector('.s-question'),()=>{
+  const list=docsOf(space),i=list.findIndex(x=>cur&&x.id===cur.d.id)-1;if(i>=0&&list[i])location.hash=list[i].id;
+});
+const questionAnswerSelector=letter=>'[data-qo-ans$="|'+letter+'"]:not([disabled]),.s-choice[data-alt="'+letter+'"],.sc-alt[data-qo-ans$="|'+letter+'"],.s-question input[type=radio][value="'+letter+'"]:not(:disabled)';
+for(const [n,letter] of ['A','B','C','D','E'].entries()){
+  command('question.answer-'+letter,'Selecionar alternativa '+letter,(n+1)+'|'+letter.toLowerCase(),'Questões',100,
+    ()=>!!document.querySelector(questionAnswerSelector(letter)),
+    ()=>document.querySelector(questionAnswerSelector(letter))?.click());
+}
+command('question.confirm','Confirmar resposta ou avançar','Enter','Questões',95,
+  ()=>!!document.querySelector('[data-st-next],.s-question .main-cta,.op-actions .op-btn[href*="/questao/"]')&&!document.activeElement?.matches('button,a,input,textarea,select'),
+  ()=>document.querySelector('.s-question .main-cta,[data-st-next],.op-actions .op-btn[href*="/questao/"]:last-child')?.click());
+command('question.next','Próxima questão','j','Questões',90,
+  ()=>!!document.querySelector('.op-actions a.op-btn[href*="/questao/"]:last-child'),
+  ()=>document.querySelector('.op-actions a.op-btn[href*="/questao/"]:last-child')?.click());
+command('question.prev','Questão anterior','k','Questões',90,
+  ()=>!!document.querySelector('.op-actions a.op-btn[href*="/questao/"]:first-child'),
+  ()=>document.querySelector('.op-actions a.op-btn[href*="/questao/"]:first-child')?.click());
+document.addEventListener('keydown',routeWorkspaceShortcut);
 
 /* ---- in-page dialog (native prompt/confirm are blocked in the sandbox) ---- */
 function dialog(o){
@@ -4801,10 +4894,7 @@ addEventListener('hashchange',()=>route(false));
 const histSync=()=>{ try{ if(window.navigation){ $('histBack').disabled=!navigation.canGoBack; $('histFwd').disabled=!navigation.canGoForward; } }catch(_){} };
 $('histBack').onclick=()=>history.back(); $('histFwd').onclick=()=>history.forward();
 addEventListener('hashchange',histSync); addEventListener('popstate',histSync); histSync(); setTimeout(histSync,300);
-document.addEventListener('keydown',e=>{ const t=e.target; if(t&&(t.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
-  const alt=e.altKey&&!e.ctrlKey&&!e.metaKey, mod=(e.metaKey||e.ctrlKey)&&!e.altKey;
-  if((alt&&e.key==='ArrowLeft')||(mod&&e.key==='[')){ e.preventDefault(); history.back(); }
-  else if((alt&&e.key==='ArrowRight')||(mod&&e.key===']')){ e.preventDefault(); history.forward(); } });
+/* Historical browser navigation shortcut now resolved by command registry (#139). */
 document.documentElement.lang='pt-BR';
 /* teclado de árvore na barra lateral: setas movem, esquerda/direita recolhem e expandem */
 nav.addEventListener('keydown',e=>{
@@ -4841,27 +4931,68 @@ const kIcon=k=>k==='grafico'?WI.graph:(TYI()[k]||(k==='espaco'?SI.collection:SI.
 function hKind(h){ h=String(h||'').replace(/^#/,''); if(!h) return 'pdf'; const p=h.split('/'); if(p[0]!=='') return 'pdf'; const k=p[1]; if(k==='espaco'||k==='quadro') return 'espaco'; if(k==='tipo') return p[2]||'arquivo'; if(k==='valor') return 'arquivo'; if(k==='simulado'||k==='tentativa') return 'simulado'; if(k==='lixeira') return 'arquivo'; return k; }
 
 /* ---- grafo de objetos do espaço (usado no painel e na página Gráfico) ---- */
-function G(){
-  const N=new Map(), add=(href,title,kind,sub,extra,text)=>{ if(!N.has(href)) N.set(href,{href,title:String(title||'Sem título'),kind,sub:sub||'',extra:extra||[],text:text||'',out:[],inn:[]}); return N.get(href); };
+function G(spId){
+  const sp=spId||space, N=new Map(), add=(href,title,kind,sub,extra,text)=>{ if(!href) return null; if(!N.has(href)) N.set(href,{href,title:String(title||'Sem título'),kind,sub:sub||'',extra:extra||[],text:text||'',out:[],inn:[]}); return N.get(href); };
   const link=(a,b,l)=>{ const A=N.get(a),B=b&&N.get(b); if(!A||!B||A===B) return; if(A.out.some(x=>x[0]===b&&x[1]===l)) return; A.out.push([b,l]); B.inn.push([a,l]); };
-  const eh=e=>e?'#/'+e.type+'/'+e.id:null, guard=f=>{ try{ f(); }catch(err){} };
-  let eds=[]; guard(()=>{ eds=edicoesOf(space); });
-  guard(()=>entsAll().forEach(e=>add('#/'+e.type+'/'+e.id,e.t,e.type,kn(e.type))));
-  guard(()=>CONCURSOS.filter(c=>c.sp===space&&!isT(c.id)).forEach(c=>add('#/concurso/'+c.id,c.t,'concurso','Concurso')));
-  guard(()=>eds.forEach(e=>add('#/edicao/'+e.id,e.t,'edicao','Edição'+(e.ano?' · '+e.ano:''),e.ano?[['Ano',String(e.ano)]]:[])));
-  guard(()=>eds.forEach(e=>cargosOf(e.id).forEach(c=>add('#/cargo/'+c.id,c.t,'cargo','Cargo',c.resumo?[['Resumo',c.resumo]]:[]))));
-  guard(()=>docsOf(space).forEach(d=>add('#'+d.id,d.t,'pdf',d.g||'PDF',[['Categoria',d.cat],['Descrição',d.m]].filter(x=>x[1]))));
-  guard(()=>qObjs().forEach(q=>add('#/questao/'+q.id,qTitle(q),'questao',q.materia||'Questão',[],String(q.enunciado||'').replace(/\s+/g,' ').slice(0,420))));
-  guard(()=>CONCURSOS.forEach(c=>link('#/concurso/'+c.id,eh(findEnt('orgao',concOrgaoName(c))),'Órgão')));
-  guard(()=>eds.forEach(e=>{ const h='#/edicao/'+e.id; link(h,'#/concurso/'+e.conc,'Concurso'); link(h,eh(findEnt('banca',edBancaName(e))),'Banca'); link(h,eh(findEnt('orgao',edOrgaoName(e))),'Órgão'); cargosOf(e.id).forEach(c=>link('#/cargo/'+c.id,h,'Edição')); }));
-  guard(()=>docsOf(space).forEach(d=>{ if(d.edicao) link('#'+d.id,'#/edicao/'+d.edicao,'Edição'); if(d.cargo) link('#'+d.id,'#/cargo/'+d.cargo,'Cargo'); }));
-  guard(()=>qObjs().forEach(q=>{ const h='#/questao/'+q.id; if(q.ed) link(h,'#/edicao/'+q.ed,'Edição'); if(q.cg) link(h,'#/cargo/'+q.cg,'Cargo'); link(h,eh(discEnt(q.materia)),'Disciplina'); link(h,eh(findEnt('banca',q.banca)),'Banca'); }));
-  return {N};
+  const eh=e=>e?'#/'+e.type+'/'+e.id:null, guard=f=>{ try{ f(); }catch(err){ if(typeof console!=='undefined'&&console.warn) console.warn('[G] err:', err); } };
+  const addEnt=e=>{ if(!e||isT(e.id)) return null; return add('#/'+e.type+'/'+e.id,e.t,e.type,kn(e.type)); };
+  let concs=[], eds=[], docs=[], qList=[];
+  guard(()=>{ concs=CONCURSOS.filter(c=>c.sp===sp&&!isT(c.id)); });
+  guard(()=>{ eds=edicoesOf(sp).filter(e=>!isT(e.id)); });
+  const edsSet=new Set(eds.map(e=>e.id));
+  guard(()=>{ docs=docsOf(sp).filter(d=>!isT(d.id)); });
+  guard(()=>{ qList=qObjs().filter(q=>!isT(q.id)&&((q.sp===sp)||(q.conc&&(concursoById(q.conc)||{}).sp===sp)||(q.ed&&edsSet.has(q.ed))||(!q.ed&&!q.user&&sp==='dataprev'))); });
+
+  // 1. Entidades nativas do espaço
+  concs.forEach(c=>add('#/concurso/'+c.id,c.t,'concurso','Concurso'));
+  eds.forEach(e=>add('#/edicao/'+e.id,e.t,'edicao','Edição'+(e.ano?' · '+e.ano:''),e.ano?[['Ano',String(e.ano)]]:[]));
+  eds.forEach(e=>cargosOf(e.id).filter(c=>!isT(c.id)).forEach(c=>add('#/cargo/'+c.id,c.t,'cargo','Cargo',c.resumo?[['Resumo',c.resumo]]:[])));
+  docs.forEach(d=>add('#'+d.id,d.t,'pdf',d.g||'PDF',[['Categoria',d.cat],['Descrição',d.m]].filter(x=>x[1])));
+  qList.forEach(q=>add('#/questao/'+q.id,qTitle(q),'questao',q.materia||'Questão',[],String(q.enunciado||'').replace(/\s+/g,' ').slice(0,420)));
+
+  // 2. Vínculos e entidades de suporte (apenas as referenciadas pelo espaço)
+  concs.forEach(c=>{ const o=findEnt('orgao',concOrgaoName(c)); if(o&&!isT(o.id)){ addEnt(o); link('#/concurso/'+c.id,eh(o),'Órgão'); } });
+  eds.forEach(e=>{
+    const h='#/edicao/'+e.id; link(h,'#/concurso/'+e.conc,'Concurso');
+    const b=findEnt('banca',edBancaName(e)); if(b&&!isT(b.id)){ addEnt(b); link(h,eh(b),'Banca'); }
+    const o=findEnt('orgao',edOrgaoName(e)); if(o&&!isT(o.id)){ addEnt(o); link(h,eh(o),'Órgão'); }
+    cargosOf(e.id).filter(c=>!isT(c.id)).forEach(c=>link('#/cargo/'+c.id,h,'Edição'));
+  });
+  docs.forEach(d=>{ if(d.edicao&&edsSet.has(d.edicao)) link('#'+d.id,'#/edicao/'+d.edicao,'Edição'); if(d.cargo&&cargoById(d.cargo)&&!isT(d.cargo)) link('#'+d.id,'#/cargo/'+d.cargo,'Cargo'); });
+  qList.forEach(q=>{
+    const h='#/questao/'+q.id;
+    if(q.ed&&edsSet.has(q.ed)) link(h,'#/edicao/'+q.ed,'Edição');
+    if(q.cg&&cargoById(q.cg)&&!isT(q.cg)) link(h,'#/cargo/'+q.cg,'Cargo');
+    const d=discEnt(q.materia); if(d&&!isT(d.id)){ addEnt(d); link(h,eh(d),'Disciplina'); }
+    const b=findEnt('banca',q.banca); if(b&&!isT(b.id)){ addEnt(b); link(h,eh(b),'Banca'); }
+  });
+  return {N, space:sp};
 }
-let GR=null; const gsig=()=>{ try{ return [space,entsAll().map(e=>e.id+e.t).join('|'),CONCURSOS.length,docsOf(space).length,qObjs().length].join('~'); }catch(e){ return Math.random(); } };
-const gr=()=>{ const t=performance.now(); if(GR&&t-GR.at<400) return GR; const sg=gsig(); if(!GR||GR.sig!==sg){ GR=G(); GR.sig=sg; } GR.at=t; return GR; };
-const nodeOf=h=>{ if(!h) return null; const N=gr().N; if(N.has(h)) return N.get(h); try{ return N.get(decodeURIComponent(h))||null; }catch(e){ return null; } };
-const nbrs=n=>{ const s=new Set(); n.out.forEach(x=>s.add(x[0])); n.inn.forEach(x=>s.add(x[0])); return [...s].map(h=>gr().N.get(h)).filter(Boolean); };
+const GR_CACHE=new Map();
+const gsig=(spId)=>{
+  const sp=spId||space;
+  try{
+    const concs=CONCURSOS.filter(c=>c.sp===sp&&!isT(c.id));
+    const cSig=concs.map(c=>c.id+':'+c.t+':'+concOrgaoName(c)).join(';');
+    const eds=edicoesOf(sp).filter(e=>!isT(e.id));
+    const eSig=eds.map(e=>e.id+':'+e.t+':'+e.conc+':'+edBancaName(e)+':'+edOrgaoName(e)).join(';');
+    const cgSig=eds.flatMap(e=>cargosOf(e.id).filter(c=>!isT(c.id))).map(c=>c.id+':'+c.t+':'+(c.resumo||'')).join(';');
+    const dSig=docsOf(sp).filter(d=>!isT(d.id)).map(d=>d.id+':'+d.t+':'+(d.edicao||'')+':'+(d.cargo||'')).join(';');
+    const edsSet=new Set(eds.map(e=>e.id));
+    const qList=qObjs().filter(q=>!isT(q.id)&&((q.sp===sp)||(q.conc&&(concursoById(q.conc)||{}).sp===sp)||(q.ed&&edsSet.has(q.ed))||(!q.ed&&!q.user&&sp==='dataprev')));
+    const qSig=qList.map(q=>q.id+':'+qTitle(q)+':'+(q.ed||'')+':'+(q.cg||'')+':'+(q.materia||'')+':'+(q.banca||'')).join(';');
+    const trSig=(typeof trashSet!=='undefined'&&trashSet)?[...trashSet].sort().join(','):'';
+    const ovSig=typeof store!=='undefined'&&store.get?JSON.stringify(store.get('ov')||{}):'';
+    return [sp,cSig,eSig,cgSig,dSig,qSig,trSig,ovSig].join('~');
+  }catch(e){ return sp+'~'+Math.random(); }
+};
+const gr=(spId,force)=>{
+  const sp=spId||space, t=performance.now(), cached=GR_CACHE.get(sp), sg=gsig(sp);
+  if(!force&&cached&&cached.sig===sg) return cached;
+  const g=G(sp); g.sig=sg; g.at=t; GR_CACHE.set(sp,g); return g;
+};
+const nodeOf=(h,spId)=>{ if(!h) return null; const N=gr(spId).N; if(N.has(h)) return N.get(h); try{ return N.get(decodeURIComponent(h))||null; }catch(e){ return null; } };
+const nbrs=(n,spId)=>{ const s=new Set(), g=gr(spId); n.out.forEach(x=>s.add(x[0])); n.inn.forEach(x=>s.add(x[0])); return [...s].map(h=>g.N.get(h)).filter(Boolean); };
 
 /* ---- estado das abas principais e do painel ---- */
 let SV={}; try{ SV=JSON.parse(localStorage.getItem(WS_KEY))||{}; }catch(e){ SV={}; }
@@ -4992,7 +5123,15 @@ const viewById=id=>{ for(const t of RP.tabs) for(const v of t.views) if(v.id===i
 let rpT=null; function rpSoon(){ clearTimeout(rpT); rpT=setTimeout(()=>{ if(rpVisible()) rpRefresh(); },140); }
 function curHref(){ const t=curTab(); let h=t.hist[t.i]||''; h=h.replace(/^(#\/(?:concurso|edicao|cargo|questao|disciplina|banca|orgao)\/[^/?]+)\/.*$/,'$1'); if(!h||h==='#') h=(cur&&cur.d)?'#'+cur.d.id:''; return h; }
 function vNode(v){ return nodeOf(v.ref||curHref()); }
-function vTitle(v){ if(v.type==='obj'){ const n=nodeOf(v.ref); return n?n.title:'Objeto'; } return RT[v.type].n; }
+function vTitle(v){
+  if(v.type==='obj'){ const n=nodeOf(v.ref); return n?n.title:'Objeto'; }
+  if(v.type==='graf'){
+    const n=nodeOf(v.ref||curHref());
+    const fallback=(spaces.find(s=>s.id===space)||{}).name||'Espaço';
+    return RT.graf.n+' · '+(n?n.title:fallback);
+  }
+  return RT[v.type].n;
+}
 function rpPaintTabs(){ gr(); $('rpTabs').innerHTML=RP.tabs.map(t=>{ const on=t.id===RP.active, v=t.views[0], ttl=t.views.length>1&&t.views.every(v=>['back','rel'].includes(v.type))?'Contexto':vTitle(v)+(t.views.length>1?' +'+(t.views.length-1):'');
   return '<div class="ws-tab'+(on?' on':'')+'" role="tab" aria-label="'+esc(ttl)+'" aria-selected="'+on+'" tabindex="'+(on?0:-1)+'" data-rp-tab="'+t.id+'" title="'+esc(t.views.map(vTitle).join(' + '))+'"><span class="ws-ti" aria-hidden="true">'+RT[v.type].ic+'</span><span class="ws-tt">'+esc(ttl)+'</span><button type="button" class="ws-tx" tabindex="'+(on?0:-1)+'" data-rp-tabx="'+t.id+'" aria-label="Fechar aba '+esc(ttl)+'">'+WI.x+'</button></div>'; }).join('');
   const L=$('rpTabs'), on=L.querySelector('.on'); if(on&&L.scrollWidth>L.clientWidth){ const a=on.offsetLeft, b=a+on.offsetWidth; if(a<L.scrollLeft) L.scrollLeft=a-4; else if(b>L.scrollLeft+L.clientWidth) L.scrollLeft=b-L.clientWidth+4; } }
@@ -5012,6 +5151,7 @@ const rpRow=(n,sub)=>{
 const rpEmpty=(t,s,extra)=>'<div class="rp-empty"><b>'+esc(t)+'</b>'+esc(s||'')+(extra||'')+'</div>';
 const toolBtns=(cls)=>'<div class="rp-tools">'+['explorar','graf','back','rel','ia'].map(k=>'<button type="button" class="rp-btn '+(cls||'')+'" data-rp-new="'+k+'">'+RT[k].ic+' '+RT[k].n+'</button>').join('')+'</div>';
 function ctxBar(v,n){
+  if(v.ref&&!n) return '<div class="rp-ctx"><span>Objeto de outro espaço</span><button type="button" class="rp-link" data-unpin="'+v.id+'">Seguir contexto</button></div>';
   if(!v.ref&&!n) return '';
   return '<div class="rp-ctx">'+
     (v.ref?'<span>Fixado em</span>':'<span>Sobre</span>')+
@@ -5032,16 +5172,21 @@ function exRows(v){ const q=norm(String(v.q||'')), all=[...gr().N.values()].filt
   if(!all.length) return '<div class="rp-empty">'+(q?'<b>Nada encontrado para “'+esc(v.q)+'”</b>Tente outra palavra ou outro tipo.':'<b>Nenhum objeto ainda</b>Crie um concurso na barra lateral.')+'</div>';
   const rows=all.slice(0,80), groups=new Map(), tot={}; all.forEach(n=>{ tot[n.kind]=(tot[n.kind]||0)+1; }); rows.forEach(n=>{ const g=groups.get(n.kind)||[]; g.push(n); groups.set(n.kind,g); });
   return [...groups].map(([kind,items])=>'<section class="rp-group" aria-label="'+esc(kn(kind))+'"><div class="rp-group-title">'+esc(kn(kind))+'<span>'+tot[kind]+'</span></div>'+items.map(n=>rpRow(n)).join('')+'</section>').join('')+(all.length>80?'<div class="rp-more">Mostrando 80 de '+all.length+'. Refine a busca.</div>':''); }
-function bodyBack(v){ const n=vNode(v); if(!n) return needCtx();
+function bodyBack(v){ const n=vNode(v);
+  if(v.ref&&!n) return ctxBar(v,n)+rpEmpty('Objeto não pertence a este espaço','O contexto fixado pertence a outro espaço ou não existe mais.','<div class="rp-tools"><button type="button" class="rp-btn" data-unpin="'+v.id+'">Seguir contexto do espaço atual</button></div>');
+  if(!n) return needCtx();
   if(!n.inn.length) return ctxBar(v,n)+rpEmpty('Nada aponta para cá ainda','Quando outro objeto citar “'+n.title+'”, ele aparece nesta lista.');
   const g=gr().N; return ctxBar(v,n)+'<div class="rp-list">'+n.inn.map(([h,l])=>{ const m=g.get(h); return m?rpRow(m,kn(m.kind)+' · como '+l):''; }).join('')+'</div>'; }
-function bodyRel(v){ const n=vNode(v); if(!n) return needCtx(); const g=gr().N, direct=new Set([n.href].concat(nbrs(n).map(x=>x.href))), sc=new Map();
+function bodyRel(v){ const n=vNode(v);
+  if(v.ref&&!n) return ctxBar(v,n)+rpEmpty('Objeto não pertence a este espaço','O contexto fixado pertence a outro espaço ou não existe mais.','<div class="rp-tools"><button type="button" class="rp-btn" data-unpin="'+v.id+'">Seguir contexto do espaço atual</button></div>');
+  if(!n) return needCtx(); const g=gr().N, direct=new Set([n.href].concat(nbrs(n).map(x=>x.href))), sc=new Map();
   nbrs(n).forEach(x=>nbrs(x).forEach(y=>{ if(direct.has(y.href)) return; const s=sc.get(y.href)||{n:y,c:0,via:[]}; s.c++; if(s.via.length<2&&!s.via.includes(x.title)) s.via.push(x.title); sc.set(y.href,s); }));
   const L=[...sc.values()].sort((a,b)=>b.c-a.c||a.n.title.localeCompare(b.n.title,'pt-BR',{numeric:true})).slice(0,12);
   if(!L.length) return ctxBar(v,n)+rpEmpty('Sem conteúdo relacionado','Objetos que compartilham banca, edição, cargo ou disciplina com “'+n.title+'” aparecem aqui.');
   return ctxBar(v,n)+'<div class="rp-list">'+L.map(s=>rpRow(s.n,'via '+s.via.join(', '))).join('')+'</div>'; }
 function bodyGraf(v){
   let n=vNode(v);
+  if(v.ref&&!n) return ctxBar(v,n)+rpEmpty('Objeto não pertence a este espaço','O contexto fixado pertence a outro espaço ou não existe mais.','<div class="rp-tools"><button type="button" class="rp-btn" data-unpin="'+v.id+'">Seguir contexto do espaço atual</button></div>');
   const curH=curHref()||'';
   if(!n && curH.startsWith('#/tipo/')){
     const tKind=curH.replace('#/tipo/','');
@@ -5111,15 +5256,50 @@ let rpSig=null;
 function rpRefresh(){ const a=document.activeElement; if(a&&a.matches&&a.matches('#rpanel input')){ gr(); rpPaintTabs(); return; }
   const t=rpTab(), sig=gr().sig+'|'+curHref(); if(t&&rpSig===sig&&t.views.every(v=>v.type==='explorar'||v.type==='obj')) return; rpPaintAll(); }
 function rpSelect(id){ rpCapture(); RP.active=id; wsSave(); rpPaintAll(); }
-function rpAddTab(type,ref){ const t={id:uid(),views:[{id:uid(),type,f:1,ref:ref||undefined}]}; RP.tabs.push(t); RP.active=t.id; wsSave(); if(!rpVisible()) openRP(true); else rpPaintAll(); }
+/* Identity includes the tool, pinned ref (or following context), and current space.
+   Multiple instances require an explicit duplicate action, not repeated clicks. */
+function rpTabMatches(t,type,ref){
+  const v=t.views.length===1?t.views[0]:null;
+  return !!v&&v.type===type&&(v.ref||'')===(ref||'')&&(!t.sp||t.sp===space);
+}
+function rpAddTab(type,ref){
+  const found=RP.tabs.find(t=>rpTabMatches(t,type,ref));
+  if(found){ rpSelect(found.id); if(!rpVisible()) openRP(true); return; }
+  const first=RP.tabs.length===1?RP.tabs[0]:null;
+  const initial=first&&first.views.length===1&&first.views[0].type==='explorar'&&
+    !first.views[0].q&&!first.views[0].kind&&!first.views[0].ref&&type!=='explorar'&&
+    (!first.sp||first.sp===space);
+  if(initial){
+    first.views=[{id:uid(),type,f:1,ref:ref||undefined}];
+    first.sp=space; RP.active=first.id;
+  }else{
+    const t={id:uid(),sp:space,views:[{id:uid(),type,f:1,ref:ref||undefined}]};
+    RP.tabs.push(t); RP.active=t.id;
+  }
+  wsSave(); if(!rpVisible()) openRP(true); else rpPaintAll();
+}
 function rpStack(type,ref){ const t=rpTab(); if(!t){ rpAddTab(type,ref); return; } if(t.views.length>=3){ toast('Cada aba do painel aceita até 3 visualizações empilhadas'); return; } t.views.forEach(v=>{ v.f=1; }); const v={id:uid(),type,f:1,ref:ref||undefined};if(type==='back')t.views.unshift(v);else t.views.push(v); wsSave(); rpPaintAll(); }
 function rpCloseView(id){ const t=rpTab(); if(!t) return; t.views=t.views.filter(v=>v.id!==id); if(!t.views.length){ RP.tabs=RP.tabs.filter(x=>x!==t); RP.active=RP.tabs[0]?RP.tabs[0].id:null; } wsSave(); rpPaintAll(); }
-function rpCloseTab(id){ const i=RP.tabs.findIndex(t=>t.id===id); if(i<0) return; const t=RP.tabs[i]; RP.tabs.splice(i,1); if(RP.active===id) RP.active=RP.tabs[Math.min(i,RP.tabs.length-1)]?RP.tabs[Math.min(i,RP.tabs.length-1)].id:null; wsSave(); rpPaintAll();
-  toast('Aba do painel fechada',()=>{ RP.tabs.splice(Math.min(i,RP.tabs.length),0,t); RP.active=t.id; wsSave(); rpPaintAll(); }); }
+function rpCloseTab(id){
+  const i=RP.tabs.findIndex(t=>t.id===id); if(i<0) return;
+  const t=RP.tabs[i]; RP.tabs.splice(i,1);
+  if(RP.active===id) RP.active=RP.tabs[Math.min(i,RP.tabs.length-1)]?.id||null;
+  let fallback=null;
+  if(!RP.tabs.length){
+    fallback={id:uid(),sp:space,views:[{id:uid(),type:'explorar',f:1}]};
+    RP.tabs.push(fallback); RP.active=fallback.id;
+  }
+  wsSave(); rpPaintAll();
+  toast('Aba do painel fechada',()=>{
+    if(fallback) RP.tabs=RP.tabs.filter(x=>x.id!==fallback.id);
+    RP.tabs.splice(Math.min(i,RP.tabs.length),0,t);
+    RP.active=t.id; wsSave(); rpPaintAll();
+  });
+}
 function rpCloseOthers(id){ const snap=RP.tabs.slice(), act=RP.active, keep=RP.tabs.filter(t=>t.id===id); if(!keep.length||keep.length===snap.length) return; RP.tabs=keep; RP.active=id; wsSave(); rpPaintAll();
   toast('Outras abas do painel fechadas',()=>{ RP.tabs=snap; RP.active=act; wsSave(); rpPaintAll(); }); }
-function rpOpenObj(h){ if(!isObjHref(h)) return; const found=RP.tabs.find(t=>t.views.some(v=>v.type==='obj'&&v.ref===h)); if(found){rpSelect(found.id);openRP(true);return;} rpCapture();rpAddTab('obj',h); }
-function rpFromView(v,h){ if(!v) return; if(v.type==='explorar'||v.type==='obj'){ v.future=[];v.hist=(v.hist||[]).concat([{type:v.type,ref:v.ref,q:v.q,kind:v.kind}]).slice(-20); v.type='obj'; v.ref=h; wsSave(); rpPaintBody(); rpPaintTabs(); } else if(v.type==='graf'){ v.ref=h; wsSave(); rpPaintBody(); } else rpOpenObj(h); }
+function rpOpenObj(h){ if(!isObjHref(h)) return; const found=RP.tabs.find(t=>(!t.sp||t.sp===space)&&t.views.some(v=>v.type==='obj'&&v.ref===h)); if(found){rpSelect(found.id);openRP(true);return;} rpCapture();rpAddTab('obj',h); }
+function rpFromView(v,h){ if(!v) return; if(v.type==='explorar'||v.type==='obj'){ v.future=[];v.hist=(v.hist||[]).concat([{type:v.type,ref:v.ref,q:v.q,kind:v.kind}]).slice(-20); v.type='obj'; v.ref=h; wsSave(); rpPaintBody(); rpPaintTabs(); } else if(v.type==='graf'){ v.ref=h; wsSave(); rpPaintBody(); rpPaintTabs(); } else rpOpenObj(h); }
 const toolMenu=(anchor,fn)=>miniMenu(anchor,['explorar','graf','back','rel','ia'].map(k=>({t:RT[k].n,ic:RT[k].ic,fn:()=>fn(k)})));
 $('rpAdd').onclick=e=>toolMenu(e.currentTarget,k=>rpAddTab(k));
 $('rpStack').onclick=e=>{ const t=rpTab(); if(t&&t.views.length>=3){ toast('Cada aba do painel aceita até 3 visualizações empilhadas'); return; } toolMenu(e.currentTarget,k=>rpStack(k)); };
@@ -5329,63 +5509,9 @@ function buildGraph(){
   wrap.querySelector('.gv-leg').addEventListener('click',e=>{ const b=e.target.closest('[data-gk]'); if(!b) return; const k=b.dataset.gk, on=b.getAttribute('aria-pressed')!=='true'; GVK[k]=on; b.setAttribute('aria-pressed',on); nodes.forEach(o=>{ if(o.n.kind===k) o.on=on; }); st.alpha=Math.max(st.alpha,.5); invalidate(); });
   cv.style.cursor='grab'; }
 
-/* ---- Atalhos de Teclado para Resolução de Questões (Issues #17 & #19) ---- */
-document.addEventListener('keydown', e => {
-  const t = e.target;
-  if(t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
-  if(e.ctrlKey || e.metaKey || e.altKey) return;
-  
-  // Teclas 1..5 ou A..E para marcar alternativa na questão ativa
-  const keyUpper = e.key.toUpperCase();
-  const altMap = {'1':'A','2':'B','3':'C','4':'D','5':'E','A':'A','B':'B','C':'C','D':'D','E':'E'};
-  if(altMap[keyUpper]){
-    const letter = altMap[keyUpper];
-    const btn = document.querySelector('[data-qo-ans$="|' + letter + '"]:not([disabled])') ||
-                document.querySelector('.s-choice[data-alt="' + letter + '"]') ||
-                document.querySelector('.sc-alt[data-qo-ans$="|' + letter + '"]');
-    if(btn){
-      e.preventDefault();
-      btn.click();
-      return;
-    }
-  }
+/* Question shortcuts are routed by the centralized command registry (#139). */
 
-  // Tecla Enter para confirmar ou avançar
-  if(e.key === 'Enter'){
-    const cta = document.querySelector('.op-actions .op-btn[href*="/questao/"]:last-child') ||
-                document.querySelector('[data-st-next]');
-    if(cta){ e.preventDefault(); cta.click(); return; }
-  }
-
-  // Navegação J (próxima) / K (anterior)
-  if(e.key === 'j' || e.key === 'J'){
-    const nextBtn = document.querySelector('.op-actions a.op-btn[href*="/questao/"]:last-child');
-    if(nextBtn){ e.preventDefault(); nextBtn.click(); return; }
-  }
-  if(e.key === 'k' || e.key === 'K'){
-    const prevBtn = document.querySelector('.op-actions a.op-btn[href*="/questao/"]:first-child');
-    if(prevBtn){ e.preventDefault(); prevBtn.click(); return; }
-  }
-});
-
-/* ---- atalhos ---- */
-document.addEventListener('keydown',e=>{ const t=e.target;
-  if(palOpen){
-    if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();closePal();return;}
-    if(t!==$('palIn')&&(e.key==='ArrowDown'||e.key==='ArrowUp')){e.preventDefault();if(palItems.length){palSel=e.key==='ArrowDown'?Math.min(palItems.length-1,palSel+1):Math.max(0,palSel-1);markSel();}return;}
-    if(t!==$('palIn')&&e.key==='Enter'){e.preventDefault();choose(palSel);return;}
-  }
-  if(t&&(t.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) { if(e.key==='Escape'&&t.closest&&t.closest('#rpanel')) t.blur(); return; }
-  const alt=e.altKey&&!e.ctrlKey&&!e.metaKey, mod=(e.metaKey||e.ctrlKey)&&!e.altKey;
-  if((alt&&e.key==='ArrowLeft')||(mod&&e.key==='[')){ e.preventDefault(); e.stopImmediatePropagation(); wsStep(-1); }
-  else if((alt&&e.key==='ArrowRight')||(mod&&e.key===']')){ e.preventDefault(); e.stopImmediatePropagation(); wsStep(1); }
-  else if((alt||mod)&&!e.shiftKey&&(e.key==='t'||e.key==='T')){ e.preventDefault(); openSearch(true); }
-  else if((alt||mod)&&(e.key==='w'||e.key==='W')){ e.preventDefault(); wsClose(WS.active); }
-  else if(alt&&/^[1-9]$/.test(e.key)){ e.preventDefault(); const nx=e.key==='9'?WS.tabs[WS.tabs.length-1]:WS.tabs[+e.key-1]; if(nx) wsActivate(nx.id); }
-  else if(e.ctrlKey&&e.key==='Tab'){ e.preventDefault(); const k=WS.tabs.findIndex(q=>q.id===WS.active), nx=WS.tabs[(k+(e.shiftKey?-1:1)+WS.tabs.length)%WS.tabs.length]; if(nx) wsActivate(nx.id); }
-  else if(mod&&e.key==='\\'){ e.preventDefault(); openRP(!rpVisible()); }
-  else if(e.key==='Escape'&&MQT.matches&&ovOpen&&!$('pal').classList.contains('on')&&!$('dlg').classList.contains('on')&&!miniEl){ openRP(false); } },true);
-
+/* Global workspace chords are routed by the centralized command registry (#139). */
 
 // Workspace management: separate tab sets, explicit overflow, context menus and drag targets.
 const historyGroup=document.querySelector('#wsTabs .hist');

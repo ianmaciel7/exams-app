@@ -1,123 +1,126 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import http from 'node:http';
 import { spawn } from 'node:child_process';
+import { request } from 'node:http';
+import path from 'node:path';
 
-const PROXY_PORT = 8766;
-const SLUG = '34cd390a-738f-4dfc-8ae2-6c4f90794d74';
+const BASE='http://127.0.0.1:8766';
+const SLUG='34cd390a-738f-4dfc-8ae2-6c4f90794d74';
+const ROOT='/api/storage/'+SLUG+'/bridge-poc';
+const TRUSTED='http://localhost:8765';
 
-function rawRequest({ method = 'GET', path = '/api/health', host = '127.0.0.1:8766', origin = 'http://localhost:8765', body = null }) {
-  return new Promise((resolve, reject) => {
-    const headers = {
-      'Host': host,
-      'Connection': 'close'
-    };
-    if (origin) headers['Origin'] = origin;
-    if (body) {
-      headers['Content-Type'] = 'application/json';
-      headers['Content-Length'] = Buffer.byteLength(body);
-    }
-
-    const req = http.request({
-      hostname: '127.0.0.1',
-      port: PROXY_PORT,
-      path,
-      method,
-      headers
-    }, (res) => {
-      let data = '';
-      res.on('data', chunk => data += chunk);
-      res.on('end', () => {
-        let parsed = null;
-        try { parsed = JSON.parse(data); } catch (e) {}
-        resolve({ status: res.statusCode, headers: res.headers, body: data, json: parsed });
-      });
+async function fetchProxy(route, options={}){
+  const headers={Origin:TRUSTED,...options.headers};
+  return fetch(BASE+route,{...options,headers});
+}
+function forgedHost(route){
+  return new Promise((resolve,reject)=>{
+    const req=request(BASE+route,{method:'GET',headers:{Origin:TRUSTED,Host:'untrusted.example'}},res=>{
+      let text='';
+      res.on('data',chunk=>text+=chunk);
+      res.on('end',()=>resolve({status:res.statusCode,body:text,headers:res.headers}));
     });
-
-    req.on('error', reject);
-    if (body) req.write(body);
+    req.once('error',reject);
     req.end();
   });
 }
 
-test('Auditoria de Seguranca do Hardened Claude Storage Proxy', async (t) => {
-  let proxyProc = null;
-
-  t.before(async () => {
-    proxyProc = spawn('python', ['services/proxy/claude_storage_proxy.py'], {
-      stdio: ['ignore', 'pipe', 'inherit']
-    });
-
-    for (let i = 0; i < 25; i++) {
-      await new Promise(r => setTimeout(r, 200));
-      try {
-        const res = await rawRequest({ path: '/api/health' });
-        if (res.status === 200) break;
-      } catch (e) {}
+test('local Frame DB proxy denies unauthorized callers before touching OAuth',async t=>{
+  const stub=path.resolve('tests/claude-storage-api-poc/fixtures');
+  const proc=spawn(process.env.PYTHON||'python3',['-u','tests/claude-storage-api-poc/proxy.py'],{
+    env:{...process.env,PYTHONPATH:stub},stdio:['ignore','pipe','pipe']
+  });
+  let out='';
+  proc.stdout.on('data',x=>out+=String(x));
+  proc.stderr.on('data',x=>out+=String(x));
+  const delay=ms=>new Promise(r=>setTimeout(r,ms));
+  try{
+    let ready=false;
+    for(let i=0;i<60;i++){
+      if(proc.exitCode!==null)break;
+      try{
+        const response=await fetchProxy(ROOT+'/alive');
+        if(response.status===200){ready=true;break;}
+      }catch{}
+      await delay(150);
     }
-  });
+    assert.ok(ready,'stubbed proxy did not launch; output: '+out.slice(0,200));
 
-  t.after(() => {
-    if (proxyProc) proxyProc.kill('SIGTERM');
-  });
-
-  await t.test('1. Protecao contra DNS Rebinding (Host Header Spoofing)', async () => {
-    const res = await rawRequest({
-      path: '/api/health',
-      host: 'malicious-attacker.com'
+    await t.test('correct preflight and CORS, no allow-origin for forbidden sites',async()=>{
+      const okay=await fetchProxy(ROOT+'/case1',{method:'OPTIONS'});
+      assert.equal(okay.status,204);
+      assert.equal(okay.headers.get('access-control-allow-origin'),TRUSTED);
+      const evil=await fetchProxy(ROOT+'/case1',{method:'OPTIONS',headers:{Origin:'https://evil.example'}});
+      assert.equal(evil.status,403);
+      assert.equal(evil.headers.get('access-control-allow-origin'),null);
     });
-    assert.equal(res.status, 403);
-    assert.equal(res.json?.error, 'INVALID_HOST');
-  });
 
-  await t.test('2. Rejeicao de Origens Nao Autorizadas (CORS Strict Rejection)', async () => {
-    const res = await rawRequest({
-      path: `/api/storage/${SLUG}/bridge-poc`,
-      origin: 'http://evil-website.com'
+    await t.test('bad/missing Origin and Host blocked even for read and delete',async()=>{
+      const bad=await fetchProxy(ROOT+'/case1',{headers:{Origin:'https://evil.example'}});
+      assert.equal(bad.status,403);
+      const noOrigin=await fetch(BASE+ROOT+'/case1');
+      assert.equal(noOrigin.status,403);
+      const badDelete=await fetchProxy(ROOT+'/case1',{method:'DELETE',headers:{Origin:'https://evil.example'}});
+      assert.equal(badDelete.status,403);
+      const badHost=await forgedHost(ROOT+'/case1');
+      assert.equal(badHost.status,403);
     });
-    assert.equal(res.status, 403);
-    assert.equal(res.json?.error, 'INVALID_ORIGIN');
-  });
 
-  await t.test('3. Bloqueio de Path Traversal e Injeção de Caracteres Especiais', async () => {
-    const maliciousPaths = [
-      `/api/storage/${SLUG}/../secrets`,
-      `/api/storage/${SLUG}/bridge-poc/../../etc/passwd`,
-      `/api/storage/${SLUG}/bridge-poc/doc%00nullbyte`,
-      `/api/storage/invalid$slug/bridge-poc/doc1`
-    ];
-
-    for (const p of maliciousPaths) {
-      const res = await rawRequest({ path: p });
-      assert.ok(res.status === 400 || res.status === 403, `Falhou para ${p}: status=${res.status}`);
-    }
-  });
-
-  await t.test('4. Bloqueio de Coleções Fora da Allowlist', async () => {
-    const res = await rawRequest({
-      path: `/api/storage/${SLUG}/system_credentials/admin`
+    await t.test('slug cannot be changed and collection must match exactly',async()=>{
+      const wrongSlug=await fetchProxy('/api/storage/other-artifact/bridge-poc/doc');
+      assert.equal(wrongSlug.status,403);
+      const wrongColl=await fetchProxy('/api/storage/'+SLUG+'/bridge-poc-secret/doc');
+      assert.equal(wrongColl.status,403);
     });
-    assert.equal(res.status, 403);
-    assert.equal(res.json?.error, 'DISALLOWED_COLLECTION');
-  });
 
-  await t.test('5. Rejeicao de Payload Excessivo (> 512 KB)', async () => {
-    const largeData = JSON.stringify({ blob: 'x'.repeat(550 * 1024) });
-    const res = await rawRequest({
-      method: 'POST',
-      path: `/api/storage/${SLUG}/bridge-poc/large-doc`,
-      body: largeData
+    await t.test('encoded slash, path traversal and query are rejected',async()=>{
+      for(const route of [ROOT+'/foo%2Fbar',ROOT+'/..%2Fsomething',ROOT+'/item?verb=delete']){
+        const response=await fetchProxy(route);
+        assert.equal(response.status,400,'Route should be rejected: '+route);
+      }
     });
-    assert.equal(res.status, 413);
-    assert.equal(res.json?.error, 'PAYLOAD_TOO_LARGE');
-  });
 
-  await t.test('6. Healthcheck Seguro (Zero Exposição de Tokens)', async () => {
-    const res = await rawRequest({ path: '/api/health' });
-    assert.equal(res.status, 200);
-    assert.equal(res.json?.status, 'ok');
-    assert.equal(res.json?.authenticated, true);
-    assert.equal(res.body.includes('sk-ant'), false);
-    assert.equal(res.body.includes('Bearer'), false);
-  });
+    await t.test('writes require JSON object and Content-Type',async()=>{
+      const unsupported=await fetchProxy(ROOT+'/document',{method:'POST',
+        headers:{'Content-Type':'text/plain'},body:'{"data":1}'});
+      assert.equal(unsupported.status,415);
+      const invalid=await fetchProxy(ROOT+'/document',{method:'POST',
+        headers:{'Content-Type':'application/json'},body:'[1,2]'});
+      assert.equal(invalid.status,400);
+      const invalidJson=await fetchProxy(ROOT+'/document',{method:'POST',
+        headers:{'Content-Type':'application/json'},body:'{broken'});
+      assert.equal(invalidJson.status,400);
+    });
+
+    await t.test('CRUD works against in-memory stub and never requires actual Claude login',async()=>{
+      const payload={title:'Safe offline fixture'};
+      const set=await fetchProxy(ROOT+'/document',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+      assert.equal(set.status,200);
+      const state=await fetchProxy(ROOT+'/document');
+      assert.equal(state.status,200);
+      const j=await state.json();
+      assert.equal(j.exists,true);
+      assert.deepEqual(j.data,payload);
+      const list=await fetchProxy(ROOT);
+      assert.equal(list.status,200);
+      assert.ok((await list.json()).docs.some(x=>x.id==='document'));
+      const del=await fetchProxy(ROOT+'/document',{method:'DELETE'});
+      assert.equal(del.status,200);
+      assert.equal((await (await fetchProxy(ROOT+'/document')).json()).exists,false);
+    });
+
+    await t.test('errors do not reveal any upstream credentials',async()=>{
+      const r=await fetchProxy(ROOT+'/raise-upstream');
+      assert.equal(r.status,502);
+      const body=await r.text();
+      assert.equal(body.includes('Bearer'),false);
+      assert.equal(body.includes('confidential-upstream-secret'),false);
+      assert.match(body,/UPSTREAM_UNAVAILABLE/);
+      assert.equal(out.includes('confidential-upstream-secret'),false);
+    });
+  }finally{
+    proc.kill('SIGTERM');
+    await delay(150);
+    assert.equal(out.includes('TEST_ONLY_FAKE_TOKEN_DO_NOT_USE'),false,'proxy logged auth token');
+  }
 });

@@ -573,4 +573,228 @@ As 20 URLs estão **dentro do AGENTS.md**, não apenas em documento externo. **A
 
 **Estado verificável desta integração:** 30/30 entradas do catálogo editorial Laws of UX listadas acima; 86/86 entradas da curadoria aplicada transcritas integralmente aqui; 20/20 URLs fornecidas indexadas aqui; demais famílias (Gestalt, Nielsen, Shneiderman, ISO e WCAG) mantidas acima. **Cobertura de todas as entradas individuais dos 20 sites: não verificada.** Não declarar que essa etapa está concluída antes de uma auditoria por fonte.
 
+### 13. Leis e modelos complementares para formulários e campos (13 entradas)
+
+**Escopo e taxonomia:** os nomes originais abaixo são denominações publicadas por autores ou organizações identificáveis. **Lei empírica**, **conceito psicofísico**, **modelo teórico**, **princípio**, **mecanismo de design** e **framework editorial** são categorias diferentes. Não denominar todos como "leis oficiais" nem atribuir requisitos WCAG/ISO a fontes não normativas. O catálogo é complementar às leis de Fitts, Hick, Jakob, Gestalt, Nielsen e aos padrões já listados, não uma substituição.
+
+| # | Nome original publicado | Classe | Português e aplicação em formulários do Exam App | Limites / cuidados | Fonte primária ou publicação de referência |
+|---:|---|---|---|---|---|
+| 1 | Steering Law (Accot–Zhai) | Lei/modelo empírico de HCI | Lei da condução: reduzir trajetórias estreitas em menus encadeados, drag-and-drop, sliders e controles de arraste. | É um modelo para movimentos restritos; não é regra geral de espaçamento ou clique. | [Accot & Zhai, CHI 1997](https://doi.org/10.1145/258549.258760) |
+| 2 | Law of Crossing | Modelo de interação por cruzamento | Lei do cruzamento: avaliar alvos acionados ao cruzar limites em interações com mouse ou caneta. | Não substituir cliques convencionais por crossing sem teste; especialmente inadequado como regra geral para formulários. | [Shumin Zhai — Laws and Models of Action](https://www.shuminzhai.com/post/laws-of-action) |
+| 3 | Principle of Least Astonishment | Princípio de design | Princípio da menor surpresa: controles, Enter, mudanças automáticas e botões devem agir conforme expectativa e rótulo. | Não equivale à lei de Jakob e não proíbe padrões novos quando são claros e testados. | [GNOME — Design Principles](https://wiki.gnome.org/Projects/GnomeShell/Design/Principles) |
+| 4 | Gulf of Execution | Conceito/modelo de ação | Lacuna de execução: deixar óbvio onde editar, como aplicar filtro, como iniciar ou salvar uma ação. | Não se resolve com mais botões por padrão; avaliar descobribilidade e objetivo. | [Don Norman — The Design of Everyday Things](https://jnd.org/books/the-design-of-everyday-things-revised-and-expanded-edition/) |
+| 5 | Gulf of Evaluation | Conceito/modelo de ação | Lacuna de avaliação: distinguir alteração local, salvando, salvo, erro e persistência confirmada. | Nunca comunicar "Salvo" antes da confirmação efetiva; tratar perda de conexão. | [Don Norman — The Design of Everyday Things](https://jnd.org/books/the-design-of-everyday-things-revised-and-expanded-edition/) |
+| 6 | Feedforward | Conceito de design de interação | Antecipação informativa: o controle comunica o que vai ocorrer **antes** da ação, inclusive envio, aplicação e exclusão. | Diferente de feedback, que informa o resultado **depois** da ação; não prometer consequência falsa. | [The Encyclopedia of HCI — Affordances / Feedforward](https://assets.interaction-design.org/literature/book/the-encyclopedia-of-human-computer-interaction-2nd-ed/affordances) |
+| 7 | Forcing Functions | Mecanismo de design / restrição | Impedir ações perigosas ou estados inválidos, por exemplo finalizar simulado sem autorização exigida. | Restrições devem ser proporcionais; não bloquear edição trivial nem causar armadilhas de foco. | [Don Norman — The Design of Everyday Things](https://jnd.org/books/the-design-of-everyday-things-revised-and-expanded-edition/) |
+| 8 | Fogg Behavior Model (B=MAP) | Modelo comportamental | Motivação, capacidade e prompt: reduzir esforço para concluir tarefas e tornar ações acessíveis e oportunas. | Não usar para pressionar, manipular ou criar dark patterns; não impõe CTA para toda configuração. | [BJ Fogg — Fogg Behavior Model](https://www.behaviormodel.org/) |
+| 9 | Weber's Law | Lei psicofísica empírica | Lei de Weber: diferenças perceptíveis dependem da intensidade de referência; testar distinção entre estados e hierarquia visual. | Não transformar em fórmula universal de tamanho de fonte, contraste ou espaçamento; WCAG continua valendo. | [The Corsini Encyclopedia of Psychology — Weber's Law](https://doi.org/10.1002/9780470479216.corpsy1033) |
+| 10 | Just Noticeable Difference (JND) | Conceito psicofísico (não lei independente) | Diferença apenas perceptível: testar se mudanças de estado e ênfase visual realmente são notadas. | Relacionado a Weber; não substituir medições de contraste, foco ou testes acessíveis. | [The Corsini Encyclopedia of Psychology — JND](https://doi.org/10.1002/9780470479216.corpsy0481) |
+| 11 | EAS Framework — Eliminate, Automate, Simplify | Framework de usabilidade de formulários | Eliminar campos desnecessários, automatizar entradas recuperáveis e simplificar as restantes. | Evitar inferência insegura, preenchimento sensível sem consentimento e omissão de campos essenciais. | [Nielsen Norman Group — EAS Framework (2025)](https://www.nngroup.com/articles/eas-framework-simplify-forms/) |
+| 12 | Structure, Transparency, Clarity, Support | Quatro princípios editoriais de design de formulários | Estrutura lógica, expectativas claras, linguagem inequívoca e ajuda contextual; labels, exemplos e feedback devem apoiar a tarefa. | Não tratar os quatro princípios como norma ISO nem justificar excesso de instruções. | [Nielsen Norman Group — 4 Principles to Reduce Cognitive Load in Forms (2025)](https://www.nngroup.com/articles/4-principles-reduce-cognitive-load/) |
+| 13 | Seven Stages of Action | Modelo de ação | Sete estágios da ação: objetivo, plano, especificação, execução, percepção, interpretação e comparação; usar para auditar formulários de criação/edição. | É modelo analítico aproximado, não checklist rígido nem exigência de sete telas ou sete passos. | [Don Norman — The Design of Everyday Things](https://jnd.org/books/the-design-of-everyday-things-revised-and-expanded-edition/) |
+
+#### 13.1. Decisão de salvar, aplicar ou confirmar — regras para agentes
+
+- **MUST** classificar cada formulário ou controle por **efeito** (temporário vs. persistido), **risco** (reversível vs. destrutivo), **custo/latência** (imediato vs. caro) e **escopo** (um campo vs. operação composta), antes de decidir o CTA. Não criar botões "Salvar" ou "Aplicar" por hábito e não removê-los por estética.
+- **SHOULD** aplicar imediatamente mudanças simples, previsíveis, reversíveis e de baixo custo (por exemplo, tema ou filtro local), mantendo foco e estado, informando o resultado e permitindo recuperar configuração anterior quando pertinente.
+- **SHOULD** escolher salvamento automático para edição pequena e de baixo risco **somente** com persistência confiável, estado visível ("Salvando", "Salvo", "Erro ao salvar"), recuperação/retry limitado e proteção contra perda de dados. A alteração local **não** significa dado persistido.
+- **MUST** usar confirmação explícita para criação/submissão composta, efeitos externos, operações caras, exclusão irreversível e entrega definitiva de simulado. Distinguir "Criar", "Iniciar", "Enviar", "Salvar" e "Excluir" segundo consequência real; não adicionar confirmação excessiva para cada clique.
+- **MUST** preservar teclado/Enter, semântica do elemento HTML form, ordem de foco e prevenção de dupla submissão ou alteração acidental. Atualização automática de filtros não pode roubar foco nem tornar a interface imprevisível; garantir feedback e recuperação de falhas.
+- **SHOULD** preferir edição inline para pequenas alterações isoladas quando o estado editável é claro e reversível, e formulário/página dedicados quando há múltiplos campos, dependências, validação importante ou revisão antes de concluir.
+- **MUST** justificar em PR/issue por que há (ou não há) botão principal e como se comportam sucesso, falha, lentidão, interrupção e voltar; registrar evidência no board conforme política já definida.
+
+#### 13.2. Aparência moderna de campos — sem inventar leis
+
+- **SHOULD** aplicar uma hierarquia visual consistente para label, valor, descrição, erro e CTA, usando tokens do design system existente; evitar larguras desproporcionais, caixas e divisores redundantes, **sem proibir bordas universalmente**.
+- **MUST** diferenciar estados default, hover, focus-visible, selected, invalid, disabled, read-only, pending e saved conforme o tipo de campo, com contraste e semântica acessível; não depender só de cor.
+- **SHOULD** adequar largura, alinhamento e densidade à tarefa e ao conteúdo esperado; formulários sequenciais geralmente favorecem fluxo de leitura vertical, mas campos naturalmente associados podem ficar lado a lado quando isso melhora a compreensão e não quebra a ordem de foco.
+- **MUST** escolher controle apropriado ao dado e ao tipo de decisão: radio para escolha exclusiva visível, checkbox para escolhas independentes, switch para estado binário aplicado imediatamente, select/combobox para listas apropriadas, slider quando ajuste aproximado é intencional e campo numérico quando precisão importa. Validar cada escolha com as regras WCAG/APG aplicáveis.
+- **AVOID** justificar um redesign apenas por parecer "2026": comparar antes/depois, tempo e sucesso da tarefa, legibilidade, acessibilidade, responsividade e recuperação de erros, preservando a evidência.
+
+**Fontes para as regras de formulários:** [NN/g — EAS](https://www.nngroup.com/articles/eas-framework-simplify-forms/), [NN/g — quatro princípios](https://www.nngroup.com/articles/4-principles-reduce-cognitive-load/), [WCAG 2.2](https://www.w3.org/TR/WCAG22/) e [WAI-ARIA APG](https://www.w3.org/WAI/ARIA/apg/). Essas regras são **diretrizes específicas do Exam App** fundamentadas nos conceitos, não citações literais nem novos critérios de conformidade.
+
+### 14. Critérios ergonômicos, formulários e acessibilidade — Context7 (14/11/2026)
+
+**Classificação e prevenção de duplicidade:** esta extensão reúne **8 critérios de Bastien & Scapin**, **10 princípios de Gerhardt-Powals**, **4 partes ISO 9241**, **7 critérios específicos WCAG 2.2** e diretrizes de sistemas de design verificadas com **Context7** (Material Design 3, GitHub Primer e Ant Design). A presença de um nome novo não significa necessariamente que o conceito fosse ausente: muitos itens ampliam as heurísticas de Nielsen/ISO e as seções 10–13. **Critérios ergonômicos, princípios cognitivos e padrões de produtos não são leis científicas nem normas WCAG.** Fontes ISO são identificadas por título e escopo publicamente disponível; não presumir acesso à íntegra licenciada nem declarar conformidade sem avaliação.
+
+#### 14.1. Bastien & Scapin (1993) — Ergonomic Criteria for the Evaluation of Human-Computer Interfaces
+
+| # | Nome original | Português | Critério de aplicação no Exam App | Fonte |
+|---:|---|---|---|---|
+| 1 | Guidance | Orientação | Ajudar a localizar e entender campos, ajuda, grupos, estados e feedback. | [Bastien & Scapin — Ergonomic Criteria (1993)](https://www.margaux-perrin.com/wp-content/uploads/2018/08/Bastien-and-Scapin-1993.pdf) |
+| 2 | Workload | Carga de trabalho | Reduzir carga motora e cognitiva, ações e densidade desnecessárias. | [Bastien & Scapin (1993)](https://www.margaux-perrin.com/wp-content/uploads/2018/08/Bastien-and-Scapin-1993.pdf) |
+| 3 | Explicit Control | Controle explícito | Diferenciar ação iniciada pelo usuário de efeitos automáticos, preservando controle, interrupção e reversibilidade. | [Bastien & Scapin (1993)](https://www.margaux-perrin.com/wp-content/uploads/2018/08/Bastien-and-Scapin-1993.pdf) |
+| 4 | Adaptability | Adaptabilidade | Atender níveis diferentes de experiência sem esconder ações essenciais. | [Bastien & Scapin (1993)](https://www.margaux-perrin.com/wp-content/uploads/2018/08/Bastien-and-Scapin-1993.pdf) |
+| 5 | Error Management | Gestão de erros | Prevenir erro, apresentar mensagens acionáveis e permitir correção sem apagar trabalho. | [Bastien & Scapin (1993)](https://www.margaux-perrin.com/wp-content/uploads/2018/08/Bastien-and-Scapin-1993.pdf) |
+| 6 | Consistency | Consistência | Usar controles, rótulos, apresentação e feedback coerentes em fluxos equivalentes. | [Bastien & Scapin (1993)](https://www.margaux-perrin.com/wp-content/uploads/2018/08/Bastien-and-Scapin-1993.pdf) |
+| 7 | Significance of Codes (and Denominations) | Significado dos códigos e denominações | Evitar abreviações obscuras, ícones sem significado e nomenclaturas inconsistentes. | [Bastien & Scapin (1993)](https://www.margaux-perrin.com/wp-content/uploads/2018/08/Bastien-and-Scapin-1993.pdf) |
+| 8 | Compatibility | Compatibilidade | Ajustar interface às tarefas, contexto e expectativas do estudante. | [Bastien & Scapin (1993)](https://www.margaux-perrin.com/wp-content/uploads/2018/08/Bastien-and-Scapin-1993.pdf) |
+
+**Subcritérios especialmente relevantes (nomes publicados):** **Prompting**, **Grouping/Distinction by Location**, **Grouping/Distinction by Format**, **Immediate Feedback**, **Legibility**, **Brevity**, **Concision**, **Minimal Actions**, **Information Density**, **Explicit User Action**, **User Control**, **Flexibility**, **User Experience**, **Error Protection**, **Quality of Error Messages** e **Error Correction**. O conjunto possui **18 critérios elementares** na organização original, sem tratar cada um como uma nova lei separada.
+
+- **MUST** usar **Explicit User Action** para questionar mudanças inesperadas de navegação ou submissões disparadas pela edição de um campo; **não confundir** com proibição universal de autosave ou atualização imediata de filtros.
+- **SHOULD** usar **Minimal Actions** e **Concision** para eliminar confirmações, campos e etapas redundantes, sem sacrificar prevenção de erros e acessibilidade.
+- **SHOULD** usar **Grouping/Distinction** e **Information Density** para controlar espaçamento semântico, agrupamentos, largura útil e ruído de cards/bordas, sem impor estética universal.
+
+#### 14.2. Gerhardt-Powals (1996) — Cognitive Engineering Principles for Enhancing Human-Computer Performance
+
+| # | Nome original | Aplicação sugerida no Exam App |
+|---:|---|---|
+| 1 | Automate Unwanted Workload | Evitar digitação e seleção repetitivas quando os dados já são conhecidos e confiáveis. |
+| 2 | Reduce Uncertainty | Explicitar o efeito de filtros, validação, envio e salvamento. |
+| 3 | Fuse Data | Integrar dados relacionados em resumos compreensíveis. |
+| 4 | Present New Information with Meaningful Aids to Interpretation | Mostrar exemplos, contexto e explicações quando introduzir campos complexos. |
+| 5 | Use Names That Are Conceptually Related to Function | Nomear ações pelo resultado real, em vez de rótulos técnicos obscuros. |
+| 6 | Group Data in Consistently Meaningful Ways | Organizar campos por assunto e dependência real. |
+| 7 | Limit Data-Driven Tasks | Apresentar sínteses úteis em vez de exigir comparação manual de dados brutos. |
+| 8 | Include Only Information Needed by the Operator | Priorizar informações relevantes no momento da tarefa. |
+| 9 | Provide Multiple Coding of Data | Sinalizar estados também por texto/forma/ícone acessível, não apenas cor. |
+| 10 | Practice Judicious Redundancy | Repetir informação só quando ajuda a executar ou verificar a tarefa. |
+
+**Fonte:** [Gerhardt-Powals, International Journal of Human-Computer Interaction 8(2), 189–211 (1996)](https://doi.org/10.1080/10447319609526147). Trata-se de princípios de engenharia cognitiva, com sobreposição intencional a Nielsen, Gestalt e regras já documentadas; evitar contar duplicatas como avanços de cobertura.
+
+#### 14.3. ISO 9241 — partes relevantes ainda não enumeradas
+
+| Parte / edição | Título oficial | Aplicação de escopo no Exam App | Fonte |
+|---|---|---|---|
+| ISO 9241-143:2012 (confirmada em 2024) | Forms | Referência específica para desenho e avaliação de formulários e campos identificados por rótulos. | [ISO 9241-143](https://www.iso.org/standard/53590.html) |
+| ISO 9241-161:2025 | Visual user-interface elements | Seleção, uso e relação de elementos visuais de UI. | [ISO 9241-161](https://www.iso.org/standard/85790.html) |
+| ISO 9241-115:2024 | Guidance on conceptual design, user-system interaction design, user interface design and navigation design | Arquitetura conceitual, interação, estrutura e navegação. | [ISO 9241-115](https://www.iso.org/standard/80773.html) |
+| ISO 9241-171:2025 | Software accessibility | Avaliação da acessibilidade do software além dos requisitos aplicáveis ao conteúdo web. | [ISO 9241-171](https://www.iso.org/standard/86308.html) |
+
+**Limite:** referências de escopo e títulos disponíveis publicamente, não transcrições de cláusulas ISO licenciadas. **MUST NOT** marcar conformidade com essas normas sem obter os textos integrais pertinentes e realizar avaliação apropriada. Para web, verificar os critérios WCAG aplicáveis independentemente.
+
+#### 14.4. WCAG 2.2 — sete critérios específicos para formulários e interações
+
+| Critério e nível | Nome oficial | Regra de auditoria do Exam App e cuidado de escopo |
+|---|---|---|
+| 3.2.2 (A) | On Input | Alterar valor/seleção não pode provocar inesperadamente **mudança de contexto** sem aviso prévio. Atualizar resultados sem trocar contexto não é automaticamente uma falha. |
+| 3.3.3 (AA) | Error Suggestion | Quando erro é detectado e há sugestão apropriada conhecida, orientar como corrigir, salvo impacto na segurança/finalidade. |
+| 3.3.4 (AA) | Error Prevention (Legal, Financial, Data) | Modificação/exclusão de dados controlados pelo usuário **ou envio de respostas de teste** deve atender **ao menos uma** condição: reversibilidade, verificação com correção ou revisão/confirmação antes de finalizar. **Não exige modal em todas as operações.** |
+| 3.3.7 (A) | Redundant Entry | Na mesma atividade/processo, reaproveitar ou permitir selecionar informação já fornecida, consideradas as exceções (essencial, segurança, validade). Não obriga retenção entre sessões. |
+| 3.3.8 (AA) | Accessible Authentication (Minimum) | No login, não exigir teste de função cognitiva sem uma das alternativas/exceções permitidas; permitir mecanismos adequados de apoio à autenticação. |
+| 1.3.5 (AA) | Identify Input Purpose | Campos sobre informações pessoais dos usuários devem expor programaticamente finalidade quando se enquadrarem na lista de propósitos especificada; não atribuir autocomplete arbitrário a qualquer campo. |
+| 2.5.7 (AA) | Dragging Movements | Interações por arraste devem ter alternativa de ponteiro único sem arraste, salvo exceção de essencialidade. |
+
+**Fonte normativa:** [WCAG 2.2](https://www.w3.org/TR/WCAG22/); orientação por critério em [WAI Understanding](https://www.w3.org/WAI/WCAG22/Understanding/). **MUST** registrar resultado por critério aplicável e evidência, não declarar conformidade apenas porque a regra existe no AGENTS.md.
+
+#### 14.5. Context7 — princípios/padrões oficiais dos design systems (não são leis universais)
+
+| Sistema e fonte | Nome publicado | Aplicação orientativa |
+|---|---|---|
+| [Ant Design — Form Page](https://ant.design/docs/spec/research-form/) | Efficient; Clear; Security | Organização, clareza de causa/efeito, salvamento e reversibilidade; verificar especialmente configuração de simulados. |
+| [Ant Design — Form Page](https://ant.design/docs/spec/research-form/) | Instant Effect Mode; Submission Effect Mode | Para ajustes independentes e reversíveis, atualização imediata é opção; para múltiplas configurações interdependentes, avaliar envio explícito. Não importar números de agrupamento como regras universais. |
+| [Material Design 3 — Text fields](https://m3.material.io/components/text-fields/guidelines) | Filled text fields; Outlined text fields | Variantes com funções equivalentes e ênfase visual distinta; escolher pela hierarquia, pelo contexto e pela distinção de outros componentes. |
+| [GitHub Primer — Forms](https://primer.style/product/ui-patterns/forms/) | Inline validation | Evitar primeira validação prematura enquanto o usuário digita; em geral validar após edição e perda de foco, revalidando um campo já inválido durante correção. Observar latência e leitores de tela. |
+| [GitHub Primer — Text input](https://primer.style/product/components/text-input/guidelines/) | Label; Required indicator; Caption; Validation message; Trailing action | Compor campo completo com nome, instrução, erro acionável e ação local quando pertinente; não usar placeholder como único label. |
+
+**Regra prática consolidada para o Exam App:**
+1. **MUST** distinguir **alterar preferência**, **aplicar filtro**, **editar objeto**, **criar registro** e **entregar simulado**, com consequência e comportamento de salvamento claros e testáveis.
+2. **MUST** validar **On Input (3.2.2)**, **Error Prevention (3.3.4)** e **Redundant Entry (3.3.7)** nos fluxos afetados; aplicar outras normas por escopo e nível, sem generalizações.
+3. **SHOULD** preferir formulários simples, agrupados por sentido, com largura de campo útil, labels e erro próximos do controle; justificar quando ação explícita, autosave, inline edit ou fluxo em etapas é melhor.
+4. **MUST** diferenciar material **consultado e documentado** de **código implementado** e **conformidade testada**. Registrar evidências do fluxo no board/issues quando houver mudança real de UI; esta inclusão documental isolada não exige capturas fabricadas.
+
+
+### 15. WCAG 2.2 e técnicas verificáveis de formulários — complemento
+
+**Classificação:** estes sete itens são **critérios de sucesso WCAG 2.2**, quando aplicáveis e no respectivo nível; os cinco nomes na seção seguinte são **tutoriais/padrões**, não leis universais. Complementam as seções 11.7, 13 e 14, sem alterar as contagens anteriores de Laws of UX e catálogo aplicado.
+
+#### 15.1. Sete critérios WCAG adicionais com nomes oficiais
+
+| Critério | Nome original | Regra de implementação do Exam App | Limites e fonte |
+|---|---|---|---|
+| **1.3.1 (A)** | **Info and Relationships** | Expor relações visuais também em código: labels, grupos semânticos, títulos e relações entre campos; usar fieldset/legend em grupos apropriados. | Agrupar por espaçamento não basta. [WCAG](https://www.w3.org/TR/WCAG22/#info-and-relationships) |
+| **3.3.1 (A)** | **Error Identification** | Quando erro de entrada for detectado automaticamente, identificar o item errado e descrever o erro em texto. | Não exige apresentar erro antes de terminar a primeira edição. [WCAG](https://www.w3.org/TR/WCAG22/#error-identification) |
+| **3.2.1 (A)** | **On Focus** | Receber foco, por si só, não pode provocar mudança de contexto. | Diferenciar painel de ajuda previsível de navegação/submissão inesperada. [WCAG](https://www.w3.org/TR/WCAG22/#on-focus) |
+| **2.5.3 (A)** | **Label in Name** | O nome acessível de controle com label visível precisa conter o texto visível aplicável. | Não substituir texto visível por outro nome incompatível em ARIA. [WCAG](https://www.w3.org/TR/WCAG22/#label-in-name) |
+| **3.2.6 (A)** | **Consistent Help** | Quando mecanismos de ajuda definidos no critério se repetirem no mesmo conjunto de páginas, manter sua ordem relativa. | Não exige que toda página tenha botão de ajuda. [WCAG](https://www.w3.org/TR/WCAG22/#consistent-help) |
+| **1.4.13 (AA)** | **Content on Hover or Focus** | Conteúdo adicional por hover/foco deve atender aos requisitos de dispensabilidade, ponteiro e persistência quando aplicáveis. | Observar exceções do critério; tooltip não deve desaparecer antes da interação necessária. [WCAG](https://www.w3.org/TR/WCAG22/#content-on-hover-or-focus) |
+| **2.4.13 (AAA)** | **Focus Appearance** | Avaliar área e contraste do indicador de foco entre estados normal/focado, conforme o critério. | É **AAA**, não mínimo AA; não confundir com foco visível 2.4.7 ou não oculto 2.4.11. [WCAG](https://www.w3.org/TR/WCAG22/#focus-appearance) |
+
+#### 15.2. Cinco tutoriais e diretrizes oficiais (não são leis)
+
+| Nome publicado | Aplicação para campos e formulários | Fonte |
+|---|---|---|
+| **Grouping Controls** | Agrupar radio/checkbox e campos relacionados semanticamente (fieldset/legend ou alternativa acessível); organizar opções de select com optgroup quando apropriado. | [W3C WAI](https://www.w3.org/WAI/tutorials/forms/grouping/) |
+| **Form Instructions** | Explicar obrigatoriedade, formato e exemplos relevantes de maneira acessível e associada ao campo; evitar instruções redundantes. | [W3C WAI](https://www.w3.org/WAI/tutorials/forms/instructions/) |
+| **Validating Input** | Validar no cliente para orientação e no servidor para segurança/integridade; aceitar formatos equivalentes quando apropriado e preservar o trabalho após erro. | [W3C WAI](https://www.w3.org/WAI/tutorials/forms/validation/) |
+| **Multi-page Forms** | Em formulários realmente extensos, separar grupos lógicos, indicar progresso, permitir voltar e explicitar etapas opcionais; evitar wizard para formulário curto. | [W3C WAI](https://www.w3.org/WAI/tutorials/forms/multi-page/) |
+| **Inline Validation** | Não interromper a primeira digitação com erro precoce; validar após edição/blur ou envio conforme tarefa, e oferecer feedback durante correção de erros já apresentados. | [GitHub Primer](https://primer.style/product/ui-patterns/forms/) |
+
+**Contrato de implementação:**
+1. **MUST** verificar semântica programática além do layout: nome acessível, label, grupo, descrição, associação de erro, foco e teclado. Preferir HTML nativo quando adequado.
+2. **MUST** tratar **On Focus (3.2.1)** e **On Input (3.2.2)** separadamente em filtros, autosave, selects e inline edit. Atualizar resultado não é automaticamente mudar de contexto.
+3. **MUST** evitar perda de entrada e submissão duplicada; distinguir edição, inválido, submetendo, salvando, salvo, falhou e estado de concorrência quando relevante. Não anunciar persistência sem confirmação.
+4. **MUST** orientar correção com texto específico e associação ao campo; para múltiplos erros, considerar resumo de erros com foco e links. Seguir o momento de validação da tarefa, não uma regra temporal universal.
+5. **SHOULD** evitar desabilitar a única ação possível sem explicação ou caminho de recuperação; avaliar validação no envio quando isso for mais claro.
+6. **MUST** testar teclado, IME/composição, autofill, zoom/reflow, mobile, hover/foco, leitor de tela quando possível e modo de alto contraste. Ver [DESIGN.md §8.10](DESIGN.md).
+7. **MUST** documentar por critério status **passou/falhou/não aplicável/não testado**, cenário, fonte e evidência; catálogo não representa conformidade testada.
+
 <!-- UX-LAWS-CATALOG:END -->
+
+<!-- DESIGN-SYSTEM-INTEGRATION:START -->
+## Material 3 Expressive + Apple HIG — contrato de integração para agentes (14/11/2026)
+
+**Leitura obrigatória em alterações de interface:** [DESIGN.md](DESIGN.md) é a autoridade interna para aparência, componentes e tokens; [MOTION.md](MOTION.md) é a autoridade interna para animação e física; este `AGENTS.md` é a autoridade para execução, evidências e critérios de aceite. Complementar com [arquitetura de informação](docs/ux/arquitetura-informacao-navegacao.md), [princípios de UX/UI](docs/ux/ux-ui-principles.md), documentação oficial [Material Design 3](https://m3.material.io/) e [Apple HIG](https://developer.apple.com/design/human-interface-guidelines/). **Não substituir silenciosamente** tokens, navegação ou comportamento existentes pelo visual de outra plataforma.
+
+### Hierarquia de autoridade, fontes e modo de decisão
+
+1. **MUST** priorizar tarefa real, acessibilidade e contratos existentes do Exam App sobre efeitos estéticos. Documentar objetivo, ação principal, estados e critérios de aceitação antes de redesenhar.
+2. **MUST** diferenciar: (a) normas verificáveis WCAG/WAI-ARIA; (b) orientação oficial M3/HIG de escopo/plataforma específicos; (c) convenções próprias do Exam App; (d) sínteses, heurísticas e recomendações de skills comunitários. **Não chamar conselhos de terceiros de exigência oficial**.
+3. **MUST** ler a fonte oficial atual quando a decisão depender de um valor exato (contraste, dimensão, componente, design token, motion token, licença ou API). Não fixar números de terceiros como especificação universal.
+4. **MUST** usar tokens semânticos próprios do produto; tratar roles M3 `primary/on-primary/surface/on-surface` e Apple `label/fill/background` como **vocabulários de referência**, não como ordem para renomear os tokens `--app-*`, `--k-*` e `--motion-*` existentes. Preservar OKLCH e temas claro/escuro.
+5. **MUST** escolher um vocabulário visual predominante por superfície. No Exam App o padrão é **produto próprio, low-chrome e orientado a leitura**; usar princípios de M3 Expressive para ênfase funcional e Apple HIG para clareza/continuidade, sem introduzir glassmorphism como estilo global.
+6. **MUST** respeitar a arquitetura atual: protótipo HTML/CSS/JS sem build. Não instalar React, Motion, GSAP, Material Web, MUI ou bibliotecas de componentes apenas por referência de skill. Em migração futura para Next.js, reavaliar trade-offs e preferir componentes acessíveis já adotados no projeto.
+7. **SHOULD** ler apenas a referência específica da tarefa em vez de copiar repositórios inteiros ou adicionar dezenas de instruções redundantes. Preservar licença e atribuição; snippets externos não são automaticamente compatíveis nem seguros.
+
+### Design visual, estrutura e componentes
+
+8. **MUST** comunicar hierarquia por layout, espaços, alinhamento, tipografia e papéis de cor **antes** de adicionar sombras, bordas, transparências e animações; manter a política low-chrome da issue #97. Não remover divisores funcionais só para ficar "sem bordas".
+9. **MUST** manter uma única navegação primária coerente. Abas representam vistas irmãs do mesmo contexto; filtros são controles de refinamento, não abas duplicadas; wizard representa etapa sequencial. Resolução de questões e simulados preservam o próprio fluxo e estados.
+10. **MUST** escolher controles por semântica: botão/CTA para ação, link para navegação, tab para alternância de vista, chip para filtro/atributo, select/radio para escolha e dialog apenas para interrupção adequada. Não disfarçar ação primária como chip ou menu oculto.
+11. **SHOULD** aplicar expressividade pontualmente onde melhora localização da ação/resultado, mudança de contexto ou descoberta de relação: seleção ativa, gráfico/grafo, onboarding, sucesso importante. **AVOID** formas decorativas em enunciados, tabelas densas, provas ou painéis textuais.
+12. **MUST** preservar tipografia legível mesmo com zoom, tradução e fontes substitutas. Não importar SF Pro/SF Symbols proprietários indiscriminadamente na web; seguir licença e manter SVGs semânticos conforme política de ícones.
+13. **MUST** distinguir o tamanho visível do componente da sua área efetiva de interação. Para WCAG 2.2 AA, avaliar o critério 2.5.8 de **24×24 CSS px ou exceção válida**. Alvos Apple **44 pt** e Material **48 dp** são diretrizes de plataforma, não o mínimo universal WCAG AA; preferir alvos confortáveis em touch e testar espaçamento.
+14. **MUST** suportar teclado, leitor de tela, foco visível/não oculto, estados `disabled/hover/pressed/focus/selected`, contraste, modo escuro, zoom/reflow, alto contraste quando aplicável e mensagens que não dependem só de cor.
+15. **SHOULD** adotar layouts **adaptativos**, não apenas reduzir a largura: verificar sidebar, painel direito, barras de abas, filtros, gráficos/grafo, leitor de PDF e questões em viewport estreito, amplo e zoom de 200%/400% conforme critério aplicável; declarar limitações reais.
+16. **AVOID** efeito Liquid Glass por padrão. Se uma superfície de controle flutuante precisar de translucidez, documentar propósito, contraste sobre conteúdos variáveis, fallback opaco, legibilidade em alto contraste, preferências de transparência e custo de `backdrop-filter`. O conteúdo principal de estudo deve permanecer estável e legível.
+
+### Motion, feedback e integridade da tarefa
+
+17. **MUST** seguir [MOTION.md](MOTION.md) para tokens e física. Diferenciar transições de estado (opacidade/cor, sem overshoot) das espaciais (posição, escala, raio, eventualmente spring); as equações e presets de skills são **referências**, não implementação automática.
+18. **MUST** garantir animações **interrompíveis e reversíveis** a partir do estado visual atual, inclusive cliques rápidos, duplo clique, Escape, drag, novo filtro ou navegação em meio à transição; não enfileirar animações que causem atraso.
+19. **MUST** impedir `scroll jump`, perda de foco, alteração acidental de resposta, atrasos na correção e movimento automático do grafo sem benefício. Não transformar a interface de estudos em demonstração de efeitos físicos.
+20. **MUST** observar `prefers-reduced-motion` no CSS e JS/canvas e usar alternativa sem movimento espacial preservando significado, estado e feedback. Evitar reiniciar loops de física em abas ocultas ou quando estáveis.
+21. **MUST** oferecer estado terminal de erro e recuperação para operações assíncronas, com timeout/deadline e retries limitados conforme a operação. Não usar animação de loading infinita como substituta de tratamento de erro.
+
+### Procedimento de alteração e aceite
+
+Antes de concluir uma mudança visual/interativa, o agente **MUST**:
+- Conferir `origin/dev` **no início e no fim**; preservar mudanças concorrentes; abrir PR para `dev` conforme o fluxo do projeto.
+- Levantar tarefa/problema, registrar baseline (DOM/ARIA, screenshot ou gravação/GIF onde movimento importar), URL/viewport/tema e comparar com evidências existentes em `docs/`, `prototypes/`, issues e `docs/archives/`.
+- Registrar decisão de design: qual padrão interno foi mantido, qual princípio M3/HIG foi **adaptado**, qual alternativa foi rejeitada e por quê. Anotar fontes primárias e as referências comunitárias quando úteis.
+- Validar teclado, leitor de tela onde possível, claro/escuro, touch/desktop, zoom, motion normal/reduzido, ações repetidas, navegação de volta, carregamento lento e erros. Para protótipos, verificar console e executar testes existentes relevantes.
+- Publicar antes/depois com texto reconstrutível e evidência no board (`board.json` e assets), regenerando `BOARD.md` com `npm run board` quando a tarefa envolva UI real. **Mudança apenas documental** não exige screenshot inventado.
+- Reportar **implementado × especificado × não testado**; não declarar conformidade M3, Apple HIG ou WCAG sem evidência.
+
+**Consulta por tópico:** tokens, superfícies, tipografia, componentes, layout e critérios em [DESIGN.md](DESIGN.md); springs, easing, tempo, continuidade espacial, grafo, performance e motion reduzido em [MOTION.md](MOTION.md). Inventário dos 22 skills de referência e separação entre fontes oficiais/comunidade em `DESIGN.md`.
+
+### Auditoria de lacunas de design — evidência antes de declarar "implementado"
+
+Para cada alteração de **formulário, navegação, componente, efeito ou tema**, registrar no PR uma matriz com colunas: `superfície` → `problema observado` → `regra interna aplicada` → `fonte oficial, quando houver` → `evidência antes/depois` → `teste` → `resultado (implementado/especificado/não testado)`. A ausência de teste não significa aprovação.
+
+- **MUST** verificar [DESIGN.md §8.10–8.13](DESIGN.md): campos, formulários, matriz de estados, forced colors e padrões sem button; escolher `Salvar`/`Aplicar`/autosave pela semântica e risco da operação, não pela aparência.
+- **MUST** testar inputs com teclado, digitação/composição IME, paste/autocomplete, validação, foco, erro de servidor, latência e recuperação. Não depender do placeholder, apenas cor, mensagens genéricas ou ausência silenciosa do botão.
+- **MUST** testar navegação com estado transitório: reflow durante transição, alterações rápidas de viewport/zoom, clique repetido, hidden tab e nova ação antes do `animationend`; seguir [MOTION.md §5.10](MOTION.md).
+- **MUST** verificar `forced-colors: active` quando aplicável; não esconder foco, seleção e separações funcionais atrás de sombra/gradiente/transparência. Para translucidez, `prefers-reduced-transparency` é **suporte progressivo**, não fallback universal; sempre ter superfície opaca como base.
+- **MUST** distinguir **"links catalogados"** de **"SKILL.md efetivamente lido e verificado"**: não afirmar auditoria completa das 22 skills, compatibilidade ou conformidade sem registrar arquivo, caminho, revisão/commit e data, quando disponíveis. Conferir links com origem atual e corrigir moved/deleted.
+- **SHOULD** validar uma tarefa representativa por superfície (criar/editar, filtrar, navegar, responder, rever erro), não apenas screenshots estáticas; se for mudança só documental, não inventar evidência visual.
+
+### Verificação de atalhos, contraste e semântica por componente
+
+- **MUST** conferir cada atalho anunciado na documentação, tooltip e modal com o dispatcher realmente implementado, em Windows/macOS, sem prometer `Ctrl+W`/`Ctrl+T` ou outro comando reservado pelo navegador. O usuário precisa de alternativa visível por clique/menu e os campos em edição não podem capturar atalhos globais.
+- **MUST** medir contrastes de pares de cores e estados; OKLCH, Material 3 ou Apple HIG não comprovam automaticamente WCAG. Guardar resultado e contexto do cálculo quando declarar conformidade.
+- **MUST** diferenciar foco de diálogo modal (Tab contido quando modal) de padrão menu (setas, Enter, Escape e retorno ao invocador) e de popover não modal. Preferir elementos nativos com semântica correta; auditar no DOM real.
+- **SHOULD** testar conteúdo longo/localizado, idiomas e formatos de data/número, tamanho de fonte aumentado e ordem de leitura quando layout adaptativo reorganizar elementos. Ver [DESIGN.md §8.14](DESIGN.md).
+
+<!-- DESIGN-SYSTEM-INTEGRATION:END -->

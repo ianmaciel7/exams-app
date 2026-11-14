@@ -8,7 +8,7 @@ root=Path(__file__).resolve().parents[1]/"prototypes"/"board-exam-app"
 board_path=root/"board.json"
 board=json.loads(board_path.read_text(encoding="utf-8"))
 elements,order=board["elements"],board["order"]
-title="44. SpaceSwitcher — Issue #138: busca, reordenação e persistência"
+title="45. SpaceSwitcher — Issue #138: busca, reordenação e persistência"
 if any(item.get("type")=="container" and item.get("text")==title for item in elements.values()):
     raise SystemExit("Evidence already present: skipping duplicates")
 

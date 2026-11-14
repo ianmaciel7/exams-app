@@ -141,6 +141,107 @@
 | 85 | Métricas de fluxo | Instrumentação | Medir sucesso, abandono, retorno e tempo por tarefa. | Comparar antes e depois da navegação por tarefas. | Evitar metas inventadas ou otimizar cliques isoladamente. | [Clicks](https://www.nngroup.com/articles/3-click-rule/) |
 | 86 | Consistência de componentes | Padrão de design system | Reusar tokens, nomenclatura e comportamento reduz variações arbitrárias. | Reaproveitar botões, campos, filtros e estados em todas as rotas. | Consistência não impede variantes justificadas por contexto. | [Shopify](https://shopify.dev/docs/api/polaris), [Fluent](https://fluent2.microsoft.design/), [Apple](https://developer.apple.com/design/human-interface-guidelines/) |
 
+
+## Extensões sincronizadas de UX para formulários — catálogo do AGENTS.md §§13–15
+
+**Escopo:** este documento continua contendo as **86 entradas aplicadas originais**. As tabelas a seguir espelham, sem renumerar as 86, os nomes e as fontes das adições ao [AGENTS.md](../../AGENTS.md) feitas nas seções 13, 14 e 15. **Não são 13+8+10+4+14+5 leis científicas independentes**: incluem leis empíricas, princípios, modelos, normas e orientações de implementação. Para o contrato de desenho visual e de persistência, consultar [DESIGN.md §8.10](../../DESIGN.md).
+
+### A. Treze leis, modelos e frameworks complementares (§13)
+
+| Nome original | Tipo / uso principal | Fonte |
+|---|---|---|
+| **Steering Law (Accot–Zhai)** | Modelo empírico; precisão exigida por trajetórias estreitas e arraste. | [Accot & Zhai](https://doi.org/10.1145/258549.258760) |
+| **Law of Crossing** | Modelo de interação por cruzamento de limites, não regra universal de formulários. | [Shumin Zhai](https://www.shuminzhai.com/post/laws-of-action) |
+| **Principle of Least Astonishment** | Princípio de previsibilidade de ações, teclado e efeitos de salvamento. | [GNOME](https://wiki.gnome.org/Projects/GnomeShell/Design/Principles) |
+| **Gulf of Execution** | Modelo de compreensão de como realizar a ação. | [Don Norman](https://jnd.org/books/the-design-of-everyday-things-revised-and-expanded-edition/) |
+| **Gulf of Evaluation** | Modelo de compreensão do resultado; alterações locais não equivalem a persistência. | [Don Norman](https://jnd.org/books/the-design-of-everyday-things-revised-and-expanded-edition/) |
+| **Feedforward** | Pista anterior à ação sobre a consequência esperada. | [Encyclopedia of HCI](https://assets.interaction-design.org/literature/book/the-encyclopedia-of-human-computer-interaction-2nd-ed/affordances) |
+| **Forcing Functions** | Mecanismos de restrição contra ação inválida/perigosa. | [Don Norman](https://jnd.org/books/the-design-of-everyday-things-revised-and-expanded-edition/) |
+| **Fogg Behavior Model (B=MAP)** | Modelo motivação/capacidade/prompt, sem manipulação. | [BJ Fogg](https://www.behaviormodel.org/) |
+| **Weber's Law** | Lei psicofísica; percepção de diferença depende do estímulo de referência. | [Corsini](https://doi.org/10.1002/9780470479216.corpsy1033) |
+| **Just Noticeable Difference (JND)** | Conceito psicofísico relacionado a Weber, não lei independente. | [Corsini](https://doi.org/10.1002/9780470479216.corpsy0481) |
+| **EAS Framework — Eliminate, Automate, Simplify** | Método de simplificação da entrada de dados. | [NN/g](https://www.nngroup.com/articles/eas-framework-simplify-forms/) |
+| **Structure, Transparency, Clarity, Support** | Quatro princípios editoriais de design de formulários. | [NN/g](https://www.nngroup.com/articles/4-principles-reduce-cognitive-load/) |
+| **Seven Stages of Action** | Modelo dos estágios de ação, percepção e avaliação de resultado. | [Don Norman](https://jnd.org/books/the-design-of-everyday-things-revised-and-expanded-edition/) |
+
+### B. Oito critérios ergonômicos de Bastien & Scapin (§14.1)
+
+| Nome original | Aplicação |
+|---|---|
+| **Guidance** | Orientação, legibilidade e feedback dos campos. |
+| **Workload** | Redução de esforço, densidade e ações excessivas. |
+| **Explicit Control** | Controle explícito e previsibilidade de ações automáticas e confirmações. |
+| **Adaptability** | Flexibilidade para diferentes experiências. |
+| **Error Management** | Prevenção, diagnóstico e recuperação de erros. |
+| **Consistency** | Consistência de nomenclatura, componentes e fluxos. |
+| **Significance of Codes (and Denominations)** | Significado claro de códigos, rótulos e ícones. |
+| **Compatibility** | Adequação à tarefa e ao contexto do usuário. |
+
+**Subcritérios registrados no AGENTS.md:** Prompting; Grouping/Distinction by Location; Grouping/Distinction by Format; Immediate Feedback; Legibility; Brevity; Concision; Minimal Actions; Information Density; Explicit User Action; User Control; Flexibility; User Experience; Error Protection; Quality of Error Messages; Error Correction. São parte da estrutura de avaliação ergonômica, **não novas leis**. Fonte de referência: [Bastien & Scapin (1993)](https://www.margaux-perrin.com/wp-content/uploads/2018/08/Bastien-and-Scapin-1993.pdf).
+
+### C. Dez princípios cognitivos de Gerhardt-Powals (§14.2)
+
+| Nome original | Aplicação |
+|---|---|
+| **Automate Unwanted Workload** | Automatizar esforço evitável. |
+| **Reduce Uncertainty** | Explicitar consequência e estado. |
+| **Fuse Data** | Unir dados relacionados. |
+| **Present New Information with Meaningful Aids to Interpretation** | Dar apoio à interpretação. |
+| **Use Names That Are Conceptually Related to Function** | Denominação relacionada à função. |
+| **Group Data in Consistently Meaningful Ways** | Agrupamento semântico. |
+| **Limit Data-Driven Tasks** | Reduzir comparação manual de dados brutos. |
+| **Include Only Information Needed by the Operator** | Mostrar o necessário. |
+| **Provide Multiple Coding of Data** | Não depender só de cor. |
+| **Practice Judicious Redundancy** | Redundância somente quando útil. |
+
+Fonte: [Gerhardt-Powals (1996)](https://doi.org/10.1080/10447319609526147). Parte do conteúdo se sobrepõe a Nielsen, Gestalt e normas existentes.
+
+### D. Quatro normas ISO de escopo relevante (§14.3)
+
+| Norma | Escopo do documento | Fonte |
+|---|---|---|
+| **ISO 9241-143:2012 — Forms** | Requisitos/recomendações para formulários conforme escopo normativo. | [ISO](https://www.iso.org/standard/53590.html) |
+| **ISO 9241-161:2025 — Visual user-interface elements** | Elementos visuais de UI. | [ISO](https://www.iso.org/standard/85790.html) |
+| **ISO 9241-115:2024 — Guidance on conceptual design, user-system interaction design, user interface design and navigation design** | Estrutura conceitual, interação e navegação. | [ISO](https://www.iso.org/standard/80773.html) |
+| **ISO 9241-171:2025 — Software accessibility** | Acessibilidade do software. | [ISO](https://www.iso.org/standard/86308.html) |
+
+**Não atribuir cláusulas específicas às normas ISO sem consultar o texto integral licenciado.**
+
+### E. WCAG 2.2 — 14 critérios de formulários individualizados nas seções 14.4 e 15.1
+
+| SC e nível | Nome oficial | Contexto principal |
+|---|---|---|
+| 3.2.2 (A) | On Input | Mudança de contexto inesperada ao alterar valor. |
+| 3.3.3 (AA) | Error Suggestion | Sugestões de correção apropriadas. |
+| 3.3.4 (AA) | Error Prevention (Legal, Financial, Data) | Verificação/reversão/revisão de submissão de respostas de teste e mudanças de dados. |
+| 3.3.7 (A) | Redundant Entry | Evitar pedir novamente dados da mesma atividade, consideradas as exceções. |
+| 3.3.8 (AA) | Accessible Authentication (Minimum) | Autenticação sem barreiras cognitivas indevidas. |
+| 1.3.5 (AA) | Identify Input Purpose | Identificação programática de finalidades de campos pessoais aplicáveis. |
+| 2.5.7 (AA) | Dragging Movements | Alternativa a arraste, quando exigida pelo critério. |
+| 1.3.1 (A) | Info and Relationships | Semântica de grupos, campos e relações visuais. |
+| 3.3.1 (A) | Error Identification | Identificar e descrever erros detectados. |
+| 3.2.1 (A) | On Focus | Foco não deve mudar contexto por si só. |
+| 2.5.3 (A) | Label in Name | Nome acessível deve conter o rótulo visível aplicável. |
+| 3.2.6 (A) | Consistent Help | Consistência na ordem de mecanismos de ajuda repetidos. |
+| 1.4.13 (AA) | Content on Hover or Focus | Conteúdo adicional acessível por hover/foco. |
+| 2.4.13 (AAA) | Focus Appearance | Área/contraste de indicador de foco; **AAA, não AA**. |
+
+Fonte: [WCAG 2.2](https://www.w3.org/TR/WCAG22/) e [Quick Reference](https://www.w3.org/WAI/WCAG22/quickref/). **Aplicabilidade e exceções devem ser avaliadas por critério**; esta enumeração não substitui uma auditoria WCAG completa.
+
+### F. Cinco técnicas oficiais para implementar formulários (§15.2)
+
+| Nome publicado | Referência | Aplicação |
+|---|---|---|
+| **Grouping Controls** | [WAI](https://www.w3.org/WAI/tutorials/forms/grouping/) | Agrupar campos também semanticamente, não só visualmente. |
+| **Form Instructions** | [WAI](https://www.w3.org/WAI/tutorials/forms/instructions/) | Associar instruções relevantes aos campos. |
+| **Validating Input** | [WAI](https://www.w3.org/WAI/tutorials/forms/validation/) | Validação tolerante, acessível e também no servidor quando aplicável. |
+| **Multi-page Forms** | [WAI](https://www.w3.org/WAI/tutorials/forms/multi-page/) | Etapas lógicas, progresso e possibilidade de retomada. |
+| **Inline Validation** | [Primer](https://primer.style/product/ui-patterns/forms/) | Timing de erro e correção com foco e associação acessíveis. |
+
+**Acréscimo de fontes específicas de design system:** [Ant Design — Form Page](https://ant.design/docs/spec/research-form/) (Efficient, Clear, Security); [Material Design 3 — Text Fields](https://m3.material.io/components/text-fields/guidelines) (Filled/Outlined); [GitHub Primer — Forms](https://primer.style/product/ui-patterns/forms/) (validação). São padrões contextualizados, não leis universais.
+
+**Contrato de sincronização:** sempre que uma lei, norma ou regra de formulário for inserida no AGENTS.md, conferir este catálogo e a especificação de aparência do DESIGN.md. Documentação de princípios não comprova que o protótipo foi alterado ou testado.
+
 ## Matriz de decisão por superfície
 
 | Superfície | Padrão principal | Primeiro viewport e CTA | Secundário | Mobile e exceção | Verificação |

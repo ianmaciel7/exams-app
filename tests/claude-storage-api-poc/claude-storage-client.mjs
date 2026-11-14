@@ -6,6 +6,7 @@
 
 export class ClaudeStorageClient {
   constructor(options = {}) {
+    // Experimental private API. A successful local fallback is NOT a confirmed cloud sync.
     this.proxyUrl = options.proxyUrl || 'http://127.0.0.1:8766';
     this.slug = options.slug || '34cd390a-738f-4dfc-8ae2-6c4f90794d74';
     this.collection = options.collection || 'bridge-poc';
@@ -94,10 +95,8 @@ export class ClaudeStorageClient {
       }
       return true;
     } catch (err) {
-      this.onLog(`[ClaudeStorageClient] Falha ao excluir do Claude Pro: ${err.message}`);
-      if (typeof localStorage !== 'undefined') {
-        localStorage.removeItem(`${this.collection}:${key}`);
-      }
+      // Remote deletion failed: retain local data instead of silently losing the only copy.
+      this.onLog('[ClaudeStorageClient] Exclusão remota não confirmada; dados locais preservados.');
       throw err;
     }
   }

@@ -1,301 +1,159 @@
 #!/usr/bin/env python3
-"""Proxy Local Seguro e Blindado para Claude Pro Frame Database.
+"""Opt-in, local proof of concept for the private, unsupported Claude Artifact DB API.
 
-Escuta ESTRITAMENTE em 127.0.0.1:8766.
-Implementa:
-- Protecao contra DNS Rebinding (validacao estrita do header Host).
-- CORS estrito com rejeicao imediata de origens nao autorizadas (HTTP 403).
-- Validacao estrita por Regex de slugs, colecoes e IDs de documento contra Path Traversal / Injection.
-- Allowlist de colecoes autorizadas para o Exam App.
-- Limite maximo de payload (512 KB) e rejeicao de requisicoes sem Content-Length.
-- Renovacao e recarregamento automatico de credenciais OAuth se o token expirar.
-- Sanitizacao total de logs e respostas de erro (zero vazamento de tokens ou dados de sessao).
-- Endpoint de diagnostico e integridade /api/health.
+No public interface and no credentials in browser responses. Not a production sync service.
 """
 
 import http.server
 import json
-import os
 import re
-import socketserver
 import sys
-import time
 import urllib.parse
-from pathlib import Path
 
-# Localizacao dinamica do pacote claude_artifact_cli no cache do uv
-uv_cache = Path(os.environ.get("LOCALAPPDATA", "")) / "uv" / "cache" / "archive-v0"
-for p in uv_cache.glob("*/Lib/site-packages"):
-    if (p / "claude_artifact_cli").is_dir():
-        sys.path.insert(0, str(p))
-        break
-
-try:
-    from claude_artifact_cli import api, auth
-except ImportError:
-    print("[Proxy Fatal] modulo 'claude_artifact_cli' nao encontrado no ambiente.", file=sys.stderr)
-    sys.exit(1)
+# Import exclusively from the explicitly installed environment, not random uv cache archives.
+from claude_artifact_cli import api, auth
 
 HOST = "127.0.0.1"
 PORT = 8766
-MAX_PAYLOAD_BYTES = 512 * 1024  # 512 KB
+DEFAULT_SLUG = "34cd390a-738f-4dfc-8ae2-6c4f90794d74"
+ALLOWED_ORIGINS = ["http://localhost:8765", "http://127.0.0.1:8765"]
+ALLOWED_COLLECTION = "bridge-poc"
+ALLOWED_HOST = f"{HOST}:{PORT}"
+DOC_ID = re.compile(r"[A-Za-z0-9_-]{1,96}\Z")
 
-# Validacao de Seguranca
-ALLOWED_HOSTS = {"127.0.0.1:8766", "localhost:8766"}
-ALLOWED_ORIGINS = {"http://localhost:8765", "http://127.0.0.1:8765"}
-ALLOWED_COLLECTIONS = {
-    "bridge-poc",
-    "exam_app_study",
-    "exam_app_attempts",
-    "exam_app_errors",
-    "exam_app_spaces",
-    "exam_app_state"
-}
-
-# Regex estritas para prevencao de Path Traversal e Injections
-RE_SLUG = re.compile(r"^[A-Za-z0-9_-]{1,64}$")
-RE_COLLECTION = re.compile(r"^[A-Za-z0-9_-]{1,32}$")
-RE_DOC_ID = re.compile(r"^[A-Za-z0-9_.:-]{1,96}$")
+# Inicializa cliente Anthropic autenticado
+try:
+    token = auth.get_token()
+    client = api.FrameClient(token)
+except Exception:
+    print("[Proxy Init Error] Install/authenticate claude-artifact-cli and retry.", file=sys.stderr)
+    sys.exit(1)
 
 
-class TokenManager:
-    """Gerencia o token OAuth com deteccao de expiracao e recarregamento sob demanda."""
+class SecureStorageProxyHandler(http.server.BaseHTTPRequestHandler):
+    def log_message(self, fmt, *args):
+        # Paths and upstream diagnostics may contain credentials or private document IDs.
+        sys.stderr.write(f"[Artifact POC Proxy] {self.command} request processed\n")
 
-    def __init__(self):
-        self._token = None
-        self._client = None
-        self._last_loaded = 0
-
-    def get_client(self, force_refresh=False) -> api.FrameClient:
-        now = time.time()
-        # Recarregar se forcado ou se passaram mais de 5 minutos
-        if force_refresh or self._client is None or (now - self._last_loaded > 300):
-            token = auth.get_token()
-            self._token = token
-            self._client = api.FrameClient(token)
-            self._last_loaded = now
-        return self._client
-
-
-token_mgr = TokenManager()
-
-
-class HardenedStorageProxyHandler(http.server.BaseHTTPRequestHandler):
-    def log_message(self, format, *args):
-        # Sanitizacao segura de log preservando formatacao nativa do http.server
-        try:
-            line = format % args
-            line = re.sub(r'Bearer\s+[A-Za-z0-9_\-\.]+', 'Bearer [REDACTED]', line)
-            line = re.sub(r'token=[A-Za-z0-9_\-\.]+', 'token=[REDACTED]', line)
-            sys.stderr.write(f"[Proxy 127.0.0.1:{PORT}] {line}\n")
-        except Exception:
-            sys.stderr.write(f"[Proxy 127.0.0.1:{PORT}] {format}\n")
-
-    def validate_host_header(self) -> bool:
-        host = self.headers.get("Host", "").strip()
-        # Se contiver porta, compara diretamente
-        return host in ALLOWED_HOSTS
-
-    def validate_origin(self) -> str | None:
-        origin = self.headers.get("Origin")
-        if not origin:
-            # Requisicoes sem Origin (ex: chamadas diretas ou curl local)
-            return "http://localhost:8765"
+    def send_cors_headers(self):
+        origin = self.headers.get("Origin", "")
+        self.send_header("Vary", "Origin")
         if origin in ALLOWED_ORIGINS:
-            return origin
-        return None
+            self.send_header("Access-Control-Allow-Origin", origin)
+            self.send_header("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS")
+            self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Cache-Control", "no-store")
 
-    def send_json(self, status_code: int, data: dict, allowed_origin: str = "http://localhost:8765"):
+    def do_OPTIONS(self):
+        if not self.authorized():
+            return
+        slug, collection, _ = self.parse_path()
+        if not slug or not self.validate_scope(slug, collection):
+            return self.send_json(403, {"error": "DISALLOWED_SCOPE"})
+        self.send_response(204)
+        self.send_cors_headers()
+        self.end_headers()
+
+    def send_json(self, status_code, data):
         body = json.dumps(data, ensure_ascii=False).encode("utf-8")
         self.send_response(status_code)
-        self.send_header("Access-Control-Allow-Origin", allowed_origin)
-        self.send_header("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type")
-        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_cors_headers()
         self.send_header("Content-Length", str(len(body)))
-        self.send_header("X-Content-Type-Options", "nosniff")
-        self.send_header("X-Frame-Options", "DENY")
         self.end_headers()
         self.wfile.write(body)
 
-    def do_OPTIONS(self):
-        if not self.validate_host_header():
-            return self.send_json(403, {"error": "INVALID_HOST", "message": "Host header rejeitado"})
-        origin = self.validate_origin()
-        if not origin:
-            return self.send_json(403, {"error": "INVALID_ORIGIN", "message": "Origem nao autorizada"})
+    def authorized(self):
+        # CORS is not authentication: enforce trusted Origin AND loopback Host on every method.
+        if self.headers.get("Host") != ALLOWED_HOST or self.headers.get("Origin") not in ALLOWED_ORIGINS:
+            self.send_json(403, {"error": "REQUEST_ORIGIN_FORBIDDEN"})
+            return False
+        return True
 
-        self.send_response(204)
-        self.send_header("Access-Control-Allow-Origin", origin)
-        self.send_header("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type")
-        self.send_header("Access-Control-Max-Age", "86400")
-        self.end_headers()
-
-    def parse_and_validate_path(self):
-        """Valida e extrai (slug, collection, doc_id) com regex estrita."""
-        parsed = urllib.parse.urlparse(self.path)
-        parts = [urllib.parse.unquote(p) for p in parsed.path.split("/") if p]
-
-        # Rota de healthcheck
-        if len(parts) == 2 and parts[0] == "api" and parts[1] == "health":
-            return "HEALTH", None, None
-
-        if len(parts) < 4 or parts[0] != "api" or parts[1] != "storage":
+    def parse_path(self):
+        parsed = urllib.parse.urlsplit(self.path)
+        if parsed.query or parsed.fragment:
             return None, None, None
+        parts = [urllib.parse.unquote(p) for p in parsed.path.split("/") if p]
+        if len(parts) not in (4, 5) or parts[:2] != ["api", "storage"]:
+            return None, None, None
+        slug, collection = parts[2:4]
+        doc = parts[4] if len(parts) == 5 else None
+        if doc is not None and not DOC_ID.fullmatch(doc):
+            return None, None, None
+        if any("/" in segment or "\\" in segment or ".." in segment for segment in (slug, collection)):
+            return None, None, None
+        return slug, collection, doc
 
-        slug = parts[2]
-        collection = parts[3]
-        doc_id = parts[4] if len(parts) > 4 else None
+    def validate_scope(self, slug, collection):
+        return slug == DEFAULT_SLUG and collection == ALLOWED_COLLECTION
 
-        if not RE_SLUG.match(slug):
-            return "INVALID_SLUG", None, None
-
-        if not RE_COLLECTION.match(collection) or collection not in ALLOWED_COLLECTIONS:
-            return "DISALLOWED_COLLECTION", None, None
-
-        if doc_id is not None and not RE_DOC_ID.match(doc_id):
-            return "INVALID_DOC_ID", None, None
-
-        return slug, collection, doc_id
-
-    def execute_anthropic_call(self, slug: str, verb: str, args: dict):
-        """Executa chamada para Anthropic com retry automatico em caso de 401."""
-        client = token_mgr.get_client()
+    def upstream(self, verb, arguments):
         try:
-            return client.db(slug, verb, args)
-        except api.ApiError as err:
-            if err.status == 401:
-                # Token pode ter sido renovado no disco pelo Claude Code
-                client = token_mgr.get_client(force_refresh=True)
-                return client.db(slug, verb, args)
-            raise
+            return self.send_json(200, client.db(DEFAULT_SLUG, verb, arguments))
+        except Exception:
+            # Never relay exception strings that could contain OAuth details or paths.
+            return self.send_json(502, {"error": "UPSTREAM_UNAVAILABLE"})
 
     def do_GET(self):
-        if not self.validate_host_header():
-            return self.send_json(403, {"error": "INVALID_HOST", "message": "Host header rejeitado"})
-        origin = self.validate_origin()
-        if not origin:
-            return self.send_json(403, {"error": "INVALID_ORIGIN", "message": "Origem nao autorizada"})
+        if not self.authorized():
+            return
+        slug, collection, doc = self.parse_path()
+        if not slug or not collection:
+            return self.send_json(400, {"error": "INVALID_ROUTE", "message": "Rota invalida"})
 
-        slug, collection, doc_id = self.parse_and_validate_path()
+        if not self.validate_scope(slug, collection):
+            return self.send_json(403, {"error": "DISALLOWED_SCOPE", "message": f"Colecao restrita: {collection}"})
 
-        if slug == "HEALTH":
-            try:
-                client = token_mgr.get_client()
-                return self.send_json(200, {
-                    "status": "ok",
-                    "authenticated": True,
-                    "proxy": "HardenedStorageProxy",
-                    "time": int(time.time())
-                }, origin)
-            except Exception:
-                return self.send_json(500, {
-                    "status": "error",
-                    "authenticated": False,
-                    "message": "Falha na autenticacao do Claude Code"
-                }, origin)
-
-        if slug == "DISALLOWED_COLLECTION":
-            return self.send_json(403, {"error": "DISALLOWED_COLLECTION", "message": "Colecao restrita ou nao permitida"}, origin)
-        if slug in ("INVALID_SLUG", "INVALID_DOC_ID") or slug is None:
-            return self.send_json(400, {"error": "INVALID_PATH", "message": "Caminho invalido ou rejeitado pela politica de seguranca"}, origin)
-
-        try:
-            if doc_id:
-                res = self.execute_anthropic_call(slug, "get", {"path": f"{collection}/{doc_id}"})
-                return self.send_json(200, res, origin)
-            else:
-                res = self.execute_anthropic_call(slug, "list", {"collection": collection})
-                return self.send_json(200, res, origin)
-        except Exception as e:
-            code = getattr(e, "status", 500)
-            return self.send_json(code, {"error": "UPSTREAM_ERROR", "message": "Falha na comunicacao com Claude Pro DB"}, origin)
-
-    def drain_body(self):
-        try:
-            cl = int(self.headers.get("Content-Length", 0))
-            if cl > 0:
-                # Drena até 2 MB com segurança
-                remaining = min(cl, 2 * 1024 * 1024)
-                while remaining > 0:
-                    chunk = self.rfile.read(min(remaining, 65536))
-                    if not chunk:
-                        break
-                    remaining -= len(chunk)
-        except Exception:
-            pass
+        if doc:
+            return self.upstream("get", {"path": f"{collection}/{doc}"})
+        return self.upstream("list", {"collection": collection})
 
     def do_POST(self):
-        if not self.validate_host_header():
-            self.drain_body()
-            return self.send_json(403, {"error": "INVALID_HOST", "message": "Host header rejeitado"})
-        origin = self.validate_origin()
-        if not origin:
-            self.drain_body()
-            return self.send_json(403, {"error": "INVALID_ORIGIN", "message": "Origem nao autorizada"})
+        if not self.authorized():
+            return
+        slug, collection, doc = self.parse_path()
+        if not slug or not collection or not doc:
+            return self.send_json(400, {"error": "INVALID_ROUTE", "message": "Rota requer :slug/:collection/:doc"})
 
-        slug, collection, doc_id = self.parse_and_validate_path()
-        if slug == "DISALLOWED_COLLECTION":
-            self.drain_body()
-            return self.send_json(403, {"error": "DISALLOWED_COLLECTION", "message": "Colecao restrita"}, origin)
-        if slug in ("INVALID_SLUG", "INVALID_DOC_ID") or slug is None or doc_id is None:
-            self.drain_body()
-            return self.send_json(400, {"error": "INVALID_PATH", "message": "Operacao POST exige :slug/:collection/:doc_id validos"}, origin)
+        if not self.validate_scope(slug, collection):
+            return self.send_json(403, {"error": "DISALLOWED_SCOPE", "message": f"Colecao restrita: {collection}"})
 
-        cl_header = self.headers.get("Content-Length")
-        if not cl_header:
-            return self.send_json(411, {"error": "LENGTH_REQUIRED", "message": "Content-Length obrigatorio"}, origin)
-
+        if self.headers.get("Content-Type", "").split(";", 1)[0].strip().lower() != "application/json":
+            return self.send_json(415, {"error": "JSON_CONTENT_TYPE_REQUIRED"})
+        if self.headers.get("Transfer-Encoding"):
+            return self.send_json(400, {"error": "UNSUPPORTED_ENCODING"})
         try:
-            content_length = int(cl_header)
+            content_length = int(self.headers.get("Content-Length", ""))
         except ValueError:
-            return self.send_json(400, {"error": "INVALID_CONTENT_LENGTH"}, origin)
-
-        if content_length > MAX_PAYLOAD_BYTES:
-            self.drain_body()
-            return self.send_json(413, {"error": "PAYLOAD_TOO_LARGE", "message": f"Limite maximo de {MAX_PAYLOAD_BYTES} bytes excedido"}, origin)
-
-        raw_body = self.rfile.read(content_length)
+            return self.send_json(411, {"error": "CONTENT_LENGTH_REQUIRED"})
+        if content_length < 1 or content_length > 1024 * 1024:
+            return self.send_json(413, {"error": "INVALID_BODY_SIZE"})
         try:
-            body = json.loads(raw_body)
-            if not isinstance(body, dict):
-                return self.send_json(400, {"error": "INVALID_JSON_BODY", "message": "Corpo deve ser um objeto JSON"}, origin)
-        except Exception:
-            return self.send_json(400, {"error": "MALFORMED_JSON", "message": "JSON invalido"}, origin)
-
-        try:
-            res = self.execute_anthropic_call(slug, "set", {"path": f"{collection}/{doc_id}", "data": body})
-            return self.send_json(200, res, origin)
-        except Exception as e:
-            code = getattr(e, "status", 500)
-            return self.send_json(code, {"error": "UPSTREAM_ERROR", "message": "Falha ao gravar no Claude Pro DB"}, origin)
+            body = json.loads(self.rfile.read(content_length))
+        except (ValueError, UnicodeError):
+            return self.send_json(400, {"error": "INVALID_JSON"})
+        if not isinstance(body, dict):
+            return self.send_json(400, {"error": "JSON_OBJECT_REQUIRED"})
+        return self.upstream("set", {"path": f"{collection}/{doc}", "data": body})
 
     def do_DELETE(self):
-        if not self.validate_host_header():
-            return self.send_json(403, {"error": "INVALID_HOST", "message": "Host header rejeitado"})
-        origin = self.validate_origin()
-        if not origin:
-            return self.send_json(403, {"error": "INVALID_ORIGIN", "message": "Origem nao autorizada"})
+        if not self.authorized():
+            return
+        slug, collection, doc = self.parse_path()
+        if not slug or not collection or not doc:
+            return self.send_json(400, {"error": "INVALID_ROUTE", "message": "Rota requer :slug/:collection/:doc"})
 
-        slug, collection, doc_id = self.parse_and_validate_path()
-        if slug == "DISALLOWED_COLLECTION":
-            return self.send_json(403, {"error": "DISALLOWED_COLLECTION", "message": "Colecao restrita"}, origin)
-        if slug in ("INVALID_SLUG", "INVALID_DOC_ID") or slug is None or doc_id is None:
-            return self.send_json(400, {"error": "INVALID_PATH", "message": "Operacao DELETE exige :slug/:collection/:doc_id validos"}, origin)
+        if not self.validate_scope(slug, collection):
+            return self.send_json(403, {"error": "DISALLOWED_SCOPE", "message": f"Colecao restrita: {collection}"})
 
-        try:
-            res = self.execute_anthropic_call(slug, "delete", {"path": f"{collection}/{doc_id}"})
-            return self.send_json(200, res, origin)
-        except Exception as e:
-            code = getattr(e, "status", 500)
-            return self.send_json(code, {"error": "UPSTREAM_ERROR", "message": "Falha ao excluir no Claude Pro DB"}, origin)
+        return self.upstream("delete", {"path": f"{collection}/{doc}"})
 
 
 def main():
     server_address = (HOST, PORT)
-    with socketserver.TCPServer(server_address, HardenedStorageProxyHandler) as httpd:
-        print(f"[HardenedProxy] Servidor iniciado e blindado em http://{HOST}:{PORT}")
+    with http.server.ThreadingHTTPServer(server_address, SecureStorageProxyHandler) as httpd:
+        print(f"[Proxy] Servidor iniciado estritamente em http://{HOST}:{PORT}")
         httpd.serve_forever()
 
 

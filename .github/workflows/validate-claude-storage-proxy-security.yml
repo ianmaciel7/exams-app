@@ -1,0 +1,40 @@
+name: Validate Claude Artifact Proxy Security (offline)
+
+on:
+  pull_request:
+    branches: [dev]
+    paths:
+      - 'tests/claude-storage-api-poc/proxy.py'
+      - 'tests/claude-storage-api-poc/security.test.mjs'
+      - 'tests/claude-storage-api-poc/client-fallback.test.mjs'
+      - 'tests/claude-storage-api-poc/fixtures/**'
+      - 'tests/claude-storage-api-poc/claude-storage-client.mjs'
+      - '.github/workflows/validate-claude-storage-proxy-security.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  proxy-security:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Compile the local Python proxy and test fixture
+        run: |
+          python3 -m py_compile tests/claude-storage-api-poc/proxy.py
+          python3 -m py_compile tests/claude-storage-api-poc/fixtures/claude_artifact_cli/__init__.py
+      - name: Security boundary and local-data preservation (no credentials, no external calls)
+        run: |
+          node --test tests/claude-storage-api-poc/security.test.mjs tests/claude-storage-api-poc/client-fallback.test.mjs
+      - name: Ensure private endpoint is not described as supported API
+        shell: bash
+        run: |
+          grep -q 'API privada e não documentada' docs/reports/claude-storage-api/CLAUDE_STORAGE_API_INTEGRATION.md
+          ! grep -q 'u_MtER6w_6FV6qblJiQR8Zpg' docs/reports/claude-storage-api/CLAUDE_STORAGE_API_INTEGRATION.md
