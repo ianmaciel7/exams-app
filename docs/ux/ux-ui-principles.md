@@ -393,6 +393,24 @@ Espelho resumido de [AGENTS.md §18](../../AGENTS.md) e dos contratos de [DESIGN
 
 **Nota sobre testes:** scanners e ferramentas automáticas não determinam sozinhos se um produto é acessível; requerem interpretação e testes manuais de experiências e processos. [WAI — Selecting Evaluation Tools](https://www.w3.org/WAI/test-evaluate/tools/selecting/). A enumeração de fontes **não** equivale a teste de implementação.
 
+
+### R. Animated icons, Sortable e View Transitions — padrões publicados e acessibilidade (2026)
+
+Espelho das regras em [AGENTS.md §19](../../AGENTS.md), [DESIGN.md §8.22](../../DESIGN.md) e [MOTION.md §6](../../MOTION.md). Estes **não são leis universais de UX**: incluem efeitos nativos Apple, orientações Material 3, componentes e mecanismos de biblioteca, APIs Web e técnica informativa de conformidade WCAG.
+
+| Nome publicado | Categoria | Exemplo condicionado no Exam App | Fonte |
+|---|---|---|---|
+| **Symbol Effects: Discrete, Indefinite, Transition, Content Transition** | Apple Symbols, **plataformas nativas** | Referência para feedback de ícone de favorito, expandir, salvamento e substituição de símbolo; **não copiar asset ou API Apple para web**. | [Apple Symbols](https://developer.apple.com/documentation/symbols) |
+| **Bounce, Pulse, Wiggle, Rotate, Replace, Draw On / Draw Off** | Efeitos Apple/SF Symbols | Pequena mudança por evento/estado, evitando loops ou distração contínua. | [Apple SF Symbols](https://developer.apple.com/sf-symbols/) |
+| **Spatial Springs / Effects Springs** | Material 3 Expressive | Diferença entre mudanças espaciais e de cor/opacidade, em conjunto com tokens existentes. | [M3 Motion](https://m3.material.io/styles/motion/overview) |
+| **Sortable, Drag Handle, Drag Overlay, Drop Animation** | Padrões de drag-and-drop documentados por dnd-kit | Reordenar cards e listas preservando alça, destino, cancelamento e ordem. | [dnd-kit](https://dndkit.com/concepts/sortable/) |
+| **Pointer Sensor, Keyboard Sensor, Accessibility, AutoScroller** | Recursos dnd-kit | Entrada por pointer/teclado, anúncio, auto-scroll; nenhuma instalação exigida. | [dnd-kit manager](https://dndkit.com/concepts/drag-drop-manager/) |
+| **Layout Animations, Shared Layout, AnimatePresence, Reorder** | Padrões/APIs Motion | Transição card ↔ detalhe, reordenação, entrada/saída, se tiver justificativa. | [Motion Layout](https://motion.dev/docs/react-layout-animations), [Motion Reorder](https://motion.dev/docs/react-reorder) |
+| **View Transition API** | API de navegador | Transições entre DOM/rotas com fallback, estado lógico, foco e scroll tratados pela aplicação. | [MDN](https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API) |
+| **G219 — Ensuring that an alternative is available for dragging movements that operate on content** | Técnica W3C **suficiente** para **WCAG 2.5.7 AA** | Reordenar também por botões de mover ou menu de destino com clique/toque, independente do teclado. | [WAI G219](https://www.w3.org/WAI/WCAG22/Techniques/general/G219) |
+
+**Verificações:** toda interação arrastável deve distinguir drag, teclado e **ponteiro único sem drag**, além de cancelamento, drop inválido, retorno de foco, reduced motion, anúncio do resultado e salvamento real. Animações de ícones devem comunicar estado ou feedback, nunca substituir rótulos ou bloquear ação. Registrar evidência quando houver implementação concreta.
+
 ## Matriz de decisão por superfície
 
 | Superfície | Padrão principal | Primeiro viewport e CTA | Secundário | Mobile e exceção | Verificação |
