@@ -751,7 +751,9 @@
     "e1442",
     "e1443",
     "e1444",
-    "e1445"
+    "e1445",
+    "e1446",
+    "e1447"
   ],
   "elements": {
     "e1": {
@@ -7819,7 +7821,7 @@
       "x": 42000,
       "y": 11000,
       "w": 1650,
-      "h": 2400
+      "h": 3500
     },
     "e1441": {
       "type": "text",
@@ -7863,6 +7865,23 @@
       "y": 13240,
       "w": 1550,
       "h": 130
+    },
+    "e1446": {
+      "type": "image",
+      "src": "/_blob/evidence-homologation-clean-recovery",
+      "x": 42050,
+      "y": 13400,
+      "w": 1550,
+      "h": 850
+    },
+    "e1447": {
+      "type": "text",
+      "color": "white",
+      "text": "Evidencia de Homologacao: Recuperacao completa e deterministica de dados (respostas, cadernos, espacos e workspaces) em navegador limpo e virgem a partir do Claude Pro DB.",
+      "x": 42050,
+      "y": 14280,
+      "w": 1550,
+      "h": 120
     }
   }
 }

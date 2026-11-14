@@ -2264,6 +2264,10 @@ Evidencia de execucao real no Google Chrome: Badge SVG ativo (.synced/.syncing) 
 
 Evidencia de auditoria do Claude Web: O acesso web automatizado ao Artifact real (claude.ai/code/artifact/...) apresenta o desafio Cloudflare Turnstile (Just a moment...), enquanto a API de Frame DB via token OAuth do Claude Code no proxy conecta-se diretamente ao backend sem bloqueio.
 
+![imagem e1446](assets/evidence-homologation-clean-recovery.png)
+
+Evidencia de Homologacao: Recuperacao completa e deterministica de dados (respostas, cadernos, espacos e workspaces) em navegador limpo e virgem a partir do Claude Pro DB.
+
 ## 46. Atalhos de teclado — Issue #139: registro e roteamento centralizado
 <!-- container e1397 @ (43000,11000) -->
 
