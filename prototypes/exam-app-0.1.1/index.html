@@ -3338,7 +3338,7 @@ function scBody(k,id,tab,kind,title){
     const sel='<div class="sc-filters"><select id="scMat" aria-label="Disciplina"><option value="todas">Todas as disciplinas</option>'+examNames.map(n=>'<option value="'+esc(n)+'"'+(scMat===n?' selected':'')+'>'+esc(n)+'</option>').join('')+'</select><select id="scSit" aria-label="Situação">'+[['todas','Todas'],['pendentes','Não resolvidas'],['erradas','Que errei']].map(o=>'<option value="'+o[0]+'"'+(scSit===o[0]?' selected':'')+'>'+o[1]+'</option>').join('')+'</select><span class="sc-count" role="status">'+(list.length+listU.length)+((list.length+listU.length)===1?' questão':' questões')+'</span>'+ACT+'</div>';
     const rows=list.map(q=>{const r=a[q.n],st=r?(r.correct?UIICON.check:UIICON.close):'';const t=String(q.enunciado).replace(/\s+/g,' ').trim();return '<a class="op-row sc-q" href="#/questao/q'+q.n+'"><span class="sc-n">'+q.n+'</span><span class="op-rt"><b>'+esc(t.length>110?t.slice(0,110)+'…':t)+'</b><small>'+esc(q.materia)+' · FGV 2026</small></span><span class="sc-st '+(r?(r.correct?'ok':'bad'):'')+'">'+(st||'')+'</span><span class="op-go" aria-hidden="true">›</span></a>';}).join('');
     const urows=listU.map(q=>{const r=ua[q.id],t=q.enunciado.replace(/\s+/g,' ').trim();return '<a class="op-row sc-q" href="#/questao/'+q.id+'"><span class="sc-n">+</span><span class="op-rt"><b>'+esc(t.length>110?t.slice(0,110)+'…':t)+'</b><small>'+esc(q.materia||'Sem disciplina')+' · criada por você</small></span><span class="sc-st '+(r?(r===q.gabarito?'ok':'bad'):'')+'">'+(r?(r===q.gabarito?UIICON.check:UIICON.close):'')+'</span><span class="op-go" aria-hidden="true">›</span></a>';}).join('');
-    const form=scForm?'<form class="sc-form" onsubmit="return false"><label>Disciplina<input id="uqMat" list="uqMats" placeholder="Ex.: Língua Portuguesa"><datalist id="uqMats">'+examNames.map(n=>'<option value="'+esc(n)+'">').join('')+'</datalist></label><label>Origem<select id="uqOri"><option value="manual">Manual (criada por mim)</option><option value="ia">Gerada por IA</option><option value="oficial">Oficial (de uma prova)</option></select></label><label>Enunciado<textarea id="uqEnu" rows="4"></textarea></label>'+['A','B','C','D','E'].map(l=>'<label class="sc-lt">'+l+'<input id="uqAlt'+l+'" placeholder="Alternativa '+l+(l<'C'?'':' (opcional)')+'"></label>').join('')+'<label>Gabarito<select id="uqGab">'+['A','B','C','D','E'].map(l=>'<option>'+l+'</option>').join('')+'</select></label><div class="op-actions"><button type="button" class="op-btn pri" data-uq-save>Salvar questão</button><button type="button" class="op-btn" data-uq-cancel>Cancelar</button></div></form>':'';
+    const form=scForm?'<form class="sc-form" onsubmit="return false"><label>Disciplina<input id="uqMat" list="uqMats" placeholder="Ex.: Língua Portuguesa"><datalist id="uqMats">'+examNames.map(n=>'<option value="'+esc(n)+'">').join('')+'</datalist></label><label>Origem<select id="uqOri"><option value="manual">Manual (criada por mim)</option><option value="ia">Gerada por IA</option><option value="oficial">Oficial (de uma prova)</option></select></label><label>Assunto<input id="uqAssunto" placeholder="Ex.: Interpretação de texto"></label><label>Modalidade<select id="uqModal"><option value="Múltipla escolha">Múltipla escolha</option><option value="Certo/Errado">Certo/Errado</option></select></label><label>Dificuldade<select id="uqDif"><option value="">Não classificada</option><option>Fácil</option><option>Média</option><option>Difícil</option></select></label><label>Enunciado<textarea id="uqEnu" rows="4"></textarea></label>'+['A','B','C','D','E'].map(l=>'<label class="sc-lt">'+l+'<input id="uqAlt'+l+'" placeholder="Alternativa '+l+(l<'C'?'':' (opcional)')+'"></label>').join('')+'<label>Gabarito<select id="uqGab">'+['A','B','C','D','E'].map(l=>'<option>'+l+'</option>').join('')+'</select></label><div class="op-actions"><button type="button" class="op-btn pri" data-uq-save>Salvar questão</button><button type="button" class="op-btn" data-uq-cancel>Cancelar</button></div></form>':'';
     return scSec(form+qfHTML(k+':'+id,qObjs().filter(q=>q.user?q[UQF[k]]===id:scHas(k,id)),{extra:ACT,renderList:renderPracticeList}));
   }
   const uaS=uqAns(),total=bank.length+mine.length,er=bank.filter(x=>a[x.n]&&!a[x.n].correct).length+mine.filter(q=>uaS[q.id]&&uaS[q.id]!==q.gabarito).length,pe=bank.filter(x=>!a[x.n]).length+mine.filter(q=>!uaS[q.id]).length;
@@ -3979,16 +3979,44 @@ function qfPopHTML(key){
   const c=QF_CATS.find(x=>x.id===st.cat),nv=qfVals(key,c).length;
   return '<div class="qf-h"><button type="button" class="qf-back" data-qf-back aria-label="Voltar às categorias">‹</button><span>'+c.t+'</span><button type="button" class="qf-mini" data-qf-catclear>Limpar</button></div>'+(nv>6?'<input type="search" class="qf-s" data-qf-s placeholder="Buscar '+c.t.toLowerCase()+'…" aria-label="Buscar em '+c.t+'" autocomplete="off" value="'+esc(st.qs)+'">':'')+'<div class="qf-opts" role="listbox" aria-multiselectable="true" aria-label="'+c.t+'">'+qfOptsHTML(key)+'</div>';
 }
-function qfQuickHTML(key){const selected=(qfSt(key).f.sit||[])[0]||'todas';return '<div class="qf-fast" role="group" aria-label="Situação das questões">'+[['todas','Todas'],['resolvidas','Resolvidas'],['pendentes','Não resolvidas'],['certas','Acertei'],['erradas','Errei']].map(([v,t])=>'<button type="button" class="op-btn qf-quick'+(selected===v?' on':'')+'" data-qf-quick="'+v+'" aria-pressed="'+(selected===v)+'">'+t+'</button>').join('')+'</div>';}
+function qfQuickHTML(key){
+  const selected=(qfSt(key).f.sit||[])[0]||'todas';
+  return '<div class="qf-fast" role="group" aria-label="Situação das questões">'+
+    [['todas','Todas'],['resolvidas','Resolvidas'],['pendentes','Não resolvidas'],['certas','Acertei'],['erradas','Errei']].map(([v,t])=>
+      '<button type="button" class="op-btn qf-quick'+(selected===v?' on':'')+'" data-qf-quick="'+v+'" aria-pressed="'+(selected===v)+'">'+t+'</button>').join('')+'</div>';
+}
+const QF_GRID_FIELDS=['disc','assunto','banca','cg','ano','orgao','modalidade','dificuldade'];
+function qfAdvancedHTML(key){
+  const st=qfSt(key);
+  const fields=QF_GRID_FIELDS.map(id=>{
+    const cat=QF_CATS.find(c=>c.id===id),hasParent=!cat.requires||(st.f[cat.requires]||[]).length>0;
+    const choices=hasParent?qfVals(key,cat):[];
+    const selected=(st.f[id]||[])[0]||'';
+    const available=choices.some(([v])=>v===selected);
+    const hint=!hasParent?'Selecione uma Disciplina primeiro':!choices.length?'Sem valores cadastrados':'Todas as opções';
+    return '<label class="qf-field"><span>'+cat.t+'</span><select data-qf-field="'+id+'" aria-label="'+cat.t+'" '+(!hasParent||(!choices.length&&!available)?'disabled':'')+'>'+
+      '<option value="">'+hint+'</option>'+
+      choices.map(([v,n])=>'<option value="'+esc(v)+'" '+(selected===v?'selected':'')+'>'+esc(qfLbl(cat,v))+' ('+n+')</option>').join('')+'</select></label>';
+  }).join('');
+  const flags='<fieldset class="qf-exclusions"><legend>Excluir questões</legend>'+
+    QF_EXCLUSIONS.filter(x=>x.mode==='exclude').map(x=>'<label class="qf-check"><input type="checkbox" data-qf-flag="'+x.id+'" '+((st.x||{})[x.id]?'checked':'')+'><span>'+x.t+'</span></label>').join('')+'</fieldset>'+
+    '<fieldset class="qf-exclusions"><legend>Incluir somente questões com</legend>'+
+    QF_EXCLUSIONS.filter(x=>x.mode==='include').map(x=>'<label class="qf-check"><input type="checkbox" data-qf-flag="'+x.id+'" '+((st.x||{})[x.id]?'checked':'')+'><span>'+x.t+'</span></label>').join('')+'</fieldset>';
+  return '<div class="qf-field-grid">'+fields+'</div>'+flags+
+    '<div class="qf-advanced-footer"><button type="button" class="op-btn pri" data-qf-apply>Filtrar</button>'+
+    '<button type="button" class="op-btn" data-qf-clear>Limpar filtros</button>'+
+    '<button type="button" class="op-btn" data-qf-panel>Fechar filtro ↑</button></div>';
+}
 function qfHTML(key,all,o){
   o=o||{}; qfCtx[key]={all,o}; const st=qfSt(key); st.open=false; st.cat=null; st.qs='';
   const P=qfParts(key); if(o.onChange) o.onChange(P.fl);
+  const advancedPanel='<div class="qf-advanced"><button type="button" class="op-btn qf-panel-toggle" data-qf-panel aria-expanded="'+(st.panelOpen?'true':'false')+'">'+(st.panelOpen?'Fechar filtro ↑':'Mais filtros ↓')+'</button><div class="qf-advanced-body" '+(st.panelOpen?'':'hidden')+'>'+qfAdvancedHTML(key)+'</div></div>';
   const savedActions='<div class="qf-saved-actions"><button type="button" class="op-btn" data-qf-create-book="'+esc(key)+'">Gerar Caderno</button><button type="button" class="op-btn" data-qf-save-filter="'+esc(key)+'">Salvar filtro</button><a class="op-btn" href="#/filtros">Meus filtros</a></div>';
-  return '<div class="qf" data-qf="'+key+'">'+qfQuickHTML(key)+'<div class="qf-bar"><div class="qf-wrap"><button type="button" class="op-btn qf-btn" data-qf-toggle aria-haspopup="dialog" aria-expanded="false">'+QF_IC+' Filtrar'+(P.n?'<em class="qf-n">'+P.n+'</em>':'')+'</button><div class="qf-pop" role="dialog" aria-label="Filtrar questões"></div></div><input type="search" class="qf-q" data-qf-text placeholder="Buscar nas questões…" aria-label="Buscar nas questões" autocomplete="off" value="'+esc(st.text)+'"><span class="sc-count qf-count" role="status" aria-live="polite">'+P.count+'</span>'+(o.extra||'')+savedActions+'</div><div class="qf-chips">'+P.chips+'</div><div class="qf-list">'+P.list+'</div></div>';
+  return '<div class="qf" data-qf="'+key+'">'+qfQuickHTML(key)+advancedPanel+'<div class="qf-bar"><div class="qf-wrap"><button type="button" class="op-btn qf-btn" data-qf-toggle aria-haspopup="dialog" aria-expanded="false">'+QF_IC+' Filtrar'+(P.n?'<em class="qf-n">'+P.n+'</em>':'')+'</button><div class="qf-pop" role="dialog" aria-label="Filtrar questões"></div></div><input type="search" class="qf-q" data-qf-text placeholder="Buscar nas questões…" aria-label="Buscar nas questões" autocomplete="off" value="'+esc(st.text)+'"><span class="sc-count qf-count" role="status" aria-live="polite">'+P.count+'</span>'+(o.extra||'')+savedActions+'</div><div class="qf-chips"><b class="qf-chip-heading">Filtrar por:</b>'+P.chips+'</div><div class="qf-list">'+P.list+'</div></div>';
 }
 function qfRefresh(root){
   const key=root.dataset.qf,c=qfCtx[key];if(key==='study'){qIndex=0;qfSyncURL();}else qScopedPage[key]=0;const P=qfParts(key);
-  root.querySelector('.qf-chips').innerHTML=P.chips; root.querySelector('.qf-count').textContent=P.count; root.querySelector('.qf-list').innerHTML=P.list;
+  root.querySelector('.qf-chips').innerHTML='<b class="qf-chip-heading">Filtrar por:</b>'+P.chips;const adv=root.querySelector('.qf-advanced-body');if(adv)adv.innerHTML=qfAdvancedHTML(key);root.querySelector('.qf-count').textContent=P.count; root.querySelector('.qf-list').innerHTML=P.list;
   root.querySelector('.qf-btn').innerHTML=QF_IC+' Filtrar'+(P.n?'<em class="qf-n">'+P.n+'</em>':'');const selected=(qfSt(key).f.sit||[])[0]||'todas';root.querySelectorAll('[data-qf-quick]').forEach(b=>{const on=b.dataset.qfQuick===selected;b.setAttribute('aria-pressed',String(on));b.classList.toggle('on',on);});
   if(c.o.onChange) c.o.onChange(P.fl);
 }
@@ -4348,7 +4376,7 @@ view.addEventListener('click',e=>{
  if(e.target.closest('[data-uq-cancel]')){ scForm=false; rr(); return; }
  if(e.target.closest('[data-uq-save]')){ const v=id=>(view.querySelector('#'+id)||{}).value||''; const enu=v('uqEnu').trim(); const alts={}; ['A','B','C','D','E'].forEach(l=>{const t=v('uqAlt'+l).trim(); if(t)alts[l]=t;}); const gab=v('uqGab');
    if(!enu){toast('Escreva o enunciado');return;} if(Object.keys(alts).length<2){toast('Informe ao menos duas alternativas');return;} if(!alts[gab]){toast('O gabarito precisa ser uma alternativa preenchida');return;}
-   const q={id:'u'+Date.now().toString(36),materia:v('uqMat').trim(),enunciado:enu,alternativas:alts,gabarito:gab,origem:v('uqOri')||'manual',criada:Date.now()};
+   const q={id:'u'+Date.now().toString(36),materia:v('uqMat').trim(),assunto:v('uqAssunto').trim(),modalidade:v('uqModal')||'Múltipla escolha',dificuldade:v('uqDif')||'',enunciado:enu,alternativas:alts,gabarito:gab,origem:v('uqOri')||'manual',criada:Date.now()};
    if(hh[1]==='concurso')q.conc=hh[2]; else if(hh[1]==='edicao'){q.ed=hh[2];q.conc=(edicaoById(hh[2])||{}).conc;} else {const g=cargoById(hh[2]);q.cg=hh[2];q.ed=g&&g.edicao;q.conc=g&&(edicaoById(g.edicao)||{}).conc;}
    if(q.materia) ensureEnt('disciplina',q.materia); store.set('uq',uqAll().concat(q)); scForm=false; toast('Questão salva'); rr(); return; }
  const ua=e.target.closest('[data-uq-ans]'); if(ua){ e.preventDefault(); const [id,l]=ua.dataset.uqAns.split('|'); const m=uqAns(); m[id]=l; store.set('uqAns',m); rr(); return; }
