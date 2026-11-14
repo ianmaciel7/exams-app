@@ -1,0 +1,65 @@
+name: E2E Advanced Question Filters
+
+on:
+  pull_request:
+    branches: [dev]
+    paths:
+      - 'prototypes/exam-app-0.1.1/index.html'
+      - 'tests/advanced-question-filters.e2e.mjs'
+      - 'scripts/append-advanced-filters-board.py'
+      - '.github/workflows/e2e-advanced-filters.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  filter-journeys:
+    if: github.head_ref == 'feat/advanced-question-filters-70' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Launch baseline and updated prototype
+        run: |
+          git worktree add --detach /tmp/exams-filter-before b9baf0936f6d4c2cae586cc1614dd71f788b7afe
+          python3 -m http.server 8765 --directory prototypes >/tmp/filter-after.log 2>&1 &
+          python3 -m http.server 8766 --directory /tmp/exams-filter-before/prototypes >/tmp/filter-before.log 2>&1 &
+          sleep 2
+          curl -f http://127.0.0.1:8765/exam-app-0.1.1/index.html -o /dev/null
+          curl -f http://127.0.0.1:8766/exam-app-0.1.1/index.html -o /dev/null
+      - name: E2E cascading facets, exclusions, saved Queries, URL, simulation and mobile
+        run: node tests/advanced-question-filters.e2e.mjs
+      - name: Upload screenshots and route journal
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: issue70-advanced-filter-evidence
+          path: |
+            prototypes/board-exam-app/assets/issue70_*.png
+            prototypes/board-exam-app/issue70_e2e.json
+          if-no-files-found: warn
+      - name: Append validated evidence to board and regenerate Markdown
+        run: |
+          python3 scripts/append-advanced-filters-board.py
+          npm run board
+          grep -q "36. Filtros avançados" prototypes/board-exam-app/BOARD.md
+      - name: Persist evidence in PR branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add prototypes/board-exam-app/board.json prototypes/board-exam-app/BOARD.md prototypes/board-exam-app/issue70_e2e.json
+          git add prototypes/board-exam-app/assets/issue70_*.png
+          if ! git diff --cached --quiet; then
+            git commit -m "test(filters): persist Issue #70 Chromium evidence in planning board"
+            git push origin HEAD:${{ github.head_ref }}
+          fi
