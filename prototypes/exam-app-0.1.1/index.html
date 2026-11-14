@@ -90,6 +90,25 @@
 .nb-goal input{width:75px;padding:7px;border:1px solid var(--line);border-radius:6px}
 @media(max-width:768px){.qf-saved-actions{padding-left:0}.nb-list{gap:10px}.nb-card{padding:12px}}
 </style>
+<style>
+/* Advanced study filters: progressive disclosure, semantic labels and safe mobile wrapping. */
+.qf-advanced{margin:6px 0 12px}
+.qf-panel-toggle{min-height:32px}
+.qf-advanced-body{padding:14px;margin-top:8px;background:var(--bg-base);border:1px solid var(--line);border-radius:12px}
+.qf-advanced-body[hidden]{display:none!important}
+.qf-field-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,185px),1fr));gap:12px}
+.qf-field{display:flex;flex-direction:column;gap:4px;color:var(--muted);font-size:12px;min-width:0}
+.qf-field select{padding:8px 10px;min-height:36px;max-width:100%;border:1px solid var(--line);border-radius:7px;background:var(--bg);color:var(--text)}
+.qf-field select:disabled{opacity:.6;cursor:not-allowed}
+.qf-exclusions{border:0;padding:0;margin:14px 0 0;display:flex;flex-wrap:wrap;gap:6px 14px}
+.qf-exclusions legend{display:block;color:var(--text);font-size:12.5px;font-weight:600;padding:0;margin-bottom:4px}
+.qf-check{display:inline-flex;gap:7px;align-items:center;min-height:30px;font-size:12px}
+.qf-check input{accent-color:var(--study-accent);width:16px;height:16px}
+.qf-advanced-footer{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.qf-chip-heading{font-size:12px;color:var(--muted);font-weight:600;white-space:nowrap}
+.qf-saved-actions{flex-wrap:wrap;gap:6px}
+@media(max-width:768px){.qf-field-grid{grid-template-columns:1fr}.qf-advanced-body{padding:10px}.qf-saved-actions{width:100%}}
+</style>
 </head><body>
 <style>
 /* ===== Exam App 0.1.1 — páginas de estudo e detalhes, 2026 ===== */
@@ -3338,7 +3357,7 @@ function scBody(k,id,tab,kind,title){
     const sel='<div class="sc-filters"><select id="scMat" aria-label="Disciplina"><option value="todas">Todas as disciplinas</option>'+examNames.map(n=>'<option value="'+esc(n)+'"'+(scMat===n?' selected':'')+'>'+esc(n)+'</option>').join('')+'</select><select id="scSit" aria-label="Situação">'+[['todas','Todas'],['pendentes','Não resolvidas'],['erradas','Que errei']].map(o=>'<option value="'+o[0]+'"'+(scSit===o[0]?' selected':'')+'>'+o[1]+'</option>').join('')+'</select><span class="sc-count" role="status">'+(list.length+listU.length)+((list.length+listU.length)===1?' questão':' questões')+'</span>'+ACT+'</div>';
     const rows=list.map(q=>{const r=a[q.n],st=r?(r.correct?UIICON.check:UIICON.close):'';const t=String(q.enunciado).replace(/\s+/g,' ').trim();return '<a class="op-row sc-q" href="#/questao/q'+q.n+'"><span class="sc-n">'+q.n+'</span><span class="op-rt"><b>'+esc(t.length>110?t.slice(0,110)+'…':t)+'</b><small>'+esc(q.materia)+' · FGV 2026</small></span><span class="sc-st '+(r?(r.correct?'ok':'bad'):'')+'">'+(st||'')+'</span><span class="op-go" aria-hidden="true">›</span></a>';}).join('');
     const urows=listU.map(q=>{const r=ua[q.id],t=q.enunciado.replace(/\s+/g,' ').trim();return '<a class="op-row sc-q" href="#/questao/'+q.id+'"><span class="sc-n">+</span><span class="op-rt"><b>'+esc(t.length>110?t.slice(0,110)+'…':t)+'</b><small>'+esc(q.materia||'Sem disciplina')+' · criada por você</small></span><span class="sc-st '+(r?(r===q.gabarito?'ok':'bad'):'')+'">'+(r?(r===q.gabarito?UIICON.check:UIICON.close):'')+'</span><span class="op-go" aria-hidden="true">›</span></a>';}).join('');
-    const form=scForm?'<form class="sc-form" onsubmit="return false"><label>Disciplina<input id="uqMat" list="uqMats" placeholder="Ex.: Língua Portuguesa"><datalist id="uqMats">'+examNames.map(n=>'<option value="'+esc(n)+'">').join('')+'</datalist></label><label>Origem<select id="uqOri"><option value="manual">Manual (criada por mim)</option><option value="ia">Gerada por IA</option><option value="oficial">Oficial (de uma prova)</option></select></label><label>Enunciado<textarea id="uqEnu" rows="4"></textarea></label>'+['A','B','C','D','E'].map(l=>'<label class="sc-lt">'+l+'<input id="uqAlt'+l+'" placeholder="Alternativa '+l+(l<'C'?'':' (opcional)')+'"></label>').join('')+'<label>Gabarito<select id="uqGab">'+['A','B','C','D','E'].map(l=>'<option>'+l+'</option>').join('')+'</select></label><div class="op-actions"><button type="button" class="op-btn pri" data-uq-save>Salvar questão</button><button type="button" class="op-btn" data-uq-cancel>Cancelar</button></div></form>':'';
+    const form=scForm?'<form class="sc-form" onsubmit="return false"><label>Disciplina<input id="uqMat" list="uqMats" placeholder="Ex.: Língua Portuguesa"><datalist id="uqMats">'+examNames.map(n=>'<option value="'+esc(n)+'">').join('')+'</datalist></label><label>Origem<select id="uqOri"><option value="manual">Manual (criada por mim)</option><option value="ia">Gerada por IA</option><option value="oficial">Oficial (de uma prova)</option></select></label><label>Assunto<input id="uqAssunto" placeholder="Ex.: Interpretação de texto"></label><label>Modalidade<select id="uqModal"><option value="Múltipla escolha">Múltipla escolha</option><option value="Certo/Errado">Certo/Errado</option></select></label><label>Dificuldade<select id="uqDif"><option value="">Não classificada</option><option>Fácil</option><option>Média</option><option>Difícil</option></select></label><label>Enunciado<textarea id="uqEnu" rows="4"></textarea></label>'+['A','B','C','D','E'].map(l=>'<label class="sc-lt">'+l+'<input id="uqAlt'+l+'" placeholder="Alternativa '+l+(l<'C'?'':' (opcional)')+'"></label>').join('')+'<label>Gabarito<select id="uqGab">'+['A','B','C','D','E'].map(l=>'<option>'+l+'</option>').join('')+'</select></label><div class="op-actions"><button type="button" class="op-btn pri" data-uq-save>Salvar questão</button><button type="button" class="op-btn" data-uq-cancel>Cancelar</button></div></form>':'';
     return scSec(form+qfHTML(k+':'+id,qObjs().filter(q=>q.user?q[UQF[k]]===id:scHas(k,id)),{extra:ACT,renderList:renderPracticeList}));
   }
   const uaS=uqAns(),total=bank.length+mine.length,er=bank.filter(x=>a[x.n]&&!a[x.n].correct).length+mine.filter(q=>uaS[q.id]&&uaS[q.id]!==q.gabarito).length,pe=bank.filter(x=>!a[x.n]).length+mine.filter(q=>!uaS[q.id]).length;
@@ -3714,7 +3733,7 @@ const origTag=q=>'<span class="s-badge" title="Origem da questão">'+ORIGENS[qOr
 const qTitle=q=>q.user?(String(q.enunciado).replace(/\s+/g,' ').trim().slice(0,70)||'Questão'):'Questão '+q.n;
 function qObjs(){
   const b=(questionBank&&questionBank.questoes)||[];
-  const bank=b.map((q,i)=>({id:'q'+q.n,type:'questao',bi:i,n:q.n,materia:q.materia,enunciado:q.enunciado,alternativas:q.alternativas,gabarito:q.gabarito,banca:'FGV',orgao:'Dataprev',ano:'2026',ed:'dataprev-2026',cg:'dataprev-2026-ti-dev',conc:'dataprev',origem:'oficial',doc:'tipo1'}));
+  const bank=b.map((q,i)=>({id:'q'+q.n,type:'questao',bi:i,n:q.n,materia:q.materia,assunto:q.assunto||'',modalidade:q.modalidade||'',dificuldade:q.dificuldade||'',anulada:!!q.anulada,desatualizada:!!q.desatualizada,comentario:q.comentario||'',enunciado:q.enunciado,alternativas:q.alternativas,gabarito:q.gabarito,banca:'FGV',orgao:'Dataprev',ano:'2026',ed:'dataprev-2026',cg:'dataprev-2026-ti-dev',conc:'dataprev',origem:'oficial',doc:'tipo1'}));
   const u=uqAll().map(q=>{const e=q.ed&&edicaoById(q.ed);return Object.assign({type:'questao',user:true,banca:e?edBancaName(e):'',orgao:e?edOrgaoName(e):'',ano:e&&e.ano?String(e.ano):''},q);});
   return bank.concat(u);
 }
@@ -3733,15 +3752,28 @@ let qtF={banca:'',disc:'',ed:'',sit:'',orig:''}, qtList=[];
 /* ---- v0.1.1 · Filtro de questões (componente único: Questão, Concurso, Edição, Cargo) ---- */
 const qfN=s=>String(s==null?'':s).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
 const QF_SIT={resolvidas:'Resolvidas',pendentes:'Não resolvidas',certas:'Que acertei',erradas:'Que errei',rev:'Para revisar',fav:'Favoritas'};
+const qfModal=q=>{if(q.modalidade)return q.modalidade;const v=Object.values(q.alternativas||{}).map(x=>qfN(String(x).trim()));return v.length===2&&v.includes('certo')&&v.includes('errado')?'Certo/Errado':'Múltipla escolha';};
 const QF_CATS=[
+ {id:'disc',t:'Disciplina',get:q=>[q.materia||'Sem disciplina']},
+ {id:'assunto',t:'Assunto',get:q=>q.assunto?[q.assunto]:[],requires:'disc'},
  {id:'banca',t:'Banca',get:q=>q.banca?[q.banca]:[]},
- {id:'conc',t:'Concurso',get:q=>q.conc?[q.conc]:[],fmt:v=>(concursoById(v)||{}).t||v},
  {id:'cg',t:'Cargo',get:q=>q.cg?[q.cg]:[],fmt:v=>(cargoById(v)||{}).t||v},
  {id:'ano',t:'Ano',get:q=>q.ano?[String(q.ano)]:[]},
- {id:'disc',t:'Disciplina',get:q=>[q.materia||'Sem disciplina']},
+ {id:'orgao',t:'Órgão',get:q=>q.orgao?[q.orgao]:[]},
+ {id:'modalidade',t:'Modalidade',get:q=>[qfModal(q)]},
+ {id:'dificuldade',t:'Dificuldade',get:q=>q.dificuldade?[q.dificuldade]:[]},
+ {id:'conc',t:'Concurso',get:q=>q.conc?[q.conc]:[],fmt:v=>(concursoById(v)||{}).t||v},
  {id:'ed',t:'Edição',get:q=>q.ed?[q.ed]:[],fmt:v=>(edicaoById(v)||{}).t||v},
  {id:'orig',t:'Origem',get:q=>[qOrig(q)],fmt:v=>ORIGENS[v]||v},
  {id:'sit',t:'Situação',get:q=>{const r=qSel(q),f=qFlag(q.id),a=[!r?'pendentes':(r===q.gabarito?'certas':'erradas')];if(r)a.push('resolvidas');if(f.rev)a.push('rev');if(f.fav)a.push('fav');return a;},fmt:v=>QF_SIT[v]||v,fixed:Object.keys(QF_SIT),always:true}
+];
+const QF_EXCLUSIONS=[
+ {id:'cadernos',t:'Dos meus cadernos',mode:'exclude',test:q=>nbAll().some(b=>b.sp===space&&b.questionIds.includes(q.id))},
+ {id:'simulados',t:'Dos meus simulados',mode:'exclude',test:q=>simsAll().some(s=>Array.isArray(s.res)&&s.res.some(r=>r.id===q.id))},
+ {id:'anuladas',t:'Anuladas',mode:'exclude',test:q=>!!q.anulada,default:true},
+ {id:'desatualizadas',t:'Desatualizadas',mode:'exclude',test:q=>!!q.desatualizada},
+ {id:'comentado',t:'Gabarito comentado',mode:'include',test:q=>!!(q.comentario||q.explicacao||q.gabaritoComentado)},
+ {id:'anotacoes',t:'Minhas anotações',mode:'include',test:q=>!!qFlag(q.id).note}
 ];
 const qfS={},qfCtx={},qScopedPage={};
 
@@ -3755,6 +3787,7 @@ const sfAll=()=>{const v=store.get('savedQuestionFilters');return Array.isArray(
 const sfSave=items=>store.set('savedQuestionFilters',items);
 function sfHref(item){
   const st=item.query||{},params=new URLSearchParams();
+  QF_EXCLUSIONS.forEach(x=>{const enabled=!!(st.x||{})[x.id];if(enabled!==!!x.default)params.set('x_'+x.id,enabled?'1':'0');});
   if(st.text)params.set('busca',st.text);
   for(const [cat,values] of Object.entries(st.f||{}))for(const v of values||[])params.append(cat,v);
   return '#/questoes'+(params.toString()?'?'+params.toString():'');
@@ -3771,7 +3804,7 @@ function sfLinks(){
 }
 async function sfCreate(key){
   const context=qfCtx[key];if(!context)return;
-  const cur=qfSt(key),query={text:cur.text,f:sfScope(key,JSON.parse(JSON.stringify(cur.f||{})))};
+  const cur=qfSt(key),query={text:cur.text,f:sfScope(key,JSON.parse(JSON.stringify(cur.f||{}))),x:JSON.parse(JSON.stringify(cur.x||{}))};
   const name=await dialog({title:'Salvar filtro de questões',input:'',label:'Nome do filtro',placeholder:'Ex.: FGV · Questões não resolvidas',
     ok:'Salvar filtro',validate:v=>v.length<3?'Use pelo menos 3 caracteres.':''});
   if(!name)return;
@@ -3922,13 +3955,14 @@ async function nbRoute(h){
   }catch(e){if(location.hash.slice(1)===h)studyError(e,'#/espaco');}
 }
 
-const qfSt=k=>qfS[k]||(qfS[k]={f:{},text:'',open:false,cat:null,qs:''});
+const qfSt=k=>qfS[k]||(qfS[k]={f:{},x:{anuladas:true},text:'',open:false,panelOpen:false,cat:null,qs:''});
 const qfLbl=(c,v)=>c.fmt?c.fmt(v):v;
 const QF_IC='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 5h18M6 12h12M10 19h4"/></svg>';
 const QF_X='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
 function qfMatch(q,st,skip){
   const t=qfN(st.text.trim());
-  if(t&&!qfN(q.enunciado+' '+(q.materia||'')+' '+Object.values(q.alternativas||{}).join(' ')).includes(t)) return false;
+  if(t&&!qfN(q.enunciado+' '+(q.materia||'')+' '+(q.assunto||'')+' '+q.id+' '+(q.n||'')+' '+Object.values(q.alternativas||{}).join(' ')).includes(t)) return false;
+  if(!QF_EXCLUSIONS.every(x=>!((st.x||{})[x.id])||(x.mode==='include'?x.test(q):!x.test(q))))return false;
   return QF_CATS.every(c=>{ if(c.id===skip) return true; const a=st.f[c.id]; return !a||!a.length||c.get(q).some(v=>a.includes(v)); });
 }
 function qfFilter(key,all){ const st=qfSt(key); return all.filter(q=>qfMatch(q,st)); }
@@ -3939,17 +3973,18 @@ function qfVals(key,c){
   all.forEach(q=>{ if(qfMatch(q,st,c.id)) c.get(q).forEach(v=>m.set(v,m.get(v)+1)); });
   const a=[...m]; if(!c.fixed) a.sort((x,y)=>String(qfLbl(c,x[0])).localeCompare(String(qfLbl(c,y[0])),'pt-BR')); return a;
 }
-const qfCats=key=>QF_CATS.filter(c=>c.always||qfVals(key,c).length>1||(qfSt(key).f[c.id]||[]).length);
+const qfCats=key=>QF_CATS.filter(c=>(!c.requires||(qfSt(key).f[c.requires]||[]).length)&& (c.always||qfVals(key,c).length>1||(qfSt(key).f[c.id]||[]).length));
 function qfChipsHTML(key){
   const st=qfSt(key); let h='';
   if(st.text.trim()) h+='<span class="qf-chip"><span class="qf-chip-b"><b>Busca</b> “'+esc(st.text.trim())+'”</span><button type="button" class="qf-x" data-qf-xt aria-label="Remover busca">'+QF_X+'</button></span>';
   QF_CATS.forEach(c=>{ const a=st.f[c.id]; if(a&&a.length){ const L=a.map(v=>qfLbl(c,v)), s=L.length>2?L.slice(0,2).join(', ')+' +'+(L.length-2):L.join(', ');
     h+='<span class="qf-chip"><button type="button" class="qf-chip-b" data-qf-chip="'+c.id+'" title="'+esc(L.join(', '))+'"><b>'+c.t+'</b> '+(a.length>1?'é um de':'é')+' '+esc(s)+'</button><button type="button" class="qf-x" data-qf-x="'+c.id+'" aria-label="Remover filtro '+c.t+'">'+QF_X+'</button></span>'; } });
+  QF_EXCLUSIONS.forEach(x=>{if((st.x||{})[x.id])h+='<span class="qf-chip"><span class="qf-chip-b"><b>'+(x.mode==='exclude'?'Excluir':'Incluir')+'</b> '+esc(x.t)+'</span><button type="button" class="qf-x" data-qf-xflag="'+x.id+'" aria-label="Remover '+esc(x.t)+'">'+QF_X+'</button></span>';});
   if(h) h+='<button type="button" class="qf-clear" data-qf-clear>Limpar tudo</button>';
   return h;
 }
 function qfParts(key){
-  const c=qfCtx[key],st=qfSt(key),fl=qfFilter(key,c.all),n=QF_CATS.filter(x=>(st.f[x.id]||[]).length).length,act=n||st.text.trim(),T=c.all.length;
+  const c=qfCtx[key],st=qfSt(key),fl=qfFilter(key,c.all),n=QF_CATS.filter(x=>(st.f[x.id]||[]).length).length,T=c.all.length,act=n||st.text.trim()||fl.length!==T||QF_EXCLUSIONS.some(x=>!!(st.x||{})[x.id]!==!!x.default);
   return {fl,n,chips:qfChipsHTML(key),
     count:act?fl.length+' de '+T+' questões':T+(T===1?' questão':' questões'),
     list:fl.length?(c.o.renderList?c.o.renderList(fl,key):'<div class="op-list">'+qRows(fl)+'</div>'):'<div class="sc-empty"><b>Nenhuma questão com esses filtros.</b><p>Remova um filtro ou limpe tudo para ver as '+T+' questões.</p><button type="button" class="op-btn" data-qf-clear>Limpar tudo</button></div>'};
@@ -3965,16 +4000,44 @@ function qfPopHTML(key){
   const c=QF_CATS.find(x=>x.id===st.cat),nv=qfVals(key,c).length;
   return '<div class="qf-h"><button type="button" class="qf-back" data-qf-back aria-label="Voltar às categorias">‹</button><span>'+c.t+'</span><button type="button" class="qf-mini" data-qf-catclear>Limpar</button></div>'+(nv>6?'<input type="search" class="qf-s" data-qf-s placeholder="Buscar '+c.t.toLowerCase()+'…" aria-label="Buscar em '+c.t+'" autocomplete="off" value="'+esc(st.qs)+'">':'')+'<div class="qf-opts" role="listbox" aria-multiselectable="true" aria-label="'+c.t+'">'+qfOptsHTML(key)+'</div>';
 }
-function qfQuickHTML(key){const selected=(qfSt(key).f.sit||[])[0]||'todas';return '<div class="qf-fast" role="group" aria-label="Situação das questões">'+[['todas','Todas'],['resolvidas','Resolvidas'],['pendentes','Não resolvidas'],['certas','Acertei'],['erradas','Errei']].map(([v,t])=>'<button type="button" class="op-btn qf-quick'+(selected===v?' on':'')+'" data-qf-quick="'+v+'" aria-pressed="'+(selected===v)+'">'+t+'</button>').join('')+'</div>';}
+function qfQuickHTML(key){
+  const selected=(qfSt(key).f.sit||[])[0]||'todas';
+  return '<div class="qf-fast" role="group" aria-label="Situação das questões">'+
+    [['todas','Todas'],['resolvidas','Resolvidas'],['pendentes','Não resolvidas'],['certas','Acertei'],['erradas','Errei']].map(([v,t])=>
+      '<button type="button" class="op-btn qf-quick'+(selected===v?' on':'')+'" data-qf-quick="'+v+'" aria-pressed="'+(selected===v)+'">'+t+'</button>').join('')+'</div>';
+}
+const QF_GRID_FIELDS=['disc','assunto','banca','cg','ano','orgao','modalidade','dificuldade'];
+function qfAdvancedHTML(key){
+  const st=qfSt(key);
+  const fields=QF_GRID_FIELDS.map(id=>{
+    const cat=QF_CATS.find(c=>c.id===id),hasParent=!cat.requires||(st.f[cat.requires]||[]).length>0;
+    const choices=hasParent?qfVals(key,cat):[];
+    const selected=(st.f[id]||[])[0]||'';
+    const available=choices.some(([v])=>v===selected);
+    const hint=!hasParent?'Selecione uma Disciplina primeiro':!choices.length?'Sem valores cadastrados':'Todas as opções';
+    return '<label class="qf-field"><span>'+cat.t+'</span><select data-qf-field="'+id+'" aria-label="'+cat.t+'" '+(!hasParent||(!choices.length&&!available)?'disabled':'')+'>'+
+      '<option value="">'+hint+'</option>'+
+      choices.map(([v,n])=>'<option value="'+esc(v)+'" '+(selected===v?'selected':'')+'>'+esc(qfLbl(cat,v))+' ('+n+')</option>').join('')+'</select></label>';
+  }).join('');
+  const flags='<fieldset class="qf-exclusions"><legend>Excluir questões</legend>'+
+    QF_EXCLUSIONS.filter(x=>x.mode==='exclude').map(x=>'<label class="qf-check"><input type="checkbox" data-qf-flag="'+x.id+'" '+((st.x||{})[x.id]?'checked':'')+'><span>'+x.t+'</span></label>').join('')+'</fieldset>'+
+    '<fieldset class="qf-exclusions"><legend>Incluir somente questões com</legend>'+
+    QF_EXCLUSIONS.filter(x=>x.mode==='include').map(x=>'<label class="qf-check"><input type="checkbox" data-qf-flag="'+x.id+'" '+((st.x||{})[x.id]?'checked':'')+'><span>'+x.t+'</span></label>').join('')+'</fieldset>';
+  return '<div class="qf-field-grid">'+fields+'</div>'+flags+
+    '<div class="qf-advanced-footer"><button type="button" class="op-btn pri" data-qf-apply>Filtrar</button>'+
+    '<button type="button" class="op-btn" data-qf-clear>Limpar filtros</button>'+
+    '<button type="button" class="op-btn" data-qf-panel>Fechar filtro ↑</button></div>';
+}
 function qfHTML(key,all,o){
   o=o||{}; qfCtx[key]={all,o}; const st=qfSt(key); st.open=false; st.cat=null; st.qs='';
   const P=qfParts(key); if(o.onChange) o.onChange(P.fl);
-  const savedActions='<div class="qf-saved-actions"><button type="button" class="op-btn" data-qf-create-book="'+esc(key)+'">Gerar Caderno</button><button type="button" class="op-btn" data-qf-save-filter="'+esc(key)+'">Salvar filtro</button><a class="op-btn" href="#/filtros">Meus filtros</a></div>';
-  return '<div class="qf" data-qf="'+key+'">'+qfQuickHTML(key)+'<div class="qf-bar"><div class="qf-wrap"><button type="button" class="op-btn qf-btn" data-qf-toggle aria-haspopup="dialog" aria-expanded="false">'+QF_IC+' Filtrar'+(P.n?'<em class="qf-n">'+P.n+'</em>':'')+'</button><div class="qf-pop" role="dialog" aria-label="Filtrar questões"></div></div><input type="search" class="qf-q" data-qf-text placeholder="Buscar nas questões…" aria-label="Buscar nas questões" autocomplete="off" value="'+esc(st.text)+'"><span class="sc-count qf-count" role="status" aria-live="polite">'+P.count+'</span>'+(o.extra||'')+savedActions+'</div><div class="qf-chips">'+P.chips+'</div><div class="qf-list">'+P.list+'</div></div>';
+  const advancedPanel='<div class="qf-advanced"><button type="button" class="op-btn qf-panel-toggle" data-qf-panel aria-expanded="'+(st.panelOpen?'true':'false')+'">'+(st.panelOpen?'Fechar filtro ↑':'Mais filtros ↓')+'</button><div class="qf-advanced-body" '+(st.panelOpen?'':'hidden')+'>'+qfAdvancedHTML(key)+'</div></div>';
+  const savedActions='<div class="qf-saved-actions"><button type="button" class="op-btn" data-qf-save-filter="'+esc(key)+'">Salvar filtro</button><button type="button" class="op-btn" data-qf-create-book="'+esc(key)+'">Gerar Caderno</button><a class="op-btn" href="#/cadernos">Meus Cadernos</a><a class="op-btn" href="#/filtros">Meus filtros</a><button type="button" class="op-btn" data-qf-sim="'+esc(key)+'">Criar Simulado</button></div>';
+  return '<div class="qf" data-qf="'+key+'">'+qfQuickHTML(key)+advancedPanel+'<div class="qf-bar"><div class="qf-wrap"><button type="button" class="op-btn qf-btn" data-qf-toggle aria-haspopup="dialog" aria-expanded="false">'+QF_IC+' Filtrar'+(P.n?'<em class="qf-n">'+P.n+'</em>':'')+'</button><div class="qf-pop" role="dialog" aria-label="Filtrar questões"></div></div><input type="search" class="qf-q" data-qf-text placeholder="Buscar nas questões…" aria-label="Buscar nas questões" autocomplete="off" value="'+esc(st.text)+'"><span class="sc-count qf-count" role="status" aria-live="polite">'+P.count+'</span>'+(o.extra||'')+savedActions+'</div><div class="qf-chips"><b class="qf-chip-heading">Filtrar por:</b>'+P.chips+'</div><div class="qf-list">'+P.list+'</div></div>';
 }
 function qfRefresh(root){
   const key=root.dataset.qf,c=qfCtx[key];if(key==='study'){qIndex=0;qfSyncURL();}else qScopedPage[key]=0;const P=qfParts(key);
-  root.querySelector('.qf-chips').innerHTML=P.chips; root.querySelector('.qf-count').textContent=P.count; root.querySelector('.qf-list').innerHTML=P.list;
+  root.querySelector('.qf-chips').innerHTML='<b class="qf-chip-heading">Filtrar por:</b>'+P.chips;const adv=root.querySelector('.qf-advanced-body');if(adv)adv.innerHTML=qfAdvancedHTML(key);root.querySelector('.qf-count').textContent=P.count; root.querySelector('.qf-list').innerHTML=P.list;
   root.querySelector('.qf-btn').innerHTML=QF_IC+' Filtrar'+(P.n?'<em class="qf-n">'+P.n+'</em>':'');const selected=(qfSt(key).f.sit||[])[0]||'todas';root.querySelectorAll('[data-qf-quick]').forEach(b=>{const on=b.dataset.qfQuick===selected;b.setAttribute('aria-pressed',String(on));b.classList.toggle('on',on);});
   if(c.o.onChange) c.o.onChange(P.fl);
 }
@@ -3988,16 +4051,36 @@ view.addEventListener('click',e=>{
   const root=e.target.closest('[data-qf]'); if(!root) return;
   const key=root.dataset.qf,st=qfSt(key),t=e.target; let x;
   const redo=()=>{ qfRefresh(root); if(st.open) qfPop(root,true,false); root.querySelector('.qf-btn').focus(); };
+  if(x=t.closest('[data-qf-panel]')){st.panelOpen=!st.panelOpen;root.querySelector('.qf-advanced-body').hidden=!st.panelOpen;const trigger=root.querySelector('.qf-panel-toggle');trigger.textContent=st.panelOpen?'Fechar filtro ↑':'Mais filtros ↓';trigger.setAttribute('aria-expanded',String(st.panelOpen));trigger.focus();return;}
+  if(t.closest('[data-qf-apply]')){st.panelOpen=false;root.querySelector('.qf-advanced-body').hidden=true;const trigger=root.querySelector('.qf-panel-toggle');trigger.textContent='Mais filtros ↓';trigger.setAttribute('aria-expanded','false');trigger.focus();return;}
+  if(x=t.closest('[data-qf-xflag]')){st.x[x.dataset.qfXflag]=false;redo();return;}
   if(x=t.closest('[data-qf-quick]')){ if(x.dataset.qfQuick==='todas')delete st.f.sit;else st.f.sit=[x.dataset.qfQuick];qfRefresh(root);return; }
   if(t.closest('[data-qf-toggle]')){ st.cat=null; qfPop(root,!st.open); return; }
   if(x=t.closest('[data-qf-cat]')){ st.cat=x.dataset.qfCat; st.qs=''; qfPop(root,true); return; }
   if(t.closest('[data-qf-back]')){ st.cat=null; qfPop(root,true); return; }
-  if(x=t.closest('[data-qf-v]')){ const a=st.f[st.cat]||(st.f[st.cat]=[]),v=x.dataset.qfV,i=a.indexOf(v); if(i<0) a.push(v); else a.splice(i,1); x.setAttribute('aria-selected',i<0); x.querySelector('.qf-ck').innerHTML=i<0?UIICON.check:''; qfRefresh(root); return; }
+  if(x=t.closest('[data-qf-v]')){ const a=st.f[st.cat]||(st.f[st.cat]=[]),v=x.dataset.qfV,i=a.indexOf(v);if(st.cat==='disc')delete st.f.assunto; if(i<0) a.push(v); else a.splice(i,1); x.setAttribute('aria-selected',i<0); x.querySelector('.qf-ck').innerHTML=i<0?UIICON.check:''; qfRefresh(root); return; }
   if(t.closest('[data-qf-catclear]')){ delete st.f[st.cat]; qfRefresh(root); qfPop(root,true,false); const f=root.querySelector('.qf-s,.qf-o'); if(f) f.focus(); return; }
-  if(x=t.closest('[data-qf-x]')){ delete st.f[x.dataset.qfX]; redo(); return; }
+  if(x=t.closest('[data-qf-x]')){ if(x.dataset.qfX==='disc')delete st.f.assunto;delete st.f[x.dataset.qfX]; redo(); return; }
   if(t.closest('[data-qf-xt]')){ st.text=''; root.querySelector('[data-qf-text]').value=''; redo(); return; }
   if(x=t.closest('[data-qf-chip]')){ st.cat=x.dataset.qfChip; st.qs=''; qfPop(root,true); return; }
-  if(t.closest('[data-qf-clear]')){ st.f={}; st.text=''; root.querySelector('[data-qf-text]').value=''; redo(); return; }
+  if(t.closest('[data-qf-clear]')){ st.f={}; st.x={anuladas:true};st.text=''; root.querySelector('[data-qf-text]').value=''; redo(); return; }
+});
+view.addEventListener('change',e=>{
+  const root=e.target.closest&&e.target.closest('[data-qf]');if(!root)return;
+  const st=qfSt(root.dataset.qf),field=e.target.matches('[data-qf-field]')?e.target:null;
+  if(field){
+    const id=field.dataset.qfField,v=field.value;
+    if(id==='disc')delete st.f.assunto;
+    if(v)st.f[id]=[v];else delete st.f[id];
+    qfRefresh(root);
+    const next=root.querySelector('[data-qf-field="'+id+'"]');if(next)next.focus();
+    return;
+  }
+  if(e.target.matches('[data-qf-flag]')){
+    const id=e.target.dataset.qfFlag;st.x[id]=e.target.checked;
+    qfRefresh(root);
+    const next=root.querySelector('[data-qf-flag="'+id+'"]');if(next)next.focus();
+  }
 });
 view.addEventListener('input',e=>{
   const root=e.target.closest&&e.target.closest('[data-qf]'); if(!root) return; const key=root.dataset.qf,st=qfSt(key);
@@ -4188,7 +4271,7 @@ const qProps=q=>{
 };
 function qfReadPracticeRoute(path){
   const state=qfSt('study'),base=path.split('?')[0],params=new URLSearchParams(path.split('?')[1]||'');
-  state.f={};state.text=params.get('busca')||'';
+  state.f={};state.x={anuladas:true};QF_EXCLUSIONS.forEach(x=>{const v=params.get('x_'+x.id);if(v!==null)state.x[x.id]=v==='1';});state.text=params.get('busca')||'';
   QF_CATS.forEach(cat=>{const values=params.getAll(cat.id).filter(Boolean);if(values.length)state.f[cat.id]=values;});
   if((base==='/questoes/erradas'||base==='/questoes/pendentes')&&!state.f.sit){
     state.f.sit=[base==='/questoes/erradas'?'erradas':'pendentes'];
@@ -4202,6 +4285,7 @@ function qfSyncURL(){
   const state=qfSt('study'),params=new URLSearchParams();
   if(state.text.trim())params.set('busca',state.text.trim());
   QF_CATS.forEach(cat=>(state.f[cat.id]||[]).forEach(v=>params.append(cat.id,v)));
+  QF_EXCLUSIONS.forEach(x=>{const enabled=!!(state.x||{})[x.id];if(enabled!==!!x.default)params.set('x_'+x.id,enabled?'1':'0');});
   if(qIndex>0)params.set('at',String(qIndex));
   if(qPer!==1)params.set('per',String(qPer));
   const next='/questoes'+(params.toString()?'?'+params.toString():'');
@@ -4239,7 +4323,7 @@ function renderPractice(){
   const all=qObjs(),selected=qfSt('study').f.sit||[];
   const stats=all.reduce((a,q)=>{const answer=qSel(q);if(answer){a.done++;if(answer!==q.gabarito)a.wrong++;}return a;},{done:0,wrong:0});
   const options='<div class="s-filterbar q-opts"><label class="q-opt">Questões por vez <select id="qPer" aria-label="Questões por vez">'+[1,5,10,20].map(n=>'<option value="'+n+'" '+(qPer===n?'selected':'')+'>'+n+'</option>').join('')+'</select></label><label class="q-opt q-switch"><input type="checkbox" role="switch" id="qAuto" '+(qAuto?'checked':'')+'><span>Corrigir ao selecionar a alternativa</span></label></div>';
-  const actions='<div class="op-actions"><button type="button" class="op-btn pri" data-qf-sim="study">Criar simulado com as questões filtradas</button></div>';
+  const actions=''; /* The shared qfHTML action bar includes Create Simulado. */
   const title=sHead('Banco de questões','Resolver questões','Questões oficiais e questões criadas por você no mesmo banco, com filtros e correção individual.',sBtn('Configurar simulado','#/simulado'),sBadge(all.length+' questões')+sBadge(stats.done+' resolvidas')+sBadge(stats.wrong+' erradas'));
   const html=sBreadcrumb([['Início','#/espaco'],['Questões','']])+title+qfHTML('study',all,{extra:actions,renderList:renderPracticeList})+options;
   studyPage('Questões','Banco unificado',html);
@@ -4334,7 +4418,7 @@ view.addEventListener('click',e=>{
  if(e.target.closest('[data-uq-cancel]')){ scForm=false; rr(); return; }
  if(e.target.closest('[data-uq-save]')){ const v=id=>(view.querySelector('#'+id)||{}).value||''; const enu=v('uqEnu').trim(); const alts={}; ['A','B','C','D','E'].forEach(l=>{const t=v('uqAlt'+l).trim(); if(t)alts[l]=t;}); const gab=v('uqGab');
    if(!enu){toast('Escreva o enunciado');return;} if(Object.keys(alts).length<2){toast('Informe ao menos duas alternativas');return;} if(!alts[gab]){toast('O gabarito precisa ser uma alternativa preenchida');return;}
-   const q={id:'u'+Date.now().toString(36),materia:v('uqMat').trim(),enunciado:enu,alternativas:alts,gabarito:gab,origem:v('uqOri')||'manual',criada:Date.now()};
+   const q={id:'u'+Date.now().toString(36),materia:v('uqMat').trim(),assunto:v('uqAssunto').trim(),modalidade:v('uqModal')||'Múltipla escolha',dificuldade:v('uqDif')||'',enunciado:enu,alternativas:alts,gabarito:gab,origem:v('uqOri')||'manual',criada:Date.now()};
    if(hh[1]==='concurso')q.conc=hh[2]; else if(hh[1]==='edicao'){q.ed=hh[2];q.conc=(edicaoById(hh[2])||{}).conc;} else {const g=cargoById(hh[2]);q.cg=hh[2];q.ed=g&&g.edicao;q.conc=g&&(edicaoById(g.edicao)||{}).conc;}
    if(q.materia) ensureEnt('disciplina',q.materia); store.set('uq',uqAll().concat(q)); scForm=false; toast('Questão salva'); rr(); return; }
  const ua=e.target.closest('[data-uq-ans]'); if(ua){ e.preventDefault(); const [id,l]=ua.dataset.uqAns.split('|'); const m=uqAns(); m[id]=l; store.set('uqAns',m); rr(); return; }
