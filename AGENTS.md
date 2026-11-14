@@ -231,7 +231,7 @@ Este catálogo fornece os **nomes originais** (em inglês, quando publicados ass
 ### Pesquisa Profunda — 20 bibliotecas de referência (14/11/2026)
 
 - **MUST** consultar [docs/ux/pesquisa-20-fontes-2026-11.md](docs/ux/pesquisa-20-fontes-2026-11.md) ao pesquisar novas leis/princípios ou ao justificar decisões de UI/UX; o documento reúne os **20 URLs solicitados**, síntese aplicada, matriz de testes e limitações de cobertura.
-- **MUST** usar o inventário de **30 entradas de Laws of UX** e as demais famílias abaixo como índice de nomes, com [docs/ux/ux-ui-principles.md](docs/ux/ux-ui-principles.md) como catálogo de **86 itens aplicados**. Não duplicar listas só para aumentar a contagem.
+- **MUST** usar as **30 entradas de Laws of UX**, as demais famílias e as **86 entradas aplicadas transcritas integralmente nas seções abaixo**, com [docs/ux/ux-ui-principles.md](docs/ux/ux-ui-principles.md) como espelho de manutenção. A repetição neste AGENTS.md é intencional para leitura autossuficiente por agentes.
 - **MUST** distinguir uma norma obrigatória de um estudo, modelo psicológico, heurística, catálogo agregador e padrão de plataforma. Uma URL listada não comprova que todas as entradas daquele site foram verificadas.
 - **MUST** testar tarefas reais (descobrir Questões, resolver, simular, retomar e revisar) antes de declarar sucesso de uma recomendação; documentar comportamento observado, estados de erro/loading e limites.
 - **AVOID** aplicar indiscriminadamente "7 itens", "3 cliques", "400 ms", "tudo na mesma página", "somente 1 CTA" ou "proibido usar bordas". Decisões dependem de contexto, foco, acessibilidade, dados e testes.
@@ -414,4 +414,163 @@ Fonte normativa: https://www.w3.org/TR/WCAG22/ . Consultar **cada critério de s
 **Fontes complementares oficiais:** https://www.w3.org/WAI/ARIA/apg/ ; https://m3.material.io/ ; https://developer.apple.com/design/human-interface-guidelines/ ; https://design-system.service.gov.uk/ ; https://carbondesignsystem.com/ ; https://fluent2.microsoft.design/ ; https://www.w3.org/International/ .
 
 **Precedência:** acessibilidade verificável, integridade de dados, segurança e sucesso de tarefas prevalecem sobre heurísticas estéticas. Não generalizar heurísticas como leis determinísticas nem alegar testes ou conformidade sem evidências.
+### 11. Catálogo aplicado integral — 86 entradas com fonte e exceções (espelhado no AGENTS.md)
+
+**Obrigatório para agentes:** as **86 entradas abaixo estão presentes integralmente neste próprio arquivo**, com classe, definição, regra para o Exam App, limites e fonte. São leis, modelos, heurísticas, padrões, normas, métricas e métodos de pesquisa — **não 86 leis científicas**. Este espelho é intencional para agentes que só recebem AGENTS.md como contexto. Documento de origem e manutenção: [docs/ux/ux-ui-principles.md](docs/ux/ux-ui-principles.md). Atualizar ambos quando modificar qualquer entrada; preservar os 30 itens Laws of UX, as demais famílias e normas já listadas acima.
+
+#### 11.1. Cognição, decisão e percepção
+
+| # | Princípio | Classe | Definição | Regra para o Exam App | Limites e exceções | Fonte |
+|---:|---|---|---|---|---|---|
+| 1 | Lei de Fitts | Estudo empírico | O tempo de apontar depende da distância e do tamanho do alvo. | Aumentar área clicável de Responder, Próxima e ações frequentes. | Não prediz toda a experiência; contexto motor e dispositivo importam. | [Fitts](https://doi.org/10.1037/h0055392) |
+| 2 | Lei de Hick-Hyman | Estudo empírico | O tempo de escolha tende a crescer com quantidade e incerteza das alternativas. | Priorizar Questões e Simulados na Home sem ocultar caminhos necessários. | Não implica remover opções úteis ou impor número máximo de itens. | [Hick](https://doi.org/10.1080/17470215208416600), [Laws](https://lawsofux.com/) |
+| 3 | Lei de Jakob | Heurística | Convenções aprendidas em outros produtos moldam expectativas. | Usar navegação, filtros e controles familiares. | Padrões externos não substituem pesquisa com estudantes. | [Laws](https://lawsofux.com/) |
+| 4 | Lei de Tesler | Heurística | A complexidade inerente de uma tarefa não desaparece por esconder controles. | Simplificar criação de simulado sem omitir duração e origem das questões. | A complexidade deve ser alocada de modo compreensível, não negada. | [Laws](https://lawsofux.com/) |
+| 5 | Miller e 7 ± 2 | Pesquisa histórica | O artigo descreve limites de processamento em tarefas específicas. | Agrupar filtros semanticamente, sem fixar sete itens no menu. | Não é limite universal de opções, navegação ou memória de trabalho. | [Miller](https://doi.org/10.1037/h0043158) |
+| 6 | Carga cognitiva | Modelo teórico aplicado | Excesso de informações concorrentes dificulta compreender a tarefa. | Mostrar enunciado e alternativas antes de metadados extensos. | Densidade útil pode ser desejável para usuários experientes. | [Nielsen](https://www.nngroup.com/articles/ten-usability-heuristics/) |
+| 7 | Divulgação progressiva | Heurística | Detalhes avançados aparecem quando se tornam relevantes. | Manter propriedades técnicas em painel secundário. | Não esconder o CTA principal nem informações de segurança. | [Progressive](https://www.nngroup.com/articles/progressive-disclosure/) |
+| 8 | Reconhecimento em vez de lembrança | Heurística | Opções visíveis evitam exigir memorização de rotas ou comandos. | Mostrar ações de responder, revisar e simular no contexto. | Evitar poluição visual; priorizar o necessário. | [Nielsen](https://www.nngroup.com/articles/ten-usability-heuristics/) |
+| 9 | Efeito de posição serial | Generalização psicológica | Início e fim de sequências podem receber mais atenção ou lembrança. | Colocar ações prioritárias em posições previsíveis. | Efeito depende da tarefa e não determina ordem fixa de menu. | [Laws](https://lawsofux.com/) |
+| 10 | Regra do pico-fim | Generalização psicológica | Momentos intensos e o encerramento influenciam avaliação retrospectiva. | Fazer entrega de simulado e resultado serem claros e recuperáveis. | Não otimizar só a emoção final, negligenciando a jornada. | [Laws](https://lawsofux.com/) |
+| 11 | Limiar de Doherty | Heurística histórica | Respostas rápidas e feedback sustentam continuidade da interação. | Exibir seleção, salvamento e carregamento sem silêncio. | Números históricos não são SLA universal; medir latência real. | [Laws](https://lawsofux.com/), [Vitals](https://web.dev/articles/vitals) |
+| 12 | Efeito estética-usabilidade | Tendência perceptiva | Aparência agradável pode melhorar percepção inicial de facilidade. | Usar hierarquia e tipografia consistentes. | Beleza não corrige fluxos quebrados nem prova usabilidade. | [Laws](https://lawsofux.com/) |
+| 13 | Efeito Zeigarnik | Hipótese contextual | Tarefas inacabadas podem permanecer salientes. | Oferecer Retomar simulado com progresso salvo. | Não usar pressão ou ansiedade para forçar retorno. | [Laws](https://lawsofux.com/) |
+| 14 | Princípio de Pareto 80/20 | Heurística de priorização | Algumas tarefas podem concentrar uso ou valor. | Priorizar jornadas conforme telemetria e entrevistas. | A proporção 80/20 não é lei de distribuição de uso. | [Laws](https://lawsofux.com/) |
+
+#### 11.2. Organização visual e Gestalt
+
+| # | Princípio | Classe | Definição | Regra para o Exam App | Limites e exceções | Fonte |
+|---:|---|---|---|---|---|---|
+| 15 | Proximidade | Princípio perceptivo | Elementos próximos tendem a ser percebidos como grupo. | Agrupar filtros por disciplina, banca e situação. | Proximidade não substitui títulos e semântica. | [Gestalt](https://ixdf.org/literature/topics/gestalt-principles) |
+| 16 | Similaridade | Princípio perceptivo | Aparência semelhante sugere função ou categoria semelhante. | Padronizar botões e estados das alternativas. | Diferenciar visualmente ações com consequências diferentes. | [Gestalt](https://ixdf.org/literature/topics/gestalt-principles) |
+| 17 | Região comum | Princípio perceptivo | Um contêiner pode comunicar agrupamento. | Delimitar filtros avançados e resumo do simulado. | Evitar caixas em excesso e ruído de bordas. | [Gestalt](https://ixdf.org/literature/topics/gestalt-principles) |
+| 18 | Continuidade | Princípio perceptivo | Alinhamentos e sequências favorecem leitura de percurso. | Alinhar enunciado, respostas, correção e próxima questão. | A ordem semântica do DOM deve acompanhar a visual. | [Gestalt](https://ixdf.org/literature/topics/gestalt-principles) |
+| 19 | Fechamento | Princípio perceptivo | Pessoas completam formas visuais incompletas. | Usar indicadores de progresso simples e legíveis. | Nunca depender só de formas implícitas para informação crítica. | [Gestalt](https://ixdf.org/literature/topics/gestalt-principles) |
+| 20 | Figura-fundo | Princípio perceptivo | Contraste ajuda distinguir elemento focal do entorno. | Dar prioridade visual à questão em resolução. | Manter contraste acessível, inclusive em dark mode. | [Gestalt](https://ixdf.org/literature/topics/gestalt-principles), [WCAG](https://www.w3.org/TR/WCAG22/) |
+| 21 | Conexão uniforme | Princípio perceptivo | Linhas e conexões sugerem relação. | Indicar relações entre concurso, cargo e questões no grafo. | Conexões devem ter rótulos e alternativa textual. | [Gestalt](https://ixdf.org/literature/topics/gestalt-principles) |
+
+#### 11.3. Dez heurísticas de Nielsen, individualmente
+
+| # | Princípio | Classe | Definição | Regra para o Exam App | Limites e exceções | Fonte |
+|---:|---|---|---|---|---|---|
+| 22 | H1 Visibilidade do status | Heurística | O sistema informa o que ocorreu e o que está acontecendo. | Mostrar questão salva, simulado em andamento e falha de carregamento. | Feedback deve ser proporcional, sem notificações excessivas. | [Nielsen](https://www.nngroup.com/articles/ten-usability-heuristics/) |
+| 23 | H2 Correspondência com mundo real | Heurística | Vocabulário e ordem refletem o modelo mental do estudante. | Usar Questões, Simulados, Revisão em vez de exigir tipos de objeto. | Confirmar terminologia em pesquisa com usuários. | [Nielsen](https://www.nngroup.com/articles/ten-usability-heuristics/) |
+| 24 | H3 Controle e liberdade | Heurística | A pessoa consegue sair, cancelar e desfazer quando apropriado. | Voltar ao banco sem perder filtros e retomar tentativa. | Nem toda operação pode ser desfeita após envio definitivo. | [Nielsen](https://www.nngroup.com/articles/ten-usability-heuristics/) |
+| 25 | H4 Consistência e padrões | Heurística | A mesma ação e conceito mantêm nomes e comportamentos. | Unificar banco global e contextual, preservando diferenças justificadas. | Contextos diferentes podem exigir variantes explícitas. | [Nielsen](https://www.nngroup.com/articles/ten-usability-heuristics/) |
+| 26 | H5 Prevenção de erros | Heurística | O projeto reduz chances de erros antes de acontecerem. | Confirmar entrega definitiva e evitar perda de respostas. | Não pedir confirmação para ações triviais. | [Nielsen](https://www.nngroup.com/articles/ten-usability-heuristics/) |
+| 27 | H6 Reconhecimento, não recordação | Heurística | Informações relevantes ficam visíveis ou recuperáveis. | Mostrar filtros aplicados e contexto da questão. | Mostrar tudo ao mesmo tempo pode sobrecarregar. | [Nielsen](https://www.nngroup.com/articles/ten-usability-heuristics/) |
+| 28 | H7 Flexibilidade e eficiência | Heurística | Iniciantes e experientes têm caminhos adequados. | Oferecer atalhos de teclado opcionais e filtros salvos. | Atalhos não substituem controles descobríveis. | [Nielsen](https://www.nngroup.com/articles/ten-usability-heuristics/) |
+| 29 | H8 Estética e minimalismo | Heurística | O conteúdo secundário não compete com a tarefa principal. | Enunciado e alternativas dominam a tela de resolução. | Minimalismo não significa omitir dados essenciais. | [Nielsen](https://www.nngroup.com/articles/ten-usability-heuristics/) |
+| 30 | H9 Recuperação de erros | Heurística | Mensagens explicam o problema e a ação corretiva. | Erro ao carregar questões com Tentar novamente e contexto preservado. | Evitar códigos técnicos sem tradução. | [Nielsen](https://www.nngroup.com/articles/ten-usability-heuristics/) |
+| 31 | H10 Ajuda e documentação | Heurística | Ajuda contextual existe quando a interface não basta. | Explicar filtros e regras do simulado perto da configuração. | Ajuda não substitui correção de navegação ruim. | [Nielsen](https://www.nngroup.com/articles/ten-usability-heuristics/) |
+
+#### 11.4. Arquitetura da informação e navegação
+
+| # | Princípio | Classe | Definição | Regra para o Exam App | Limites e exceções | Fonte |
+|---:|---|---|---|---|---|---|
+| 32 | Navegação orientada a tarefas | Recomendação de produto | Organizar entradas pela intenção, não só pelo modelo de dados. | Questões e Simulados como entradas primárias; objetos ficam acessíveis em Explorar. | Validar por primeiro clique e teste de árvore. | [Nielsen](https://www.nngroup.com/articles/ten-usability-heuristics/), [Tree](https://www.nngroup.com/articles/tree-testing/) |
+| 33 | Information scent | Conceito de encontrabilidade | Rótulos e pistas ajudam prever o destino de um clique. | Nomear CTA Resolver questões e Fazer simulado com destino correspondente. | A previsibilidade precisa ser testada com pessoas reais. | [Nielsen](https://www.nngroup.com/articles/ten-usability-heuristics/) |
+| 34 | Wayfinding e localização | Padrão | Mostrar onde a pessoa está e como voltar. | Título, contexto do concurso, breadcrumbs quando houver hierarquia. | Breadcrumb não é necessário em fluxo plano. | [GOVPatterns](https://design-system.service.gov.uk/patterns/) |
+| 35 | Navegação consistente | Norma WCAG 2.2 3.2.3 | Elementos de navegação repetidos mantêm ordem relativa consistente. | Sidebar e atalhos preservam nomes e ordem. | Critério admite mudanças iniciadas pelo usuário. | [WCAG](https://www.w3.org/TR/WCAG22/) |
+| 36 | Identificação consistente | Norma WCAG 2.2 3.2.4 | Componentes de mesma função são identificados de modo consistente. | Não alternar Simulado, Prova e Teste para a mesma ação. | Funções distintas podem exigir nomes distintos. | [WCAG](https://www.w3.org/TR/WCAG22/) |
+| 37 | Estado na URL | Padrão de aplicação | Estado compartilhável e navegável facilita retorno. | Preservar filtros, página e contexto em rota ou query quando pertinente. | Dados sensíveis ou temporários não devem ir para URL. | [GOVPatterns](https://design-system.service.gov.uk/patterns/) |
+| 38 | Contexto ao voltar | Heurística | Retornar à lista não deve apagar a seleção de trabalho. | Restaurar posição, filtros e questão selecionada. | Pode ser inadequado restaurar estado obsoleto após mudança de dados. | [Nielsen](https://www.nngroup.com/articles/ten-usability-heuristics/) |
+| 39 | Hierarquia rasa quando útil | Heurística | Reduzir desvios e rótulos ambíguos importa mais que contar cliques. | Testar acesso direto ao banco de questões. | A regra de três cliques é falsa. | [Clicks](https://www.nngroup.com/articles/3-click-rule/) |
+| 40 | Taxonomia e navegação não são iguais | Recomendação de IA | Objetos e relacionamentos podem coexistir com caminhos por tarefa. | Manter ficha Questão e experiência Responder separadas, mas conectadas. | Evitar duplicar bancos e filtros. | [ISO115](https://www.iso.org/standard/80773.html) |
+
+#### 11.5. Escolha de páginas e componentes
+
+| # | Princípio | Classe | Definição | Regra para o Exam App | Limites e exceções | Fonte |
+|---:|---|---|---|---|---|---|
+| 41 | Página dedicada | Padrão | Uma tarefa extensa recebe espaço, URL e histórico próprios. | Usar para Banco de Questões, Execução e Resultado. | Não abrir nova rota para ação mínima e transitória. | [GOVPatterns](https://design-system.service.gov.uk/patterns/) |
+| 42 | Página longa com seções | Padrão | Conteúdo que precisa ser lido em sequência pode ficar contínuo. | Resultado com resumo e análise por disciplina na mesma página. | Separar quando houver fluxos realmente independentes. | [GOVPatterns](https://design-system.service.gov.uk/patterns/) |
+| 43 | Tabs | Padrão APG | Alternam painéis relacionados de um mesmo contexto. | Em ficha de concurso, separar Visão geral e Objetos relacionados. | Não ocultar etapas sequenciais ou conteúdo que precisa ser comparado simultaneamente. | [APGTabs](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/), [GOVTabs](https://design-system.service.gov.uk/components/tabs/) |
+| 44 | Accordion | Padrão APG | Expande e recolhe seções independentes. | Agrupar filtros avançados por assunto. | Não esconder respostas essenciais nem usar como navegação principal. | [APGAccordion](https://www.w3.org/WAI/ARIA/apg/patterns/accordion/), [GOVAccordion](https://design-system.service.gov.uk/components/accordion/) |
+| 45 | Details | Padrão | Expõe explicação complementar curta sob demanda. | Explicar critérios de correção e origem da questão. | Conteúdo crítico deve ficar visível. | [GOVDetails](https://design-system.service.gov.uk/components/details/) |
+| 46 | Drawer de navegação | Padrão de design | Superfície lateral revela destinos ou controles em espaço restrito. | Sidebar recolhível no mobile, com Questões e Simulados visíveis. | Garantir saída, foco e identificação do estado. | [Material](https://m3.material.io/components/navigation-drawer/overview), [Apple](https://developer.apple.com/design/human-interface-guidelines/) |
+| 47 | Painel contextual | Padrão | Detalhes secundários acompanham a tarefa sem substituí-la. | Metadados, notas e vínculos ao lado da questão no desktop. | No mobile deve virar seção acessível ou painel sob demanda. | [Carbon](https://www.carbondesignsystem.com/building-blocks/core/components/data-table/guidelines) |
+| 48 | Popover | Padrão | Informação ou escolha breve aparece ancorada ao gatilho. | Opções de ordenação ou dica de filtro. | Não usar para formulário longo ou conteúdo essencial. | [Fluent](https://fluent2.microsoft.design/) |
+| 49 | Modal | Padrão APG | Interrompe interação com fundo para decisão concentrada. | Confirmar entrega definitiva ou exclusão irreversível. | Exige foco contido, retorno de foco e alternativa de cancelamento quando aplicável. | [APGDialog](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/) |
+| 50 | Wizard e etapas | Padrão | Processo longo e linear pode ser dividido com progresso. | Configuração avançada de simulado somente se houver decisões dependentes. | Não criar etapas para formulário curto ou fluxo não linear. | [USWDSStep](https://designsystem.digital.gov/components/step-indicator/) |
+| 51 | Paginação | Padrão | Divide conjunto grande em páginas identificáveis. | Banco de questões com total, página atual e retorno estável. | Escolha depende de tarefa e performance, não de preferência universal. | [USWDSPagination](https://designsystem.digital.gov/components/pagination/) |
+| 52 | Rolagem contínua | Padrão | Mantém leitura de conteúdo sequencial no mesmo contexto. | Lista curta ou revisão linear de explicações. | Não usar scroll infinito se impedir localizar e retomar questão específica. | [GOVPatterns](https://design-system.service.gov.uk/patterns/) |
+| 53 | Ações fixas ou sticky | Padrão | Controles frequentes permanecem disponíveis durante rolagem. | Próxima questão e Salvar quando ajudarem em telas longas. | Não encobrir conteúdo, foco ou teclado virtual. | [Focus](https://www.w3.org/WAI/WCAG22/Understanding/focus-not-obscured-minimum) |
+
+#### 11.6. Busca, filtros, formulários e dados
+
+| # | Princípio | Classe | Definição | Regra para o Exam App | Limites e exceções | Fonte |
+|---:|---|---|---|---|---|---|
+| 54 | Busca visível | Heurística | Busca deve ser reconhecível e ter escopo claro. | Buscar por enunciado, assunto ou banca com placeholder explicativo. | Busca não substitui filtros estruturados. | [Nielsen](https://www.nngroup.com/articles/ten-usability-heuristics/) |
+| 55 | Filtros por facetas | Padrão | Critérios independentes refinam o mesmo conjunto. | Disciplina, banca, cargo, ano, status e origem no banco unificado. | Não oferecer filtros sem dados confiáveis. | [Filters](https://www.nngroup.com/articles/applying-filters/) |
+| 56 | Filtros aplicados explícitos | Padrão | Mostrar critérios ativos permite compreender o resultado. | Chips removíveis e contagem de questões. | Evitar duplicar o mesmo estado em controles inconsistentes. | [Filters](https://www.nngroup.com/articles/applying-filters/) |
+| 57 | Limpar filtros | Padrão | Recuperar conjunto inicial deve ser fácil. | Botão Limpar tudo sem apagar preferências salvas. | Preservar filtros que o usuário explicitamente fixou, se sinalizado. | [Filters](https://www.nngroup.com/articles/applying-filters/) |
+| 58 | Zero resultados | Padrão | Estado vazio explica a causa e oferece recuperação. | Sugerir remover filtro, alterar busca ou ver questões disponíveis. | Não inventar questões nem ocultar filtros ativos. | [Atlassian](https://atlassian.design/components/empty-state/) |
+| 59 | Ordenação declarada | Padrão | Ordem e critério de listagem ficam visíveis. | Ordenar por relevância, ano ou número da questão com rótulo. | Relevância só deve existir se houver critério definido. | [Carbon](https://www.carbondesignsystem.com/building-blocks/core/components/data-table/guidelines) |
+| 60 | Tabela de dados | Padrão | Linhas e colunas facilitam comparar atributos homogêneos. | Usar em lista administrativa de objetos ou questões. | Resolução focada pede enunciado, não tabela densa. | [Carbon](https://www.carbondesignsystem.com/building-blocks/core/components/data-table/guidelines) |
+| 61 | Rótulos persistentes | Norma WCAG 2.2 3.3.2 | Campos têm instruções ou rótulos adequados. | Banca, disciplina e quantidade com label explícito. | Placeholder sozinho não equivale a label. | [WCAG](https://www.w3.org/TR/WCAG22/) |
+| 62 | Validação próxima ao campo | Padrão | Mensagem aponta erro e como corrigi-lo. | Informar quantidade de questões inválida no configurador. | Para formulários longos, complementar com resumo de erros. | [GOVErrors](https://design-system.service.gov.uk/components/error-summary/) |
+| 63 | Prevenção de perda de dados | Heurística | Ações destrutivas exigem proteção proporcional. | Salvar tentativa e avisar ao sair com mudanças não salvas. | Confirmação repetida de cada clique atrapalha. | [Nielsen](https://www.nngroup.com/articles/ten-usability-heuristics/) |
+
+#### 11.7. Acessibilidade verificável
+
+| # | Princípio | Classe | Definição | Regra para o Exam App | Limites e exceções | Fonte |
+|---:|---|---|---|---|---|---|
+| 64 | Teclado | Norma WCAG 2.2 2.1.1 | Funcionalidades devem ser operáveis por teclado. | Resolver, filtrar, iniciar e finalizar simulado sem mouse. | Testar interações reais, não apenas presença de tabindex. | [WCAG](https://www.w3.org/TR/WCAG22/) |
+| 65 | Ordem de foco | Norma WCAG 2.2 2.4.3 | Sequência de foco preserva significado e operação. | Seguir título, filtros, questão, alternativas e ações. | Layout visual e DOM precisam ser coerentes. | [WCAG](https://www.w3.org/TR/WCAG22/) |
+| 66 | Foco visível | Norma WCAG 2.2 2.4.7 | Indicador de foco deve ser perceptível. | Exibir foco em tabs, botões, chips e alternativas. | Não remover outline sem substituto suficiente. | [WCAG](https://www.w3.org/TR/WCAG22/) |
+| 67 | Foco não oculto | Norma WCAG 2.2 2.4.11 AA | Foco não pode ficar totalmente escondido por conteúdo criado pela página. | Corrigir sobreposição de header, dock e drawers. | AA não exige ausência de qualquer sobreposição; preferir foco totalmente visível. | [Focus](https://www.w3.org/WAI/WCAG22/Understanding/focus-not-obscured-minimum) |
+| 68 | Nome, papel e valor | Norma WCAG 2.2 4.1.2 | Controles expõem semântica e estado à tecnologia assistiva. | Alternativas e botões com rótulos e estados programáticos. | ARIA não compensa interação nativa quebrada. | [WCAG](https://www.w3.org/TR/WCAG22/) |
+| 69 | Contraste de texto | Norma WCAG 2.2 1.4.3 AA | Texto normal em geral precisa 4.5:1 e grande 3:1, com exceções. | Validar temas claro e escuro. | Logos, texto incidental e inativo têm exceções específicas. | [WCAG](https://www.w3.org/TR/WCAG22/), [WebAIM](https://webaim.org/articles/contrast/), [Deque](https://dequeuniversity.com/rules/axe/4.10/color-contrast) |
+| 70 | Contraste não textual | Norma WCAG 2.2 1.4.11 AA | Informação gráfica necessária e limites de controles precisam contraste adequado. | Borda de seleção, foco e estado de alternativa. | Critério contém exceções e escopo específico. | [WCAG](https://www.w3.org/TR/WCAG22/), [WebAIM](https://webaim.org/articles/contrast/) |
+| 71 | Cor não é único sinal | Norma WCAG 2.2 1.4.1 | Significado não depende apenas de cor. | Correta e errada também por texto, ícone SVG ou padrão. | Manter consistência sem redundância excessiva. | [WCAG](https://www.w3.org/TR/WCAG22/) |
+| 72 | Tamanho de alvo | Norma WCAG 2.2 2.5.8 AA | Alvo mínimo 24×24 CSS px ou exceção de espaçamento/equivalência. | Auditar chips e botões compactos; preferir alvos maiores quando possível. | 44×44 é critério AAA 2.5.5, não mínimo AA universal. | [Target](https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum) |
+| 73 | Reflow e zoom | Norma WCAG 2.2 1.4.10 | Conteúdo deve refluir sem rolagem bidimensional indevida nas condições do critério. | Verificar resolução de questão em viewport estreita e zoom. | Algumas tabelas e gráficos têm exceção. | [WCAG](https://www.w3.org/TR/WCAG22/) |
+| 74 | Mensagens de status | Norma WCAG 2.2 4.1.3 AA | Atualizações de status são comunicadas sem roubar foco. | Anunciar resposta salva e atualização de contagem. | Alertas urgentes podem requerer padrão diferente. | [WCAG](https://www.w3.org/TR/WCAG22/), [APGAlert](https://www.w3.org/WAI/ARIA/apg/patterns/alert/) |
+| 75 | Movimento reduzido | Norma WCAG 2.2 2.3.3 AAA e preferência do usuário | Movimento disparado por interação deve poder ser desativado, salvo essencial. | Respeitar prefers-reduced-motion em CSS, JS e canvas, preservando feedback e integridade da tarefa. | Não confundir este AAA com obrigação AA geral; considerar 2.2.2 e 2.3.1 (A) quando aplicáveis. | [WCAG](https://www.w3.org/TR/WCAG22/), [MOTION.md](../../MOTION.md) |
+| 76 | Cabeçalhos e rótulos | Norma WCAG 2.2 2.4.6 AA | Títulos e labels descrevem assunto ou propósito. | Título Questão 12 de 70 e botões com ação explícita. | Evitar rótulos genéricos como Ver mais sem contexto. | [WCAG](https://www.w3.org/TR/WCAG22/) |
+
+#### 11.8. Desempenho, ética e validação
+
+| # | Princípio | Classe | Definição | Regra para o Exam App | Limites e exceções | Fonte |
+|---:|---|---|---|---|---|---|
+| 77 | LCP | Métrica de desempenho | Mede quando o maior conteúdo visível é renderizado. | Medir carregamento da Home e do banco. | Não é medida isolada de satisfação; dados de campo importam. | [Vitals](https://web.dev/articles/vitals) |
+| 78 | INP | Métrica de responsividade | Mede latência de interação observada ao longo da página. | Medir resposta a filtros e seleção de alternativas. | Diferenciar atraso de rede e processamento local. | [Vitals](https://web.dev/articles/vitals) |
+| 79 | CLS | Métrica de estabilidade | Quantifica mudanças inesperadas de layout. | Evitar deslocar alternativa durante carregamento de correção. | Mudanças esperadas após interação não são todas penalizadas. | [Vitals](https://web.dev/articles/vitals) |
+| 80 | Feedback otimista com recuperação | Padrão | Interface pode responder antes da persistência, com tratamento de falha. | Marcar alternativa imediatamente e confirmar salvamento. | Não afirmar persistência se falhou. | [Nielsen](https://www.nngroup.com/articles/ten-usability-heuristics/) |
+| 81 | Ética e ausência de padrões enganosos | Princípio ético | Interface não deve manipular decisões ou ocultar consequências. | Mostrar claramente duração, critérios e entrega do simulado. | A intenção do produto não substitui teste de compreensão. | [Nielsen](https://www.nngroup.com/articles/ten-usability-heuristics/), [GOVPatterns](https://design-system.service.gov.uk/patterns/) |
+| 82 | Primeiro clique | Método de pesquisa | A primeira escolha revela pistas de navegação percebidas. | Pedir que usuários encontrem Questões, Simulados e Revisão. | Não generalizar a partir de poucos participantes. | [Tree](https://www.nngroup.com/articles/tree-testing/) |
+| 83 | Teste de árvore | Método de pesquisa | Avalia encontrabilidade da hierarquia sem decoração visual. | Testar rótulos da sidebar e Explorar antes de redesenhar. | Não avalia percepção visual ou comportamento da tela final. | [Tree](https://www.nngroup.com/articles/tree-testing/) |
+| 84 | Teste de tarefa | Método de pesquisa | Observa sucesso, erros e desvios em jornadas reais. | Filtrar, responder, voltar, criar simulado e revisar erradas. | Definir amostra e critérios antes de comparar versões. | [Nielsen](https://www.nngroup.com/articles/ten-usability-heuristics/) |
+| 85 | Métricas de fluxo | Instrumentação | Medir sucesso, abandono, retorno e tempo por tarefa. | Comparar antes e depois da navegação por tarefas. | Evitar metas inventadas ou otimizar cliques isoladamente. | [Clicks](https://www.nngroup.com/articles/3-click-rule/) |
+| 86 | Consistência de componentes | Padrão de design system | Reusar tokens, nomenclatura e comportamento reduz variações arbitrárias. | Reaproveitar botões, campos, filtros e estados em todas as rotas. | Consistência não impede variantes justificadas por contexto. | [Shopify](https://shopify.dev/docs/api/polaris), [Fluent](https://fluent2.microsoft.design/), [Apple](https://developer.apple.com/design/human-interface-guidelines/) |
+
+### 12. Inventário explícito das 20 fontes fornecidas para a pesquisa
+
+As 20 URLs estão **dentro do AGENTS.md**, não apenas em documento externo. **Atenção:** indexar uma URL **não** equivale a enumerar todos os itens do site; a auditoria exaustiva, site a site, permanece pendente. Não atribuir nomes ou evidências a páginas que não foram verificadas. Para cobertura futura: registrar por entrada nome original, URL específica, classe, tradução, duplicatas, data e limites.
+
+| # | Fonte | URL | Tipo principal / observação |
+|---:|---|---|---|
+| 1 | UX Atlas | https://www.uxatlas.in/explore | Agregador amplo; não confundir com o domínio diferente `uiuxatlas.com` |
+| 2 | UXScan — UX Psychology | https://uxscan.app/ux-psychology | Agregador de psicologia, vieses e leis |
+| 3 | Psychological | https://psychological.bouksim.com/ | Agregador de conceitos psicológicos e exemplos |
+| 4 | UX/UI Principles | https://uxuiprinciples.com/en | Biblioteca de princípios; verificar acesso de cada entrada |
+| 5 | UX Guidelines | https://www.ux-guidelines.com/ | Coleção de diretrizes e práticas |
+| 6 | UI Coach | https://www.uicoach.io/ux-laws | Leis / princípios para consulta |
+| 7 | Laws of UX | https://lawsofux.com/laws/ | Catálogo editorial de leis, efeitos e modelos; **30 entradas já indexadas no AGENTS.md** |
+| 8 | ProUX | https://www.proux.design/ux | Coleção de conceitos de UX |
+| 9 | UX Quest | https://www.uxqst.com/ux-laws | Catálogo de leis |
+| 10 | Twisted Brackets | https://www.twistedbrackets.com/ui-laws | Catálogo de princípios visuais |
+| 11 | UX Principles | https://uxprinciples.design/laws | Catálogo de leis |
+| 12 | UX UI Open | https://uxuiopen.com/laws-of-ux | Catálogo visual de leis |
+| 13 | UX360 | https://ux360.design/laws-of-ux/ | Catálogo de leis |
+| 14 | Design Principles | https://principles.design/browse/ | Agregador de princípios de design; nem todos são leis de UX |
+| 15 | Nielsen Norman Group | https://www.nngroup.com/articles/ten-usability-heuristics/ | Fonte direta para **10 heurísticas** já indexadas |
+| 16 | W3C WCAG | https://www.w3.org/TR/wcag/ | Norma técnica; usar a referência estável de versão https://www.w3.org/TR/WCAG22/ para critérios WCAG 2.2 |
+| 17 | Apple HIG | https://developer.apple.com/design/human-interface-guidelines/ | Padrões de plataforma; exemplo: botões e área de toque |
+| 18 | U.S. Web Design System | https://designsystem.digital.gov/ | Design system para governo dos EUA; padrões de componentes acessíveis |
+| 19 | Baymard Institute | https://baymard.com/blog | Pesquisa aplicada, em especial formulários/navegação/e-commerce; não generalizar sem contexto |
+| 20 | UI Patterns | https://ui-patterns.com/ | Padrões de interação; não confundir padrões com leis empíricas |
+
+**Estado verificável desta integração:** 30/30 entradas do catálogo editorial Laws of UX listadas acima; 86/86 entradas da curadoria aplicada transcritas integralmente aqui; 20/20 URLs fornecidas indexadas aqui; demais famílias (Gestalt, Nielsen, Shneiderman, ISO e WCAG) mantidas acima. **Cobertura de todas as entradas individuais dos 20 sites: não verificada.** Não declarar que essa etapa está concluída antes de uma auditoria por fonte.
+
 <!-- UX-LAWS-CATALOG:END -->
