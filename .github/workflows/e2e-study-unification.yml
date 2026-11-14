@@ -1,0 +1,64 @@
+name: E2E Unified Questions and Simulados
+
+on:
+  pull_request:
+    branches: [dev]
+    paths:
+      - 'prototypes/exam-app-0.1.1/index.html'
+      - 'tests/study-unification.e2e.mjs'
+      - 'scripts/append-study-unification-board.py'
+      - '.github/workflows/e2e-study-unification.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  study-journey:
+    if: github.head_ref == 'feat/unify-study-questions-100' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Launch baseline and updated prototype
+        run: |
+          git worktree add --detach /tmp/exams-before e305e474f68c5bbe0e80adc7dbf52a0c5b3dc6d0
+          python3 -m http.server 8765 --directory prototypes >/tmp/exams-after-server.log 2>&1 &
+          python3 -m http.server 8766 --directory /tmp/exams-before/prototypes >/tmp/exams-before-server.log 2>&1 &
+          sleep 2
+          curl -f http://127.0.0.1:8765/exam-app-0.1.1/index.html -o /dev/null
+          curl -f http://127.0.0.1:8766/exam-app-0.1.1/index.html -o /dev/null
+      - name: Verify real user journeys and capture before/after evidence
+        run: node tests/study-unification.e2e.mjs
+      - name: Upload captured evidence for review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: issue-100-before-after
+          path: prototypes/board-exam-app/assets/issue100_*.png
+          if-no-files-found: warn
+      - name: Verify screenshot sizes, append board and regenerate Markdown
+        run: |
+          python3 scripts/append-study-unification-board.py
+          npm run board
+          grep -q "32. Questões e Simulados" prototypes/board-exam-app/BOARD.md
+          grep -q "issue100_after_manual.png" prototypes/board-exam-app/BOARD.md
+      - name: Persist evidence in PR branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add prototypes/board-exam-app/board.json prototypes/board-exam-app/BOARD.md
+          git add prototypes/board-exam-app/assets/issue100_*.png
+          if ! git diff --cached --quiet; then
+            git commit -m "test(e2e): persist issue #100 visual evidence in planning board"
+            git push origin HEAD:${{ github.head_ref }}
+          fi
