@@ -214,6 +214,15 @@ Este catálogo fornece os **nomes originais** (em inglês, quando publicados ass
 
 **Regra para uso em issue/PR:** indicar qual princípio foi aplicado, por quê, efeito esperado, cenário reproduzível de teste, limites e exceções. Não impor números mágicos de 3 cliques, 7 itens, 400 ms ou 80/20. Priorizar acessibilidade, preservação de dados, segurança, sucesso da tarefa e evidências com usuários. Não declarar conformidade WCAG sem auditoria dos critérios aplicáveis.
 
+### Pesquisa Profunda — 20 bibliotecas de referência (14/11/2026)
+
+- **MUST** consultar [docs/ux/pesquisa-20-fontes-2026-11.md](docs/ux/pesquisa-20-fontes-2026-11.md) ao pesquisar novas leis/princípios ou ao justificar decisões de UI/UX; o documento reúne os **20 URLs solicitados**, síntese aplicada, matriz de testes e limitações de cobertura.
+- **MUST** usar o inventário de **30 entradas de Laws of UX** e as demais famílias abaixo como índice de nomes, com [docs/ux/ux-ui-principles.md](docs/ux/ux-ui-principles.md) como catálogo de **86 itens aplicados**. Não duplicar listas só para aumentar a contagem.
+- **MUST** distinguir uma norma obrigatória de um estudo, modelo psicológico, heurística, catálogo agregador e padrão de plataforma. Uma URL listada não comprova que todas as entradas daquele site foram verificadas.
+- **MUST** testar tarefas reais (descobrir Questões, resolver, simular, retomar e revisar) antes de declarar sucesso de uma recomendação; documentar comportamento observado, estados de erro/loading e limites.
+- **AVOID** aplicar indiscriminadamente "7 itens", "3 cliques", "400 ms", "tudo na mesma página", "somente 1 CTA" ou "proibido usar bordas". Decisões dependem de contexto, foco, acessibilidade, dados e testes.
+- **MUST** preservar as políticas de sincronização, evidências/board, SVG sem emojis e a integridade das tentativas já definidas neste AGENTS.md.
+
 ### 1. Laws of UX — 30 conceitos
 
 | Nome original | Português | Definição e aplicação |
