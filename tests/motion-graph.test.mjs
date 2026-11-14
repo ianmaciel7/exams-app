@@ -46,7 +46,7 @@ function harness({ reduced = false, physicsEnabled = true, intersection = false 
     };
   }
   const ctx = {
-    st, nodes, motionMQ, document, wrap, cv, window, devicePixelRatio: 1,
+    st, nodes, motionMQ, document, wrap, cv, window, IntersectionObserver: window.IntersectionObserver, devicePixelRatio: 1,
     matchMedia: () => motionMQ,
     requestAnimationFrame(fn) { const id = ++nextFrame; frames.set(id, fn); return id; },
     cancelAnimationFrame(id) { frames.delete(id); },
