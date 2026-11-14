@@ -166,6 +166,26 @@
 #spPop .sp-create{min-height:40px}
 @media (max-width:768px){#spPop .sp-select{min-height:44px}#spPop .sp-grip,#spPop .sp-more{height:44px;min-width:38px}}
 </style>
+<style>
+/* Custom type studio: accessible search, selectable cards and bounded preview (#140). */
+.type-studio{display:grid;gap:10px;min-width:0;max-height:min(72vh,590px);overflow:auto}
+#studioSearch{box-sizing:border-box;min-height:40px;width:100%}
+.type-studio-list{display:grid;gap:4px;max-height:min(28vh,250px);overflow:auto;min-width:0}
+.type-studio-item{display:flex;align-items:center;gap:10px;min-height:48px;width:100%;padding:8px 11px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--text);text-align:left;cursor:pointer}
+.type-studio-item[aria-selected="true"]{border-color:var(--study-accent);background:var(--study-tint)}
+.type-studio-item:hover{background:var(--hover)}
+.type-studio-item:focus-visible,#studioSearch:focus-visible{outline:2px solid var(--study-accent);outline-offset:2px}
+.type-studio-item[hidden]{display:none}
+.type-studio-preview{min-height:65px;padding:12px;border-radius:9px;border:1px solid var(--line);background:var(--bg-base);font-size:13px;line-height:1.55;overflow-wrap:anywhere}
+.type-studio-preview p{margin:6px 0;color:var(--muted)}
+.type-studio-preview small{color:var(--muted)}
+.custom-object-body{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px;line-height:1.65}
+.custom-tone-blue{--obj-tone:#5489c2;color:#5489c2!important}
+.custom-tone-green{--obj-tone:#379d7a;color:#379d7a!important}
+.custom-tone-amber{--obj-tone:#b3863e;color:#b3863e!important}
+.custom-tone-violet{--obj-tone:#8d74bb;color:#8d74bb!important}
+@media(max-width:480px){.type-studio-list{max-height:30vh}.type-studio-preview{padding:10px}}
+</style>
 </head><body>
 <style>
 /* ===== Exam App 0.1.1 — páginas de estudo e detalhes, 2026 ===== */
@@ -2647,7 +2667,7 @@ function pickObjectType(){
   w.addEventListener('input',onInput,true);
   w.addEventListener('keydown',onKey,true);
   render();
-  $('studioSearch').focus();
+  setTimeout(()=>$('studioSearch')?.focus(),40);
   p.then(ok=>{
     w.removeEventListener('click',onClick,true);w.removeEventListener('input',onInput,true);w.removeEventListener('keydown',onKey,true);
     if(!ok)return;
@@ -3889,6 +3909,7 @@ function opTipoPage(t,T,list,sp){
   const propSec=opSec('Propriedades',propRows?'<div class="pt">'+propRows+'</div>':opEmpty('Este tipo não tem propriedades.'),{count:typeProps(t).length,action:'<button type="button" class="op-btn" data-add-prop="'+t+'">+ Adicionar propriedade</button>'});
   const rows=list.map(d=>({icon:d.type,title:d.t,meta:[d.classe,d.cat].filter(Boolean).join(' · ')||TYPES[d.type].n,href:objHref(d),pinId:isA(d.type,'arquivo')?d.id:'',pinned:d.pin}));
   const NEWL={concurso:'Novo concurso',edicao:'Nova edição',cargo:'Novo cargo',orgao:'Novo órgão',banca:'Nova banca',disciplina:'Nova disciplina'};
+  if(T.custom) NEWL[t]='Novo '+T.n;
   return opPage({iid:'tipo:'+t,crumb:[['Espaço','#/espaco'],[T.n,'']],icon:t,kind:'Tipo de objeto',title:T.n,props,actions:NEWL[t]?'<button class="op-btn pri" data-new="'+t+'">+ '+NEWL[t]+'</button>':'',body:propSec+opSec('Objetos',rows.length?opList(rows):opEmpty('Nenhum objeto deste tipo no espaço.'),{count:list.length})});
 }
 function opValorPage(k,v,list){
@@ -4645,6 +4666,9 @@ function showObjs(h0){
     title='Questão'; meta='Tipo de Objeto · '+sp.name; html=questaoTipoPage(sp);
   } else if(isEntT(parts[1])&&entById(parts[1],parts[2])){
     const t=parts[1], en=entById(t,parts[2]); title=en.t; meta=TYPES[t].n+' · '+sp.name; html=t==='disciplina'?discPage(en):entPage(t,en);
+  } else if(parts[1]==='custom-object'&&customObjById(parts[2])){
+    const obj=customObjById(parts[2]);
+    title=obj.t;meta=TYPES[obj.type].n+' · '+sp.name;html=customObjectPage(obj);
   } else if(parts[1]==='tipo'&&TYPES[parts[2]]){
     const t=parts[2], T=TYPES[t], list=isEntT(t)?entsOf(t).map(e=>({id:e.id,type:t,t:e.t,classe:'',cat:''})):mine.filter(d=>isA(d.type,t));
     const kids=Object.keys(TYPES).filter(k=>TYPES[k].parent===t);
@@ -4972,7 +4996,7 @@ function route(spaceChanged){
   if(h0==='/revisao'){ location.replace('#/questoes/erradas'); return; }
   if(h0==='/quadro'){ $('spaceRow')?.removeAttribute('aria-current'); showBoard(); return; }
   if(h0.startsWith('/questoes')||h0==='/simulado'){ showStudyRoute(h0); return; }
-  if(h0==='/espaco'||h0.startsWith('/concurso/')||h0.startsWith('/questao/')||h0.startsWith('/tentativa/')||h0.startsWith('/resposta/')||h0.startsWith('/disciplina/')||h0.startsWith('/edicao/')||h0.startsWith('/cargo/')||h0.startsWith('/tipo/')||h0.startsWith('/valor/')||h0.startsWith('/orgao/')||h0.startsWith('/banca/')){ showObjs(h0); return; }
+  if(h0==='/espaco'||h0.startsWith('/concurso/')||h0.startsWith('/questao/')||h0.startsWith('/tentativa/')||h0.startsWith('/resposta/')||h0.startsWith('/disciplina/')||h0.startsWith('/edicao/')||h0.startsWith('/cargo/')||h0.startsWith('/tipo/')||h0.startsWith('/custom-object/')||h0.startsWith('/valor/')||h0.startsWith('/orgao/')||h0.startsWith('/banca/')){ showObjs(h0); return; }
   document.querySelector('.main').classList.remove('on-board'); $('boardBtn')?.removeAttribute('aria-current'); $('spaceRow')?.removeAttribute('aria-current');
   const list=docsOf(space);
   if(!list.length){ blank(spaces.find(x=>x.id===space).name,'Este espaço ainda não tem objetos.<br><button class="cta" data-addv>+ Adicionar PDF</button>'); return; }
@@ -5028,6 +5052,8 @@ const viewClick=e=>{
       if(JSON.stringify(nv)===JSON.stringify(base)) delete o[key]; else o[key]=nv; store.set('ptypes',o); route(true); toast('Tipo atualizado'); }); return; }
   const pd=e.target.closest('[data-pin-doc]'); if(pd){ e.preventDefault(); const id=pd.dataset.pinDoc, m=M(id), was=!!m.pin; if(was) delete m.pin; else m.pin=true; saveMeta(); paintNav(); route(true); toast(was?'Desafixado':'Fixado no topo'); return; }
   const pi=e.target.closest('[data-pick-icon]'); if(pi&&pi.dataset.pickIcon){ pickIcon(pi.dataset.pickIcon); return; }
+  const editCustom=e.target.closest('[data-custom-edit]');
+  if(editCustom){e.preventDefault();const obj=customObjById(editCustom.dataset.customEdit);if(obj)createCustomObject(obj.type,obj);return;}
   const nb=e.target.closest('[data-new]'); if(nb){ e.preventDefault(); createObj(nb.dataset.new,{conc:nb.dataset.conc,edicao:nb.dataset.ed}); } };
 view.addEventListener('click',viewClick); $('props').addEventListener('click',e=>{ if(e.target.closest('[data-edit-cv]')) viewClick(e); });
 addEventListener('hashchange',()=>route(false));
