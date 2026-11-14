@@ -135,3 +135,48 @@ When continuing work across different AI agents or recovering context from past 
 - **Project memories via Serena MCP**:
   - `.serena/memories/*.md` (e.g. `.serena/memories/cross-tool-session-recovery.md`, `archives-reuse-map.md`)
 
+## UX/UI — contrato de implementação para agentes (MANDATORY)
+
+**Antes de desenhar ou alterar uma tela, leia [docs/ux/ux-ui-principles.md](docs/ux/ux-ui-principles.md) e [docs/ux/arquitetura-informacao-navegacao.md](docs/ux/arquitetura-informacao-navegacao.md).** O catálogo distingue normas, estudos, heurísticas e padrões: não transforme uma heurística em lei universal. Preserve todas as políticas de sincronização, board.json e ícones SVG deste arquivo.
+
+### Navegação e tarefas
+1. **MUST** oferecer caminhos descobríveis para as tarefas primárias: Questões, Simulados e Revisão; não exigir conhecer Tipos de Objeto.
+2. **MUST** fazer cada CTA executar o destino prometido; Revisar erradas deve abrir um conjunto efetivamente filtrado.
+3. **MUST** manter nomes e comportamento consistentes entre Home, sidebar, banco e contexto do concurso.
+4. **MUST** preservar filtros, seleção, posição e retorno quando a tarefa exigir; preferir estado compartilhável na URL quando seguro.
+5. **SHOULD** separar ficha de objeto (metadados e relações) de fluxo de estudo (responder, corrigir, avançar), sem duplicar banco de dados.
+6. **AVOID** impor a regra dos três cliques, sete itens no menu ou mínimo de páginas sem evidência de teste.
+
+### Conteúdo, páginas e componentes
+7. **MUST** identificar propósito da página, contexto e ação primária no primeiro viewport, sem exigir que todo conteúdo caiba acima da dobra.
+8. **SHOULD** priorizar enunciado, alternativas e resposta em resolução; propriedades avançadas são secundárias.
+9. **MUST** escolher página, tabs, accordion, drawer, modal ou wizard conforme a tarefa; registrar justificativa em mudanças relevantes.
+10. **AVOID** tabs para etapas sequenciais, modais para formulários longos e accordion para esconder conteúdo indispensável.
+11. **SHOULD** usar paginação ou navegação por questão quando posição, retorno e compartilhamento importarem.
+12. **MUST** fornecer estados de carregamento, vazio, erro, indisponibilidade, sucesso e recuperação para operações críticas.
+
+### Filtros, formulários e dados
+13. **MUST** exibir escopo, quantidade, filtros ativos, remoção individual e opção de limpar no banco de questões.
+14. **MUST** manter uma definição consistente de questão, status e origem entre prática, simulado, cadernos e revisão.
+15. **MUST** usar labels persistentes e mensagens de validação claras; não depender só de placeholder.
+16. **MUST** proteger respostas e tentativas contra perda acidental; confirmar somente ações realmente irreversíveis.
+17. **SHOULD** permitir atalhos e filtros salvos sem esconder controles básicos dos iniciantes.
+
+### Acessibilidade e responsividade
+18. **MUST** testar tarefas essenciais apenas com teclado, ordem de foco, foco visível e foco não encoberto.
+19. **MUST** verificar critérios WCAG 2.2 AA aplicáveis, inclusive contraste, nome/papel/valor, labels, reflow e mensagens de status.
+20. **MUST** conferir alvo mínimo WCAG 2.2 2.5.8 (24×24 CSS px ou exceção válida); não tratar 44×44 como mínimo AA universal.
+21. **MUST** comunicar correto/incorreto e seleção sem depender exclusivamente de cor.
+22. **MUST** implementar semântica e teclado apropriados para tabs, dialogs e accordions, seguindo WAI-ARIA APG.
+23. **MUST** garantir uso em viewport estreita e zoom sem sobreposição de conteúdo, controles ou foco.
+24. **MUST** seguir a política existente de ícones SVG sem emojis na interface.
+
+### Evidência, validação e entrega
+25. **MUST** registrar o fluxo antes/depois e o critério verificável de aceite para qualquer mudança de navegação.
+26. **MUST** validar com cenários de erro, lentidão, interrupção, retorno, teclado e mobile; declarar limites dos testes.
+27. **SHOULD** usar primeiro clique, teste de árvore e teste de tarefas para decisões controversas; não otimizar só contagem de cliques.
+28. **MUST** classificar achados P0 (bloqueio), P1 (alta) ou P2 (evolução), justificando exceções.
+29. **MUST** registrar evidências visuais reais em board.json, regenerar BOARD.md com npm run board e vincular issues/PRs conforme a política acima.
+30. **AVOID** declarar conformidade WCAG, superioridade sobre concorrentes ou melhoria de métricas sem medição verificável.
+
+**Fontes-base:** [WCAG 2.2](https://www.w3.org/TR/WCAG22/), [WAI-ARIA APG](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/), [10 heurísticas de Nielsen](https://www.nngroup.com/articles/ten-usability-heuristics/), [GOV.UK Design System](https://design-system.service.gov.uk/patterns/), [USWDS](https://designsystem.digital.gov/components/step-indicator/) e o catálogo com fontes independentes em docs/ux/ux-ui-principles.md.
