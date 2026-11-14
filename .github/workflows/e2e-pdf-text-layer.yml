@@ -1,0 +1,65 @@
+name: Diagnose PDF rendering and text selection
+
+on:
+  pull_request:
+    branches: [dev]
+    paths:
+      - 'prototypes/exam-app-0.1.1/index.html'
+      - 'tests/pdf-render-and-selection.e2e.mjs'
+      - '.github/workflows/e2e-pdf-text-layer.yml'
+      - 'scripts/append-pdf-layer-board.py'
+
+permissions:
+  contents: write
+
+jobs:
+  pdf-chromium:
+    if: github.head_ref == 'fix/pdf-page-text-layer-recovery-112' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Launch baseline and updated app
+        run: |
+          git worktree add --detach /tmp/exams-pdf-before c0c6029a2978c8ad4d67584308300e35e96eb82e
+          python3 -m http.server 8765 --directory prototypes >/tmp/pdf-after-server.log 2>&1 &
+          python3 -m http.server 8766 --directory /tmp/exams-pdf-before/prototypes >/tmp/pdf-before-server.log 2>&1 &
+          sleep 3
+          curl -f http://127.0.0.1:8765/exam-app-0.1.1/pdfs/edital-2a-retificacao.pdf -o /dev/null
+          curl -f http://127.0.0.1:8766/exam-app-0.1.1/pdfs/edital-2a-retificacao.pdf -o /dev/null
+      - name: Diagnostic matrix and injected error recovery
+        run: node tests/pdf-render-and-selection.e2e.mjs
+      - name: Upload debug evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pdf-112-diagnostics
+          path: |
+            prototypes/board-exam-app/assets/pdf112_*.png
+            prototypes/board-exam-app/pdf112_diagnostic.json
+          if-no-files-found: warn
+      - name: Persist verified evidence
+        run: |
+          python3 scripts/append-pdf-layer-board.py
+          npm run board
+          grep -q "PDF.js — diagnóstico" prototypes/board-exam-app/BOARD.md
+      - name: Commit board evidence to PR branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add prototypes/board-exam-app/board.json prototypes/board-exam-app/BOARD.md prototypes/board-exam-app/pdf112_diagnostic.json
+          git add prototypes/board-exam-app/assets/pdf112_*.png
+          if ! git diff --cached --quiet; then
+            git commit -m "test(pdf): record real before/after browser evidence (#111 #112)"
+            git push origin HEAD:${{ github.head_ref }}
+          fi

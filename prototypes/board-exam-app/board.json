@@ -562,7 +562,18 @@
     "e1173",
     "e1174",
     "e1175",
-    "e1176"
+    "e1176",
+    "e1177",
+    "e1178",
+    "e1179",
+    "e1180",
+    "e1181",
+    "e1182",
+    "e1183",
+    "e1184",
+    "e1185",
+    "e1186",
+    "e1187"
   ],
   "elements": {
     "e1": {
@@ -5959,6 +5970,100 @@
       "y": 13712,
       "w": 760,
       "h": 50
+    },
+    "e1177": {
+      "type": "container",
+      "color": "white",
+      "text": "34. PDF.js — diagnóstico de texto, canvas, DPR e zoom (#111 #112)",
+      "x": 18000,
+      "y": 11000,
+      "w": 1650,
+      "h": 1500
+    },
+    "e1178": {
+      "type": "text",
+      "size": "small",
+      "text": "Evidência nativa do Exam App: Playwright Chromium, PDF da segunda retificação edital-2a-retificacao.pdf. Capturas reais no mesmo documento e DPR 2 (100%/200%), antes e depois do PR. Canvas fornece pixels; textLayer fornece seleção/cópia. Este teste não prova paridade com Readwise nem visualizador nativo, e não substitui Firefox/Edge. Métricas por cenário em pdf112_diagnostic.json.",
+      "x": 18020,
+      "y": 11012,
+      "w": 1550,
+      "h": 90
+    },
+    "e1179": {
+      "type": "image",
+      "src": "/_blob/pdf112_before_dpr2_zoom1",
+      "x": 18020,
+      "y": 11110,
+      "w": 760,
+      "h": 490
+    },
+    "e1180": {
+      "type": "text",
+      "size": "small",
+      "text": "ANTES: página e camada de texto, DPR 2 / 100% | assets/pdf112_before_dpr2_zoom1.png",
+      "x": 18020,
+      "y": 11612,
+      "w": 760,
+      "h": 40
+    },
+    "e1181": {
+      "type": "image",
+      "src": "/_blob/pdf112_after_dpr2_zoom1",
+      "x": 18830,
+      "y": 11110,
+      "w": 760,
+      "h": 490
+    },
+    "e1182": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: página e camada de texto, DPR 2 / 100% | assets/pdf112_after_dpr2_zoom1.png",
+      "x": 18830,
+      "y": 11612,
+      "w": 760,
+      "h": 40
+    },
+    "e1183": {
+      "type": "image",
+      "src": "/_blob/pdf112_before_dpr2_zoom2",
+      "x": 18020,
+      "y": 11720,
+      "w": 760,
+      "h": 490
+    },
+    "e1184": {
+      "type": "text",
+      "size": "small",
+      "text": "ANTES: página e camada de texto, DPR 2 / 200% | assets/pdf112_before_dpr2_zoom2.png",
+      "x": 18020,
+      "y": 12222,
+      "w": 760,
+      "h": 40
+    },
+    "e1185": {
+      "type": "image",
+      "src": "/_blob/pdf112_after_dpr2_zoom2",
+      "x": 18830,
+      "y": 11720,
+      "w": 760,
+      "h": 490
+    },
+    "e1186": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: página e camada de texto, DPR 2 / 200% | assets/pdf112_after_dpr2_zoom2.png",
+      "x": 18830,
+      "y": 12222,
+      "w": 760,
+      "h": 40
+    },
+    "e1187": {
+      "type": "shape",
+      "text": "**Medições reais de canvas/textLayer**\nbefore DPR=1 zoom=1 página=1 canvas=754×1066 CSS=754.0×1077.0 ratio=1.00 textSpans=157 status=untracked\nbefore DPR=1 zoom=1.5 página=1 canvas=754×1066 CSS=754.0×1616.0 ratio=1.00 textSpans=157 status=untracked\nbefore DPR=1 zoom=2 página=1 canvas=754×1066 CSS=754.0×2155.0 ratio=1.00 textSpans=157 status=untracked\nbefore DPR=2 zoom=1 página=1 canvas=1508×2132 CSS=754.0×1077.0 ratio=2.00 textSpans=157 status=untracked\nbefore DPR=2 zoom=1.5 página=1 canvas=1508×2132 CSS=754.0×1616.0 ratio=2.00 textSpans=157 status=untracked\nbefore DPR=2 zoom=2 página=1 canvas=1508×2132 CSS=754.0×2155.0 ratio=2.00 textSpans=157 status=untracked\nafter DPR=1 zoom=1 página=1 canvas=754×1066 CSS=754.0×1077.0 ratio=1.00 textSpans=157 status=ready\nafter DPR=1 zoom=1.5 página=1 canvas=754×1066 CSS=754.0×1616.0 ratio=1.00 textSpans=157 status=ready\nafter DPR=1 zoom=2 página=1 canvas=754×1066 CSS=754.0×2155.0 ratio=1.00 textSpans=157 status=ready\nafter DPR=2 zoom=1 página=1 canvas=1508×2132 CSS=754.0×1077.0 ratio=2.00 textSpans=157 status=ready\nafter DPR=2 zoom=1.5 página=1 canvas=1508×2132 CSS=754.0×1616.0 ratio=2.00 textSpans=157 status=ready\nafter DPR=2 zoom=2 página=1 canvas=1508×2132 CSS=754.0×2155.0 ratio=2.00 textSpans=157 status=ready",
+      "x": 18020,
+      "y": 12350,
+      "w": 1550,
+      "h": 120
     }
   }
 }
