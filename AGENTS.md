@@ -15,8 +15,13 @@ All agents working in this repository must keep the codebase and the live Claude
    - Always run `git fetch origin` before starting and inspect remote branches.
    - If Claude pushed new commits remotely, merge/rebase them into `dev`.
    - If changes are committed to `dev`, push them back to `origin/claude/project-thread-6zihkn` to keep the cloud thread up to date.
-2. **Sync the Live Claude Artifact (Zero-Token CLI)**:
-   - After updating `prototypes/exam-app-0.1.1/index.html`, deploy the new version directly to the live Claude artifact:
+2. **Sync the Live Claude Artifact (Zero-Token CLI & Automated Hooks)**:
+   - **Automated Git Hooks:** Git hooks are configured in `.githooks/` (`post-commit` and `post-merge`). Whenever `prototypes/exam-app-0.1.1/index.html` is committed or merged/pulled on `dev`, the hook runs `sync:artifact` automatically. Enable in any clone with:
+     ```bash
+     npm run setup:hooks # or: git config core.hooksPath .githooks
+     ```
+   - **Automated CI (GitHub Actions):** `.github/workflows/sync-artifact.yml` runs on push to `dev` whenever `prototypes/exam-app-0.1.1/index.html` changes. If `CLAUDE_ARTIFACT_TOKEN` is set in GitHub repository secrets, CI deploys the artifact automatically on merge.
+   - **Manual deploy command:**
      ```bash
      npm run sync:artifact
      ```
