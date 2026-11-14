@@ -694,6 +694,42 @@ As 20 URLs estão **dentro do AGENTS.md**, não apenas em documento externo. **A
 3. **SHOULD** preferir formulários simples, agrupados por sentido, com largura de campo útil, labels e erro próximos do controle; justificar quando ação explícita, autosave, inline edit ou fluxo em etapas é melhor.
 4. **MUST** diferenciar material **consultado e documentado** de **código implementado** e **conformidade testada**. Registrar evidências do fluxo no board/issues quando houver mudança real de UI; esta inclusão documental isolada não exige capturas fabricadas.
 
+
+### 15. WCAG 2.2 e técnicas verificáveis de formulários — complemento
+
+**Classificação:** estes sete itens são **critérios de sucesso WCAG 2.2**, quando aplicáveis e no respectivo nível; os cinco nomes na seção seguinte são **tutoriais/padrões**, não leis universais. Complementam as seções 11.7, 13 e 14, sem alterar as contagens anteriores de Laws of UX e catálogo aplicado.
+
+#### 15.1. Sete critérios WCAG adicionais com nomes oficiais
+
+| Critério | Nome original | Regra de implementação do Exam App | Limites e fonte |
+|---|---|---|---|
+| **1.3.1 (A)** | **Info and Relationships** | Expor relações visuais também em código: labels, grupos semânticos, títulos e relações entre campos; usar fieldset/legend em grupos apropriados. | Agrupar por espaçamento não basta. [WCAG](https://www.w3.org/TR/WCAG22/#info-and-relationships) |
+| **3.3.1 (A)** | **Error Identification** | Quando erro de entrada for detectado automaticamente, identificar o item errado e descrever o erro em texto. | Não exige apresentar erro antes de terminar a primeira edição. [WCAG](https://www.w3.org/TR/WCAG22/#error-identification) |
+| **3.2.1 (A)** | **On Focus** | Receber foco, por si só, não pode provocar mudança de contexto. | Diferenciar painel de ajuda previsível de navegação/submissão inesperada. [WCAG](https://www.w3.org/TR/WCAG22/#on-focus) |
+| **2.5.3 (A)** | **Label in Name** | O nome acessível de controle com label visível precisa conter o texto visível aplicável. | Não substituir texto visível por outro nome incompatível em ARIA. [WCAG](https://www.w3.org/TR/WCAG22/#label-in-name) |
+| **3.2.6 (A)** | **Consistent Help** | Quando mecanismos de ajuda definidos no critério se repetirem no mesmo conjunto de páginas, manter sua ordem relativa. | Não exige que toda página tenha botão de ajuda. [WCAG](https://www.w3.org/TR/WCAG22/#consistent-help) |
+| **1.4.13 (AA)** | **Content on Hover or Focus** | Conteúdo adicional por hover/foco deve atender aos requisitos de dispensabilidade, ponteiro e persistência quando aplicáveis. | Observar exceções do critério; tooltip não deve desaparecer antes da interação necessária. [WCAG](https://www.w3.org/TR/WCAG22/#content-on-hover-or-focus) |
+| **2.4.13 (AAA)** | **Focus Appearance** | Avaliar área e contraste do indicador de foco entre estados normal/focado, conforme o critério. | É **AAA**, não mínimo AA; não confundir com foco visível 2.4.7 ou não oculto 2.4.11. [WCAG](https://www.w3.org/TR/WCAG22/#focus-appearance) |
+
+#### 15.2. Cinco tutoriais e diretrizes oficiais (não são leis)
+
+| Nome publicado | Aplicação para campos e formulários | Fonte |
+|---|---|---|
+| **Grouping Controls** | Agrupar radio/checkbox e campos relacionados semanticamente (fieldset/legend ou alternativa acessível); organizar opções de select com optgroup quando apropriado. | [W3C WAI](https://www.w3.org/WAI/tutorials/forms/grouping/) |
+| **Form Instructions** | Explicar obrigatoriedade, formato e exemplos relevantes de maneira acessível e associada ao campo; evitar instruções redundantes. | [W3C WAI](https://www.w3.org/WAI/tutorials/forms/instructions/) |
+| **Validating Input** | Validar no cliente para orientação e no servidor para segurança/integridade; aceitar formatos equivalentes quando apropriado e preservar o trabalho após erro. | [W3C WAI](https://www.w3.org/WAI/tutorials/forms/validation/) |
+| **Multi-page Forms** | Em formulários realmente extensos, separar grupos lógicos, indicar progresso, permitir voltar e explicitar etapas opcionais; evitar wizard para formulário curto. | [W3C WAI](https://www.w3.org/WAI/tutorials/forms/multi-page/) |
+| **Inline Validation** | Não interromper a primeira digitação com erro precoce; validar após edição/blur ou envio conforme tarefa, e oferecer feedback durante correção de erros já apresentados. | [GitHub Primer](https://primer.style/product/ui-patterns/forms/) |
+
+**Contrato de implementação:**
+1. **MUST** verificar semântica programática além do layout: nome acessível, label, grupo, descrição, associação de erro, foco e teclado. Preferir HTML nativo quando adequado.
+2. **MUST** tratar **On Focus (3.2.1)** e **On Input (3.2.2)** separadamente em filtros, autosave, selects e inline edit. Atualizar resultado não é automaticamente mudar de contexto.
+3. **MUST** evitar perda de entrada e submissão duplicada; distinguir edição, inválido, submetendo, salvando, salvo, falhou e estado de concorrência quando relevante. Não anunciar persistência sem confirmação.
+4. **MUST** orientar correção com texto específico e associação ao campo; para múltiplos erros, considerar resumo de erros com foco e links. Seguir o momento de validação da tarefa, não uma regra temporal universal.
+5. **SHOULD** evitar desabilitar a única ação possível sem explicação ou caminho de recuperação; avaliar validação no envio quando isso for mais claro.
+6. **MUST** testar teclado, IME/composição, autofill, zoom/reflow, mobile, hover/foco, leitor de tela quando possível e modo de alto contraste. Ver [DESIGN.md §8.10](DESIGN.md).
+7. **MUST** documentar por critério status **passou/falhou/não aplicável/não testado**, cenário, fonte e evidência; catálogo não representa conformidade testada.
+
 <!-- UX-LAWS-CATALOG:END -->
 
 <!-- DESIGN-SYSTEM-INTEGRATION:START -->
