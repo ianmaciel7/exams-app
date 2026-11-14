@@ -242,6 +242,157 @@ Fonte: [WCAG 2.2](https://www.w3.org/TR/WCAG22/) e [Quick Reference](https://www
 
 **Contrato de sincronização:** sempre que uma lei, norma ou regra de formulário for inserida no AGENTS.md, conferir este catálogo e a especificação de aparência do DESIGN.md. Documentação de princípios não comprova que o protótipo foi alterado ou testado.
 
+
+## Extensões gerais verificadas para UX em 2026 — espelho da seção 16 do AGENTS.md
+
+Este índice **não altera nem renumera as 86 entradas originais** nem o inventário de leis já documentado. Ele acrescenta nomes **publicados**, nas classes corretas: modelos de visualização, princípios de inclusão, norma ISO, orientação W3C, framework de métricas, padrões governamentais e padrões de design systems. Consulte [AGENTS.md §16](../../AGENTS.md) para as regras normativas por fluxo e [DESIGN.md §8.14](../../DESIGN.md) para componentes, paneamento, grafo e gráficos.
+
+### G. Seven Principles of Universal Design (7)
+
+| Nome original | Aplicação no Exam App |
+|---|---|
+| **Equitable Use** | Acesso equivalente a tarefas de estudo. |
+| **Flexibility in Use** | Diferentes entradas, capacidades e ritmos. |
+| **Simple and Intuitive Use** | Descoberta de ações sem precisar entender estruturas internas. |
+| **Perceptible Information** | Estados e conteúdo compreensíveis além de cor/posição. |
+| **Tolerance for Error** | Prevenção, recuperação e retomada. |
+| **Low Physical Effort** | Reduzir arrastes, repetições e esforço motor. |
+| **Size and Space for Approach and Use** | Espaço e acesso apropriados conforme o contexto e dispositivo. |
+
+Fontes: [North Carolina State University — Center for Universal Design](https://design.ncsu.edu/research/center-for-universal-design/) e [UK Department for Education](https://accessibility.education.gov.uk/guidelines/universal-design). Princípios originalmente de design universal, estendidos à interface digital; **não são critérios WCAG**.
+
+### H. Shneiderman — Visual Information-Seeking Mantra (1996)
+
+**Nome original:** **Overview first, zoom and filter, then details-on-demand**. Tarefas do modelo: **Overview; Zoom; Filter; Details-on-demand; Relate; History; Extract**.
+
+Uso: apresentar visão geral do grafo, filtros/zoom legíveis, seleção e relações contextuais, preservar histórico de navegação e permitir alternativa acessível/extrair dados quando pertinente. Não converter as sete tarefas em sete controles obrigatórios. Fonte: [The Eyes Have It, IEEE](https://doi.org/10.1109/VL.1996.545307).
+
+### I. ISO 9241-11:2018 — Usability: Definitions and Concepts
+
+Norma publicada e confirmada em 2023: estrutura de usabilidade considerando o **contexto de uso**, **eficácia**, **eficiência** e **satisfação**. Aplicação: medir sucesso de tarefas reais, custo e qualidade percebida, não apenas número de cliques, retenção ou aparência. Apenas resumo público da ISO foi consultado; **não alegar conformidade** sem acesso e avaliação da norma integral. [Fonte ISO](https://www.iso.org/standard/63500.html).
+
+### J. Microsoft Inclusive Design — 3 princípios
+
+| Nome original | Aplicação |
+|---|---|
+| **Recognize exclusion** | Identificar barreiras entre pessoa, contexto e interface. |
+| **Learn from diversity** | Pesquisar/testar em contextos variados. |
+| **Solve for one, extend to many** | Soluções para necessidades específicas podem beneficiar outras pessoas, se testadas. |
+
+[Fonte Microsoft Inclusive Design](https://inclusive.microsoft.design/).
+
+### K. W3C COGA — 8 objetivos de acessibilidade cognitiva
+
+| Nome original | Aplicação |
+|---|---|
+| **Help Users Understand What Things Are and How to Use Them** | Clareza de função/controles. |
+| **Help Users Find What They Need** | Encontrabilidade e navegação. |
+| **Use Clear and Understandable Content** | Conteúdo legível e compreensível. |
+| **Help Users Avoid Mistakes and Know How to Correct Them** | Recuperação de erros sem perda. |
+| **Help Users Focus** | Gestão de distrações e retorno ao contexto. |
+| **Ensure Processes Do Not Rely on Memory** | Reduzir esforço de lembrar passos e valores. |
+| **Provide Help and Support** | Ajuda contextual e feedback. |
+| **Support Adaptation and Personalization** | Adaptação e preferências sob controle do usuário. |
+
+[Fonte W3C COGA](https://www.w3.org/TR/coga-usable/). **Working Group Note suplementar**; não cria critérios WCAG 2.2 adicionais.
+
+### L. GOV.UK — 11 Government Design Principles (atualizados em 2025)
+
+| Nome original |
+|---|
+| **Start with user needs** |
+| **Do less** |
+| **Design with data** |
+| **Do the hard work to make it simple** |
+| **Iterate. Then iterate again** |
+| **This is for everyone** |
+| **Understand context** |
+| **Build digital services, not websites** |
+| **Be consistent, not uniform** |
+| **Make things open: it makes things better** |
+| **Minimise environmental impact** |
+
+Fonte: [GOV.UK Government Design Principles](https://www.gov.uk/guidance/government-design-principles). A sustentabilidade foi incluída em 02/04/2025. São princípios de serviço, não leis universais, e parte do conteúdo já sobrepõe Nielsen/ISO.
+
+### M. HEART Framework — métricas centradas no usuário
+
+**HEART = Happiness, Engagement, Adoption, Retention, Task Success**; **GSM = Goals–Signals–Metrics**. A escolha de métricas deve começar pelo objetivo de cada tarefa, passar por sinais e culminar em indicadores verificáveis. Não equiparar tempo na aplicação a facilidade de uso. Fonte original: [Google Research, CHI 2010](https://research.google/pubs/measuring-the-user-experience-on-a-large-scale-user-centered-metrics-for-web-applications/); [Kerry Rodden](https://www.kerryrodden.com/heart/). Modelo de métricas, **não uma lei UI/UX**.
+
+### N. WCAG 2.2 — 16 critérios gerais adicionais da seção 16.8 do AGENTS.md
+
+| SC / nível | Nome oficial | Aplicação resumida |
+|---|---|---|
+| **1.3.2 A** | Meaningful Sequence | Ordem significativa da leitura e dos painéis. |
+| **1.3.4 AA** | Orientation | Não impor orientação sem essencialidade. |
+| **1.4.4 AA** | Resize Text | Texto redimensionável sem perda de conteúdo/função nas condições do SC. |
+| **1.4.12 AA** | Text Spacing | Override de espaçamento não pode causar perda de conteúdo/função. |
+| **2.1.2 A** | No Keyboard Trap | Sair por teclado de interações. |
+| **2.1.4 A** | Character Key Shortcuts | Alternativas/restrições para atalhos de caractere único. |
+| **2.2.1 A** | Timing Adjustable | Avaliar limites de tempo e exceção quando o tempo é essencial. |
+| **2.4.1 A** | Bypass Blocks | Saltar regiões repetidas. |
+| **2.4.2 A** | Page Titled | Título descritivo de página. |
+| **2.4.4 A** | Link Purpose (In Context) | Destino de link compreensível. |
+| **2.4.5 AA** | Multiple Ways | Mais de um caminho de localização quando aplicável, com exceções. |
+| **2.5.1 A** | Pointer Gestures | Alternativa a gestos complexos quando exigida. |
+| **2.5.2 A** | Pointer Cancellation | Regras de cancelamento de acionamento de ponteiro. |
+| **2.5.4 A** | Motion Actuation | Alternativa e controle para ações baseadas em movimento quando aplicável. |
+| **3.1.1 A** | Language of Page | Idioma principal programático. |
+| **3.1.2 AA** | Language of Parts | Idioma dos trechos com exceções previstas. |
+
+Fonte: [WCAG 2.2](https://www.w3.org/TR/WCAG22/). Níveis, escopo e exceções importam. **Não confundir documentação com testes aprovados.**
+
+### O. Context7 + fontes oficiais — padrões de design atuais, não leis
+
+| Fonte | Nome publicado | Relevância |
+|---|---|---|
+| [Material Design 3](https://m3.material.io/foundations/layout/layout-overview/overview) | **Adaptive Design / Layout Scaffold / Panes / Breakpoints** | Orientação atualizada em maio de 2026 para compor interfaces por espaço/contexto, não miniaturizar desktop. |
+| [IBM Carbon](https://github.com/carbon-design-system/carbon/blob/main/packages/react/src/examples/EmptyState/EmptyState.mdx) | **Empty State Pattern** | Diferenciar indisponível, vazio e nenhum resultado. |
+| [React Aria](https://react-spectrum.adobe.com/react-aria/interactions.html) | **Accessible, Adaptive, International** | Modos de entrada, foco, idiomas/RTL e responsividade. |
+| [USWDS](https://designsystem.digital.gov/components/data-visualizations/) | **Data Visualizations** | Gráficos com leitura equivalente, mensagem principal textual, rótulos e alternativas tabulares/de dados. |
+
+**Priorização da auditoria**: IA de navegação Questões/Simulados; adaptação de sidebar e painel direito; grafo com overview/filter/detail/history; gráficos com títulos/alternativas; leitura de PDFs; operações por teclado/touch; métricas de sucesso de tarefa. Validar antes e depois por cenários reais. Este índice é uma **curadoria documental**, não uma avaliação executada do protótipo.
+
+
+### P. HCI, avaliação e widgets acessíveis — auditoria incremental Context7 (2026)
+
+Espelho resumido de [AGENTS.md §17](../../AGENTS.md) e do contrato de implementação de [DESIGN.md §8.19](../../DESIGN.md). Os nomes abaixo **não alteram os 86 itens do catálogo original** e representam categorias diferentes de conhecimento, sem pretensão de que sejam leis científicas novas.
+
+| Nome original publicado | Tipo, autoria / instituição | Uso no Exam App e limite | Fonte |
+|---|---|---|---|
+| **Information Foraging Theory** | Teoria de HCI; Pirolli e Card (1995/1999) | Avaliar pistas de navegação, agrupamento e encontrabilidade de Questões, Simulados, Revisão e Explorar. O conceito Information Scent já existia. | [Pirolli e Card (1995)](https://chi1995.acm.org/proceedings/papers/ppp_bdy.htm); [1999](https://doi.org/10.1037/0033-295X.106.4.643) |
+| **Cognitive Walkthrough** | Método de inspeção; Polson, Lewis, Rieman e Wharton (1992) | Verificar cada etapa de descoberta/ação/feedback de um iniciante; não substitui teste com usuários. | [Artigo original](https://doi.org/10.1016/0020-7373(92)90039-N) |
+| **Keystroke-Level Model (KLM)** | Modelo preditivo de desempenho; Card, Moran e Newell (1980) | Estimar esforço temporal em operação repetitiva de usuário experiente; não estima satisfação ou aprendizagem. | [Artigo original](https://doi.org/10.1145/358886.358895) |
+| **Progressive Enhancement** | Filosofia de desenvolvimento web | Manter conteúdo/ações essenciais com fallback realista de APIs e visualizações avançadas. | [MDN](https://developer.mozilla.org/en-US/docs/Glossary/Progressive_Enhancement) |
+| **Disclosure (Show/Hide) Pattern** | W3C WAI-ARIA APG | Sidebar de grupos simples; botão com expansão, Enter/Espaço e foco consistente. | [APG Disclosure](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/) |
+| **Tree View Pattern** | W3C WAI-ARIA APG | Hierarquia navegável por setas, foco e seleção; **não** aplicar automaticamente a sidebar comum ou grafo canvas. | [APG Tree View](https://www.w3.org/WAI/ARIA/apg/patterns/treeview/) |
+| **Grid Pattern** | W3C WAI-ARIA APG | Grade realmente interativa com foco/células; preferir tabela HTML simples para dados estáticos. | [APG Grid](https://www.w3.org/WAI/ARIA/apg/patterns/grid/) |
+| **Treegrid Pattern** | W3C WAI-ARIA APG | Somente para grade hierárquica interativa, com semântica e teclado completos. | [APG Treegrid](https://www.w3.org/WAI/ARIA/apg/patterns/treegrid/) |
+| **Keyboard Interface / Focus in Composites** | Prática W3C APG | Distinguir foco, seleção, expansão, ativação e retorno de foco, inclusive em coleções que mudam. | [APG Keyboard Interface](https://www.w3.org/WAI/ARIA/apg/practices/keyboard-interface/) |
+| **Complex Images** | Tutorial W3C WAI | Texto equivalente para gráfico estático; para grafo interativo, alternativa em lista/tabela navegável. | [WAI Complex Images](https://www.w3.org/WAI/tutorials/images/complex/) |
+| **In-page Navigation** | Componente/padrão USWDS | Índice orientador para páginas longas, não tab duplicada. | [USWDS](https://designsystem.digital.gov/components/in-page-navigation/) |
+| **Graceful Degradation** | Filosofia complementar de desenvolvimento web | Explicitar fallback e recuperação quando função avançada falhar, sem alegar suporte no-JS/offline não testado. | [MDN](https://developer.mozilla.org/en-US/docs/Glossary/Graceful_degradation) |
+
+**Aplicação por prioridade:** P0 — perda de foco, seleção não recuperável, navegação por teclado inviável, visualização sem alternativa para dados essenciais; P1 — sidebar/árvore mal classificados, nomes que não comunicam destinos, erros sem fallback e primeiro uso confuso; P2 — previsão de esforço com KLM ou índice de página quando facilitar tarefas reais. A classificação é proposta de auditoria e **não declaração de falhas presentes no código**. Usar as evidências do board, do protótipo e de testes antes de abrir regressões ou afirmar implementação.
+
+
+### Q. Avaliação, testes e tokens — publicações de 2026
+
+Espelho resumido de [AGENTS.md §18](../../AGENTS.md) e dos contratos de [DESIGN.md §§8.20–8.21](../../DESIGN.md). **Estes itens não são leis UI/UX novas.** Diferenciar especificação, método, padrão de tecnologia e rascunho.
+
+| Nome oficial | Tipo e status | Aplicação / cuidado | Fonte |
+|---|---|---|---|
+| **WCAG Evaluation Methodology (WCAG-EM) 2.0** | **W3C Group Note**, 23/07/2026 | Método em cinco etapas para avaliar acessibilidade de produtos digitais, incluindo jornadas completas. Não acrescenta critérios WCAG. | [W3C](https://www.w3.org/TR/wcag-em-2/), [WAI](https://www.w3.org/WAI/test-evaluate/conformance/wcag-em/) |
+| **Accessibility Conformance Testing (ACT) Rules Format 1.1** | **W3C Recommendation**, 05/02/2026 | Formato para produzir regras verificáveis e comparáveis; as regras ACT individuais são informativas. | [W3C](https://www.w3.org/TR/act-rules-format/) |
+| **Design Tokens Format Module 2025.10** | **Design Tokens Community Group**, relatório estável de 28/10/2025, **não** W3C Recommendation | Tokens, tipos, grupos, aliases e compostos; aplicar ao planejamento de interoperabilidade, não migrar tokens CSS existentes sem justificativa. | [DTCG estável](https://www.designtokens.org/TR/2025.10/format/) |
+| **WCAG 3.0 Working Draft** | **Rascunho**, atualizado em setembro de 2026, ainda não versão normativa vigente | Monitorar evolução, sem usá-lo para declarar conformidade. | [WAI](https://www.w3.org/WAI/standards-guidelines/wcag/wcag3-intro/) |
+| **CSS Container Size Queries** | Padrão/funcionalidade CSS; **não** lei UX | Adaptação de componentes por largura de contêiner, especialmente sidebar e painel direito, com fallback. | [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Containment/Container_queries) |
+
+**WCAG-EM 2.0, cinco passos publicados:** **Define the evaluation scope**; **Explore the target digital product**; **Select a representative sample set**; **Evaluate the selected sample set**; **Report the evaluation findings**. Auditar Questões, Simulados, PDF, grafo, estados interativos e processos completos com amostra representativa e relatório reproduzível.
+
+**WCAG 2.2 AAA complementares, não obrigatórios para AA:** **2.5.6 Concurrent Input Mechanisms**; **3.3.6 Error Prevention (All)**; **3.3.9 Accessible Authentication (Enhanced)**. [Fonte normativa WCAG 2.2](https://www.w3.org/TR/WCAG22/). Não confundí-los com os critérios A/AA já documentados.
+
+**Nota sobre testes:** scanners e ferramentas automáticas não determinam sozinhos se um produto é acessível; requerem interpretação e testes manuais de experiências e processos. [WAI — Selecting Evaluation Tools](https://www.w3.org/WAI/test-evaluate/tools/selecting/). A enumeração de fontes **não** equivale a teste de implementação.
+
 ## Matriz de decisão por superfície
 
 | Superfície | Padrão principal | Primeiro viewport e CTA | Secundário | Mobile e exceção | Verificação |

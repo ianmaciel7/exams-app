@@ -535,7 +535,82 @@ Exemplo ilustrativo, a ser adaptado aos tokens CSS existentes:
 
 Fontes: [MDN — forced-colors](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/forced-colors), [MDN — prefers-reduced-transparency](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-transparency), [Apple HIG — Materials](https://developer.apple.com/design/human-interface-guidelines/materials).
 
-### 8.14 Localização, redação e apresentação numérica
+### 8.13 Matriz de rastreabilidade e qualidade
+
+Para cada padrão novo, registrar **a referência exata e o que foi adaptado**: `padrão`, `contexto Exam App`, `fonte primária`, `skill auxiliar`, `status (documentado/implementado/testado)`, `evidência`, `restrições`. Preferir fontes oficiais e a implementação atual quando houver divergência.
+
+As lacunas registradas aqui não comprovam falha do protótipo: são requisitos de documentação/validação que deverão ser aplicados em mudanças reais. **Não declarar "conformidade" com M3, HIG ou WCAG** apenas por cumprir um checklist de estilo.
+
+### 8.14 UX geral — layout adaptativo, grafo e visualização acessível (revisão 2026)
+
+Esta seção traduz [AGENTS.md §16](AGENTS.md) e [docs/ux/ux-ui-principles.md](docs/ux/ux-ui-principles.md) em contratos de design. **Nenhuma regra é proposta apenas por ser tendência de 2026**: validar em tarefa, viewport, modalidade de interação e dados. Material 3 e React Aria são referências para adaptação; o protótipo continua HTML/CSS/JS e não exige adicionar bibliotecas.
+
+#### 8.14.1. Material 3 Adaptive Design — composição por contexto, não apenas por largura
+
+A documentação Material 3 de **maio de 2026** introduz nomenclatura atualizada para **Adaptive Design**, **Layout Scaffold**, **Panes** e **Breakpoints**. É uma referência de design system, **não um requisito normativo de breakpoint ou de número de colunas para web**. [Fonte M3 Layout](https://m3.material.io/foundations/layout/layout-overview/overview).
+
+| Superfície | Compacto / viewport estreito | Intermediário | Amplo / desktop | Invariantes |
+|---|---|---|---|---|
+| **Navegação primária** | Acesso explícito a Questões, Simulados, Revisão; menu/painel temporário quando necessário. | Navegação ajustada ao espaço real, evitando duas barras rivais. | Sidebar persistente se couber e ajudar. | Rotas e rótulos consistentes, foco e voltar funcionais. |
+| **Painel direito / propriedades** | Sob demanda como seção, página, drawer ou overlay acessível, sem encobrir tarefa. | Mostrar apenas quando não diminuir indevidamente área de leitura. | Painel auxiliar persistente somente quando a tarefa ganhar eficiência. | Não forçar três colunas; preservar seleção, rolagem, foco e posição. |
+| **Resolução de questões** | Enunciado e alternativas com prioridade; ações alcançáveis. | Área de leitura estável com secundário recolhível. | Metadados/explicação contextual sem competir com o enunciado. | Conteúdo e ordem semântica equivalentes; sem perda de resposta. |
+| **Grafo de objetos** | Visão principal com controles alternativos e relações em lista. | Detalhes de nó em superfície adaptável, não duplicada. | Grafo + painel de relações contextual se houver espaço. | Mesmo nó ativo/relacionamentos ao mudar viewport. |
+| **Leitor PDF** | Leitura e navegação de páginas prioritárias; toolbar pode colapsar sem ocultar comandos essenciais. | Ferramentas relevantes próximas do conteúdo. | Painel de notas/metadados só quando não prejudicar leitura. | Preservar página, zoom, busca, seleção e foco no reflow. |
+| **Gráficos e resultados** | Um gráfico legível por vez; alternativa tabular e resumo textual alcançáveis. | Grade conforme legibilidade real. | Comparação lado a lado quando faz sentido; evitar abas duplicadas. | Mesmos dados, filtros, legendas e interpretação independentemente da composição. |
+
+**MUST:** testar por comportamento, não impor números mágicos de largura; conferir zoom, fonte ampliada, teclado, touch, redimensionamento da janela durante animação e idiomas mais extensos. O painel auxiliar não pode sequestrar foco/rolagem ou manter um gráfico duplicado fora de sincronia.
+
+#### 8.14.2. Grafo — Visual Information-Seeking Mantra e continuidade espacial
+
+Adotar como **hipótese de experiência** o modelo de Ben Shneiderman, [The Eyes Have It (1996)](https://doi.org/10.1109/VL.1996.545307), sem exigir sete controles visíveis:
+
+| Tarefa do modelo | Comportamento verificável no Exam App |
+|---|---|
+| **Overview** | A pessoa entende o conjunto ou região inicial do grafo, com controles principais descobríveis. |
+| **Zoom** | Zoom deliberado e reversível, sem perda do nó ativo. |
+| **Filter** | Tipo, relação ou outra faceta selecionável com efeito indicado e opção de limpar. |
+| **Details-on-demand** | Clique/teclado em nó exibe detalhes sem trocar contexto de maneira desorientadora. |
+| **Relate** | Relações visíveis com identificação textual de origem/destino/tipo quando pertinente. |
+| **History** | Voltar à seleção e posição anterior após navegar para relações; não se confunde com histórico de respostas. |
+| **Extract** | Oferecer representação em lista/tabela ou exportação apenas onde houver caso de uso real. |
+
+**MUST:** evitar movimento automático que desloque o nó selecionado sem necessidade; aplicar o [MOTION.md](MOTION.md) para transições interrompíveis, movimento reduzido e preservação do estado. Testar todos os caminhos sem mouse, inclusive seleção de nó, filtros, fechar painel e retornar ao contexto.
+
+#### 8.14.3. Gráficos e dashboards — mensagem e equivalência de acesso
+
+A referência [USWDS Data Visualizations](https://designsystem.digital.gov/components/data-visualizations/) esclarece que visualização acessível não é só contraste: quem não vê o gráfico precisa compreender **a mensagem e o dado**, e uma tabela por si só nem sempre comunica a interpretação de uma tendência.
+
+- **MUST** exibir **título explicativo**, rótulos/eixos/unidades e legenda consistente para dados representados; não depender apenas de cor ou hover. Resumir por texto a conclusão importante (por exemplo, evolução no percentual de acerto), sem inventar interpretação ou dados.
+- **MUST** disponibilizar alternativa textual/estruturada adequada a leitores de tela; tabelas para exploração de valores e resumo narrativo para tendência/relacionamentos. Gráficos interativos devem expor caminhos de teclado/foco e status acessíveis.
+- **SHOULD** preservar filtros e seleção entre gráfico e representação textual; evitar duas abas para a mesma visualização, legendas duplicadas ou gráficos decorativos que escondam a métrica principal.
+- **SHOULD** preferir tipos de gráfico familiares adequados à comparação desejada; evitar densidade, efeitos ou séries além da capacidade de leitura no viewport disponível.
+- **MUST** verificar estado vazio, não há resultado, erro, dados parciais e atualização. Para tratamento de estado vazio, consultar [IBM Carbon Empty State Pattern](https://github.com/carbon-design-system/carbon/blob/main/packages/react/src/examples/EmptyState/EmptyState.mdx).
+
+#### 8.14.4. Inclusão, cognição e internacionalização
+
+Aplique os [7 Principles of Universal Design](https://accessibility.education.gov.uk/guidelines/universal-design), os [3 Inclusive Design Principles](https://inclusive.microsoft.design/) e os [8 objetivos suplementares W3C COGA](https://www.w3.org/TR/coga-usable/) sem confundir tais orientações com critérios WCAG.
+
+- **MUST** garantir que o primeiro passo para **Questões**, **Simulados** e **Revisão** seja descobrível sem conhecer termos internos como tipos/objetos/relacionamentos.
+- **SHOULD** oferecer opções de densidade e apresentação quando úteis, mantendo o mesmo conteúdo/ação em qualquer versão; simplificação não pode apagar dado essencial ou evidência.
+- **MUST** preservar contexto cognitivo ao navegar: onde estou, o que posso fazer agora, qual foi o resultado e como voltar/retomar.
+- **MUST** prever textos longos, formato de data/número, leitura LTR/RTL quando aplicável e associação de idioma (WCAG 3.1.1/3.1.2) sem usar coordenadas esquerda/direita como única semântica. Referência: [Adobe React Aria Internationalization](https://react-spectrum.adobe.com/react-aria/internationalization.html).
+- **MUST** não exigir gesto, temporização, precisão motora ou memorização como única maneira de concluir a tarefa; avaliar os SC WCAG pertinentes por fluxo e exceções.
+
+#### 8.14.5. Qualidade da experiência em contexto — ISO 9241-11 + HEART
+
+Referências: [ISO 9241-11:2018](https://www.iso.org/standard/63500.html), [HEART Framework (Google Research)](https://research.google/pubs/measuring-the-user-experience-on-a-large-scale-user-centered-metrics-for-web-applications/) e [GOV.UK Design Principles (2025)](https://www.gov.uk/guidance/government-design-principles/). São fontes de avaliação e processo: **não definem aparência de bordas, medidas fixas ou métricas obrigatórias por tela**.
+
+| Jornada | Eficácia (sucesso) | Eficiência (esforço) | Satisfação / sinais |
+|---|---|---|---|
+| Encontrar Questões e filtrar | Encontrou conjunto correto; escopo/filtros compreendidos | Tempo, erros, desvios e retrabalho | Sente controle e clareza do resultado |
+| Resolver questão avulsa | Respondeu e recebeu correção correta | Quantidade de passos sem perda de contexto | Explicação compreensível, foco na leitura |
+| Configurar e finalizar Simulado | Iniciou/entregou com regras compreendidas e sem perda | Correções de configuração, interrupções e retomada | Segurança/confiança no salvamento e resultado |
+| Explorar grafo/objetos | Localizou relação/nó desejado | Voltar, zoom e filtragem sem desorientação | Compreendeu por que os objetos se relacionam |
+| Ler PDF e revisar | Acessou conteúdo e retomou posição | Rolagem, busca e mudanças de zoom | Leitura confortável e recuperação previsível |
+
+**MUST:** definir tarefas, critérios de sucesso e amostra antes/depois; diferenciar **documentado**, **implementado** e **testado**. O catálogo e exemplos são hipóteses para testes de usuário e a11y, não dados coletados. **SHOULD:** usar o processo Goals–Signals–Metrics do HEART para escolher indicadores apropriados; não maximizar retenção/tempo de tela à custa de compreensão.
+
+### 8.15 Localização, redação e apresentação numérica
 
 A UI deve ser robusta em **português brasileiro**, com suporte futuro a outros idiomas, antes de adotar densidade e animações de uma plataforma específica.
 
@@ -547,17 +622,108 @@ A UI deve ser robusta em **português brasileiro**, com suporte futuro a outros 
 
 Referências: [Apple HIG — Layout](https://developer.apple.com/design/human-interface-guidelines/layout), [MDN — Intl](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl), [W3C Internationalization](https://www.w3.org/International/) e [WCAG 2.2](https://www.w3.org/TR/WCAG22/).
 
-### 8.13 Matriz de rastreabilidade e qualidade
+### 8.16 Apple HIG — oito princípios oficiais de design (2026)
 
-Para cada padrão novo, registrar **a referência exata e o que foi adaptado**: `padrão`, `contexto Exam App`, `fonte primária`, `skill auxiliar`, `status (documentado/implementado/testado)`, `evidência`, `restrições`. Preferir fontes oficiais e a implementação atual quando houver divergência.
+A Apple publicou/atualizou em junho de 2026 **oito princípios nomeados** em [Design principles](https://developer.apple.com/design/human-interface-guidelines/design-principles/) e na sessão [WWDC26 — Principles of great design](https://developer.apple.com/videos/play/wwdc2026/250/). São **princípios orientativos Apple**, não "leis psicológicas" nem requisitos WCAG. Aplicá-los como perguntas de revisão **adaptadas ao Exam App Web**:
 
-As lacunas registradas aqui não comprovam falha do protótipo: são requisitos de documentação/validação que deverão ser aplicados em mudanças reais. **Não declarar "conformidade" com M3, HIG ou WCAG** apenas por cumprir um checklist de estilo.
+| Nome oficial | Tradução de trabalho | Questão de auditoria no Exam App | Não confundir com |
+|---|---|---|---|
+| **Purpose** | Propósito | Esta tela ajuda uma tarefa de estudo real? A ação prioritária é reconhecível antes dos metadados? | Criar recursos apenas para demonstrar design |
+| **Agency** | Autonomia / controle | O estudante consegue cancelar, voltar, desfazer, editar e recuperar dados? Simulado tem confirmação proporcional? | Adicionar modais a toda ação |
+| **Responsibility** | Responsabilidade | A UI distingue resultado real, análise por IA e hipótese? Pede dados/permissões apenas quando necessários e explica consequências? | Declarações de segurança/privacidade não verificadas |
+| **Familiarity** | Familiaridade | Controles idênticos funcionam igual em sidebar, painel, questões e grafo? Links, botões e atalhos respeitam convenções? | Copiar uma interface Apple literalmente na Web |
+| **Flexibility** | Flexibilidade | Funciona com teclado, touch, tecnologias assistivas, preferências, janela estreita e texto ampliado? | Uma única tela responsiva apenas pela largura |
+| **Simplicity** | Simplicidade | Há tarefas com caminho claro e contexto suficiente, sem abas/filtros duplicados? | Minimalismo que esconde a ação essencial |
+| **Craft** | Capricho técnico e visual | Estados, alinhamento, microcopy, loading/erro, foco e movimento se mantêm coerentes e confiáveis? | Sombras, arredondamento e efeitos como substitutos de qualidade |
+| **Delight** | Experiência agradável | O resultado traz confiança e tranquilidade ao estudar, sem criar distração em provas? | Confete, glassmorphism e springs sem função |
 
-## 9. Registro de referências dos 22 skills catalogados (auditoria de conteúdo em andamento)
+**Aceite:** escolher o(s) princípio(s) relevante(s) na issue/PR e justificar por evidência; não exigir todos os oito em todas as pequenas alterações nem apresentar esta matriz como certificação Apple. No estudo prolongado, a emoção-alvo predominante é **clareza, controle e confiança**, não excitação contínua.
 
-Os 22 itens abaixo são **referências comunitárias catalogadas**, não extensões oficiais de Apple ou Google. **Catalogar URL não comprova leitura integral de cada SKILL.md, README e referências internas.** Não afirmar que os 22 foram verificados ou que cada resumo corresponde ao estado atual do repositório sem registro de arquivo/revisão/data. Esta integração é uma síntese preliminar enquanto a análise aprofundada de cada fonte não estiver documentada. Alguns estão voltados a Android/SwiftUI; nem todo trecho de código se aplica a um protótipo HTML/CSS/JS. Para números ou requisitos, confrontar com a documentação oficial **vigente**.
+### 8.17 UX Writing: nomenclatura, mensagens e recuperação
 
-| # | Projeto / skill | Conhecimento reaproveitado | Fonte |
+Princípios adaptados de [Apple HIG — Writing](https://developer.apple.com/design/human-interface-guidelines/writing), [W3C WAI — Form Instructions](https://www.w3.org/WAI/tutorials/forms/instructions/) e [WCAG 2.2](https://www.w3.org/TR/WCAG22/). São decisões editoriais do Exam App em português brasileiro; não uma lista de termos obrigatórios da Apple.
+
+| Contexto | Padrão preferível no Exam App | Evitar |
+|---|---|---|
+| Navegação | Nome específico da tarefa ou entidade: `Questões`, `Simulados`, `Revisar erros` | `Ver tudo`, `Mais` como única entrada para tarefa central |
+| Ação primária | Verbo + objeto/resultado: `Iniciar simulado`, `Confirmar resposta`, `Salvar alterações` quando houver envio | `OK`, `Próximo` sem contexto ou ação sem rótulo |
+| Mudança automática | `Salvando…` → `Salvo` após confirmação, ou `Não foi possível salvar — Tentar novamente` | `Salvo` antes da persistência, spinner sem saída |
+| Erro de campo | Descrever **o que corrigir** perto do controle; manter valor e foco coerente | `Inválido` genérico, erro só vermelho |
+| Estado vazio | Explicar o escopo e oferecer **próximo passo real**: `Nenhuma questão corresponde a estes filtros. Limpar filtros` | Apenas ícone ou `Sem dados` |
+| Falha de carregamento | `Não foi possível carregar o PDF. Tentar novamente` com controle de retry/cancelamento | Loop infinito, `Algo deu errado` sem recuperação |
+| Ação destrutiva | `Excluir caderno?` + consequência real + ações `Cancelar` e `Excluir caderno` | Confirmações vagas repetitivas |
+| Aviso sobre IA | Separar resposta oficial/gabarito, interpretação automática e conteúdo gerado; mostrar limite de confiança e origem quando aplicável | Apresentar sugestão de IA como gabarito oficial |
+
+**MUST** usar terminologia consistente entre sidebar, breadcrumbs, abas, botões, busca e ajuda; nomes visíveis precisam integrar o nome acessível (WCAG 2.5.3 quando aplicável). Escrever labels curtos, mas não sacrificar a consequência da ação; usar voz ativa e evitar jargão quando há vocabulário comum. Testar truncamento, tradução e leitor de tela. Evitar notificações redundantes, especialmente durante resolução seriada de questões.
+
+### 8.18 Aplicação seletiva de M3 Expressive — táticas, não ornamentos
+
+O skill comunitário [abhixv/m3-expressive](https://github.com/abhixv/google-m3-expressive-design-skill/blob/main/skills/m3-expressive/SKILL.md) descreve **containment, size, shape, color, typography** como táticas de usabilidade/expressão, com motion como recurso complementar. A implementação deve ser conferida contra a [documentação oficial Material 3](https://m3.material.io/) antes de atribuir valores ou comportamentos à especificação Google.
+
+| Tática | Aplicar quando | Exemplo de contexto | Não fazer |
+|---|---|---|---|
+| **Containment** | Agrupamento faz relações ficarem óbvias | Resposta + feedback; filtros aplicados e quantidade de resultados | Empilhar cards aninhados e divisores redundantes |
+| **Size** | Uma ação é realmente prioritária | CTA de iniciar simulado, controle de entrega definitiva | Tornar todos os botões grandes; deslocar enunciados |
+| **Shape** | Silhueta indica função/estado sem prejudicar densidade | Superfície de seleção, toolbar ou ação única | Formas chamativas em alternativas de prova ou textos longos |
+| **Color** | Cor reforça estado/tipo de objeto com texto/ícone | Chips semânticos, foco no nó, acerto/erro | Usar só cor para status; quebrar tokens próprios |
+| **Typography** | Texto precisa de hierarquia e reconhecimento | Título de objeto, ação primária e contexto atual | Reduzir corpo de questão ou truncar título crítico |
+| **Motion** (complementar) | Ajuda a perceber causalidade ou relação espacial | Painel contextual, foco em grafo, menu ancorado | Movimento ornamental persistente; ver [MOTION.md](MOTION.md) |
+
+**Critério de aceite:** a solução expressiva precisa melhorar descoberta, foco, associação ou compreensão em uma tarefa. Se a melhoria só pode ser descrita como "parece mais moderno", tratá-la como hipótese visual e não como padrão obrigatório.
+
+
+### 8.19 Componentes complexos e continuidade de interação — revisão Context7 (2026)
+
+Este contrato complementa [AGENTS.md §17](AGENTS.md) e as seções 8.14–8.18. O Exam App permanece um protótipo HTML/CSS/JS; React Aria, WAI-ARIA APG e USWDS são **fontes de comportamento**, não dependências automáticas. A escolha de widget deve corresponder à sua **semântica e interação real**, não a um visual específico.
+
+| Superfície / padrão | Uso apropriado e interação esperada | Erro comum a evitar | Fonte oficial |
+|---|---|---|---|
+| **Sidebar com grupos expansíveis — Disclosure** | Grupos comuns de navegação usam link e botão de expansão/colapso distinguíveis; estado expandido anunciado; Enter/Espaço ativam o botão. | Tratar todo menu recolhível como ARIA tree, forçando navegação por setas não esperada. | [W3C APG — Disclosure](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/) |
+| **Explorador hierárquico — Tree View** | Se houver árvore real de tipos/pastas com navegação especializada, implementar setas, Home/End e relação foco/seleção segundo APG. | Atribuir role tree ao canvas do grafo, ou misturar seleção por clique e foco por teclado sem estado consistente. | [W3C APG — Tree View](https://www.w3.org/WAI/ARIA/apg/patterns/treeview/) |
+| **Grade interativa — Grid** | Somente para células navegáveis/interativas: definir foco na célula ou no seu controle, setas, edição e retorno de modo. | Substituir tabela HTML simples por role grid sem necessidade e sem implementar o modelo de teclado. | [W3C APG — Grid](https://www.w3.org/WAI/ARIA/apg/patterns/grid/) |
+| **Dados tabulares hierárquicos — Treegrid** | Usar exclusivamente quando houver linhas hierárquicas expansíveis e operações de célula, com teclado apropriado. | Confundir treegrid com visualização em grafo ou uma lista comum. | [W3C APG — Treegrid](https://www.w3.org/WAI/ARIA/apg/patterns/treegrid/) |
+| **Modal, popover, drawer e listas dinâmicas — Focus Management** | Foco inicial, contenção quando modal, retorno à origem ao fechar e reposicionamento coerente quando item focado for removido. | Foco perdido no body, atrás do drawer ou em elemento que deixou de existir. | [Adobe React Aria](https://react-aria.adobe.com/); [W3C APG — Keyboard Interface](https://www.w3.org/WAI/ARIA/apg/practices/keyboard-interface/) |
+| **Gráficos e diagramas — Complex Images** | Imagem estática: identificação e descrição detalhada equivalentes; grafo interativo: oferecer lista/tabela operável de nós e relações com seleção e contexto preservados. | Acreditar que um único alt curto substitui interação com gráfico ou grafo. | [W3C WAI — Complex Images](https://www.w3.org/WAI/tutorials/images/complex/) |
+| **Conteúdo longo — In-page Navigation** | Índice de seções em edital, relatório ou documentação quando melhora orientação; rótulos e âncoras significativos. | Barra de navegação duplicada numa página curta ou âncora que fica escondida sob toolbar fixa. | [USWDS — In-page Navigation](https://designsystem.digital.gov/components/in-page-navigation/) |
+| **Funcionalidade essencial — Progressive Enhancement** | Manter leitura/dados/tarefa principal quando visualizações avançadas ou animações não carregam, com fallback viável e erro recuperável. | Declarar suporte sem JavaScript, PDF offline ou canvas alternativo que não existe. | [MDN — Progressive Enhancement](https://developer.mozilla.org/en-US/docs/Glossary/Progressive_Enhancement) |
+
+#### 8.19.1 Critérios de aceite para navegação, grafo e dados
+
+- **MUST** distinguir **foco de teclado, seleção, ativação e expansão** nos componentes; cada estado tem nome, papel e comportamento apropriado. Preferir HTML semântico e Disclosure para navegação comum; promover a padrões complexos somente quando houver tarefa que justifique.
+- **MUST** registrar transições de foco em abrir/fechar overlay, excluir item da coleção, selecionar nós e alterar viewport, inclusive durante uma animação interrompida. Ver [MOTION.md](MOTION.md).
+- **MUST** fornecer acesso aos relacionamentos e dados essenciais por modo estruturado/textual no grafo, com descrição de gráficos estáticos e alternativa operável quando necessário.
+- **MUST** registrar comportamento de fallback de canvas, gráfico e PDF diante de erro, ausência de dados, bloqueio de API ou suporte insuficiente, com saída do loading e caminho de recuperação; não prometer capacidades inexistentes.
+- **SHOULD** avaliar jornadas por **Cognitive Walkthrough**, rótulos/destinos por **Information Foraging Theory** e esforço de tarefas repetitivas pelo **Keystroke-Level Model** apenas quando a previsão de usuário experiente for pertinente. Nenhum substitui teste real nem métricas da ISO 9241-11.
+- **MUST** separar em evidências: documentado / implementado / testado. Se só houver documentação, não registrar screenshots ou conformidade fictícias.
+
+
+### 8.20 Design tokens e container queries — governança 2026
+
+Complementa as seções de cores, tokens e responsividade: o [Design Tokens Format Module 2025.10](https://www.designtokens.org/TR/2025.10/format/) é uma **especificação comunitária estável, não uma norma W3C**. Fornece vocabulário para decisões semânticas com valor, tipo, grupos, referências/aliases e tokens compostos. É relevante ao sistema de design, mas **não demanda migração imediata dos tokens CSS**. O preview de setembro de 2026 é experimental e não deve ser referência de implementação normativa.
+
+| Cenário | Orientação para Exam App | Verificação |
+|---|---|---|
+| **Tokens de aparência** | Priorizar tokens semânticos existentes para superfícies, texto, foco, seleção, estados e espaçamento, mantendo tema claro/escuro e OKLCH quando já usado. | Listar o token usado, seu papel e valor computado por tema; evitar literais dispersos sem motivo. |
+| **Interoperabilidade futura** | Se houver exportação/transformação de tokens, adotar como base de comparação o DTCG **2025.10 estável**, após checar tipos, aliases, resolução de referências e formato final. | Registrar conversão e equivalência; não afirmar conformidade por similaridade superficial de nomenclatura. |
+| **Componentes em sidebars/painéis** | Usar [CSS Container Queries](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Containment/Container_queries) quando o espaço do componente variar independentemente do viewport (painel recolhido, resize, split view). | Redimensionar sidebar, painel direito e janela; o componente preserva ações e conteúdo, não depende somente de media query global. |
+| **Fallback responsivo** | Se container query não for suportada/aplicável, usar composição simples adequada e manter foco, scroll, CTA e informação principal. | Avaliar zoom/reflow, tradução, alto contraste, estado de animação e viewport dinâmico. |
+
+**MUST:** não substituir tokens semânticos aprovados pelo JSON do DTCG por estética ou apenas porque é mais recente. **SHOULD:** manter uma única fonte de verdade e conferir a dependência de tokens por estado de componentes. **MUST:** validar comportamento de componentes em contêineres estreitos e largos, não somente snapshots mobile/desktop. A acessibilidade do resultado deve ser verificada pelos critérios WCAG aplicáveis, independentemente do formato escolhido para tokens.
+
+### 8.21 Metodologia de auditoria abrangente — WCAG-EM 2.0 e ACT Rules
+
+A [WCAG-EM 2.0](https://www.w3.org/TR/wcag-em-2/) é uma **W3C Group Note publicada em 23/07/2026**. Seu processo de cinco etapas (escopo → exploração → seleção de amostra → avaliação → relatório) deve orientar auditorias amplas de UI/UX e acessibilidade. Para o Exam App, a amostra deve incluir navegação, campos, resposta/simulado, grafo, gráficos, PDF e estados de erro, com **jornadas completas**, e não apenas imagens estáticas.
+
+- **MUST** registrar: ref/commit da branch, escopo, nível WCAG alvo, amostra representativa, dispositivos/tecnologias assistivas utilizados, critério por cenário, resultado, evidência e limitações. Quando realizar auditoria amostral, indicar que não foi teste exaustivo.
+- **MUST** combinar verificação automatizada, inspeção manual e cenários reais. [ACT Rules Format 1.1](https://www.w3.org/TR/act-rules-format/) é uma **W3C Recommendation** para formato de regras de teste; as [ACT Rules](https://www.w3.org/WAI/standards-guidelines/act/rules/) são informativas e não demonstram, isoladamente, conformidade.
+- **MUST** manter WCAG **2.2** como referência normativa adotada no projeto. O [WCAG 3.0 Working Draft de setembro de 2026](https://www.w3.org/WAI/standards-guidelines/wcag/wcag3-intro/) está em evolução; não usar como substituto da versão vigente ou como requisito inventado.
+- **MUST** diferenciar o que a documentação **exige**, o que a implementação **faz** e o que a auditoria **testou**. Não promover um checklist de design a laudo de acessibilidade.
+
+## 9. Referências catalogadas — 21 candidatos a skills + 1 agregador (auditoria em andamento)
+
+Os 22 itens abaixo são **21 candidatos a skills e 1 agregador comunitário (M09)**; **não correspondem a 22 SKILL.md individuais verificados**, e não são extensões oficiais de Apple ou Google. **Catalogar URL não comprova leitura integral de cada SKILL.md, README e referências internas.** Não afirmar que os 22 foram verificados ou que cada resumo corresponde ao estado atual do repositório sem registro de arquivo/revisão/data. Esta integração é uma síntese preliminar enquanto a análise aprofundada de cada fonte não estiver documentada. Alguns estão voltados a Android/SwiftUI; nem todo trecho de código se aplica a um protótipo HTML/CSS/JS. Para números ou requisitos, confrontar com a documentação oficial **vigente**.
+
+| # | Projeto / referência | Tema para conferência (não auditado individualmente) | Fonte |
 |---|---|---|---|
 | M01 | skydashnet — Material 3 UI | Checklists, hierarquia, tokens, auditoria | https://github.com/skydashnet/material-design-3-ui-skill |
 | M02 | hamen — Material 3 | Roles, temas e componentes multiplataforma | https://github.com/hamen/material-3-skill |
@@ -567,7 +733,7 @@ Os 22 itens abaixo são **referências comunitárias catalogadas**, não extens�
 | M06 | macsystems — M3 Agent | Mapa de papéis e componentes oficiais | https://github.com/macsystems/m3-agent-skill |
 | M07 | yhongm — Material | Sistema multiplataforma, tipografia, motion e temas | https://github.com/yhongm/material-design-skill |
 | M08 | shelbeely — Material Shape | Raios, formas expressivas, casos de uso | https://github.com/shelbeely/Shelbeely-Agent-skills/tree/main/skills/material-design-3-shape |
-| M09 | majiayu000 — Material Design (catálogo; caminho a verificar) | Referência genérica; **conteúdo e caminho de SKILL.md não verificados** | https://github.com/majiayu000/claude-skill-registry/tree/main/skills/other/material-design |
+| M09 | majiayu000 — **agregador de skills, não skill Material individual confirmada** | Indexação de fontes; **localizar o projeto original e SKILL.md antes de atribuir conhecimento ou instalar** | https://github.com/majiayu000/claude-skill-registry |
 | M10 | MadAppGang — Design References | Quadro comparativo M3/HIG, heurísticas | https://github.com/MadAppGang/claude-code/blob/main/plugins/dev/skills/design/design-references/SKILL.md |
 | A01 | gotired — Apple Design Skills | Auditoria HIG, crítica visual, consistência | https://github.com/gotired/Apple-Design-Skills |
 | A02 | oye-rahul — Apple Web Design | Camadas funcionais, Liquid Glass e web responsiva | https://github.com/oye-rahul/Apple-Design-Skill |
@@ -582,6 +748,6 @@ Os 22 itens abaixo são **referências comunitárias catalogadas**, não extens�
 | A11 | rshankras — Apple Design Skills | Liquid Glass, tipografia, animação, microcopy | https://github.com/rshankras/claude-code-apple-skills/tree/main/skills/design |
 | A12 | Sunwood-ai-labs — Apple HIG | Fluxo evidence-first e verificação pós-alteração | https://github.com/Sunwood-ai-labs/design-with-apple-hig |
 
-**Fontes primárias para validação:** [Material 3](https://m3.material.io/), [Apple HIG](https://developer.apple.com/design/human-interface-guidelines/), [Apple Liquid Glass](https://developer.apple.com/documentation/technologyoverviews/liquid-glass), [WCAG 2.2](https://www.w3.org/TR/WCAG22/), [WAI-ARIA APG](https://www.w3.org/WAI/ARIA/apg/). As alegações técnicas dos skills e recomendações numéricas de terceiros devem ser revalidadas contra o arquivo original e a origem oficial antes de qualquer uso normativo. **Evidência de leitura integral dos 22 arquivos SKILL.md: não registrada nesta versão**.
+**Fontes primárias para validação:** [Material 3](https://m3.material.io/), [Apple HIG](https://developer.apple.com/design/human-interface-guidelines/), [Apple Liquid Glass](https://developer.apple.com/documentation/technologyoverviews/liquid-glass), [WCAG 2.2](https://www.w3.org/TR/WCAG22/), [WAI-ARIA APG](https://www.w3.org/WAI/ARIA/apg/). As alegações técnicas dos skills e recomendações numéricas de terceiros devem ser revalidadas contra o arquivo original e a origem oficial antes de qualquer uso normativo. **Evidência de leitura integral dos 21 SKILL.md candidatos: não registrada nesta versão; M09 é um agregador.**
 
 <!-- MATERIAL-APPLE-INTEGRATION:END -->
