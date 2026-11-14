@@ -535,24 +535,11 @@ Exemplo ilustrativo, a ser adaptado aos tokens CSS existentes:
 
 Fontes: [MDN — forced-colors](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/forced-colors), [MDN — prefers-reduced-transparency](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-transparency), [Apple HIG — Materials](https://developer.apple.com/design/human-interface-guidelines/materials).
 
-### 8.14 Localização, redação e apresentação numérica
-
-A UI deve ser robusta em **português brasileiro**, com suporte futuro a outros idiomas, antes de adotar densidade e animações de uma plataforma específica.
-
-- **MUST** declarar idioma do documento e de trechos estrangeiros quando aplicável; usar **Intl/ECMA-402** na formatação sensível a locale de datas, horas, números, percentuais e moedas. Evitar concatenação manual de mensagens localizáveis e datas ambíguas.
-- **MUST** acomodar expansão de textos, nomes longos de concursos/órgãos, siglas e tamanho de fonte ampliado, sem sobrepor campos ou esconder tarefas principais. Adaptar layout em vez de truncar conteúdo crítico.
-- **SHOULD** preferir propriedades CSS lógicas para alinhar blocos e testar bidi/RTL quando houver idiomas que o exijam; não espelhar indiscriminadamente números, gráficos e conteúdos oficiais de provas.
-- **MUST** manter cronômetros, notas e percentuais compreensíveis, com valores estáveis e anúncios acessíveis proporcionais ao significado da atualização. Preservar valores originais publicados em documentos oficiais.
-- **MUST** preservar ordem semântica do DOM e de leitura ao reordenar painéis em layouts adaptativos. Ordem visual não pode ocultar a ordem real de Tab e tecnologias assistivas.
-
-Referências: [Apple HIG — Layout](https://developer.apple.com/design/human-interface-guidelines/layout), [MDN — Intl](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl), [W3C Internationalization](https://www.w3.org/International/) e [WCAG 2.2](https://www.w3.org/TR/WCAG22/).
-
 ### 8.13 Matriz de rastreabilidade e qualidade
 
 Para cada padrão novo, registrar **a referência exata e o que foi adaptado**: `padrão`, `contexto Exam App`, `fonte primária`, `skill auxiliar`, `status (documentado/implementado/testado)`, `evidência`, `restrições`. Preferir fontes oficiais e a implementação atual quando houver divergência.
 
 As lacunas registradas aqui não comprovam falha do protótipo: são requisitos de documentação/validação que deverão ser aplicados em mudanças reais. **Não declarar "conformidade" com M3, HIG ou WCAG** apenas por cumprir um checklist de estilo.
-
 
 ### 8.14 UX geral — layout adaptativo, grafo e visualização acessível (revisão 2026)
 
@@ -623,11 +610,72 @@ Referências: [ISO 9241-11:2018](https://www.iso.org/standard/63500.html), [HEAR
 
 **MUST:** definir tarefas, critérios de sucesso e amostra antes/depois; diferenciar **documentado**, **implementado** e **testado**. O catálogo e exemplos são hipóteses para testes de usuário e a11y, não dados coletados. **SHOULD:** usar o processo Goals–Signals–Metrics do HEART para escolher indicadores apropriados; não maximizar retenção/tempo de tela à custa de compreensão.
 
-## 9. Registro de referências dos 22 skills catalogados (auditoria de conteúdo em andamento)
+### 8.15 Localização, redação e apresentação numérica
 
-Os 22 itens abaixo são **referências comunitárias catalogadas**, não extensões oficiais de Apple ou Google. **Catalogar URL não comprova leitura integral de cada SKILL.md, README e referências internas.** Não afirmar que os 22 foram verificados ou que cada resumo corresponde ao estado atual do repositório sem registro de arquivo/revisão/data. Esta integração é uma síntese preliminar enquanto a análise aprofundada de cada fonte não estiver documentada. Alguns estão voltados a Android/SwiftUI; nem todo trecho de código se aplica a um protótipo HTML/CSS/JS. Para números ou requisitos, confrontar com a documentação oficial **vigente**.
+A UI deve ser robusta em **português brasileiro**, com suporte futuro a outros idiomas, antes de adotar densidade e animações de uma plataforma específica.
 
-| # | Projeto / skill | Conhecimento reaproveitado | Fonte |
+- **MUST** declarar idioma do documento e de trechos estrangeiros quando aplicável; usar **Intl/ECMA-402** na formatação sensível a locale de datas, horas, números, percentuais e moedas. Evitar concatenação manual de mensagens localizáveis e datas ambíguas.
+- **MUST** acomodar expansão de textos, nomes longos de concursos/órgãos, siglas e tamanho de fonte ampliado, sem sobrepor campos ou esconder tarefas principais. Adaptar layout em vez de truncar conteúdo crítico.
+- **SHOULD** preferir propriedades CSS lógicas para alinhar blocos e testar bidi/RTL quando houver idiomas que o exijam; não espelhar indiscriminadamente números, gráficos e conteúdos oficiais de provas.
+- **MUST** manter cronômetros, notas e percentuais compreensíveis, com valores estáveis e anúncios acessíveis proporcionais ao significado da atualização. Preservar valores originais publicados em documentos oficiais.
+- **MUST** preservar ordem semântica do DOM e de leitura ao reordenar painéis em layouts adaptativos. Ordem visual não pode ocultar a ordem real de Tab e tecnologias assistivas.
+
+Referências: [Apple HIG — Layout](https://developer.apple.com/design/human-interface-guidelines/layout), [MDN — Intl](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl), [W3C Internationalization](https://www.w3.org/International/) e [WCAG 2.2](https://www.w3.org/TR/WCAG22/).
+
+### 8.16 Apple HIG — oito princípios oficiais de design (2026)
+
+A Apple publicou/atualizou em junho de 2026 **oito princípios nomeados** em [Design principles](https://developer.apple.com/design/human-interface-guidelines/design-principles/) e na sessão [WWDC26 — Principles of great design](https://developer.apple.com/videos/play/wwdc2026/250/). São **princípios orientativos Apple**, não "leis psicológicas" nem requisitos WCAG. Aplicá-los como perguntas de revisão **adaptadas ao Exam App Web**:
+
+| Nome oficial | Tradução de trabalho | Questão de auditoria no Exam App | Não confundir com |
+|---|---|---|---|
+| **Purpose** | Propósito | Esta tela ajuda uma tarefa de estudo real? A ação prioritária é reconhecível antes dos metadados? | Criar recursos apenas para demonstrar design |
+| **Agency** | Autonomia / controle | O estudante consegue cancelar, voltar, desfazer, editar e recuperar dados? Simulado tem confirmação proporcional? | Adicionar modais a toda ação |
+| **Responsibility** | Responsabilidade | A UI distingue resultado real, análise por IA e hipótese? Pede dados/permissões apenas quando necessários e explica consequências? | Declarações de segurança/privacidade não verificadas |
+| **Familiarity** | Familiaridade | Controles idênticos funcionam igual em sidebar, painel, questões e grafo? Links, botões e atalhos respeitam convenções? | Copiar uma interface Apple literalmente na Web |
+| **Flexibility** | Flexibilidade | Funciona com teclado, touch, tecnologias assistivas, preferências, janela estreita e texto ampliado? | Uma única tela responsiva apenas pela largura |
+| **Simplicity** | Simplicidade | Há tarefas com caminho claro e contexto suficiente, sem abas/filtros duplicados? | Minimalismo que esconde a ação essencial |
+| **Craft** | Capricho técnico e visual | Estados, alinhamento, microcopy, loading/erro, foco e movimento se mantêm coerentes e confiáveis? | Sombras, arredondamento e efeitos como substitutos de qualidade |
+| **Delight** | Experiência agradável | O resultado traz confiança e tranquilidade ao estudar, sem criar distração em provas? | Confete, glassmorphism e springs sem função |
+
+**Aceite:** escolher o(s) princípio(s) relevante(s) na issue/PR e justificar por evidência; não exigir todos os oito em todas as pequenas alterações nem apresentar esta matriz como certificação Apple. No estudo prolongado, a emoção-alvo predominante é **clareza, controle e confiança**, não excitação contínua.
+
+### 8.17 UX Writing: nomenclatura, mensagens e recuperação
+
+Princípios adaptados de [Apple HIG — Writing](https://developer.apple.com/design/human-interface-guidelines/writing), [W3C WAI — Form Instructions](https://www.w3.org/WAI/tutorials/forms/instructions/) e [WCAG 2.2](https://www.w3.org/TR/WCAG22/). São decisões editoriais do Exam App em português brasileiro; não uma lista de termos obrigatórios da Apple.
+
+| Contexto | Padrão preferível no Exam App | Evitar |
+|---|---|---|
+| Navegação | Nome específico da tarefa ou entidade: `Questões`, `Simulados`, `Revisar erros` | `Ver tudo`, `Mais` como única entrada para tarefa central |
+| Ação primária | Verbo + objeto/resultado: `Iniciar simulado`, `Confirmar resposta`, `Salvar alterações` quando houver envio | `OK`, `Próximo` sem contexto ou ação sem rótulo |
+| Mudança automática | `Salvando…` → `Salvo` após confirmação, ou `Não foi possível salvar — Tentar novamente` | `Salvo` antes da persistência, spinner sem saída |
+| Erro de campo | Descrever **o que corrigir** perto do controle; manter valor e foco coerente | `Inválido` genérico, erro só vermelho |
+| Estado vazio | Explicar o escopo e oferecer **próximo passo real**: `Nenhuma questão corresponde a estes filtros. Limpar filtros` | Apenas ícone ou `Sem dados` |
+| Falha de carregamento | `Não foi possível carregar o PDF. Tentar novamente` com controle de retry/cancelamento | Loop infinito, `Algo deu errado` sem recuperação |
+| Ação destrutiva | `Excluir caderno?` + consequência real + ações `Cancelar` e `Excluir caderno` | Confirmações vagas repetitivas |
+| Aviso sobre IA | Separar resposta oficial/gabarito, interpretação automática e conteúdo gerado; mostrar limite de confiança e origem quando aplicável | Apresentar sugestão de IA como gabarito oficial |
+
+**MUST** usar terminologia consistente entre sidebar, breadcrumbs, abas, botões, busca e ajuda; nomes visíveis precisam integrar o nome acessível (WCAG 2.5.3 quando aplicável). Escrever labels curtos, mas não sacrificar a consequência da ação; usar voz ativa e evitar jargão quando há vocabulário comum. Testar truncamento, tradução e leitor de tela. Evitar notificações redundantes, especialmente durante resolução seriada de questões.
+
+### 8.18 Aplicação seletiva de M3 Expressive — táticas, não ornamentos
+
+O skill comunitário [abhixv/m3-expressive](https://github.com/abhixv/google-m3-expressive-design-skill/blob/main/skills/m3-expressive/SKILL.md) descreve **containment, size, shape, color, typography** como táticas de usabilidade/expressão, com motion como recurso complementar. A implementação deve ser conferida contra a [documentação oficial Material 3](https://m3.material.io/) antes de atribuir valores ou comportamentos à especificação Google.
+
+| Tática | Aplicar quando | Exemplo de contexto | Não fazer |
+|---|---|---|---|
+| **Containment** | Agrupamento faz relações ficarem óbvias | Resposta + feedback; filtros aplicados e quantidade de resultados | Empilhar cards aninhados e divisores redundantes |
+| **Size** | Uma ação é realmente prioritária | CTA de iniciar simulado, controle de entrega definitiva | Tornar todos os botões grandes; deslocar enunciados |
+| **Shape** | Silhueta indica função/estado sem prejudicar densidade | Superfície de seleção, toolbar ou ação única | Formas chamativas em alternativas de prova ou textos longos |
+| **Color** | Cor reforça estado/tipo de objeto com texto/ícone | Chips semânticos, foco no nó, acerto/erro | Usar só cor para status; quebrar tokens próprios |
+| **Typography** | Texto precisa de hierarquia e reconhecimento | Título de objeto, ação primária e contexto atual | Reduzir corpo de questão ou truncar título crítico |
+| **Motion** (complementar) | Ajuda a perceber causalidade ou relação espacial | Painel contextual, foco em grafo, menu ancorado | Movimento ornamental persistente; ver [MOTION.md](MOTION.md) |
+
+**Critério de aceite:** a solução expressiva precisa melhorar descoberta, foco, associação ou compreensão em uma tarefa. Se a melhoria só pode ser descrita como "parece mais moderno", tratá-la como hipótese visual e não como padrão obrigatório.
+
+## 9. Referências catalogadas — 21 candidatos a skills + 1 agregador (auditoria em andamento)
+
+Os 22 itens abaixo são **21 candidatos a skills e 1 agregador comunitário (M09)**; **não correspondem a 22 SKILL.md individuais verificados**, e não são extensões oficiais de Apple ou Google. **Catalogar URL não comprova leitura integral de cada SKILL.md, README e referências internas.** Não afirmar que os 22 foram verificados ou que cada resumo corresponde ao estado atual do repositório sem registro de arquivo/revisão/data. Esta integração é uma síntese preliminar enquanto a análise aprofundada de cada fonte não estiver documentada. Alguns estão voltados a Android/SwiftUI; nem todo trecho de código se aplica a um protótipo HTML/CSS/JS. Para números ou requisitos, confrontar com a documentação oficial **vigente**.
+
+| # | Projeto / referência | Tema para conferência (não auditado individualmente) | Fonte |
 |---|---|---|---|
 | M01 | skydashnet — Material 3 UI | Checklists, hierarquia, tokens, auditoria | https://github.com/skydashnet/material-design-3-ui-skill |
 | M02 | hamen — Material 3 | Roles, temas e componentes multiplataforma | https://github.com/hamen/material-3-skill |
@@ -637,7 +685,7 @@ Os 22 itens abaixo são **referências comunitárias catalogadas**, não extens�
 | M06 | macsystems — M3 Agent | Mapa de papéis e componentes oficiais | https://github.com/macsystems/m3-agent-skill |
 | M07 | yhongm — Material | Sistema multiplataforma, tipografia, motion e temas | https://github.com/yhongm/material-design-skill |
 | M08 | shelbeely — Material Shape | Raios, formas expressivas, casos de uso | https://github.com/shelbeely/Shelbeely-Agent-skills/tree/main/skills/material-design-3-shape |
-| M09 | majiayu000 — Material Design (catálogo; caminho a verificar) | Referência genérica; **conteúdo e caminho de SKILL.md não verificados** | https://github.com/majiayu000/claude-skill-registry/tree/main/skills/other/material-design |
+| M09 | majiayu000 — **agregador de skills, não skill Material individual confirmada** | Indexação de fontes; **localizar o projeto original e SKILL.md antes de atribuir conhecimento ou instalar** | https://github.com/majiayu000/claude-skill-registry |
 | M10 | MadAppGang — Design References | Quadro comparativo M3/HIG, heurísticas | https://github.com/MadAppGang/claude-code/blob/main/plugins/dev/skills/design/design-references/SKILL.md |
 | A01 | gotired — Apple Design Skills | Auditoria HIG, crítica visual, consistência | https://github.com/gotired/Apple-Design-Skills |
 | A02 | oye-rahul — Apple Web Design | Camadas funcionais, Liquid Glass e web responsiva | https://github.com/oye-rahul/Apple-Design-Skill |
@@ -652,6 +700,6 @@ Os 22 itens abaixo são **referências comunitárias catalogadas**, não extens�
 | A11 | rshankras — Apple Design Skills | Liquid Glass, tipografia, animação, microcopy | https://github.com/rshankras/claude-code-apple-skills/tree/main/skills/design |
 | A12 | Sunwood-ai-labs — Apple HIG | Fluxo evidence-first e verificação pós-alteração | https://github.com/Sunwood-ai-labs/design-with-apple-hig |
 
-**Fontes primárias para validação:** [Material 3](https://m3.material.io/), [Apple HIG](https://developer.apple.com/design/human-interface-guidelines/), [Apple Liquid Glass](https://developer.apple.com/documentation/technologyoverviews/liquid-glass), [WCAG 2.2](https://www.w3.org/TR/WCAG22/), [WAI-ARIA APG](https://www.w3.org/WAI/ARIA/apg/). As alegações técnicas dos skills e recomendações numéricas de terceiros devem ser revalidadas contra o arquivo original e a origem oficial antes de qualquer uso normativo. **Evidência de leitura integral dos 22 arquivos SKILL.md: não registrada nesta versão**.
+**Fontes primárias para validação:** [Material 3](https://m3.material.io/), [Apple HIG](https://developer.apple.com/design/human-interface-guidelines/), [Apple Liquid Glass](https://developer.apple.com/documentation/technologyoverviews/liquid-glass), [WCAG 2.2](https://www.w3.org/TR/WCAG22/), [WAI-ARIA APG](https://www.w3.org/WAI/ARIA/apg/). As alegações técnicas dos skills e recomendações numéricas de terceiros devem ser revalidadas contra o arquivo original e a origem oficial antes de qualquer uso normativo. **Evidência de leitura integral dos 21 SKILL.md candidatos: não registrada nesta versão; M09 é um agregador.**
 
 <!-- MATERIAL-APPLE-INTEGRATION:END -->
