@@ -3909,8 +3909,13 @@ view.addEventListener('click',e=>{ const b=e.target.closest('[data-ai]'); if(b){
 function route(spaceChanged){
   document.querySelector('.main').classList.remove('study-mode');
   if(location.hash!=='#/grafico'){ stopGV(); document.querySelector('.main').classList.remove('on-graph'); }
-  const h0=(location.hash||'').slice(1);
-  if(!h0 || h0==='/'){ location.replace('#/espaco'); return; }
+  let h0=(location.hash||'').slice(1);
+  if(!h0 || h0==='/'){
+    h0='/espaco';
+    if(location.hash!=='#/espaco'){
+      try{ history.replaceState(null,'','#/espaco'); }catch(_){ location.hash='#/espaco'; }
+    }
+  }
   if(h0==='/simulado/exec'||h0==='/simulado/resultado'){showStudyRoute(h0);return;}
   if(h0==='/lixeira'){ showTrash(); return; }
   if(h0==='/grafico'||h0==='/explorar'){ showGraph(); return; }
@@ -4576,8 +4581,13 @@ wsPaint(); wsPaintNav(); applyRP(false);
 { let rq=0, rpAuto=false; const fit=()=>{ rq=0; wsPaint(); if(MQT.matches) return; const mainEl=document.querySelector('.main'); const w=mainEl.offsetWidth-(rpVisible()?0:(RP.w||420));
     if(rpVisible()&&w<480){ RP.open=false; rpAuto=true; applyRP(false); wsPaint(); } else if(!rpVisible()&&rpAuto&&w>=560){ RP.open=true; rpAuto=false; applyRP(false); wsPaint(); } };
   const kick=()=>{ if(!rq) rq=requestAnimationFrame(fit); }; addEventListener('resize',kick); if(window.ResizeObserver) new ResizeObserver(kick).observe($('wsTabList')); setTimeout(kick,50); }
-{ const t=curTab(); let h=location.hash||''; if(!h || h==='#'){ if(!t.hist[t.i] || t.hist[t.i]==='#') t.hist[t.i]='#/espaco'; h=t.hist[t.i]; location.replace(h); }
-  if(t.hist[t.i]!==h){ if(!h&&t.hist[t.i]){ wsSilent=true; setTimeout(()=>{ wsSilent=false; },500); location.hash=t.hist[t.i]; } else { pushHist(t,h); wsSave(); wsPaint(); wsPaintNav(); } } else afterNav(); }
+{ const t=curTab(); let h=location.hash||'';
+  if(!h || h==='#'){
+    h = (t.hist[t.i] && t.hist[t.i] !== '#' && t.hist[t.i] !== '') ? t.hist[t.i] : '#/espaco';
+    try{ history.replaceState(null,'',h); }catch(_){ location.hash=h; }
+  }
+  if(t.hist[t.i]!==h){ pushHist(t,h); wsSave(); }
+  wsPaint(); wsPaintNav(); afterNav(); }
 if(typeof loadQuestions==='function'&&!questionBank) loadQuestions().then(()=>{ if(rpVisible()) rpRefresh(); }).catch(()=>{});
 paintSpaces(); paintNav(); route(false); if(location.hash==='#/simulado/exec')beginExamTicker();
 })();
