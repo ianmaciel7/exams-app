@@ -717,7 +717,23 @@
     "e1377",
     "e1378",
     "e1379",
-    "e1380"
+    "e1380",
+    "e1381",
+    "e1382",
+    "e1383",
+    "e1384",
+    "e1385",
+    "e1386",
+    "e1387",
+    "e1388",
+    "e1389",
+    "e1390",
+    "e1391",
+    "e1392",
+    "e1393",
+    "e1394",
+    "e1395",
+    "e1396"
   ],
   "elements": {
     "e1": {
@@ -7488,7 +7504,7 @@
     "e1375": {
       "type": "image",
       "src": "/_blob/issue136_after_context_1366",
-      "x": 36828,
+      "x": 39328,
       "y": 11100,
       "w": 755,
       "h": 430
@@ -7497,7 +7513,7 @@
       "type": "text",
       "size": "small",
       "text": "DEPOIS: alternativas em linhas/click targets, concurso no desktop",
-      "x": 36828,
+      "x": 39328,
       "y": 11538,
       "w": 760,
       "h": 50
@@ -7505,7 +7521,7 @@
     "e1377": {
       "type": "image",
       "src": "/_blob/issue136_after_context_390",
-      "x": 36018,
+      "x": 38518,
       "y": 11635,
       "w": 755,
       "h": 430
@@ -7514,7 +7530,7 @@
       "type": "text",
       "size": "small",
       "text": "DEPOIS: alternativas em linhas e texto quebrando, concurso em 390px",
-      "x": 36018,
+      "x": 38518,
       "y": 12073,
       "w": 760,
       "h": 50
@@ -7522,7 +7538,7 @@
     "e1379": {
       "type": "image",
       "src": "/_blob/issue136_after_global_1366",
-      "x": 36828,
+      "x": 39328,
       "y": 11635,
       "w": 755,
       "h": 430
@@ -7531,8 +7547,146 @@
       "type": "text",
       "size": "small",
       "text": "DEPOIS: banco global preserva o mesmo componente de questões",
-      "x": 36828,
+      "x": 39328,
       "y": 12073,
+      "w": 760,
+      "h": 50
+    },
+    "e1381": {
+      "type": "container",
+      "color": "white",
+      "text": "44. Questões contextuais — Issue #136: alternativas alinhadas e CSS compartilhado",
+      "x": 38500,
+      "y": 11000,
+      "w": 1650,
+      "h": 1170
+    },
+    "e1382": {
+      "type": "text",
+      "size": "small",
+      "x": 38518,
+      "y": 11008,
+      "w": 1590,
+      "h": 82,
+      "text": "Restaurado após conflito de IDs introduzido pela PR #142. Causa original validada por DOM: alternativas em páginas contextuais perdiam display:flex fora de .study-shell. As quatro capturas reais da PR #141 e o relatório issue136_e2e.json documentam o antes/depois em desktop, 390px e banco global. Implementação: CSS compartilhado com :is(.study-shell,.practice-list). Não equivale à conclusão de todos os critérios da issue #136; permanecem zoom, painel lateral, navegação por teclado e demais rotas."
+    },
+    "e1383": {
+      "type": "image",
+      "src": "/_blob/issue136_before_context_1366",
+      "x": 38518,
+      "y": 11100,
+      "w": 755,
+      "h": 430
+    },
+    "e1384": {
+      "type": "text",
+      "size": "small",
+      "text": "ANTES: alternativas inline no concurso, sem estilização da lista de questões",
+      "x": 38518,
+      "y": 11538,
+      "w": 760,
+      "h": 50
+    },
+    "e1385": {
+      "type": "container",
+      "color": "white",
+      "text": "45. SpaceSwitcher — Issue #138: busca, reordenação e persistência",
+      "x": 40500,
+      "y": 11000,
+      "w": 1650,
+      "h": 1720
+    },
+    "e1386": {
+      "type": "text",
+      "size": "small",
+      "text": "Implementação observável: o SpaceSwitcher passa a oferecer busca por nome com normalização de acentos, estado vazio, seleção/aria-selected, drag handle e reordenação por teclado Alt+ArrowUp/Down. A ordem é salva por ID em spaceOrder, distinta dos objetos de espaço persistidos em spaces; nomes e seleção sobrevivem à recarga. Arraste por Pointer Events tem threshold de 7px, indicação de destino e cancelamento Escape/pointercancel sem mudança. E2E real Chromium: reprodução anterior, busca, criação de dois espaços, reordenação por teclado e mouse, recarga, cancelamento e viewport 390px; ver issue138_spaces_e2e.json. Limite: toque físico, leitores de tela e sincronização entre dispositivos não foram validados.",
+      "x": 40518,
+      "y": 11008,
+      "w": 1590,
+      "h": 95
+    },
+    "e1387": {
+      "type": "image",
+      "src": "/_blob/issue138_before_desktop",
+      "x": 40518,
+      "y": 11115,
+      "w": 755,
+      "h": 430
+    },
+    "e1388": {
+      "type": "text",
+      "size": "small",
+      "text": "ANTES: seletor sem campo de busca e sem alças de reordenação no desktop",
+      "x": 40518,
+      "y": 11553,
+      "w": 760,
+      "h": 50
+    },
+    "e1389": {
+      "type": "image",
+      "src": "/_blob/issue138_search_desktop",
+      "x": 41328,
+      "y": 11115,
+      "w": 755,
+      "h": 430
+    },
+    "e1390": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: pesquisa incremental, nomes de espaços filtrados sem distinção de acentos",
+      "x": 41328,
+      "y": 11553,
+      "w": 760,
+      "h": 50
+    },
+    "e1391": {
+      "type": "image",
+      "src": "/_blob/issue138_after_keyboard_desktop",
+      "x": 40518,
+      "y": 11650,
+      "w": 755,
+      "h": 430
+    },
+    "e1392": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: Alt + seta reordena por identidade sem trocar o espaço ativo",
+      "x": 40518,
+      "y": 12088,
+      "w": 760,
+      "h": 50
+    },
+    "e1393": {
+      "type": "image",
+      "src": "/_blob/issue138_after_drag_desktop",
+      "x": 41328,
+      "y": 11650,
+      "w": 755,
+      "h": 430
+    },
+    "e1394": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: arraste por Pointer Events altera ordem sem perda de contexto",
+      "x": 41328,
+      "y": 12088,
+      "w": 760,
+      "h": 50
+    },
+    "e1395": {
+      "type": "image",
+      "src": "/_blob/issue138_after_mobile_390",
+      "x": 40518,
+      "y": 12185,
+      "w": 755,
+      "h": 430
+    },
+    "e1396": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: seletor responsivo a 390 CSS px com busca e seleção por toque",
+      "x": 40518,
+      "y": 12623,
       "w": 760,
       "h": 50
     }
