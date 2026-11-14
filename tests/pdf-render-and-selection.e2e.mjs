@@ -89,7 +89,7 @@ async function selectionTest(target,pageno){
 async function recoveryTest(target,pageno){
  const {page}=target;
  await page.evaluate(()=>{window.__restoreTextLayer=pdfjsLib.renderTextLayer;pdfjsLib.renderTextLayer=()=>{throw new Error('E2E injected text layer failure');};});
- await page.locator('#zin').click();
+ await page.evaluate(()=>document.getElementById('zin').click());
  const el=page.locator('.page[data-p="'+pageno+'"]');
  await el.locator('[data-pdf-notice="text"]').waitFor({timeout:30000});
  assert.equal(await el.getAttribute('data-text-status'),'error');
