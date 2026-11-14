@@ -242,6 +242,116 @@ Fonte: [WCAG 2.2](https://www.w3.org/TR/WCAG22/) e [Quick Reference](https://www
 
 **Contrato de sincronização:** sempre que uma lei, norma ou regra de formulário for inserida no AGENTS.md, conferir este catálogo e a especificação de aparência do DESIGN.md. Documentação de princípios não comprova que o protótipo foi alterado ou testado.
 
+
+## Extensões gerais verificadas para UX em 2026 — espelho da seção 16 do AGENTS.md
+
+Este índice **não altera nem renumera as 86 entradas originais** nem o inventário de leis já documentado. Ele acrescenta nomes **publicados**, nas classes corretas: modelos de visualização, princípios de inclusão, norma ISO, orientação W3C, framework de métricas, padrões governamentais e padrões de design systems. Consulte [AGENTS.md §16](../../AGENTS.md) para as regras normativas por fluxo e [DESIGN.md §8.14](../../DESIGN.md) para componentes, paneamento, grafo e gráficos.
+
+### G. Seven Principles of Universal Design (7)
+
+| Nome original | Aplicação no Exam App |
+|---|---|
+| **Equitable Use** | Acesso equivalente a tarefas de estudo. |
+| **Flexibility in Use** | Diferentes entradas, capacidades e ritmos. |
+| **Simple and Intuitive Use** | Descoberta de ações sem precisar entender estruturas internas. |
+| **Perceptible Information** | Estados e conteúdo compreensíveis além de cor/posição. |
+| **Tolerance for Error** | Prevenção, recuperação e retomada. |
+| **Low Physical Effort** | Reduzir arrastes, repetições e esforço motor. |
+| **Size and Space for Approach and Use** | Espaço e acesso apropriados conforme o contexto e dispositivo. |
+
+Fontes: [North Carolina State University — Center for Universal Design](https://design.ncsu.edu/research/center-for-universal-design/) e [UK Department for Education](https://accessibility.education.gov.uk/guidelines/universal-design). Princípios originalmente de design universal, estendidos à interface digital; **não são critérios WCAG**.
+
+### H. Shneiderman — Visual Information-Seeking Mantra (1996)
+
+**Nome original:** **Overview first, zoom and filter, then details-on-demand**. Tarefas do modelo: **Overview; Zoom; Filter; Details-on-demand; Relate; History; Extract**.
+
+Uso: apresentar visão geral do grafo, filtros/zoom legíveis, seleção e relações contextuais, preservar histórico de navegação e permitir alternativa acessível/extrair dados quando pertinente. Não converter as sete tarefas em sete controles obrigatórios. Fonte: [The Eyes Have It, IEEE](https://doi.org/10.1109/VL.1996.545307).
+
+### I. ISO 9241-11:2018 — Usability: Definitions and Concepts
+
+Norma publicada e confirmada em 2023: estrutura de usabilidade considerando o **contexto de uso**, **eficácia**, **eficiência** e **satisfação**. Aplicação: medir sucesso de tarefas reais, custo e qualidade percebida, não apenas número de cliques, retenção ou aparência. Apenas resumo público da ISO foi consultado; **não alegar conformidade** sem acesso e avaliação da norma integral. [Fonte ISO](https://www.iso.org/standard/63500.html).
+
+### J. Microsoft Inclusive Design — 3 princípios
+
+| Nome original | Aplicação |
+|---|---|
+| **Recognize exclusion** | Identificar barreiras entre pessoa, contexto e interface. |
+| **Learn from diversity** | Pesquisar/testar em contextos variados. |
+| **Solve for one, extend to many** | Soluções para necessidades específicas podem beneficiar outras pessoas, se testadas. |
+
+[Fonte Microsoft Inclusive Design](https://inclusive.microsoft.design/).
+
+### K. W3C COGA — 8 objetivos de acessibilidade cognitiva
+
+| Nome original | Aplicação |
+|---|---|
+| **Help Users Understand What Things Are and How to Use Them** | Clareza de função/controles. |
+| **Help Users Find What They Need** | Encontrabilidade e navegação. |
+| **Use Clear and Understandable Content** | Conteúdo legível e compreensível. |
+| **Help Users Avoid Mistakes and Know How to Correct Them** | Recuperação de erros sem perda. |
+| **Help Users Focus** | Gestão de distrações e retorno ao contexto. |
+| **Ensure Processes Do Not Rely on Memory** | Reduzir esforço de lembrar passos e valores. |
+| **Provide Help and Support** | Ajuda contextual e feedback. |
+| **Support Adaptation and Personalization** | Adaptação e preferências sob controle do usuário. |
+
+[Fonte W3C COGA](https://www.w3.org/TR/coga-usable/). **Working Group Note suplementar**; não cria critérios WCAG 2.2 adicionais.
+
+### L. GOV.UK — 11 Government Design Principles (atualizados em 2025)
+
+| Nome original |
+|---|
+| **Start with user needs** |
+| **Do less** |
+| **Design with data** |
+| **Do the hard work to make it simple** |
+| **Iterate. Then iterate again** |
+| **This is for everyone** |
+| **Understand context** |
+| **Build digital services, not websites** |
+| **Be consistent, not uniform** |
+| **Make things open: it makes things better** |
+| **Minimise environmental impact** |
+
+Fonte: [GOV.UK Government Design Principles](https://www.gov.uk/guidance/government-design-principles). A sustentabilidade foi incluída em 02/04/2025. São princípios de serviço, não leis universais, e parte do conteúdo já sobrepõe Nielsen/ISO.
+
+### M. HEART Framework — métricas centradas no usuário
+
+**HEART = Happiness, Engagement, Adoption, Retention, Task Success**; **GSM = Goals–Signals–Metrics**. A escolha de métricas deve começar pelo objetivo de cada tarefa, passar por sinais e culminar em indicadores verificáveis. Não equiparar tempo na aplicação a facilidade de uso. Fonte original: [Google Research, CHI 2010](https://research.google/pubs/measuring-the-user-experience-on-a-large-scale-user-centered-metrics-for-web-applications/); [Kerry Rodden](https://www.kerryrodden.com/heart/). Modelo de métricas, **não uma lei UI/UX**.
+
+### N. WCAG 2.2 — 16 critérios gerais adicionais da seção 16.8 do AGENTS.md
+
+| SC / nível | Nome oficial | Aplicação resumida |
+|---|---|---|
+| **1.3.2 A** | Meaningful Sequence | Ordem significativa da leitura e dos painéis. |
+| **1.3.4 AA** | Orientation | Não impor orientação sem essencialidade. |
+| **1.4.4 AA** | Resize Text | Texto redimensionável sem perda de conteúdo/função nas condições do SC. |
+| **1.4.12 AA** | Text Spacing | Override de espaçamento não pode causar perda de conteúdo/função. |
+| **2.1.2 A** | No Keyboard Trap | Sair por teclado de interações. |
+| **2.1.4 A** | Character Key Shortcuts | Alternativas/restrições para atalhos de caractere único. |
+| **2.2.1 A** | Timing Adjustable | Avaliar limites de tempo e exceção quando o tempo é essencial. |
+| **2.4.1 A** | Bypass Blocks | Saltar regiões repetidas. |
+| **2.4.2 A** | Page Titled | Título descritivo de página. |
+| **2.4.4 A** | Link Purpose (In Context) | Destino de link compreensível. |
+| **2.4.5 AA** | Multiple Ways | Mais de um caminho de localização quando aplicável, com exceções. |
+| **2.5.1 A** | Pointer Gestures | Alternativa a gestos complexos quando exigida. |
+| **2.5.2 A** | Pointer Cancellation | Regras de cancelamento de acionamento de ponteiro. |
+| **2.5.4 A** | Motion Actuation | Alternativa e controle para ações baseadas em movimento quando aplicável. |
+| **3.1.1 A** | Language of Page | Idioma principal programático. |
+| **3.1.2 AA** | Language of Parts | Idioma dos trechos com exceções previstas. |
+
+Fonte: [WCAG 2.2](https://www.w3.org/TR/WCAG22/). Níveis, escopo e exceções importam. **Não confundir documentação com testes aprovados.**
+
+### O. Context7 + fontes oficiais — padrões de design atuais, não leis
+
+| Fonte | Nome publicado | Relevância |
+|---|---|---|
+| [Material Design 3](https://m3.material.io/foundations/layout/layout-overview/overview) | **Adaptive Design / Layout Scaffold / Panes / Breakpoints** | Orientação atualizada em maio de 2026 para compor interfaces por espaço/contexto, não miniaturizar desktop. |
+| [IBM Carbon](https://github.com/carbon-design-system/carbon/blob/main/packages/react/src/examples/EmptyState/EmptyState.mdx) | **Empty State Pattern** | Diferenciar indisponível, vazio e nenhum resultado. |
+| [React Aria](https://react-spectrum.adobe.com/react-aria/interactions.html) | **Accessible, Adaptive, International** | Modos de entrada, foco, idiomas/RTL e responsividade. |
+| [USWDS](https://designsystem.digital.gov/components/data-visualizations/) | **Data Visualizations** | Gráficos com leitura equivalente, mensagem principal textual, rótulos e alternativas tabulares/de dados. |
+
+**Priorização da auditoria**: IA de navegação Questões/Simulados; adaptação de sidebar e painel direito; grafo com overview/filter/detail/history; gráficos com títulos/alternativas; leitura de PDFs; operações por teclado/touch; métricas de sucesso de tarefa. Validar antes e depois por cenários reais. Este índice é uma **curadoria documental**, não uma avaliação executada do protótipo.
+
 ## Matriz de decisão por superfície
 
 | Superfície | Padrão principal | Primeiro viewport e CTA | Secundário | Mobile e exceção | Verificação |

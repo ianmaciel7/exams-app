@@ -553,6 +553,76 @@ Para cada padrão novo, registrar **a referência exata e o que foi adaptado**: 
 
 As lacunas registradas aqui não comprovam falha do protótipo: são requisitos de documentação/validação que deverão ser aplicados em mudanças reais. **Não declarar "conformidade" com M3, HIG ou WCAG** apenas por cumprir um checklist de estilo.
 
+
+### 8.14 UX geral — layout adaptativo, grafo e visualização acessível (revisão 2026)
+
+Esta seção traduz [AGENTS.md §16](AGENTS.md) e [docs/ux/ux-ui-principles.md](docs/ux/ux-ui-principles.md) em contratos de design. **Nenhuma regra é proposta apenas por ser tendência de 2026**: validar em tarefa, viewport, modalidade de interação e dados. Material 3 e React Aria são referências para adaptação; o protótipo continua HTML/CSS/JS e não exige adicionar bibliotecas.
+
+#### 8.14.1. Material 3 Adaptive Design — composição por contexto, não apenas por largura
+
+A documentação Material 3 de **maio de 2026** introduz nomenclatura atualizada para **Adaptive Design**, **Layout Scaffold**, **Panes** e **Breakpoints**. É uma referência de design system, **não um requisito normativo de breakpoint ou de número de colunas para web**. [Fonte M3 Layout](https://m3.material.io/foundations/layout/layout-overview/overview).
+
+| Superfície | Compacto / viewport estreito | Intermediário | Amplo / desktop | Invariantes |
+|---|---|---|---|---|
+| **Navegação primária** | Acesso explícito a Questões, Simulados, Revisão; menu/painel temporário quando necessário. | Navegação ajustada ao espaço real, evitando duas barras rivais. | Sidebar persistente se couber e ajudar. | Rotas e rótulos consistentes, foco e voltar funcionais. |
+| **Painel direito / propriedades** | Sob demanda como seção, página, drawer ou overlay acessível, sem encobrir tarefa. | Mostrar apenas quando não diminuir indevidamente área de leitura. | Painel auxiliar persistente somente quando a tarefa ganhar eficiência. | Não forçar três colunas; preservar seleção, rolagem, foco e posição. |
+| **Resolução de questões** | Enunciado e alternativas com prioridade; ações alcançáveis. | Área de leitura estável com secundário recolhível. | Metadados/explicação contextual sem competir com o enunciado. | Conteúdo e ordem semântica equivalentes; sem perda de resposta. |
+| **Grafo de objetos** | Visão principal com controles alternativos e relações em lista. | Detalhes de nó em superfície adaptável, não duplicada. | Grafo + painel de relações contextual se houver espaço. | Mesmo nó ativo/relacionamentos ao mudar viewport. |
+| **Leitor PDF** | Leitura e navegação de páginas prioritárias; toolbar pode colapsar sem ocultar comandos essenciais. | Ferramentas relevantes próximas do conteúdo. | Painel de notas/metadados só quando não prejudicar leitura. | Preservar página, zoom, busca, seleção e foco no reflow. |
+| **Gráficos e resultados** | Um gráfico legível por vez; alternativa tabular e resumo textual alcançáveis. | Grade conforme legibilidade real. | Comparação lado a lado quando faz sentido; evitar abas duplicadas. | Mesmos dados, filtros, legendas e interpretação independentemente da composição. |
+
+**MUST:** testar por comportamento, não impor números mágicos de largura; conferir zoom, fonte ampliada, teclado, touch, redimensionamento da janela durante animação e idiomas mais extensos. O painel auxiliar não pode sequestrar foco/rolagem ou manter um gráfico duplicado fora de sincronia.
+
+#### 8.14.2. Grafo — Visual Information-Seeking Mantra e continuidade espacial
+
+Adotar como **hipótese de experiência** o modelo de Ben Shneiderman, [The Eyes Have It (1996)](https://doi.org/10.1109/VL.1996.545307), sem exigir sete controles visíveis:
+
+| Tarefa do modelo | Comportamento verificável no Exam App |
+|---|---|
+| **Overview** | A pessoa entende o conjunto ou região inicial do grafo, com controles principais descobríveis. |
+| **Zoom** | Zoom deliberado e reversível, sem perda do nó ativo. |
+| **Filter** | Tipo, relação ou outra faceta selecionável com efeito indicado e opção de limpar. |
+| **Details-on-demand** | Clique/teclado em nó exibe detalhes sem trocar contexto de maneira desorientadora. |
+| **Relate** | Relações visíveis com identificação textual de origem/destino/tipo quando pertinente. |
+| **History** | Voltar à seleção e posição anterior após navegar para relações; não se confunde com histórico de respostas. |
+| **Extract** | Oferecer representação em lista/tabela ou exportação apenas onde houver caso de uso real. |
+
+**MUST:** evitar movimento automático que desloque o nó selecionado sem necessidade; aplicar o [MOTION.md](MOTION.md) para transições interrompíveis, movimento reduzido e preservação do estado. Testar todos os caminhos sem mouse, inclusive seleção de nó, filtros, fechar painel e retornar ao contexto.
+
+#### 8.14.3. Gráficos e dashboards — mensagem e equivalência de acesso
+
+A referência [USWDS Data Visualizations](https://designsystem.digital.gov/components/data-visualizations/) esclarece que visualização acessível não é só contraste: quem não vê o gráfico precisa compreender **a mensagem e o dado**, e uma tabela por si só nem sempre comunica a interpretação de uma tendência.
+
+- **MUST** exibir **título explicativo**, rótulos/eixos/unidades e legenda consistente para dados representados; não depender apenas de cor ou hover. Resumir por texto a conclusão importante (por exemplo, evolução no percentual de acerto), sem inventar interpretação ou dados.
+- **MUST** disponibilizar alternativa textual/estruturada adequada a leitores de tela; tabelas para exploração de valores e resumo narrativo para tendência/relacionamentos. Gráficos interativos devem expor caminhos de teclado/foco e status acessíveis.
+- **SHOULD** preservar filtros e seleção entre gráfico e representação textual; evitar duas abas para a mesma visualização, legendas duplicadas ou gráficos decorativos que escondam a métrica principal.
+- **SHOULD** preferir tipos de gráfico familiares adequados à comparação desejada; evitar densidade, efeitos ou séries além da capacidade de leitura no viewport disponível.
+- **MUST** verificar estado vazio, não há resultado, erro, dados parciais e atualização. Para tratamento de estado vazio, consultar [IBM Carbon Empty State Pattern](https://github.com/carbon-design-system/carbon/blob/main/packages/react/src/examples/EmptyState/EmptyState.mdx).
+
+#### 8.14.4. Inclusão, cognição e internacionalização
+
+Aplique os [7 Principles of Universal Design](https://accessibility.education.gov.uk/guidelines/universal-design), os [3 Inclusive Design Principles](https://inclusive.microsoft.design/) e os [8 objetivos suplementares W3C COGA](https://www.w3.org/TR/coga-usable/) sem confundir tais orientações com critérios WCAG.
+
+- **MUST** garantir que o primeiro passo para **Questões**, **Simulados** e **Revisão** seja descobrível sem conhecer termos internos como tipos/objetos/relacionamentos.
+- **SHOULD** oferecer opções de densidade e apresentação quando úteis, mantendo o mesmo conteúdo/ação em qualquer versão; simplificação não pode apagar dado essencial ou evidência.
+- **MUST** preservar contexto cognitivo ao navegar: onde estou, o que posso fazer agora, qual foi o resultado e como voltar/retomar.
+- **MUST** prever textos longos, formato de data/número, leitura LTR/RTL quando aplicável e associação de idioma (WCAG 3.1.1/3.1.2) sem usar coordenadas esquerda/direita como única semântica. Referência: [Adobe React Aria Internationalization](https://react-spectrum.adobe.com/react-aria/internationalization.html).
+- **MUST** não exigir gesto, temporização, precisão motora ou memorização como única maneira de concluir a tarefa; avaliar os SC WCAG pertinentes por fluxo e exceções.
+
+#### 8.14.5. Qualidade da experiência em contexto — ISO 9241-11 + HEART
+
+Referências: [ISO 9241-11:2018](https://www.iso.org/standard/63500.html), [HEART Framework (Google Research)](https://research.google/pubs/measuring-the-user-experience-on-a-large-scale-user-centered-metrics-for-web-applications/) e [GOV.UK Design Principles (2025)](https://www.gov.uk/guidance/government-design-principles/). São fontes de avaliação e processo: **não definem aparência de bordas, medidas fixas ou métricas obrigatórias por tela**.
+
+| Jornada | Eficácia (sucesso) | Eficiência (esforço) | Satisfação / sinais |
+|---|---|---|---|
+| Encontrar Questões e filtrar | Encontrou conjunto correto; escopo/filtros compreendidos | Tempo, erros, desvios e retrabalho | Sente controle e clareza do resultado |
+| Resolver questão avulsa | Respondeu e recebeu correção correta | Quantidade de passos sem perda de contexto | Explicação compreensível, foco na leitura |
+| Configurar e finalizar Simulado | Iniciou/entregou com regras compreendidas e sem perda | Correções de configuração, interrupções e retomada | Segurança/confiança no salvamento e resultado |
+| Explorar grafo/objetos | Localizou relação/nó desejado | Voltar, zoom e filtragem sem desorientação | Compreendeu por que os objetos se relacionam |
+| Ler PDF e revisar | Acessou conteúdo e retomou posição | Rolagem, busca e mudanças de zoom | Leitura confortável e recuperação previsível |
+
+**MUST:** definir tarefas, critérios de sucesso e amostra antes/depois; diferenciar **documentado**, **implementado** e **testado**. O catálogo e exemplos são hipóteses para testes de usuário e a11y, não dados coletados. **SHOULD:** usar o processo Goals–Signals–Metrics do HEART para escolher indicadores apropriados; não maximizar retenção/tempo de tela à custa de compreensão.
+
 ## 9. Registro de referências dos 22 skills catalogados (auditoria de conteúdo em andamento)
 
 Os 22 itens abaixo são **referências comunitárias catalogadas**, não extensões oficiais de Apple ou Google. **Catalogar URL não comprova leitura integral de cada SKILL.md, README e referências internas.** Não afirmar que os 22 foram verificados ou que cada resumo corresponde ao estado atual do repositório sem registro de arquivo/revisão/data. Esta integração é uma síntese preliminar enquanto a análise aprofundada de cada fonte não estiver documentada. Alguns estão voltados a Android/SwiftUI; nem todo trecho de código se aplica a um protótipo HTML/CSS/JS. Para números ou requisitos, confrontar com a documentação oficial **vigente**.
