@@ -1,0 +1,198 @@
+{
+  "timestamp": "2026-11-14T16:34:27.960Z",
+  "browser": "Chrome/157.0.8103.52",
+  "testUrl": "http://localhost:8765/claude-storage-test/index.html",
+  "consoleLogs": [
+    {
+      "type": "log",
+      "text": "[1:34:16 PM] [INFO] Iniciando Teste de Simulação Controlada (iframe local simulando Artifact)...\n",
+      "timestamp": 1794674056768
+    },
+    {
+      "type": "log",
+      "text": "[1:34:16 PM] [INFO] Iframe de simulação carregado. Inicializando ClaudeStorageBridgeClient com MessageChannel...\n",
+      "timestamp": 1794674056790
+    },
+    {
+      "type": "log",
+      "text": "[1:34:16 PM] [PASS] Ping na simulação: Sucesso ({\"pong\":true,\"timestamp\":1794674056805})\n",
+      "timestamp": 1794674056808
+    },
+    {
+      "type": "log",
+      "text": "[1:34:16 PM] [PASS] Simulação SET \"bridge-poc:teste-001\" -> \"salvo-pelo-claude\": Sucesso\n",
+      "timestamp": 1794674056809
+    },
+    {
+      "type": "log",
+      "text": "[1:34:16 PM] [PASS] Simulação GET \"bridge-poc:teste-001\": salvo-pelo-claude\n",
+      "timestamp": 1794674056809
+    },
+    {
+      "type": "log",
+      "text": "[1:34:16 PM] [PASS] Simulação SET \"bridge-poc:teste-001\" -> \"atualizado-pelo-localhost\": Sucesso\n",
+      "timestamp": 1794674056810
+    },
+    {
+      "type": "log",
+      "text": "[1:34:16 PM] [PASS] Simulação GET atualizado: atualizado-pelo-localhost\n",
+      "timestamp": 1794674056810
+    },
+    {
+      "type": "log",
+      "text": "[1:34:16 PM] [PASS] Simulação DELETE \"bridge-poc:teste-001\": Sucesso\n",
+      "timestamp": 1794674056810
+    },
+    {
+      "type": "log",
+      "text": "[1:34:16 PM] [INFO] ATENCAO: A simulação funciona perfeitamente em canais locais controlados, mas NÃO comprova viabilidade com o Claude real.\n",
+      "timestamp": 1794674056811
+    },
+    {
+      "type": "log",
+      "text": "[1:34:19 PM] [INFO] Iniciando Teste 1: Tentativa de incorporar Artifact real via <iframe>...\n",
+      "timestamp": 1794674059780
+    },
+    {
+      "type": "error",
+      "text": "[security] Framing 'https://claude.ai/' violates the following Content Security Policy directive: \"frame-ancestors chrome-extension://fcoeoabgfenejglbffodgkkbkcdhcgfn chrome-extension://dngcpimnedloihjnnfngkgjoidhnaolf\". The request has been blocked.\n",
+      "timestamp": 1794674059950
+    },
+    {
+      "type": "log",
+      "text": "[1:34:19 PM] [INFO] Evento onload disparado no iframe. Verificando acesso ao document/window...\n",
+      "timestamp": 1794674059979
+    },
+    {
+      "type": "log",
+      "text": "[1:34:19 PM] [BLOCKED] Bloqueio de Same-Origin Policy (esperado): Failed to read a named property 'document' from 'Window': Blocked a frame with origin \"http://localhost:8765\" from accessing a cross-origin frame.\n",
+      "timestamp": 1794674059980
+    },
+    {
+      "type": "log",
+      "text": "[1:34:19 PM] [INFO] postMessage probe enviado ao iframe. Aguardando resposta (timeout 3s)...\n",
+      "timestamp": 1794674059980
+    },
+    {
+      "type": "log",
+      "text": "[1:34:22 PM] [INFO] Verificando status de renderização do iframe...\n",
+      "timestamp": 1794674062291
+    },
+    {
+      "type": "log",
+      "text": "[1:34:22 PM] [BLOCKED] DIAGNOSTICO: Claude.ai envia Content-Security-Policy com \"frame-ancestors 'self'\". O navegador bloqueia a exibição dentro de localhost.\n",
+      "timestamp": 1794674062291
+    },
+    {
+      "type": "log",
+      "text": "[1:34:23 PM] [INFO] Iniciando Teste 2: Tentativa de conexão via Popup autenticado (window.open)...\n",
+      "timestamp": 1794674063805
+    },
+    {
+      "type": "log",
+      "text": "[1:34:23 PM] [INFO] Popup aberto com sucesso. Aguardando carregamento e testando integridade da referência...\n",
+      "timestamp": 1794674063868
+    },
+    {
+      "type": "log",
+      "text": "[1:34:25 PM] [INFO] Popup foi fechado pelo usuário ou pelo navegador.\n",
+      "timestamp": 1794674065358
+    }
+  ],
+  "networkEvents": [
+    {
+      "url": "http://localhost:8765/claude-storage-test/index.html",
+      "status": 200,
+      "headers": {
+        "Content-Length": "11718",
+        "Content-type": "text/html",
+        "Date": "Sat, 14 Nov 2026 16:34:14 GMT",
+        "Last-Modified": "Sat, 14 Nov 2026 16:32:39 GMT",
+        "Server": "SimpleHTTP/0.6 Python/3.12.10"
+      }
+    },
+    {
+      "url": "http://localhost:8765/claude-storage-test/protocol.mjs",
+      "status": 200,
+      "headers": {
+        "Content-Length": "1444",
+        "Date": "Sat, 14 Nov 2026 16:34:14 GMT",
+        "Content-type": "text/javascript",
+        "Last-Modified": "Sat, 14 Nov 2026 16:28:49 GMT",
+        "Server": "SimpleHTTP/0.6 Python/3.12.10"
+      }
+    },
+    {
+      "url": "http://localhost:8765/claude-storage-test/client.mjs",
+      "status": 200,
+      "headers": {
+        "Content-Length": "3655",
+        "Date": "Sat, 14 Nov 2026 16:34:14 GMT",
+        "Content-type": "text/javascript",
+        "Last-Modified": "Sat, 14 Nov 2026 16:29:13 GMT",
+        "Server": "SimpleHTTP/0.6 Python/3.12.10"
+      }
+    },
+    {
+      "url": "http://localhost:8765/claude-storage-test/artifact-simulation.html",
+      "status": 200,
+      "headers": {
+        "Content-Length": "1889",
+        "Content-type": "text/html",
+        "Date": "Sat, 14 Nov 2026 16:34:16 GMT",
+        "Last-Modified": "Sat, 14 Nov 2026 16:32:44 GMT",
+        "Server": "SimpleHTTP/0.6 Python/3.12.10"
+      }
+    },
+    {
+      "url": "http://localhost:8765/claude-storage-test/server.mjs",
+      "status": 200,
+      "headers": {
+        "Content-Length": "5234",
+        "Date": "Sat, 14 Nov 2026 16:34:16 GMT",
+        "Content-type": "text/javascript",
+        "Last-Modified": "Sat, 14 Nov 2026 16:29:48 GMT",
+        "Server": "SimpleHTTP/0.6 Python/3.12.10"
+      }
+    },
+    {
+      "url": "http://localhost:8765/claude-storage-test/protocol.mjs",
+      "status": 200,
+      "headers": {
+        "Content-Length": "1444",
+        "Date": "Sat, 14 Nov 2026 16:34:14 GMT",
+        "Content-type": "text/javascript",
+        "Last-Modified": "Sat, 14 Nov 2026 16:28:49 GMT",
+        "Server": "SimpleHTTP/0.6 Python/3.12.10"
+      }
+    },
+    {
+      "url": "https://claude.ai/artifact/MeCzKuKCsr6fY4F8AGxnyC",
+      "status": 200,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=86400",
+        "cache-control": "private, no-store",
+        "cf-cache-status": "HIT",
+        "cf-ray": "a5a76c472c8928e7-GIG",
+        "content-encoding": "zstd",
+        "content-security-policy": "frame-ancestors chrome-extension://fcoeoabgfenejglbffodgkkbkcdhcgfn chrome-extension://dngcpimnedloihjnnfngkgjoidhnaolf; frame-src https://a728ae48-3fa2-4dbf-9092-0392c90b58f7.frame.claudeusercontent.com; script-src 'nonce-pGO5mYoX80g6FdfiGj1SJA==' 'self' 'wasm-unsafe-eval' assets.claude.ai assets-proxy.anthropic.com s-cdn.anthropic.com; style-src 'nonce-pGO5mYoX80g6FdfiGj1SJA=='; connect-src 'self' https://a728ae48-3fa2-4dbf-9092-0392c90b58f7.frame.claudeusercontent.com; base-uri 'none'; object-src 'none'; form-action 'none'",
+        "content-type": "text/html",
+        "cross-origin-opener-policy": "same-origin-allow-popups",
+        "cross-origin-resource-policy": "same-origin",
+        "date": "Sat, 14 Nov 2026 16:34:19 GMT",
+        "link": "<https://a728ae48-3fa2-4dbf-9092-0392c90b58f7.frame.claudeusercontent.com>; rel=preconnect",
+        "permissions-policy": "accelerometer=(self \"https://a728ae48-3fa2-4dbf-9092-0392c90b58f7.frame.claudeusercontent.com\"), attribution-reporting=*, bluetooth=self, browsing-topics=*, camera=(self \"https://a728ae48-3fa2-4dbf-9092-0392c90b58f7.frame.claudeusercontent.com\"), clipboard-read=self, compute-pressure=self, display-capture=(self \"https://a728ae48-3fa2-4dbf-9092-0392c90b58f7.frame.claudeusercontent.com\"), encrypted-media=self, geolocation=(self \"https://a728ae48-3fa2-4dbf-9092-0392c90b58f7.frame.claudeusercontent.com\"), gyroscope=(self \"https://a728ae48-3fa2-4dbf-9092-0392c90b58f7.frame.claudeusercontent.com\"), hid=self, identity-credentials-get=self, idle-detection=self, local-fonts=self, magnetometer=(self \"https://a728ae48-3fa2-4dbf-9092-0392c90b58f7.frame.claudeusercontent.com\"), microphone=(self \"https://a728ae48-3fa2-4dbf-9092-0392c90b58f7.frame.claudeusercontent.com\"), midi=(self \"https://a728ae48-3fa2-4dbf-9092-0392c90b58f7.frame.claudeusercontent.com\"), otp-credentials=self, picture-in-picture=self, publickey-credentials-create=self, publickey-credentials-get=self, serial=self, storage-access=*, unload=(), usb=self, web-share=self, window-management=self",
+        "priority": "u=0,i",
+        "referrer-policy": "strict-origin-when-cross-origin",
+        "server": "cloudflare",
+        "server-timing": "cfExtPri",
+        "strict-transport-security": "max-age=31536000; includeSubDomains",
+        "vary": "Sec-Fetch-Dest, Sec-Fetch-Site, accept-encoding",
+        "x-content-type-options": "nosniff",
+        "x-ion-version": "cf8b67a9-8de1-4244-beb2-0264da03a3c5",
+        "x-robots-tag": "none",
+        "x-xss-protection": "1; mode=block"
+      }
+    }
+  ]
+}

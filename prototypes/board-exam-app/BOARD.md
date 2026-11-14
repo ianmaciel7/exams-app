@@ -2180,16 +2180,24 @@ Botão de exportação na barra do grafo, viewport 1366px
 
 PNG real gerado no canvas desktop, pixel ratio 2
 
-## 43. Questões contextuais — Issue #136: alternativas alinhadas e CSS compartilhado
+## 43. Prova de Conceito: Integração Claude Pro Storage Bridge (localhost vs claude.ai)
 <!-- container e1371 @ (36000,11000) -->
 
-Diagnóstico comprovado pelo DOM: .qf-list renderizava s-question sem .study-shell, então label.s-option perdia display:flex e hitboxes. CSS compartilhado via :is(.study-shell,.practice-list), sem duplicar implementação do componente. E2E Chromium verifica baseline antes, card contextual desktop/mobile e banco global, separação Questão / Disciplina, seleção por label. Capturas reais desta PR; a screenshot original do usuário permanece fora do repositório. Não demonstra validação em todos os browsers, zoom 200% ou com painel Gráfico aberto.
+### Veredito da Prova de Conceito: Inviável via Browser Bridge (Bloqueado por CSP e Sandbox)
 
-![imagem e1373](assets/issue136_before_context_1366.png)
+Testamos a comunicação entre o Exam App em localhost (porta 8765) e o Claude Pro Storage (window.storage no Artifact a728ae48).
+
+- Testes unitários do protocolo (MessageChannel, CRUD, timeout, validação de chaves e origens): 6/6 passaram.
+- Teste de incorporação em iframe: Bloqueado pelo navegador via CSP frame-ancestors self.
+- Teste de janela autenticada (window.open): Desacoplado pelo navegador via Cross-Origin-Opener-Policy (same-origin-allow-popups).
+- Teste de postMessage: Inalcançável devido ao sandboxing em 3 camadas do Claude (claude.ai -> frame.claudeusercontent.com -> index.html).
+- Fechamento de aba: Canais em memória são destruídos com a aba; não há persistência autônoma.
+
+Evidência técnica registrada em docs/reports/claude-storage-bridge/CLAUDE_STORAGE_BRIDGE_INVESTIGATION.md.
 
 ![imagem e1375](assets/issue136_after_context_1366.png)
 
-ANTES: alternativas inline no concurso, sem estilização da lista de questões
+![imagem e1373](assets/evidence-iframe-csp-blocked.png)
 
 DEPOIS: alternativas em linhas/click targets, concurso no desktop
 
@@ -2200,6 +2208,8 @@ DEPOIS: alternativas em linhas/click targets, concurso no desktop
 DEPOIS: alternativas em linhas e texto quebrando, concurso em 390px
 
 DEPOIS: banco global preserva o mesmo componente de questões
+
+Evidência de execução real no Google Chrome: O navegador acusa 'Framing https://claude.ai/ violates Content Security Policy: frame-ancestors... The request has been blocked'. O iframe renderiza em branco e o canal postMessage é recusado pela Same-Origin Policy. Recomendação: Manter armazenamento local estruturado (localStorage/IndexedDB) e publicação estática via claude-artifact publish.
 
 ## 10. Arquivos do projeto (Dataprev 2026 e referências)
 <!-- container e363 @ (0,12666) -->

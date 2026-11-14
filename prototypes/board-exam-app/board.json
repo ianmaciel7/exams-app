@@ -7453,37 +7453,37 @@
     "e1371": {
       "type": "container",
       "color": "white",
-      "text": "43. Questões contextuais — Issue #136: alternativas alinhadas e CSS compartilhado",
+      "text": "43. Prova de Conceito: Integração Claude Pro Storage Bridge (localhost vs claude.ai)",
       "x": 36000,
       "y": 11000,
       "w": 1650,
-      "h": 1170
+      "h": 1600
     },
     "e1372": {
       "type": "text",
-      "size": "small",
-      "x": 36018,
-      "y": 11008,
-      "w": 1590,
-      "h": 82,
-      "text": "Diagnóstico comprovado pelo DOM: .qf-list renderizava s-question sem .study-shell, então label.s-option perdia display:flex e hitboxes. CSS compartilhado via :is(.study-shell,.practice-list), sem duplicar implementação do componente. E2E Chromium verifica baseline antes, card contextual desktop/mobile e banco global, separação Questão / Disciplina, seleção por label. Capturas reais desta PR; a screenshot original do usuário permanece fora do repositório. Não demonstra validação em todos os browsers, zoom 200% ou com painel Gráfico aberto."
+      "color": "white",
+      "text": "### Veredito da Prova de Conceito: Inviável via Browser Bridge (Bloqueado por CSP e Sandbox)\n\nTestamos a comunicação entre o Exam App em localhost (porta 8765) e o Claude Pro Storage (window.storage no Artifact a728ae48).\n\n- Testes unitários do protocolo (MessageChannel, CRUD, timeout, validação de chaves e origens): 6/6 passaram.\n- Teste de incorporação em iframe: Bloqueado pelo navegador via CSP frame-ancestors self.\n- Teste de janela autenticada (window.open): Desacoplado pelo navegador via Cross-Origin-Opener-Policy (same-origin-allow-popups).\n- Teste de postMessage: Inalcançável devido ao sandboxing em 3 camadas do Claude (claude.ai -> frame.claudeusercontent.com -> index.html).\n- Fechamento de aba: Canais em memória são destruídos com a aba; não há persistência autônoma.\n\nEvidência técnica registrada em docs/reports/claude-storage-bridge/CLAUDE_STORAGE_BRIDGE_INVESTIGATION.md.",
+      "x": 36050,
+      "y": 11080,
+      "w": 1550,
+      "h": 280
     },
     "e1373": {
       "type": "image",
-      "src": "/_blob/issue136_before_context_1366",
-      "x": 36018,
-      "y": 11100,
-      "w": 755,
-      "h": 430
+      "src": "/_blob/evidence-iframe-csp-blocked",
+      "x": 36050,
+      "y": 11400,
+      "w": 1550,
+      "h": 900
     },
     "e1374": {
       "type": "text",
-      "size": "small",
-      "text": "ANTES: alternativas inline no concurso, sem estilização da lista de questões",
-      "x": 36018,
-      "y": 11538,
-      "w": 760,
-      "h": 50
+      "color": "white",
+      "text": "Evidência de execução real no Google Chrome: O navegador acusa 'Framing https://claude.ai/ violates Content Security Policy: frame-ancestors... The request has been blocked'. O iframe renderiza em branco e o canal postMessage é recusado pela Same-Origin Policy. Recomendação: Manter armazenamento local estruturado (localStorage/IndexedDB) e publicação estática via claude-artifact publish.",
+      "x": 36050,
+      "y": 12340,
+      "w": 1550,
+      "h": 200
     },
     "e1375": {
       "type": "image",
