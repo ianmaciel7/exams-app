@@ -401,9 +401,121 @@ Checklist básico: foco na ordem certa, foco não oculto por sticky UI; ícones 
 - Critérios de qualidade: sem CTAs mortos, abas duplicadas, ação primária perdida, contornos decorativos em excesso, scroll jumping, loading infinito ou gesto sem alternativa.
 - Não declarar que a aplicação está "conforme Apple/M3" porque um token, radius ou efeito se parece com referência.
 
-## 9. Registro de referências dos 22 skills analisados
+### 8.10 Formulários e campos — especificação visual e decisão de persistência
 
-Os repositórios abaixo são **fontes comunitárias de aprendizado**, não extensões oficiais de Apple ou Google. Alguns estão voltados a Android/SwiftUI; nem todo trecho de código se aplica a um protótipo HTML/CSS/JS. Para números ou requisitos, confrontar com a documentação oficial **vigente**.
+**Objetivo:** o formulário deve parecer parte do Exam App, não uma coleção desconexa de caixas. Aplicar a regra de salvamento de [AGENTS.md §13.1](AGENTS.md), distinguindo *edição*, *aplicação local*, *persistência confirmada* e *submissão definitiva*. As recomendações Apple/M3 abaixo são **adaptações para Web**, não cópia de SwiftUI/Compose.
+
+| Situação | Forma de interação preferida | Quando mostrar botão | Feedback obrigatório |
+|---|---|---|---|
+| Alterar tema, alternar visualização, recolher painel | Aplicação imediata reversível | Em geral **não** | Mudança visível instantânea; reversão simples |
+| Filtrar lista local sem custo significativo | Atualização previsível; debounce quando textual | Em geral **não**; `Limpar` quando útil | Total de resultados, chips ativos, estado sem resultados |
+| Filtros que disparam busca cara, múltiplas escolhas ou carga demorada | Painel de rascunho + `Aplicar filtros` quando o custo justificar | **Sim**, se necessário estabelecer uma operação | Mudanças pendentes, botão habilitado, progresso/cancelamento |
+| Editar rótulo ou propriedade simples | Inline ou autosave confiável | Opcional; **não** se autosave está explícito | `Editado` → `Salvando` → `Salvo` ou `Erro ao salvar` com retry |
+| Criar concurso/caderno, configurar simulado ou alterar várias propriedades | Formulário identificado, validação e revisão de consequências | **Sim**, CTA nomeando a operação | Pendente, validação, confirmação real, destino/retorno |
+| Enviar simulado, publicar resultado, exclusão irreversível | Ação explícita, com confirmação proporcional e proteção contra dupla submissão | **Sim** | Consequência, irreversibilidade, sucesso/erro e recuperação |
+
+**Estrutura recomendada:** título da tarefa → explicação somente se necessária → seções com nomes claros → pares label/campo → *hint* contextual → erro específico junto ao campo → ações na posição esperada. Campos relacionados podem dividir uma linha **somente** se a ordem do DOM/leitura e o comportamento no mobile continuarem coerentes.
+
+**Elementos de cada campo:**
+- **Label persistente** acima ou ao lado conforme largura/contexto; placeholder é exemplo breve e opcional, nunca a única identificação. Seção agrupada usa `fieldset/legend` quando necessário.
+- **Valor** legível no estado normal, focus, read-only, disabled e com erro; o texto digitado não deve competir com rótulos, prefixos ou ícones.
+- **Hint** curta, anterior ao erro, associada por `aria-describedby` quando ajuda; unidade e formato ficam junto ao controle.
+- **Erro** específico, acionável e associado ao campo (ex.: "Informe um ano entre ..."), com indicação que não depende da cor; usar `aria-invalid` no campo inválido. Para formulários extensos, considerar sumário de erros com links para campos.
+- **Ação no campo** (limpar, revelar senha, pesquisar) com nome acessível, área clicável confortável, estado de foco, sem trocar inesperadamente o valor.
+- **Status de persistência** não confunde `dirty`, `pending`, `saved`, `failed`, `conflict` e `offline`. "Salvo" aparece apenas após sucesso real; editar durante gravação deve preservar versão e evitar sobrescrita.
+
+**Controles e estados:**
+
+| Componente | Uso correto | Estados/considerações |
+|---|---|---|
+| Text input / textarea | Texto curto / longo, respectivamente | Label, placeholder auxiliar, IME, autocomplete, paste, readonly, erro, contador se houver limite |
+| Select / combobox | Opções conhecidas / escolha com busca quando necessário | Sem teclado quebrado, opção selecionada sempre legível, lista navegável, fechamento e foco |
+| Radio group | Escolha mutuamente exclusiva e opções visíveis | Grupo/legend, ordem de leitura, seleção por teclado; não usar switch para decisão não aplicada |
+| Checkbox | Preferências independentes e consentimento explícito | `checked`, `indeterminate` quando válido, label clicável e validação |
+| Switch | Estado binário cuja alteração é aplicada imediatamente | `on/off` explícito, pending/erro no caso de persistência remota; não representar ação de submit como switch |
+| Slider / campo numérico | Ajuste aproximado / entrada exata | Valor e unidade disponíveis; alternativa por teclado e entrada direta se precisão importar |
+| Search + filtros | Localizar/restringir conjunto | Escopo, filtro ativo, resultado, remoção individual, reset, debounce e cancelamento de resposta obsoleta |
+| Action buttons | Enviar, salvar, cancelar, excluir, reverter | Primária sem concorrentes visuais, loading com texto estável, prevenção de duplo envio, erro com recuperação |
+
+**Validação:** escolher o momento de validar pela tarefa (após blur, durante digitação quando útil, ou submit); não disparar erro antecipadamente ao focar campo vazio. Não apagar entrada inválida sem explicar; conservar o que foi digitado após erro de servidor.
+
+**Aparência atual a revisar, não alterar às cegas:** a seção 3 inclui corpo de questão 14–15px, alternativas 13,5px e metadados 11–12px. Não são mínimos normativos; examinar legibilidade real com zoom, texto ampliado e leitura prolongada antes de fixar como meta. Estilo "moderno" não se mede pela ausência de borda, campo excessivamente fino ou placeholder flutuante.
+
+Fontes: [Apple HIG — Text fields](https://developer.apple.com/design/human-interface-guidelines/text-fields), [Apple HIG — Buttons](https://developer.apple.com/design/human-interface-guidelines/buttons), [GOV.UK — Text input](https://design-system.service.gov.uk/components/text-input/), [GOV.UK — Error message](https://design-system.service.gov.uk/components/error-message/), [WAI-ARIA APG](https://www.w3.org/WAI/ARIA/apg/) e [WCAG 2.2](https://www.w3.org/TR/WCAG22/).
+
+### 8.11 Contrato de estados e governança dos componentes
+
+Nenhum componente é aprovado apenas pelo estado "bonito" em screenshot estático. O agente deve registrar sua matriz de estados, **sem criar estados irrelevantes**:
+
+| Superfície | Estados mínimos esperados | Verificações prioritárias |
+|---|---|---|
+| Botões e controles de toolbar | default, hover (mouse), pressed, focus-visible, disabled, pending | Rótulo, clique funcional, mesma posição do texto durante loading, não duplicar operação |
+| Input e editor | empty, filled, focus, invalid, readonly, disabled, dirty, saving, saved, failed | Label+hint+erro, preservação da entrada, Enter, Tab, IME, autosave |
+| Abas / filtros | default, selected, focus, loading, empty/error do painel | Um painel ativo, sem abas duplicadas, estado na URL quando apropriado |
+| Drawer / dialog / popover | closed, opening, open, closing, interrupted | Retorno de foco, Escape, backdrop, scroll, aria-modal apenas se modal de fato |
+| Sidebar / right panel | collapsed, expanded, resizing, overlay, loading | Largura mínima, reflow, persistência de seleção, não ocultar CTA |
+| Questão / simulado | unanswered, selected, pending, corrected, flagged, timed-out | Não revelar gabarito antecipadamente; evitar perda/duplicação de resposta |
+| Grafo e dados | initializing, ready, empty, filtering, selected, error, reduced-motion | Legenda, seleção estável, alternativa textual, focus e performance |
+| PDF e documentos | loading, ready, page-changing, zooming, error, unavailable | Posição de leitura, status real, cancelamento e retry limitados |
+
+**Duas saídas obrigatórias para redesign significativo:** (1) matriz de estados/semântica e (2) exemplos antes/depois com viewport, tema e foco, além de evidência textual. Um GIF prova a existência de movimento, **não** comprova WCAG ou utilidade.
+
+### 8.12 Transparência reduzida, contraste forçado e modo de alto contraste
+
+O fallback de uma superfície translúcida é **opaco por padrão**. `prefers-reduced-transparency` ainda tem suporte irregular em navegadores; **não depender dele isoladamente**. `forced-colors: active` pode retirar sombras e fundos: se um elemento dependia somente de `box-shadow` para delimitação ou seleção, ele pode desaparecer no modo de alto contraste.
+
+Exemplo ilustrativo, a ser adaptado aos tokens CSS existentes:
+
+```css
+.contextual-overlay {
+  background: var(--app-tab-bg-base);
+  border: 1px solid var(--app-tab-border-front);
+}
+
+/* Apenas após aprovação da translucidez; fallback continua opaco */
+@supports (backdrop-filter: blur(12px)) {
+  .contextual-overlay[data-translucent="true"] {
+    background: color-mix(in oklch, var(--app-tab-bg-base) 92%, transparent);
+    backdrop-filter: blur(12px);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  .contextual-overlay[data-translucent="true"] {
+    background: var(--app-tab-bg-base);
+    backdrop-filter: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .contextual-overlay {
+    background: Canvas;
+    color: CanvasText;
+    border: 1px solid CanvasText;
+    backdrop-filter: none;
+  }
+  .contextual-overlay :focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+}
+```
+
+- Testar a UI em **Windows High Contrast/forced colors** e contraste aumentado quando disponível, inclusive estados selected, foco e alertas. Usar *system colors* apropriadas, preferir elementos HTML nativos e evitar `forced-color-adjust: none` salvo justificativa muito específica.
+- Verificar se suporte a `color-mix()`, `backdrop-filter` e preferências de media query corresponde aos navegadores-alvo antes de ativar o efeito.
+- Testar `prefers-reduced-motion` separadamente: menos movimento **não implica** menos transparência, e vice-versa.
+
+Fontes: [MDN — forced-colors](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/forced-colors), [MDN — prefers-reduced-transparency](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-transparency), [Apple HIG — Materials](https://developer.apple.com/design/human-interface-guidelines/materials).
+
+### 8.13 Matriz de rastreabilidade e qualidade
+
+Para cada padrão novo, registrar **a referência exata e o que foi adaptado**: `padrão`, `contexto Exam App`, `fonte primária`, `skill auxiliar`, `status (documentado/implementado/testado)`, `evidência`, `restrições`. Preferir fontes oficiais e a implementação atual quando houver divergência.
+
+As lacunas registradas aqui não comprovam falha do protótipo: são requisitos de documentação/validação que deverão ser aplicados em mudanças reais. **Não declarar "conformidade" com M3, HIG ou WCAG** apenas por cumprir um checklist de estilo.
+
+## 9. Registro de referências dos 22 skills catalogados (auditoria de conteúdo em andamento)
+
+Os 22 itens abaixo são **referências comunitárias catalogadas**, não extensões oficiais de Apple ou Google. **Catalogar URL não comprova leitura integral de cada SKILL.md, README e referências internas.** Não afirmar que os 22 foram verificados ou que cada resumo corresponde ao estado atual do repositório sem registro de arquivo/revisão/data. Esta integração é uma síntese preliminar enquanto a análise aprofundada de cada fonte não estiver documentada. Alguns estão voltados a Android/SwiftUI; nem todo trecho de código se aplica a um protótipo HTML/CSS/JS. Para números ou requisitos, confrontar com a documentação oficial **vigente**.
 
 | # | Projeto / skill | Conhecimento reaproveitado | Fonte |
 |---|---|---|---|
@@ -415,8 +527,8 @@ Os repositórios abaixo são **fontes comunitárias de aprendizado**, não exten
 | M06 | macsystems — M3 Agent | Mapa de papéis e componentes oficiais | https://github.com/macsystems/m3-agent-skill |
 | M07 | yhongm — Material | Sistema multiplataforma, tipografia, motion e temas | https://github.com/yhongm/material-design-skill |
 | M08 | shelbeely — Material Shape | Raios, formas expressivas, casos de uso | https://github.com/shelbeely/Shelbeely-Agent-skills/tree/main/skills/material-design-3-shape |
-| M09 | majiayu000 — M3 Expressive (arquivo/espelho) | Tailwind, spring, tokens e acessibilidade | https://github.com/majiayu000/claude-skill-registry/blob/main/skills/data/material-design-3-expressive/SKILL.md |
-| M10 | MadAppGang — Design References | Quadro comparativo M3/HIG, heurísticas | https://github.com/MadAppGang/magus/blob/main/plugins/designer/skills/design-references/SKILL.md |
+| M09 | majiayu000 — Material Design (catálogo; caminho a verificar) | Referência genérica; **conteúdo e caminho de SKILL.md não verificados** | https://github.com/majiayu000/claude-skill-registry/tree/main/skills/other/material-design |
+| M10 | MadAppGang — Design References | Quadro comparativo M3/HIG, heurísticas | https://github.com/MadAppGang/claude-code/blob/main/plugins/dev/skills/design/design-references/SKILL.md |
 | A01 | gotired — Apple Design Skills | Auditoria HIG, crítica visual, consistência | https://github.com/gotired/Apple-Design-Skills |
 | A02 | oye-rahul — Apple Web Design | Camadas funcionais, Liquid Glass e web responsiva | https://github.com/oye-rahul/Apple-Design-Skill |
 | A03 | BuilderIO — Apple Design | Interfaces fluidas, springs e gestos interrompíveis | https://github.com/BuilderIO/agent-native-product-visuals/tree/main/.agents/skills/apple-design |
@@ -430,6 +542,6 @@ Os repositórios abaixo são **fontes comunitárias de aprendizado**, não exten
 | A11 | rshankras — Apple Design Skills | Liquid Glass, tipografia, animação, microcopy | https://github.com/rshankras/claude-code-apple-skills/tree/main/skills/design |
 | A12 | Sunwood-ai-labs — Apple HIG | Fluxo evidence-first e verificação pós-alteração | https://github.com/Sunwood-ai-labs/design-with-apple-hig |
 
-**Leituras primárias:** [Material 3](https://m3.material.io/), [Apple HIG](https://developer.apple.com/design/human-interface-guidelines/), [Apple Liquid Glass](https://developer.apple.com/documentation/technologyoverviews/liquid-glass), [WCAG 2.2](https://www.w3.org/TR/WCAG22/), [WAI-ARIA APG](https://www.w3.org/WAI/ARIA/apg/). Todas as recomendações numéricas da tabela de terceiros devem ser revalidadas contra a origem antes de uso normativo.
+**Fontes primárias para validação:** [Material 3](https://m3.material.io/), [Apple HIG](https://developer.apple.com/design/human-interface-guidelines/), [Apple Liquid Glass](https://developer.apple.com/documentation/technologyoverviews/liquid-glass), [WCAG 2.2](https://www.w3.org/TR/WCAG22/), [WAI-ARIA APG](https://www.w3.org/WAI/ARIA/apg/). As alegações técnicas dos skills e recomendações numéricas de terceiros devem ser revalidadas contra o arquivo original e a origem oficial antes de qualquer uso normativo. **Evidência de leitura integral dos 22 arquivos SKILL.md: não registrada nesta versão**.
 
 <!-- MATERIAL-APPLE-INTEGRATION:END -->
