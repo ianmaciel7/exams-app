@@ -1050,6 +1050,7 @@ a.rp-link:hover{background:var(--active)}
 .rp-graph a:hover circle,.rp-graph a:focus-visible circle{stroke:var(--text)}
 .rp-graph a:focus-visible{outline:none}
 .rp-graph .g-c text{font-weight:600;font-size:10.5px}
+.rp-graph-tools{display:flex;justify-content:flex-end;gap:4px;margin:0 0 6px}.rp-graph-tools button{min-width:30px;height:28px;border:1px solid var(--line);border-radius:6px;background:var(--pop);color:var(--text);cursor:pointer}.rp-graph-tools button:focus-visible{outline:2px solid var(--ring);outline-offset:2px}.rp-graph-viewport{touch-action:none;cursor:grab}.rp-graph-viewport:active{cursor:grabbing}
 .rp-scrim{display:none}
 .ai-off{margin:0 0 10px;font-size:12.5px;color:var(--muted);line-height:1.5}
 .ai-on .ai-off{display:none}
@@ -3756,15 +3757,15 @@ function bodyGraf(v){
     const tKind=curH.replace('#/tipo/','');
     const allT=[...gr().N.values()].filter(x=>x.kind===tKind);
     if(allT.length){
-      const W=300,H=240,cx=W/2,cy=H/2,R=Math.min(90,30+allT.length*6);
+      const W=300,H=240,R=Math.max(90,allT.length*5.5),cx=R+45,cy=R+45,full=2*(R+45),startX=cx-W/2,startY=cy-H/2;
       const pos=new Map();
-      allT.slice(0,14).forEach((m,i)=>{
-        const a=-Math.PI/2+i*2*Math.PI/Math.max(Math.min(allT.length,14),1);
+      allT.forEach((m,i)=>{
+        const a=-Math.PI/2+i*2*Math.PI/Math.max(allT.length,1);
         pos.set(m.href,[cx+R*Math.cos(a)*1.2,cy+R*Math.sin(a)]);
       });
-      let s='<svg class="rp-graph" viewBox="0 0 '+W+' '+H+'" role="group" aria-label="Subgrafo da coleção '+esc(kn(tKind))+'">';
-      allT.slice(0,14).forEach(m=>{ const p=pos.get(m.href); s+='<line class="g-e c" x1="'+cx+'" y1="'+cy+'" x2="'+p[0].toFixed(1)+'" y2="'+p[1].toFixed(1)+'"/>'; });
-      allT.slice(0,14).forEach(m=>{
+      let s='<div class="rp-graph-tools" role="group" aria-label="Controles do grafo"><button type="button" data-rpg="zoom-in" aria-label="Aproximar grafo">+</button><button type="button" data-rpg="zoom-out" aria-label="Afastar grafo">−</button><button type="button" data-rpg="left" aria-label="Mover grafo para a esquerda">←</button><button type="button" data-rpg="up" aria-label="Mover grafo para cima">↑</button><button type="button" data-rpg="down" aria-label="Mover grafo para baixo">↓</button><button type="button" data-rpg="right" aria-label="Mover grafo para a direita">→</button><button type="button" data-rpg="reset" aria-label="Centralizar grafo">⌂</button></div><svg class="rp-graph rp-graph-viewport" data-rpg-viewport data-cx="'+cx+'" data-cy="'+cy+'" viewBox="'+startX+' '+startY+' '+W+' '+H+'" role="group" aria-label="Subgrafo da coleção '+esc(kn(tKind))+', com '+allT.length+' itens. Use os controles para navegar.">';
+      allT.forEach(m=>{ const p=pos.get(m.href); s+='<line class="g-e c" x1="'+cx+'" y1="'+cy+'" x2="'+p[0].toFixed(1)+'" y2="'+p[1].toFixed(1)+'"/>'; });
+      allT.forEach(m=>{
         const p=pos.get(m.href);
         const t=m.title.length>16?m.title.slice(0,15)+'…':m.title;
         s+='<a href="'+esc(m.href)+'" class="g-n k-'+m.kind+'" aria-label="'+esc(m.title)+'"><title>'+esc(m.title)+'</title><circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="8.5"/><text x="'+p[0].toFixed(1)+'" y="'+(p[1]+19).toFixed(1)+'" text-anchor="middle">'+esc(t)+'</text></a>';
@@ -3838,6 +3839,7 @@ $('rpTabs').addEventListener('dblclick',e=>{ if(e.target.closest('button')) retu
 $('rpTabs').addEventListener('auxclick',e=>{ if(e.button!==1) return; const t=e.target.closest('[data-rp-tab]'); if(t){ e.preventDefault(); rpCloseTab(t.dataset.rpTab); } });
 $('rpTabs').addEventListener('contextmenu',e=>{ const t=e.target.closest('[data-rp-tab]'); if(!t) return; e.preventDefault(); e.stopImmediatePropagation(); const id=t.dataset.rpTab, one=RP.tabs.length<=1; miniMenu(t,[{t:'Fechar aba',ic:WI.x,fn:()=>rpCloseTab(id)},{t:'Fechar outras abas',ic:WI.x,off:one,fn:()=>rpCloseOthers(id)}]); });
 $('rpBody').addEventListener('click',e=>{ const T=e.target;
+  let graphBtn=T.closest('[data-rpg]'); if(graphBtn){ const svg=graphBtn.closest('.rp-vb')?.querySelector('[data-rpg-viewport]'); if(!svg)return; const v=svg.viewBox.baseVal, step=v.width*.2, kind=graphBtn.dataset.rpg; if(kind==='reset'){ const cx=+svg.dataset.cx,cy=+svg.dataset.cy; svg.setAttribute('viewBox',(cx-150)+' '+(cy-120)+' 300 240'); } else if(kind==='zoom-in'||kind==='zoom-out'){ const f=kind==='zoom-in'?.8:1.25,nw=Math.max(80,Math.min(2400,v.width*f)),nh=nw*.8,cx=v.x+v.width/2,cy=v.y+v.height/2; svg.setAttribute('viewBox',(cx-nw/2)+' '+(cy-nh/2)+' '+nw+' '+nh); } else { const dx=kind==='left'?-step:kind==='right'?step:0,dy=kind==='up'?-step:kind==='down'?step:0; svg.setAttribute('viewBox',(v.x+dx)+' '+(v.y+dy)+' '+v.width+' '+v.height); } return; }
   let b=T.closest('[data-vforward]');if(b){const v=viewById(b.dataset.vforward);if(v?.future?.length){v.hist=(v.hist||[]).concat([{type:v.type,ref:v.ref,q:v.q,kind:v.kind}]);Object.assign(v,v.future.pop());wsSave();rpPaintAll();}return;}
   b=T.closest('[data-vmove]');if(b){const t=rpTab(),v=viewById(b.dataset.vmove),i=t.views.indexOf(v);miniMenu(b,[{t:'Mover para cima',off:i===0,fn:()=>{t.views.splice(i,1);t.views.splice(i-1,0,v);wsSave();rpPaintAll();}},{t:'Mover para baixo',off:i===t.views.length-1,fn:()=>{t.views.splice(i,1);t.views.splice(i+1,0,v);wsSave();rpPaintAll();}}]);return;}
   b=T.closest('[data-rp-new]'); if(b){ rpAddTab(b.dataset.rpNew); return; }
