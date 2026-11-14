@@ -16,7 +16,7 @@ async function capture(page,filename){
   await page.screenshot({path:path.join(output,'issue138_'+filename+'.png'),animations:'disabled',fullPage:false});
 }
 async function listNames(page){return page.locator('#spItems .sp-select .t').allTextContents();}
-async function open(page){await page.locator('#spBtn').click();await page.locator('#spSearch').waitFor(); }
+async function open(page){if(page.viewportSize()?.width<=768 && !(await page.locator('#app').getAttribute('class'))?.split(' ').includes('open')) await page.locator('#wsSide').click();await page.locator('#spBtn').click();await page.locator('#spSearch').waitFor(); }
 async function create(page,name){
   await open(page);
   await page.locator('#spPop .sp-create').click();
