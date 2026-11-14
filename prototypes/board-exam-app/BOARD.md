@@ -2195,7 +2195,19 @@ Testamos a comunicação entre o Exam App em localhost (porta 8765) e o Claude P
 
 Evidência técnica registrada em docs/reports/claude-storage-bridge/CLAUDE_STORAGE_BRIDGE_INVESTIGATION.md.
 
+![imagem e1375](assets/issue136_after_context_1366.png)
+
 ![imagem e1373](assets/evidence-iframe-csp-blocked.png)
+
+DEPOIS: alternativas em linhas/click targets, concurso no desktop
+
+![imagem e1377](assets/issue136_after_context_390.png)
+
+![imagem e1379](assets/issue136_after_global_1366.png)
+
+DEPOIS: alternativas em linhas e texto quebrando, concurso em 390px
+
+DEPOIS: banco global preserva o mesmo componente de questões
 
 Evidência de execução real no Google Chrome: O navegador acusa 'Framing https://claude.ai/ violates Content Security Policy: frame-ancestors... The request has been blocked'. O iframe renderiza em branco e o canal postMessage é recusado pela Same-Origin Policy. Recomendação: Manter armazenamento local estruturado (localStorage/IndexedDB) e publicação estática via claude-artifact publish.
 

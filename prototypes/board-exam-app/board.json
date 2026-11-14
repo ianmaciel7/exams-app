@@ -711,7 +711,13 @@
     "e1371",
     "e1372",
     "e1373",
-    "e1374"
+    "e1374",
+    "e1375",
+    "e1376",
+    "e1377",
+    "e1378",
+    "e1379",
+    "e1380"
   ],
   "elements": {
     "e1": {
@@ -7478,6 +7484,57 @@
       "y": 12340,
       "w": 1550,
       "h": 200
+    },
+    "e1375": {
+      "type": "image",
+      "src": "/_blob/issue136_after_context_1366",
+      "x": 36828,
+      "y": 11100,
+      "w": 755,
+      "h": 430
+    },
+    "e1376": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: alternativas em linhas/click targets, concurso no desktop",
+      "x": 36828,
+      "y": 11538,
+      "w": 760,
+      "h": 50
+    },
+    "e1377": {
+      "type": "image",
+      "src": "/_blob/issue136_after_context_390",
+      "x": 36018,
+      "y": 11635,
+      "w": 755,
+      "h": 430
+    },
+    "e1378": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: alternativas em linhas e texto quebrando, concurso em 390px",
+      "x": 36018,
+      "y": 12073,
+      "w": 760,
+      "h": 50
+    },
+    "e1379": {
+      "type": "image",
+      "src": "/_blob/issue136_after_global_1366",
+      "x": 36828,
+      "y": 11635,
+      "w": 755,
+      "h": 430
+    },
+    "e1380": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: banco global preserva o mesmo componente de questões",
+      "x": 36828,
+      "y": 12073,
+      "w": 760,
+      "h": 50
     }
   }
 }
