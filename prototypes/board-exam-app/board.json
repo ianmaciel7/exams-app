@@ -735,7 +735,17 @@
     "e1395",
     "e1396",
     "e1397",
-    "e1398"
+    "e1398",
+    "e1399",
+    "e1400",
+    "e1401",
+    "e1402",
+    "e1403",
+    "e1404",
+    "e1405",
+    "e1406",
+    "e1407",
+    "e1408"
   ],
   "elements": {
     "e1": {
@@ -7695,17 +7705,103 @@
     "e1397": {
       "type": "container",
       "color": "white",
-      "text": "46. Graph State & Space Isolation — Issue #145: isolamento por espaço e invalidação reativa",
-      "x": 42500,
+      "text": "46. Atalhos de teclado — Issue #139: registro e roteamento centralizado",
+      "x": 43000,
+      "y": 11000,
+      "w": 1650,
+      "h": 1170
+    },
+    "e1398": {
+      "type": "text",
+      "size": "small",
+      "x": 43018,
+      "y": 11008,
+      "w": 1590,
+      "h": 82,
+      "text": "Roteador declarativo único para comandos globais, categorias, prioridade, chord normalizado Mod (Ctrl/Command), Alt e Shift e disponibilidade contextual. E2E Chromium valida busca Ctrl+K, alternância Ctrl+B, novo objeto Ctrl+Alt+N, proteção de campos e diálogos, janela de ajuda gerada do mesmo catálogo, sem erro JS. Capturas e medições em issue139_commands_e2e.json. Permanecem sem cobertura E2E integral os contextos de grafo, simulado, leitor e atalhos reservados do SO ou IME real; a issue #139 fica aberta até a paridade completa."
+    },
+    "e1399": {
+      "type": "image",
+      "src": "/_blob/issue139_before_help",
+      "x": 43018,
+      "y": 11100,
+      "w": 755,
+      "h": 430
+    },
+    "e1400": {
+      "type": "text",
+      "size": "small",
+      "text": "ANTES: janela de ajuda com tabela fixa de seis atalhos",
+      "x": 43018,
+      "y": 11538,
+      "w": 760,
+      "h": 50
+    },
+    "e1401": {
+      "type": "image",
+      "src": "/_blob/issue139_after_help",
+      "x": 43828,
+      "y": 11100,
+      "w": 755,
+      "h": 430
+    },
+    "e1402": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: janela gerada dinamicamente a partir do registro de comandos",
+      "x": 43828,
+      "y": 11538,
+      "w": 760,
+      "h": 50
+    },
+    "e1403": {
+      "type": "image",
+      "src": "/_blob/issue139_after_search",
+      "x": 43018,
+      "y": 11635,
+      "w": 755,
+      "h": 430
+    },
+    "e1404": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: Ctrl+K abre busca; campo editável impede Ctrl+B global",
+      "x": 43018,
+      "y": 12073,
+      "w": 760,
+      "h": 50
+    },
+    "e1405": {
+      "type": "image",
+      "src": "/_blob/issue139_after_new_item",
+      "x": 43828,
+      "y": 11635,
+      "w": 755,
+      "h": 430
+    },
+    "e1406": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: Ctrl+Alt+N abre o menu Novo; digitação não sequestra atalhos",
+      "x": 43828,
+      "y": 12073,
+      "w": 760,
+      "h": 50
+    },
+    "e1407": {
+      "type": "container",
+      "color": "white",
+      "text": "47. Graph State & Space Isolation — Issue #145: isolamento por espaço e invalidação reativa",
+      "x": 45000,
       "y": 11000,
       "w": 1650,
       "h": 1720
     },
-    "e1398": {
+    "e1408": {
       "type": "text",
       "color": "white",
       "text": "Implementação e Auditoria Issue #145:\n\n1. Isolamento Estrito por Espaço:\n- A função G(spId) passa a construir o subgrafo restrito às entidades nativas do espaço (concursos, edições, cargos, documentos, questões vinculadas).\n- Entidades globais de suporte (órgão, banca, disciplina) só entram no subgrafo se forem ativamente referenciadas por um objeto nativo do espaço.\n- Nenhuma entidade privada ou questão de outro espaço vaza para o grafo, contagens ou backlinks.\n\n2. Invalidação Reativa e Eliminação de Stale Cache de 400ms:\n- O hash gsig(spId) agora monitora a assinatura completa de cada entidade, vínculos ativos (órgão, banca, edição, cargo, disciplina), overrides do store ('ov') e exclusões na lixeira (trashSet).\n- Removido o bypass cego de 400ms em gr(); se gsig alterar por edição de relação ou troca de espaço, a reconstrução é imediata.\n- Cache GR_CACHE mapeado por ID de espaço, permitindo alternância instantânea entre espaços sem recálculo desnecessário e sem dados cruzados.\n\n3. Tratamento Explícito de Contexto Fixado Estrangeiro (Painel Contextual):\n- Quando uma aba lateral foi fixada em um objeto do Espaço A e o usuário altera para o Espaço B, o painel exibe aviso explícito: 'Objeto não pertence a este espaço' com botão 'Seguir contexto do espaço atual' (data-unpin).\n- Eliminação de links órfãos ou nós fantasmas quando uma entidade da extremidade é excluída.\n\n4. Testes Automatizados de Regressão:\n- Criada suíte de testes unitários em tests/graph-space-isolation.test.mjs com 5 cenários verificando:\n  * Isolamento Espaço A vs B;\n  * Alternância instantânea de espaço;\n  * Invalidação imediata por mudança de relações/metadados/overrides;\n  * Exclusão e ausência de arestas órfãs;\n  * Alerta explícito de contexto estrangeiro fixado no painel direito.",
-      "x": 42540,
+      "x": 45040,
       "y": 11100,
       "w": 1570,
       "h": 1500

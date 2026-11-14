@@ -2245,8 +2245,29 @@ DEPOIS: arraste por Pointer Events altera ordem sem perda de contexto
 
 DEPOIS: seletor responsivo a 390 CSS px com busca e seleção por toque
 
-## 46. Graph State & Space Isolation — Issue #145: isolamento por espaço e invalidação reativa
-<!-- container e1397 @ (42500,11000) -->
+## 46. Atalhos de teclado — Issue #139: registro e roteamento centralizado
+<!-- container e1397 @ (43000,11000) -->
+
+Roteador declarativo único para comandos globais, categorias, prioridade, chord normalizado Mod (Ctrl/Command), Alt e Shift e disponibilidade contextual. E2E Chromium valida busca Ctrl+K, alternância Ctrl+B, novo objeto Ctrl+Alt+N, proteção de campos e diálogos, janela de ajuda gerada do mesmo catálogo, sem erro JS. Capturas e medições em issue139_commands_e2e.json. Permanecem sem cobertura E2E integral os contextos de grafo, simulado, leitor e atalhos reservados do SO ou IME real; a issue #139 fica aberta até a paridade completa.
+
+![imagem e1399](assets/issue139_before_help.png)
+
+![imagem e1401](assets/issue139_after_help.png)
+
+ANTES: janela de ajuda com tabela fixa de seis atalhos
+
+DEPOIS: janela gerada dinamicamente a partir do registro de comandos
+
+![imagem e1403](assets/issue139_after_search.png)
+
+![imagem e1405](assets/issue139_after_new_item.png)
+
+DEPOIS: Ctrl+K abre busca; campo editável impede Ctrl+B global
+
+DEPOIS: Ctrl+Alt+N abre o menu Novo; digitação não sequestra atalhos
+
+## 47. Graph State & Space Isolation — Issue #145: isolamento por espaço e invalidação reativa
+<!-- container e1407 @ (45000,11000) -->
 
 Implementação e Auditoria Issue #145:
 
