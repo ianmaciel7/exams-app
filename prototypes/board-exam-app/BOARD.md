@@ -935,6 +935,94 @@ O que Ian mostrou como modelo para a sidebar: tipos de objeto, ordenar, hover, l
 
 **Evidência 20 (Archive `notes-app-old-10` Recall):** Estética editorial *Monastic Knowledge Sanctuary* para a Home do Espaço (`#/espaco`) com card Hero escuro `TODAY`, `Review today` e `Recent objects` sem emojis — Issue #58
 
+## 29. Engenharia da Barra Direita & Motor de Grafo do Capacities + Central de Preparação & Questões do QConcursos Elite (Issues #64 e #66 a #72)
+<!-- container e800 @ (5000,11000) -->
+
+### Blueprint Técnico: Painel Direito & Grafo Retina 60fps (Capacities Live) + Home & Resolução de Questões (QConcursos Elite Live)
+
+> **1. Remoção Definitiva do `#spTopBtn` Duplicado em `#wsTabs` (Issue #64)**
+> - O botão `[💡 Concurso de TI ↕]` (`#spTopBtn`) foi injetado dentro de `#wsTabs` por engano no commit `7edd4ac` (PR #20) porque o autor não percebeu que `.side-top` já existia na Sidebar esquerda. Mesmo quando a Sidebar é recolhida (`0px`), o Capacities **NUNCA** mostra o Space Switcher na barra de abas — exibe apenas `[◧ Expandir sidebar]`, `[+ Novo]` e `[🔍 Buscar]`. `#spTopBtn` deve ser removido do HTML/CSS/JS.
+> **2. As 6 Ferramentas Contextuais do Painel Direito, Overflow `Buscar abas` `[v]` e `ResizeObserver` (Issue #66)**
+> - No Capacities Live, a Barra Direita tem calha invisível de `8px` (`col-resize`) que aciona `ResizeObserver` no canvas em tempo real sem borrar.
+> - Quando há 5+ abas no painel direito, elas compactam para ícone e revelam o botão `[v]`, abrindo o popover `Buscar abas` (`256px`).
+> - As 6 ferramentas de `Explorar` são: `Grafo`, `Links de entrada` (com snippet do bloco), `Objetos internos` (agrupados por tipo), `Conteúdo relacionado` (com pílula `[66 | ☰ ⌄ | ☵]`), `Chat de IA` (com chip do objeto ativo) e `Buscar`.
+> **3. Motor de Grafo `<canvas>` 2D Retina (`devicePixelRatio`) & Taxonomia Visual de Nós em 3 Níveis (Issue #67)**
+> - **Por que o grafo do Capacities é muito mais responsivo:** Usa um único motor `<canvas>` 2D a 60 FPS calibrado por `window.devicePixelRatio` tanto no Painel Direito quanto no Grafo Global (substituindo o `<svg class="rp-graph">` estático do nosso protótipo).
+> - **Taxonomia em 3 Níveis:** (1) Nó Central: badge quadrado `36-42px` (`border-radius: 8px`) com ícone SVG do tipo, borda brilhante `2px` e rótulo em pílula escura (`rgba(20,20,20,0.85)`); (2) Nós Vizinhos: badges quadrados `24-28px` (`border-radius: 6px`) tingidos na cor OKLCH do Tipo de Objeto; (3) **Nós de Tags/Assuntos:** renderizados como **pílulas ovais coloridas** (`[vm group]`, `[logical container]`) com o texto dentro!
+> - **Arestas & Física:** Arestas direcionais com rótulos de relação inline (`Relação`, `Equivalente do GCP`), spotlight no hover (`opacity: 0.15` nos demais) e física de molas amortecida (*spring damping* `< 1s`).
+> **4. Barras Flutuantes de `27px` no Grafo, Popover de Filtros/Hubs, Profundidade `1..5` e Busca Auto-Zoom (Issue #68)**
+> - Pílulas inferiores de `27px` (`backdrop-filter: blur(8px)`): à esquerda `[⤢ Fit] [☊ Re-layout]`; à direita `[🔍- | 100% ⌄ | 🔍+]` e `[📥 Export PNG | 🎛 Filtros | ● Profundidade 1..5]`.
+> - Popover `[🎛]` com submenus pesquisáveis `Filtrar tipos de objeto >`, `Excluir tipos de objeto >` e checkbox `Ocultar objetos com muitos links` (evita poluição de hubs!). No Grafo Global: busca no topo com auto-zoom suave no cluster e `Reproduzir linha do tempo`.
+> **5. QConcursos Elite — Central de Preparação na Home `#/espaco` (Issue #69)**
+> - Card do Concurso com dados do edital + bloco acionável **`PRÓXIMA AÇÃO`** (`Continuar estudando →` / `Mapa do edital`), widget **`Seu ritmo hoje`** (`X questões respondidas hoje`, `Taxa de acerto`, `Taxa de erro` e barra semanal `Seg–Dom`) e seção **`Conteúdo do seu edital`** com 4 abas (`Disciplinas & Assuntos` Master-Detail, `Caderno de Questões`, `Raio-X da Banca` e `Caderno de Erros`).
+> **6. QConcursos Elite — Construtor de Filtros Avançado, Tesoura nas Alternativas e Abas Pedagógicas (Issues #70, #71 e #72)**
+> - Filtros rápidos (`Resolvidas`, `Não resolvidas`, `Acertei`, `Errei`), selects em cascata (`Disciplina -> Assunto`), chips `Filtrar por:` e barra de ações (`Salvar filtro`, `Gerar Caderno`, `Criar Simulado`).
+> - Card da questão com cabeçalho compacto de 2 linhas (`[1 | Q1]` + Breadcrumb; `Ano · Banca · Órgão · Prova`), toggle `Texto associado ⊕/⊖`, **botão de Tesoura (`✂️ Descartar alternativa`)** com `line-through`, confirmação em 2 etapas via botão **`[Responder]`** e barra inferior de abas pedagógicas (**`Gabarito Comentado`**, **`Estatísticas`** com Donut + Barras A–E + Histórico, **`Cadernos`** e **`Anotações`** ricas).
+
+![imagem e805](assets/bug_spTopBtn_duplicated_lightbulb.png)
+
+![imagem e807](assets/capacities_live_right_panel_tab_overflow.png)
+
+**Evidência 21 (Bug Reportado pelo Usuário — Issue #64):** Botão duplicado `#spTopBtn` (`💡 Concurso de TI ↕`) + `#wsSide` (`[◧]`) injetado dentro de `#wsTabs` pelo commit `7edd4ac` (PR #20)
+
+**Evidência 22 (Capacities Live — Issue #66):** Painel Direito com 5+ abas compactadas por ícone e popover pesquisável `Buscar abas` aberto no botão `[v]`
+
+![imagem e809](assets/capacities_live_right_panel_related.png)
+
+![imagem e811](assets/capacities_live_graph_3tier_nodes_resized.png)
+
+**Evidência 23 (Capacities Live — Issue #66):** Aba `Conteúdo relacionado` no Painel Direito com pílula `[66 | ☰ ⌄ | ☵]` e lista de objetos com badges quadrados `20x20px`
+
+**Evidência 24 (Capacities Live — Issues #66, #67):** Painel Direito redimensionado via calha (`ResizeObserver` a `150%` zoom) exibindo taxonomia em 3 níveis: badges quadrados de objetos, pílulas coloridas de tags (`vm group`, `logical container`) e rótulos nas arestas
+
+![imagem e813](assets/capacities_live_graph_filter_popover.png)
+
+![imagem e815](assets/capacities_live_global_graph_constellation.png)
+
+**Evidência 25 (Capacities Live — Issue #68):** Popover de Configurações do Grafo (`[🎛]`) com submenu pesquisável `Filtrar tipos de objeto >`, `Ocultar objetos com muitos links` e pílula de profundidade `[● 4]`
+
+**Evidência 26 (Capacities Live — Issues #67, #68):** Grafo Global (`348` nós) com agrupamento em clusters orbitais por domínio e barra de busca flutuante no topo
+
+![imagem e817](assets/capacities_live_global_graph_search_autozoom.png)
+
+![imagem e819](assets/qconcursos_live_home_proxima_acao.png)
+
+**Evidência 27 (Capacities Live — Issue #68):** Busca reativa `'Azure'` no Grafo Global atualizando contador (`306`), executando auto-zoom (`40%`) e exibindo botão de `Linha do Tempo`
+
+**Evidência 28 (QConcursos Elite Live — Issue #69):** Central de Preparação (Topo): Card do concurso com dados do edital, bloco acionável `PRÓXIMA AÇÃO` (`Continuar estudando →`) e widget `Seu ritmo hoje`
+
+![imagem e821](assets/qconcursos_live_home_ritmo_disciplinas.png)
+
+![imagem e823](assets/qconcursos_live_home_raiox_curso.png)
+
+**Evidência 29 (QConcursos Elite Live — Issue #69):** Cards `Taxa de acerto` / `Taxa de erro`, barra semanal `Seg–Dom` e visão Master-Detail de `Disciplinas & Assuntos` com badge `Recomendado`
+
+**Evidência 30 (QConcursos Elite Live — Issue #69):** Aba `Raio X do Curso` analisando incidência histórica e relevância dos assuntos na banca
+
+![imagem e825](assets/qconcursos_live_home_caderno_erros.png)
+
+![imagem e827](assets/qconcursos_live_filter_builder_top.png)
+
+**Evidência 31 (QConcursos Elite Live — Issue #69):** Aba `Caderno de Erros` reunindo automaticamente questões erradas para revisão ativa
+
+**Evidência 32 (QConcursos Elite Live — Issue #70):** Construtor de Filtros com pílulas rápidas (`Resolvidas`, `Não resolvidas`, `Acertei`, `Errei`), selects em cascata (`Disciplina -> Assunto`) e checkboxes de exclusão
+
+![imagem e829](assets/qconcursos_live_filter_actions_bar.png)
+
+![imagem e831](assets/qconcursos_live_question_scissors_eliminated.png)
+
+**Evidência 33 (QConcursos Elite Live — Issue #70):** Barra de chips ativos `Filtrar por:` e barra de ações (`Salvar filtro`, `Gerar Caderno`, `Meus Cadernos`, `Meus filtros`, `Criar Simulado`)
+
+**Evidência 34 (QConcursos Elite Live — Issue #71):** Card de Questão com cabeçalho compacto de 2 linhas, toggle `Texto associado (+)` e **Tesoura (`✂️`) riscando a alternativa D** (`line-through`)
+
+![imagem e833](assets/qconcursos_live_question_answered_feedback.png)
+
+![imagem e835](assets/qconcursos_live_question_tab_estatisticas.png)
+
+**Evidência 35 (QConcursos Elite Live — Issue #71):** Confirmação em 2 etapas via botão `Responder`, destacando a alternativa correta B em verde e exibindo a barra inferior de abas pedagógicas
+
+**Evidência 36 (QConcursos Elite Live — Issue #72):** Aba pedagógica `Estatísticas` aberta sob a questão: gráfico Donut (`69% de acertos`), gráfico de barras `Alternativas mais respondidas (A–E)` e `Histórico de desempenho`
+
 ## 10. Arquivos do projeto (Dataprev 2026 e referências)
 <!-- container e363 @ (0,12666) -->
 
