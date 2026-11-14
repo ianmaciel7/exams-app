@@ -2,21 +2,25 @@
 
 Exam App: study app for exams (certifications and Brazilian public-service exams).
 
-> [!IMPORTANT]
-> ### Regra Obrigatória de Sincronização com Claude Cloud
-> Todo agente trabalhando neste repositório DEVE OBRIGATORIAMENTE sincronizar com a sessão remota do Claude Cloud:
-> - **Link do projeto/thread:** https://claude.ai/code/project/chan_013qMDV6HM5kW8Z4atVzkN6s?thread=cmsg_013qMDV6HM5kW8Z4atVzkN6sK8bH1qZiXjDNuMib8czmAu
-> 
-> **Procedimento:**
-> 1. Sempre execute `git fetch origin` antes de iniciar qualquer trabalho e verifique as branches remotas (`origin/claude/project-thread-*` e `origin/dev`).
-> 2. Verifique qual dos dois lados está desatualizado (o repositório local/dev ou o Claude remoto).
-> 3. Ambos os lados PRECISAM SEMPRE estar sincronizados. Se o Claude remoto enviou commits novos, faça o merge imediatamente em `dev`. Se você fizer alterações na `dev`, faça o push ou abra/atualize o PR correspondente para que o Claude remoto tenha o código atualizado.
+## Mandatory synchronization with Claude Cloud
 
-> [!IMPORTANT]
-> ### Regra Obrigatória de Preservação e Memória no Board
-> **Todas as informações, fotos, evidências, descobertas e tudo que for sendo memorizado ou decidido durante o desenvolvimento DEVE SEMPRE ser guardado no board (`prototypes/board-exam-app/board.json` e `BOARD.md`).**
-> **Qualquer informação importante DEVE ser guardada no board.**
-> Nenhum contexto de arquitetura, print de referência visual, análise de UX ou progresso de implementação pode ficar solto ou ser esquecido entre as sessões dos agentes.
+All agents working in this repository must keep the codebase synchronized with the active remote Claude Cloud session:
+
+- **Active project thread:** https://claude.ai/code/project/chan_013qMDV6HM5kW8Z4atVzkN6s?thread=cmsg_013qMDV6HM5kW8Z4atVzkN6sK8bH1qZiXjDNuMib8czmAu
+- **Remote tracking branch:** `origin/claude/project-thread-6zihkn` (and other `origin/claude/project-thread-*` branches).
+
+### Synchronization procedure:
+1. Always run `git fetch origin` before starting any work and inspect remote branches (`origin/claude/project-thread-*` and `origin/dev`).
+2. Verify which side is ahead or behind (local `dev` or remote Claude branch).
+3. Both sides must always remain synchronized:
+   - If Claude pushed new commits remotely, merge or cherry-pick them immediately into `dev`.
+   - If changes are committed to `dev`, push them back to the active Claude branch (`origin/claude/project-thread-6zihkn`) and ensure pull requests are updated so the remote Claude session always has the latest code.
+
+## Planning board and memory preservation
+
+- **Mandatory rule:** All information, visual references, screenshots, discoveries, UX decisions, and cross-session memories must always be recorded and preserved in the Planning Board (`prototypes/board-exam-app/board.json` / `BOARD.md` and `assets/`).
+- `board.json` is the source of truth; never edit `BOARD.md` by hand. Regenerate it with `npm run board`.
+- No architectural decision, UX finding, or implementation progress should be lost between AI assistant sessions.
 
 ## Run the prototype (any tool)
 
