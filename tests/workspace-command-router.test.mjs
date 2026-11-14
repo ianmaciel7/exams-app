@@ -45,9 +45,9 @@ test('chords are canonical on Windows and macOS; wrong modifiers do not match',(
   const a=harness();
   assert.equal(a.api.shortcutMatches({key:'k',ctrlKey:true,metaKey:false,altKey:false,shiftKey:false},'Mod+k'),true);
   assert.equal(a.api.shortcutMatches({key:'k',ctrlKey:true,metaKey:false,altKey:true,shiftKey:false},'Mod+k'),false);
-  assert.equal(a.api.formatShortcut('Mod+Alt+n'),'Ctrl + Alt + n');
+  assert.equal(a.api.formatShortcut('Mod+Alt+n'),'Ctrl + Alt + N');
   const m=harness({mac:true});
-  assert.equal(m.api.formatShortcut('Mod+Alt+n'),'⌘ + Option + n');
+  assert.equal(m.api.formatShortcut('Mod+Alt+n'),'⌘ + Option + N');
 });
 test('global commands execute once and are suppressed in textboxes, IME, and modal',()=>{
   const h=harness();
