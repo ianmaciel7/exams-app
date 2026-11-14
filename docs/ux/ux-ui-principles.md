@@ -575,3 +575,19 @@ A curadoria cruza psicologia experimental, W3C/WAI, NN/g, Laws of UX, IxDF, GOV.
 - [Guia específico de arquitetura e navegação](arquitetura-informacao-navegacao.md) registra as rotas atuais, propostas e issues. Não confundir proposta com funcionalidade implementada.
 
 **Próxima revisão:** incorporar os resultados verificáveis do relatório final da Pesquisa Profunda quando disponíveis; conferir links e divergências antes de promover qualquer heurística a regra obrigatória.
+
+<!-- DATAVIZ-UX-LAWS-2026:START -->
+## Ponte para Data Visualization e dashboards — aplicações das leis e modelos
+
+O catálogo acima cobre princípios gerais de UX/UI. Para **dashboards, KPIs, gráficos, relatórios e grafos**, consulte o [guia canônico Data Visualization e dashboards](data-visualization-dashboards-2026.md), com definições de métricas, matriz de tipos de gráfico, acessibilidade, testes, fontes e inventário de skills especializadas.
+
+| Origem / classe | O que acrescenta à decisão de visualização | Fonte |
+|---|---|---|
+| **Graphical Perception — Cleveland & McGill (1984)** — estudo empírico | Encodings mais precisos para comparar valores quantitativos | [Estudo](https://doi.org/10.1080/01621459.1984.10478080) |
+| **Cognitive Fit — Vessey (1991)** — teoria | A tarefa determina se gráfico espacial ou tabela simbólica ajuda mais | [Artigo](https://doi.org/10.1111/j.1540-5915.1991.tb00344.x) |
+| **Nested Model — Munzner (2009)** — modelo de processo | Validar pergunta, abstração dos dados, encoding/interação e implementação | [Artigo](https://doi.org/10.1109/TVCG.2009.111) |
+| **Visual Information-Seeking Mantra — Shneiderman (1996)** — heurística | Visão geral, filtros/zoom e detalhes sob demanda; relações e histórico quando úteis | [Artigo](https://doi.org/10.1109/VL.1996.545307) |
+| **WCAG 2.2, WAI Complex Images e USWDS** — norma/guia | Título, mensagem textual, tabela adequada, teclado, contraste e acesso aos dados | [WCAG](https://www.w3.org/TR/WCAG22/), [WAI](https://www.w3.org/WAI/tutorials/images/complex/), [USWDS](https://designsystem.digital.gov/components/data-visualizations/) |
+
+**Não existem “todas as leis de dashboard” em lista oficial.** A documentação mantém separadas leis, teorias, heurísticas, normas, padrões do design system e regras do projeto; não presume que novos princípios estejam implementados na `dev`. Para PRs de visualização, combinar este catálogo com o [contrato do AGENTS.md](../../AGENTS.md) e [DESIGN.md](../../DESIGN.md).
+<!-- DATAVIZ-UX-LAWS-2026:END -->
