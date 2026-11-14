@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "dev": "python -m http.server 8765 --directory prototypes",
-    "board": "python prototypes/board-exam-app/board_to_md.py"
+    "board": "python prototypes/board-exam-app/board_to_md.py",
+    "sync:artifact": "uvx --from claude-artifact-cli claude-artifact publish --mode patch --url https://claude.ai/artifact/MeCzKuKCsr6fY4F8AGxnyC prototypes/exam-app-0.1.1/index.html"
   }
 }
