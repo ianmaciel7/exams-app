@@ -161,7 +161,7 @@ When continuing work across different AI agents or recovering context from past 
 
 ## UX/UI — contrato de implementação para agentes (MANDATORY)
 
-**Antes de desenhar ou alterar uma tela, leia [docs/ux/ux-ui-principles.md](docs/ux/ux-ui-principles.md) e [docs/ux/arquitetura-informacao-navegacao.md](docs/ux/arquitetura-informacao-navegacao.md).** O catálogo distingue normas, estudos, heurísticas e padrões: não transforme uma heurística em lei universal. Preserve todas as políticas de sincronização, board.json e ícones SVG deste arquivo.
+**Antes de desenhar ou alterar uma tela, leia [docs/ux/ux-ui-principles.md](docs/ux/ux-ui-principles.md) e [docs/ux/arquitetura-informacao-navegacao.md](docs/ux/arquitetura-informacao-navegacao.md). Para criar ou alterar animações, leia também [MOTION.md](MOTION.md).** O catálogo distingue normas, estudos, heurísticas e padrões: não transforme uma heurística em lei universal. Preserve todas as políticas de sincronização, board.json e ícones SVG deste arquivo.
 
 ### Navegação e tarefas
 1. **MUST** oferecer caminhos descobríveis para as tarefas primárias: Questões, Simulados e Revisão; não exigir conhecer Tipos de Objeto.
@@ -194,6 +194,20 @@ When continuing work across different AI agents or recovering context from past 
 22. **MUST** implementar semântica e teclado apropriados para tabs, dialogs e accordions, seguindo WAI-ARIA APG.
 23. **MUST** garantir uso em viewport estreita e zoom sem sobreposição de conteúdo, controles ou foco.
 24. **MUST** seguir a política existente de ícones SVG sem emojis na interface.
+
+### Movimento e animações (MANDATORY)
+
+**Fonte canônica:** [MOTION.md](MOTION.md) contém os **12 princípios clássicos de animação adaptados para UI**, regras modernas de motion, tokens de duração/easing existentes, física do grafo, acessibilidade, exemplos por fluxo e referências consultadas via **Context7** (MDN e Motion) e skill **Impeccable — Animate**. Os 12 princípios são técnicas artísticas históricas, **não leis universais nem critérios WCAG**.
+
+- **MUST** justificar animação por feedback, mudança de estado, continuidade espacial ou hierarquia; **AVOID** animação puramente decorativa em Questões, Simulados e Revisão.
+- **MUST** preservar seleção, resposta, tempo útil, foco, hitbox, rolagem e dados; animação **não** pode atrasar envio, fechamento, navegação nem recuperação de erros.
+- **MUST** oferecer caminho intencional para \`prefers-reduced-motion: reduce\` em CSS e em animações por JS/canvas; preservar feedback sem exigir deslocamento espacial. Verificar **WCAG 2.2 2.3.1 e 2.2.2 (A)** quando aplicáveis; **2.3.3 é AAA**, não AA.
+- **MUST** tornar transições interrompíveis/reversíveis, sem filas e sem bloquear teclado, Escape, foco ou leitor de tela. Pausar loops quando invisíveis e limitar consumo de CPU/bateria.
+- **SHOULD** reutilizar os tokens de \`MOTION.md\`, escolhendo easing/duração pela tarefa e testando em mobile; preferir CSS/WAAPI quando bastarem e **não** instalar Motion/React só por um efeito.
+- **AVOID** tratar 60/120/200/350/500 ms como SLAs, impor física contínua em todo lugar, proibir \`linear\` universalmente, animar propriedades de layout sem medição ou aplicar resets globais de animação sem avaliar perda de feedback.
+- **MUST** testar com movimento normal e reduzido, teclado, cliques rápidos/repetidos, latência, aba oculta e viewport estreita; registrar evidência e limites no PR.
+
+**Índice dos 12 princípios (não normativos):** Squash and Stretch; Anticipation; Staging; Straight Ahead Action and Pose to Pose; Follow Through and Overlapping Action; Slow In and Slow Out; Arcs; Secondary Action; Timing; Exaggeration; Solid Drawing; Appeal. Tradução, uso apropriado, anti-padrões e exemplos estão em [MOTION.md](MOTION.md).
 
 ### Evidência, validação e entrega
 25. **MUST** registrar o fluxo antes/depois e o critério verificável de aceite para qualquer mudança de navegação.
