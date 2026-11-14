@@ -962,6 +962,24 @@ O que Ian mostrou como modelo para a sidebar: tipos de objeto, ordenar, hover, l
 
 **Evidência 20 (Archive `notes-app-old-10` Recall):** Estética editorial *Monastic Knowledge Sanctuary* para a Home do Espaço (`#/espaco`) com card Hero escuro `TODAY`, `Review today` e `Recent objects` sem emojis — Issue #58
 
+> **Resolução Técnica: Colapso Off-Canvas Total (0px) & ResizableHandle na Sidebar (Issue #49)**
+> 
+> - **Colapso Off-Canvas Total (0px):**
+>   - Substituição do rail residual de `56px` por recolhimento real para `0px` (`.app.collapsed .side { width: 0 !important; min-width: 0 !important; max-width: 0 !important; overflow: hidden !important; border-right: none !important; pointer-events: none; }`).
+>   - Todo o espaço horizontal é imediatamente liberado para a superfície flutuante central (`AppShellSurface` / `.main`).
+> - **Alça de Redimensionamento da Sidebar (`#sideRz`):**
+>   - Inserido elemento `.side-rz` na borda direita da sidebar (`role="separator"`, `aria-orientation="vertical"`, `tabindex="0"`, `touch-action: none`).
+>   - Drag fluído via `pointerdown` / `setPointerCapture` e atalhos de teclado `ArrowLeft` / `ArrowRight` (passos de `24px`).
+>   - Limites padronizados de `workspace-layout.ts`: mínimo `224px`, padrão `284px`, máximo `384px`.
+>   - Duplo-clique restaura a largura padrão (`284px`).
+>   - Persistência contínua em `localStorage` sob a chave `sidew`.
+>   - Estilo Capacities: linha sutil translúcida no hover / drag (`linear-gradient(90deg, transparent 5px, var(--faint) 5px, var(--faint) 7px, transparent 7px)`).
+> - **Ajustes e Breakpoints do Painel Contextual Direito (`#rpanel`):**
+>   - Limites atualizados: mínimo `240px`, padrão `420px`, máximo `640px`.
+>   - Duplo-clique em `#rpRz` restaura o padrão de `420px` e persiste sob a chave `rpw`.
+>   - Modo Overlay Sheet ativado entre `769px` e `1024px` (`matchMedia('(max-width:1024px)')`), garantindo que o painel contextual abra sobreposto sem esmagar o conteúdo central abaixo de `480px`.
+>   - Em mobile (<= `768px`), gavetas operam com scrim e redimensionamentos são desativados.
+
 ## 29. Engenharia da Barra Direita & Motor de Grafo do Capacities + Central de Preparação & Questões do QConcursos Elite (Issues #64 e #66 a #72)
 <!-- container e800 @ (5000,11000) -->
 
