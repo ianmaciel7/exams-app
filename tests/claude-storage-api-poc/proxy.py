@@ -1,61 +1,56 @@
 #!/usr/bin/env python3
-"""Proxy Local Seguro para Claude Pro Frame Database.
+"""Opt-in, local proof of concept for the private, unsupported Claude Artifact DB API.
 
-Escuta ESTRITAMENTE em 127.0.0.1.
-Permite exclusivamente operacoes sobre documentos e colecoes com prefixo 'bridge-poc'.
-Nunca expoe tokens de autenticacao para o cliente nem nos logs.
+No public interface and no credentials in browser responses. Not a production sync service.
 """
 
 import http.server
 import json
-import os
 import re
-import socketserver
 import sys
 import urllib.parse
-from pathlib import Path
 
-# Adiciona o pacote claude_artifact_cli caso disponivel no cache uv
-uv_cache = Path(os.environ.get("LOCALAPPDATA", "")) / "uv" / "cache" / "archive-v0"
-for p in uv_cache.glob("*/Lib/site-packages"):
-    if (p / "claude_artifact_cli").is_dir():
-        sys.path.insert(0, str(p))
-        break
-
+# Import exclusively from the explicitly installed environment, not random uv cache archives.
 from claude_artifact_cli import api, auth
 
 HOST = "127.0.0.1"
 PORT = 8766
 DEFAULT_SLUG = "34cd390a-738f-4dfc-8ae2-6c4f90794d74"
 ALLOWED_ORIGINS = ["http://localhost:8765", "http://127.0.0.1:8765"]
-ALLOWED_COLLECTION_PREFIX = "bridge-poc"
+ALLOWED_COLLECTION = "bridge-poc"
+ALLOWED_HOST = f"{HOST}:{PORT}"
+DOC_ID = re.compile(r"[A-Za-z0-9_-]{1,96}\Z")
 
 # Inicializa cliente Anthropic autenticado
 try:
     token = auth.get_token()
     client = api.FrameClient(token)
-except Exception as e:
-    print(f"[Proxy Init Error] Nao foi possivel carregar credenciais: {e}", file=sys.stderr)
+except Exception:
+    print("[Proxy Init Error] Install/authenticate claude-artifact-cli and retry.", file=sys.stderr)
     sys.exit(1)
 
 
 class SecureStorageProxyHandler(http.server.BaseHTTPRequestHandler):
-    def log_message(self, format, *args):
-        # Sanitizacao de logs: nunca exibe tokens ou payloads sensiveis
-        clean_args = [re.sub(r'Bearer\s+[A-Za-z0-9_\-\.]+', 'Bearer [REDACTED]', str(a)) for a in args]
-        sys.stderr.write(f"[Proxy 127.0.0.1:{PORT}] {format % tuple(clean_args)}\n")
+    def log_message(self, fmt, *args):
+        # Paths and upstream diagnostics may contain credentials or private document IDs.
+        sys.stderr.write(f"[Artifact POC Proxy] {self.command} request processed\n")
 
     def send_cors_headers(self):
         origin = self.headers.get("Origin", "")
+        self.send_header("Vary", "Origin")
         if origin in ALLOWED_ORIGINS:
             self.send_header("Access-Control-Allow-Origin", origin)
-        else:
-            self.send_header("Access-Control-Allow-Origin", ALLOWED_ORIGINS[0])
-        self.send_header("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+            self.send_header("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS")
+            self.send_header("Access-Control-Allow-Headers", "Content-Type")
         self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Cache-Control", "no-store")
 
     def do_OPTIONS(self):
+        if not self.authorized():
+            return
+        slug, collection, _ = self.parse_path()
+        if not slug or not self.validate_scope(slug, collection):
+            return self.send_json(403, {"error": "DISALLOWED_SCOPE"})
         self.send_response(204)
         self.send_cors_headers()
         self.end_headers()
@@ -68,86 +63,96 @@ class SecureStorageProxyHandler(http.server.BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
-    def parse_path(self):
-        # Rotas esperadas:
-        # /api/storage/:slug/:collection/:doc
-        # /api/storage/:slug/:collection
-        parsed = urllib.parse.urlparse(self.path)
-        parts = [p for p in parsed.path.split("/") if p]
-        if len(parts) >= 3 and parts[0] == "api" and parts[1] == "storage":
-            slug = parts[2]
-            collection = parts[3] if len(parts) > 3 else ""
-            doc = parts[4] if len(parts) > 4 else None
-            return slug, collection, doc
-        return None, None, None
-
-    def validate_scope(self, collection):
-        if not collection or not collection.startswith(ALLOWED_COLLECTION_PREFIX):
+    def authorized(self):
+        # CORS is not authentication: enforce trusted Origin AND loopback Host on every method.
+        if self.headers.get("Host") != ALLOWED_HOST or self.headers.get("Origin") not in ALLOWED_ORIGINS:
+            self.send_json(403, {"error": "REQUEST_ORIGIN_FORBIDDEN"})
             return False
         return True
 
+    def parse_path(self):
+        parsed = urllib.parse.urlsplit(self.path)
+        if parsed.query or parsed.fragment:
+            return None, None, None
+        parts = [urllib.parse.unquote(p) for p in parsed.path.split("/") if p]
+        if len(parts) not in (4, 5) or parts[:2] != ["api", "storage"]:
+            return None, None, None
+        slug, collection = parts[2:4]
+        doc = parts[4] if len(parts) == 5 else None
+        if doc is not None and not DOC_ID.fullmatch(doc):
+            return None, None, None
+        if any("/" in segment or "\\" in segment or ".." in segment for segment in (slug, collection)):
+            return None, None, None
+        return slug, collection, doc
+
+    def validate_scope(self, slug, collection):
+        return slug == DEFAULT_SLUG and collection == ALLOWED_COLLECTION
+
+    def upstream(self, verb, arguments):
+        try:
+            return self.send_json(200, client.db(DEFAULT_SLUG, verb, arguments))
+        except Exception:
+            # Never relay exception strings that could contain OAuth details or paths.
+            return self.send_json(502, {"error": "UPSTREAM_UNAVAILABLE"})
+
     def do_GET(self):
+        if not self.authorized():
+            return
         slug, collection, doc = self.parse_path()
         if not slug or not collection:
             return self.send_json(400, {"error": "INVALID_ROUTE", "message": "Rota invalida"})
 
-        if not self.validate_scope(collection):
+        if not self.validate_scope(slug, collection):
             return self.send_json(403, {"error": "DISALLOWED_SCOPE", "message": f"Colecao restrita: {collection}"})
 
-        try:
-            if doc:
-                # Obter um documento
-                res = client.db(slug, "get", {"path": f"{collection}/{doc}"})
-                return self.send_json(200, res)
-            else:
-                # Listar documentos na colecao
-                res = client.db(slug, "list", {"collection": collection})
-                return self.send_json(200, res)
-        except Exception as e:
-            return self.send_json(500, {"error": "ANTHROPIC_API_ERROR", "message": str(e)})
+        if doc:
+            return self.upstream("get", {"path": f"{collection}/{doc}"})
+        return self.upstream("list", {"collection": collection})
 
     def do_POST(self):
+        if not self.authorized():
+            return
         slug, collection, doc = self.parse_path()
         if not slug or not collection or not doc:
             return self.send_json(400, {"error": "INVALID_ROUTE", "message": "Rota requer :slug/:collection/:doc"})
 
-        if not self.validate_scope(collection):
+        if not self.validate_scope(slug, collection):
             return self.send_json(403, {"error": "DISALLOWED_SCOPE", "message": f"Colecao restrita: {collection}"})
 
-        content_length = int(self.headers.get("Content-Length", 0))
-        if content_length > 1024 * 1024: # Cap de 1 MB
-            return self.send_json(413, {"error": "PAYLOAD_TOO_LARGE"})
-
-        raw_body = self.rfile.read(content_length)
+        if self.headers.get("Content-Type", "").split(";", 1)[0].strip().lower() != "application/json":
+            return self.send_json(415, {"error": "JSON_CONTENT_TYPE_REQUIRED"})
+        if self.headers.get("Transfer-Encoding"):
+            return self.send_json(400, {"error": "UNSUPPORTED_ENCODING"})
         try:
-            body = json.loads(raw_body)
-        except Exception:
+            content_length = int(self.headers.get("Content-Length", ""))
+        except ValueError:
+            return self.send_json(411, {"error": "CONTENT_LENGTH_REQUIRED"})
+        if content_length < 1 or content_length > 1024 * 1024:
+            return self.send_json(413, {"error": "INVALID_BODY_SIZE"})
+        try:
+            body = json.loads(self.rfile.read(content_length))
+        except (ValueError, UnicodeError):
             return self.send_json(400, {"error": "INVALID_JSON"})
-
-        try:
-            res = client.db(slug, "set", {"path": f"{collection}/{doc}", "data": body})
-            return self.send_json(200, res)
-        except Exception as e:
-            return self.send_json(500, {"error": "ANTHROPIC_API_ERROR", "message": str(e)})
+        if not isinstance(body, dict):
+            return self.send_json(400, {"error": "JSON_OBJECT_REQUIRED"})
+        return self.upstream("set", {"path": f"{collection}/{doc}", "data": body})
 
     def do_DELETE(self):
+        if not self.authorized():
+            return
         slug, collection, doc = self.parse_path()
         if not slug or not collection or not doc:
             return self.send_json(400, {"error": "INVALID_ROUTE", "message": "Rota requer :slug/:collection/:doc"})
 
-        if not self.validate_scope(collection):
+        if not self.validate_scope(slug, collection):
             return self.send_json(403, {"error": "DISALLOWED_SCOPE", "message": f"Colecao restrita: {collection}"})
 
-        try:
-            res = client.db(slug, "delete", {"path": f"{collection}/{doc}"})
-            return self.send_json(200, res)
-        except Exception as e:
-            return self.send_json(500, {"error": "ANTHROPIC_API_ERROR", "message": str(e)})
+        return self.upstream("delete", {"path": f"{collection}/{doc}"})
 
 
 def main():
     server_address = (HOST, PORT)
-    with socketserver.TCPServer(server_address, SecureStorageProxyHandler) as httpd:
+    with http.server.ThreadingHTTPServer(server_address, SecureStorageProxyHandler) as httpd:
         print(f"[Proxy] Servidor iniciado estritamente em http://{HOST}:{PORT}")
         httpd.serve_forever()
 
