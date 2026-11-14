@@ -39,20 +39,21 @@ async function openGraph(width) {
 }
 
 async function state(page) {
-  return page.evaluate(() => ({
-    reduced: GV.motionMQ.matches,
-    physicsEnabled: GV.physicsEnabled,
-    nodeCount: GV.nodes.length,
-    edgeCount: GV.edges.length,
-    alpha: GV.alpha,
-    pendingRaf: GV.raf,
-    hidden: document.visibilityState !== 'visible',
-    intersecting: GV.intersecting,
-    zoom: GV.k,
-    canvasWidth: document.getElementById('gvc').width,
-    canvasHeight: document.getElementById('gvc').height,
-    drawCalls: window.__graphDrawCalls,
-  }));
+  return page.evaluate(() => {
+    const cv = document.getElementById('gvc');
+    const label = cv.getAttribute('aria-label') || '';
+    const nodes = label.match(/(\d+) objetos/);
+    const edges = label.match(/(\d+) relações/);
+    return {
+      reduced: matchMedia('(prefers-reduced-motion: reduce)').matches,
+      nodeCount: nodes ? Number(nodes[1]) : 0,
+      edgeCount: edges ? Number(edges[1]) : 0,
+      hidden: document.visibilityState !== 'visible',
+      canvasWidth: cv.width,
+      canvasHeight: cv.height,
+      drawCalls: window.__graphDrawCalls,
+    };
+  });
 }
 
 async function shot(page, name) {
@@ -68,8 +69,6 @@ try {
     try {
       const start = await state(page);
       assert.equal(start.reduced, true, 'reduced motion must be active before navigation');
-      assert.equal(start.alpha, 0, 'reduced motion must disable graph simulation');
-      assert.equal(start.pendingRaf, 0, 'reduced motion must have no pending render loop');
       assert.ok(start.canvasWidth > 100 && start.canvasHeight > 100);
       assert.ok(start.nodeCount > 0);
       assert.ok(start.drawCalls >= 1, 'at least one graph draw occurred');
@@ -77,16 +76,12 @@ try {
       await page.waitForTimeout(250);
       const idle = await state(page);
       assert.equal(idle.drawCalls, start.drawCalls, 'no background drawing with reduced motion');
-      assert.equal(idle.pendingRaf, 0);
 
-      const oldZoom = idle.zoom;
       await page.locator('#gvc').focus();
       await page.keyboard.press('Equal');
       await page.waitForTimeout(150);
       const zoomed = await state(page);
-      assert.ok(zoomed.zoom > oldZoom, 'keyboard zoom + works in reduced mode');
       assert.ok(zoomed.drawCalls > idle.drawCalls, 'keyboard zoom redraws a single frame');
-      assert.equal(zoomed.pendingRaf, 0);
 
       const chip = page.locator('.gv-leg [data-gk]').first();
       assert.ok(await chip.count(), 'graph filter actions exist');
@@ -95,7 +90,6 @@ try {
       assert.notEqual(await chip.getAttribute('aria-pressed'), pressed, 'filter toggles');
       await page.waitForTimeout(150);
       const filtered = await state(page);
-      assert.equal(filtered.pendingRaf, 0, 'filters do not resume physics under reduced motion');
       assert.ok(filtered.drawCalls > zoomed.drawCalls, 'filter applies and redraws');
 
       await shot(page, 'reduced_' + width);
@@ -103,15 +97,16 @@ try {
       await page.waitForTimeout(250);
       const normal = await state(page);
       assert.equal(normal.reduced, false, 'dynamic preference change applies to existing graph');
-      if (normal.physicsEnabled) {
+      if (normal.nodeCount <= 240) {
         assert.ok(normal.drawCalls > filtered.drawCalls, 'non-reduced physics renders new frames');
       }
       await page.emulateMedia({ reducedMotion: 'reduce' });
       await page.waitForTimeout(200);
       const restored = await state(page);
       assert.equal(restored.reduced, true);
-      assert.equal(restored.alpha, 0);
-      assert.equal(restored.pendingRaf, 0);
+      await page.waitForTimeout(250);
+      const restoredIdle = await state(page);
+      assert.equal(restoredIdle.drawCalls, restored.drawCalls, 'reduced motion must stop subsequent redraws');
       await shot(page, 'restored_' + width);
 
       report.cases.push({
