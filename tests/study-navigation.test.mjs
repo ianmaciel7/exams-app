@@ -39,3 +39,14 @@ test('practice position and path filter are preserved across redraws', () => {
   assert.match(source, /store\.set\('qIndex',qIndex\)/);
   assert.match(source, /if\(qPracticeRoute!==path\)/);
 });
+
+test('native selects match the explicit theme and the automatic OS preference', () => {
+  const head = html.slice(0, html.indexOf('</head>'));
+  // color-scheme affects browser-rendered option menus, not only CSS-styled controls.
+  assert.match(head, /:root\[data-theme="dark"\]\s*\{\s*color-scheme:\s*dark\s*;/);
+  assert.match(head, /:root\[data-theme="light"\]\s*\{\s*color-scheme:\s*light\s*;/);
+  assert.match(head, /@media\s*\(prefers-color-scheme:\s*dark\)\s*\{\s*:root:not\(\[data-theme="light"\]\)\s*\{\s*color-scheme:\s*dark\s*;/);
+  assert.ok(head.lastIndexOf('color-scheme:') > head.lastIndexOf(':root{color-scheme:light;'), 'theme-aware rules must override the initial light default');
+  assert.match(source, /<select id=\\"qPer\\"/);
+  assert.match(source, /\[1,5,10,20\]\.map\(/);
+});
