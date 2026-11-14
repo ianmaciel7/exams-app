@@ -188,8 +188,8 @@ Quando a media query `(prefers-reduced-motion: reduce)` estiver ativa:
 
 | Categoria | Propósito | Propriedades preferidas | Exemplos no Exam App | Restrições |
 |---|---|---|---|---|
-| **Feedback de estado (effects)** | Confirmar ação e mudança de estado sem mover conteúdo | \`opacity\`, \`color\`, \`background-color\` | Hover/pressed, tab selecionada, resposta marcada, filtro ativo | **Sem overshoot** de cor/opacidade; preservar sinalização textual |
-| **Espacial (spatial)** | Demonstrar origem, destino, continuidade e hierarquia | \`transform\` (\`translate\`/\`scale\`), eventual raio/clip | Abrir sidebar, right panel, mover foco no grafo, popover ancorado | Evitar layout shift, scroll jump e movimento vestibular |
+| **Feedback de estado (effects)** | Confirmar ação e mudança de estado sem mover conteúdo | `opacity`, `color`, `background-color` | Hover/pressed, tab selecionada, resposta marcada, filtro ativo | **Sem overshoot** de cor/opacidade; preservar sinalização textual |
+| **Espacial (spatial)** | Demonstrar origem, destino, continuidade e hierarquia | `transform` (`translate`/`scale`), eventual raio/clip | Abrir sidebar, right panel, mover foco no grafo, popover ancorado | Evitar layout shift, scroll jump e movimento vestibular |
 | **Gesture-following** | Acompanhar ponteiro/toque continuamente | Transform/posição do elemento arrastado | Drag de nós, resize de painel, gesto de sheet quando existir | Seguir diretamente a interação, sem easing que atrase o ponteiro |
 | **Spring settle** | Encerrar drag/interrupção com comportamento físico coerente | Simulação amortecida pontual de posição/escala | Soltar nó, magnetismo leve em snap funcional | Respeitar velocidade de soltura e limites; sem loop permanente |
 | **Feedback de sistema** | Informar progresso, erro, sucesso e disponibilidade | Indicador estático ou animado com estado textual | Carregamento de PDF, extração, busca, atualização | Timeout/erro/recuperação; nunca loading infinito |
@@ -202,31 +202,31 @@ Quando a media query `(prefers-reduced-motion: reduce)` estiver ativa:
 Todas as transições iniciadas pelo usuário devem tolerar eventos concorrentes:
 
 1. **Ponto inicial = estado atual renderizado**, não o valor inicial da animação anterior. Em reabertura de painel, partir da posição em que o fechamento foi interrompido.
-2. **Novo comando cancela/sobrescreve o comando antigo**; não criar fila de animações após cliques rápidos nem esperar um \`transitionend\` que não virá.
+2. **Novo comando cancela/sobrescreve o comando antigo**; não criar fila de animações após cliques rápidos nem esperar um `transitionend` que não virá.
 3. **Arraste direto acompanha o dedo/mouse**. Ao soltar, pode aplicar *spring settle* restrito. Se o usuário agarrar novamente, interromper a mola imediatamente e herdar ou zerar a velocidade de forma previsível.
 4. **Fechamento por Escape, mudança de rota ou unmount** termina a interação e restaura foco relevante sem esperar por movimento.
-5. **Animação não é a fonte de verdade do estado**: \`selected\`, \`expanded\`, \`aria-selected\`, \`aria-expanded\`, resposta marcada, filtros e resultados devem derivar da mesma máquina/estado lógico.
+5. **Animação não é a fonte de verdade do estado**: `selected`, `expanded`, `aria-selected`, `aria-expanded`, resposta marcada, filtros e resultados devem derivar da mesma máquina/estado lógico.
 6. **Qualquer estado intermediário** conserva click targets e legibilidade; hitbox, layer e pointer-events não podem ficar presos após cancelamento.
 
-Em Web Animations API (WAAPI), \`Animation.cancel()\` interrompe a transição, mas **não preserva por si só todos os estilos computados**. Na prática, ler o estado visual calculado ou usar um único controlador de estado antes de iniciar a próxima animação. Não misturar \`transition\`, \`animation\`, WAAPI e JS spring no mesmo atributo sem uma política explícita de ownership.
+Em Web Animations API (WAAPI), `Animation.cancel()` interrompe a transição, mas **não preserva por si só todos os estilos computados**. Na prática, ler o estado visual calculado ou usar um único controlador de estado antes de iniciar a próxima animação. Não misturar `transition`, `animation`, WAAPI e JS spring no mesmo atributo sem uma política explícita de ownership.
 
 ### 5.3 Spring real vs curva elástica CSS
 
-A curva existente \`--motion-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1)\` **simula overshoot**, mas **não** incorpora velocidade, massa, rigidez ou damping. A denominação histórica é preservada para compatibilidade com o protótipo.
+A curva existente `--motion-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1)` **simula overshoot**, mas **não** incorpora velocidade, massa, rigidez ou damping. A denominação histórica é preservada para compatibilidade com o protótipo.
 
 Para um sistema massa-mola-amortecedor, o modelo conceitual é:
 
-\`\`\`text
+```text
 F = -k (x - alvo) - c v
 a = F / m
 v = v + a Δt
 x = x + v Δt
-\`\`\`
+```
 
-- \`k\`: rigidez (*stiffness*); \`c\`: amortecimento (*damping*); \`m\`: massa; \`v\`: velocidade; \`Δt\`: intervalo temporal em segundos.
-- Esses parâmetros **não são diretamente intercambiáveis** com a API de \`damping/response\` de outro framework, nem com easing CSS.
-- Integradores discretos simples podem ficar instáveis em \`Δt\` alto; usar passo temporal limitado, amortecimento definido, stop threshold e cancelamento. Para animações pontuais, preferir CSS/WAAPI antes de adicionar um motor físico.
-- **Overshoot moderado** pode fazer sentido para posição/escala em confirmação especial; **não** deformar texto, enunciados, alternativas, ícones acessíveis ou áreas-alvo. Para \`opacity\`, valores devem permanecer dentro de \`[0,1]\`; para cor, interpolação contínua sem bounce.
+- `k`: rigidez (*stiffness*); `c`: amortecimento (*damping*); `m`: massa; `v`: velocidade; `Δt`: intervalo temporal em segundos.
+- Esses parâmetros **não são diretamente intercambiáveis** com a API de `damping/response` de outro framework, nem com easing CSS.
+- Integradores discretos simples podem ficar instáveis em `Δt` alto; usar passo temporal limitado, amortecimento definido, stop threshold e cancelamento. Para animações pontuais, preferir CSS/WAAPI antes de adicionar um motor físico.
+- **Overshoot moderado** pode fazer sentido para posição/escala em confirmação especial; **não** deformar texto, enunciados, alternativas, ícones acessíveis ou áreas-alvo. Para `opacity`, valores devem permanecer dentro de `[0,1]`; para cor, interpolação contínua sem bounce.
 
 **M3 Expressive** distingue springs *spatial* e *effects*; **Apple fluid interfaces** enfatiza a passagem de velocidade e reversibilidade. No Exam App ambos são **heurísticas de implementação condicionadas** à legibilidade, ao contexto e à performance, não obrigação de animar tudo.
 
@@ -236,11 +236,11 @@ As durações **existentes** permanecem: 60, 120, 200, 350 e 500 ms (seção 2.1
 
 | Intenção | Padrão recomendado | Observação |
 |---|---|---|
-| Press/hover | \`instant\`/ \`fast\` | Não atrasar ação; compatível com alto volume de estudo |
-| Menu/popover | \`fast\` / \`normal\` | Abrir a partir do gatilho; foco operacional imediato |
-| Seleção de aba | \`normal\` ou instantâneo | Mudança de conteúdo preserva posição e foco |
-| Sidebar / contexto | \`normal\` / \`smooth\` se a transição espacial trouxer benefício | Testar clique repetido, focus trap se overlay e ResizeObserver quando útil |
-| Navegação contextual entre nós | \`normal\` / \`smooth\` para reorientação; instantâneo em redução | Manter seleção, legenda e ponto focal |
+| Press/hover | `instant`/ `fast` | Não atrasar ação; compatível com alto volume de estudo |
+| Menu/popover | `fast` / `normal` | Abrir a partir do gatilho; foco operacional imediato |
+| Seleção de aba | `normal` ou instantâneo | Mudança de conteúdo preserva posição e foco |
+| Sidebar / contexto | `normal` / `smooth` se a transição espacial trouxer benefício | Testar clique repetido, focus trap se overlay e ResizeObserver quando útil |
+| Navegação contextual entre nós | `normal` / `smooth` para reorientação; instantâneo em redução | Manter seleção, legenda e ponto focal |
 | Troca de questão/simulado | Instantâneo ou curta | Priorizar fluxo rápido; sem animação ornamental |
 | Loading/progresso | Conforme operação real, sem duração artificial | Estado terminal de sucesso/erro/cancelamento obrigatório |
 
@@ -248,7 +248,7 @@ Para microinterações, várias skills Apple dão intervalos de exemplo (~100–
 
 ### 5.5 Continuidade espacial por fluxo do Exam App
 
-**Sidebar e painel direito.** O painel entra/sai da borda à qual pertence; conteúdo principal não salta. Quando estiver em modo overlay, usar \`aria-expanded\`, backdrop, Escape e retorno de foco corretos. Não animar largura do layout em todas as ações se o custo de relayout for alto; avaliar composição transform + dimensão final, mas evitar conteúdo clicável fora de posição.
+**Sidebar e painel direito.** O painel entra/sai da borda à qual pertence; conteúdo principal não salta. Quando estiver em modo overlay, usar `aria-expanded`, backdrop, Escape e retorno de foco corretos. Não animar largura do layout em todas as ações se o custo de relayout for alto; avaliar composição transform + dimensão final, mas evitar conteúdo clicável fora de posição.
 
 **Abas e navegação de conteúdo.** O indicador de seleção pode se mover em curta distância, mas painel de conteúdo e scroll não devem pular. Caso o usuário mude de aba antes do fim da transição, o indicador deve escolher o **destino novo imediatamente**. A animação nunca justifica manter duas abas visualmente selecionadas.
 
@@ -262,34 +262,34 @@ Para microinterações, várias skills Apple dão intervalos de exemplo (~100–
 
 ### 5.6 Performance, CSS, JS, canvas e medição
 
-- Preferir \`transform\` e \`opacity\` quando não houver impacto na leitura/seleção, porque normalmente são candidatos à composição eficiente. Isso **não garante** performance: \`filter\`, blur, grandes layers, muitos nós SVG e repaints podem custar caro.
-- Não usar \`will-change\` em toda a aplicação; ativá-lo pontualmente e medir consumo de memória.
-- Em loops de \`requestAnimationFrame\`, usar timestamps reais, interromper quando estável/oculto, reagir a \`visibilitychange\` e preferências de movimento e **limitar cálculo em delta de tempo grande** após aba suspensa.
-- Limitar efeitos Apple-inspired de \`backdrop-filter\`: o Design System privilegia superfícies opacas. Não animar blur em grandes áreas/scroll sem teste em dispositivo modesto.
+- Preferir `transform` e `opacity` quando não houver impacto na leitura/seleção, porque normalmente são candidatos à composição eficiente. Isso **não garante** performance: `filter`, blur, grandes layers, muitos nós SVG e repaints podem custar caro.
+- Não usar `will-change` em toda a aplicação; ativá-lo pontualmente e medir consumo de memória.
+- Em loops de `requestAnimationFrame`, usar timestamps reais, interromper quando estável/oculto, reagir a `visibilitychange` e preferências de movimento e **limitar cálculo em delta de tempo grande** após aba suspensa.
+- Limitar efeitos Apple-inspired de `backdrop-filter`: o Design System privilegia superfícies opacas. Não animar blur em grandes áreas/scroll sem teste em dispositivo modesto.
 - Evitar JS e CSS concorrentes animando o mesmo elemento/propriedade. Para CSS + WAAPI manter ownership claro e cleanup em transições canceladas.
 - Métrica mínima de revisão: taxa/tempo de frame no dispositivo-alvo, layout shifts percebidos, resposta ao input, existência de frames agendados após repouso/aba oculta, acessibilidade/foco, resultado com reduced motion. Orçamento de 16,7 ms/8,3 ms é físico do display, não promessa de latência.
 
 ### 5.7 Redução de movimento: matriz de equivalência
 
-| Em movimento normal | Em \`prefers-reduced-motion: reduce\` | Estado preservado |
+| Em movimento normal | Em `prefers-reduced-motion: reduce` | Estado preservado |
 |---|---|---|
-| Slide de painel | Painel aparece/desaparece sem deslocamento espacial | \`expanded\`, foco, backdrop, scroll |
+| Slide de painel | Painel aparece/desaparece sem deslocamento espacial | `expanded`, foco, backdrop, scroll |
 | Câmera do grafo recentra com spring | Reposicionamento instantâneo ou transição não espacial discreta | Nó selecionado, vizinhos, legenda, controle de zoom |
 | Node drag settle | Parar no destino, sem overshoot ou oscilação | Coordenada final, vínculos |
-| Seleção de tab animada | Troca direta de indicador/aba | \`aria-selected\`, painel e posição |
+| Seleção de tab animada | Troca direta de indicador/aba | `aria-selected`, painel e posição |
 | Feedback de resposta | Cor/ícone/texto estáticos ou fade discreto apropriado | Correto/incorreto, anúncio e histórico |
 | Skeleton/progresso | Placeholder estático ou atualização textual | Loading, erro, recuperação e cancelamento |
 
-A WCAG 2.2 estabelece critérios específicos (como **2.3.1** para flashes e **2.2.2** para conteúdo que se move/atualiza automaticamente, quando aplicáveis); **2.3.3 Animation from Interactions é nível AAA**, não AA. \`prefers-reduced-motion\` é preferência do usuário e prática de implementação importante, não um substituto de avaliação de WCAG.
+A WCAG 2.2 estabelece critérios específicos (como **2.3.1** para flashes e **2.2.2** para conteúdo que se move/atualiza automaticamente, quando aplicáveis); **2.3.3 Animation from Interactions é nível AAA**, não AA. `prefers-reduced-motion` é preferência do usuário e prática de implementação importante, não um substituto de avaliação de WCAG.
 
 ### 5.8 Matriz de teste obrigatória para mudanças de animação
 
 1. Abrir → fechar → abrir sidebar e painel no meio do fechamento, com cliques rápidos; verificar estado e foco.
-2. Trocar abas 5× em sequência; nenhum painel duplicado, seleção divergente ou \`transitionend\` perdido.
+2. Trocar abas 5× em sequência; nenhum painel duplicado, seleção divergente ou `transitionend` perdido.
 3. Selecionar nós do grafo rapidamente, filtrar tipos durante animação, usar busca, zoom, pan, drag e mudar de contexto; verificar câmera, nó ativo e controles.
-4. Alternar preferência \`prefers-reduced-motion\` **enquanto uma animação está em execução**; cancelar frames e preservar o estado.
+4. Alternar preferência `prefers-reduced-motion` **enquanto uma animação está em execução**; cancelar frames e preservar o estado.
 5. Repetir em tema claro/escuro, largura estreita, zoom e com teclado; testar Escape, Tab e leitor de tela conforme recurso.
-6. Suspender aba, voltar após tempo longo, observar CPU e frames pendentes; nada deve explodir por grande \`Δt\`.
+6. Suspender aba, voltar após tempo longo, observar CPU e frames pendentes; nada deve explodir por grande `Δt`.
 7. Simular latência/erro no carregamento e navegação de PDF: nunca deixar usuário preso em skeleton, spinner ou camada bloqueadora.
 8. Capturar vídeo/GIF e descrever trajetória, origem, destino, easing, estados/frames e comportamento de interrupção em texto no board; **não afirmar teste visual se não houver execução**.
 
