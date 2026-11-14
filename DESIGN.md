@@ -794,6 +794,34 @@ Complementa [AGENTS.md §21](AGENTS.md) e [catálogo UX/UI §T](docs/ux/ux-ui-pr
 - **MUST** diferenciar efeitos observados em **aprendizagem multimídia** de regras para todas as páginas; adotar progressão por passos somente quando a tarefa e testes indicarem ganho.
 - **MUST** verificar antes/depois e registrar evidências de implementação no board quando houver alteração real da interface. Este acréscimo documental não significa que o protótipo foi modificado ou auditado.
 
+
+### 8.25 Componentes de interface 2026 — semântica, estados e anatomia
+
+**Referência canônica:** [docs/ux/componentes-ui-padroes-2026.md](docs/ux/componentes-ui-padroes-2026.md) (30 padrões APG e bibliotecas oficiais), com contrato para agentes em [AGENTS.md §22](AGENTS.md). **Padrão de UI não é lei empírica**. Semântica HTML/APG determina comportamento, componentes M3/Primer/React Aria orientam a solução, e leis de Fitts/Hick–Hyman/Steering/Gestalt só fundamentam hipóteses de interação. A implementação atual é um protótipo HTML/CSS/JS: não instalar bibliotecas sem justificativa.
+
+| Componente / aparência | Contrato para o Exam App | Estados e testes obrigatórios |
+|---|---|---|
+| **Icon Button e CTA** | Ícone não substitui rótulo acessível; Link navega e Button opera; não esconder ação essencial até hover. | Default, hover, focus-visible, pressed/selected quando pertinente, pending, erro; alvo e ordem Tab. |
+| **Tabs e navegação de rotas** | Escolher entre **tabs APG** (mesmo contexto e tabpanel) e **links de navegação** para páginas distintas; evitar duplicar barras/abas para a mesma função. | Focus vs selected, setas nas tabs reais, back/forward, URL, wrap/scroll, painel ativo. |
+| **Sidebar expansível / explorador** | Navegação comum com links e Disclosure; Tree View apenas para hierarquia realmente operável por setas. | Expandido, ativo, roving focus se aplicável, teclado, retorno e compactação. |
+| **Context Menu / Action Menu** | Menu Button no controle "..." quando há **ações**; hover não pode ser a única forma de descobrir/operar. Menubar apenas com teclado completo de aplicação. | Abrir, foco no menu, Escape, setas, desabilitado, confirmação em ação destrutiva. |
+| **Select / Combobox / SelectPanel** | Preferir input nativo para valor simples; usar filtro quando a lista realmente exige busca; não trocar select por combobox apenas por visual. | Digitar/IME, autocomplete, seleção única/múltipla, grupo, cancelamento, fallback e AT. |
+| **Dialogs, popovers, sheets e tooltip** | Dialog modal bloqueia fundo com foco contido; Popover e tooltip normalmente não bloqueiam. Tooltip não contém ações interativas; sheet pode ser modal ou não, conforme comportamento real. | Foco inicial/retorno, esc/touch/click outside onde apropriado, aria-modal fiel, scroll, responsive. |
+| **Table, DataTable, Grid e Treegrid** | Dados estáticos = table; células navegáveis ou editáveis = grid; dados hierárquicos operáveis = treegrid. Não usar `role=grid` para layout CSS. | Cabeçalho/linha, sort/filter, teclado e foco, ações de linha, empty/error, virtualização. |
+| **Progress, Meter, Alert e Status** | Progresso de operação/fluxo é diferente de medição numérica e de erro; comunicar mensagem, estado e recuperação sem spinner infinito. | Pending, indeterminate/determinate, success, failure, timeout; anúncio acessível. |
+| **Toolbar, Panel Splitter e drag handles** | Toolbar real agrupa comandos com teclado; splitter ajusta panes inclusive sem mouse; drag mantém alternativa de clique/toque sem arraste. | Nome/valor/posição, setas, Escape, cancelamento, pointer/touch, reflow. |
+| **Componente personalizado moderno** | Native HTML antes de composição JS; Popover API/Anchor Positioning podem ajudar, mas `base-select` ainda tem suporte limitado em 2026. | Feature detection, fallback, browser/AT/SSR se houver, zoom, língua extensa e RTL. |
+
+**Critérios de aceite:**
+- **MUST:** para cada componente alterado, declarar **intenção, nome do padrão, tipo de fonte, estados, comportamento sem mouse, visual e acessibilidade**, em conjunto com [WCAG 2.2](https://www.w3.org/TR/WCAG22/) e orientações APG aplicáveis.
+- **MUST:** comprovar que o design não confunde visual de tabs com links, accordion com menu, tabela com grade interativa, switch com escolha múltipla e tooltip com popover interativo.
+- **MUST:** testar duplicidade/concorrência de eventos, seleção e ativação, persistência, posição do foco, retorno ao fechar, resize e mudanças rápidas de estado — inclusive durante animação.
+- **SHOULD:** usar componentes nativos e padrões testados antes de criar controles personalizados complexos; avaliar real vantagem para a tarefa.
+- **MUST:** comparar com as leis empíricas **apenas como suporte de hipótese**, sem inferir sucesso de Fitts/Hick/Steering pela aparência ou quantidade de componentes.
+- **MUST:** registrar o que foi somente documentado versus implementado e testado, preservando evidências reais no board quando mudar código/UI.
+
+Fontes: [W3C APG — 30 padrões](https://www.w3.org/WAI/ARIA/apg/patterns/), [Primer — DataTable](https://primer.style/product/components/data-table/), [Primer — SelectPanel](https://primer.style/product/components/select-panel/), [Adobe React Aria](https://react-aria.adobe.com/), [Material 3](https://m3.material.io/components), [MDN Popover](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API).
+
 ## 9. Referências catalogadas — 21 candidatos a skills + 1 agregador (auditoria em andamento)
 
 Os 22 itens abaixo são **21 candidatos a skills e 1 agregador comunitário (M09)**; **não correspondem a 22 SKILL.md individuais verificados**, e não são extensões oficiais de Apple ou Google. **Catalogar URL não comprova leitura integral de cada SKILL.md, README e referências internas.** Não afirmar que os 22 foram verificados ou que cada resumo corresponde ao estado atual do repositório sem registro de arquivo/revisão/data. Esta integração é uma síntese preliminar enquanto a análise aprofundada de cada fonte não estiver documentada. Alguns estão voltados a Android/SwiftUI; nem todo trecho de código se aplica a um protótipo HTML/CSS/JS. Para números ou requisitos, confrontar com a documentação oficial **vigente**.
