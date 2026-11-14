@@ -13,6 +13,22 @@
 - **Recomendação local:** decisão de produto a validar, não resultado científico.
 - Em conflitos, priorizar acessibilidade, integridade dos dados, tarefa real e evidência de teste. Registre exceções justificadas na issue/PR.
 
+
+## Índice estrito de leis empíricas para UI/UX (separado de heurísticas e padrões)
+
+**Para pedidos de “leis de UX/UI”**, consultar [AGENTS.md §0](../../AGENTS.md) **antes** das listas editoriais de Laws of UX, componentes, motion e técnicas WCAG. Este índice só reúne relações científicas rastreáveis, **não transforma recomendações de design systems em leis**.
+
+| Lei/modelo original | Área e uso adequado | Fonte científica | Observação |
+|---|---|---|---|
+| **Fitts's Law** | Controle motor; distância/largura dos alvos de clique, handles e ícones. | [Fitts (1954)](https://doi.org/10.1037/h0055392) | Não define dimensões WCAG. |
+| **Hick–Hyman Law** | Escolha/incerteza; avaliar alternativas de navegação, filtros e ações. | [Hick (1952)](https://doi.org/10.1080/17470215208416600); [revisão (2018)](https://doi.org/10.1080/17470218.2017.1322622) | Não exige menu com número fixo de opções. |
+| **Steering Law** | Trajetórias motoras restritas; menus em cascata, drag, resize. | [Accot & Zhai (1997)](https://doi.org/10.1145/258549.258760) | Diferente de apontamento discreto. |
+| **Weber's Law** | Psicofísica perceptiva e limiares de diferença relativa. | [MIT — Weber's Law](https://vis.csail.mit.edu/classes/6.859/lectures/05-Perception.pdf) | Não substitui contraste normativo ou testes de percepção. |
+| **Zipf's Law** | Distribuições de frequência de palavras/ocorrências; útil para **analisar dados de busca reais**, se houver. | [Zipf (1949), registro](https://www.ncbi.nlm.nih.gov/nlmcatalog/274664); [revisão](https://pmc.ncbi.nlm.nih.gov/articles/PMC298679/) | Não define ordenação de menu sem telemetria. |
+| **Power Law of Practice / Law of Practice** | Modelo histórico de aprendizagem e melhora em tarefas repetidas. | [Newell & Rosenbloom](https://iiif.library.cmu.edu/file/Newell_box00089_fld06179_doc0001/Newell_box00089_fld06179_doc0001.pdf); [contestação empírica](https://pubmed.ncbi.nlm.nih.gov/10909131/) | **Contestado:** curvas exponenciais podem ajustar melhor dados individuais. |
+
+**Quatro diretamente aplicáveis à interação e percepção:** Fitts, Hick-Hyman, Steering e Weber. **Duas condicionais e com limites:** Zipf e Power Law of Practice. “Laws of UX” contém conceitos de várias classes, e **Jakob, Tesler, Gestalt, Nielsen, Apple Symbol Effects, Material 3 e Drag-and-Drop não são leis científicas da UI**. O objetivo é documentação correta, não impor fórmulas matemáticas a uma interface sem dados.
+
 ## Catálogo (86 itens)
 
 ### 1. Cognição, decisão e percepção
