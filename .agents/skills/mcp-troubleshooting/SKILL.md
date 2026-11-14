@@ -16,3 +16,16 @@ Troubleshooting priorities:
 - Invalid server names/transport fields.
 - Missing required environment variables or secrets.
 - Target mismatch (server not routed to expected integration).
+
+Claude Code scope-parity rule:
+- First inspect `claude mcp list` for `Conflicting scopes` and check which
+  registrations are `user` versus `project`.
+- Project work inherits global (`user`) servers. Never add project-scope
+  copies of `serena`, `fetch`, `filesystem` or `git` to make the two
+  scopes look alike; the **effective** MCP tools should match without duplicates.
+- Serena for Claude Code belongs in the user scope with
+  `--context claude-code --project-from-cwd`. The project may retain
+  `.serena/project.yml` for workspace-specific language configuration.
+- Correct `.agents/agents.json` (not just generated local files) when
+  sync has recreated conflicting Claude Code registrations. Preserve other
+  clients' targets and validate `claude mcp list` after `agents sync`.
