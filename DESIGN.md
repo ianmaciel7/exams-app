@@ -822,6 +822,20 @@ Complementa [AGENTS.md §21](AGENTS.md) e [catálogo UX/UI §T](docs/ux/ux-ui-pr
 
 Fontes: [W3C APG — 30 padrões](https://www.w3.org/WAI/ARIA/apg/patterns/), [Primer — DataTable](https://primer.style/product/components/data-table/), [Primer — SelectPanel](https://primer.style/product/components/select-panel/), [Adobe React Aria](https://react-aria.adobe.com/), [Material 3](https://m3.material.io/components), [MDN Popover](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API).
 
+
+### 8.26 Variantes de componentes, dialogs e Settings Hub — 2026
+
+Referência central: [docs/ux/taxonomia-componentes-e-dialogs-2026.md](docs/ux/taxonomia-componentes-e-dialogs-2026.md). Organiza **28 famílias** de componentes e variantes de Dialog/AlertDialog/Popover/Sheet/Picker/Settings Hub por **tarefa, semântica, apresentação e estados**. Complementa [AGENTS.md §23](AGENTS.md) e o [catálogo W3C APG de 30 padrões](docs/ux/componentes-ui-padroes-2026.md), não os substitui. **Nenhuma variante de produto é uma lei científica de UX.**
+
+**Exemplo visual: Settings Hub de Tipos de Objetos (imagem de referência):**
+- **Desktop:** dialog de configurações com fundo dimmed, navegação categorizada/busca à esquerda e título/descrição/grade de objetos à direita; fechar acessível. Padrão de composição de produto, não role SettingsDialog/AlertDialog.
+- **Mobile/zoom:** adaptação para full-screen com navegação e conteúdo empilhados, preservando posição/seleção e permitindo voltar. Nada de sidebar fixa que esprema a grade.
+- **Semântica:** dialog modal somente quando fundo estiver realmente inerte; título acessível, foco bem gerenciado; lista de categorias é navegação ou seleção conforme o comportamento; tiles usam links/botões ou estado selecionado apropriado.
+- **Estado:** cards de tipo têm nome, ícone distinguível, foco visível e ação real; status textuais de conta e dicas não dependem só de cor; salvar/cancelar ou auto-save deve ser explícito. A captura **não comprova** política de persistência ou teclado.
+- **Teste:** medir decisão/foco/scroll/teclado/reflow, interação com configurações não salvas, erro/retry, e comparar screenshot real. Não copiar implementação do Capacities nem declarar paridade apenas por aparência.
+
+**Escolha por superfície:** FormDialog para pequenas alterações, Confirmation/AlertDialog para ações importantes, Danger Modal para exclusões irreversíveis, Picker para escolher referência/ícone/data, Wizard ou página para fluxos longos, Popover não modal para ajustes breves, Side/Bottom Sheet para contexto e largura estreita. Usar nomenclatura da fonte canônica e não confundir variantes de apresentação com modalidades.
+
 ## 9. Referências catalogadas — 21 candidatos a skills + 1 agregador (auditoria em andamento)
 
 Os 22 itens abaixo são **21 candidatos a skills e 1 agregador comunitário (M09)**; **não correspondem a 22 SKILL.md individuais verificados**, e não são extensões oficiais de Apple ou Google. **Catalogar URL não comprova leitura integral de cada SKILL.md, README e referências internas.** Não afirmar que os 22 foram verificados ou que cada resumo corresponde ao estado atual do repositório sem registro de arquivo/revisão/data. Esta integração é uma síntese preliminar enquanto a análise aprofundada de cada fonte não estiver documentada. Alguns estão voltados a Android/SwiftUI; nem todo trecho de código se aplica a um protótipo HTML/CSS/JS. Para números ou requisitos, confrontar com a documentação oficial **vigente**.
