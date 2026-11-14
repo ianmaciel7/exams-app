@@ -1909,7 +1909,7 @@ const allEd=()=>{ const o=OV(); return BASE_ED.concat(userEd()).map(e=>{ const o
 const edicaoById=id=>allEd().find(e=>e.id===id);
 const edicoesOf=sp=>allEd().filter(e=>(concursoById(e.conc)||{}).sp===sp&&!isT(e.id)).sort((a,b)=>b.ano-a.ano);
 const cargosOf=ed=>CARGOS.filter(c=>c.edicao===ed&&!isT(c.id));
-const objsOf=sp=>docsOf(sp).concat(CONCURSOS.filter(c=>c.sp===sp&&!isT(c.id)),edicoesOf(sp),edicoesOf(sp).flatMap(e=>cargosOf(e.id)));
+const objsOf=sp=>docsOf(sp).concat(CONCURSOS.filter(c=>c.sp===sp&&!isT(c.id)),edicoesOf(sp),edicoesOf(sp).flatMap(e=>cargosOf(e.id)),customObjects.filter(o=>o.sp===sp&&!isT(o.id)&&TYPES[o.type]?.custom));
 const PKIND={disciplina:['rel','Disciplina'],banca:['rel','Banca'],orgao:['rel','Órgão'],cargo:['rel','Cargo'],ano:['num'],concurso:['rel','Concurso'],edicao:['rel','Edição'],formato:['txt'],classe:['sel'],cat:['sel'],paginas:['num']};
 const PROPS={
   disciplina:{n:'Disciplina',get:o=>o.materia},
@@ -1986,7 +1986,7 @@ const UIICON={
 };
 const ICN={help:'Pergunta',timer:'Cronômetro',answer:'Resposta',book:'Livro',star:'Estrela',bookmark:'Marcador',flag:'Bandeira',target:'Alvo',bolt:'Raio',heart:'Coração',code:'Código',cap:'Formatura',building:'Prédio',globe:'Globo',folder:'Pasta',bulb:'Ideia',chart:'Gráfico',tag:'Etiqueta',pin:'Fixo'};
 const iconSvg=(id,def)=>{ const m=store.get('icons')||{}; return (m[id]&&IC[m[id]])||def; };
-const TYI=()=>({concurso:SI.collection,edicao:SI.calendar,cargo:SI.briefcase,arquivo:SI.file,documento:SI.text,pdf:SI.pdf,orgao:IC.building,banca:IC.flag,questao:IC.help,disciplina:IC.cap,simulado:IC.timer,resposta:IC.answer});
+const TYI=()=>Object.assign({concurso:SI.collection,edicao:SI.calendar,cargo:SI.briefcase,arquivo:SI.file,documento:SI.text,pdf:SI.pdf,orgao:IC.building,banca:IC.flag,questao:IC.help,disciplina:IC.cap,simulado:IC.timer,resposta:IC.answer},Object.fromEntries(Object.keys(TYPES).filter(t=>TYPES[t].custom).map(t=>[t,customTypeIcon(t)])));
 const sidebarIcon=d=>{const n=d.t.toLowerCase();return n.includes('cronograma')?SI.calendar:n.includes('gabarito')?SI.filecheck:SI.pdf;};
 const store={
   get(k){ try{ return JSON.parse(localStorage.getItem('leitor:'+k)); }catch(e){ return null; } },
@@ -1998,6 +1998,28 @@ const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
 const isPhone=()=>matchMedia('(max-width:768px)').matches;
 
 /* ---- spaces ---- */
+/* Restore custom types after local storage exists and before custom property hydration. */
+const CUSTOM_TONES=['blue','green','amber','violet'],CUSTOM_ICONS=['file','book','tag','star'];
+const storedCustomTypes=store.get('customObjectTypes');
+const validCustomType=d=>d&&typeof d.id==='string'&&/^custom-[a-z0-9-]{1,56}$/.test(d.id)&&
+  typeof d.n==='string'&&d.n.trim().length>=2&&d.n.length<=70&&
+  typeof d.plural==='string'&&d.plural.trim().length>=2&&d.plural.length<=70;
+for(const def of Array.isArray(storedCustomTypes)?storedCustomTypes:[]){
+  if(!validCustomType(def)||Object.prototype.hasOwnProperty.call(TYPES,def.id))continue;
+  TYPES[def.id]={n:def.n,en:def.n,parent:null,own:[],plural:def.plural,custom:true,
+    tone:CUSTOM_TONES.includes(def.tone)?def.tone:'blue',icon:CUSTOM_ICONS.includes(def.icon)?def.icon:'file'};
+}
+const storedCustomObjects=store.get('customObjects');
+const customObjects=Array.isArray(storedCustomObjects)?storedCustomObjects.filter(o=>
+  o&&typeof o.id==='string'&&/^custom-object-[a-z0-9-]+$/.test(o.id)&&TYPES[o.type]?.custom&&
+  typeof o.t==='string'&&typeof o.sp==='string'):[];
+const saveCustomTypes=()=>store.set('customObjectTypes',Object.entries(TYPES)
+  .filter(([id,def])=>def.custom).map(([id,def])=>({id,n:def.n,plural:def.plural,tone:def.tone,icon:def.icon})));
+const saveCustomObjects=()=>store.set('customObjects',customObjects);
+const customObjById=id=>customObjects.find(o=>o.id===id&&o.sp===space);
+const customTypeIcon=t=>({file:SI.file,book:IC.book,tag:IC.tag,star:IC.star})[TYPES[t]?.icon]||SI.file;
+const customToneClass=t=>TYPES[t]?.custom?' custom-tone-'+TYPES[t].tone:'';
+const customTypeNameValid=value=>!Object.values(TYPES).some(x=>normN(x.n)===normN(value));
 const BASE_SP={id:'dataprev',name:store.get('baseName')||'Concurso de TI'};
 (store.get('userConc')||[]).forEach(c=>{ if(!CONCURSOS.some(x=>x.id===c.id)) CONCURSOS.push(c); });
 (store.get('userCargos')||[]).forEach(c=>{ if(!CARGOS.some(x=>x.id===c.id)) CARGOS.push(c); });
@@ -2105,7 +2127,7 @@ function renderNewMenu(){
     const cnt=getObjectTypeCount(t);
     const icon=TI[t]||SI.file;
     const sel=idx===newMenuSel?' sel':'';
-    return '<button type="button" class="nm-item'+sel+'" role="option" id="nm-opt-'+idx+'" data-type="'+t+'" data-idx="'+idx+'" aria-selected="'+(idx===newMenuSel)+'"><span class="nm-badge tone-type-'+t+'" aria-hidden="true">'+icon+'</span><span class="nm-t">'+esc(TYPES[t].n)+'</span><span class="nm-cnt">'+cnt+'</span></button>';
+    return '<button type="button" class="nm-item'+sel+'" role="option" id="nm-opt-'+idx+'" data-type="'+t+'" data-idx="'+idx+'" aria-selected="'+(idx===newMenuSel)+'"><span class="nm-badge tone-type-'+t+customToneClass(t)+'" aria-hidden="true">'+icon+'</span><span class="nm-t">'+esc(TYPES[t].n)+'</span><span class="nm-cnt">'+cnt+'</span></button>';
   }).join('');
   markNewMenuSel();
 }
@@ -2599,7 +2621,7 @@ function typesSec(){
   const TI=TYI();
   const walk=t=>{ const isE=isEntT(t); const n=t==='questao'?(70+uqAll().length):t==='simulado'?simsAll().length:t==='resposta'?histAll().length:isE?entsOf(t).length:mine.filter(d=>isA(d.type,t)).length;
     const kids=Object.keys(TYPES).filter(k=>TYPES[k].parent===t&&!hiddenTypes.has(k)).map(walk).join('')+(isE?entsOf(t).map(e=>treeNode(t+':'+e.id,e.t,'#/'+t+'/'+e.id,TI[t],'tone-type tone-type-'+t)).join(''):'');
-    return treeNode('tipo:'+t,TYPES[t].n,'#/tipo/'+t,TI[t]||SI.file,'tone-type tone-type-'+t,kids,n); };
+    return treeNode('tipo:'+t,TYPES[t].n,'#/tipo/'+t,TI[t]||SI.file,'tone-type tone-type-'+t+customToneClass(t),kids,n); };
   const rows=sortList(Object.keys(TYPES).filter(k=>!TYPES[k].parent&&!hiddenTypes.has(k)),navSort('types'),k=>TYPES[k].n,()=>0).map(walk);
   return '<div class="sec'+(closed?' closed':'')+'" data-seckey="'+esc(key)+'">'+secHead(key,'Tipos de objeto',closed,Object.keys(TYPES).filter(k=>!hiddenTypes.has(k)).length,'types','Adicionar tipo de objeto')+'<div class="sec-b">'+rows.join('')+'</div></div>';
 }
@@ -3607,7 +3629,7 @@ const opProps=(rows,iid)=>{
   '</div>';
 };
 const opProps0=opProps;
-const objHref=d=>d.type==='questao'?'#/questao/'+d.id:isEntT(d.type)?'#/'+d.type+'/'+d.id:d.type==='concurso'?'#/concurso/'+d.id:d.type==='edicao'?'#/edicao/'+d.id:d.type==='cargo'?'#/cargo/'+d.id:'#'+d.id;
+const objHref=d=>TYPES[d.type]?.custom?'#/custom-object/'+d.id:d.type==='questao'?'#/questao/'+d.id:isEntT(d.type)?'#/'+d.type+'/'+d.id:d.type==='concurso'?'#/concurso/'+d.id:d.type==='edicao'?'#/edicao/'+d.id:d.type==='cargo'?'#/cargo/'+d.id:'#'+d.id;
 const opRow0=o=>'<a class="op-row" href="'+o.href+'">'+(o.icon?'<span class="op-ri t-'+o.icon+'" aria-hidden="true">'+iconSvg(o.iid,OPI()[o.icon]||SI.file)+'</span>':'')+'<span class="op-rt"><b>'+esc(o.title)+'</b>'+(o.meta?'<small>'+esc(o.meta)+'</small>':'')+'</span>'+(o.tail?'<span class="op-tail">'+esc(o.tail)+'</span>':'')+'<span class="op-go" aria-hidden="true">›</span></a>';
 const opRow=o=>o.pinId?'<div class="op-rw">'+opRow0(o)+'</div>':opRow0(o);
 const opList=rows=>rows.length?'<div class="op-list">'+rows.map(opRow).join('')+'</div>':'';
