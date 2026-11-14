@@ -3714,7 +3714,7 @@ const origTag=q=>'<span class="s-badge" title="Origem da questão">'+ORIGENS[qOr
 const qTitle=q=>q.user?(String(q.enunciado).replace(/\s+/g,' ').trim().slice(0,70)||'Questão'):'Questão '+q.n;
 function qObjs(){
   const b=(questionBank&&questionBank.questoes)||[];
-  const bank=b.map((q,i)=>({id:'q'+q.n,type:'questao',bi:i,n:q.n,materia:q.materia,enunciado:q.enunciado,alternativas:q.alternativas,gabarito:q.gabarito,banca:'FGV',orgao:'Dataprev',ano:'2026',ed:'dataprev-2026',cg:'dataprev-2026-ti-dev',conc:'dataprev',origem:'oficial',doc:'tipo1'}));
+  const bank=b.map((q,i)=>({id:'q'+q.n,type:'questao',bi:i,n:q.n,materia:q.materia,assunto:q.assunto||'',modalidade:q.modalidade||'',dificuldade:q.dificuldade||'',anulada:!!q.anulada,desatualizada:!!q.desatualizada,comentario:q.comentario||'',enunciado:q.enunciado,alternativas:q.alternativas,gabarito:q.gabarito,banca:'FGV',orgao:'Dataprev',ano:'2026',ed:'dataprev-2026',cg:'dataprev-2026-ti-dev',conc:'dataprev',origem:'oficial',doc:'tipo1'}));
   const u=uqAll().map(q=>{const e=q.ed&&edicaoById(q.ed);return Object.assign({type:'questao',user:true,banca:e?edBancaName(e):'',orgao:e?edOrgaoName(e):'',ano:e&&e.ano?String(e.ano):''},q);});
   return bank.concat(u);
 }
@@ -3733,15 +3733,28 @@ let qtF={banca:'',disc:'',ed:'',sit:'',orig:''}, qtList=[];
 /* ---- v0.1.1 · Filtro de questões (componente único: Questão, Concurso, Edição, Cargo) ---- */
 const qfN=s=>String(s==null?'':s).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
 const QF_SIT={resolvidas:'Resolvidas',pendentes:'Não resolvidas',certas:'Que acertei',erradas:'Que errei',rev:'Para revisar',fav:'Favoritas'};
+const qfModal=q=>{if(q.modalidade)return q.modalidade;const v=Object.values(q.alternativas||{}).map(x=>qfN(String(x).trim()));return v.length===2&&v.includes('certo')&&v.includes('errado')?'Certo/Errado':'Múltipla escolha';};
 const QF_CATS=[
+ {id:'disc',t:'Disciplina',get:q=>[q.materia||'Sem disciplina']},
+ {id:'assunto',t:'Assunto',get:q=>q.assunto?[q.assunto]:[],requires:'disc'},
  {id:'banca',t:'Banca',get:q=>q.banca?[q.banca]:[]},
- {id:'conc',t:'Concurso',get:q=>q.conc?[q.conc]:[],fmt:v=>(concursoById(v)||{}).t||v},
  {id:'cg',t:'Cargo',get:q=>q.cg?[q.cg]:[],fmt:v=>(cargoById(v)||{}).t||v},
  {id:'ano',t:'Ano',get:q=>q.ano?[String(q.ano)]:[]},
- {id:'disc',t:'Disciplina',get:q=>[q.materia||'Sem disciplina']},
+ {id:'orgao',t:'Órgão',get:q=>q.orgao?[q.orgao]:[]},
+ {id:'modalidade',t:'Modalidade',get:q=>[qfModal(q)]},
+ {id:'dificuldade',t:'Dificuldade',get:q=>q.dificuldade?[q.dificuldade]:[]},
+ {id:'conc',t:'Concurso',get:q=>q.conc?[q.conc]:[],fmt:v=>(concursoById(v)||{}).t||v},
  {id:'ed',t:'Edição',get:q=>q.ed?[q.ed]:[],fmt:v=>(edicaoById(v)||{}).t||v},
  {id:'orig',t:'Origem',get:q=>[qOrig(q)],fmt:v=>ORIGENS[v]||v},
  {id:'sit',t:'Situação',get:q=>{const r=qSel(q),f=qFlag(q.id),a=[!r?'pendentes':(r===q.gabarito?'certas':'erradas')];if(r)a.push('resolvidas');if(f.rev)a.push('rev');if(f.fav)a.push('fav');return a;},fmt:v=>QF_SIT[v]||v,fixed:Object.keys(QF_SIT),always:true}
+];
+const QF_EXCLUSIONS=[
+ {id:'cadernos',t:'Dos meus cadernos',mode:'exclude',test:q=>nbAll().some(b=>b.sp===space&&b.questionIds.includes(q.id))},
+ {id:'simulados',t:'Dos meus simulados',mode:'exclude',test:q=>simsAll().some(s=>Array.isArray(s.res)&&s.res.some(r=>r.id===q.id))},
+ {id:'anuladas',t:'Anuladas',mode:'exclude',test:q=>!!q.anulada,default:true},
+ {id:'desatualizadas',t:'Desatualizadas',mode:'exclude',test:q=>!!q.desatualizada},
+ {id:'comentado',t:'Gabarito comentado',mode:'include',test:q=>!!(q.comentario||q.explicacao||q.gabaritoComentado)},
+ {id:'anotacoes',t:'Minhas anotações',mode:'include',test:q=>!!qFlag(q.id).note}
 ];
 const qfS={},qfCtx={},qScopedPage={};
 
@@ -3922,13 +3935,14 @@ async function nbRoute(h){
   }catch(e){if(location.hash.slice(1)===h)studyError(e,'#/espaco');}
 }
 
-const qfSt=k=>qfS[k]||(qfS[k]={f:{},text:'',open:false,cat:null,qs:''});
+const qfSt=k=>qfS[k]||(qfS[k]={f:{},x:{anuladas:true},text:'',open:false,panelOpen:false,cat:null,qs:''});
 const qfLbl=(c,v)=>c.fmt?c.fmt(v):v;
 const QF_IC='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 5h18M6 12h12M10 19h4"/></svg>';
 const QF_X='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
 function qfMatch(q,st,skip){
   const t=qfN(st.text.trim());
-  if(t&&!qfN(q.enunciado+' '+(q.materia||'')+' '+Object.values(q.alternativas||{}).join(' ')).includes(t)) return false;
+  if(t&&!qfN(q.enunciado+' '+(q.materia||'')+' '+(q.assunto||'')+' '+q.id+' '+(q.n||'')+' '+Object.values(q.alternativas||{}).join(' ')).includes(t)) return false;
+  if(!QF_EXCLUSIONS.every(x=>!((st.x||{})[x.id])||(x.mode==='include'?x.test(q):!x.test(q))))return false;
   return QF_CATS.every(c=>{ if(c.id===skip) return true; const a=st.f[c.id]; return !a||!a.length||c.get(q).some(v=>a.includes(v)); });
 }
 function qfFilter(key,all){ const st=qfSt(key); return all.filter(q=>qfMatch(q,st)); }
@@ -3939,7 +3953,7 @@ function qfVals(key,c){
   all.forEach(q=>{ if(qfMatch(q,st,c.id)) c.get(q).forEach(v=>m.set(v,m.get(v)+1)); });
   const a=[...m]; if(!c.fixed) a.sort((x,y)=>String(qfLbl(c,x[0])).localeCompare(String(qfLbl(c,y[0])),'pt-BR')); return a;
 }
-const qfCats=key=>QF_CATS.filter(c=>c.always||qfVals(key,c).length>1||(qfSt(key).f[c.id]||[]).length);
+const qfCats=key=>QF_CATS.filter(c=>(!c.requires||(qfSt(key).f[c.requires]||[]).length)&& (c.always||qfVals(key,c).length>1||(qfSt(key).f[c.id]||[]).length));
 function qfChipsHTML(key){
   const st=qfSt(key); let h='';
   if(st.text.trim()) h+='<span class="qf-chip"><span class="qf-chip-b"><b>Busca</b> “'+esc(st.text.trim())+'”</span><button type="button" class="qf-x" data-qf-xt aria-label="Remover busca">'+QF_X+'</button></span>';
