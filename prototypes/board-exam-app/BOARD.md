@@ -2180,6 +2180,25 @@ Botão de exportação na barra do grafo, viewport 1366px
 
 PNG real gerado no canvas desktop, pixel ratio 2
 
+## 43. Prova de Conceito: Integração Claude Pro Storage Bridge (localhost vs claude.ai)
+<!-- container e1371 @ (36000,11000) -->
+
+### Veredito da Prova de Conceito: Inviável via Browser Bridge (Bloqueado por CSP e Sandbox)
+
+Testamos a comunicação entre o Exam App em localhost (porta 8765) e o Claude Pro Storage (window.storage no Artifact a728ae48).
+
+- Testes unitários do protocolo (MessageChannel, CRUD, timeout, validação de chaves e origens): 6/6 passaram.
+- Teste de incorporação em iframe: Bloqueado pelo navegador via CSP frame-ancestors self.
+- Teste de janela autenticada (window.open): Desacoplado pelo navegador via Cross-Origin-Opener-Policy (same-origin-allow-popups).
+- Teste de postMessage: Inalcançável devido ao sandboxing em 3 camadas do Claude (claude.ai -> frame.claudeusercontent.com -> index.html).
+- Fechamento de aba: Canais em memória são destruídos com a aba; não há persistência autônoma.
+
+Evidência técnica registrada em docs/reports/claude-storage-bridge/CLAUDE_STORAGE_BRIDGE_INVESTIGATION.md.
+
+![imagem e1373](assets/evidence-iframe-csp-blocked.png)
+
+Evidência de execução real no Google Chrome: O navegador acusa 'Framing https://claude.ai/ violates Content Security Policy: frame-ancestors... The request has been blocked'. O iframe renderiza em branco e o canal postMessage é recusado pela Same-Origin Policy. Recomendação: Manter armazenamento local estruturado (localStorage/IndexedDB) e publicação estática via claude-artifact publish.
+
 ## 10. Arquivos do projeto (Dataprev 2026 e referências)
 <!-- container e363 @ (0,12666) -->
 
