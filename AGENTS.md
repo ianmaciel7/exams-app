@@ -78,6 +78,11 @@ Do not open `index.html` with `file://`: the app fetches PDFs and JSON, which ne
 
 ## Other
 
+### Zero Emoji Policy for UI
+
+- Do not use Unicode emoji in the interface, controls, badges, metrics, empty states, or UI specifications. Use semantic, monochrome inline SVG icons with `currentColor`, `stroke-width="1.8"`, rounded caps, and rounded joins.
+- Before finishing a UI change, scan the affected interface files for emoji and pictographic symbols.
+
 - Design and planning material: `prototypes/README.md`.
 - Archived legacy code is in `docs/archives/` (see `docs/archives/REUSE-MAP.md` on the `chore/project-tooling` branch).
 

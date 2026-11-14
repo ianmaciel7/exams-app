@@ -254,7 +254,8 @@
     "e723",
     "e724",
     "e725",
-    "e726"
+    "e726",
+    "e630"
   ],
   "elements": {
     "e1": {
@@ -2819,6 +2820,14 @@
       "w": 700,
       "h": 60,
       "text": "**Evidência 20 (Archive `notes-app-old-10` Recall):** Estética editorial *Monastic Knowledge Sanctuary* para a Home do Espaço (`#/espaco`) com card Hero escuro `TODAY`, `Review today` e `Recent objects` sem emojis — Issue #58"
+    },
+    "e630": {
+      "type": "text",
+      "x": 1630,
+      "y": 14010,
+      "w": 1500,
+      "h": 90,
+      "text": "**Implementação das Issues #34 e #42 (branch codex/issue-34-42)**\n- Topbar sem duplicação do espaço ou toggle da sidebar com navegação expandida no desktop; seletor compacto mostra monograma quando recolhida.\n- Progresso aparece somente em documentos de leitura; barra secundária removida do modo simulado; páginas do app usam superfície elevada arredondada.\n- UI sem emojis: ícones vetoriais semânticos substituem os pictogramas e marcas Unicode; regra Zero Emoji Policy registrada em AGENTS.md e DESIGN.md."
     }
   }
 }

@@ -59,7 +59,7 @@
 :root[data-theme="dark"]{--study-accent:#a0adff;--study-tint:#252836;--study-good:#75d2b8;--study-warn:#f0aa8b}
 .study-side-link{font-size:13.5px}
 .nav .doc.ty{height:33px;font-size:13px}.nav .doc.ty[aria-current="page"]{background:var(--active)}
-.main.study-mode .bar{background:var(--bg)}
+.main.study-mode .bar{display:none}
 .main.study-mode .bar .title b{font-size:13px;font-weight:500}
 .main.study-mode .bar .title span{display:none}
 .main.study-mode .tools,.main.study-mode .readprog{display:none}
@@ -469,7 +469,8 @@ svg{flex:none}
 .tools button:hover{background:var(--hover)}
 .tools .z{min-width:50px}
 .tools .sep{width:1px;height:18px;background:var(--line);margin:0 6px}
-.readprog{height:2px;flex:none}
+.readprog{height:2px;flex:none;display:none}
+.main.reading-mode .readprog{display:block}
 .readprog i{display:block;height:100%;width:0;background:var(--accent);transition:width .15s}
 .view{flex:1;overflow:auto;background:var(--canvas);padding:24px 16px 80px;padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right))}
 .page{margin:0 auto 16px;background:var(--sheet);box-shadow:var(--shadow);border-radius:2px;position:relative;max-width:100%}
@@ -789,6 +790,7 @@ a.ot{display:block;padding:3px 0;min-height:24px}
 .dash-resume-card:hover{border-color:color-mix(in srgb, var(--line) 60%, var(--muted));box-shadow:0 3px 12px rgba(0,0,0,.04)}
 .dash-resume-head{display:flex;align-items:center;gap:12px}
 .dash-resume-icon{display:grid;place-items:center;width:40px;height:40px;border-radius:10px;background:var(--hover);color:var(--text);font-size:18px;flex:none}
+.dash-resume-icon svg,.dash-act-ico svg,.dash-hero-badge svg,.dash-hero-timer svg,[data-drawer-toggle] svg,.qm-marks svg{display:block;flex:none}
 .dash-resume-txt b{display:block;font-size:14.5px;font-weight:600;color:var(--text);line-height:1.3}
 .dash-resume-txt small{font-size:12.5px;color:var(--muted)}
 .dash-cta{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:550;text-decoration:none;cursor:pointer;line-height:1.2;transition:background-color .15s ease}
@@ -807,7 +809,7 @@ a.ot{display:block;padding:3px 0;min-height:24px}
 .dash-actions{display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:12px}
 .dash-act-btn{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--side);color:var(--text);text-decoration:none;cursor:pointer;transition:background-color .15s ease, transform .1s ease}
 .dash-act-btn:hover{background:var(--hover);transform:translateY(-1px)}
-.dash-act-ico{font-size:20px;flex:none}
+.dash-act-ico{display:grid;place-items:center;width:28px;height:28px;flex:none;color:var(--muted)}
 .dash-act-txt{display:flex;flex-direction:column;min-width:0;text-align:left}
 .dash-act-txt b{font-size:13.5px;font-weight:600}
 .dash-act-txt small{font-size:11.5px;color:var(--muted)}
@@ -1108,6 +1110,7 @@ a.rp-link:hover{background:var(--active)}
   .app.collapsed .side-top #collapse svg{width:16px;height:16px}
   .side-top .space-btn{flex:1}
 }
+@media (min-width:1101px){.app:not(.collapsed) #spTopBtn,.app:not(.collapsed) #wsSide{display:none}}
 @media(max-width:700px){.ws-tabs .ws-tablist{max-width:none}}
 
 /* ===== abas v2 (barra superior e painel) ===== */
@@ -1115,9 +1118,13 @@ a.rp-link:hover{background:var(--active)}
 .rp-top{background:var(--app-tab-bg-back)}
 .bar{display:none;height:46px}
 .main.has-pdf .bar,.main.study-mode .bar{display:flex}
+.main.study-mode .bar{display:none}
+.main:not(.reading-mode) .readprog{display:none}
+.main.on-board .view{background:var(--app-tab-bg-back);padding:16px}
+.main.on-board .view>.board{box-sizing:border-box;min-height:100%;padding:24px;background:var(--app-tab-bg-base);border:1px solid var(--app-tab-border-front);border-radius:12px;color:var(--app-tab-text-primary)}
 .ws-sp-btn{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 8px;border-radius:8px;border:none;background:transparent;color:var(--text);font-size:13px;font-weight:600;cursor:pointer;flex:none;transition:background-color .15s ease}
 .ws-sp-btn:hover{background:var(--app-tab-bg-back-hover)}
-.ws-sp-btn .sp-ic{font-size:14px;line-height:1}
+.ws-sp-btn .sp-ic{display:grid;place-items:center;width:20px;height:20px;border-radius:6px;color:#fff;font-size:11px;line-height:1;font-weight:700}
 .ws-sp-btn .sp-lbl{white-space:nowrap;max-width:140px;overflow:hidden;text-overflow:ellipsis}
 .ws-sp-btn .sp-chev{width:11px;height:11px;color:var(--muted);opacity:.75}
 #wsTabs .hist.ws-nav{display:flex;align-items:center;gap:2px;flex:none;margin:0 2px}
@@ -1234,7 +1241,7 @@ a.rp-link:hover{background:var(--active)}
 
   <main class="main">
     <div class="ws-tabs" id="wsTabs">
-      <button class="ws-sp-btn" id="spTopBtn" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Alternar espaço"><span class="sp-ic" id="spTopAv">💡</span><b class="sp-lbl" id="spTopName">Concurso de TI</b><svg class="sp-chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg></button>
+      <button class="ws-sp-btn" id="spTopBtn" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Alternar espaço"><span class="sp-ic" id="spTopAv">C</span><b class="sp-lbl" id="spTopName">Concurso de TI</b><svg class="sp-chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg></button>
       <button class="icon-btn" id="wsSide" aria-label="Alternar barra lateral" title="Barra lateral (Ctrl+\)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/></svg></button>
       <div class="hist ws-nav"><button class="icon-btn" id="histBack" aria-label="Voltar (Alt+←)" title="Voltar (Alt+←)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button><button class="icon-btn" id="histFwd" aria-label="Avançar (Alt+→)" title="Avançar (Alt+→)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></div>
       <div class="ws-tablist" id="wsTabList" role="tablist" aria-label="Abas principais"></div>
@@ -1484,6 +1491,19 @@ const SI={
 
 const ICP={help:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9.500a2.500 2.500 0 1 1 3.500 2.300c-.7.4-1 .9-1 1.700M12 17h.01"/>',timer:'<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.500 2M9 2.500h6"/>',answer:'<circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/>',book:'<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5"/>',star:'<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',bookmark:'<path d="M6 3h12v18l-6-4-6 4z"/>',flag:'<path d="M5 21V4M5 4h12l-2 4 2 4H5"/>',target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>',bolt:'<path d="M13 3 5 13h6l-1 8 8-10h-6z"/>',heart:'<path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/>',code:'<path d="m8 8-5 4 5 4M16 8l5 4-5 4M14 5l-4 14"/>',cap:'<path d="m2 9 10-5 10 5-10 5z"/><path d="M6 11v5c0 1.5 3 3 6 3s6-1.500 6-3v-5"/>',building:'<path d="M4 21V4h10v17M14 9h6v12M2 21h20M8 8h2M8 12h2M8 16h2"/>',globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/>',folder:'<path d="M3 6a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',bulb:'<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.500c.8.8 1 1.500 1 2.500h6c0-1 .2-1.700 1-2.500A6 6 0 0 0 12 3z"/>',chart:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',tag:'<path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.500" cy="8.500" r="1"/>',pin:'<path d="M12 17v5M8 3h8l-1 7 3 4H6l3-4z"/>'};
 const IC={}; Object.keys(ICP).forEach(k=>IC[k]='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+ICP[k]+'</svg>');
+const UIICON={
+  target:IC.target,
+  calendar:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg>',
+  book:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h13v18H6a2 2 0 0 0-2 2z"/><path d="M4 19V5M9 7h6M9 11h6"/></svg>',
+  check:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>',
+  close:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>',
+  star:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>',
+  grid:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>',
+  filePlus:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2v-7"/><path d="M13 3v6h6M18 3l3 3M18 14v6M15 17h6"/></svg>',
+  nodes:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="12" cy="18" r="2"/><path d="m7 7 4 9M17 7l-4 9M7 6h10"/></svg>',
+  alert:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 4.3 2.7 18a2 2 0 0 0 1.7 3h15.2a2 2 0 0 0 1.7-3L13.7 4.3a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>',
+  spark:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8L19 16z"/></svg>'
+};
 const ICN={help:'Pergunta',timer:'Cronômetro',answer:'Resposta',book:'Livro',star:'Estrela',bookmark:'Marcador',flag:'Bandeira',target:'Alvo',bolt:'Raio',heart:'Coração',code:'Código',cap:'Formatura',building:'Prédio',globe:'Globo',folder:'Pasta',bulb:'Ideia',chart:'Gráfico',tag:'Etiqueta',pin:'Fixo'};
 const iconSvg=(id,def)=>{ const m=store.get('icons')||{}; return (m[id]&&IC[m[id]])||def; };
 const TYI=()=>({concurso:SI.collection,edicao:SI.calendar,cargo:SI.briefcase,arquivo:SI.file,documento:SI.text,pdf:SI.pdf,orgao:IC.building,banca:IC.flag,questao:IC.help,disciplina:IC.cap,simulado:IC.timer,resposta:IC.answer});
@@ -1520,6 +1540,7 @@ function paintSpaces(){
   $('spAv').textContent=sp.name[0].toUpperCase(); $('spAv').style.background=spColor(sp);
   $('spName').textContent=sp.name;
   if($('spTopName')) $('spTopName').textContent=sp.name;
+  if($('spTopAv')) { $('spTopAv').textContent=sp.name[0].toUpperCase(); $('spTopAv').style.background=spColor(sp); }
   $('spPop').innerHTML=spaces.map(x=>
     '<div class="row" role="menuitem" tabindex="0" data-sp="'+x.id+'"><span class="av" style="background:'+spColor(x)+'">'+esc(x.name[0].toUpperCase())+'</span><span class="t">'+esc(x.name)+'</span>'+(x.id===space?CHECK:'')+'<button class="more" data-spmore="'+x.id+'" aria-label="Ações do espaço" title="Mais ações">'+I.more+'</button></div>').join('')+
     '<hr><button class="row" role="menuitem" data-sp="+"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span class="t">Criar espaço</span></button>';
@@ -2067,11 +2088,13 @@ let cur=null, token=0, zoom=1, io=null, baseW=0;
 const hasPdf=!!window.pdfjsLib;
 if(hasPdf) pdfjsLib.GlobalWorkerOptions.workerSrc='pdf.worker.min.js';
 function setZoomLabel(){ $('zfit').textContent=Math.round(zoom*100)+'%'; }
-function blank(title,html){ $('props').hidden=true; if(cur&&cur.pdf){ try{cur.pdf.destroy();}catch(e){} } cur=null; token++;
+function blank(title,html){ $('props').hidden=true; document.querySelector('.main').classList.remove('reading-mode'); if(cur&&cur.pdf){ try{cur.pdf.destroy();}catch(e){} } cur=null; token++;
   $('docTitle').textContent=title; $('docMeta').textContent=''; $('pg').textContent=''; $('rp').style.width='0'; $('zfit').textContent='';
   view.innerHTML='<div class="msg">'+html+'</div>'; markCurrent(); }
 
 async function open(d){
+  document.querySelector('.main').classList.remove('on-board','study-mode');
+  document.querySelector('.main').classList.toggle('reading-mode',d.classe!=='referência');
   $('docTitle').textContent=d.t; $('docMeta').textContent=d.g+' · '+d.m;
   { const ed=d.edicao&&edicaoById(d.edicao), cc=ed&&concursoById(ed.conc); if(ed&&cc) { const sep='<i class="bc-s" aria-hidden="true"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 1.5 7 5 3.5 8.5"/></svg></i>'; $('docMeta').innerHTML='<nav class="bc" aria-label="Localização do documento"><a href="#/concurso/'+esc(cc.id)+'">'+esc(cc.t)+'</a>'+sep+'<a href="#/edicao/'+esc(ed.id)+'">Edição '+ed.ano+'</a>'+sep+'<span class="bc-c">'+esc(d.g)+'</span></nav>'; } }
   document.title=d.t+' · Leitor';
@@ -2595,8 +2618,8 @@ function scBody(k,id,tab,kind,title){
     const ua=uqAns(),listU=mine.filter(q=>(scMat==='todas'||q.materia===scMat)&&(scSit==='todas'||(scSit==='pendentes'?!ua[q.id]:(ua[q.id]&&ua[q.id]!==q.gabarito))));
     const list=bank.filter(q=>(scMat==='todas'||q.materia===scMat)&&(scSit==='todas'||(scSit==='pendentes'?!a[q.n]:(a[q.n]&&!a[q.n].correct))));
     const sel='<div class="sc-filters"><select id="scMat" aria-label="Disciplina"><option value="todas">Todas as disciplinas</option>'+examNames.map(n=>'<option value="'+esc(n)+'"'+(scMat===n?' selected':'')+'>'+esc(n)+'</option>').join('')+'</select><select id="scSit" aria-label="Situação">'+[['todas','Todas'],['pendentes','Não resolvidas'],['erradas','Que errei']].map(o=>'<option value="'+o[0]+'"'+(scSit===o[0]?' selected':'')+'>'+o[1]+'</option>').join('')+'</select><span class="sc-count" role="status">'+(list.length+listU.length)+((list.length+listU.length)===1?' questão':' questões')+'</span>'+ACT+'</div>';
-    const rows=list.map(q=>{const r=a[q.n],st=r?(r.correct?'✓':'✗'):'';const t=String(q.enunciado).replace(/\s+/g,' ').trim();return '<a class="op-row sc-q" href="#/questao/q'+q.n+'"><span class="sc-n">'+q.n+'</span><span class="op-rt"><b>'+esc(t.length>110?t.slice(0,110)+'…':t)+'</b><small>'+esc(q.materia)+' · FGV 2026</small></span><span class="sc-st '+(r?(r.correct?'ok':'bad'):'')+'">'+(st||'')+'</span><span class="op-go" aria-hidden="true">›</span></a>';}).join('');
-    const urows=listU.map(q=>{const r=ua[q.id],t=q.enunciado.replace(/\s+/g,' ').trim();return '<a class="op-row sc-q" href="#/questao/'+q.id+'"><span class="sc-n">+</span><span class="op-rt"><b>'+esc(t.length>110?t.slice(0,110)+'…':t)+'</b><small>'+esc(q.materia||'Sem disciplina')+' · criada por você</small></span><span class="sc-st '+(r?(r===q.gabarito?'ok':'bad'):'')+'">'+(r?(r===q.gabarito?'✓':'✗'):'')+'</span><span class="op-go" aria-hidden="true">›</span></a>';}).join('');
+    const rows=list.map(q=>{const r=a[q.n],st=r?(r.correct?UIICON.check:UIICON.close):'';const t=String(q.enunciado).replace(/\s+/g,' ').trim();return '<a class="op-row sc-q" href="#/questao/q'+q.n+'"><span class="sc-n">'+q.n+'</span><span class="op-rt"><b>'+esc(t.length>110?t.slice(0,110)+'…':t)+'</b><small>'+esc(q.materia)+' · FGV 2026</small></span><span class="sc-st '+(r?(r.correct?'ok':'bad'):'')+'">'+(st||'')+'</span><span class="op-go" aria-hidden="true">›</span></a>';}).join('');
+    const urows=listU.map(q=>{const r=ua[q.id],t=q.enunciado.replace(/\s+/g,' ').trim();return '<a class="op-row sc-q" href="#/questao/'+q.id+'"><span class="sc-n">+</span><span class="op-rt"><b>'+esc(t.length>110?t.slice(0,110)+'…':t)+'</b><small>'+esc(q.materia||'Sem disciplina')+' · criada por você</small></span><span class="sc-st '+(r?(r===q.gabarito?'ok':'bad'):'')+'">'+(r?(r===q.gabarito?UIICON.check:UIICON.close):'')+'</span><span class="op-go" aria-hidden="true">›</span></a>';}).join('');
     const form=scForm?'<form class="sc-form" onsubmit="return false"><label>Disciplina<input id="uqMat" list="uqMats" placeholder="Ex.: Língua Portuguesa"><datalist id="uqMats">'+examNames.map(n=>'<option value="'+esc(n)+'">').join('')+'</datalist></label><label>Origem<select id="uqOri"><option value="manual">Manual (criada por mim)</option><option value="ia">Gerada por IA</option><option value="oficial">Oficial (de uma prova)</option></select></label><label>Enunciado<textarea id="uqEnu" rows="4"></textarea></label>'+['A','B','C','D','E'].map(l=>'<label class="sc-lt">'+l+'<input id="uqAlt'+l+'" placeholder="Alternativa '+l+(l<'C'?'':' (opcional)')+'"></label>').join('')+'<label>Gabarito<select id="uqGab">'+['A','B','C','D','E'].map(l=>'<option>'+l+'</option>').join('')+'</select></label><div class="op-actions"><button type="button" class="op-btn pri" data-uq-save>Salvar questão</button><button type="button" class="op-btn" data-uq-cancel>Cancelar</button></div></form>':'';
     return scSec(form+qfHTML(k+':'+id,qObjs().filter(q=>q.user?q[UQF[k]]===id:scHas(k,id)),{extra:ACT}));
   }
@@ -2712,12 +2735,12 @@ function opEspacoPage(sp,mine){
   <div class="dash-hero">
     <div class="dash-hero-top">
       <div>
-        <span class="dash-hero-badge">🎯 Meta Principal · Certame Ativo</span>
+        <span class="dash-hero-badge">${UIICON.target} Meta Principal · Certame Ativo</span>
         <h2 class="dash-hero-title">Dataprev 2026 · Analista de Tecnologia da Informação</h2>
         <p class="dash-hero-sub">FGV · Perfil: Engenharia de Software · 80 vagas imediatas + 371 CR · R$ 10.685,44</p>
       </div>
       <div class="dash-hero-timer">
-        <span>📅 Prova em 38 dias</span>
+        <span>${UIICON.calendar} Prova em 38 dias</span>
         <small style="opacity:.7">• 13/10/2026</small>
       </div>
     </div>
@@ -2735,7 +2758,7 @@ function opEspacoPage(sp,mine){
   <div class="dash-resume-grid">
     <div class="dash-resume-card">
       <div class="dash-resume-head">
-        <span class="dash-resume-icon">📖</span>
+        <span class="dash-resume-icon">${UIICON.book}</span>
         <div class="dash-resume-txt">
           <b>${lastD?esc(lastD.t):'Edital de Abertura'}</b>
           <small>${lp&&lp.total?'Página '+lp.page+' de '+lp.total+' ('+pctOf(lp.page,lp.total)+'% lido)':'Pronto para retomar leitura'}</small>
@@ -2745,7 +2768,7 @@ function opEspacoPage(sp,mine){
     </div>
     <div class="dash-resume-card">
       <div class="dash-resume-head">
-        <span class="dash-resume-icon">🎯</span>
+        <span class="dash-resume-icon">${UIICON.target}</span>
         <div class="dash-resume-txt">
           <b>${st.done?'Sessão de Questões':'Banco de Questões'}</b>
           <small>${st.done?st.done+' respondidas · '+pctOf(st.correct,st.done)+'% de acertos':'Inicie sua resolução focada'}</small>
@@ -2766,11 +2789,11 @@ function opEspacoPage(sp,mine){
     <div class="dash-kpi">
       <span class="dash-kpi-lbl">Questões Hoje</span>
       <span class="dash-kpi-val">${qToday} <small style="font-size:15px;color:var(--muted)">/ 25</small></span>
-      <span class="dash-kpi-sub">${qToday>=25?'🎉 Meta diária batida!':'Faltam '+(25-qToday)+' para a meta'}</span>
+      <span class="dash-kpi-sub">${qToday>=25?UIICON.check+' Meta diária batida!':'Faltam '+(25-qToday)+' para a meta'}</span>
     </div>
     <div class="dash-kpi">
       <span class="dash-kpi-lbl">Sequência (Streak)</span>
-      <span class="dash-kpi-val">🔥 5 dias</span>
+      <span class="dash-kpi-val">5 dias</span>
       <span class="dash-kpi-sub">Constância comprovada</span>
     </div>
     <div class="dash-kpi">
@@ -2784,28 +2807,28 @@ function opEspacoPage(sp,mine){
   const actionsHtml=`
   <div class="dash-actions">
     <a class="dash-act-btn" href="#/concurso/dataprev/simulado">
-      <span class="dash-act-ico">🎯</span>
+      <span class="dash-act-ico">${UIICON.timer}</span>
       <div class="dash-act-txt">
         <b>Simulado Rápido</b>
         <small>Prova com cronômetro</small>
       </div>
     </a>
     <a class="dash-act-btn" href="#/concurso/dataprev/questoes">
-      <span class="dash-act-ico">⚠️</span>
+      <span class="dash-act-ico">${UIICON.alert}</span>
       <div class="dash-act-txt">
         <b>Caderno de Erros</b>
         <small>${st.wrong||0} questões para fixar</small>
       </div>
     </a>
     <a class="dash-act-btn" href="#/grafico">
-      <span class="dash-act-ico">🕸️</span>
+      <span class="dash-act-ico">${UIICON.nodes}</span>
       <div class="dash-act-txt">
         <b>Grafo de Conhecimento</b>
         <small>Conexões orgânicas</small>
       </div>
     </a>
     <button type="button" class="dash-act-btn" data-addv>
-      <span class="dash-act-ico">📄</span>
+      <span class="dash-act-ico">${UIICON.filePlus}</span>
       <div class="dash-act-txt">
         <b>Importar PDF/Edital</b>
         <small>Adicionar material novo</small>
@@ -2931,7 +2954,7 @@ function tentativaPage(x){
     </div>`;
   }).join('');
 
-  const rows=x.res.map(r=>'<a class="op-row sc-q" href="#/questao/'+r.id+'"><span class="op-rt"><b>'+esc(r.n)+'</b></span><span class="sc-st '+(r.r==='ok'?'ok':r.r==='err'?'bad':'')+'">'+(r.r==='ok'?'✓':r.r==='err'?'✗':'—')+'</span><span class="op-go" aria-hidden="true">›</span></a>').join('');
+  const rows=x.res.map(r=>'<a class="op-row sc-q" href="#/questao/'+r.id+'"><span class="op-rt"><b>'+esc(r.n)+'</b></span><span class="sc-st '+(r.r==='ok'?'ok':r.r==='err'?'bad':'')+'">'+(r.r==='ok'?UIICON.check:r.r==='err'?UIICON.close:'—')+'</span><span class="op-go" aria-hidden="true">›</span></a>').join('');
   return opPage({iid:'tentativa:'+x.id,crumb:[['Espaço','#/espaco'],['Simulado','#/tipo/simulado'],[fmtDT(x.at),'']],icon:'simulado',kind:'Simulado',kindHref:'#/tipo/simulado',title:'Simulado de '+fmtDT(x.at),props,body:scoreCardHtml+opSec('Desempenho por Disciplina',discRows)+opSec('Questões',rows?'<div class="op-list">'+rows+'</div>':opEmpty('Sem questões.'),{count:x.res.length})+(()=>{const rs=respAll().filter(r=>r.sim===x.id);return opSec('Respostas',rs.length?'<div class="op-list">'+respRows(rs)+'</div>':opEmpty('Sem respostas registradas.'),{count:rs.length});})()});
 }
 
@@ -2940,7 +2963,7 @@ function tentativaPage(x){
 const respAll=()=>histAll().map(h=>Object.assign({},h,{id:h.id||('r'+h.t.toString(36)+'-'+h.q),sim:h.sim||(h.src==='Simulado'?'s'+h.t.toString(36):'')}));
 const respById=id=>respAll().find(r=>r.id===id);
 const respTitle=r=>'Resposta em '+fmtDT(r.t);
-function respRows(list){ return list.slice().sort((a,b)=>b.t-a.t).map(r=>'<a class="op-row" href="#/resposta/'+r.id+'"><span class="op-rt"><b>'+esc(r.n)+'</b><small>'+fmtDT(r.t)+' · '+esc(r.src)+(r.a?' · marcou '+esc(r.a):'')+'</small></span><span class="sc-st '+(r.ok?'ok':'bad')+'">'+(r.ok?'✓ Acertou':'✗ Errou')+'</span><span class="op-go" aria-hidden="true">›</span></a>').join(''); }
+function respRows(list){ return list.slice().sort((a,b)=>b.t-a.t).map(r=>'<a class="op-row" href="#/resposta/'+r.id+'"><span class="op-rt"><b>'+esc(r.n)+'</b><small>'+fmtDT(r.t)+' · '+esc(r.src)+(r.a?' · marcou '+esc(r.a):'')+'</small></span><span class="sc-st '+(r.ok?'ok':'bad')+'">'+(r.ok?UIICON.check+' Acertou':UIICON.close+' Errou')+'</span><span class="op-go" aria-hidden="true">›</span></a>').join(''); }
 function respostaPage(r){
   const q=qObjs().find(x=>x.id===r.q), sm=r.sim&&simsAll().find(x=>x.id===r.sim);
   const ch=(t,h)=>t?(h?'<a class="chip" href="'+h+'">'+esc(t)+'</a>':'<span class="chip">'+esc(t)+'</span>'):'';
@@ -2966,7 +2989,7 @@ function qObjs(){
 }
 function qSel(q){ if(q.user) return uqAns()[q.id]||null; const a=getAnswers()[q.n]; return a?a.selected:null; }
 const discEnt=m=>m?findEnt('disciplina',m):null;
-function qRows(list){ const sel=q=>qSel(q); return list.map(q=>{const r=sel(q),t=String(q.enunciado).replace(/\s+/g,' ').trim();return '<a class="op-row sc-q" href="#/questao/'+q.id+'"><span class="sc-n">'+(q.user?'+':q.n)+'</span><span class="op-rt"><b>'+esc(t.length>110?t.slice(0,110)+'…':t)+'</b><small>'+esc([q.materia||'Sem disciplina',q.banca,q.ano,ORIGENS[qOrig(q)]].filter(Boolean).join(' · '))+'</small></span><span class="sc-st '+(r?(r===q.gabarito?'ok':'bad'):'')+'">'+(r?(r===q.gabarito?'✓':'✗'):'')+'</span><span class="op-go" aria-hidden="true">›</span></a>';}).join(''); }
+function qRows(list){ const sel=q=>qSel(q); return list.map(q=>{const r=sel(q),t=String(q.enunciado).replace(/\s+/g,' ').trim();return '<a class="op-row sc-q" href="#/questao/'+q.id+'"><span class="sc-n">'+(q.user?'+':q.n)+'</span><span class="op-rt"><b>'+esc(t.length>110?t.slice(0,110)+'…':t)+'</b><small>'+esc([q.materia||'Sem disciplina',q.banca,q.ano,ORIGENS[qOrig(q)]].filter(Boolean).join(' · '))+'</small></span><span class="sc-st '+(r?(r===q.gabarito?'ok':'bad'):'')+'">'+(r?(r===q.gabarito?UIICON.check:UIICON.close):'')+'</span><span class="op-go" aria-hidden="true">›</span></a>';}).join(''); }
 function startSim(items){
   if(!items.length){ toast('Nenhuma questão neste filtro'); return; }
   let idx=items.map(q=>q.user?q.id:q.bi);
@@ -3021,7 +3044,7 @@ function qfParts(key){
 function qfOptsHTML(key){
   const st=qfSt(key),c=QF_CATS.find(x=>x.id===st.cat),sel=st.f[c.id]||[],q=qfN(st.qs);
   const vs=qfVals(key,c).filter(([v])=>!q||qfN(qfLbl(c,v)).includes(q));
-  return vs.length?vs.map(([v,n])=>{const on=sel.includes(v);return '<button type="button" role="option" class="qf-o'+(n?'':' z')+'" aria-selected="'+on+'" data-qf-v="'+esc(v)+'"><span class="qf-ck" aria-hidden="true">'+(on?'✓':'')+'</span><span class="qf-ol">'+esc(qfLbl(c,v))+'</span><span class="qf-oc">'+n+'</span></button>';}).join(''):'<div class="qf-none">Nada encontrado</div>';
+  return vs.length?vs.map(([v,n])=>{const on=sel.includes(v);return '<button type="button" role="option" class="qf-o'+(n?'':' z')+'" aria-selected="'+on+'" data-qf-v="'+esc(v)+'"><span class="qf-ck" aria-hidden="true">'+(on?UIICON.check:'')+'</span><span class="qf-ol">'+esc(qfLbl(c,v))+'</span><span class="qf-oc">'+n+'</span></button>';}).join(''):'<div class="qf-none">Nada encontrado</div>';
 }
 function qfPopHTML(key){
   const st=qfSt(key);
@@ -3053,7 +3076,7 @@ view.addEventListener('click',e=>{
   if(t.closest('[data-qf-toggle]')){ st.cat=null; qfPop(root,!st.open); return; }
   if(x=t.closest('[data-qf-cat]')){ st.cat=x.dataset.qfCat; st.qs=''; qfPop(root,true); return; }
   if(t.closest('[data-qf-back]')){ st.cat=null; qfPop(root,true); return; }
-  if(x=t.closest('[data-qf-v]')){ const a=st.f[st.cat]||(st.f[st.cat]=[]),v=x.dataset.qfV,i=a.indexOf(v); if(i<0) a.push(v); else a.splice(i,1); x.setAttribute('aria-selected',i<0); x.querySelector('.qf-ck').textContent=i<0?'✓':''; qfRefresh(root); return; }
+  if(x=t.closest('[data-qf-v]')){ const a=st.f[st.cat]||(st.f[st.cat]=[]),v=x.dataset.qfV,i=a.indexOf(v); if(i<0) a.push(v); else a.splice(i,1); x.setAttribute('aria-selected',i<0); x.querySelector('.qf-ck').innerHTML=i<0?UIICON.check:''; qfRefresh(root); return; }
   if(t.closest('[data-qf-catclear]')){ delete st.f[st.cat]; qfRefresh(root); qfPop(root,true,false); const f=root.querySelector('.qf-s,.qf-o'); if(f) f.focus(); return; }
   if(x=t.closest('[data-qf-x]')){ delete st.f[x.dataset.qfX]; redo(); return; }
   if(t.closest('[data-qf-xt]')){ st.text=''; root.querySelector('[data-qf-text]').value=''; redo(); return; }
@@ -3101,7 +3124,7 @@ function qMetrics(q,hh,r){
   const grid='<div class="qm-grid">'+cell('Situação',esc(st.t),'qm-'+st.k)+cell('Tentativas',n)+cell('Acertos',ok)+cell('Erros',n-ok)+cell('% de acerto',n?pctOf(ok,n)+'%':'—')+cell('Sequência de acertos',streak||'—')+cell('Última resposta',n?fmtDT(hh[0].t):'—')+cell('Alternativa errada mais marcada',top?esc(top[0])+' ('+top[1]+'×)':'—')+cell('Em simulados',sims.length?sims.length+(sims.length===1?' simulado':' simulados'):'—')+'</div>';
   return opSec('Métricas',grid+(!n&&!r?'<p class="op-note">Resolva a questão para ver as métricas.</p>':''));
 }
-function qMarks(q){ const f=qFlag(q.id); return '<div class="qm-marks"><button type="button" class="op-btn'+(f.rev?' pri':'')+'" data-qflag="rev:'+q.id+'" aria-pressed="'+(!!f.rev)+'">'+(f.rev?'✓ Marcada para revisar':'Marcar para revisar')+'</button><button type="button" class="op-btn" data-qflag="fav:'+q.id+'" aria-pressed="'+(!!f.fav)+'">'+(f.fav?'★ Favorita':'☆ Favoritar')+'</button></div>'; }
+function qMarks(q){ const f=qFlag(q.id); return '<div class="qm-marks"><button type="button" class="op-btn'+(f.rev?' pri':'')+'" data-qflag="rev:'+q.id+'" aria-pressed="'+(!!f.rev)+'">'+(f.rev?UIICON.check+' Marcada para revisar':'Marcar para revisar')+'</button><button type="button" class="op-btn" data-qflag="fav:'+q.id+'" aria-pressed="'+(!!f.fav)+'">'+(f.fav?UIICON.star+' Favorita':UIICON.star+' Favoritar')+'</button></div>'; }
 function qNote(q){ const f=qFlag(q.id); return opSec('Anotações','<textarea class="qm-note" data-qnote="'+q.id+'" rows="3" aria-label="Anotações da questão" placeholder="Escreva um lembrete, o motivo do erro ou a regra que cai nessa questão.">'+esc(f.note||'')+'</textarea>'); }
 function qRelated(q,all){ if(!q.materia) return ''; const rel=all.filter(x=>x.id!==q.id&&x.materia===q.materia); if(!rel.length) return ''; const pend=rel.filter(x=>!qSel(x)); const pick=pend.concat(rel.filter(x=>qSel(x))); const top=pick.slice(0,5), rest=pick.slice(5); return opSec('Questões relacionadas','<div class="op-list">'+qRows(top)+'</div>'+(rest.length?'<details class="qrel-more"><summary class="op-btn">Ver todas ('+rel.length+')</summary><div class="op-list">'+qRows(rest)+'</div></details>':''),{count:rel.length}); }
 const qmCss=document.createElement('style'); qmCss.textContent='.qm-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden}.qm-c{background:var(--bg,var(--panel,#fff));padding:10px 12px;display:flex;flex-direction:column;gap:2px;min-width:0}.qm-c small{font-size:12px;color:var(--muted)}.qm-c b{font-size:15px;font-weight:600;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}.qm-ok{color:var(--study-good)}.qm-bad{color:#b4412f}.qm-rev{color:var(--accent,inherit)}.qm-marks{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.qm-note{width:100%;box-sizing:border-box;font:inherit;font-size:14px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:transparent;color:var(--text);resize:vertical}'; document.head.appendChild(qmCss);
@@ -3110,7 +3133,7 @@ function questaoPage(q){
   const ch=(t,h)=>t?(h?'<a class="chip" href="'+h+'">'+esc(t)+'</a>':'<span class="chip">'+esc(t)+'</span>'):'';
   const de=discEnt(q.materia), ed=q.ed&&edicaoById(q.ed), cg=q.cg&&cargoById(q.cg), cc=q.conc&&concursoById(q.conc);
   const props=[['Tipo',ch('Questão','#/tipo/questao')],['Disciplina',q.materia?ch(q.materia,de?'#/disciplina/'+de.id:''):''],['Banca',q.banca?ch(q.banca,valHref('banca',q.banca)):''],['Órgão',q.orgao?ch(q.orgao,valHref('orgao',q.orgao)):''],['Ano',q.ano?ch(q.ano,'#/valor/ano/'+q.ano):''],['Edição',ed?ch(ed.t,'#/edicao/'+ed.id):''],['Cargo',cg?ch(cg.t,'#/cargo/'+cg.id):''],['Concurso',cc?ch(cc.t,'#/concurso/'+cc.id):''],['Origem',ch(ORIGENS[qOrig(q)],'')+(qOrig(q)==='oficial'&&q.doc?' '+ch('Caderno tipo 1 (PDF)','#'+q.doc):'')],['Gabarito oficial',r?opTxt(q.gabarito)+(qOrig(q)==='oficial'?' '+ch('Gabarito (PDF)','#gabarito'):''):opTxt('Liberado depois que você responder')],['Posição',opTxt((i+1)+' de '+all.length)]];
-  const alts=Object.entries(q.alternativas).map(([l,v])=>'<button type="button" class="sc-alt'+(r?(l===q.gabarito?' good':(l===r?' bad':'')):'')+'" data-qo-ans="'+q.id+'|'+l+'"'+(r?' disabled':'')+'><b>'+l+'</b><span>'+esc(v)+'</span>'+(r&&l===q.gabarito?'<em class="alt-t good">✓ Correta</em>':(r&&l===r?'<em class="alt-t bad">✗ Sua resposta</em>':''))+'</button>').join('');
+  const alts=Object.entries(q.alternativas).map(([l,v])=>'<button type="button" class="sc-alt'+(r?(l===q.gabarito?' good':(l===r?' bad':'')):'')+'" data-qo-ans="'+q.id+'|'+l+'"'+(r?' disabled':'')+'><b>'+l+'</b><span>'+esc(v)+'</span>'+(r&&l===q.gabarito?'<em class="alt-t good">'+UIICON.check+' Correta</em>':(r&&l===r?'<em class="alt-t bad">'+UIICON.close+' Sua resposta</em>':''))+'</button>').join('');
   const ansMap=getAnswers();
   const qGridCells=all.map((item,idx)=>{
     const an=ansMap[item.n];
@@ -3121,12 +3144,12 @@ function questaoPage(q){
   const drawerHtml='<div class="q-drawer" id="qDrawer"><div class="q-drawer-head"><span>Navegador Rápido de Questões</span><small>Legenda: Verde (Acerto) • Vermelho (Erro) • Cinza (Pendente)</small></div><div class="q-grid">'+qGridCells+'</div></div>';
   const nav='<div class="op-actions" style="margin-top:18px;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">'+
     (prev?'<a class="op-btn" href="#/questao/'+prev.id+'">← Anterior (K)</a>':'<span></span>')+
-    '<button type="button" class="op-btn" data-drawer-toggle aria-expanded="false">🧭 Grade ('+(i+1)+'/'+all.length+')</button>'+
+    '<button type="button" class="op-btn" data-drawer-toggle aria-expanded="false">'+UIICON.grid+' Grade ('+(i+1)+'/'+all.length+')</button>'+
     (r?'<button type="button" class="op-btn" data-qo-reset="'+q.id+'">Refazer</button>':'<span></span>')+
     (next?'<a class="op-btn" href="#/questao/'+next.id+'">Próxima (J) →</a>':'<span></span>')+
   '</div>'+drawerHtml;
-  const body='<div class="qo"><p class="sc-stm qo-stm">'+esc(q.enunciado)+'</p><div class="qo-alts">'+alts+'</div>'+(r?'<p class="s-note">'+(r===q.gabarito?'✓ Resposta correta!':'✗ Resposta incorreta. Gabarito oficial: '+q.gabarito+'.')+'</p>':'')+(r?aiRow(q.id):'')+qMarks(q)+nav+'</div>';
-  const hh=histAll().filter(h=>h.q===q.id).sort((a,b)=>b.t-a.t); const hist=opSec('Respostas',hh.length?'<div class="op-list">'+hh.map(h=>{const rid=h.id||('r'+h.t.toString(36)+'-'+h.q);return '<a class="op-row" href="#/resposta/'+rid+'"><span class="op-rt"><b>'+fmtDT(h.t)+'</b><small>'+esc(h.src)+(h.a?' · marcou '+esc(h.a):'')+'</small></span><span class="sc-st '+(h.ok?'ok':'bad')+'">'+(h.ok?'✓ Acertou':'✗ Errou')+'</span><span class="op-go" aria-hidden="true">›</span></a>';}).join('')+'</div>':opEmpty('Você ainda não respondeu esta questão.'),{count:hh.length});
+  const body='<div class="qo"><p class="sc-stm qo-stm">'+esc(q.enunciado)+'</p><div class="qo-alts">'+alts+'</div>'+(r?'<p class="s-note">'+(r===q.gabarito?UIICON.check+' Resposta correta!':UIICON.close+' Resposta incorreta. Gabarito oficial: '+q.gabarito+'.')+'</p>':'')+(r?aiRow(q.id):'')+qMarks(q)+nav+'</div>';
+  const hh=histAll().filter(h=>h.q===q.id).sort((a,b)=>b.t-a.t); const hist=opSec('Respostas',hh.length?'<div class="op-list">'+hh.map(h=>{const rid=h.id||('r'+h.t.toString(36)+'-'+h.q);return '<a class="op-row" href="#/resposta/'+rid+'"><span class="op-rt"><b>'+fmtDT(h.t)+'</b><small>'+esc(h.src)+(h.a?' · marcou '+esc(h.a):'')+'</small></span><span class="sc-st '+(h.ok?'ok':'bad')+'">'+(h.ok?UIICON.check+' Acertou':UIICON.close+' Errou')+'</span><span class="op-go" aria-hidden="true">›</span></a>';}).join('')+'</div>':opEmpty('Você ainda não respondeu esta questão.'),{count:hh.length});
   return opPage({iid:'questao:'+q.id,crumb:[['Espaço','#/espaco'],['Questão','#/tipo/questao'],[qTitle(q),'']],icon:'questao',kind:'Questão',kindHref:'#/tipo/questao',title:qTitle(q),props,body:body+qMetrics(q,hh,r)+hist+qNote(q)+qRelated(q,all)});
 }
 function discPage(en){
@@ -3222,7 +3245,7 @@ function studyPage(title,meta,html){
 }
 function studyError(e,h){studyPage('Questões','Erro ao carregar','<div class="s-head"><h1>Não foi possível abrir o banco de questões</h1></div><p class="s-description">'+esc(e.message)+'</p><div class="s-inlineactions"><a class="s-button" href="'+h+'">Voltar</a><button class="s-button" data-study-retry>Tentar novamente</button></div>');}
 function sQuestionMarkup(q,answer,examMode,pend){
- return '<div class="s-question" data-qn="'+q.n+'"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><div><span class="s-eyebrow">Questão '+q.n+' de '+(q.tot||70)+'</span><strong style="font-size:13px">'+esc(q.materia)+'</strong></div>'+'<span style="display:flex;gap:6px">'+sBadge('FGV · 2026')+sBadge('Oficial')+'</span></div><div class="question-statement">'+esc(q.enunciado)+'</div><div class="s-choices">'+Object.entries(q.alternativas).map(([k,v])=>'<label class="s-option'+((!examMode&&answer)?(k===q.gabarito?' good':(k===answer.selected?' bad':'')):'')+'"><input type="radio" name="study-answer" value="'+k+'" '+(((examMode?answer:answer&&answer.selected)===k||(!examMode&&!answer&&pend===k))?'checked':'')+' '+(!examMode&&answer?'disabled':'')+'/><b>'+k+'</b><span>'+esc(v)+'</span>'+((!examMode&&answer)?(k===q.gabarito?'<em class="alt-t good">✓ Correta</em>':(k===answer.selected?'<em class="alt-t bad">✗ Sua resposta</em>':'')):'')+'</label>').join('')+'</div>'+(!examMode&&answer?'<div class="s-feedback '+(answer.correct?'good':'bad')+'"><strong>'+(answer.correct?'Resposta correta.':'Resposta incorreta.')+'</strong> Gabarito: '+esc(q.gabarito)+'.</div>':'')+(!examMode&&answer?aiRow('q'+q.n):'')+'</div>';
+ return '<div class="s-question" data-qn="'+q.n+'"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><div><span class="s-eyebrow">Questão '+q.n+' de '+(q.tot||70)+'</span><strong style="font-size:13px">'+esc(q.materia)+'</strong></div>'+'<span style="display:flex;gap:6px">'+sBadge('FGV · 2026')+sBadge('Oficial')+'</span></div><div class="question-statement">'+esc(q.enunciado)+'</div><div class="s-choices">'+Object.entries(q.alternativas).map(([k,v])=>'<label class="s-option'+((!examMode&&answer)?(k===q.gabarito?' good':(k===answer.selected?' bad':'')):'')+'"><input type="radio" name="study-answer" value="'+k+'" '+(((examMode?answer:answer&&answer.selected)===k||(!examMode&&!answer&&pend===k))?'checked':'')+' '+(!examMode&&answer?'disabled':'')+'/><b>'+k+'</b><span>'+esc(v)+'</span>'+((!examMode&&answer)?(k===q.gabarito?'<em class="alt-t good">'+UIICON.check+' Correta</em>':(k===answer.selected?'<em class="alt-t bad">'+UIICON.close+' Sua resposta</em>':'')):'')+'</label>').join('')+'</div>'+(!examMode&&answer?'<div class="s-feedback '+(answer.correct?'good':'bad')+'"><strong>'+(answer.correct?'Resposta correta.':'Resposta incorreta.')+'</strong> Gabarito: '+esc(q.gabarito)+'.</div>':'')+(!examMode&&answer?aiRow('q'+q.n):'')+'</div>';
 }
 const qProps=q=>{const ch=(t,h)=>h?'<a class="chip" href="'+h+'">'+esc(t)+'</a>':'<span class="chip">'+esc(t)+'</span>';const r=(l,v)=>'<div class="op-prop"><dt>'+l+'</dt><dd>'+v+'</dd></div>';
  return '<dl class="op-props flat q-props">'+r('Tipo',ch('Questão'))+(q?r('Disciplina',ch(q.materia)):'')+r('Banca',ch('FGV',valHref('banca','FGV')))+r('Ano',ch('2026'))+r('Edição',ch('Dataprev 2026','#/edicao/dataprev-2026'))+r('Cargo',ch('Analista de TI · Desenvolvimento','#/cargo/dataprev-2026-ti-dev'))+r('Concurso',ch('Dataprev','#/concurso/dataprev'))+'</dl>';};
@@ -3256,7 +3279,7 @@ function sExamQuestion(){
  const hh=Math.floor(remainingSec/3600),mm=Math.floor(remainingSec%3600/60),ss=remainingSec%60;
  const inner=sBreadcrumb([['Dataprev','#/concurso/dataprev'],['Simulado','#/simulado'],['Em andamento','']])+sHead('Modo prova','Simulado · Dataprev 2026',N+(N===1?' questão':' questões')+(N===70?' originais':'')+' · '+(s.rand?'ordem aleatória':'ordem original')+' · gabarito oculto até a entrega.', '<button class="s-button" data-s-finish>Entregar prova</button>',sBadge('FGV · Caderno tipo 1'))+
  '<div class="s-smallstats"><div class="s-smallstat"><strong>'+answered+' / '+N+'</strong><small>Respondidas</small></div><div class="s-smallstat"><strong>'+String(hh).padStart(2,'0')+':'+String(mm).padStart(2,'0')+':'+String(ss).padStart(2,'0')+'</strong><small>Tempo restante</small></div><div class="s-smallstat"><strong>'+s.marked.length+'</strong><small>Marcadas para revisão</small></div></div>'+
- '<div class="s-layout"><div class="s-maincol">'+sQuestionMarkup(q,s.answers[q.n],true)+'<div class="s-inlineactions" style="justify-content:space-between"><button class="s-button" data-s-prev '+(s.index===0?'disabled':'')+'>← Anterior</button><button class="s-button" data-s-mark>'+(s.marked.includes(q.n)?'✓ Marcada para revisão':'Marcar para revisão')+'</button><button class="s-button main-cta" data-s-next '+(s.index===N-1?'disabled':'')+'>Próxima →</button></div></div><aside class="s-asidecol">'+sSection('Navegação','<div class="s-card"><p class="s-note" style="margin-top:0">As respostas são salvas no navegador.</p><div class="s-navigator">'+qs.map((x,i)=>'<button class="s-qnum '+(s.index===i?'current ':'')+(s.answers[x.n]?'answered':'')+'" data-s-jump="'+i+'">'+x.n+'</button>').join('')+'</div></div>')+'</aside></div>';
+ '<div class="s-layout"><div class="s-maincol">'+sQuestionMarkup(q,s.answers[q.n],true)+'<div class="s-inlineactions" style="justify-content:space-between"><button class="s-button" data-s-prev '+(s.index===0?'disabled':'')+'>← Anterior</button><button class="s-button" data-s-mark>'+(s.marked.includes(q.n)?UIICON.check+' Marcada para revisão':'Marcar para revisão')+'</button><button class="s-button main-cta" data-s-next '+(s.index===N-1?'disabled':'')+'>Próxima →</button></div></div><aside class="s-asidecol">'+sSection('Navegação','<div class="s-card"><p class="s-note" style="margin-top:0">As respostas são salvas no navegador.</p><div class="s-navigator">'+qs.map((x,i)=>'<button class="s-qnum '+(s.index===i?'current ':'')+(s.answers[x.n]?'answered':'')+'" data-s-jump="'+i+'">'+x.n+'</button>').join('')+'</div></div>')+'</aside></div>';
  studyPage('Simulado','Em andamento',inner);
 }
 function finishExam(){
@@ -3272,7 +3295,7 @@ function sSimOpts(){ const b=questionBank.questoes,a=getAnswers(),er=b.filter(x=
 function renderExamHome(){
  const s=getExam(),prev=s&&s.finished;
  const content=sBreadcrumb([['Dataprev','#/concurso/dataprev'],['Simulados','']])+sHead('Simulados','Simular prova real','Reproduza o caderno tipo 1 da prova Dataprev 2026, com as 70 questões originais e limite de quatro horas.',sBtn('Banco de questões','#/questoes'),sBadge('FGV')+sBadge('70 questões')+sBadge('4 horas'))+
- '<div class="s-layout"><div class="s-maincol">'+sSection('Reprodução da prova','<div class="s-card"><div class="s-cardtitle">Configuração do simulado</div>'+sSimOpts()+sInfoRows([['Caderno','Tipo 1 · Analista de TI — Desenvolvimento de Software'],['Questões','70 · 40 gerais e 30 específicas'],['Tempo','4 horas a partir do início'],['Correção','Somente depois da entrega'],['Pontuação','115 pontos máximos'],['Aprovação','57,5 pontos e não zerar nenhuma disciplina']])+'<div class="s-inlineactions"><button class="s-button main-cta" data-s-start>'+(s&&!s.finished?'Recomeçar do zero':'Iniciar simulado →')+'</button>'+(s&&!s.finished?sBtn('Continuar tentativa','#/simulado/exec'):'' )+'</div></div>')+(prev?sSection('Último resultado','<div class="s-card"><div class="s-big">'+s.score.toLocaleString('pt-BR')+' <span style="font-size:13px;color:var(--muted)">/ '+(s.max||115).toLocaleString('pt-BR')+' pontos</span></div><p class="s-note">'+s.correct+' acertos de '+(s.total||70)+' questões.</p><a class="s-button" href="#/simulado/resultado">Ver resultado →</a></div>'):'')+'</div><aside class="s-asidecol">'+sSection('Antes de começar','<div class="s-card"><div class="s-quicklist"><div class="s-docline">✓ <span>Gabarito oculto durante a prova</span></div><div class="s-docline">✓ <span>Respostas salvas no navegador</span></div><div class="s-docline">✓ <span>Navegação livre entre questões</span></div><div class="s-docline">✓ <span>Relatório após finalizar</span></div></div></div>')+sSection('Documentos oficiais','<div class="s-card">'+sDocs(docsOf(space).filter(x=>x.id==='tipo1'||x.id==='gabarito'))+'</div>')+'</aside></div>';
+ '<div class="s-layout"><div class="s-maincol">'+sSection('Reprodução da prova','<div class="s-card"><div class="s-cardtitle">Configuração do simulado</div>'+sSimOpts()+sInfoRows([['Caderno','Tipo 1 · Analista de TI — Desenvolvimento de Software'],['Questões','70 · 40 gerais e 30 específicas'],['Tempo','4 horas a partir do início'],['Correção','Somente depois da entrega'],['Pontuação','115 pontos máximos'],['Aprovação','57,5 pontos e não zerar nenhuma disciplina']])+'<div class="s-inlineactions"><button class="s-button main-cta" data-s-start>'+(s&&!s.finished?'Recomeçar do zero':'Iniciar simulado →')+'</button>'+(s&&!s.finished?sBtn('Continuar tentativa','#/simulado/exec'):'' )+'</div></div>')+(prev?sSection('Último resultado','<div class="s-card"><div class="s-big">'+s.score.toLocaleString('pt-BR')+' <span style="font-size:13px;color:var(--muted)">/ '+(s.max||115).toLocaleString('pt-BR')+' pontos</span></div><p class="s-note">'+s.correct+' acertos de '+(s.total||70)+' questões.</p><a class="s-button" href="#/simulado/resultado">Ver resultado →</a></div>'):'')+'</div><aside class="s-asidecol">'+sSection('Antes de começar','<div class="s-card"><div class="s-quicklist"><div class="s-docline">'+UIICON.check+' <span>Gabarito oculto durante a prova</span></div><div class="s-docline">'+UIICON.check+' <span>Respostas salvas no navegador</span></div><div class="s-docline">'+UIICON.check+' <span>Navegação livre entre questões</span></div><div class="s-docline">'+UIICON.check+' <span>Relatório após finalizar</span></div></div></div>')+sSection('Documentos oficiais','<div class="s-card">'+sDocs(docsOf(space).filter(x=>x.id==='tipo1'||x.id==='gabarito'))+'</div>')+'</aside></div>';
  studyPage('Simulados','Dataprev 2026',content);
 }
 function renderExamResult(){
@@ -3358,7 +3381,7 @@ function aiMd(t){ const inl=s=>esc(s).replace(/\*\*(.+?)\*\*/g,'<strong>$1</stro
   for(const raw of String(t).split('\n')){ const l=raw.trim(), m=/^[-*•]\s+(.*)/.exec(l); if(m){ if(!ul){h+='<ul>';ul=true;} h+='<li>'+inl(m[1])+'</li>'; } else { if(ul){h+='</ul>';ul=false;} if(l) h+='<p>'+inl(l.replace(/^#+\s*/,''))+'</p>'; } }
   return h+(ul?'</ul>':''); }
 const aiBox=k=>'<div class="ai-box" data-ai-box="'+esc(k)+'" aria-live="polite"></div>';
-const aiSpark='<span class="ai-spark" aria-hidden="true">✦</span>';
+const aiSpark=UIICON.spark;
 view.addEventListener('click',e=>{ const b=e.target.closest('[data-qflag]'); if(!b) return; const [k,id]=b.dataset.qflag.split(':'); const f=qFlag(id); qSetFlag(id,k==='rev'?{rev:!f.rev}:{fav:!f.fav}); const y=view.scrollTop; showObjs(location.hash.slice(1)); view.scrollTop=y; });
 view.addEventListener('change',e=>{ const t=e.target.closest&&e.target.closest('[data-qnote]'); if(t){ qSetFlag(t.dataset.qnote,{note:t.value}); toast('Anotação salva'); } });
 const AI_WHY='A IA só funciona quando o protótipo é aberto no visualizador de artefatos do claude.ai, com o uso do Claude permitido.';
@@ -3500,7 +3523,7 @@ const IX=(p,w)=>'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" str
 const WI={x:IX('<path d="M6 6l12 12M18 6L6 18"/>',2),plus:IX('<path d="M12 5v14M5 12h14"/>',2),search:IX('<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>'),
   graph:IX('<circle cx="6" cy="7" r="2.3"/><circle cx="18" cy="6" r="2.3"/><circle cx="12" cy="18" r="2.3"/><path d="M8 8l3 8M16 8l-3 8M8.3 6.8l7.4-.6"/>'),
   back:IX('<path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 6 6v3"/>'),rel:IX('<rect x="3" y="4" width="11" height="8" rx="2"/><rect x="10" y="12" width="11" height="8" rx="2"/>'),
-  spark:'<span aria-hidden="true">✦</span>',obj:IX('<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/>'),
+  spark:UIICON.spark,obj:IX('<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/>'),
   panel:IX('<rect x="3" y="4" width="18" height="16" rx="3"/><path d="M15 4v16"/>'),stack:IX('<rect x="4" y="4" width="16" height="7" rx="2"/><rect x="4" y="13" width="16" height="7" rx="2"/>'),
   out:IX('<path d="M7 17L17 7M9 7h8v8"/>'),left:IX('<path d="M15 6l-6 6 6 6"/>'),side:IX('<rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/>'),
   minus:IX('<path d="M5 12h14"/>',2),fit:IX('<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>')};

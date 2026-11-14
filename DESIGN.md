@@ -147,15 +147,15 @@ A barra superior é a âncora de navegação e orientação do usuário, com alt
 
 ```
 +----------------------------------------------------------------------------------------------------------+
-| [💡 Espaço ↕]  [◧ Toggle Sidebar]  [< > Histórico]  |  [Aba 1 ✕] [Aba 2 ✕] [+] [▼ Overflow]  |  [◨ Toggle RP] |
+| [C Espaço ↕]  [◧ Toggle Sidebar]  [< > Histórico]  |  [Aba 1 ×] [Aba 2 ×] [+] [▼ Overflow]  |  [◨ Toggle RP] |
 +----------------------------------------------------------------------------------------------------------+
 ```
 
 ### 5.1 Componentes e Disposição
 
-1. **Seletor de Espaço (`[💡 Espaço ↕]`)**:
-   - Posição: Canto superior esquerdo da barra.
-   - Mostra o ícone e nome do espaço de estudo ativo (ex: "Dataprev 2026", "INSS", "CNU").
+1. **Seletor de Espaço (`[C Espaço ↕]`)**:
+   - Posição: Canto superior esquerdo da barra quando a navegação lateral estiver recolhida.
+   - Mostra o monograma e nome do espaço de estudo ativo (ex: "Dataprev 2026", "INSS", "CNU").
    - Clique abre dropdown acessível com busca e gerenciador de espaços.
 2. **Alternador de Sidebar Esquerda (`[◧]`)**:
    - Botão quadrado de 28px x 28px, borda arredondada de 6px, hover suave.
@@ -175,6 +175,10 @@ A barra superior é a âncora de navegação e orientação do usuário, com alt
    - Permite expandir ou colapsar o painel lateral de inspeção, mantendo paridade visual de altura (46px) com a barra de abas do painel direito.
 
 ---
+
+### 5.2 Zero Emoji Policy
+
+Unicode emoji e caracteres pictográficos não são usados na interface, em botões, badges, KPIs, estados vazios ou especificações de UI. Use ícones vetoriais SVG semânticos e monocromáticos com `currentColor`, `stroke-width="1.8"`, `stroke-linecap="round"` e `stroke-linejoin="round"`.
 
 ## 6. Arquitetura de Telas & Padrões de Interface
 
