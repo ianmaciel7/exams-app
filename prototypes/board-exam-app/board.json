@@ -208,7 +208,28 @@
     "e402",
     "e403",
     "e420",
-    "e421"
+    "e421",
+    "e600",
+    "e601",
+    "e602",
+    "e610",
+    "e611",
+    "e612",
+    "e613",
+    "e614",
+    "e615",
+    "e616",
+    "e617",
+    "e618",
+    "e619",
+    "e620",
+    "e621",
+    "e622",
+    "e623",
+    "e624",
+    "e625",
+    "e626",
+    "e627"
   ],
   "elements": {
     "e1": {
@@ -2401,6 +2422,176 @@
       "type": "text",
       "x": 20,
       "y": 9860
+    },
+    "e600": {
+      "type": "container",
+      "x": 1600,
+      "y": 11000,
+      "w": 1600,
+      "h": 3400,
+      "color": "white",
+      "text": "27. Auditoria Completa UI/UX Enterprise 2026 (Pós-PR #27 / Commit c92d2ca)"
+    },
+    "e601": {
+      "type": "text",
+      "size": "large",
+      "x": 1630,
+      "y": 11060,
+      "w": 1500,
+      "h": 120,
+      "text": "Diagnóstico Especialista UI/UX Enterprise 2026 (Capacities, Linear, Raycast, Notion, QConcursos) — Issues #33 a #40"
+    },
+    "e602": {
+      "type": "shape",
+      "x": 1630,
+      "y": 11180,
+      "w": 1500,
+      "h": 420,
+      "text": "**1. Hotfix Crítico Aplicado (index.html:2558 - Issue #33)**\n- Corrigido `Uncaught SyntaxError: Unexpected string` em `opProps` causado por aspas simples não escapadas dentro de `onclick=\"this.closest('.props-card').classList.toggle('is-collapsed')\"` no commit `c92d2ca`.\n**2. Shell & Barra Superior Unificada (Issue #34)**\n- Duplicação lado a lado de `[C Concurso de TI ↕] [◧]` (na sidebar) e `[💡 Concurso de TI ↕] [◧]` (na topbar central) quando a sidebar está aberta.\n- Linha laranja residual `.readprog` visível em páginas que não são de leitura de PDF.\n- Barra `.bar` secundária redundante exibida durante `#/simulado/exec` e `#/simulado/resultado`.\n- Ausência de cartões de superfície flutuantes (`border-radius: 12px` sobre `--app-tab-bg-back`, padrão `notes-app-old-4`).\n**3. Quebra de Layout em `#/tipo/questao` e Inputs Nativos (Issue #35)**\n- Título `Questão` comprimido em `57.68px`, quebrando em 3 linhas (`Qu / est / ão`), e `<input type=\"radio\">` nativos sem estilização.\n**4. Ergonomia de Resolução em `#/questao/*` (Issue #36)**\n- `.props-card` inicia expandido com 11 linhas (~320px), empurrando enunciado e alternativas A–E para fora da dobra (below the fold). Deve iniciar `is-collapsed` em questões.\n**5. Diagramação do Simulado `#/simulado/exec` e Scorecard `#/simulado/resultado` (Issue #37)**\n- Enunciado espremido em ~250px (4–6 palavras/linha) quando a grade de 70 questões divide espaço com o Painel Direito; disciplinas truncadas no resultado (`Língua Portu...`).\n**6. Colisão no Rodapé do Grafo `#/grafico` (Issue #38)**\n- Pílulas de filtro `.gv-leg` em 2 linhas colidem diretamente sobre `.gv-info` (`90 objetos · 299 relações`).\n**7. Corte de Rótulos em `.props-card` e Abas do Painel Direito (Issue #39)**\n- `dt` corta `'Cadastro de reserv'` e `'Remuneração inici'`; abas do painel direito truncam `'Navegar'` para `'ir'`.\n**8. Home `#/espaco` e Modais (Issue #40)**\n- KPIs com valores hardcoded (`5 dias`, `38 dias`, `5% lido`), grid 3+1 com card órfão, contraste fraco no Light Mode e falta de fechamento consistente com `Escape` em `#pal`."
+    },
+    "e610": {
+      "type": "image",
+      "x": 1630,
+      "y": 11640,
+      "w": 700,
+      "h": 360,
+      "src": "/_blob/audit2026_home_dark"
+    },
+    "e611": {
+      "type": "text",
+      "x": 1630,
+      "y": 12015,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 1:** Dashboard Home (#/espaco) em Dark Mode: KPIs 3+1, métricas estáticas e duplicação na topbar"
+    },
+    "e612": {
+      "type": "image",
+      "x": 2370,
+      "y": 11640,
+      "w": 700,
+      "h": 360,
+      "src": "/_blob/audit2026_home_light"
+    },
+    "e613": {
+      "type": "text",
+      "x": 2370,
+      "y": 12015,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 2:** Dashboard Home (#/espaco) em Light Mode: botões cinzas pesados e baixo contraste de bordas"
+    },
+    "e614": {
+      "type": "image",
+      "x": 1630,
+      "y": 12120,
+      "w": 700,
+      "h": 360,
+      "src": "/_blob/audit2026_cargo_props"
+    },
+    "e615": {
+      "type": "text",
+      "x": 1630,
+      "y": 12495,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 3:** Cargo Analista de TI (#/cargo/dataprev-2026-ti-dev): corte nos rótulos 'Cadastro de reserv' e 'Remuneração inici' no .props-card"
+    },
+    "e616": {
+      "type": "image",
+      "x": 2370,
+      "y": 12120,
+      "w": 700,
+      "h": 360,
+      "src": "/_blob/audit2026_questao_expanded"
+    },
+    "e617": {
+      "type": "text",
+      "x": 2370,
+      "y": 12495,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 4:** Questão 1 (#/questao/q1): .props-card aberto por padrão com 11 linhas empurra enunciado e alternativas para fora da tela"
+    },
+    "e618": {
+      "type": "image",
+      "x": 1630,
+      "y": 12600,
+      "w": 700,
+      "h": 360,
+      "src": "/_blob/audit2026_questao_collapsed"
+    },
+    "e619": {
+      "type": "text",
+      "x": 1630,
+      "y": 12975,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 5:** Questão 1 (#/questao/q1) com .props-card recolhido: enunciado e alternativas A-D cabem imediatamente na dobra"
+    },
+    "e620": {
+      "type": "image",
+      "x": 2370,
+      "y": 12600,
+      "w": 700,
+      "h": 360,
+      "src": "/_blob/audit2026_graph_collision"
+    },
+    "e621": {
+      "type": "text",
+      "x": 2370,
+      "y": 12975,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 6:** Grafo Global (#/grafico): colisão direta entre pílulas de filtro (.gv-leg) e contador '90 objetos · 299 relações' (.gv-info)"
+    },
+    "e622": {
+      "type": "image",
+      "x": 1630,
+      "y": 13080,
+      "w": 700,
+      "h": 360,
+      "src": "/_blob/audit2026_simulado_exec"
+    },
+    "e623": {
+      "type": "text",
+      "x": 1630,
+      "y": 13455,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 7:** Modo Simulado (#/simulado/exec): enunciado comprimido em ~250px ao lado da grade de 70 questões"
+    },
+    "e624": {
+      "type": "image",
+      "x": 2370,
+      "y": 13080,
+      "w": 700,
+      "h": 360,
+      "src": "/_blob/audit2026_simulado_resultado"
+    },
+    "e625": {
+      "type": "text",
+      "x": 2370,
+      "y": 13455,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 8:** Scorecard Pós-Simulado (#/simulado/resultado): truncamento severo dos nomes das disciplinas ('Língua Portu...', 'Raciocínio Ló...')"
+    },
+    "e626": {
+      "type": "image",
+      "x": 1630,
+      "y": 13560,
+      "w": 700,
+      "h": 360,
+      "src": "/_blob/audit2026_tipo_questao_wrap"
+    },
+    "e627": {
+      "type": "text",
+      "x": 1630,
+      "y": 13935,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 9:** Página Tipo Questão (#/tipo/questao): quebra do título em 3 linhas ('Qu / est / ão') e inputs radio nativos sem estilização"
     }
   }
 }

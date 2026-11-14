@@ -798,6 +798,67 @@ O que Ian mostrou como modelo para a sidebar: tipos de objeto, ordenar, hover, l
 
 **Capacities:** lista de tipos de objeto.
 
+## 27. Auditoria Completa UI/UX Enterprise 2026 (Pós-PR #27 / Commit c92d2ca)
+<!-- container e600 @ (1600,11000) -->
+
+### Diagnóstico Especialista UI/UX Enterprise 2026 (Capacities, Linear, Raycast, Notion, QConcursos) — Issues #33 a #40
+
+> **1. Hotfix Crítico Aplicado (index.html:2558 - Issue #33)**
+> - Corrigido `Uncaught SyntaxError: Unexpected string` em `opProps` causado por aspas simples não escapadas dentro de `onclick="this.closest('.props-card').classList.toggle('is-collapsed')"` no commit `c92d2ca`.
+> **2. Shell & Barra Superior Unificada (Issue #34)**
+> - Duplicação lado a lado de `[C Concurso de TI ↕] [◧]` (na sidebar) e `[💡 Concurso de TI ↕] [◧]` (na topbar central) quando a sidebar está aberta.
+> - Linha laranja residual `.readprog` visível em páginas que não são de leitura de PDF.
+> - Barra `.bar` secundária redundante exibida durante `#/simulado/exec` e `#/simulado/resultado`.
+> - Ausência de cartões de superfície flutuantes (`border-radius: 12px` sobre `--app-tab-bg-back`, padrão `notes-app-old-4`).
+> **3. Quebra de Layout em `#/tipo/questao` e Inputs Nativos (Issue #35)**
+> - Título `Questão` comprimido em `57.68px`, quebrando em 3 linhas (`Qu / est / ão`), e `<input type="radio">` nativos sem estilização.
+> **4. Ergonomia de Resolução em `#/questao/*` (Issue #36)**
+> - `.props-card` inicia expandido com 11 linhas (~320px), empurrando enunciado e alternativas A–E para fora da dobra (below the fold). Deve iniciar `is-collapsed` em questões.
+> **5. Diagramação do Simulado `#/simulado/exec` e Scorecard `#/simulado/resultado` (Issue #37)**
+> - Enunciado espremido em ~250px (4–6 palavras/linha) quando a grade de 70 questões divide espaço com o Painel Direito; disciplinas truncadas no resultado (`Língua Portu...`).
+> **6. Colisão no Rodapé do Grafo `#/grafico` (Issue #38)**
+> - Pílulas de filtro `.gv-leg` em 2 linhas colidem diretamente sobre `.gv-info` (`90 objetos · 299 relações`).
+> **7. Corte de Rótulos em `.props-card` e Abas do Painel Direito (Issue #39)**
+> - `dt` corta `'Cadastro de reserv'` e `'Remuneração inici'`; abas do painel direito truncam `'Navegar'` para `'ir'`.
+> **8. Home `#/espaco` e Modais (Issue #40)**
+> - KPIs com valores hardcoded (`5 dias`, `38 dias`, `5% lido`), grid 3+1 com card órfão, contraste fraco no Light Mode e falta de fechamento consistente com `Escape` em `#pal`.
+
+![imagem e610](assets/audit2026_home_dark.png)
+
+![imagem e612](assets/audit2026_home_light.png)
+
+**Evidência 1:** Dashboard Home (#/espaco) em Dark Mode: KPIs 3+1, métricas estáticas e duplicação na topbar
+
+**Evidência 2:** Dashboard Home (#/espaco) em Light Mode: botões cinzas pesados e baixo contraste de bordas
+
+![imagem e614](assets/audit2026_cargo_props.png)
+
+![imagem e616](assets/audit2026_questao_expanded.png)
+
+**Evidência 3:** Cargo Analista de TI (#/cargo/dataprev-2026-ti-dev): corte nos rótulos 'Cadastro de reserv' e 'Remuneração inici' no .props-card
+
+**Evidência 4:** Questão 1 (#/questao/q1): .props-card aberto por padrão com 11 linhas empurra enunciado e alternativas para fora da tela
+
+![imagem e618](assets/audit2026_questao_collapsed.png)
+
+![imagem e620](assets/audit2026_graph_collision.png)
+
+**Evidência 5:** Questão 1 (#/questao/q1) com .props-card recolhido: enunciado e alternativas A-D cabem imediatamente na dobra
+
+**Evidência 6:** Grafo Global (#/grafico): colisão direta entre pílulas de filtro (.gv-leg) e contador '90 objetos · 299 relações' (.gv-info)
+
+![imagem e622](assets/audit2026_simulado_exec.png)
+
+![imagem e624](assets/audit2026_simulado_resultado.png)
+
+**Evidência 7:** Modo Simulado (#/simulado/exec): enunciado comprimido em ~250px ao lado da grade de 70 questões
+
+**Evidência 8:** Scorecard Pós-Simulado (#/simulado/resultado): truncamento severo dos nomes das disciplinas ('Língua Portu...', 'Raciocínio Ló...')
+
+![imagem e626](assets/audit2026_tipo_questao_wrap.png)
+
+**Evidência 9:** Página Tipo Questão (#/tipo/questao): quebra do título em 3 linhas ('Qu / est / ão') e inputs radio nativos sem estilização
+
 ## 10. Arquivos do projeto (Dataprev 2026 e referências)
 <!-- container e363 @ (0,12666) -->
 
