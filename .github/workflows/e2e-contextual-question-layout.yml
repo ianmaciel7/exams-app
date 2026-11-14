@@ -1,0 +1,71 @@
+name: E2E Contextual Question Layout
+
+on:
+  pull_request:
+    branches: [dev]
+    paths:
+      - 'prototypes/exam-app-0.1.1/index.html'
+      - 'tests/contextual-question-layout.test.mjs'
+      - 'tests/contextual-question-layout.e2e.mjs'
+      - 'scripts/append-contextual-question-board.py'
+      - '.github/workflows/e2e-contextual-question-layout.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  contextual-questions:
+    if: github.head_ref == 'fix/136-contextual-question-layout' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify source and shared component styles
+        run: node --test tests/contextual-question-layout.test.mjs tests/study-navigation.test.mjs
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Reproduce prior issue and validate card CSS in Chromium
+        shell: bash
+        run: |
+          set -euo pipefail
+          if test -f prototypes/board-exam-app/issue136_e2e.json; then
+            echo 'Prior verified screenshots already committed; skipping capture regeneration.'
+            exit 0
+          fi
+          git worktree add --detach /tmp/exams-before-136 edc091d918c6fa1ccdd48dc3f297dbee573deafe
+          python3 -m http.server 8765 --directory prototypes >/tmp/exams-after-136.log 2>&1 &
+          python3 -m http.server 8766 --directory /tmp/exams-before-136/prototypes >/tmp/exams-before-136.log 2>&1 &
+          for i in $(seq 1 20); do
+            if curl -fsS http://127.0.0.1:8765/exam-app-0.1.1/index.html -o /dev/null &&
+               curl -fsS http://127.0.0.1:8766/exam-app-0.1.1/index.html -o /dev/null; then break; fi
+            sleep 1
+          done
+          node tests/contextual-question-layout.e2e.mjs
+          python3 scripts/append-contextual-question-board.py
+          npm run board
+          grep -q "43. Questões contextuais" prototypes/board-exam-app/BOARD.md
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add prototypes/board-exam-app/board.json prototypes/board-exam-app/BOARD.md prototypes/board-exam-app/issue136_e2e.json
+          git add prototypes/board-exam-app/assets/issue136_*.png
+          if ! git diff --cached --quiet; then
+            git commit -m "test(questions): persist Issue #136 Chromium layout before/after"
+            git push origin "HEAD:${{ github.head_ref }}"
+          fi
+      - name: Upload diagnostic screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: issue136-contextual-questions-evidence
+          path: |
+            prototypes/board-exam-app/assets/issue136_*.png
+            prototypes/board-exam-app/issue136_e2e.json
+          if-no-files-found: warn
