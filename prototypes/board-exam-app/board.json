@@ -2267,7 +2267,7 @@
       "y": 690
     },
     "e50": {
-      "text": "- Modelar as entidades do app (diagrama abaixo)\n- Adotar \"tudo é um Objeto\" (tipo e propriedades)\n- Decidir onde ficam as questões\n- Testar as telas no celular",
+      "text": "- Modelar as entidades do app (diagrama abaixo)\n- Adotar \"tudo é um Objeto\" (tipo e propriedades)\n- Decidir onde ficam as questões\n- Testar as telas no celular\n- Motion (Issue #128): loop do grafo agora respeita movimento reduzido, aba oculta, viewport e repouso; tokens CSS alinhados. QA visual e benchmarks ainda pendentes.",
       "type": "text",
       "wrap": 430,
       "x": 534,
