@@ -166,7 +166,7 @@ A barra superior é a âncora de navegação e orientação do usuário, com alt
 4. **Trilho de Abas Principais (`[Abas +]`)**:
    - Largura mínima por aba: `MAIN_TAB_MIN_WIDTH = 82px`. Espaçamento: `MAIN_TAB_GAP = 4px`.
    - Separador vertical sutil entre abas inativas (`height: 18px; width: 0.5px; opacity: 0.6`).
-   - Botão de fechar aba (`✕`): área de 20px x 20px no canto direito da aba, visível permanentemente na aba ativa e no hover das abas inativas.
+   - Botão de fechar aba (`×`): área de 20px x 20px no canto direito da aba, visível permanentemente na aba ativa e no hover das abas inativas.
    - Atalhos de teclado: `Alt + 1` até `Alt + 9` para alternar abas; `Ctrl + W` ou duplo clique na aba para fechar.
    - Botão `+`: cria nova aba de visualização (explorador, grafo, busca).
    - Botão de Overflow (`[▼]`): acionado automaticamente quando o número de abas excede a largura disponível, exibindo menu suspenso pesquisável de 256px.

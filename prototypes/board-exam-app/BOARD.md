@@ -764,8 +764,8 @@ Capturas da fase em que o Ian pediu um artefato só para o protótipo e outro pa
 - **Explorar como Central de Descoberta**:
   - Busca integrada, filtros dinâmicos por tipo e contagens em tempo real.
   - Ações diretas e imediatas em cada item da listagem:
-    - [🕸️] Abrir no Grafo Contextual direto da linha.
-    - [🔗] Abrir Backlinks / referências.
+    - Ação de grafo: abrir no Grafo Contextual direto da linha.
+    - Ação de backlinks: abrir referências relacionadas.
     - [+] Abrir em Nova Aba.
 - **Grafo Contextual por Objeto e por Tipo**:
   - Suporte nativo ao grafo local focado no objeto ativo e em suas relações primárias/secundárias.
@@ -804,7 +804,7 @@ O que Ian mostrou como modelo para a sidebar: tipos de objeto, ordenar, hover, l
 ### Diagnóstico Especialista UI/UX Enterprise 2026 (Capacities, Linear, Raycast, Notion, QConcursos) — Issues #34 a #40 e #42
 
 > **1. Proibição Total de Emojis na UI — Zero Emoji Policy (Issue #42)**
-> - É estritamente proibido usar emojis Unicode (`💡`, `🎯`, `📅`, `📖`, `🎉`, `🔥`, `⚠️`, `🕸️`, `📄`, `🧭`) na UI, botões, KPIs ou docs. Todos devem ser substituídos por ícones `<svg>` vetoriais monocromáticos/semânticos (`stroke-width: 1.8`).
+> - É estritamente proibido usar emojis Unicode na UI, botões, KPIs ou docs. Substituir símbolos pictográficos (lâmpada, alvo, calendário, livro aberto, celebração, chama, aviso, rede, documento e bússola) por ícones `<svg>` vetoriais monocromáticos/semânticos (`stroke-width: 1.8`).
 > **2. Shell & Barra Superior Unificada (Issue #34)**
 > - Duplicação lado a lado de `[C Concurso de TI]` (na sidebar) e `[Concurso de TI]` (na topbar central) quando a sidebar está aberta.
 > - Linha laranja residual `.readprog` visível em páginas que não são de leitura de PDF.
