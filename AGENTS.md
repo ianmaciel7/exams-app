@@ -743,4 +743,15 @@ Antes de concluir uma mudança visual/interativa, o agente **MUST**:
 
 **Consulta por tópico:** tokens, superfícies, tipografia, componentes, layout e critérios em [DESIGN.md](DESIGN.md); springs, easing, tempo, continuidade espacial, grafo, performance e motion reduzido em [MOTION.md](MOTION.md). Inventário dos 22 skills de referência e separação entre fontes oficiais/comunidade em `DESIGN.md`.
 
+### Auditoria de lacunas de design — evidência antes de declarar "implementado"
+
+Para cada alteração de **formulário, navegação, componente, efeito ou tema**, registrar no PR uma matriz com colunas: `superfície` → `problema observado` → `regra interna aplicada` → `fonte oficial, quando houver` → `evidência antes/depois` → `teste` → `resultado (implementado/especificado/não testado)`. A ausência de teste não significa aprovação.
+
+- **MUST** verificar [DESIGN.md §8.10–8.13](DESIGN.md): campos, formulários, matriz de estados, forced colors e padrões sem button; escolher `Salvar`/`Aplicar`/autosave pela semântica e risco da operação, não pela aparência.
+- **MUST** testar inputs com teclado, digitação/composição IME, paste/autocomplete, validação, foco, erro de servidor, latência e recuperação. Não depender do placeholder, apenas cor, mensagens genéricas ou ausência silenciosa do botão.
+- **MUST** testar navegação com estado transitório: reflow durante transição, alterações rápidas de viewport/zoom, clique repetido, hidden tab e nova ação antes do `animationend`; seguir [MOTION.md §5.10](MOTION.md).
+- **MUST** verificar `forced-colors: active` quando aplicável; não esconder foco, seleção e separações funcionais atrás de sombra/gradiente/transparência. Para translucidez, `prefers-reduced-transparency` é **suporte progressivo**, não fallback universal; sempre ter superfície opaca como base.
+- **MUST** distinguir **"links catalogados"** de **"SKILL.md efetivamente lido e verificado"**: não afirmar auditoria completa das 22 skills, compatibilidade ou conformidade sem registrar arquivo, caminho, revisão/commit e data, quando disponíveis. Conferir links com origem atual e corrigir moved/deleted.
+- **SHOULD** validar uma tarefa representativa por superfície (criar/editar, filtrar, navegar, responder, rever erro), não apenas screenshots estáticas; se for mudança só documental, não inventar evidência visual.
+
 <!-- DESIGN-SYSTEM-INTEGRATION:END -->
