@@ -1,4 +1,4 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><style>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><style>
 /* Layout follows the available reading pane, including an open context panel. */
 .view{container-type:inline-size}
 .op,.op-main,.op-side{min-width:0}
@@ -2140,7 +2140,7 @@ function setCollapsed(c){ app.classList.toggle('collapsed',c); store.set('collap
   $('collapse').setAttribute('aria-label',c?'Abrir barra lateral':'Recolher barra lateral');
   $('collapse').title=(c?'Abrir':'Recolher')+' barra lateral (Ctrl+B)';
   const wsSide=$('wsSide'); if(wsSide){ wsSide.setAttribute('aria-label',c?'Abrir barra lateral':'Recolher barra lateral'); wsSide.title=(c?'Abrir':'Recolher')+' barra lateral (Ctrl+B)'; }
-  closePops(); if(typeof wsPaint==='function') wsPaint(); }
+  closePops(); if(typeof curTab==='function' && typeof wsPaint==='function') wsPaint(); }
 function toggleSide(){ if(isPhone()) app.classList.toggle('open'); else setCollapsed(!app.classList.contains('collapsed')); }
 if(store.get('collapsed')) setCollapsed(true);
 $('collapse').onclick=toggleSide;
