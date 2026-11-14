@@ -2,6 +2,8 @@
 
 > **Status:** curadoria operacional inicial (14/11/2026), para uso por agentes; não representa o relatório final da Pesquisa Profunda em andamento. **Base consultada:** branch dev em 408271d7c56b088fefe9d17860a23c47731ff268. **Escopo:** documentação, sem alterar telas. Relacionado a [#102](https://github.com/ianmaciel7/exams-app/issues/102) e [arquitetura de navegação](arquitetura-informacao-navegacao.md).
 
+**Animação e movimento:** os 12 princípios clássicos, as regras de motion para interfaces, os tokens do Exam App e os testes de movimento reduzido estão documentados em [MOTION.md](../../MOTION.md). São princípios artísticos e práticas de interação, não 12 leis normativas de UX.
+
 ## Como usar sem transformar heurísticas em dogmas
 
 - **Norma técnica:** critério formal e testável; aplicar o nível e as exceções corretos. WCAG 2.2 AA é alvo de projeto, **não declaração de conformidade**. A norma ISO pode exigir acesso ao texto integral.
@@ -121,7 +123,7 @@
 | 72 | Tamanho de alvo | Norma WCAG 2.2 2.5.8 AA | Alvo mínimo 24×24 CSS px ou exceção de espaçamento/equivalência. | Auditar chips e botões compactos; preferir alvos maiores quando possível. | 44×44 é critério AAA 2.5.5, não mínimo AA universal. | [Target](https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum) |
 | 73 | Reflow e zoom | Norma WCAG 2.2 1.4.10 | Conteúdo deve refluir sem rolagem bidimensional indevida nas condições do critério. | Verificar resolução de questão em viewport estreita e zoom. | Algumas tabelas e gráficos têm exceção. | [WCAG](https://www.w3.org/TR/WCAG22/) |
 | 74 | Mensagens de status | Norma WCAG 2.2 4.1.3 AA | Atualizações de status são comunicadas sem roubar foco. | Anunciar resposta salva e atualização de contagem. | Alertas urgentes podem requerer padrão diferente. | [WCAG](https://www.w3.org/TR/WCAG22/), [APGAlert](https://www.w3.org/WAI/ARIA/apg/patterns/alert/) |
-| 75 | Movimento reduzido | Norma WCAG 2.2 2.3.3 AAA e preferência do usuário | Movimento disparado por interação deve poder ser desativado, salvo essencial. | Respeitar prefers-reduced-motion nas transições. | Não confundir este AAA com obrigação AA geral. | [WCAG](https://www.w3.org/TR/WCAG22/) |
+| 75 | Movimento reduzido | Norma WCAG 2.2 2.3.3 AAA e preferência do usuário | Movimento disparado por interação deve poder ser desativado, salvo essencial. | Respeitar prefers-reduced-motion em CSS, JS e canvas, preservando feedback e integridade da tarefa. | Não confundir este AAA com obrigação AA geral; considerar 2.2.2 e 2.3.1 (A) quando aplicáveis. | [WCAG](https://www.w3.org/TR/WCAG22/), [MOTION.md](../../MOTION.md) |
 | 76 | Cabeçalhos e rótulos | Norma WCAG 2.2 2.4.6 AA | Títulos e labels descrevem assunto ou propósito. | Título Questão 12 de 70 e botões com ação explícita. | Evitar rótulos genéricos como Ver mais sem contexto. | [WCAG](https://www.w3.org/TR/WCAG22/) |
 
 ### 8. Desempenho, ética e validação
