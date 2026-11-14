@@ -1784,6 +1784,17 @@ O que Ian mostrou como modelo para a sidebar: tipos de objeto, ordenar, hover, l
 | Readwise SRS | readwise_srs_frequency_tuning_by_source.png | readwise.io/configure/tune/books | 2026-11-13 | Sliders individuais de frequência de ressurgimento por livro/fonte | Deixar ajuste fino de frequência por disciplina para fase 2 do SRS (começar com fila diária simples) | Adaptar |
 | Readwise SRS | readwise_srs_statistics_heatmap.png | readwise.io/stats | 2026-11-13 | Heatmap anual de revisões diárias e contador de Streak (ofensiva) | Incluir Streak e estatísticas de consistência na Home e página de Desempenho | Adotar |
 | Readwise SRS | readwise_srs_export_highlights_top.png | readwise.io/export & /welcome/sync | 2026-11-14 | 32 conectores de importação e 16 integrações de exportação OAuth (Obsidian, Notion, etc.) | Descartar integrações OAuth com terceiros; fornecer exportação/backup próprio em CSV/Markdown/JSON | Descartar |
+| QConcursos Elite | qconcursos_criar_simulado_config_modal.png | elite.qconcursos.com/simulados/criar | 2026-11-14 | Drawer de criação de simulado: nome, quantidade (stepper), tempo/duração e modo Real vs Prática | Fluxo unificado de Simulado: modal com tempo, quantidade e alternância entre Modo Simulado e Modo Prática (Pergunta 3) | Adotar |
+| QConcursos Elite | qconcursos_filter_assunto_tree_open.png | elite.qconcursos.com/questoes | 2026-11-14 | Popover do filtro Assunto aberto com campo Busca rápida e árvore hierárquica de 3 níveis com contadores | Filtro cascata Assunto com busca rápida interna e seleção atômica de nós sem selecionar disciplina inteira | Adotar |
+| QConcursos Elite | qconcursos_highlighter_applied.png | elite.qconcursos.com/questoes | 2026-11-14 | Seleção de texto no enunciado abrindo paleta flutuante de 4 cores e persistindo <mark> amarelo no DOM | Marca-texto flutuante direto no enunciado com persistência nas anotações do aluno (Pergunta 4) | Adotar |
+| QConcursos Elite | qconcursos_dock_resumos_paywall_modal.png | elite.qconcursos.com/questoes | 2026-11-14 | Botão Meus Resumos no dock acionando modal de paywall e upgrade de plano Pro/Ilimitado | Resumos ricos desvinculados do MVP inicial; manter apenas anotações simples por questão (Pergunta 4) | Descartar |
+| QConcursos Elite | qconcursos_desempenho_top_overview.png | elite.qconcursos.com/meu-desempenho?scope=all | 2026-11-14 | Rota global de desempenho com abas de escopo, seletor de período (Hoje, 7d, 15d, 30d, Tudo) e KPIs consolidados | Dashboard Central de Desempenho (#/espaco) com períodos pré-fixados e taxa global de aproveitamento (Pergunta 9) | Adotar |
+| QConcursos Elite | qconcursos_desempenho_charts_and_table.png | elite.qconcursos.com/meu-desempenho?scope=all | 2026-11-14 | Gráfico diário de evolução e tabela de disciplinas com barra de taxa de acerto e botão de expandir assuntos | Visualização analítica de evolução e detalhamento disciplinar no perfil de estudos | Adotar |
+| Capacities | capacities_global_graph_search_dropdown_open.png | app.capacities.io/?section=graph | 2026-11-14 | Busca secundária no topo direito do Grafo Global abrindo popover Buscar objetos com lista de resultados | Busca integrada com dropdown no grafo de entidades e tópicos do concurso (Pergunta 6/7) | Adotar |
+| Capacities | capacities_global_graph_search_node_nav.png | app.capacities.io/?section=graph | 2026-11-14 | Clique no resultado disparando transição animada de zoom (39% para 175%) centralizando o nó focalizado em branco | Centralização animada no grafo ao buscar ou navegar entre entidades de estudo | Adotar |
+| ExamTopics | examtopics_az104_question_card.png | examtopics.com/exams/microsoft/az-104/view/ | 2026-11-14 | Card da questão pública de certificação com barra de progresso (1-10 de 606), enunciado de cenário e botões de ação | Módulo de Certificações Internacionais com suporte a Case Study e formato de itens de TI (Pergunta 13) | Adaptar |
+| ExamTopics | examtopics_az104_solution_reveal.png | examtopics.com/exams/microsoft/az-104/view/ | 2026-11-14 | Botão Reveal Solution exibindo resposta correta com badge Most Voted e barra de votação comunitária (98% C) | Exibição de gabarito com percentual de concordância / confiança da IA ou estatísticas de candidatos | Adaptar |
+| Readwise SRS | readwise_srs_bookreview_highlight_actions_menu.png | readwise.io/bookreview/65206299 | 2026-11-14 | Menu secundário com 6 ações: Copy, Edit metadata, Add tags, Show more often, Show less often, Never show again | Menu de ações de cada item do SRS permitindo ao aluno acelerar ou suspender a frequência de repetição (Pergunta 9) | Adotar |
 
 ## 32. Questões e Simulados — Issue #100: unificação dos fluxos e evidência E2E
 <!-- container e1155 @ (15000,11000) -->
@@ -1987,6 +1998,119 @@ Tema escuro escolhido, mesmo com sistema claro
 ![imagem e1246](assets/issue120_after_auto_light_restored.png)
 
 Retorno ao automatico com sistema claro
+
+## 38. Infraestrutura de agentes — correção MCP (Codex, Claude e Antigravity)
+<!-- container e1248 @ (26000,11000) -->
+
+### Diagnóstico P1 e correção verificável — 2026-11-14
+
+> **Escopo:** Codex, Claude Desktop e Antigravity no workspace `C:\Users\ianma\workspace\exams\dev`. Sem captura visual: evidência é a saída textual de `agents` e os arquivos de configuração materializados.
+> **Causas confirmadas (P1):**
+> 1. O projeto declarava somente `fetch`, `filesystem` e `git`; Serena não estava no conjunto MCP.
+> 2. `fetch` e `git` dependiam de `uvx`, disponível apenas no PATH da sessão.
+> 3. O Codex não confiava no projeto, podendo ignorar `.codex/config.toml`.
+> 4. CodeGraph não possui índice neste repositório (a pasta `.codegraph/` contém apenas `.gitignore`); a indexação permanece decisão explícita.
+> **Correção aplicada:**
+> - Serena foi registrado na fonte compartilhada para Codex, Claude, Claude Desktop, Gemini e Antigravity.
+> - Overrides locais chamam os caminhos absolutos de `uvx.exe` e `serena.exe` através de `cmd.exe`, mantendo a fonte versionada portátil.
+> - `agents sync` materializou `.codex/config.toml`, `.mcp.json`, `.agents/mcp_config.json`, `.gemini/settings.json` e a configuração global do Claude Desktop.
+> - O projeto foi marcado como `trusted` na configuração global do Codex.
+> **Aceite verificado:** `agents mcp test` aprovou `fetch`, `filesystem`, `git` e `serena`; `agents sync --check` não encontrou divergências; status registra quatro servidores e Codex `trusted`.
+> **Limite de teste:** os CLIs de Codex, Claude e Antigravity não estão no PATH, logo a introspecção de runtime dos apps GUI não é automatizável. Reiniciar os três apps carrega a configuração; no Claude Desktop os nomes recebem o prefixo gerenciado `agents__5c84344337b9__`.
+
+## 39. Fechamento Integral dos 7 Gaps de Referência (Evidências Visuais e DOM de QConcursos Elite, Capacities Graph, ExamTopics e Readwise SRS)
+<!-- container e1300 @ (28000,11000) -->
+
+### Visão Geral da Auditoria de Fechamento de Gaps
+Todos os 7 gaps de produto e de fluxo identificados na sessão anterior foram auditados ao vivo no navegador, sem CAPTCHAs, com extração de hierarquia de DOM e gravação de evidências de alta resolução no diretório ssets/. Todas as decisões de produto agora contam com base empírica visual e documental.
+
+### Gap 1 (P1) — QConcursos Elite: Fluxo de Criação de Simulado
+**Ação Observada**: Abertura do drawer/modal lateral de configuração de simulados (/simulados/criar) acionado a partir da busca filtrada de questões.
+**Parâmetros de UI**: Permite configurar Nome do Simulado, Quantidade de Questões (input com stepper/máximo permitido pelo filtro), Tempo / Duração (em minutos ou sem limite) e chave de alternância entre Modo Simulado Real (sem gabarito imediato, cronômetro regressivo) e Modo Prática (feedback imediato a cada questão respondida). Validação de questões mínimas bloqueia envio caso filtro resulte em zero itens.
+
+*(imagem vetorial e1303)*
+
+**Evidência 105 (QConcursos Criar Simulado Modal):** Configuração completa de simulado com título, quantidade de questões, tempo limite e modo de execução.
+
+### Gap 4 (P2) — QConcursos Elite: Filtro Assunto em Árvore Hierárquica
+**Ação Observada**: Clique no seletor de Assunto após filtrar Disciplina: Direito Constitucional.
+**Parâmetros de UI**: Popover suspenso contendo barra de Busca rápida interna e árvore hierárquica expansível de 3 níveis de profundidade, com checkboxes individuais e indicadores numéricos de volume de questões por nó (e.g., Direitos Individuais (1.240)). Permite seleção atômica de sub-tópicos sem selecionar a disciplina inteira.
+
+*(imagem vetorial e1306)*
+
+**Evidência 106 (QConcursos Filtro Assunto Tree Open):** Árvore hierárquica aberta com busca rápida, expansão de nós e checkboxes com contagem de questões.
+
+### Gap 5 (P2) — QConcursos Elite: Marca-Texto no Enunciado & Paywall Meus Resumos
+**Ação Observada**: Seleção de trecho de texto no enunciado da questão e inspeção do botão Meus Resumos no dock inferior direito.
+**Parâmetros de UI**: Ao selecionar texto no enunciado, surge uma paleta flutuante (bubble toolbar) com 4 cores vibrantes (Amarelo, Verde, Rosa, Azul) e ícone de lixeira para remover marcação. A marcação amarela é aplicada diretamente na tag <mark> do DOM. O botão Meus Resumos abre modal de paywall exigindo plano Pro/Ilimitado, confirmando que resumos ricos não são do plano básico.
+
+*(imagem vetorial e1309)*
+
+**Evidência 107 (QConcursos Marca-Texto Aplicado):** Trecho do enunciado destacado em amarelo com paleta flutuante ativa.
+
+*(imagem vetorial e1311)*
+
+**Evidência 108 (QConcursos Meus Resumos Paywall):** Modal de bloqueio de plano para criação e edição de resumos integrados às questões.
+
+### Gap 2 (P1) — QConcursos Elite: Painel Global de Desempenho (/meu-desempenho?scope=all)
+**Ação Observada**: Acesso à rota consolidada de desempenho com escopo geral e filtros temporais.
+**Parâmetros de UI**: Topo com abas de escopo (Geral, Disciplinas, Bancas, Órgãos), seletor de período (Hoje, Últimos 7 dias, Últimos 15 dias, Últimos 30 dias, Desde o início), KPIs agregados (Total resolvidas, Acertos, Erros, % de Aproveitamento), gráfico de evolução temporal (spline chart diário) e tabela hierárquica por disciplina com barras de acerto/erro e botão de expansão de assuntos.
+
+*(imagem vetorial e1314)*
+
+**Evidência 109 (QConcursos Desempenho Top KPIs):** Cartões de métricas consolidadas, taxa de acerto global e seletor de período temporal.
+
+*(imagem vetorial e1316)*
+
+**Evidência 110 (QConcursos Desempenho Gráficos e Tabela):** Gráfico de evolução de estudos e tabela de disciplinas com taxa de aproveitamento.
+
+*(imagem vetorial e1318)*
+
+**Evidência 111 (QConcursos Desempenho Disciplina Expandida):** Detalhamento de assuntos e tópicos internos com percentual de acertos individual.
+
+### Gap 7 (P2) — Capacities: Busca no Grafo Global & Navegação / Foco por Nó
+**Ação Observada**: Execução de busca no Grafo Global (?section=graph) e clique em nó do resultado.
+**Parâmetros de UI**: O Grafo Global roda em WebGL Canvas. A busca secundária no canto superior direito abre o popover Buscar objetos com lista de nós correspondentes (Azure Virtual Machine Scale Sets, etc.). Ao clicar no item, o menu se fecha, a viewport realiza uma transição suave animada de pan e zoom (indo de 39% para 175%), centralizando o nó focalizado em branco com seu anel de cor de tipo (verde-azulado/teal) e rótulo permanente.
+
+*(imagem vetorial e1321)*
+
+**Evidência 112 (Capacities Grafo Dropdown de Busca):** Popover Buscar objetos aberto com lista de entidades do espaço de trabalho.
+
+*(imagem vetorial e1323)*
+
+**Evidência 113 (Capacities Grafo Nó Centralizado com Zoom):** Transição de zoom para 175% centralizando o nó alvo e destacando conexões de 1º grau.
+
+### Gap 3 (P1) — ExamTopics: Estrutura da Prova AZ-104, Solução Revelada & Discussões
+**Ação Observada**: Auditoria da página pública de certificação Microsoft AZ-104 (/exams/microsoft/az-104/view/).
+**Parâmetros de UI**: Sem CAPTCHA. Cabeçalho com paginação (Página 1 de 61, Questões 1-10 de 606) e barra de progresso. Card da questão com barra de título azul (Question #1 Topic 1), enunciado do cenário e alternativas com letras. Botão Reveal Solution abre a resposta correta (Correct Answer: C) com badge Most Voted e barra de distribuição da votação da comunidade (B: 2%, C: 98%). Botão Discussion 126 abre modal completo com votos dos membros (Selected Answer: C) e argumentos técnicos detalhados.
+
+*(imagem vetorial e1326)*
+
+**Evidência 114 (ExamTopics Header & Paginação):** Cabeçalho da certificação AZ-104 com paginação, progresso de questões e menu.
+
+*(imagem vetorial e1328)*
+
+**Evidência 115 (ExamTopics Question Card Inicial):** Card da questão com enunciado, alternativas e botões Reveal Solution e Discussion.
+
+*(imagem vetorial e1330)*
+
+**Evidência 116 (ExamTopics Solution Reveal com Voto Comunitário):** Resposta revelada com badge Most Voted e barra comparativa de 98% da comunidade.
+
+*(imagem vetorial e1332)*
+
+**Evidência 117 (ExamTopics Discussion Modal):** Discussão comunitária com justificativas técnicas, votos por alternativa e upvotes.
+
+### Gap 6 (P2) — Readwise SRS: Menu de Ações do Highlight & Formulário Freeform
+**Ação Observada**: Abertura do menu de contexto de 3 pontos do highlight em /bookreview/65206299 e auditoria da tela de importação manual /import_freeform.
+**Parâmetros de UI**: O menu secundário do highlight expõe exatamente 6 ações: Copy highlight text, Edit document metadata, Add document tags, Show this doc more often, Show this doc less often e Never show this doc again. A tela /import_freeform oferece formulário em duas colunas para inserção rápida de destaques sem arquivo (Quote, Page, Notes, Tags).
+
+*(imagem vetorial e1335)*
+
+**Evidência 118 (Readwise SRS Highlight Actions Menu):** Menu suspenso de 6 ações de ajuste de frequência, metadados e tags do destaque.
+
+*(imagem vetorial e1337)*
+
+**Evidência 119 (Readwise SRS Freeform Manual Import Form):** Formulário de inserção manual de citações e anotações para o motor de SRS.
 
 ## 10. Arquivos do projeto (Dataprev 2026 e referências)
 <!-- container e363 @ (0,12666) -->

@@ -633,7 +633,49 @@
     "e1244",
     "e1245",
     "e1246",
-    "e1247"
+    "e1247",
+    "e1248",
+    "e1249",
+    "e1250",
+    "e1300",
+    "e1301",
+    "e1302",
+    "e1303",
+    "e1304",
+    "e1305",
+    "e1306",
+    "e1307",
+    "e1308",
+    "e1309",
+    "e1310",
+    "e1311",
+    "e1312",
+    "e1313",
+    "e1314",
+    "e1315",
+    "e1316",
+    "e1317",
+    "e1318",
+    "e1319",
+    "e1320",
+    "e1321",
+    "e1322",
+    "e1323",
+    "e1324",
+    "e1325",
+    "e1326",
+    "e1327",
+    "e1328",
+    "e1329",
+    "e1330",
+    "e1331",
+    "e1332",
+    "e1333",
+    "e1334",
+    "e1335",
+    "e1336",
+    "e1337",
+    "e1338"
   ],
   "elements": {
     "e1": {
@@ -5540,7 +5582,7 @@
       "x": 12000,
       "y": 11000,
       "w": 1680,
-      "h": 6200,
+      "h": 7800,
       "text": "33. Matriz de Decisões de Produto Extraída dos Sites (14 Perguntas) & Índice Mestre de Rastreabilidade de Evidências (Adotar / Adaptar / Descartar)"
     },
     "e1151": {
@@ -5840,6 +5882,116 @@
           "c5": "32 conectores de importação e 16 integrações de exportação OAuth (Obsidian, Notion, etc.)",
           "c6": "Descartar integrações OAuth com terceiros; fornecer exportação/backup próprio em CSV/Markdown/JSON",
           "c7": "Descartar"
+        },
+        "r24": {
+          "at": "a24",
+          "c1": "QConcursos Elite",
+          "c2": "qconcursos_criar_simulado_config_modal.png",
+          "c3": "elite.qconcursos.com/simulados/criar",
+          "c4": "2026-11-14",
+          "c5": "Drawer de criação de simulado: nome, quantidade (stepper), tempo/duração e modo Real vs Prática",
+          "c6": "Fluxo unificado de Simulado: modal com tempo, quantidade e alternância entre Modo Simulado e Modo Prática (Pergunta 3)",
+          "c7": "Adotar"
+        },
+        "r25": {
+          "at": "a25",
+          "c1": "QConcursos Elite",
+          "c2": "qconcursos_filter_assunto_tree_open.png",
+          "c3": "elite.qconcursos.com/questoes",
+          "c4": "2026-11-14",
+          "c5": "Popover do filtro Assunto aberto com campo Busca rápida e árvore hierárquica de 3 níveis com contadores",
+          "c6": "Filtro cascata Assunto com busca rápida interna e seleção atômica de nós sem selecionar disciplina inteira",
+          "c7": "Adotar"
+        },
+        "r26": {
+          "at": "a26",
+          "c1": "QConcursos Elite",
+          "c2": "qconcursos_highlighter_applied.png",
+          "c3": "elite.qconcursos.com/questoes",
+          "c4": "2026-11-14",
+          "c5": "Seleção de texto no enunciado abrindo paleta flutuante de 4 cores e persistindo <mark> amarelo no DOM",
+          "c6": "Marca-texto flutuante direto no enunciado com persistência nas anotações do aluno (Pergunta 4)",
+          "c7": "Adotar"
+        },
+        "r27": {
+          "at": "a27",
+          "c1": "QConcursos Elite",
+          "c2": "qconcursos_dock_resumos_paywall_modal.png",
+          "c3": "elite.qconcursos.com/questoes",
+          "c4": "2026-11-14",
+          "c5": "Botão Meus Resumos no dock acionando modal de paywall e upgrade de plano Pro/Ilimitado",
+          "c6": "Resumos ricos desvinculados do MVP inicial; manter apenas anotações simples por questão (Pergunta 4)",
+          "c7": "Descartar"
+        },
+        "r28": {
+          "at": "a28",
+          "c1": "QConcursos Elite",
+          "c2": "qconcursos_desempenho_top_overview.png",
+          "c3": "elite.qconcursos.com/meu-desempenho?scope=all",
+          "c4": "2026-11-14",
+          "c5": "Rota global de desempenho com abas de escopo, seletor de período (Hoje, 7d, 15d, 30d, Tudo) e KPIs consolidados",
+          "c6": "Dashboard Central de Desempenho (#/espaco) com períodos pré-fixados e taxa global de aproveitamento (Pergunta 9)",
+          "c7": "Adotar"
+        },
+        "r29": {
+          "at": "a29",
+          "c1": "QConcursos Elite",
+          "c2": "qconcursos_desempenho_charts_and_table.png",
+          "c3": "elite.qconcursos.com/meu-desempenho?scope=all",
+          "c4": "2026-11-14",
+          "c5": "Gráfico diário de evolução e tabela de disciplinas com barra de taxa de acerto e botão de expandir assuntos",
+          "c6": "Visualização analítica de evolução e detalhamento disciplinar no perfil de estudos",
+          "c7": "Adotar"
+        },
+        "r30": {
+          "at": "a30",
+          "c1": "Capacities",
+          "c2": "capacities_global_graph_search_dropdown_open.png",
+          "c3": "app.capacities.io/?section=graph",
+          "c4": "2026-11-14",
+          "c5": "Busca secundária no topo direito do Grafo Global abrindo popover Buscar objetos com lista de resultados",
+          "c6": "Busca integrada com dropdown no grafo de entidades e tópicos do concurso (Pergunta 6/7)",
+          "c7": "Adotar"
+        },
+        "r31": {
+          "at": "a31",
+          "c1": "Capacities",
+          "c2": "capacities_global_graph_search_node_nav.png",
+          "c3": "app.capacities.io/?section=graph",
+          "c4": "2026-11-14",
+          "c5": "Clique no resultado disparando transição animada de zoom (39% para 175%) centralizando o nó focalizado em branco",
+          "c6": "Centralização animada no grafo ao buscar ou navegar entre entidades de estudo",
+          "c7": "Adotar"
+        },
+        "r32": {
+          "at": "a32",
+          "c1": "ExamTopics",
+          "c2": "examtopics_az104_question_card.png",
+          "c3": "examtopics.com/exams/microsoft/az-104/view/",
+          "c4": "2026-11-14",
+          "c5": "Card da questão pública de certificação com barra de progresso (1-10 de 606), enunciado de cenário e botões de ação",
+          "c6": "Módulo de Certificações Internacionais com suporte a Case Study e formato de itens de TI (Pergunta 13)",
+          "c7": "Adaptar"
+        },
+        "r33": {
+          "at": "a33",
+          "c1": "ExamTopics",
+          "c2": "examtopics_az104_solution_reveal.png",
+          "c3": "examtopics.com/exams/microsoft/az-104/view/",
+          "c4": "2026-11-14",
+          "c5": "Botão Reveal Solution exibindo resposta correta com badge Most Voted e barra de votação comunitária (98% C)",
+          "c6": "Exibição de gabarito com percentual de concordância / confiança da IA ou estatísticas de candidatos",
+          "c7": "Adaptar"
+        },
+        "r34": {
+          "at": "a34",
+          "c1": "Readwise SRS",
+          "c2": "readwise_srs_bookreview_highlight_actions_menu.png",
+          "c3": "readwise.io/bookreview/65206299",
+          "c4": "2026-11-14",
+          "c5": "Menu secundário com 6 ações: Copy, Edit metadata, Add tags, Show more often, Show less often, Never show again",
+          "c6": "Menu de ações de cada item do SRS permitindo ao aluno acelerar ou suspender a frequência de repetição (Pergunta 9)",
+          "c7": "Adotar"
         }
       }
     },
@@ -6637,6 +6789,349 @@
       "y": 13678,
       "w": 760,
       "h": 50
+    },
+    "e1248": {
+      "type": "container",
+      "color": "white",
+      "x": 26000,
+      "y": 11000,
+      "w": 1650,
+      "h": 1500,
+      "text": "38. Infraestrutura de agentes — correção MCP (Codex, Claude e Antigravity)"
+    },
+    "e1249": {
+      "type": "text",
+      "size": "large",
+      "x": 26030,
+      "y": 11060,
+      "w": 1590,
+      "h": 70,
+      "text": "Diagnóstico P1 e correção verificável — 2026-11-14"
+    },
+    "e1250": {
+      "type": "shape",
+      "color": "blue",
+      "kind": "rounded",
+      "size": "small",
+      "textAlign": "left",
+      "x": 26030,
+      "y": 11150,
+      "w": 1590,
+      "h": 1280,
+      "text": "**Escopo:** Codex, Claude Desktop e Antigravity no workspace `C:\\Users\\ianma\\workspace\\exams\\dev`. Sem captura visual: evidência é a saída textual de `agents` e os arquivos de configuração materializados.\n**Causas confirmadas (P1):**\n1. O projeto declarava somente `fetch`, `filesystem` e `git`; Serena não estava no conjunto MCP.\n2. `fetch` e `git` dependiam de `uvx`, disponível apenas no PATH da sessão.\n3. O Codex não confiava no projeto, podendo ignorar `.codex/config.toml`.\n4. CodeGraph não possui índice neste repositório (a pasta `.codegraph/` contém apenas `.gitignore`); a indexação permanece decisão explícita.\n**Correção aplicada:**\n- Serena foi registrado na fonte compartilhada para Codex, Claude, Claude Desktop, Gemini e Antigravity.\n- Overrides locais chamam os caminhos absolutos de `uvx.exe` e `serena.exe` através de `cmd.exe`, mantendo a fonte versionada portátil.\n- `agents sync` materializou `.codex/config.toml`, `.mcp.json`, `.agents/mcp_config.json`, `.gemini/settings.json` e a configuração global do Claude Desktop.\n- O projeto foi marcado como `trusted` na configuração global do Codex.\n**Aceite verificado:** `agents mcp test` aprovou `fetch`, `filesystem`, `git` e `serena`; `agents sync --check` não encontrou divergências; status registra quatro servidores e Codex `trusted`.\n**Limite de teste:** os CLIs de Codex, Claude e Antigravity não estão no PATH, logo a introspecção de runtime dos apps GUI não é automatizável. Reiniciar os três apps carrega a configuração; no Claude Desktop os nomes recebem o prefixo gerenciado `agents__5c84344337b9__`."
+    },
+    "e1300": {
+      "type": "container",
+      "color": "white",
+      "x": 28000,
+      "y": 11000,
+      "w": 1680,
+      "h": 11080,
+      "text": "39. Fechamento Integral dos 7 Gaps de Referência (Evidências Visuais e DOM de QConcursos Elite, Capacities Graph, ExamTopics e Readwise SRS)"
+    },
+    "e1301": {
+      "type": "text",
+      "x": 28050,
+      "y": 11060,
+      "w": 1580,
+      "h": 180,
+      "text": "### Visão Geral da Auditoria de Fechamento de Gaps\nTodos os 7 gaps de produto e de fluxo identificados na sessão anterior foram auditados ao vivo no navegador, sem CAPTCHAs, com extração de hierarquia de DOM e gravação de evidências de alta resolução no diretório \u0007ssets/. Todas as decisões de produto agora contam com base empírica visual e documental."
+    },
+    "e1302": {
+      "type": "text",
+      "x": 28050,
+      "y": 11260,
+      "w": 1580,
+      "h": 220,
+      "text": "### Gap 1 (P1) — QConcursos Elite: Fluxo de Criação de Simulado\n**Ação Observada**: Abertura do drawer/modal lateral de configuração de simulados (/simulados/criar) acionado a partir da busca filtrada de questões.\n**Parâmetros de UI**: Permite configurar Nome do Simulado, Quantidade de Questões (input com stepper/máximo permitido pelo filtro), Tempo / Duração (em minutos ou sem limite) e chave de alternância entre Modo Simulado Real (sem gabarito imediato, cronômetro regressivo) e Modo Prática (feedback imediato a cada questão respondida). Validação de questões mínimas bloqueia envio caso filtro resulte em zero itens."
+    },
+    "e1303": {
+      "type": "image",
+      "x": 28050,
+      "y": 11500,
+      "w": 1580,
+      "h": 500,
+      "src": "assets/qconcursos_criar_simulado_config_modal.png"
+    },
+    "e1304": {
+      "type": "text",
+      "x": 28050,
+      "y": 12020,
+      "w": 1580,
+      "h": 80,
+      "text": "**Evidência 105 (QConcursos Criar Simulado Modal):** Configuração completa de simulado com título, quantidade de questões, tempo limite e modo de execução."
+    },
+    "e1305": {
+      "type": "text",
+      "x": 28050,
+      "y": 12120,
+      "w": 1580,
+      "h": 200,
+      "text": "### Gap 4 (P2) — QConcursos Elite: Filtro Assunto em Árvore Hierárquica\n**Ação Observada**: Clique no seletor de Assunto após filtrar Disciplina: Direito Constitucional.\n**Parâmetros de UI**: Popover suspenso contendo barra de Busca rápida interna e árvore hierárquica expansível de 3 níveis de profundidade, com checkboxes individuais e indicadores numéricos de volume de questões por nó (e.g., Direitos Individuais (1.240)). Permite seleção atômica de sub-tópicos sem selecionar a disciplina inteira."
+    },
+    "e1306": {
+      "type": "image",
+      "x": 28050,
+      "y": 12340,
+      "w": 1580,
+      "h": 500,
+      "src": "assets/qconcursos_filter_assunto_tree_open.png"
+    },
+    "e1307": {
+      "type": "text",
+      "x": 28050,
+      "y": 12860,
+      "w": 1580,
+      "h": 80,
+      "text": "**Evidência 106 (QConcursos Filtro Assunto Tree Open):** Árvore hierárquica aberta com busca rápida, expansão de nós e checkboxes com contagem de questões."
+    },
+    "e1308": {
+      "type": "text",
+      "x": 28050,
+      "y": 12960,
+      "w": 1580,
+      "h": 220,
+      "text": "### Gap 5 (P2) — QConcursos Elite: Marca-Texto no Enunciado & Paywall Meus Resumos\n**Ação Observada**: Seleção de trecho de texto no enunciado da questão e inspeção do botão Meus Resumos no dock inferior direito.\n**Parâmetros de UI**: Ao selecionar texto no enunciado, surge uma paleta flutuante (bubble toolbar) com 4 cores vibrantes (Amarelo, Verde, Rosa, Azul) e ícone de lixeira para remover marcação. A marcação amarela é aplicada diretamente na tag <mark> do DOM. O botão Meus Resumos abre modal de paywall exigindo plano Pro/Ilimitado, confirmando que resumos ricos não são do plano básico."
+    },
+    "e1309": {
+      "type": "image",
+      "x": 28050,
+      "y": 13200,
+      "w": 1580,
+      "h": 480,
+      "src": "assets/qconcursos_highlighter_applied.png"
+    },
+    "e1310": {
+      "type": "text",
+      "x": 28050,
+      "y": 13700,
+      "w": 1580,
+      "h": 80,
+      "text": "**Evidência 107 (QConcursos Marca-Texto Aplicado):** Trecho do enunciado destacado em amarelo com paleta flutuante ativa."
+    },
+    "e1311": {
+      "type": "image",
+      "x": 28050,
+      "y": 13800,
+      "w": 1580,
+      "h": 480,
+      "src": "assets/qconcursos_dock_resumos_paywall_modal.png"
+    },
+    "e1312": {
+      "type": "text",
+      "x": 28050,
+      "y": 14300,
+      "w": 1580,
+      "h": 80,
+      "text": "**Evidência 108 (QConcursos Meus Resumos Paywall):** Modal de bloqueio de plano para criação e edição de resumos integrados às questões."
+    },
+    "e1313": {
+      "type": "text",
+      "x": 28050,
+      "y": 14400,
+      "w": 1580,
+      "h": 240,
+      "text": "### Gap 2 (P1) — QConcursos Elite: Painel Global de Desempenho (/meu-desempenho?scope=all)\n**Ação Observada**: Acesso à rota consolidada de desempenho com escopo geral e filtros temporais.\n**Parâmetros de UI**: Topo com abas de escopo (Geral, Disciplinas, Bancas, Órgãos), seletor de período (Hoje, Últimos 7 dias, Últimos 15 dias, Últimos 30 dias, Desde o início), KPIs agregados (Total resolvidas, Acertos, Erros, % de Aproveitamento), gráfico de evolução temporal (spline chart diário) e tabela hierárquica por disciplina com barras de acerto/erro e botão de expansão de assuntos."
+    },
+    "e1314": {
+      "type": "image",
+      "x": 28050,
+      "y": 14660,
+      "w": 1580,
+      "h": 480,
+      "src": "assets/qconcursos_desempenho_top_overview.png"
+    },
+    "e1315": {
+      "type": "text",
+      "x": 28050,
+      "y": 15160,
+      "w": 1580,
+      "h": 80,
+      "text": "**Evidência 109 (QConcursos Desempenho Top KPIs):** Cartões de métricas consolidadas, taxa de acerto global e seletor de período temporal."
+    },
+    "e1316": {
+      "type": "image",
+      "x": 28050,
+      "y": 15260,
+      "w": 1580,
+      "h": 480,
+      "src": "assets/qconcursos_desempenho_charts_and_table.png"
+    },
+    "e1317": {
+      "type": "text",
+      "x": 28050,
+      "y": 15760,
+      "w": 1580,
+      "h": 80,
+      "text": "**Evidência 110 (QConcursos Desempenho Gráficos e Tabela):** Gráfico de evolução de estudos e tabela de disciplinas com taxa de aproveitamento."
+    },
+    "e1318": {
+      "type": "image",
+      "x": 28050,
+      "y": 15860,
+      "w": 1580,
+      "h": 480,
+      "src": "assets/qconcursos_desempenho_disciplina_expanded.png"
+    },
+    "e1319": {
+      "type": "text",
+      "x": 28050,
+      "y": 16360,
+      "w": 1580,
+      "h": 80,
+      "text": "**Evidência 111 (QConcursos Desempenho Disciplina Expandida):** Detalhamento de assuntos e tópicos internos com percentual de acertos individual."
+    },
+    "e1320": {
+      "type": "text",
+      "x": 28050,
+      "y": 16460,
+      "w": 1580,
+      "h": 220,
+      "text": "### Gap 7 (P2) — Capacities: Busca no Grafo Global & Navegação / Foco por Nó\n**Ação Observada**: Execução de busca no Grafo Global (?section=graph) e clique em nó do resultado.\n**Parâmetros de UI**: O Grafo Global roda em WebGL Canvas. A busca secundária no canto superior direito abre o popover Buscar objetos com lista de nós correspondentes (Azure Virtual Machine Scale Sets, etc.). Ao clicar no item, o menu se fecha, a viewport realiza uma transição suave animada de pan e zoom (indo de 39% para 175%), centralizando o nó focalizado em branco com seu anel de cor de tipo (verde-azulado/teal) e rótulo permanente."
+    },
+    "e1321": {
+      "type": "image",
+      "x": 28050,
+      "y": 16700,
+      "w": 1580,
+      "h": 480,
+      "src": "assets/capacities_global_graph_search_dropdown_open.png"
+    },
+    "e1322": {
+      "type": "text",
+      "x": 28050,
+      "y": 17200,
+      "w": 1580,
+      "h": 80,
+      "text": "**Evidência 112 (Capacities Grafo Dropdown de Busca):** Popover Buscar objetos aberto com lista de entidades do espaço de trabalho."
+    },
+    "e1323": {
+      "type": "image",
+      "x": 28050,
+      "y": 17300,
+      "w": 1580,
+      "h": 480,
+      "src": "assets/capacities_global_graph_search_node_nav.png"
+    },
+    "e1324": {
+      "type": "text",
+      "x": 28050,
+      "y": 17800,
+      "w": 1580,
+      "h": 80,
+      "text": "**Evidência 113 (Capacities Grafo Nó Centralizado com Zoom):** Transição de zoom para 175% centralizando o nó alvo e destacando conexões de 1º grau."
+    },
+    "e1325": {
+      "type": "text",
+      "x": 28050,
+      "y": 17900,
+      "w": 1580,
+      "h": 240,
+      "text": "### Gap 3 (P1) — ExamTopics: Estrutura da Prova AZ-104, Solução Revelada & Discussões\n**Ação Observada**: Auditoria da página pública de certificação Microsoft AZ-104 (/exams/microsoft/az-104/view/).\n**Parâmetros de UI**: Sem CAPTCHA. Cabeçalho com paginação (Página 1 de 61, Questões 1-10 de 606) e barra de progresso. Card da questão com barra de título azul (Question #1 Topic 1), enunciado do cenário e alternativas com letras. Botão Reveal Solution abre a resposta correta (Correct Answer: C) com badge Most Voted e barra de distribuição da votação da comunidade (B: 2%, C: 98%). Botão Discussion 126 abre modal completo com votos dos membros (Selected Answer: C) e argumentos técnicos detalhados."
+    },
+    "e1326": {
+      "type": "image",
+      "x": 28050,
+      "y": 18160,
+      "w": 1580,
+      "h": 460,
+      "src": "assets/examtopics_az104_header_and_overview.png"
+    },
+    "e1327": {
+      "type": "text",
+      "x": 28050,
+      "y": 18640,
+      "w": 1580,
+      "h": 80,
+      "text": "**Evidência 114 (ExamTopics Header & Paginação):** Cabeçalho da certificação AZ-104 com paginação, progresso de questões e menu."
+    },
+    "e1328": {
+      "type": "image",
+      "x": 28050,
+      "y": 18740,
+      "w": 1580,
+      "h": 480,
+      "src": "assets/examtopics_az104_question_card.png"
+    },
+    "e1329": {
+      "type": "text",
+      "x": 28050,
+      "y": 19240,
+      "w": 1580,
+      "h": 80,
+      "text": "**Evidência 115 (ExamTopics Question Card Inicial):** Card da questão com enunciado, alternativas e botões Reveal Solution e Discussion."
+    },
+    "e1330": {
+      "type": "image",
+      "x": 28050,
+      "y": 19340,
+      "w": 1580,
+      "h": 480,
+      "src": "assets/examtopics_az104_solution_reveal.png"
+    },
+    "e1331": {
+      "type": "text",
+      "x": 28050,
+      "y": 19840,
+      "w": 1580,
+      "h": 80,
+      "text": "**Evidência 116 (ExamTopics Solution Reveal com Voto Comunitário):** Resposta revelada com badge Most Voted e barra comparativa de 98% da comunidade."
+    },
+    "e1332": {
+      "type": "image",
+      "x": 28050,
+      "y": 19940,
+      "w": 1580,
+      "h": 480,
+      "src": "assets/examtopics_az104_discussion_modal.png"
+    },
+    "e1333": {
+      "type": "text",
+      "x": 28050,
+      "y": 20440,
+      "w": 1580,
+      "h": 80,
+      "text": "**Evidência 117 (ExamTopics Discussion Modal):** Discussão comunitária com justificativas técnicas, votos por alternativa e upvotes."
+    },
+    "e1334": {
+      "type": "text",
+      "x": 28050,
+      "y": 20540,
+      "w": 1580,
+      "h": 220,
+      "text": "### Gap 6 (P2) — Readwise SRS: Menu de Ações do Highlight & Formulário Freeform\n**Ação Observada**: Abertura do menu de contexto de 3 pontos do highlight em /bookreview/65206299 e auditoria da tela de importação manual /import_freeform.\n**Parâmetros de UI**: O menu secundário do highlight expõe exatamente 6 ações: Copy highlight text, Edit document metadata, Add document tags, Show this doc more often, Show this doc less often e Never show this doc again. A tela /import_freeform oferece formulário em duas colunas para inserção rápida de destaques sem arquivo (Quote, Page, Notes, Tags)."
+    },
+    "e1335": {
+      "type": "image",
+      "x": 28050,
+      "y": 20780,
+      "w": 1580,
+      "h": 480,
+      "src": "assets/readwise_srs_bookreview_highlight_actions_menu.png"
+    },
+    "e1336": {
+      "type": "text",
+      "x": 28050,
+      "y": 21280,
+      "w": 1580,
+      "h": 80,
+      "text": "**Evidência 118 (Readwise SRS Highlight Actions Menu):** Menu suspenso de 6 ações de ajuste de frequência, metadados e tags do destaque."
+    },
+    "e1337": {
+      "type": "image",
+      "x": 28050,
+      "y": 21380,
+      "w": 1580,
+      "h": 480,
+      "src": "assets/readwise_srs_freeform_input_highlight_form.png"
+    },
+    "e1338": {
+      "type": "text",
+      "x": 28050,
+      "y": 21880,
+      "w": 1580,
+      "h": 80,
+      "text": "**Evidência 119 (Readwise SRS Freeform Manual Import Form):** Formulário de inserção manual de citações e anotações para o motor de SRS."
     }
   }
 }
