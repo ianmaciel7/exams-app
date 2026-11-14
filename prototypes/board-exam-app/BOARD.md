@@ -2138,6 +2138,27 @@ DEPOIS: 768px, ações primárias preservadas
 
 DEPOIS: 1280px, alinhamento do CTA no desktop
 
+## 41. Grafo — Issue #128: movimento reduzido e preferência dinâmica no Chromium
+<!-- container e1351 @ (32000,11000) -->
+
+E2E Chromium sobre o grafo global: preferencia de movimento reduzido ao abrir, ausencia de loop no repouso, zoom por teclado, filtros, mudança dinamica da preferencia e retorno ao reduzido. Medicoes: issue128_motion_e2e.json. LIMITES: somente emulacao Chromium CI; nao prova WCAG, bateria, CPU ou leitor de tela. 390px: 90 nos, 299 relacoes, canvas em 420ms (medicao unica, nao SLA) 1366px: 90 nos, 299 relacoes, canvas em 372ms (medicao unica, nao SLA)
+
+![imagem e1353](assets/issue128_reduced_390.png)
+
+![imagem e1355](assets/issue128_restored_390.png)
+
+390px, movimento reduzido desde a montagem: canvas desenhado sem loop
+
+390px, preferência alterada dinamicamente e restaurada
+
+![imagem e1357](assets/issue128_reduced_1366.png)
+
+![imagem e1359](assets/issue128_restored_1366.png)
+
+1366px, grafo com redução de movimento e controles interativos
+
+1366px, controles de zoom/filtro e retorno à preferência reduzida
+
 ## 10. Arquivos do projeto (Dataprev 2026 e referências)
 <!-- container e363 @ (0,12666) -->
 
