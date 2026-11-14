@@ -1,0 +1,71 @@
+name: E2E Workspace Command Router and Evidence
+
+on:
+  pull_request:
+    branches: [dev]
+    paths:
+      - 'prototypes/exam-app-0.1.1/index.html'
+      - 'tests/workspace-command-router.test.mjs'
+      - 'tests/workspace-command-router.e2e.mjs'
+      - 'scripts/append-command-router-board.py'
+      - '.github/workflows/e2e-workspace-command-router.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  command-router:
+    if: github.head_ref == 'refactor/139-keyboard-command-router' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Static commands and existing navigation regression
+        run: node --test tests/workspace-command-router.test.mjs tests/study-navigation.test.mjs
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Compare original static shortcuts and new router; commit true evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          if test -f prototypes/board-exam-app/issue139_commands_e2e.json; then
+            echo 'Existing screenshots are already versioned, skipping recapture.'
+            exit 0
+          fi
+          git worktree add --detach /tmp/exams-before-139 0c7465431938d3d48a49166c928e8066fa67b912
+          python3 -m http.server 8765 --directory prototypes >/tmp/exams-after-139.log 2>&1 &
+          python3 -m http.server 8766 --directory /tmp/exams-before-139/prototypes >/tmp/exams-before-139.log 2>&1 &
+          for i in $(seq 1 20); do
+            if curl -fsS http://127.0.0.1:8765/exam-app-0.1.1/index.html -o /dev/null &&
+               curl -fsS http://127.0.0.1:8766/exam-app-0.1.1/index.html -o /dev/null; then break; fi
+            sleep 1
+          done
+          node tests/workspace-command-router.e2e.mjs
+          python3 scripts/append-command-router-board.py
+          npm run board
+          grep -q '46. Atalhos de teclado' prototypes/board-exam-app/BOARD.md
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add prototypes/board-exam-app/board.json prototypes/board-exam-app/BOARD.md prototypes/board-exam-app/issue139_commands_e2e.json
+          git add prototypes/board-exam-app/assets/issue139_*.png
+          if ! git diff --cached --quiet; then
+            git commit -m 'test(ux): preserve Issue #139 verified Chromium command evidence'
+            git push origin "HEAD:${{ github.head_ref }}"
+          fi
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: issue139-command-router-evidence
+          path: |
+            prototypes/board-exam-app/assets/issue139_*.png
+            prototypes/board-exam-app/issue139_commands_e2e.json
+          if-no-files-found: warn
