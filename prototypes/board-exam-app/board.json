@@ -540,7 +540,29 @@
     "e1151",
     "e1152",
     "e1153",
-    "e1154"
+    "e1154",
+    "e1155",
+    "e1156",
+    "e1157",
+    "e1158",
+    "e1159",
+    "e1160",
+    "e1161",
+    "e1162",
+    "e1163",
+    "e1164",
+    "e1165",
+    "e1166",
+    "e1167",
+    "e1168",
+    "e1169",
+    "e1170",
+    "e1171",
+    "e1172",
+    "e1173",
+    "e1174",
+    "e1175",
+    "e1176"
   ],
   "elements": {
     "e1": {
@@ -5749,6 +5771,194 @@
           "c7": "Descartar"
         }
       }
+    },
+    "e1155": {
+      "type": "container",
+      "color": "white",
+      "text": "32. Questões e Simulados — Issue #100: unificação dos fluxos e evidência E2E",
+      "x": 15000,
+      "y": 11000,
+      "w": 1650,
+      "h": 2845
+    },
+    "e1156": {
+      "type": "text",
+      "size": "small",
+      "text": "Fonte: Playwright Chromium 1366×900 (DPR 1), comparação da dev anterior e da branch de PR. Screenshots produzidos por tests/study-unification.e2e.mjs. Testes: busca oficial+manual, resposta, reload, lista contextual, criar simulado pelo filtro, quantidade/tempo e status de erros. Não representam inspeção do QConcursos, Capacities ou conformidade WCAG.",
+      "x": 15022,
+      "y": 11012,
+      "w": 1550,
+      "h": 90
+    },
+    "e1157": {
+      "type": "image",
+      "src": "/_blob/issue100_before_global",
+      "x": 15020,
+      "y": 11100,
+      "w": 760,
+      "h": 445
+    },
+    "e1158": {
+      "type": "text",
+      "size": "small",
+      "text": "ANTES: fluxo global separado da lista de objetos | PNG real: assets/issue100_before_global.png",
+      "x": 15020,
+      "y": 11552,
+      "w": 760,
+      "h": 50
+    },
+    "e1159": {
+      "type": "image",
+      "src": "/_blob/issue100_after_global",
+      "x": 15830,
+      "y": 11100,
+      "w": 760,
+      "h": 445
+    },
+    "e1160": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: banco unificado com filtros e status rápidos | PNG real: assets/issue100_after_global.png",
+      "x": 15830,
+      "y": 11552,
+      "w": 760,
+      "h": 50
+    },
+    "e1161": {
+      "type": "image",
+      "src": "/_blob/issue100_before_manual",
+      "x": 15020,
+      "y": 11640,
+      "w": 760,
+      "h": 445
+    },
+    "e1162": {
+      "type": "text",
+      "size": "small",
+      "text": "ANTES: busca de questão manual sem resultados na prática global | PNG real: assets/issue100_before_manual.png",
+      "x": 15020,
+      "y": 12092,
+      "w": 760,
+      "h": 50
+    },
+    "e1163": {
+      "type": "image",
+      "src": "/_blob/issue100_after_manual",
+      "x": 15830,
+      "y": 11640,
+      "w": 760,
+      "h": 445
+    },
+    "e1164": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: questão manual encontrada e renderizada no mesmo fluxo | PNG real: assets/issue100_after_manual.png",
+      "x": 15830,
+      "y": 12092,
+      "w": 760,
+      "h": 50
+    },
+    "e1165": {
+      "type": "image",
+      "src": "/_blob/issue100_before_simulado",
+      "x": 15020,
+      "y": 12180,
+      "w": 760,
+      "h": 445
+    },
+    "e1166": {
+      "type": "text",
+      "size": "small",
+      "text": "ANTES: configurador restrito à prova oficial Dataprev | PNG real: assets/issue100_before_simulado.png",
+      "x": 15020,
+      "y": 12632,
+      "w": 760,
+      "h": 50
+    },
+    "e1167": {
+      "type": "image",
+      "src": "/_blob/issue100_after_simulado",
+      "x": 15830,
+      "y": 12180,
+      "w": 760,
+      "h": 445
+    },
+    "e1168": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: banco completo, quantidade, tempo e ordem configuráveis | PNG real: assets/issue100_after_simulado.png",
+      "x": 15830,
+      "y": 12632,
+      "w": 760,
+      "h": 50
+    },
+    "e1169": {
+      "type": "image",
+      "src": "/_blob/issue100_after_answer",
+      "x": 15020,
+      "y": 12720,
+      "w": 760,
+      "h": 445
+    },
+    "e1170": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: resposta da questão manual, feedback e persistência | PNG real: assets/issue100_after_answer.png",
+      "x": 15020,
+      "y": 13172,
+      "w": 760,
+      "h": 50
+    },
+    "e1171": {
+      "type": "image",
+      "src": "/_blob/issue100_after_contexto",
+      "x": 15830,
+      "y": 12720,
+      "w": 760,
+      "h": 445
+    },
+    "e1172": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: mesma questão manual e filtro no contexto do concurso | PNG real: assets/issue100_after_contexto.png",
+      "x": 15830,
+      "y": 13172,
+      "w": 760,
+      "h": 50
+    },
+    "e1173": {
+      "type": "image",
+      "src": "/_blob/issue100_after_manual_simulado",
+      "x": 15020,
+      "y": 13260,
+      "w": 760,
+      "h": 445
+    },
+    "e1174": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: simulado criado a partir do filtro da questão manual | PNG real: assets/issue100_after_manual_simulado.png",
+      "x": 15020,
+      "y": 13712,
+      "w": 760,
+      "h": 50
+    },
+    "e1175": {
+      "type": "image",
+      "src": "/_blob/issue100_after_erros",
+      "x": 15830,
+      "y": 13260,
+      "w": 760,
+      "h": 445
+    },
+    "e1176": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: atalho de erros inclui resposta manual incorreta | PNG real: assets/issue100_after_erros.png",
+      "x": 15830,
+      "y": 13712,
+      "w": 760,
+      "h": 50
     }
   }
 }
