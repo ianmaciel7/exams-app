@@ -109,6 +109,14 @@
 .qf-saved-actions{flex-wrap:wrap;gap:6px}
 @media(max-width:768px){.qf-field-grid{grid-template-columns:1fr}.qf-advanced-body{padding:10px}.qf-saved-actions{width:100%}}
 </style>
+<style>
+/* Native OS form popups must follow the Exam App theme. */
+:root[data-theme="dark"] { color-scheme: dark; }
+:root[data-theme="light"] { color-scheme: light; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { color-scheme: dark; }
+}
+</style>
 </head><body>
 <style>
 /* ===== Exam App 0.1.1 — páginas de estudo e detalhes, 2026 ===== */
