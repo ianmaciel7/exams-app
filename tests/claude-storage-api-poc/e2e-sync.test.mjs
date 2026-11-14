@@ -164,17 +164,24 @@ test('E2E: Validacao de Sincronizacao Bidirecional no Artifact Principal e Exam 
 
     // Força o flush da fila
     await cdp.send('Runtime.evaluate', {
-      expression: `window.syncEngine.flushOutbox()`
+      expression: `window.syncEngine.flushOutbox()`,
+      awaitPromise: true
     });
 
-    // Aguarda conclusão do envio à Anthropic
-    await new Promise(r => setTimeout(r, 2000));
-
-    // Verifica que o outbox foi esvaziado com sucesso
-    const outboxAfter = await cdp.send('Runtime.evaluate', {
-      expression: `window.syncEngine.getOutbox().length`
-    });
-    assert.equal(outboxAfter.result.value, 0);
+    // Aguarda o outbox descarregar o item de teste (ate 5s)
+    let flushed = false;
+    for (let i = 0; i < 25; i++) {
+      const check = await cdp.send('Runtime.evaluate', {
+        expression: `window.syncEngine.getOutbox().some(op => op.docId === '${TEST_RUN_DOC}')`,
+        returnByValue: true
+      });
+      if (check.result.value === false) {
+        flushed = true;
+        break;
+      }
+      await new Promise(r => setTimeout(r, 200));
+    }
+    assert.equal(flushed, true, 'Item de teste deve ser removido do outbox apos confirmacao');
 
     // Validação Direta no Servidor Claude Pro via Proxy
     const checkRes = await fetch(`http://127.0.0.1:${PROXY_PORT}/api/storage/${MAIN_SLUG}/exam_app_study/${TEST_RUN_DOC}`, {

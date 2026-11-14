@@ -33,24 +33,29 @@ from pathlib import Path
 
 # Localizacao dinamica do pacote claude_artifact_cli
 # 1. Localizacao dinamica no cache uv (Windows e Linux/macOS)
+found_real_sdk = False
 uv_cache_win = Path(os.environ.get("LOCALAPPDATA", "")) / "uv" / "cache" / "archive-v0"
 for p in uv_cache_win.glob("*/Lib/site-packages"):
     if (p / "claude_artifact_cli").is_dir():
         sys.path.insert(0, str(p))
+        found_real_sdk = True
         break
 
-uv_cache_nix = Path.home() / ".cache" / "uv" / "archive-v0"
-if uv_cache_nix.exists():
-    for p in uv_cache_nix.glob("*/lib/python*/site-packages"):
-        if (p / "claude_artifact_cli").is_dir():
-            sys.path.insert(0, str(p))
-            break
+if not found_real_sdk:
+    uv_cache_nix = Path.home() / ".cache" / "uv" / "archive-v0"
+    if uv_cache_nix.exists():
+        for p in uv_cache_nix.glob("*/lib/python*/site-packages"):
+            if (p / "claude_artifact_cli").is_dir():
+                sys.path.insert(0, str(p))
+                found_real_sdk = True
+                break
 
-# 2. Fixture de teste local se presente (prioridade maxima em testes/CI)
-_repo_root = Path(__file__).resolve().parents[2]
-_fixture = _repo_root / "tests" / "claude-storage-api-poc" / "fixtures"
-if (_fixture / "claude_artifact_cli").is_dir():
-    sys.path.insert(0, str(_fixture))
+# 2. Fixture de teste local como fallback se o SDK real nao for encontrado ou sob variavel de mock
+if not found_real_sdk or os.environ.get("USE_MOCK_STORAGE") == "1":
+    _repo_root = Path(__file__).resolve().parents[2]
+    _fixture = _repo_root / "tests" / "claude-storage-api-poc" / "fixtures"
+    if (_fixture / "claude_artifact_cli").is_dir():
+        sys.path.insert(0, str(_fixture))
 
 try:
     from claude_artifact_cli import api, auth
@@ -150,19 +155,22 @@ class HardenedStorageProxyHandler(http.server.BaseHTTPRequestHandler):
         return False, "ORIGIN_OR_AUTH_REQUIRED"
 
     def send_json(self, status_code: int, data: dict, allowed_origin: str = "http://localhost:8765"):
-        body = json.dumps(data, ensure_ascii=False).encode("utf-8")
-        self.send_response(status_code)
-        if allowed_origin:
-            self.send_header("Access-Control-Allow-Origin", allowed_origin)
-        self.send_header("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type, X-Proxy-Auth")
-        self.send_header("Content-Type", "application/json; charset=utf-8")
-        self.send_header("Content-Length", str(len(body)))
-        self.send_header("X-Content-Type-Options", "nosniff")
-        self.send_header("X-Frame-Options", "DENY")
-        self.send_header("X-Upstream-API", "private-unsupported-anthropic-frame-db")
-        self.end_headers()
-        self.wfile.write(body)
+        try:
+            body = json.dumps(data, ensure_ascii=False).encode("utf-8")
+            self.send_response(status_code)
+            if allowed_origin:
+                self.send_header("Access-Control-Allow-Origin", allowed_origin)
+            self.send_header("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS")
+            self.send_header("Access-Control-Allow-Headers", "Content-Type, X-Proxy-Auth")
+            self.send_header("Content-Type", "application/json; charset=utf-8")
+            self.send_header("Content-Length", str(len(body)))
+            self.send_header("X-Content-Type-Options", "nosniff")
+            self.send_header("X-Frame-Options", "DENY")
+            self.send_header("X-Upstream-API", "private-unsupported-anthropic-frame-db")
+            self.end_headers()
+            self.wfile.write(body)
+        except (ConnectionResetError, BrokenPipeError):
+            pass
 
     def do_OPTIONS(self):
         if not self.validate_host_header():

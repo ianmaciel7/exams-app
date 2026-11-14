@@ -1858,6 +1858,7 @@ if(typeof ClaudeStorageSyncEngine==="undefined"){
       this.proxyBase = options.proxyBase || PROXY_BASE;
       this.isOnline = typeof navigator !== 'undefined' ? navigator.onLine : true;
       this.isSyncing = false;
+      this.needsFlushAgain = false;
       this.syncListeners = [];
       this.directDb = null;
       this.isClaudeArtifact = false;
@@ -2073,8 +2074,52 @@ if(typeof ClaudeStorageSyncEngine==="undefined"){
         }
 
         try {
-          // 2. Envia para o servidor remoto
-          await this.sendToRemote(op.collection, op.docId, op.data);
+          // 2. Read-Merge-Write (3-Way Merge determinístico) para documentos compostos:
+          let payloadToSend = op.data;
+          try {
+            if (op.collection === 'exam_app_study' && op.docId === 'user_answers') {
+              const remote = await this.fetchRemote('exam_app_study', 'user_answers');
+              if (remote && remote.answers) {
+                const merged = this.reconcileAnswers(op.data?.answers || {}, remote.answers);
+                payloadToSend = { ...op.data, answers: merged, updatedAt: Date.now() };
+              }
+            } else if (op.collection === 'exam_app_study' && op.docId === 'cadernos') {
+              const remote = await this.fetchRemote('exam_app_study', 'cadernos');
+              if (remote && remote.cadernos) {
+                const merged = this.reconcileCadernos(op.data?.cadernos || [], remote.cadernos);
+                payloadToSend = { ...op.data, cadernos: merged, updatedAt: Date.now() };
+              }
+            } else if (op.collection === 'exam_app_spaces' && op.docId === 'spaces_list') {
+              const remote = await this.fetchRemote('exam_app_spaces', 'spaces_list');
+              if (remote && remote.spaces) {
+                const merged = this.reconcileSpaces(op.data?.spaces || [], remote.spaces, op.data?.spaceOrder || [], remote.spaceOrder || []);
+                payloadToSend = { ...op.data, spaces: merged.spaces, spaceOrder: merged.spaceOrder, updatedAt: Date.now() };
+              }
+            } else if (op.collection === 'exam_app_study' && op.docId === 'exam_state') {
+              const remote = await this.fetchRemote('exam_app_study', 'exam_state');
+              if (remote && remote.exam) {
+                const merged = this.reconcileExam(op.data?.exam, remote.exam);
+                payloadToSend = { ...op.data, exam: merged, updatedAt: Date.now() };
+              }
+            } else if (op.collection === 'exam_app_state' && op.docId === 'workspace_state') {
+              const remote = await this.fetchRemote('exam_app_state', 'workspace_state');
+              if (remote && remote.tabs) {
+                const merged = this.reconcileWorkspace(op.data, remote);
+                payloadToSend = { ...op.data, ...merged, updatedAt: Date.now() };
+              }
+            } else if (op.collection === 'exam_app_study' && op.docId === 'user_questions') {
+              const remote = await this.fetchRemote('exam_app_study', 'user_questions');
+              if (remote) {
+                const merged = this.reconcileUserQuestions(op.data?.uq || [], remote.uq || [], op.data?.uqAns || {}, remote.uqAns || {});
+                payloadToSend = { ...op.data, uq: merged.uq, uqAns: merged.uqAns, updatedAt: Date.now() };
+              }
+            }
+          } catch (mergeErr) {
+            // Nunca sobrescreva um documento composto sem leitura/mesclagem remota.
+            throw new Error(`Leitura remota obrigatória antes da mesclagem: ${mergeErr.message || mergeErr}`);
+          }
+
+          await this.sendToRemote(op.collection, op.docId, payloadToSend);
 
           // 3. Sucesso: Remove atomicamente APENAS esta operacao confirmada
           const curAfter = this.getOutbox();
@@ -2110,9 +2155,11 @@ if(typeof ClaudeStorageSyncEngine==="undefined"){
       } else if (failedCount > 0) {
         this.notifyStatus('error', `${failedCount} alteração(ões) retidas com erro. Clique para retentar.`);
       } else {
-        // Backoff exponencial com jitter aleatorio (500ms - 2500ms)
-        const delay = Math.min(2000 * Math.pow(1.5, remainingQueue[0].attempts || 1), 30000) + Math.floor(Math.random() * 500);
-        this.notifyStatus('pending', `${remainingQueue.length} item(ns) pendente(s). Retentando...`);
+        const hasFresh = remainingQueue.some(op => op.status === 'pending' && (!op.attempts || op.attempts === 0));
+        const delay = hasFresh
+          ? 150
+          : Math.min(2000 * Math.pow(1.5, remainingQueue[0].attempts || 1), 30000) + Math.floor(Math.random() * 500);
+        this.notifyStatus('pending', `${remainingQueue.length} item(ns) pendente(s). Sincronizando...`);
 
         clearTimeout(this.flushTimer);
         this.flushTimer = setTimeout(() => this.flushOutbox(), delay);
@@ -2176,12 +2223,14 @@ if(typeof ClaudeStorageSyncEngine==="undefined"){
      * Trata timestamps individuais, versoes e exclusoes sem perda de dados.
      */
     reconcileAnswers(localAnswers = {}, remoteAnswers = {}) {
+      const localMap = (localAnswers && typeof localAnswers === 'object') ? localAnswers : {};
+      const remoteMap = (remoteAnswers && typeof remoteAnswers === 'object') ? remoteAnswers : {};
       const merged = {};
-      const allQids = new Set([...Object.keys(localAnswers || {}), ...Object.keys(remoteAnswers || {})]);
+      const allQids = new Set([...Object.keys(localMap), ...Object.keys(remoteMap)]);
 
       for (const qid of allQids) {
-        const local = localAnswers[qid];
-        const remote = remoteAnswers[qid];
+        const local = localMap[qid];
+        const remote = remoteMap[qid];
 
         if (!local && remote) {
           merged[qid] = remote;
@@ -2216,6 +2265,189 @@ if(typeof ClaudeStorageSyncEngine==="undefined"){
         }
       }
       return merged;
+    }
+
+    reconcileExam(localExam = null, remoteExam = null) {
+      const l = (localExam && typeof localExam === 'object') ? localExam : null;
+      const r = (remoteExam && typeof remoteExam === 'object') ? remoteExam : null;
+      if (!l && r) return r;
+      if (l && !r) return l;
+      if (!l && !r) return null;
+
+      const localTime = Number(l.updatedAt || l.started || 0);
+      const remoteTime = Number(r.updatedAt || r.started || 0);
+
+      const base = remoteTime > localTime ? { ...r } : { ...l };
+      const other = remoteTime > localTime ? l : r;
+
+      const mergedAnswers = { ...(other.answers || {}), ...(base.answers || {}) };
+      const mergedMarked = Array.from(new Set([...(l.marked || []), ...(r.marked || [])]));
+
+      base.answers = mergedAnswers;
+      base.marked = mergedMarked;
+      base.updatedAt = Math.max(localTime, remoteTime);
+      base.finished = (l.finished || r.finished) ? (base.finished || other.finished) : null;
+      return base;
+    }
+
+    reconcileCadernos(localCadernos = [], remoteCadernos = []) {
+      const map = new Map();
+      const localList = Array.isArray(localCadernos) ? localCadernos : [];
+      const remoteList = Array.isArray(remoteCadernos) ? remoteCadernos : [];
+
+      for (const item of localList) {
+        if (item && item.id) map.set(item.id, { ...item, _source: 'local' });
+      }
+
+      for (const rItem of remoteList) {
+        if (!rItem || !rItem.id) continue;
+        if (!map.has(rItem.id)) {
+          map.set(rItem.id, { ...rItem, _source: 'remote' });
+        } else {
+          const lItem = map.get(rItem.id);
+          const lTime = Number(lItem.updatedAt || lItem.createdAt || 0);
+          const rTime = Number(rItem.updatedAt || rItem.createdAt || 0);
+
+          if (rItem.deleted && rTime >= lTime) {
+            map.set(rItem.id, { ...rItem, deleted: true });
+          } else if (lItem.deleted && lTime >= rTime) {
+            map.set(rItem.id, { ...lItem, deleted: true });
+          } else {
+            const winner = rTime > lTime ? rItem : lItem;
+            const qSet = new Set([...(lItem.questionIds || []), ...(rItem.questionIds || [])]);
+            map.set(rItem.id, {
+              ...winner,
+              questionIds: Array.from(qSet),
+              updatedAt: Math.max(lTime, rTime)
+            });
+          }
+        }
+      }
+
+      return Array.from(map.values()).filter(c => !c.deleted);
+    }
+
+    reconcileSpaces(localSpaces = [], remoteSpaces = [], localOrder = [], remoteOrder = []) {
+      const map = new Map();
+      const lList = Array.isArray(localSpaces) ? localSpaces : [];
+      const rList = Array.isArray(remoteSpaces) ? remoteSpaces : [];
+
+      for (const s of lList) {
+        if (s && s.id && s.id !== 'dataprev') map.set(s.id, { ...s });
+      }
+
+      for (const s of rList) {
+        if (!s || !s.id || s.id === 'dataprev') continue;
+        if (!map.has(s.id)) {
+          map.set(s.id, { ...s });
+        } else {
+          const l = map.get(s.id);
+          const lTime = Number(l.updatedAt || 0);
+          const rTime = Number(s.updatedAt || 0);
+          map.set(s.id, rTime > lTime ? { ...l, ...s } : { ...s, ...l });
+        }
+      }
+
+      const orderSet = new Set([...(remoteOrder || []), ...(localOrder || [])]);
+      const spaces = Array.from(map.values());
+      const sortedOrder = Array.from(orderSet).filter(id => id === 'dataprev' || map.has(id));
+
+      return { spaces, spaceOrder: sortedOrder };
+    }
+
+    reconcileWorkspace(localWs = null, remoteWs = null) {
+      const l = (localWs && typeof localWs === 'object') ? localWs : null;
+      const r = (remoteWs && typeof remoteWs === 'object') ? remoteWs : null;
+      if (!l && r) return r;
+      if (l && !r) return l;
+      if (!l && !r) return null;
+
+      const lTabs = Array.isArray(l.tabs) ? l.tabs : [];
+      const rTabs = Array.isArray(r.tabs) ? r.tabs : [];
+
+      const tabMap = new Map();
+      for (const t of rTabs) if (t && t.id) tabMap.set(t.id, t);
+      for (const t of lTabs) if (t && t.id) tabMap.set(t.id, t);
+
+      const lTime = Number(l.updatedAt || 0);
+      const rTime = Number(r.updatedAt || 0);
+      const active = (lTime >= rTime ? l.active : r.active) || (Array.from(tabMap.keys())[0] || null);
+
+      return {
+        active,
+        tabs: Array.from(tabMap.values()),
+        updatedAt: Math.max(lTime, rTime)
+      };
+    }
+
+    reconcileUserQuestions(localUq = [], remoteUq = [], localAns = {}, remoteAns = {}) {
+      const qMap = new Map();
+      for (const q of (Array.isArray(localUq) ? localUq : [])) {
+        if (q && q.id) qMap.set(q.id, q);
+      }
+      for (const q of (Array.isArray(remoteUq) ? remoteUq : [])) {
+        if (!q || !q.id) continue;
+        if (!qMap.has(q.id)) {
+          qMap.set(q.id, q);
+        } else {
+          const l = qMap.get(q.id);
+          const lTime = Number(l.updatedAt || 0);
+          const rTime = Number(q.updatedAt || 0);
+          qMap.set(q.id, rTime > lTime ? q : l);
+        }
+      }
+
+      const mergedAns = { ...(localAns || {}), ...(remoteAns || {}) };
+
+      return {
+        uq: Array.from(qMap.values()),
+        uqAns: mergedAns
+      };
+    }
+
+    async recoverAllRemote() {
+      const results = {
+        answers: null,
+        exam: null,
+        cadernos: null,
+        spaces: null,
+        workspace: null,
+        userQuestions: null
+      };
+
+      try {
+        const [ansDoc, examDoc, cadDoc, spDoc, wsDoc, uqDoc] = await Promise.allSettled([
+          this.fetchRemote('exam_app_study', 'user_answers'),
+          this.fetchRemote('exam_app_study', 'exam_state'),
+          this.fetchRemote('exam_app_study', 'cadernos'),
+          this.fetchRemote('exam_app_spaces', 'spaces_list'),
+          this.fetchRemote('exam_app_state', 'workspace_state'),
+          this.fetchRemote('exam_app_study', 'user_questions')
+        ]);
+
+        if (ansDoc.status === 'fulfilled' && ansDoc.value?.answers) {
+          results.answers = ansDoc.value.answers;
+        }
+        if (examDoc.status === 'fulfilled' && examDoc.value?.exam) {
+          results.exam = examDoc.value.exam;
+        }
+        if (cadDoc.status === 'fulfilled' && cadDoc.value?.cadernos) {
+          results.cadernos = cadDoc.value.cadernos;
+        }
+        if (spDoc.status === 'fulfilled' && spDoc.value) {
+          results.spaces = spDoc.value;
+        }
+        if (wsDoc.status === 'fulfilled' && wsDoc.value) {
+          results.workspace = wsDoc.value;
+        }
+        if (uqDoc.status === 'fulfilled' && uqDoc.value) {
+          results.userQuestions = uqDoc.value;
+        }
+      } catch (err) {
+        console.warn('[SyncEngine] Falha ao recuperar dados remotos no boot:', err);
+      }
+
+      return results;
     }
   }
 
@@ -4249,6 +4481,8 @@ const scHas=(k,id)=>studyOk()&&((k==='concurso'&&id==='dataprev')||(k==='edicao'
 const UQF={concurso:'conc',edicao:'ed',cargo:'cg'};
 const uqAll=()=>{const v=store.get('uq');return Array.isArray(v)?v:[];};
 const uqAns=()=>store.get('uqAns')||{};
+const saveUq=items=>{ store.set('uq',items); if(window.syncEngine){ window.syncEngine.enqueue('exam_app_study','user_questions',{uq:items,uqAns:uqAns(),updatedAt:Date.now()}); } };
+const saveUqAns=ans=>{ store.set('uqAns',ans); if(window.syncEngine){ window.syncEngine.enqueue('exam_app_study','user_questions',{uq:uqAll(),uqAns:ans,updatedAt:Date.now()}); } };
 const uqOf=(k,id)=>uqAll().filter(q=>q[UQF[k]]===id);
 let scForm=false;
 const scQs=(k,id)=>scHas(k,id)&&questionBank?questionBank.questoes:[];
@@ -5319,7 +5553,7 @@ function qCorrect(id,val,key){
     answers[id]={selected:val,at:Date.now()};m[bookId]=answers;store.set('cadernoAnswers',m);
   }else{
     if(qSel(q))return;
-    if(q.user){const a=uqAns();a[id]=val;store.set('uqAns',a);}
+    if(q.user){const a=uqAns();a[id]=val;saveUqAns(a);}
     else{const a=getAnswers(),prev=a[q.n]||{};a[q.n]={selected:val,correct:val===q.gabarito,updatedAt:Date.now(),version:(prev.version||0)+1,deleted:false};saveAnswers(a);}
   }
   recHist(q,val===q.gabarito,bookId?'Caderno':'Prática',0,val);
@@ -5332,8 +5566,8 @@ function qCorrect(id,val,key){
 view.addEventListener('change',e=>{if(e.target.id==='qtBanca'||e.target.id==='qtOrig'||e.target.id==='qtDisc'||e.target.id==='qtEd'||e.target.id==='qtSit'){const k={qtBanca:'banca',qtOrig:'orig',qtDisc:'disc',qtEd:'ed',qtSit:'sit'}[e.target.id];qtF[k]=e.target.value;showObjs(location.hash.slice(1));return;}if(e.target.id==='qtOrd'){simOrd=e.target.value;store.set('simOrd',simOrd);return;}if(e.target.id==='scMat'||e.target.id==='scSit'){if(e.target.id==='scMat')scMat=e.target.value;else scSit=e.target.value;showObjs(location.hash.slice(1));return;}if(e.target.name==='scCount'){scCount=e.target.value;store.set('scCount',scCount);return;}if(e.target.id==='cxEd'){cxEd=e.target.value;cxCargo=null;route(true);return;}if(e.target.id==='cxCargo'){cxCargo=e.target.value;route(true);return;}if(e.target.name==='simSrc'){simSrc=e.target.value;store.set('simSrc',simSrc);return;}if(e.target.name==='simOrd'){simOrd=e.target.value;store.set('simOrd',simOrd);return;}if(e.target.id==='simQty'){simQty=e.target.value;store.set('simQty',simQty);return;}if(e.target.id==='simDuration'){simDurationMin=Number(e.target.value)||0;store.set('simDurationMin',simDurationMin);return;}if(e.target.id==='qPer'){qPer=+e.target.value;store.set('qPer',qPer);qIndex=0;qfSyncURL();renderPractice();return;}if(e.target.id==='qAuto'){qAuto=e.target.checked;store.set('qAuto',qAuto);renderPractice();toast(qAuto?'Correção automática ligada':'Correção automática desligada');return;}if(e.target.name&&e.target.name.startsWith('qa-')){const id=e.target.name.slice(3),key=e.target.closest('[data-practice-key]')?.dataset.practiceKey||'study';qPend[id]=e.target.value;if(qAuto)qCorrect(id,e.target.value,key);return;}if(e.target.id==='qFilter'){qFilter=e.target.value;qIndex=0;renderPractice();}if(e.target.id==='qMateria'){qMateria=e.target.value;qIndex=0;renderPractice();}if(e.target.name==='study-answer'&&location.hash==='#/simulado/exec'){const s=getExam();if(s&&!s.finished){const q=questionBank.questoes[s.index];s.answers[q.n]=e.target.value;saveExam(s); /* preserve input focus without full rerender */}}});
 view.addEventListener('click',e=>{
  const rr0=()=>showObjs(location.hash.slice(1)); const rrKeep=()=>{ const y=view.scrollTop; rr0(); view.scrollTop=y; };
- const qa=e.target.closest('[data-qo-ans]'); if(qa){ const [id,l]=qa.dataset.qoAns.split('|'); const q=qObjs().find(x=>x.id===id); if(q&&!qSel(q)){ if(q.user){ const m=uqAns(); m[id]=l; store.set('uqAns',m); } else { const a=getAnswers(),prev=a[q.n]||{}; a[q.n]={selected:l,correct:l===q.gabarito,updatedAt:Date.now(),version:(prev.version||0)+1,deleted:false}; saveAnswers(a); } recHist(q,l===q.gabarito,'Prática',0,l); } rrKeep(); return; }
- const qr=e.target.closest('[data-qo-reset]'); if(qr){ const q=qObjs().find(x=>x.id===qr.dataset.qoReset); if(q){ if(q.user){ const m=uqAns(); delete m[q.id]; store.set('uqAns',m); } else { const a=getAnswers(),prev=a[q.n]||{}; a[q.n]={selected:null,correct:null,updatedAt:Date.now(),version:(prev.version||0)+1,deleted:true}; saveAnswers(a); } } rr0(); return; }
+ const qa=e.target.closest('[data-qo-ans]'); if(qa){ const [id,l]=qa.dataset.qoAns.split('|'); const q=qObjs().find(x=>x.id===id); if(q&&!qSel(q)){ if(q.user){ const m=uqAns(); m[id]=l; saveUqAns(m); } else { const a=getAnswers(),prev=a[q.n]||{}; a[q.n]={selected:l,correct:l===q.gabarito,updatedAt:Date.now(),version:(prev.version||0)+1,deleted:false}; saveAnswers(a); } recHist(q,l===q.gabarito,'Prática',0,l); } rrKeep(); return; }
+ const qr=e.target.closest('[data-qo-reset]'); if(qr){ const q=qObjs().find(x=>x.id===qr.dataset.qoReset); if(q){ if(q.user){ const m=uqAns(); delete m[q.id]; saveUqAns(m); } else { const a=getAnswers(),prev=a[q.n]||{}; a[q.n]={selected:null,correct:null,updatedAt:Date.now(),version:(prev.version||0)+1,deleted:true}; saveAnswers(a); } } rr0(); return; }
  if(e.target.closest('[data-qt-sim]')){ startSim(qtList); return; }
  const qd=e.target.closest('[data-qd-sim]'); if(qd){ startSim(qObjs().filter(q=>q.materia&&(findEnt('disciplina',q.materia)||{}).id===qd.dataset.qdSim)); return; }
  const hh=location.hash.slice(1).split('/'); const rr=()=>showObjs(location.hash.slice(1));
@@ -5343,10 +5577,10 @@ view.addEventListener('click',e=>{
    if(!enu){toast('Escreva o enunciado');return;} if(Object.keys(alts).length<2){toast('Informe ao menos duas alternativas');return;} if(!alts[gab]){toast('O gabarito precisa ser uma alternativa preenchida');return;}
    const q={id:'u'+Date.now().toString(36),materia:v('uqMat').trim(),assunto:v('uqAssunto').trim(),modalidade:v('uqModal')||'Múltipla escolha',dificuldade:v('uqDif')||'',enunciado:enu,alternativas:alts,gabarito:gab,origem:v('uqOri')||'manual',criada:Date.now()};
    if(hh[1]==='concurso')q.conc=hh[2]; else if(hh[1]==='edicao'){q.ed=hh[2];q.conc=(edicaoById(hh[2])||{}).conc;} else {const g=cargoById(hh[2]);q.cg=hh[2];q.ed=g&&g.edicao;q.conc=g&&(edicaoById(g.edicao)||{}).conc;}
-   if(q.materia) ensureEnt('disciplina',q.materia); store.set('uq',uqAll().concat(q)); scForm=false; toast('Questão salva'); rr(); return; }
- const ua=e.target.closest('[data-uq-ans]'); if(ua){ e.preventDefault(); const [id,l]=ua.dataset.uqAns.split('|'); const m=uqAns(); m[id]=l; store.set('uqAns',m); rr(); return; }
- const ur=e.target.closest('[data-uq-reset]'); if(ur){ const m=uqAns(); delete m[ur.dataset.uqReset]; store.set('uqAns',m); rr(); return; }
- const ud=e.target.closest('[data-uq-del]'); if(ud){ dialog({alert:true,danger:true,title:'Excluir esta questão?',text:'A questão criada por você será removida e não poderá ser recuperada.',ok:'Excluir',cancel:'Cancelar'}).then(ok=>{ if(ok){ store.set('uq',uqAll().filter(q=>q.id!==ud.dataset.uqDel)); rr(); } }); return; }
+   if(q.materia) ensureEnt('disciplina',q.materia); saveUq(uqAll().concat(q)); scForm=false; toast('Questão salva'); rr(); return; }
+ const ua=e.target.closest('[data-uq-ans]'); if(ua){ e.preventDefault(); const [id,l]=ua.dataset.uqAns.split('|'); const m=uqAns(); m[id]=l; saveUqAns(m); rr(); return; }
+ const ur=e.target.closest('[data-uq-reset]'); if(ur){ const m=uqAns(); delete m[ur.dataset.uqReset]; saveUqAns(m); rr(); return; }
+ const ud=e.target.closest('[data-uq-del]'); if(ud){ dialog({alert:true,danger:true,title:'Excluir esta questão?',text:'A questão criada por você será removida e não poderá ser recuperada.',ok:'Excluir',cancel:'Cancelar'}).then(ok=>{ if(ok){ saveUq(uqAll().filter(q=>q.id!==ud.dataset.uqDel)); rr(); } }); return; }
  const qo=e.target.closest('[data-q-open]'); if(qo&&questionBank){ e.preventDefault(); const n=+qo.dataset.qOpen; qFilter='todas';qMateria='todas';qSearch='';qIndex=Math.max(0,questionBank.questoes.findIndex(x=>x.n===n)); location.hash='/questoes'; if(location.hash==='#/questoes') showStudyRoute('/questoes'); return; }
  if(e.target.closest('[data-sc-start]')){
   const parts=location.hash.slice(1).split('/'),kind=parts[1],id=parts[2];
@@ -6339,15 +6573,81 @@ try {
         window.syncEngine.flushOutbox();
       });
     }
-    // Reconciliação no boot
-    window.syncEngine.fetchRemote('exam_app_study', 'user_answers').then(remoteDoc => {
-      if (remoteDoc && remoteDoc.answers) {
+    // Reconciliação completa de todas as categorias no boot
+    window.syncEngine.recoverAllRemote().then(remote => {
+      let changed = false;
+
+      // 1. Respostas de questões
+      if (remote.answers && Object.keys(remote.answers).length > 0) {
         const local = getAnswers();
-        const merged = window.syncEngine.reconcileAnswers(local, remoteDoc.answers);
-        try { localStorage.setItem(answerStorage, JSON.stringify(merged)); } catch(e){}
-        if (typeof rpRefresh === 'function' && typeof rpVisible === 'function' && rpVisible()) rpRefresh();
+        const merged = window.syncEngine.reconcileAnswers(local, remote.answers);
+        try { localStorage.setItem(answerStorage, JSON.stringify(merged)); changed = true; } catch(e){}
       }
-    }).catch(()=>{});
+
+      // 2. Simulados
+      if (remote.exam) {
+        const local = getExam();
+        const merged = window.syncEngine.reconcileExam(local, remote.exam);
+        try { localStorage.setItem(examStorage, JSON.stringify(merged)); changed = true; } catch(e){}
+      }
+
+      // 3. Cadernos de estudo e de erros
+      if (remote.cadernos && Array.isArray(remote.cadernos) && remote.cadernos.length > 0) {
+        const local = (typeof nbAll === 'function' ? nbAll() : store.get('cadernos')) || [];
+        const merged = window.syncEngine.reconcileCadernos(local, remote.cadernos);
+        try { store.set('cadernos', merged); changed = true; } catch(e){}
+      }
+
+      // 4. Espaços de estudo
+      if (remote.spaces && Array.isArray(remote.spaces.spaces) && remote.spaces.spaces.length > 0) {
+        const localSpaces = store.get('spaces') || [];
+        const localOrder = store.get('spaceOrder') || [];
+        const merged = window.syncEngine.reconcileSpaces(localSpaces, remote.spaces.spaces, localOrder, remote.spaces.spaceOrder);
+        try {
+          store.set('spaces', merged.spaces);
+          if (merged.spaceOrder && merged.spaceOrder.length > 0) store.set('spaceOrder', merged.spaceOrder);
+          spaces = [BASE_SP].concat(merged.spaces);
+          changed = true;
+        } catch(e){}
+      }
+
+      // 5. Abas e workspaces
+      if (remote.workspace && Array.isArray(remote.workspace.tabs) && remote.workspace.tabs.length > 0) {
+        const localWs = store.get('ex011:ws2') || (typeof WS !== 'undefined' ? WS : null);
+        const merged = window.syncEngine.reconcileWorkspace(localWs, remote.workspace);
+        if (merged) {
+          try {
+            store.set('ex011:ws2', merged);
+            if (typeof WS !== 'undefined') {
+              WS.tabs = merged.tabs;
+              WS.active = merged.active;
+            }
+            changed = true;
+          } catch(e){}
+        }
+      }
+
+      // 6. Questões avulsas (uq e uqAns)
+      if (remote.userQuestions && (remote.userQuestions.uq || remote.userQuestions.uqAns)) {
+        const localUq = store.get('uq') || [];
+        const localUqAns = store.get('uqAns') || {};
+        const merged = window.syncEngine.reconcileUserQuestions(localUq, remote.userQuestions.uq, localUqAns, remote.userQuestions.uqAns);
+        try {
+          store.set('uq', merged.uq);
+          store.set('uqAns', merged.uqAns);
+          changed = true;
+        } catch(e){}
+      }
+
+      if (changed) {
+        try { if (typeof paintSpaces === 'function') paintSpaces(); } catch(e){}
+        try { if (typeof paintNav === 'function') paintNav(); } catch(e){}
+        try { if (typeof wsPaint === 'function') wsPaint(); } catch(e){}
+        try { if (typeof rpRefresh === 'function' && typeof rpVisible === 'function' && rpVisible()) rpRefresh(); } catch(e){}
+      }
+    }).catch(err => {
+      console.warn('[SyncEngine] Falha na recuperação de boot:', err);
+    });
   }
 } catch(e) { console.warn('Erro ao inicializar sync engine:', e); }
 })();
