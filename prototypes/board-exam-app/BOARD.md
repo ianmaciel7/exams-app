@@ -1947,6 +1947,47 @@ DEPOIS: limpar filtros restaura exclusão padrão de anuladas
 
 DEPOIS: filtros avançados adaptados a 390px
 
+## 37. Seletores nativos — Issue #120: temas e testes Windows Chromium
+<!-- container e1228 @ (24000,11000) -->
+
+Capturas reais de Chromium headless executado no runner Windows. O teste valida color-scheme computado em html e select, escolha na interface, modo automatico, quatro opcoes (1/5/10/20), foco via teclado e viewport de 390px. LIMITACAO: o popup nativo do sistema pode nao aparecer em screenshots Playwright. Nao comprova contraste visual do popup no Windows; verificar manualmente antes de fechar #120.
+
+![imagem e1230](assets/issue120_after_auto_dark.png)
+
+![imagem e1232](assets/issue120_after_explicit_light.png)
+
+Sistema escuro: tema automatico segue color-scheme escuro
+
+Tema claro escolhido na UI, mesmo com sistema escuro
+
+![imagem e1234](assets/issue120_after_explicit_dark.png)
+
+![imagem e1236](assets/issue120_after_auto_restored.png)
+
+Tema escuro escolhido na UI
+
+Retorno ao tema automatico, sem reload
+
+![imagem e1238](assets/issue120_after_toggle_light.png)
+
+![imagem e1240](assets/issue120_after_mobile.png)
+
+Alternancia pelo botao do rodape, sem reload
+
+Viewport estreita de 390px com select nativo
+
+![imagem e1242](assets/issue120_after_auto_light.png)
+
+![imagem e1244](assets/issue120_after_dark_on_light_os.png)
+
+Sistema claro: tema automatico segue color-scheme claro
+
+Tema escuro escolhido, mesmo com sistema claro
+
+![imagem e1246](assets/issue120_after_auto_light_restored.png)
+
+Retorno ao automatico com sistema claro
+
 ## 10. Arquivos do projeto (Dataprev 2026 e referências)
 <!-- container e363 @ (0,12666) -->
 

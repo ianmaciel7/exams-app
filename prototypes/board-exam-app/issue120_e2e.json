@@ -1,0 +1,110 @@
+{
+  "browser": "Chromium",
+  "platform": "win32",
+  "scenarios": [
+    {
+      "scenario": "OS escuro / automatico",
+      "expected": "dark",
+      "actual": {
+        "document": "dark",
+        "select": "dark",
+        "theme": "auto"
+      },
+      "screenshot": "issue120_after_auto_dark.png",
+      "url": "http://127.0.0.1:8765/exam-app-0.1.1/index.html#/questoes"
+    },
+    {
+      "scenario": "SO escuro / escolha claro sem reload",
+      "expected": "light",
+      "actual": {
+        "document": "light",
+        "select": "light",
+        "theme": "light"
+      },
+      "screenshot": "issue120_after_explicit_light.png",
+      "url": "http://127.0.0.1:8765/exam-app-0.1.1/index.html#/questoes"
+    },
+    {
+      "scenario": "SO escuro / escolha escuro sem reload",
+      "expected": "dark",
+      "actual": {
+        "document": "dark",
+        "select": "dark",
+        "theme": "dark"
+      },
+      "screenshot": "issue120_after_explicit_dark.png",
+      "url": "http://127.0.0.1:8765/exam-app-0.1.1/index.html#/questoes"
+    },
+    {
+      "scenario": "SO escuro / volta a automatico sem reload",
+      "expected": "dark",
+      "actual": {
+        "document": "dark",
+        "select": "dark",
+        "theme": "auto"
+      },
+      "screenshot": "issue120_after_auto_restored.png",
+      "url": "http://127.0.0.1:8765/exam-app-0.1.1/index.html#/questoes"
+    },
+    {
+      "scenario": "Botao de alternar tema sem reload",
+      "expected": "light",
+      "actual": {
+        "document": "light",
+        "select": "light",
+        "theme": "light"
+      },
+      "screenshot": "issue120_after_toggle_light.png",
+      "url": "http://127.0.0.1:8765/exam-app-0.1.1/index.html#/questoes?per=20"
+    },
+    {
+      "scenario": "Viewport mobile 390px / tema claro",
+      "expected": "light",
+      "actual": {
+        "document": "light",
+        "select": "light",
+        "theme": "light"
+      },
+      "screenshot": "issue120_after_mobile.png",
+      "url": "http://127.0.0.1:8765/exam-app-0.1.1/index.html#/questoes?per=20"
+    },
+    {
+      "scenario": "OS claro / automatico",
+      "expected": "light",
+      "actual": {
+        "document": "light",
+        "select": "light",
+        "theme": "auto"
+      },
+      "screenshot": "issue120_after_auto_light.png",
+      "url": "http://127.0.0.1:8765/exam-app-0.1.1/index.html#/questoes"
+    },
+    {
+      "scenario": "SO claro / escolha escuro",
+      "expected": "dark",
+      "actual": {
+        "document": "dark",
+        "select": "dark",
+        "theme": "dark"
+      },
+      "screenshot": "issue120_after_dark_on_light_os.png",
+      "url": "http://127.0.0.1:8765/exam-app-0.1.1/index.html#/questoes"
+    },
+    {
+      "scenario": "SO claro / volta ao automatico",
+      "expected": "light",
+      "actual": {
+        "document": "light",
+        "select": "light",
+        "theme": "auto"
+      },
+      "screenshot": "issue120_after_auto_light_restored.png",
+      "url": "http://127.0.0.1:8765/exam-app-0.1.1/index.html#/questoes"
+    }
+  ],
+  "errors": [],
+  "limitations": [
+    "Native OS popup content may not be included in Playwright screenshots.",
+    "A human must still verify popup contrast on supported Windows and browsers before closing #120."
+  ]
+}
