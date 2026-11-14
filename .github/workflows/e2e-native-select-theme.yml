@@ -1,0 +1,82 @@
+name: E2E Native Select Theme (Windows)
+
+on:
+  pull_request:
+    branches: [dev]
+    paths:
+      - 'prototypes/exam-app-0.1.1/index.html'
+      - 'tests/native-select-theme.e2e.mjs'
+      - '.github/workflows/e2e-native-select-theme.yml'
+      - 'scripts/append-native-select-board.py'
+
+permissions:
+  contents: write
+
+jobs:
+  windows-select-theme:
+    if: github.head_ref == 'fix/native-select-color-scheme-120-v2' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: windows-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install Playwright Chromium
+        shell: pwsh
+        run: |
+          npm install --no-save playwright
+          npx playwright install chromium
+      - name: Serve static Exam App prototype
+        shell: pwsh
+        run: |
+          Start-Process -FilePath python -ArgumentList '-m http.server 8765 --directory prototypes' -RedirectStandardOutput "$env:RUNNER_TEMP\exam-server.log" -RedirectStandardError "$env:RUNNER_TEMP\exam-server.err" -PassThru | Out-Null
+          $ready = $false
+          for ($i = 0; $i -lt 20; $i++) {
+            try {
+              $res = Invoke-WebRequest -UseBasicParsing 'http://127.0.0.1:8765/exam-app-0.1.1/index.html'
+              if ($res.StatusCode -eq 200) { $ready = $true; break }
+            } catch {}
+            Start-Sleep -Seconds 1
+          }
+          if (-not $ready) { throw 'Prototype HTTP server did not respond' }
+          node tests/native-select-theme.e2e.mjs
+          if ($LASTEXITCODE -ne 0) { throw 'Playwright E2E failed' }
+      - name: Upload real Chromium captures and diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: issue120-native-select-windows-chromium
+          path: |
+            prototypes/board-exam-app/assets/issue120_*.png
+            prototypes/board-exam-app/issue120_e2e.json
+          if-no-files-found: warn
+
+      - name: Register verified screenshots in board and generate BOARD.md
+        shell: pwsh
+        run: |
+          python scripts/append-native-select-board.py
+          if ($LASTEXITCODE -ne 0) { throw 'Invalid evidence or board append failure' }
+          npm run board
+          if ($LASTEXITCODE -ne 0) { throw 'Board generator failure' }
+          if (-not (Select-String -Path 'prototypes/board-exam-app/BOARD.md' -Pattern '37. Seletores nativos' -SimpleMatch)) { throw 'Issue #120 missing from generated board' }
+      - name: Persist verified E2E evidence to PR branch
+        shell: pwsh
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add prototypes/board-exam-app/board.json prototypes/board-exam-app/BOARD.md prototypes/board-exam-app/issue120_e2e.json
+          git add 'prototypes/board-exam-app/assets/issue120_*.png'
+          git diff --cached --quiet
+          if ($LASTEXITCODE -ne 0) {
+            git commit -m "test(ui): persist Windows Chromium select theme evidence in board (#120)"
+            if ($LASTEXITCODE -ne 0) { throw 'Could not commit Issue #120 evidence' }
+            git push origin "HEAD:${{ github.head_ref }}"
+            if ($LASTEXITCODE -ne 0) { throw 'Could not publish Issue #120 evidence' }
+          }

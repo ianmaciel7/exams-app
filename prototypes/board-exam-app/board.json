@@ -613,7 +613,27 @@
     "e1224",
     "e1225",
     "e1226",
-    "e1227"
+    "e1227",
+    "e1228",
+    "e1229",
+    "e1230",
+    "e1231",
+    "e1232",
+    "e1233",
+    "e1234",
+    "e1235",
+    "e1236",
+    "e1237",
+    "e1238",
+    "e1239",
+    "e1240",
+    "e1241",
+    "e1242",
+    "e1243",
+    "e1244",
+    "e1245",
+    "e1246",
+    "e1247"
   ],
   "elements": {
     "e1": {
@@ -6443,6 +6463,177 @@
       "size": "small",
       "text": "DEPOIS: filtros avançados adaptados a 390px",
       "x": 22018,
+      "y": 13678,
+      "w": 760,
+      "h": 50
+    },
+    "e1228": {
+      "type": "container",
+      "color": "white",
+      "text": "37. Seletores nativos — Issue #120: temas e testes Windows Chromium",
+      "x": 24000,
+      "y": 11000,
+      "w": 1650,
+      "h": 2775
+    },
+    "e1229": {
+      "type": "text",
+      "size": "small",
+      "x": 24018,
+      "y": 11008,
+      "w": 1580,
+      "h": 82,
+      "text": "Capturas reais de Chromium headless executado no runner Windows. O teste valida color-scheme computado em html e select, escolha na interface, modo automatico, quatro opcoes (1/5/10/20), foco via teclado e viewport de 390px. LIMITACAO: o popup nativo do sistema pode nao aparecer em screenshots Playwright. Nao comprova contraste visual do popup no Windows; verificar manualmente antes de fechar #120."
+    },
+    "e1230": {
+      "type": "image",
+      "src": "/_blob/issue120_after_auto_dark",
+      "x": 24018,
+      "y": 11100,
+      "w": 755,
+      "h": 430
+    },
+    "e1231": {
+      "type": "text",
+      "size": "small",
+      "text": "Sistema escuro: tema automatico segue color-scheme escuro",
+      "x": 24018,
+      "y": 11538,
+      "w": 760,
+      "h": 50
+    },
+    "e1232": {
+      "type": "image",
+      "src": "/_blob/issue120_after_explicit_light",
+      "x": 24828,
+      "y": 11100,
+      "w": 755,
+      "h": 430
+    },
+    "e1233": {
+      "type": "text",
+      "size": "small",
+      "text": "Tema claro escolhido na UI, mesmo com sistema escuro",
+      "x": 24828,
+      "y": 11538,
+      "w": 760,
+      "h": 50
+    },
+    "e1234": {
+      "type": "image",
+      "src": "/_blob/issue120_after_explicit_dark",
+      "x": 24018,
+      "y": 11635,
+      "w": 755,
+      "h": 430
+    },
+    "e1235": {
+      "type": "text",
+      "size": "small",
+      "text": "Tema escuro escolhido na UI",
+      "x": 24018,
+      "y": 12073,
+      "w": 760,
+      "h": 50
+    },
+    "e1236": {
+      "type": "image",
+      "src": "/_blob/issue120_after_auto_restored",
+      "x": 24828,
+      "y": 11635,
+      "w": 755,
+      "h": 430
+    },
+    "e1237": {
+      "type": "text",
+      "size": "small",
+      "text": "Retorno ao tema automatico, sem reload",
+      "x": 24828,
+      "y": 12073,
+      "w": 760,
+      "h": 50
+    },
+    "e1238": {
+      "type": "image",
+      "src": "/_blob/issue120_after_toggle_light",
+      "x": 24018,
+      "y": 12170,
+      "w": 755,
+      "h": 430
+    },
+    "e1239": {
+      "type": "text",
+      "size": "small",
+      "text": "Alternancia pelo botao do rodape, sem reload",
+      "x": 24018,
+      "y": 12608,
+      "w": 760,
+      "h": 50
+    },
+    "e1240": {
+      "type": "image",
+      "src": "/_blob/issue120_after_mobile",
+      "x": 24828,
+      "y": 12170,
+      "w": 755,
+      "h": 430
+    },
+    "e1241": {
+      "type": "text",
+      "size": "small",
+      "text": "Viewport estreita de 390px com select nativo",
+      "x": 24828,
+      "y": 12608,
+      "w": 760,
+      "h": 50
+    },
+    "e1242": {
+      "type": "image",
+      "src": "/_blob/issue120_after_auto_light",
+      "x": 24018,
+      "y": 12705,
+      "w": 755,
+      "h": 430
+    },
+    "e1243": {
+      "type": "text",
+      "size": "small",
+      "text": "Sistema claro: tema automatico segue color-scheme claro",
+      "x": 24018,
+      "y": 13143,
+      "w": 760,
+      "h": 50
+    },
+    "e1244": {
+      "type": "image",
+      "src": "/_blob/issue120_after_dark_on_light_os",
+      "x": 24828,
+      "y": 12705,
+      "w": 755,
+      "h": 430
+    },
+    "e1245": {
+      "type": "text",
+      "size": "small",
+      "text": "Tema escuro escolhido, mesmo com sistema claro",
+      "x": 24828,
+      "y": 13143,
+      "w": 760,
+      "h": 50
+    },
+    "e1246": {
+      "type": "image",
+      "src": "/_blob/issue120_after_auto_light_restored",
+      "x": 24018,
+      "y": 13240,
+      "w": 755,
+      "h": 430
+    },
+    "e1247": {
+      "type": "text",
+      "size": "small",
+      "text": "Retorno ao automatico com sistema claro",
+      "x": 24018,
       "y": 13678,
       "w": 760,
       "h": 50
