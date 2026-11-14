@@ -254,7 +254,42 @@
     "e723",
     "e724",
     "e725",
-    "e726"
+    "e726",
+    "e800",
+    "e801",
+    "e802",
+    "e805",
+    "e806",
+    "e807",
+    "e808",
+    "e809",
+    "e810",
+    "e811",
+    "e812",
+    "e813",
+    "e814",
+    "e815",
+    "e816",
+    "e817",
+    "e818",
+    "e819",
+    "e820",
+    "e821",
+    "e822",
+    "e823",
+    "e824",
+    "e825",
+    "e826",
+    "e827",
+    "e828",
+    "e829",
+    "e830",
+    "e831",
+    "e832",
+    "e833",
+    "e834",
+    "e835",
+    "e836"
   ],
   "elements": {
     "e1": {
@@ -2819,6 +2854,288 @@
       "w": 700,
       "h": 60,
       "text": "**Evidência 20 (Archive `notes-app-old-10` Recall):** Estética editorial *Monastic Knowledge Sanctuary* para a Home do Espaço (`#/espaco`) com card Hero escuro `TODAY`, `Review today` e `Recent objects` sem emojis — Issue #58"
+    },
+    "e800": {
+      "type": "container",
+      "x": 5000,
+      "y": 11000,
+      "w": 1600,
+      "h": 5100,
+      "color": "white",
+      "text": "29. Engenharia da Barra Direita & Motor de Grafo do Capacities + Central de Preparação & Questões do QConcursos Elite (Issues #64 e #66 a #72)"
+    },
+    "e801": {
+      "type": "text",
+      "size": "large",
+      "x": 5030,
+      "y": 11060,
+      "w": 1500,
+      "h": 120,
+      "text": "Blueprint Técnico: Painel Direito & Grafo Retina 60fps (Capacities Live) + Home & Resolução de Questões (QConcursos Elite Live)"
+    },
+    "e802": {
+      "type": "shape",
+      "x": 5030,
+      "y": 11180,
+      "w": 1500,
+      "h": 720,
+      "text": "**1. Remoção Definitiva do `#spTopBtn` Duplicado em `#wsTabs` (Issue #64)**\n- O botão `[💡 Concurso de TI ↕]` (`#spTopBtn`) foi injetado dentro de `#wsTabs` por engano no commit `7edd4ac` (PR #20) porque o autor não percebeu que `.side-top` já existia na Sidebar esquerda. Mesmo quando a Sidebar é recolhida (`0px`), o Capacities **NUNCA** mostra o Space Switcher na barra de abas — exibe apenas `[◧ Expandir sidebar]`, `[+ Novo]` e `[🔍 Buscar]`. `#spTopBtn` deve ser removido do HTML/CSS/JS.\n**2. As 6 Ferramentas Contextuais do Painel Direito, Overflow `Buscar abas` `[v]` e `ResizeObserver` (Issue #66)**\n- No Capacities Live, a Barra Direita tem calha invisível de `8px` (`col-resize`) que aciona `ResizeObserver` no canvas em tempo real sem borrar.\n- Quando há 5+ abas no painel direito, elas compactam para ícone e revelam o botão `[v]`, abrindo o popover `Buscar abas` (`256px`).\n- As 6 ferramentas de `Explorar` são: `Grafo`, `Links de entrada` (com snippet do bloco), `Objetos internos` (agrupados por tipo), `Conteúdo relacionado` (com pílula `[66 | ☰ ⌄ | ☵]`), `Chat de IA` (com chip do objeto ativo) e `Buscar`.\n**3. Motor de Grafo `<canvas>` 2D Retina (`devicePixelRatio`) & Taxonomia Visual de Nós em 3 Níveis (Issue #67)**\n- **Por que o grafo do Capacities é muito mais responsivo:** Usa um único motor `<canvas>` 2D a 60 FPS calibrado por `window.devicePixelRatio` tanto no Painel Direito quanto no Grafo Global (substituindo o `<svg class=\"rp-graph\">` estático do nosso protótipo).\n- **Taxonomia em 3 Níveis:** (1) Nó Central: badge quadrado `36-42px` (`border-radius: 8px`) com ícone SVG do tipo, borda brilhante `2px` e rótulo em pílula escura (`rgba(20,20,20,0.85)`); (2) Nós Vizinhos: badges quadrados `24-28px` (`border-radius: 6px`) tingidos na cor OKLCH do Tipo de Objeto; (3) **Nós de Tags/Assuntos:** renderizados como **pílulas ovais coloridas** (`[vm group]`, `[logical container]`) com o texto dentro!\n- **Arestas & Física:** Arestas direcionais com rótulos de relação inline (`Relação`, `Equivalente do GCP`), spotlight no hover (`opacity: 0.15` nos demais) e física de molas amortecida (*spring damping* `< 1s`).\n**4. Barras Flutuantes de `27px` no Grafo, Popover de Filtros/Hubs, Profundidade `1..5` e Busca Auto-Zoom (Issue #68)**\n- Pílulas inferiores de `27px` (`backdrop-filter: blur(8px)`): à esquerda `[⤢ Fit] [☊ Re-layout]`; à direita `[🔍- | 100% ⌄ | 🔍+]` e `[📥 Export PNG | 🎛 Filtros | ● Profundidade 1..5]`.\n- Popover `[🎛]` com submenus pesquisáveis `Filtrar tipos de objeto >`, `Excluir tipos de objeto >` e checkbox `Ocultar objetos com muitos links` (evita poluição de hubs!). No Grafo Global: busca no topo com auto-zoom suave no cluster e `Reproduzir linha do tempo`.\n**5. QConcursos Elite — Central de Preparação na Home `#/espaco` (Issue #69)**\n- Card do Concurso com dados do edital + bloco acionável **`PRÓXIMA AÇÃO`** (`Continuar estudando →` / `Mapa do edital`), widget **`Seu ritmo hoje`** (`X questões respondidas hoje`, `Taxa de acerto`, `Taxa de erro` e barra semanal `Seg–Dom`) e seção **`Conteúdo do seu edital`** com 4 abas (`Disciplinas & Assuntos` Master-Detail, `Caderno de Questões`, `Raio-X da Banca` e `Caderno de Erros`).\n**6. QConcursos Elite — Construtor de Filtros Avançado, Tesoura nas Alternativas e Abas Pedagógicas (Issues #70, #71 e #72)**\n- Filtros rápidos (`Resolvidas`, `Não resolvidas`, `Acertei`, `Errei`), selects em cascata (`Disciplina -> Assunto`), chips `Filtrar por:` e barra de ações (`Salvar filtro`, `Gerar Caderno`, `Criar Simulado`).\n- Card da questão com cabeçalho compacto de 2 linhas (`[1 | Q1]` + Breadcrumb; `Ano · Banca · Órgão · Prova`), toggle `Texto associado ⊕/⊖`, **botão de Tesoura (`✂️ Descartar alternativa`)** com `line-through`, confirmação em 2 etapas via botão **`[Responder]`** e barra inferior de abas pedagógicas (**`Gabarito Comentado`**, **`Estatísticas`** com Donut + Barras A–E + Histórico, **`Cadernos`** e **`Anotações`** ricas)."
+    },
+    "e805": {
+      "type": "image",
+      "x": 5030,
+      "y": 11940,
+      "w": 700,
+      "h": 240,
+      "src": "/_blob/bug_spTopBtn_duplicated_lightbulb"
+    },
+    "e806": {
+      "type": "text",
+      "x": 5030,
+      "y": 12190,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 21 (Bug Reportado pelo Usuário — Issue #64):** Botão duplicado `#spTopBtn` (`💡 Concurso de TI ↕`) + `#wsSide` (`[◧]`) injetado dentro de `#wsTabs` pelo commit `7edd4ac` (PR #20)"
+    },
+    "e807": {
+      "type": "image",
+      "x": 5770,
+      "y": 11940,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/capacities_live_right_panel_tab_overflow"
+    },
+    "e808": {
+      "type": "text",
+      "x": 5770,
+      "y": 12370,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 22 (Capacities Live — Issue #66):** Painel Direito com 5+ abas compactadas por ícone e popover pesquisável `Buscar abas` aberto no botão `[v]`"
+    },
+    "e809": {
+      "type": "image",
+      "x": 5030,
+      "y": 12460,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/capacities_live_right_panel_related"
+    },
+    "e810": {
+      "type": "text",
+      "x": 5030,
+      "y": 12890,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 23 (Capacities Live — Issue #66):** Aba `Conteúdo relacionado` no Painel Direito com pílula `[66 | ☰ ⌄ | ☵]` e lista de objetos com badges quadrados `20x20px`"
+    },
+    "e811": {
+      "type": "image",
+      "x": 5770,
+      "y": 12460,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/capacities_live_graph_3tier_nodes_resized"
+    },
+    "e812": {
+      "type": "text",
+      "x": 5770,
+      "y": 12890,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 24 (Capacities Live — Issues #66, #67):** Painel Direito redimensionado via calha (`ResizeObserver` a `150%` zoom) exibindo taxonomia em 3 níveis: badges quadrados de objetos, pílulas coloridas de tags (`vm group`, `logical container`) e rótulos nas arestas"
+    },
+    "e813": {
+      "type": "image",
+      "x": 5030,
+      "y": 12980,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/capacities_live_graph_filter_popover"
+    },
+    "e814": {
+      "type": "text",
+      "x": 5030,
+      "y": 13410,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 25 (Capacities Live — Issue #68):** Popover de Configurações do Grafo (`[🎛]`) com submenu pesquisável `Filtrar tipos de objeto >`, `Ocultar objetos com muitos links` e pílula de profundidade `[● 4]`"
+    },
+    "e815": {
+      "type": "image",
+      "x": 5770,
+      "y": 12980,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/capacities_live_global_graph_constellation"
+    },
+    "e816": {
+      "type": "text",
+      "x": 5770,
+      "y": 13410,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 26 (Capacities Live — Issues #67, #68):** Grafo Global (`348` nós) com agrupamento em clusters orbitais por domínio e barra de busca flutuante no topo"
+    },
+    "e817": {
+      "type": "image",
+      "x": 5030,
+      "y": 13500,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/capacities_live_global_graph_search_autozoom"
+    },
+    "e818": {
+      "type": "text",
+      "x": 5030,
+      "y": 13930,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 27 (Capacities Live — Issue #68):** Busca reativa `'Azure'` no Grafo Global atualizando contador (`306`), executando auto-zoom (`40%`) e exibindo botão de `Linha do Tempo`"
+    },
+    "e819": {
+      "type": "image",
+      "x": 5770,
+      "y": 13500,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/qconcursos_live_home_proxima_acao"
+    },
+    "e820": {
+      "type": "text",
+      "x": 5770,
+      "y": 13930,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 28 (QConcursos Elite Live — Issue #69):** Central de Preparação (Topo): Card do concurso com dados do edital, bloco acionável `PRÓXIMA AÇÃO` (`Continuar estudando →`) e widget `Seu ritmo hoje`"
+    },
+    "e821": {
+      "type": "image",
+      "x": 5030,
+      "y": 14020,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/qconcursos_live_home_ritmo_disciplinas"
+    },
+    "e822": {
+      "type": "text",
+      "x": 5030,
+      "y": 14450,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 29 (QConcursos Elite Live — Issue #69):** Cards `Taxa de acerto` / `Taxa de erro`, barra semanal `Seg–Dom` e visão Master-Detail de `Disciplinas & Assuntos` com badge `Recomendado`"
+    },
+    "e823": {
+      "type": "image",
+      "x": 5770,
+      "y": 14020,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/qconcursos_live_home_raiox_curso"
+    },
+    "e824": {
+      "type": "text",
+      "x": 5770,
+      "y": 14450,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 30 (QConcursos Elite Live — Issue #69):** Aba `Raio X do Curso` analisando incidência histórica e relevância dos assuntos na banca"
+    },
+    "e825": {
+      "type": "image",
+      "x": 5030,
+      "y": 14540,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/qconcursos_live_home_caderno_erros"
+    },
+    "e826": {
+      "type": "text",
+      "x": 5030,
+      "y": 14970,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 31 (QConcursos Elite Live — Issue #69):** Aba `Caderno de Erros` reunindo automaticamente questões erradas para revisão ativa"
+    },
+    "e827": {
+      "type": "image",
+      "x": 5770,
+      "y": 14540,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/qconcursos_live_filter_builder_top"
+    },
+    "e828": {
+      "type": "text",
+      "x": 5770,
+      "y": 14970,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 32 (QConcursos Elite Live — Issue #70):** Construtor de Filtros com pílulas rápidas (`Resolvidas`, `Não resolvidas`, `Acertei`, `Errei`), selects em cascata (`Disciplina -> Assunto`) e checkboxes de exclusão"
+    },
+    "e829": {
+      "type": "image",
+      "x": 5030,
+      "y": 15060,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/qconcursos_live_filter_actions_bar"
+    },
+    "e830": {
+      "type": "text",
+      "x": 5030,
+      "y": 15490,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 33 (QConcursos Elite Live — Issue #70):** Barra de chips ativos `Filtrar por:` e barra de ações (`Salvar filtro`, `Gerar Caderno`, `Meus Cadernos`, `Meus filtros`, `Criar Simulado`)"
+    },
+    "e831": {
+      "type": "image",
+      "x": 5770,
+      "y": 15060,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/qconcursos_live_question_scissors_eliminated"
+    },
+    "e832": {
+      "type": "text",
+      "x": 5770,
+      "y": 15490,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 34 (QConcursos Elite Live — Issue #71):** Card de Questão com cabeçalho compacto de 2 linhas, toggle `Texto associado (+)` e **Tesoura (`✂️`) riscando a alternativa D** (`line-through`)"
+    },
+    "e833": {
+      "type": "image",
+      "x": 5030,
+      "y": 15580,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/qconcursos_live_question_answered_feedback"
+    },
+    "e834": {
+      "type": "text",
+      "x": 5030,
+      "y": 16010,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 35 (QConcursos Elite Live — Issue #71):** Confirmação em 2 etapas via botão `Responder`, destacando a alternativa correta B em verde e exibindo a barra inferior de abas pedagógicas"
+    },
+    "e835": {
+      "type": "image",
+      "x": 5770,
+      "y": 15580,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/qconcursos_live_question_tab_estatisticas"
+    },
+    "e836": {
+      "type": "text",
+      "x": 5770,
+      "y": 16010,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 36 (QConcursos Elite Live — Issue #72):** Aba pedagógica `Estatísticas` aberta sob a questão: gráfico Donut (`69% de acertos`), gráfico de barras `Alternativas mais respondidas (A–E)` e `Histórico de desempenho`"
     }
   }
 }
