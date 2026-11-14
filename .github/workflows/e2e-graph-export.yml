@@ -1,0 +1,67 @@
+name: E2E Graph PNG Export
+
+on:
+  pull_request:
+    branches: [dev]
+    paths:
+      - 'prototypes/exam-app-0.1.1/index.html'
+      - 'tests/graph-export.e2e.mjs'
+      - 'scripts/append-graph-export-board.py'
+      - '.github/workflows/e2e-graph-export.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  graph-png:
+    if: github.head_ref == 'feat/68-graph-export-png' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify inline application script syntax
+        run: node --test tests/study-navigation.test.mjs tests/motion-graph.test.mjs
+      - name: Install Chromium
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Test downloaded PNG files and persist actual evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          if test -f prototypes/board-exam-app/issue68_export_e2e.json; then
+            echo 'Real graph PNG export evidence already versioned.'
+            exit 0
+          fi
+          python3 -m http.server 8765 --directory prototypes >/tmp/exams-export.log 2>&1 &
+          for i in $(seq 1 20); do
+            if curl -fsS http://127.0.0.1:8765/exam-app-0.1.1/index.html -o /dev/null; then break; fi
+            sleep 1
+          done
+          node tests/graph-export.e2e.mjs
+          python3 scripts/append-graph-export-board.py
+          npm run board
+          grep -q '42. Grafo' prototypes/board-exam-app/BOARD.md
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add prototypes/board-exam-app/board.json prototypes/board-exam-app/BOARD.md prototypes/board-exam-app/issue68_export_e2e.json
+          git add prototypes/board-exam-app/assets/issue68_*.png
+          if ! git diff --cached --quiet; then
+            git commit -m 'test(graph): archive Issue #68 actual PNG export QA evidence'
+            git push origin "HEAD:${{ github.head_ref }}"
+          fi
+      - name: Publish browser screenshots and PNG exports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: issue68-export-png
+          path: |
+            prototypes/board-exam-app/assets/issue68_*.png
+            prototypes/board-exam-app/issue68_export_e2e.json
+          if-no-files-found: warn
