@@ -535,7 +535,12 @@
     "e1144",
     "e1145",
     "e1146",
-    "e1147"
+    "e1147",
+    "e1150",
+    "e1151",
+    "e1152",
+    "e1153",
+    "e1154"
   ],
   "elements": {
     "e1": {
@@ -5435,6 +5440,315 @@
       "w": 710,
       "h": 80,
       "text": "**Evidência 104 (Readwise SRS Inline Tagging Guide — Issue #79):** Guia oficial `How to Tag Your Highlights While You Read` detalhando o funcionamento de `inline tagging` e categorização em tempo de leitura"
+    },
+    "e1150": {
+      "type": "container",
+      "color": "white",
+      "x": 12000,
+      "y": 11000,
+      "w": 1680,
+      "h": 6200,
+      "text": "33. Matriz de Decisões de Produto Extraída dos Sites (14 Perguntas) & Índice Mestre de Rastreabilidade de Evidências (Adotar / Adaptar / Descartar)"
+    },
+    "e1151": {
+      "type": "text",
+      "size": "large",
+      "x": 12030,
+      "y": 11060,
+      "w": 1600,
+      "h": 90,
+      "text": "Extração Direta das 4 Referências (QConcursos, Capacities, Readwise Reader/SRS e ExamTopics) Cruzada com a Arquitetura do Exam App (Perguntas 1 a 14)"
+    },
+    "e1152": {
+      "type": "shape",
+      "color": "blue",
+      "kind": "rounded",
+      "size": "small",
+      "textAlign": "left",
+      "x": 12030,
+      "y": 11170,
+      "w": 1600,
+      "h": 1850,
+      "text": "**Respostas Extraídas dos Sites e do Modelo do Board (Perguntas 1 a 14)**\n\n**1. QConcursos — \"Caderno\" como Coleção fixa de questões (sem pastas nesta fase):**\n- **No site (`elite.qconcursos.com`):** Possui `Gerar Caderno` (a partir do filtro ativo, até 1.000 questões) e a aba `Cadernos` dentro de cada questão (`+ Criar novo caderno` ou dropdown `Encontrar caderno`), além de `Caderno de Erros` automático na Central de Preparação. No QConcursos legado existiam Pastas, mas na interface moderna Elite o fluxo é plano.\n- **Decisão no Exam App (Seções 2 e 6 do Board):** **SIM, definitivamente.** O Caderno é uma **Coleção (`Collection`)** manual de objetos do tipo `Questão`, **plana e sem aninhamento (sem pastas)** (`\"Coleção não contém outra coleção\"` — linha 464). Entregar na versão `0.3.0`.\n\n**2. Filtros Salvos — Objeto próprio (`Visão`) na sidebar vs. Lista dentro do banco de questões:**\n- **Nos sites:**\n  - *QConcursos:* Fica dentro da barra de ações do banco de questões (`Salvar filtro` e `Meus filtros` lado a lado com `Gerar Caderno`).\n  - *Readwise Reader (`/views`) e Capacities (`Queries`):* São objetos `Filtered Views` com página de gestão (`/views`) e opção de `Pin` (`Fixar na barra lateral`).\n- **Decisão no Exam App (Seções 6, 9 e 28):** Na fase atual (MVP / `0.2.0`–`0.3.0`), funciona como **lista rápida no banco de questões** (`Salvar filtro` / `Meus filtros` + estado na URL), enquanto no modelo de domínio equivale a uma **Visão / Query salva** (que guarda critérios de filtro, diferente da `Coleção` que guarda IDs fixos) e pode ser **fixada opcionalmente na sidebar** via menu `⋯` sem obrigar página própria no MVP.\n\n**3. Simulado — Nascer de filtro/coleção (quantidade e tempo configuráveis) vs. Criado manualmente do zero:**\n- **No site (`elite.qconcursos.com`):** Nasce diretamente do botão `Criar Simulado` na barra de ações do filtro ativo (ou de um Caderno), sorteando `N` questões dos critérios selecionados com tempo configurável, além das Provas Oficiais fechadas (`Prova: SELECON - 2026`).\n- **Decisão no Exam App (Seções 2 e 9):** Nasce de **duas formas sem cadastro manual questão-por-questão do zero**: (A) **A partir de um Filtro ou Coleção (Caderno)** definindo quantidade, tempo limite e modo (`prova` ou `estudo`); ou (B) **Diretamente de uma Prova Oficial (`Exam Paper` — ex.: Dataprev 2026 Tipo 1)** com suas 70 questões na ordem oficial.\n\n**4. Resolução — Quais recursos do QConcursos entram no MVP além de responder e corrigir:**\n- **Extraído do Card de Questão e do Study Dock (`elite.qconcursos.com`):**\n  1. **Texto associado (`+` expansível inline):** **ENTRA NO MVP (`P0`)** — indispensável para provas da FGV/Cebraspe onde 5 a 10 questões compartilham um texto-base.\n  2. **Eliminar alternativa (`Tesoura` / `line-through`):** **ENTRA NO MVP (`P0`)** — já modelado na UI (`opacity: 0.5` + riscado) e essencial na resolução.\n  3. **Cronômetro e Modo Foco:** **ENTRAM NO MVP (`P1`)** — o Cronômetro já existe no modo Simulado e o Modo Foco equivale a recolher a Sidebar (`0px`, `[`) e o Painel Direito (`Ctrl+\\`).\n  4. **Folha de Respostas (Navegador 10×7) e Relatório de Desempenho (Scorecard):** **ENTRAM NO MVP (`P0` — entregues na Seção 25 / Issue #19)** — matriz 10×7 codificada por cores e scorecard pós-simulado por disciplina.\n  5. **Anotações da Questão e Marca-texto no enunciado:** *Anotações pessoais* entram como campo `Conteúdo` da Questão (`0.3.0`); *Marca-texto multicor inline no enunciado* fica como evolução pós-MVP (`P2`).\n\n**5. Comentários comunitários, aulas em vídeo e gabarito comentado de professores:**\n- **Nos sites:** Tanto QConcursos (`Aulas 3`, `Comentários`) quanto ExamTopics (`Discussion`, `Community Vote`) possuem abas comunitárias e videoaulas.\n- **Decisão no Exam App (Seções 8 e 9 do Board):** **Comentários comunitários, votos da comunidade, rankings e videoaulas (`Aulas`) continuam EXPLICITAMENTE FORA DO ESCOPO (Descartados).** Já o campo **`gabarito comentado`** existe no modelo da `Questão` (Seção 2, linha 306) apenas como **explicação própria do usuário ou gerada sob demanda via IA (`Explicar com IA` — Seção 11)**, sem rede social nem professores terceiros.\n\n**6. Capacities — \"Tipos de objeto\", grafo, relações e painel direito: infraestrutura interna vs. criação livre pelo aluno:**\n- **No site (`app.capacities.io`):** PKM genérico onde o usuário cria qualquer tipo de objeto do zero.\n- **Decisão no Exam App (Seção 1, 2 e UX Contract Regra #1):** Os Tipos de Objeto do domínio de concursos (`Concurso`, `Edição`, `Cargo`, `Órgão`, `Banca`, `Disciplina`, `Prova`, `Questão`, `Simulado`, `Resposta`, `Documento/PDF`, `Coleção`, `Etiqueta`, `Cartão de Revisão`, `Meta`) vêm **pré-configurados como infraestrutura nativa do Exam App** (para que o aluno estude imediatamente sem precisar modelar banco de dados, cumprindo a Regra #1 do `AGENTS.md`). A criação/edição customizada de tipos pelo menu `⋯` permanece disponível como recurso avançado secundário, nunca como pré-requisito.\n\n**7. Grafo — Qual tarefa concreta resolve para o aluno (prioridade vs. recurso secundário):**\n- **No site (`app.capacities.io`):** Possui **Grafo Local no Painel Direito** (centrado no objeto aberto, com filtro de tipos e profundidade `1..4`) e **Grafo Global (`#/grafico`)** com busca e clusters.\n- **Decisão no Exam App (Seção 26 / Issue #25):** Resolve **ambas as tarefas em níveis diferentes**:\n  1. **Grafo Local no Painel Direito (Mais útil no dia a dia):** Permite ver imediatamente todas as questões, provas, cargos e documentos ligados a uma `Disciplina` ou `Edição` sem sair da tela atual.\n  2. **Grafo Global (`#/grafico`):** Recurso **secundário de exploração visual** da estrutura do concurso (já entregue na `0.1.1`), subordinado às fluxos primários (`Questões`, `Simulados` e `Revisão`)."
+    },
+    "e1153": {
+      "type": "shape",
+      "color": "peach",
+      "kind": "rounded",
+      "size": "small",
+      "textAlign": "left",
+      "x": 12030,
+      "y": 13050,
+      "w": 1600,
+      "h": 1650,
+      "text": "**Continuação das Respostas Extraídas dos Sites (Perguntas 8 a 14)**\n\n**8. Readwise — O que a \"Revisão Diária\" revisa no nosso produto:**\n- **No site (`readwise.io/dailyreview`):** Revisa Highlights de livros/artigos e cartões de Mastery (`Cloze Deletion` e `Q&A`).\n- **Decisão no Exam App (Seções 2, 6 e 11 do Board):** Revisa uma **combinação focada em aprovação**, unificada na fila de revisão:\n  1. **Questões erradas (`situação = errei` / Caderno de Erros)** e **Questões marcadas `para revisar`** (Seção ExamTopics v109, linha 372).\n  2. **Cartões de Revisão (`Review Card` — Pergunta/Resposta ou Lacuna/Cloze)** gerados a partir de uma **Questão** ou de uma **Nota de Documento/PDF** (`\"Cartão de revisão nasce de uma Questão ou de uma Nota\"` — Seção 6, item 3).\n  *(Highlights puros de PDF não entram soltos: conforme Seção 6 item 8, trecho importante vira Nota que pode gerar Cartão).*\n\n**9. SRS — Primeira versão simples (`0.4.0`) vs. Frequência adaptativa completa do Readwise:**\n- **No site (`readwise.io`):** Tem botões de avaliação de 4 níveis (`Never/Esqueci`, `Soon/Difícil`, `Later/Bom`, `Someday/Fácil`), `Highlights Per Day (1–15)`, `Streak` + `Heatmap (/stats)` e `Frequency Tuning` por fonte.\n- **Decisão no Exam App (Seções 2, 7 e 32):**\n  - **Fase 1 (`0.4.0` — MVP da Revisão):** Fila diária simples + 4 botões de avaliação no `Cartão de Revisão` (`esqueci`, `difícil`, `bom`, `fácil` — já modelados na Seção 2, linha 325) + filtro rápido `Revisar erradas` + `Streak` e estatísticas.\n  - **Fase 2 (Evolução):** `Frequency Tuning` (sliders de prioridade por Disciplina/Peso no Edital) entra como evolução posterior quando o aluno já tiver volume de cartões.\n\n**10. Leitura de PDF — Incorporar highlights, notas e exportação vs. Focar em consulta à prova/editais nesta etapa:**\n- **No site (`read.readwise.io`):** Leitor completo com highlights, `Notebook` lateral, `Action Tags` (`.qa`, `.c1`, `.h1`), `Snapshot` de tabelas e exportação Markdown.\n- **Decisão no Exam App (Seções 3, 6 e 7 do Board):** O modelo já separa claramente em **2 classes de Documento (`0.1.0` vs `0.5.0`)**:\n  - **Agora (`0.1.1` / `0.2.0`):** Foco em **Documentos de Referência** (Edital, Retificações, Prova, Gabarito) — consulta rápida, busca textual, zoom e vínculo direto com as questões (sem % de leitura e sem complexidade de highlights).\n  - **Na versão `0.5.0` (Camada de Leitura):** Entram os **Documentos de Leitura** com `% de progresso`, criação de **Notas vinculadas à página do PDF** e conversão em **Cartão de Revisão** (`Seção 6, itens 7 e 8`).\n\n**11. IA — Quais capacidades entram no escopo:**\n- **Nos sites:** Readwise tem `Ghostreader` (15 skills Jinja2 + Chat RAG); QConcursos tem gabarito comentado.\n- **Decisão no Exam App (Seção 11 do Board — \"IA em 3 pontos do estudo\"):** Entram **exatamente 3 capacidades cirúrgicas** (usando `sample` do Claude quando disponível, e ocultando os botões graciosamente quando offline/sem IA):\n  1. **Explicar questão (`Explicar com IA`):** Pós-resposta, explica por que a correta está certa e por que as outras estão erradas, com macete.\n  2. **Gerar flashcards (`Criar cartões`):** Gera 3 cartões frente/verso ou Cloze a partir do conceito da questão.\n  3. **Recomendar revisão (`Sugerir o que revisar`):** Analisa o `Desempenho` e aponta as disciplinas críticas com link direto para treinar.\n  *(Classificar assunto e gerar questões a partir do PDF ficam apenas para a `1.0.0` — linha 551).*\n\n**12. Importação/Exportação — Sincronizar Anki/Notion/Obsidian/Capacities vs. Exportar dados próprios (CSV/Markdown/JSON):**\n- **No site (`readwise.io/welcome/sync` e `/export`):** Possui 32 conectores de importação e 16 de exportação OAuth porque é um hub intermediário.\n- **Decisão no Exam App (Seções 1 e 7 do Board):** **NÃO criar conectores OAuth com terceiros (Anki/Notion/Obsidian).** Basta **exportar e restaurar o próprio Espaço** em formatos abertos (**JSON / CSV / Markdown** — previsto na `1.0.0`, linha 525), que o próprio usuário já consegue importar no Anki ou Obsidian se desejar.\n\n**13. ExamTopics — Atender certificações desde o lançamento vs. Foco inicial em concurso brasileiro (Dataprev 2026):**\n- **Decisão no Exam App (Seção 6 item 4 e Seção 7 Roadmap):**\n  - **No modelo de dados:** Já é compatível desde o dia 1 porque `Edição` possui o rótulo `tipo: concurso | certificação` (ex.: `Dataprev 2026` vs `AZ-104`) e `Questão` suporta múltipla escolha (`Seção 2, linhas 249 e 304`).\n  - **No lançamento e conteúdo (`0.2.0` a `0.5.0`):** O **foco inicial prático é 100% Concurso Brasileiro / Dataprev 2026** (70 questões reais da FGV, edital, cargos e provas). O pacote específico de **Certificações TI (estilo ExamTopics)** fica agendado para a **`1.0.0`** (Seção 7, linha 521).\n\n**14. Criação do Índice Mestre de Rastreabilidade de Evidências no Board (`App | Captura | URL | Data | Ação Observada | Decisão | Status`):**\n- **SIM — Implementado imediatamente abaixo (`Tabela e1154`)** neste próprio container do `board.json` e compilado em `BOARD.md`, eliminando 100% da falta de rastreabilidade entre os prints capturados e as decisões de produto."
+    },
+    "e1154": {
+      "type": "table",
+      "x": 12030,
+      "y": 14740,
+      "cols": {
+        "c1": {
+          "at": "a0",
+          "w": 140
+        },
+        "c2": {
+          "at": "a1",
+          "w": 260
+        },
+        "c3": {
+          "at": "a2",
+          "w": 240
+        },
+        "c4": {
+          "at": "a3",
+          "w": 95
+        },
+        "c5": {
+          "at": "a4",
+          "w": 330
+        },
+        "c6": {
+          "at": "a5",
+          "w": 330
+        },
+        "c7": {
+          "at": "a6",
+          "w": 125
+        }
+      },
+      "rows": {
+        "r1": {
+          "at": "a00",
+          "c1": "App / Origem",
+          "c2": "Captura (`assets/`)",
+          "c3": "URL / Rota",
+          "c4": "Data",
+          "c5": "Ação Observada na Interface",
+          "c6": "Decisão que Informa no Exam App",
+          "c7": "Status"
+        },
+        "r2": {
+          "at": "a01",
+          "c1": "QConcursos Elite",
+          "c2": "qconcursos_live_home_proxima_acao.png",
+          "c3": "elite.qconcursos.com (Home)",
+          "c4": "2026-11-13",
+          "c5": "Hero do concurso alvo + CTA \"PRÓXIMA AÇÃO: Continuar estudando\" e ritmo diário",
+          "c6": "Home (#/espaco) com retomada em 1 clique do último estudo/PDF e meta diária (Seção 24)",
+          "c7": "Adotar"
+        },
+        "r3": {
+          "at": "a02",
+          "c1": "QConcursos Elite",
+          "c2": "qconcursos_live_home_caderno_erros.png",
+          "c3": "elite.qconcursos.com (Caderno de Erros)",
+          "c4": "2026-11-13",
+          "c5": "Agrupamento automático de questões erradas por disciplina para repetição imediata",
+          "c6": "Atalho \"Revisar erradas\" na Home e no Banco aplicando filtro real (situação = errei)",
+          "c7": "Adotar"
+        },
+        "r4": {
+          "at": "a03",
+          "c1": "QConcursos Elite",
+          "c2": "qconcursos_filter_disciplina_open.png",
+          "c3": "elite.qconcursos.com/questoes",
+          "c4": "2026-11-14",
+          "c5": "Dropdown multiselect pesquisável com contagem por Disciplina e cascata para Assunto",
+          "c6": "Filtro unificado com busca, chips removíveis, E entre categorias e OU na mesma categoria",
+          "c7": "Adotar"
+        },
+        "r5": {
+          "at": "a04",
+          "c1": "QConcursos Elite",
+          "c2": "qconcursos_live_filter_actions_bar.png",
+          "c3": "elite.qconcursos.com/questoes",
+          "c4": "2026-11-14",
+          "c5": "Barra de ações do filtro: Salvar filtro, Gerar Caderno, Meus Cadernos, Meus filtros, Criar Simulado",
+          "c6": "Caderno = Coleção fixa plana (sem pastas); Filtro salvo = Visão/Query; Simulado nasce do filtro/coleção",
+          "c7": "Adaptar"
+        },
+        "r6": {
+          "at": "a05",
+          "c1": "QConcursos Elite",
+          "c2": "qconcursos_texto_associado_expanded.png",
+          "c3": "elite.qconcursos.com/questoes (Q1)",
+          "c4": "2026-11-14",
+          "c5": "Expansão inline do \"Texto associado (+)\" acima do enunciado sem sair da questão",
+          "c6": "Incluir toggle Texto Associado no MVP da resolução de questões (P0)",
+          "c7": "Adotar"
+        },
+        "r7": {
+          "at": "a06",
+          "c1": "QConcursos Elite",
+          "c2": "qconcursos_alternative_scissors_struck.png",
+          "c3": "elite.qconcursos.com/questoes (Q1)",
+          "c4": "2026-11-14",
+          "c5": "Clique na Tesoura risca alternativa descartada (line-through + opacity 0.5)",
+          "c6": "Manter eliminação de alternativa por clique/atalho no MVP da resolução (P0)",
+          "c7": "Adotar"
+        },
+        "r8": {
+          "at": "a07",
+          "c1": "QConcursos Elite",
+          "c2": "qconcursos_live_question_tab_estatisticas.png",
+          "c3": "elite.qconcursos.com/questoes (Aba Estatísticas)",
+          "c4": "2026-11-13",
+          "c5": "Gráfico Donut de % de acerto e barras A-E após clicar em Responder",
+          "c6": "Exibir estatísticas e histórico do próprio usuário na questão; descartar ranking comunitário",
+          "c7": "Adaptar"
+        },
+        "r9": {
+          "at": "a08",
+          "c1": "QConcursos Elite",
+          "c2": "qconcursos_question_cadernos_tab.png",
+          "c3": "elite.qconcursos.com/questoes (Aba Cadernos)",
+          "c4": "2026-11-14",
+          "c5": "Adicionar questão individual a um Caderno existente ou \"+ Criar novo caderno\"",
+          "c6": "Permitir salvar questão em Coleção (Caderno) direto da tela de resolução (0.3.0)",
+          "c7": "Adotar"
+        },
+        "r10": {
+          "at": "a09",
+          "c1": "QConcursos Elite",
+          "c2": "qconcursos_question_anotacoes_editor.png",
+          "c3": "elite.qconcursos.com/questoes (Aba Anotações)",
+          "c4": "2026-11-14",
+          "c5": "Editor de anotações pessoais vinculado exclusivamente à questão",
+          "c6": "Guardar anotações pessoais no campo Conteúdo da Questão (0.3.0)",
+          "c7": "Adotar"
+        },
+        "r11": {
+          "at": "a10",
+          "c1": "QConcursos Elite",
+          "c2": "qconcursos_dock_fonte_aa_active.png",
+          "c3": "elite.qconcursos.com/questoes (Study Dock)",
+          "c4": "2026-11-14",
+          "c5": "Dock flutuante direito com Fonte Aa, Cronômetro, Desempenho, Modo Foco e Marca-texto",
+          "c6": "Adotar Cronômetro, Modo Foco (colapso dos painéis) e controle tipográfico; postergar marca-texto multicor",
+          "c7": "Adaptar"
+        },
+        "r12": {
+          "at": "a11",
+          "c1": "QConcursos / ExamTopics",
+          "c2": "inline-e117.jpg",
+          "c3": "examtopics.com / elite.qconcursos.com",
+          "c4": "2026-11-12",
+          "c5": "Abas de Comentários da comunidade, votação de gabarito e videoaulas (Aulas 3)",
+          "c6": "Manter comentários comunitários, votos e videoaulas explicitamente fora do escopo",
+          "c7": "Descartar"
+        },
+        "r13": {
+          "at": "a12",
+          "c1": "Capacities Live",
+          "c2": "capacities_live_main_and_local_graph.png",
+          "c3": "app.capacities.io (3-Pane Workspace)",
+          "c4": "2026-11-13",
+          "c5": "Shell de 3 painéis com ilhas flutuantes, Top Rail 46px e Painel Direito contextual",
+          "c6": "Usar tipos pré-definidos como infraestrutura nativa (sem exigir modelagem prévia pelo aluno)",
+          "c7": "Adaptar"
+        },
+        "r14": {
+          "at": "a13",
+          "c1": "Capacities Live",
+          "c2": "capacities_live_local_graph_expanded.png",
+          "c3": "app.capacities.io (Grafo Local)",
+          "c4": "2026-11-13",
+          "c5": "Grafo local no painel direito focado no objeto ativo com filtro de tipo e profundidade",
+          "c6": "Priorizar Grafo Local para navegar relações da Disciplina/Edição; Grafo Global como secundário",
+          "c7": "Adotar"
+        },
+        "r15": {
+          "at": "a14",
+          "c1": "Readwise Reader",
+          "c2": "readwise_reader_home_dashboard.png",
+          "c3": "read.readwise.io/home",
+          "c4": "2026-11-14",
+          "c5": "Dashboard com carrosséis Continue Reading, Recently Added e Quick Reads",
+          "c6": "Usar padrão de retomada imediata de leitura com barra de progresso % em Documentos de Leitura",
+          "c7": "Adotar"
+        },
+        "r16": {
+          "at": "a15",
+          "c1": "Readwise Reader",
+          "c2": "readwise_reader_manage_views_table.png",
+          "c3": "read.readwise.io/views",
+          "c4": "2026-11-14",
+          "c5": "Tabela de 14 Filtered Views baseadas em queries booleanas e fixáveis na sidebar",
+          "c6": "Modelar Filtros Salvos como queries reutilizáveis sobre o banco de questões",
+          "c7": "Adaptar"
+        },
+        "r17": {
+          "at": "a16",
+          "c1": "Readwise Reader",
+          "c2": "readwise_reader_doc2_loaded.png",
+          "c3": "read.readwise.io/new/read/...",
+          "c4": "2026-11-14",
+          "c5": "Leitura em 3 painéis com foco por parágrafo (j/k), Notebook lateral e menu Aa",
+          "c6": "Manter leitor de PDF focado em consulta (0.1.1/0.2.0) e adicionar Notas/Progresso na 0.5.0",
+          "c7": "Adaptar"
+        },
+        "r18": {
+          "at": "a17",
+          "c1": "Readwise Reader",
+          "c2": "readwise_reader_ghostreader_skills.png",
+          "c3": "read.readwise.io (Ghostreader)",
+          "c4": "2026-11-14",
+          "c5": "15 skills de IA com templates Jinja2 (Quiz Me, Summarize, Explain)",
+          "c6": "Restringir IA no Exam App a 3 ações: Explicar questão, Criar cartões e Sugerir revisão (Seção 11)",
+          "c7": "Adaptar"
+        },
+        "r19": {
+          "at": "a18",
+          "c1": "Readwise SRS",
+          "c2": "readwise_srs_daily_review_deck.png",
+          "c3": "readwise.io/dailyreview",
+          "c4": "2026-11-13",
+          "c5": "Fila diária de revisão com barra de progresso e 4 níveis (Never, Soon, Later, Someday)",
+          "c6": "Revisão Diária (0.4.0) combina Questões Erradas/Marcadas + Cartões gerados com 4 botões de avaliação",
+          "c7": "Adotar"
+        },
+        "r20": {
+          "at": "a19",
+          "c1": "Readwise SRS",
+          "c2": "readwise_srs_mastery_cloze_creator.png",
+          "c3": "readwise.io/dailyreview (Mastery)",
+          "c4": "2026-11-13",
+          "c5": "Conversão de destaque em cartão Cloze Deletion (lacuna) ou Q&A (Pergunta/Resposta)",
+          "c6": "Suportar formato Pergunta/Resposta e Lacuna no tipo Cartão de Revisão (Seção 2)",
+          "c7": "Adotar"
+        },
+        "r21": {
+          "at": "a20",
+          "c1": "Readwise SRS",
+          "c2": "readwise_srs_frequency_tuning_by_source.png",
+          "c3": "readwise.io/configure/tune/books",
+          "c4": "2026-11-13",
+          "c5": "Sliders individuais de frequência de ressurgimento por livro/fonte",
+          "c6": "Deixar ajuste fino de frequência por disciplina para fase 2 do SRS (começar com fila diária simples)",
+          "c7": "Adaptar"
+        },
+        "r22": {
+          "at": "a21",
+          "c1": "Readwise SRS",
+          "c2": "readwise_srs_statistics_heatmap.png",
+          "c3": "readwise.io/stats",
+          "c4": "2026-11-13",
+          "c5": "Heatmap anual de revisões diárias e contador de Streak (ofensiva)",
+          "c6": "Incluir Streak e estatísticas de consistência na Home e página de Desempenho",
+          "c7": "Adotar"
+        },
+        "r23": {
+          "at": "a22",
+          "c1": "Readwise SRS",
+          "c2": "readwise_srs_export_highlights_top.png",
+          "c3": "readwise.io/export & /welcome/sync",
+          "c4": "2026-11-14",
+          "c5": "32 conectores de importação e 16 integrações de exportação OAuth (Obsidian, Notion, etc.)",
+          "c6": "Descartar integrações OAuth com terceiros; fornecer exportação/backup próprio em CSV/Markdown/JSON",
+          "c7": "Descartar"
+        }
+      }
     }
   }
 }
