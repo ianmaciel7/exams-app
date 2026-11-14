@@ -707,7 +707,17 @@
     "e1367",
     "e1368",
     "e1369",
-    "e1370"
+    "e1370",
+    "e1371",
+    "e1372",
+    "e1373",
+    "e1374",
+    "e1375",
+    "e1376",
+    "e1377",
+    "e1378",
+    "e1379",
+    "e1380"
   ],
   "elements": {
     "e1": {
@@ -7436,6 +7446,92 @@
       "size": "small",
       "text": "PNG real gerado no canvas desktop, pixel ratio 2",
       "x": 34828,
+      "y": 12073,
+      "w": 760,
+      "h": 50
+    },
+    "e1371": {
+      "type": "container",
+      "color": "white",
+      "text": "43. Questões contextuais — Issue #136: alternativas alinhadas e CSS compartilhado",
+      "x": 36000,
+      "y": 11000,
+      "w": 1650,
+      "h": 1170
+    },
+    "e1372": {
+      "type": "text",
+      "size": "small",
+      "x": 36018,
+      "y": 11008,
+      "w": 1590,
+      "h": 82,
+      "text": "Diagnóstico comprovado pelo DOM: .qf-list renderizava s-question sem .study-shell, então label.s-option perdia display:flex e hitboxes. CSS compartilhado via :is(.study-shell,.practice-list), sem duplicar implementação do componente. E2E Chromium verifica baseline antes, card contextual desktop/mobile e banco global, separação Questão / Disciplina, seleção por label. Capturas reais desta PR; a screenshot original do usuário permanece fora do repositório. Não demonstra validação em todos os browsers, zoom 200% ou com painel Gráfico aberto."
+    },
+    "e1373": {
+      "type": "image",
+      "src": "/_blob/issue136_before_context_1366",
+      "x": 36018,
+      "y": 11100,
+      "w": 755,
+      "h": 430
+    },
+    "e1374": {
+      "type": "text",
+      "size": "small",
+      "text": "ANTES: alternativas inline no concurso, sem estilização da lista de questões",
+      "x": 36018,
+      "y": 11538,
+      "w": 760,
+      "h": 50
+    },
+    "e1375": {
+      "type": "image",
+      "src": "/_blob/issue136_after_context_1366",
+      "x": 36828,
+      "y": 11100,
+      "w": 755,
+      "h": 430
+    },
+    "e1376": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: alternativas em linhas/click targets, concurso no desktop",
+      "x": 36828,
+      "y": 11538,
+      "w": 760,
+      "h": 50
+    },
+    "e1377": {
+      "type": "image",
+      "src": "/_blob/issue136_after_context_390",
+      "x": 36018,
+      "y": 11635,
+      "w": 755,
+      "h": 430
+    },
+    "e1378": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: alternativas em linhas e texto quebrando, concurso em 390px",
+      "x": 36018,
+      "y": 12073,
+      "w": 760,
+      "h": 50
+    },
+    "e1379": {
+      "type": "image",
+      "src": "/_blob/issue136_after_global_1366",
+      "x": 36828,
+      "y": 11635,
+      "w": 755,
+      "h": 430
+    },
+    "e1380": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: banco global preserva o mesmo componente de questões",
+      "x": 36828,
       "y": 12073,
       "w": 760,
       "h": 50
