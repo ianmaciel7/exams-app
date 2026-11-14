@@ -305,12 +305,17 @@ svg{flex:none}
 
 /* ---------- sidebar ---------- */
 .side{width:288px;flex:none;background:var(--side);border-right:1px solid var(--line);display:flex;flex-direction:column;transition:width .18s ease;position:relative;z-index:20}
-.side-top{display:flex;align-items:center;gap:4px;padding:8px;padding-left:max(8px,env(safe-area-inset-left));position:relative}
+.side-top{height:46px;min-height:46px;box-sizing:border-box;display:flex;align-items:center;gap:4px;padding:0 8px;padding-left:max(8px,env(safe-area-inset-left));position:relative}
 .icon-btn{width:34px;height:34px;display:grid;place-items:center;border-radius:8px;color:var(--muted)}
 .icon-btn:hover{background:var(--hover);color:var(--text)}
-.space-btn{flex:1;min-width:0;display:flex;align-items:center;gap:8px;height:36px;padding:0 8px;border-radius:8px;text-align:left}
-.space-btn:hover,.space-btn[aria-expanded="true"]{background:var(--hover)}
-.space-btn b{flex:1;min-width:0;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.side-top #collapse,.side-top .side-toggle{width:27px;height:27px;min-width:27px;min-height:27px;display:inline-flex;align-items:center;justify-content:center;border-radius:6px;color:var(--muted);cursor:pointer;border:none;background:transparent;padding:0;flex:none;transition:background-color .15s ease,color .15s ease}
+.side-top #collapse:hover,.side-top .side-toggle:hover{background:var(--hover);color:var(--text)}
+.side-top #collapse svg,.side-top .side-toggle svg{width:16px;height:16px}
+.space-btn,.sp-btn{flex:1;min-width:0;display:inline-flex;align-items:center;gap:8px;height:31px;padding:0 8px;border-radius:7px;text-align:left;font-size:13px;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--text);transition:background-color .15s ease}
+.space-btn:hover,.space-btn[aria-expanded="true"],.sp-btn:hover,.sp-btn[aria-expanded="true"]{background:var(--hover)}
+.space-btn b,.sp-btn b{flex:1;min-width:0;font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2}
+.space-btn .av,.sp-btn .av{width:20px;height:20px;border-radius:5px;font-size:11px;font-weight:700;flex:none;display:grid;place-items:center;color:#fff}
+.space-btn .chev,.sp-btn .chev{width:12px;height:12px;color:var(--muted);opacity:.75;flex:none}
 .av{width:22px;height:22px;border-radius:6px;display:grid;place-items:center;font-weight:600;font-size:11.5px;color:#fff;background:#3F6B5A}
 .av.user{width:28px;height:28px;border-radius:50%;font-size:12.5px;background:#8A6A3E}
 
@@ -1134,7 +1139,10 @@ a.rp-link:hover{background:var(--active)}
   .app.collapsed .side-top #collapse svg{width:16px;height:16px}
   .side-top .space-btn{flex:1}
 }
-@media (min-width:1101px){.app:not(.collapsed) #spTopBtn,.app:not(.collapsed) #wsSide{display:none}}
+@media (min-width:1101px){
+  .app:not(.collapsed) #wsSide{display:none}
+  .app.collapsed #wsSide{display:inline-flex}
+}
 @media(max-width:700px){.ws-tabs .ws-tablist{max-width:none}}
 
 /* ===== abas v2 (barra superior e painel) ===== */
@@ -1146,11 +1154,6 @@ a.rp-link:hover{background:var(--active)}
 .main:not(.reading-mode) .readprog{display:none}
 .main.on-board .view{background:var(--app-tab-bg-back);padding:16px}
 .main.on-board .view>.board{box-sizing:border-box;min-height:100%;padding:24px;background:var(--app-tab-bg-base);border:1px solid var(--app-tab-border-front);border-radius:12px;color:var(--app-tab-text-primary)}
-.ws-sp-btn{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 8px;border-radius:8px;border:none;background:transparent;color:var(--text);font-size:13px;font-weight:600;cursor:pointer;flex:none;transition:background-color .15s ease}
-.ws-sp-btn:hover{background:var(--app-tab-bg-back-hover)}
-.ws-sp-btn .sp-ic{display:grid;place-items:center;width:20px;height:20px;border-radius:6px;color:#fff;font-size:11px;line-height:1;font-weight:700}
-.ws-sp-btn .sp-lbl{white-space:nowrap;max-width:140px;overflow:hidden;text-overflow:ellipsis}
-.ws-sp-btn .sp-chev{width:11px;height:11px;color:var(--muted);opacity:.75}
 #wsTabs .hist.ws-nav{display:flex;align-items:center;gap:2px;flex:none;margin:0 2px}
 #wsTabs .hist.ws-nav .icon-btn{width:28px;height:28px}
 #wsTabs #rpToggle{margin-left:auto}
@@ -1265,7 +1268,6 @@ a.rp-link:hover{background:var(--active)}
 
   <main class="main">
     <div class="ws-tabs" id="wsTabs">
-      <button class="ws-sp-btn" id="spTopBtn" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Alternar espaço"><span class="sp-ic" id="spTopAv">C</span><b class="sp-lbl" id="spTopName">Concurso de TI</b><svg class="sp-chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg></button>
       <button class="icon-btn" id="wsSide" aria-label="Alternar barra lateral" title="Barra lateral (Ctrl+\)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/></svg></button>
       <div class="hist ws-nav"><button class="icon-btn" id="histBack" aria-label="Voltar (Alt+←)" title="Voltar (Alt+←)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button><button class="icon-btn" id="histFwd" aria-label="Avançar (Alt+→)" title="Avançar (Alt+→)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></div>
       <div class="ws-tablist" id="wsTabList" role="tablist" aria-label="Abas principais"></div>
@@ -1563,29 +1565,21 @@ function paintSpaces(){
   const sp=spaces.find(x=>x.id===space);
   $('spAv').textContent=sp.name[0].toUpperCase(); $('spAv').style.background=spColor(sp);
   $('spName').textContent=sp.name;
-  if($('spTopName')) $('spTopName').textContent=sp.name;
-  if($('spTopAv')) { $('spTopAv').textContent=sp.name[0].toUpperCase(); $('spTopAv').style.background=spColor(sp); }
   $('spPop').innerHTML=spaces.map(x=>
     '<div class="row" role="menuitem" tabindex="0" data-sp="'+x.id+'"><span class="av" style="background:'+spColor(x)+'">'+esc(x.name[0].toUpperCase())+'</span><span class="t">'+esc(x.name)+'</span>'+(x.id===space?CHECK:'')+'<button class="more" data-spmore="'+x.id+'" aria-label="Ações do espaço" title="Mais ações">'+I.more+'</button></div>').join('')+
     '<hr><button class="row" role="menuitem" data-sp="+"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span class="t">Criar espaço</span></button>';
 }
 
 /* ---- popovers ---- */
-function closePops(){ ['spPop','usPop'].forEach(i=>$(i).classList.remove('open')); ['spBtn','usBtn','spTopBtn'].forEach(i=>{ const el=$(i); if(el) el.setAttribute('aria-expanded','false'); }); }
+function closePops(){ ['spPop','usPop'].forEach(i=>$(i).classList.remove('open')); ['spBtn','usBtn'].forEach(i=>{ const el=$(i); if(el) el.setAttribute('aria-expanded','false'); }); }
 function togglePop(btn,pop){
   const el=$(pop), b=$(btn); const o=!el.classList.contains('open'); closePops();
   if(o){
     el.classList.add('open'); if(b) b.setAttribute('aria-expanded','true');
-    if(btn==='spTopBtn'){
-      const r=b.getBoundingClientRect();
-      el.style.position='fixed'; el.style.left=Math.max(8,r.left)+'px'; el.style.top=(r.bottom+6)+'px'; el.style.zIndex='999';
-    } else {
-      el.style.position=''; el.style.left=''; el.style.top=''; el.style.zIndex='';
-    }
+    el.style.position=''; el.style.left=''; el.style.top=''; el.style.zIndex='';
     const f=el.querySelector('button, [tabindex="0"]'); f&&f.focus({preventScroll:true});
   }
 }
-if($('spTopBtn')) $('spTopBtn').onclick=e=>{ e.stopPropagation(); togglePop('spTopBtn','spPop'); };
 $('spBtn').onclick=e=>{ e.stopPropagation(); togglePop('spBtn','spPop'); };
 $('usBtn').onclick=e=>{ e.stopPropagation(); togglePop('usBtn','usPop'); };
 document.addEventListener('click',e=>{ if(!e.target.closest('.pop')) closePops(); });
