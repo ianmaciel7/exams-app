@@ -166,6 +166,26 @@
 #spPop .sp-create{min-height:40px}
 @media (max-width:768px){#spPop .sp-select{min-height:44px}#spPop .sp-grip,#spPop .sp-more{height:44px;min-width:38px}}
 </style>
+<style>
+/* Custom type studio: accessible search, selectable cards and bounded preview (#140). */
+.type-studio{display:grid;gap:10px;min-width:0;max-height:min(72vh,590px);overflow:auto}
+#studioSearch{box-sizing:border-box;min-height:40px;width:100%}
+.type-studio-list{display:grid;gap:4px;max-height:min(28vh,250px);overflow:auto;min-width:0}
+.type-studio-item{display:flex;align-items:center;gap:10px;min-height:48px;width:100%;padding:8px 11px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--text);text-align:left;cursor:pointer}
+.type-studio-item[aria-selected="true"]{border-color:var(--study-accent);background:var(--study-tint)}
+.type-studio-item:hover{background:var(--hover)}
+.type-studio-item:focus-visible,#studioSearch:focus-visible{outline:2px solid var(--study-accent);outline-offset:2px}
+.type-studio-item[hidden]{display:none}
+.type-studio-preview{min-height:65px;padding:12px;border-radius:9px;border:1px solid var(--line);background:var(--bg-base);font-size:13px;line-height:1.55;overflow-wrap:anywhere}
+.type-studio-preview p{margin:6px 0;color:var(--muted)}
+.type-studio-preview small{color:var(--muted)}
+.custom-object-body{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px;line-height:1.65}
+.custom-tone-blue{--obj-tone:#5489c2;color:#5489c2!important}
+.custom-tone-green{--obj-tone:#379d7a;color:#379d7a!important}
+.custom-tone-amber{--obj-tone:#b3863e;color:#b3863e!important}
+.custom-tone-violet{--obj-tone:#8d74bb;color:#8d74bb!important}
+@media(max-width:480px){.type-studio-list{max-height:30vh}.type-studio-preview{padding:10px}}
+</style>
 </head><body>
 <style>
 /* ===== Exam App 0.1.1 — páginas de estudo e detalhes, 2026 ===== */
@@ -2331,7 +2351,7 @@ const allEd=()=>{ const o=OV(); return BASE_ED.concat(userEd()).map(e=>{ const o
 const edicaoById=id=>allEd().find(e=>e.id===id);
 const edicoesOf=sp=>allEd().filter(e=>(concursoById(e.conc)||{}).sp===sp&&!isT(e.id)).sort((a,b)=>b.ano-a.ano);
 const cargosOf=ed=>CARGOS.filter(c=>c.edicao===ed&&!isT(c.id));
-const objsOf=sp=>docsOf(sp).concat(CONCURSOS.filter(c=>c.sp===sp&&!isT(c.id)),edicoesOf(sp),edicoesOf(sp).flatMap(e=>cargosOf(e.id)));
+const objsOf=sp=>docsOf(sp).concat(CONCURSOS.filter(c=>c.sp===sp&&!isT(c.id)),edicoesOf(sp),edicoesOf(sp).flatMap(e=>cargosOf(e.id)),customObjects.filter(o=>o.sp===sp&&!isT(o.id)&&TYPES[o.type]?.custom));
 const PKIND={disciplina:['rel','Disciplina'],banca:['rel','Banca'],orgao:['rel','Órgão'],cargo:['rel','Cargo'],ano:['num'],concurso:['rel','Concurso'],edicao:['rel','Edição'],formato:['txt'],classe:['sel'],cat:['sel'],paginas:['num']};
 const PROPS={
   disciplina:{n:'Disciplina',get:o=>o.materia},
@@ -2408,7 +2428,7 @@ const UIICON={
 };
 const ICN={help:'Pergunta',timer:'Cronômetro',answer:'Resposta',book:'Livro',star:'Estrela',bookmark:'Marcador',flag:'Bandeira',target:'Alvo',bolt:'Raio',heart:'Coração',code:'Código',cap:'Formatura',building:'Prédio',globe:'Globo',folder:'Pasta',bulb:'Ideia',chart:'Gráfico',tag:'Etiqueta',pin:'Fixo'};
 const iconSvg=(id,def)=>{ const m=store.get('icons')||{}; return (m[id]&&IC[m[id]])||def; };
-const TYI=()=>({concurso:SI.collection,edicao:SI.calendar,cargo:SI.briefcase,arquivo:SI.file,documento:SI.text,pdf:SI.pdf,orgao:IC.building,banca:IC.flag,questao:IC.help,disciplina:IC.cap,simulado:IC.timer,resposta:IC.answer});
+const TYI=()=>Object.assign({concurso:SI.collection,edicao:SI.calendar,cargo:SI.briefcase,arquivo:SI.file,documento:SI.text,pdf:SI.pdf,orgao:IC.building,banca:IC.flag,questao:IC.help,disciplina:IC.cap,simulado:IC.timer,resposta:IC.answer},Object.fromEntries(Object.keys(TYPES).filter(t=>TYPES[t].custom).map(t=>[t,customTypeIcon(t)])));
 const sidebarIcon=d=>{const n=d.t.toLowerCase();return n.includes('cronograma')?SI.calendar:n.includes('gabarito')?SI.filecheck:SI.pdf;};
 const store={
   get(k){ try{ return JSON.parse(localStorage.getItem('leitor:'+k)); }catch(e){ return null; } },
@@ -2420,6 +2440,28 @@ const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
 const isPhone=()=>matchMedia('(max-width:768px)').matches;
 
 /* ---- spaces ---- */
+/* Restore custom types after local storage exists and before custom property hydration. */
+const CUSTOM_TONES=['blue','green','amber','violet'],CUSTOM_ICONS=['file','book','tag','star'];
+const storedCustomTypes=store.get('customObjectTypes');
+const validCustomType=d=>d&&typeof d.id==='string'&&/^custom-[a-z0-9-]{1,56}$/.test(d.id)&&
+  typeof d.n==='string'&&d.n.trim().length>=2&&d.n.length<=70&&
+  typeof d.plural==='string'&&d.plural.trim().length>=2&&d.plural.length<=70;
+for(const def of Array.isArray(storedCustomTypes)?storedCustomTypes:[]){
+  if(!validCustomType(def)||Object.prototype.hasOwnProperty.call(TYPES,def.id))continue;
+  TYPES[def.id]={n:def.n,en:def.n,parent:null,own:[],plural:def.plural,custom:true,
+    tone:CUSTOM_TONES.includes(def.tone)?def.tone:'blue',icon:CUSTOM_ICONS.includes(def.icon)?def.icon:'file'};
+}
+const storedCustomObjects=store.get('customObjects');
+const customObjects=Array.isArray(storedCustomObjects)?storedCustomObjects.filter(o=>
+  o&&typeof o.id==='string'&&/^custom-object-[a-z0-9-]+$/.test(o.id)&&TYPES[o.type]?.custom&&
+  typeof o.t==='string'&&typeof o.sp==='string'):[];
+const saveCustomTypes=()=>store.set('customObjectTypes',Object.entries(TYPES)
+  .filter(([id,def])=>def.custom).map(([id,def])=>({id,n:def.n,plural:def.plural,tone:def.tone,icon:def.icon})));
+const saveCustomObjects=()=>store.set('customObjects',customObjects);
+const customObjById=id=>customObjects.find(o=>o.id===id&&o.sp===space);
+const customTypeIcon=t=>({file:SI.file,book:IC.book,tag:IC.tag,star:IC.star})[TYPES[t]?.icon]||SI.file;
+const customToneClass=t=>TYPES[t]?.custom?' custom-tone-'+TYPES[t].tone:'';
+const customTypeNameValid=value=>!Object.values(TYPES).some(x=>normN(x.n)===normN(value));
 const BASE_SP={id:'dataprev',name:store.get('baseName')||'Concurso de TI'};
 (store.get('userConc')||[]).forEach(c=>{ if(!CONCURSOS.some(x=>x.id===c.id)) CONCURSOS.push(c); });
 (store.get('userCargos')||[]).forEach(c=>{ if(!CARGOS.some(x=>x.id===c.id)) CARGOS.push(c); });
@@ -2527,7 +2569,7 @@ function renderNewMenu(){
     const cnt=getObjectTypeCount(t);
     const icon=TI[t]||SI.file;
     const sel=idx===newMenuSel?' sel':'';
-    return '<button type="button" class="nm-item'+sel+'" role="option" id="nm-opt-'+idx+'" data-type="'+t+'" data-idx="'+idx+'" aria-selected="'+(idx===newMenuSel)+'"><span class="nm-badge tone-type-'+t+'" aria-hidden="true">'+icon+'</span><span class="nm-t">'+esc(TYPES[t].n)+'</span><span class="nm-cnt">'+cnt+'</span></button>';
+    return '<button type="button" class="nm-item'+sel+'" role="option" id="nm-opt-'+idx+'" data-type="'+t+'" data-idx="'+idx+'" aria-selected="'+(idx===newMenuSel)+'"><span class="nm-badge tone-type-'+t+customToneClass(t)+'" aria-hidden="true">'+icon+'</span><span class="nm-t">'+esc(TYPES[t].n)+'</span><span class="nm-cnt">'+cnt+'</span></button>';
   }).join('');
   markNewMenuSel();
 }
@@ -2915,17 +2957,153 @@ function showTrash(){
 const hiddenNodes=new Set(store.get('hiddenNodes')||[]);
 const hiddenTypes=new Set(store.get('hiddenTypes')||[]);
 const saveHidden=()=>store.set('hiddenTypes',[...hiddenTypes]);
+/* The type studio restores built-ins and creates user types without changing core built-ins. */
+const OBJECT_PRESETS=[
+  {id:'lei',n:'Resumo de Lei',plural:'Resumos de Leis',tone:'blue',icon:'book',description:'Organize resumos e comentários de leis por estudo.',properties:'Lei, artigo, fonte'},
+  {id:'edital',n:'Assunto do Edital',plural:'Assuntos do Edital',tone:'green',icon:'tag',description:'Organize conteúdos e tópicos cobrados no edital.',properties:'Disciplina, peso, prioridade'},
+  {id:'nota',n:'Nota de Estudo',plural:'Notas de Estudo',tone:'violet',icon:'file',description:'Crie notas livres relacionadas ao seu plano.',properties:'Fonte, data'},
+  {id:'flashcard',n:'Flashcard',plural:'Flashcards',tone:'amber',icon:'star',description:'Anote perguntas e respostas para revisão futura.',properties:'Pergunta, resposta'}
+];
+function customTypeForm(preset){
+  const base=preset||{n:'',plural:'',tone:'blue',icon:'file'};
+  return formDialog({
+    title:preset?'Criar tipo a partir de modelo':'Criar tipo personalizado',
+    text:'O tipo pertence ao espaço de trabalho. Propriedades e regras avançadas serão configuradas separadamente.',
+    ok:'Criar tipo',
+    fields:[
+      {id:'nome',label:'Nome singular',value:base.n,placeholder:'Ex.: Nota de Estudo'},
+      {id:'plural',label:'Nome plural',value:base.plural,placeholder:'Ex.: Notas de Estudo'},
+      {id:'icone',label:'Ícone',type:'select',value:base.icon,options:[['file','Documento'],['book','Livro'],['tag','Etiqueta'],['star','Estrela']]},
+      {id:'tom',label:'Cor do tipo',type:'select',value:base.tone,options:[['blue','Azul'],['green','Verde'],['amber','Âmbar'],['violet','Violeta']]}
+    ],
+    validate:v=>({
+      nome:v.nome.trim().length<2||v.nome.length>70?'Informe de 2 a 70 caracteres.':!customTypeNameValid(v.nome)?'Já existe um tipo com este nome.':'',
+      plural:v.plural.trim().length<2||v.plural.length>70?'Informe de 2 a 70 caracteres.':''
+    })
+  }).then(v=>{
+    if(!v)return;
+    let id='custom-'+slug(v.nome),counter=2;
+    while(TYPES[id])id='custom-'+slug(v.nome)+'-'+counter++;
+    TYPES[id]={n:v.nome,plural:v.plural,en:v.nome,custom:true,parent:null,own:[],icon:v.icone,tone:v.tom};
+    saveCustomTypes();
+    hiddenTypes.delete(id);saveHidden();
+    openTypes.add(space+':__types');store.set('openTypes',[...openTypes]);
+    paintNav();location.hash='#/tipo/'+id;
+    toast('Tipo “'+v.nome+'” criado');
+  });
+}
+function createCustomObject(kind,existing){
+  const type=TYPES[kind];if(!type?.custom)return;
+  return formDialog({
+    title:(existing?'Editar ':'Novo ')+type.n,
+    ok:existing?'Salvar alterações':'Criar '+type.n,
+    fields:[
+      {id:'nome',label:'Título',value:existing?.t||'',placeholder:'Dê um título a este objeto'},
+      {id:'conteudo',label:'Conteúdo (texto simples)',value:existing?.body||'',placeholder:'Resumo do estudo'}
+    ],
+    validate:v=>({nome:v.nome.trim().length<2||v.nome.length>120?'Informe título de 2 a 120 caracteres.':''})
+  }).then(v=>{
+    if(!v)return;
+    let obj=existing;
+    if(obj){obj.t=v.nome;obj.body=v.conteudo;}
+    else {
+      const id='custom-object-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,9);
+      obj={id,sp:space,type:kind,t:v.nome,body:v.conteudo};
+      customObjects.push(obj);
+    }
+    saveCustomObjects();paintNav();
+    const url='#/custom-object/'+obj.id;
+    if(location.hash===url)route(true);else location.hash=url;
+    toast('Objeto salvo');
+  });
+}
+function customObjectPage(obj){
+  const T=TYPES[obj.type];
+  return opPage({
+    iid:'custom-object:'+obj.id,crumb:[['Espaço','#/espaco'],[T.plural,'#/tipo/'+obj.type],[obj.t,'']],
+    icon:obj.type,kind:T.n,kindHref:'#/tipo/'+obj.type,title:obj.t,
+    actions:'<button type="button" class="op-btn pri" data-custom-edit="'+esc(obj.id)+'">Editar objeto</button>',
+    body:opSec('Conteúdo','<p class="custom-object-body">'+esc(obj.body||'Adicione uma descrição ao objeto.')+'</p>')+
+      '<p class="op-note">Tipo personalizado · armazenamento local do protótipo</p>'
+  });
+}
 function pickObjectType(){
   const TI=TYI();
-  const miss=Object.keys(TYPES).filter(k=>hiddenTypes.has(k));
-  if(!miss.length){ dialog({title:'Todos os tipos já estão no app',text:'Não há tipo de objeto para adicionar. Para remover um tipo do app, use o menu ⋯ ao lado dele.',noCancel:true,ok:'Entendi'}); return; }
-  const rows=miss.map(k=>'<button type="button" class="pick-row" data-pick="'+k+'" data-x="1"><span class="pick-ic tone-type-'+k+'" aria-hidden="true">'+TI[k]+'</span><span class="pick-tx"><b>'+esc(TYPES[k].n)+'</b><small>'+(TYPES[k].parent?'Tipo de '+esc(TYPES[TYPES[k].parent].n):'Tipo de objeto')+'</small></span></button>').join('');
-  let chosen='';
-  const pick=e=>{ const b=e.target.closest('[data-pick]'); if(b) chosen=b.dataset.pick; };
-  const p=dialog({title:'Adicionar tipo de objeto',text:'Estes tipos foram removidos do app. Escolha um para trazê-lo de volta.',html:'<div class="pick-list">'+rows+'</div>',ok:'OK',cancel:'Cancelar'});
-  $('dlg').addEventListener('click',pick,true);
-  p.then(ok=>{ $('dlg').removeEventListener('click',pick,true); if(!ok||!chosen) return; hiddenTypes.delete(chosen); saveHidden(); openTypes.add(space+':__types'); store.set('openTypes',[...openTypes]); paintNav(); toast(TYPES[chosen].n+' adicionado ao app'); });
+  const available=Object.keys(TYPES).map(id=>({
+    key:(hiddenTypes.has(id)?'restore:':'existing:')+id,
+    title:TYPES[id].n,
+    category:hiddenTypes.has(id)?'Reexibir tipo oculto':'Tipo instalado',
+    desc:hiddenTypes.has(id)?'Restaurar o tipo preservando seu identificador e objetos.':
+      'Abrir o painel do tipo que já existe.',
+    icon:TI[id]||SI.file
+  }));
+  const presets=OBJECT_PRESETS.map(p=>({
+    key:'preset:'+p.id,title:p.n,category:'Modelo de tipo',
+    desc:p.description+' Campos sugeridos: '+p.properties+'.',
+    icon:({file:SI.file,book:IC.book,tag:IC.tag,star:IC.star})[p.icon]||SI.file
+  }));
+  const list=[{key:'custom:new',title:'Criar tipo personalizado',category:'Novo tipo',
+    desc:'Defina nome singular, plural, ícone e cor sem alterar os tipos existentes.',icon:SI.file},...presets,...available];
+  const rows=list.map((item,i)=>
+    '<button type="button" class="type-studio-item" data-studio="'+esc(item.key)+'" role="option" aria-selected="'+(i===0)+'">'+
+    '<span class="pick-ic" aria-hidden="true">'+item.icon+'</span>'+
+    '<span class="pick-tx"><b>'+esc(item.title)+'</b><small>'+esc(item.category)+'</small></span></button>'
+  ).join('');
+  let selected=list[0];
+  const view='<div class="type-studio">'+
+    '<label for="studioSearch" class="fd-l">Buscar tipos e modelos</label>'+
+    '<input id="studioSearch" type="search" class="fd-i" autocomplete="off" placeholder="Buscar tipo, modelo ou ação…">'+
+    '<div class="type-studio-list" role="listbox" aria-label="Tipos e modelos disponíveis">'+rows+'</div>'+
+    '<div id="studioEmpty" class="op-empty" role="status" hidden>Nenhum tipo encontrado.</div>'+
+    '<div class="type-studio-preview" id="studioPreview" aria-live="polite"></div></div>';
+  const render=()=>{
+    const preview=$('studioPreview');if(preview){
+      preview.innerHTML='<strong>'+esc(selected.title)+'</strong><p>'+esc(selected.desc)+'</p>'+
+        '<small>'+esc(selected.category)+'</small>';
+    }
+    $('dlg').querySelectorAll('[data-studio]').forEach(btn=>
+      btn.setAttribute('aria-selected',String(btn.dataset.studio===selected.key)));
+  };
+  const filter=()=>{
+    const needle=spNormalized($('studioSearch')?.value||'');
+    let found=0;
+    $('dlg').querySelectorAll('[data-studio]').forEach((btn,i)=>{
+      const item=list[i],visible=spNormalized(item.title+' '+item.category+' '+item.desc).includes(needle);
+      btn.hidden=!visible;if(visible)found++;
+    });
+    $('studioEmpty').hidden=found>0;
+    const current=$('dlg').querySelector('[data-studio][aria-selected="true"]:not([hidden])');
+    if(!current&&found){selected=list.find(item=>$('dlg').querySelector('[data-studio="'+item.key+'"]:not([hidden])'));render();}
+  };
+  const onClick=e=>{const btn=e.target.closest('[data-studio]');if(!btn)return;
+    selected=list.find(item=>item.key===btn.dataset.studio)||selected;render();};
+  const onInput=e=>{if(e.target.id==='studioSearch')filter();};
+  const onKey=e=>{if(e.target.id!=='studioSearch'||e.isComposing)return;
+    const visible=[...$('dlg').querySelectorAll('[data-studio]:not([hidden])')];
+    if(e.key==='ArrowDown'&&visible.length){e.preventDefault();visible[0].focus();}
+    if(e.key==='Enter'&&visible.length){e.preventDefault();selected=list.find(item=>item.key===visible[0].dataset.studio);render();$('dlg').querySelector('[data-x="1"]')?.click();}
+  };
+  const p=dialog({title:'Adicionar tipo de objeto',text:'Escolha criar um tipo, usar um modelo ou reexibir um tipo oculto.',html:view,ok:'Continuar',cancel:'Cancelar'});
+  const w=$('dlg');
+  w.addEventListener('click',onClick,true);
+  w.addEventListener('input',onInput,true);
+  w.addEventListener('keydown',onKey,true);
+  render();
+  setTimeout(()=>$('studioSearch')?.focus(),40);
+  p.then(ok=>{
+    w.removeEventListener('click',onClick,true);w.removeEventListener('input',onInput,true);w.removeEventListener('keydown',onKey,true);
+    if(!ok)return;
+    if(selected.key==='custom:new')return customTypeForm();
+    if(selected.key.startsWith('preset:'))return customTypeForm(OBJECT_PRESETS.find(p=>'preset:'+p.id===selected.key));
+    const id=selected.key.split(':')[1];
+    if(selected.key.startsWith('restore:')){
+      hiddenTypes.delete(id);saveHidden();
+      openTypes.add(space+':__types');store.set('openTypes',[...openTypes]);
+      paintNav();toast(TYPES[id].n+' restaurado');
+    }else location.hash='#/tipo/'+id;
+  });
 }
+
 function treeMenu(anchor){
   closePops(); closeCtx(); const key=anchor.dataset.treeMore, href=anchor.dataset.href; ctxFor={type:'tree',key,href};
   if(key.startsWith('tipo:')){
@@ -3021,7 +3199,7 @@ function typesSec(){
   const TI=TYI();
   const walk=t=>{ const isE=isEntT(t); const n=t==='questao'?(70+uqAll().length):t==='simulado'?simsAll().length:t==='resposta'?histAll().length:isE?entsOf(t).length:mine.filter(d=>isA(d.type,t)).length;
     const kids=Object.keys(TYPES).filter(k=>TYPES[k].parent===t&&!hiddenTypes.has(k)).map(walk).join('')+(isE?entsOf(t).map(e=>treeNode(t+':'+e.id,e.t,'#/'+t+'/'+e.id,TI[t],'tone-type tone-type-'+t)).join(''):'');
-    return treeNode('tipo:'+t,TYPES[t].n,'#/tipo/'+t,TI[t]||SI.file,'tone-type tone-type-'+t,kids,n); };
+    return treeNode('tipo:'+t,TYPES[t].n,'#/tipo/'+t,TI[t]||SI.file,'tone-type tone-type-'+t+customToneClass(t),kids,n); };
   const rows=sortList(Object.keys(TYPES).filter(k=>!TYPES[k].parent&&!hiddenTypes.has(k)),navSort('types'),k=>TYPES[k].n,()=>0).map(walk);
   return '<div class="sec'+(closed?' closed':'')+'" data-seckey="'+esc(key)+'">'+secHead(key,'Tipos de objeto',closed,Object.keys(TYPES).filter(k=>!hiddenTypes.has(k)).length,'types','Adicionar tipo de objeto')+'<div class="sec-b">'+rows.join('')+'</div></div>';
 }
@@ -3701,6 +3879,7 @@ function createEnt(t){ return formDialog({title:t==='orgao'?'Novo órgão':t==='
   validate:v=>({nome:!v.nome?'Informe o nome.':(findEnt(t,v.nome)?'Já existe um objeto com este nome.':'')})}).then(v=>{ if(!v) return; const e=ensureEnt(t,v.nome); paintNav(); location.hash='#/'+t+'/'+e.id; toast('“'+v.nome+'” criado'); }); }
 function createObj(kind,pre){
   pre=pre||{}; const sp=space;
+  if(TYPES[kind]?.custom) return createCustomObject(kind);
   if(isEntT(kind)) return createEnt(kind);
   const concs=CONCURSOS.filter(c=>c.sp===sp&&!isT(c.id));
   const goPage=h=>{ paintNav(); if(location.hash===h) route(true); else location.hash=h; };
@@ -4035,7 +4214,7 @@ const opProps=(rows,iid)=>{
   '</div>';
 };
 const opProps0=opProps;
-const objHref=d=>d.type==='questao'?'#/questao/'+d.id:isEntT(d.type)?'#/'+d.type+'/'+d.id:d.type==='concurso'?'#/concurso/'+d.id:d.type==='edicao'?'#/edicao/'+d.id:d.type==='cargo'?'#/cargo/'+d.id:'#'+d.id;
+const objHref=d=>TYPES[d.type]?.custom?'#/custom-object/'+d.id:d.type==='questao'?'#/questao/'+d.id:isEntT(d.type)?'#/'+d.type+'/'+d.id:d.type==='concurso'?'#/concurso/'+d.id:d.type==='edicao'?'#/edicao/'+d.id:d.type==='cargo'?'#/cargo/'+d.id:'#'+d.id;
 const opRow0=o=>'<a class="op-row" href="'+o.href+'">'+(o.icon?'<span class="op-ri t-'+o.icon+'" aria-hidden="true">'+iconSvg(o.iid,OPI()[o.icon]||SI.file)+'</span>':'')+'<span class="op-rt"><b>'+esc(o.title)+'</b>'+(o.meta?'<small>'+esc(o.meta)+'</small>':'')+'</span>'+(o.tail?'<span class="op-tail">'+esc(o.tail)+'</span>':'')+'<span class="op-go" aria-hidden="true">›</span></a>';
 const opRow=o=>o.pinId?'<div class="op-rw">'+opRow0(o)+'</div>':opRow0(o);
 const opList=rows=>rows.length?'<div class="op-list">'+rows.map(opRow).join('')+'</div>':'';
@@ -4158,6 +4337,7 @@ function opTipoPage(t,T,list,sp){
   const propSec=opSec('Propriedades',propRows?'<div class="pt">'+propRows+'</div>':opEmpty('Este tipo não tem propriedades.'),{count:typeProps(t).length,action:'<button type="button" class="op-btn" data-add-prop="'+t+'">+ Adicionar propriedade</button>'});
   const rows=list.map(d=>({icon:d.type,title:d.t,meta:[d.classe,d.cat].filter(Boolean).join(' · ')||TYPES[d.type].n,href:objHref(d),pinId:isA(d.type,'arquivo')?d.id:'',pinned:d.pin}));
   const NEWL={concurso:'Novo concurso',edicao:'Nova edição',cargo:'Novo cargo',orgao:'Novo órgão',banca:'Nova banca',disciplina:'Nova disciplina'};
+  if(T.custom) NEWL[t]='Novo '+T.n;
   return opPage({iid:'tipo:'+t,crumb:[['Espaço','#/espaco'],[T.n,'']],icon:t,kind:'Tipo de objeto',title:T.n,props,actions:NEWL[t]?'<button class="op-btn pri" data-new="'+t+'">+ '+NEWL[t]+'</button>':'',body:propSec+opSec('Objetos',rows.length?opList(rows):opEmpty('Nenhum objeto deste tipo no espaço.'),{count:list.length})});
 }
 function opValorPage(k,v,list){
@@ -4914,6 +5094,9 @@ function showObjs(h0){
     title='Questão'; meta='Tipo de Objeto · '+sp.name; html=questaoTipoPage(sp);
   } else if(isEntT(parts[1])&&entById(parts[1],parts[2])){
     const t=parts[1], en=entById(t,parts[2]); title=en.t; meta=TYPES[t].n+' · '+sp.name; html=t==='disciplina'?discPage(en):entPage(t,en);
+  } else if(parts[1]==='custom-object'&&customObjById(parts[2])){
+    const obj=customObjById(parts[2]);
+    title=obj.t;meta=TYPES[obj.type].n+' · '+sp.name;html=customObjectPage(obj);
   } else if(parts[1]==='tipo'&&TYPES[parts[2]]){
     const t=parts[2], T=TYPES[t], list=isEntT(t)?entsOf(t).map(e=>({id:e.id,type:t,t:e.t,classe:'',cat:''})):mine.filter(d=>isA(d.type,t));
     const kids=Object.keys(TYPES).filter(k=>TYPES[k].parent===t);
@@ -5241,7 +5424,7 @@ function route(spaceChanged){
   if(h0==='/revisao'){ location.replace('#/questoes/erradas'); return; }
   if(h0==='/quadro'){ $('spaceRow')?.removeAttribute('aria-current'); showBoard(); return; }
   if(h0.startsWith('/questoes')||h0==='/simulado'){ showStudyRoute(h0); return; }
-  if(h0==='/espaco'||h0.startsWith('/concurso/')||h0.startsWith('/questao/')||h0.startsWith('/tentativa/')||h0.startsWith('/resposta/')||h0.startsWith('/disciplina/')||h0.startsWith('/edicao/')||h0.startsWith('/cargo/')||h0.startsWith('/tipo/')||h0.startsWith('/valor/')||h0.startsWith('/orgao/')||h0.startsWith('/banca/')){ showObjs(h0); return; }
+  if(h0==='/espaco'||h0.startsWith('/concurso/')||h0.startsWith('/questao/')||h0.startsWith('/tentativa/')||h0.startsWith('/resposta/')||h0.startsWith('/disciplina/')||h0.startsWith('/edicao/')||h0.startsWith('/cargo/')||h0.startsWith('/tipo/')||h0.startsWith('/custom-object/')||h0.startsWith('/valor/')||h0.startsWith('/orgao/')||h0.startsWith('/banca/')){ showObjs(h0); return; }
   document.querySelector('.main').classList.remove('on-board'); $('boardBtn')?.removeAttribute('aria-current'); $('spaceRow')?.removeAttribute('aria-current');
   const list=docsOf(space);
   if(!list.length){ blank(spaces.find(x=>x.id===space).name,'Este espaço ainda não tem objetos.<br><button class="cta" data-addv>+ Adicionar PDF</button>'); return; }
@@ -5297,6 +5480,8 @@ const viewClick=e=>{
       if(JSON.stringify(nv)===JSON.stringify(base)) delete o[key]; else o[key]=nv; store.set('ptypes',o); route(true); toast('Tipo atualizado'); }); return; }
   const pd=e.target.closest('[data-pin-doc]'); if(pd){ e.preventDefault(); const id=pd.dataset.pinDoc, m=M(id), was=!!m.pin; if(was) delete m.pin; else m.pin=true; saveMeta(); paintNav(); route(true); toast(was?'Desafixado':'Fixado no topo'); return; }
   const pi=e.target.closest('[data-pick-icon]'); if(pi&&pi.dataset.pickIcon){ pickIcon(pi.dataset.pickIcon); return; }
+  const editCustom=e.target.closest('[data-custom-edit]');
+  if(editCustom){e.preventDefault();const obj=customObjById(editCustom.dataset.customEdit);if(obj)createCustomObject(obj.type,obj);return;}
   const nb=e.target.closest('[data-new]'); if(nb){ e.preventDefault(); createObj(nb.dataset.new,{conc:nb.dataset.conc,edicao:nb.dataset.ed}); } };
 view.addEventListener('click',viewClick); $('props').addEventListener('click',e=>{ if(e.target.closest('[data-edit-cv]')) viewClick(e); });
 addEventListener('hashchange',()=>route(false));
