@@ -47,6 +47,6 @@ test('native selects match the explicit theme and the automatic OS preference', 
   assert.match(head, /:root\[data-theme="light"\]\s*\{\s*color-scheme:\s*light\s*;/);
   assert.match(head, /@media\s*\(prefers-color-scheme:\s*dark\)\s*\{\s*:root:not\(\[data-theme="light"\]\)\s*\{\s*color-scheme:\s*dark\s*;/);
   assert.ok(head.lastIndexOf('color-scheme:') > head.lastIndexOf(':root{color-scheme:light;'), 'theme-aware rules must override the initial light default');
-  assert.match(source, /<select id=\\"qPer\\"/);
+  assert.ok(source.includes('<select id="qPer"'));
   assert.match(source, /\[1,5,10,20\]\.map\(/);
 });
