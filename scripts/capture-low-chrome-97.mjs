@@ -25,14 +25,18 @@ try {
           const page = await context.newPage();
           const label = [version, theme, width, layout.side ? 'sideopen' : 'sideclosed', layout.right ? 'rightopen' : 'rightclosed'].join('_');
           page.on('pageerror', error => errors.push(label + ': ' + error.message));
+          await page.addInitScript(() => localStorage.clear());
           await page.goto('http://127.0.0.1:' + port + '/exam-app-0.1.1/index.html#/espaco', { waitUntil: 'domcontentloaded', timeout: 30000 });
           await page.locator('#app').waitFor({ state: 'visible', timeout: 15000 });
-          await page.evaluate(({ theme, side, right }) => {
+          // The app intentionally wraps its handlers in an IIFE. Toggle via
+          // the actual UI event handlers, not inaccessible function globals.
+          await page.evaluate(({ theme, side, right, width }) => {
             document.documentElement.dataset.theme = theme;
-            if (typeof setCollapsed === 'function') setCollapsed(!side);
-            document.getElementById('app').classList.toggle('open', side);
-            if (typeof openRP === 'function') openRP(right);
-          }, { theme, ...layout });
+            const app = document.getElementById('app');
+            if (width <= 768) app.classList.toggle('open', side);
+            else if (!side) document.getElementById('collapse').click();
+            if (right) document.getElementById('rpToggle').click();
+          }, { theme, width, ...layout });
           await page.waitForTimeout(150);
           const metrics = await page.evaluate(() => {
             const side = document.querySelector('.side');
@@ -40,6 +44,7 @@ try {
             const main = document.querySelector('.main');
             const panel = document.getElementById('rpanel');
             return {
+              sideOpen: window.innerWidth <= 768 ? document.getElementById('app').classList.contains('open') : !document.getElementById('app').classList.contains('collapsed'),
               sideBorder: getComputedStyle(side).borderRightWidth,
               tabsBorder: getComputedStyle(tabs).borderBottomWidth,
               sideWidth: Math.round(side.getBoundingClientRect().width),
@@ -52,6 +57,9 @@ try {
             errors.push(label + ': border regression ' + JSON.stringify(metrics));
           }
           if (metrics.horizontalOverflow) errors.push(label + ': horizontal overflow');
+          if (version === 'after' && width === 1366 && (metrics.sideOpen !== layout.side || metrics.rightVisible !== layout.right)) {
+            errors.push(label + ': requested panel states not applied ' + JSON.stringify(metrics));
+          }
           await page.screenshot({ path: path.join(dir, 'lowchrome_97_' + label + '.png'), fullPage: false, animations: 'disabled' });
           results.push({ label, version, width, theme, ...layout, ...metrics });
           await page.close();
