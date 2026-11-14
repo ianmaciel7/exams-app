@@ -801,12 +801,12 @@ O que Ian mostrou como modelo para a sidebar: tipos de objeto, ordenar, hover, l
 ## 27. Auditoria Completa UI/UX Enterprise 2026 (Pós-PR #27 / Commit c92d2ca)
 <!-- container e600 @ (1600,11000) -->
 
-### Diagnóstico Especialista UI/UX Enterprise 2026 (Capacities, Linear, Raycast, Notion, QConcursos) — Issues #33 a #40
+### Diagnóstico Especialista UI/UX Enterprise 2026 (Capacities, Linear, Raycast, Notion, QConcursos) — Issues #34 a #40 e #42
 
-> **1. Hotfix Crítico Aplicado (index.html:2558 - Issue #33)**
-> - Corrigido `Uncaught SyntaxError: Unexpected string` em `opProps` causado por aspas simples não escapadas dentro de `onclick="this.closest('.props-card').classList.toggle('is-collapsed')"` no commit `c92d2ca`.
+> **1. Proibição Total de Emojis na UI — Zero Emoji Policy (Issue #42)**
+> - É estritamente proibido usar emojis Unicode (`💡`, `🎯`, `📅`, `📖`, `🎉`, `🔥`, `⚠️`, `🕸️`, `📄`, `🧭`) na UI, botões, KPIs ou docs. Todos devem ser substituídos por ícones `<svg>` vetoriais monocromáticos/semânticos (`stroke-width: 1.8`).
 > **2. Shell & Barra Superior Unificada (Issue #34)**
-> - Duplicação lado a lado de `[C Concurso de TI ↕] [◧]` (na sidebar) e `[💡 Concurso de TI ↕] [◧]` (na topbar central) quando a sidebar está aberta.
+> - Duplicação lado a lado de `[C Concurso de TI]` (na sidebar) e `[Concurso de TI]` (na topbar central) quando a sidebar está aberta.
 > - Linha laranja residual `.readprog` visível em páginas que não são de leitura de PDF.
 > - Barra `.bar` secundária redundante exibida durante `#/simulado/exec` e `#/simulado/resultado`.
 > - Ausência de cartões de superfície flutuantes (`border-radius: 12px` sobre `--app-tab-bg-back`, padrão `notes-app-old-4`).
