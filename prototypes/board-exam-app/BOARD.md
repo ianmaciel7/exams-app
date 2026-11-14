@@ -962,6 +962,33 @@ O que Ian mostrou como modelo para a sidebar: tipos de objeto, ordenar, hover, l
 
 **Evidência 20 (Archive `notes-app-old-10` Recall):** Estética editorial *Monastic Knowledge Sanctuary* para a Home do Espaço (`#/espaco`) com card Hero escuro `TODAY`, `Review today` e `Recent objects` sem emojis — Issue #58
 
+> **Resolução Técnica: Badges Quadrados 20x20px (18 Tons OKLCH), Linhas de 29px e Menu de Contexto Completo nos Tipos de Objeto (Issue #52)**
+> 
+> - **ObjectIconBadge nos Tipos de Objeto (`.object-icon-badge`):**
+>   - Badge quadrado de `20px × 20px` com `border-radius: 5px`, borda sutil de `0.5px solid var(--badge-border)` e fundo translúcido/tingido `var(--badge-bg)`.
+>   - Ícone SVG vetorial de `13px` centralizado dentro do badge (`stroke-width: 1.8`).
+>   - Suíte completa de 18 tons OKLCH calibrada para Light Mode e Dark Mode (`--tone-amber-*` até `--tone-violet-*`).
+>   - Mapeamento semântico fiel por Tipo de Objeto: Concurso (`emerald`), Órgão (`orange`), Banca (`rose`), Edição (`blue`), Cargo (`purple`), Arquivo/Questão (`amber`), Documento (`cyan`), PDF (`red`), Disciplina (`green`), Simulado (`indigo`), Resposta (`gray`).
+> - **Linhas de Tipo de Objeto na Sidebar (`.nav .tree-line`):**
+>   - Altura estrita de `29px` (`height: 29px; min-height: 29px; box-sizing: border-box;`), `border-radius: 6px` e tipografia `14px` (`font-weight: 400`).
+>   - No hover: revela à direita a contagem tabular (`font-variant-numeric: tabular-nums`) e o botão de contexto `⋯` de `22px × 22px` (`border-radius: 6px`).
+> - **Cabeçalhos de Seção da Sidebar (`.sec-hw`):**
+>   - Altura padronizada de `28px`, fonte `12px`, `font-weight: 600`, chevron discreto com transição de rotação a -90° no colapso e controles revelados no hover (`22px × 22px`).
+>   - Linha `+ Adicionar seção` ajustada para altura de `29px` com `border-radius: 6px`.
+> - **Menu de Contexto Completo do Tipo de Objeto (`⋯`):**
+>   - Popover `.ctx` de `244px–260px` de largura com ações padronizadas do Capacities:
+>     - `Abrir tipo` (`#/tipo/{t}`)
+>     - `Criar {Tipo singular}` (`createObj(t)`)
+>     - Divisor `<hr>`
+>     - `Nova Coleção` (`csCreate(t)`)
+>     - `Nova Query` (`csCreate(t)`)
+>     - `Fixar na barra lateral` / `Desafixar da barra lateral` (`togglePinK`)
+>     - Divisor `<hr>`
+>     - `Configurações do tipo` (abre modal de edição com campos de nome no singular e no plural)
+>     - Divisor `<hr>`
+>     - `Excluir tipo de objeto` (com estilo destrutivo vermelho).
+> - **Zero Emoji Policy (Issue #42):** 100% de conformidade com ícones vetoriais SVG monocromáticos, sem nenhum emoji Unicode na interface.
+
 > **Resolução Técnica: Colapso Off-Canvas Total (0px) & ResizableHandle na Sidebar (Issue #49)**
 > 
 > - **Colapso Off-Canvas Total (0px):**
