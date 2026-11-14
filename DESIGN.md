@@ -671,6 +671,31 @@ O skill comunitário [abhixv/m3-expressive](https://github.com/abhixv/google-m3-
 
 **Critério de aceite:** a solução expressiva precisa melhorar descoberta, foco, associação ou compreensão em uma tarefa. Se a melhoria só pode ser descrita como "parece mais moderno", tratá-la como hipótese visual e não como padrão obrigatório.
 
+
+### 8.19 Componentes complexos e continuidade de interação — revisão Context7 (2026)
+
+Este contrato complementa [AGENTS.md §17](AGENTS.md) e as seções 8.14–8.18. O Exam App permanece um protótipo HTML/CSS/JS; React Aria, WAI-ARIA APG e USWDS são **fontes de comportamento**, não dependências automáticas. A escolha de widget deve corresponder à sua **semântica e interação real**, não a um visual específico.
+
+| Superfície / padrão | Uso apropriado e interação esperada | Erro comum a evitar | Fonte oficial |
+|---|---|---|---|
+| **Sidebar com grupos expansíveis — Disclosure** | Grupos comuns de navegação usam link e botão de expansão/colapso distinguíveis; estado expandido anunciado; Enter/Espaço ativam o botão. | Tratar todo menu recolhível como ARIA tree, forçando navegação por setas não esperada. | [W3C APG — Disclosure](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/) |
+| **Explorador hierárquico — Tree View** | Se houver árvore real de tipos/pastas com navegação especializada, implementar setas, Home/End e relação foco/seleção segundo APG. | Atribuir role tree ao canvas do grafo, ou misturar seleção por clique e foco por teclado sem estado consistente. | [W3C APG — Tree View](https://www.w3.org/WAI/ARIA/apg/patterns/treeview/) |
+| **Grade interativa — Grid** | Somente para células navegáveis/interativas: definir foco na célula ou no seu controle, setas, edição e retorno de modo. | Substituir tabela HTML simples por role grid sem necessidade e sem implementar o modelo de teclado. | [W3C APG — Grid](https://www.w3.org/WAI/ARIA/apg/patterns/grid/) |
+| **Dados tabulares hierárquicos — Treegrid** | Usar exclusivamente quando houver linhas hierárquicas expansíveis e operações de célula, com teclado apropriado. | Confundir treegrid com visualização em grafo ou uma lista comum. | [W3C APG — Treegrid](https://www.w3.org/WAI/ARIA/apg/patterns/treegrid/) |
+| **Modal, popover, drawer e listas dinâmicas — Focus Management** | Foco inicial, contenção quando modal, retorno à origem ao fechar e reposicionamento coerente quando item focado for removido. | Foco perdido no body, atrás do drawer ou em elemento que deixou de existir. | [Adobe React Aria](https://react-aria.adobe.com/); [W3C APG — Keyboard Interface](https://www.w3.org/WAI/ARIA/apg/practices/keyboard-interface/) |
+| **Gráficos e diagramas — Complex Images** | Imagem estática: identificação e descrição detalhada equivalentes; grafo interativo: oferecer lista/tabela operável de nós e relações com seleção e contexto preservados. | Acreditar que um único alt curto substitui interação com gráfico ou grafo. | [W3C WAI — Complex Images](https://www.w3.org/WAI/tutorials/images/complex/) |
+| **Conteúdo longo — In-page Navigation** | Índice de seções em edital, relatório ou documentação quando melhora orientação; rótulos e âncoras significativos. | Barra de navegação duplicada numa página curta ou âncora que fica escondida sob toolbar fixa. | [USWDS — In-page Navigation](https://designsystem.digital.gov/components/in-page-navigation/) |
+| **Funcionalidade essencial — Progressive Enhancement** | Manter leitura/dados/tarefa principal quando visualizações avançadas ou animações não carregam, com fallback viável e erro recuperável. | Declarar suporte sem JavaScript, PDF offline ou canvas alternativo que não existe. | [MDN — Progressive Enhancement](https://developer.mozilla.org/en-US/docs/Glossary/Progressive_Enhancement) |
+
+#### 8.19.1 Critérios de aceite para navegação, grafo e dados
+
+- **MUST** distinguir **foco de teclado, seleção, ativação e expansão** nos componentes; cada estado tem nome, papel e comportamento apropriado. Preferir HTML semântico e Disclosure para navegação comum; promover a padrões complexos somente quando houver tarefa que justifique.
+- **MUST** registrar transições de foco em abrir/fechar overlay, excluir item da coleção, selecionar nós e alterar viewport, inclusive durante uma animação interrompida. Ver [MOTION.md](MOTION.md).
+- **MUST** fornecer acesso aos relacionamentos e dados essenciais por modo estruturado/textual no grafo, com descrição de gráficos estáticos e alternativa operável quando necessário.
+- **MUST** registrar comportamento de fallback de canvas, gráfico e PDF diante de erro, ausência de dados, bloqueio de API ou suporte insuficiente, com saída do loading e caminho de recuperação; não prometer capacidades inexistentes.
+- **SHOULD** avaliar jornadas por **Cognitive Walkthrough**, rótulos/destinos por **Information Foraging Theory** e esforço de tarefas repetitivas pelo **Keystroke-Level Model** apenas quando a previsão de usuário experiente for pertinente. Nenhum substitui teste real nem métricas da ISO 9241-11.
+- **MUST** separar em evidências: documentado / implementado / testado. Se só houver documentação, não registrar screenshots ou conformidade fictícias.
+
 ## 9. Referências catalogadas — 21 candidatos a skills + 1 agregador (auditoria em andamento)
 
 Os 22 itens abaixo são **21 candidatos a skills e 1 agregador comunitário (M09)**; **não correspondem a 22 SKILL.md individuais verificados**, e não são extensões oficiais de Apple ou Google. **Catalogar URL não comprova leitura integral de cada SKILL.md, README e referências internas.** Não afirmar que os 22 foram verificados ou que cada resumo corresponde ao estado atual do repositório sem registro de arquivo/revisão/data. Esta integração é uma síntese preliminar enquanto a análise aprofundada de cada fonte não estiver documentada. Alguns estão voltados a Android/SwiftUI; nem todo trecho de código se aplica a um protótipo HTML/CSS/JS. Para números ou requisitos, confrontar com a documentação oficial **vigente**.
