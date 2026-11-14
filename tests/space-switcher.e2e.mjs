@@ -22,7 +22,7 @@ async function create(page,name){
   await page.locator('#spPop .sp-create').click();
   await page.locator('#dlgIn').fill(name);
   await page.locator('#dlg [data-x="1"]').click();
-  await page.locator('#spName').getByText(name,{exact:true}).waitFor();
+  await page.waitForFunction(expected=>document.getElementById('spName')?.textContent===expected,name);
 }
 const context=await browser.newContext({viewport:{width:1366,height:880},reducedMotion:'reduce'});
 const page=await context.newPage();
@@ -93,7 +93,7 @@ try {
   assert.equal(await page.locator('#spPop.open').count(),0,'Escape closes switcher');
   assert.equal(await page.locator('#spBtn').evaluate(x=>document.activeElement===x),true,'Escape restores trigger focus');
 
-  const mobile=await browser.newContext({viewport:{width:390,height:800},isMobile:true,hasTouch:true,deviceScaleFactor:2,reducedMotion:'reduce'});
+  const mobile=await browser.newContext({viewport:{width:390,height:800},isMobile:true,hasTouch:true,deviceScaleFactor:2,reducedMotion:'reduce',storageState:await context.storageState()});
   const mp=await mobile.newPage();
   mp.on('pageerror',e=>report.pageErrors.push(e.message));
   try{
