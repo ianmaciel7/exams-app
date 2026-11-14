@@ -719,6 +719,29 @@ A [WCAG-EM 2.0](https://www.w3.org/TR/wcag-em-2/) é uma **W3C Group Note public
 - **MUST** manter WCAG **2.2** como referência normativa adotada no projeto. O [WCAG 3.0 Working Draft de setembro de 2026](https://www.w3.org/WAI/standards-guidelines/wcag/wcag3-intro/) está em evolução; não usar como substituto da versão vigente ou como requisito inventado.
 - **MUST** diferenciar o que a documentação **exige**, o que a implementação **faz** e o que a auditoria **testou**. Não promover um checklist de design a laudo de acessibilidade.
 
+
+### 8.22 Padrões visuais para ícones animados e componentes arrastáveis
+
+Contratos visuais derivados de [AGENTS.md §19](AGENTS.md) e [MOTION.md §6](MOTION.md). Este conteúdo **não é uma ordem para animar todos os controles**: cada efeito precisa de motivo, estado e teste. SF Symbols é referência de motion da Apple para **plataformas nativas**, não fonte de assets web nem dependência para o Exam App.
+
+| Superfície | Estados visuais e feedback | Interações alternativas e restrições |
+|---|---|---|
+| **Botão de ícone animável** | Default, hover quando aplicável, foco, pressionado, selected, pending, success, failed; microtransição de forma/cor somente quando comunica o resultado. | Nome acessível e área de clique não variam durante o efeito; respeitar reduced motion; evitar looping decorativo. |
+| **Card/lista reordenável** | Handle distinto de conteúdo clicável; item original, overlay durante drag, indicação de inserção válida/inválida, assentamento final ou retorno no cancelamento. | Além de drag, mover por controles de clique/toque sem arraste e teclado; manter DOM, posição e labels sincronizados. |
+| **Painel redimensionável** | Alça que sinaliza affordance, separação visual e limite; conteúdo reflow sem desaparecer. | Ação por teclado ou ajustes discretos; não capturar gestos que deveriam rolar a página; testar viewport/zoom. |
+| **Grafo de nós** | Nó selecionado, alvo em drag, arestas, drop/posicionamento e alteração da câmera com hierarquia perceptível. | Alternativa navegável textual/por controles para manipulação relevante; drag não é a única forma de atingir resultado. |
+| **Card ↔ detalhe / painel aberto ↔ fechado** | Continuidade espacial discreta, sem múltiplos CTAs duplicados no snapshot e sem salto de texto. | Foco, scroll e back/forward preservados; View Transitions só com suporte e fallback adequado. |
+| **Indicador de carregamento e sucesso** | Progresso visual enquanto operação ativa; confirmação com estado textual/semântico. | Timeout/erro com recuperação e nada de spinner infinito; não anunciar sucesso antes da confirmação efetiva. |
+
+**Critérios de aceite:**
+- **MUST** capturar estado inicial/intermediário/final e cancelamento das interações importantes (GIF ou vídeo + texto). Mostrar ao menos um fluxo de mouse, teclado e clique/toque sem drag quando houver item reordenável.
+- **MUST** verificar WCAG 2.5.7 (AA), 2.5.8 (AA) e 2.5.2 (A) nas interações aplicáveis, além do foco/teclado e das preferências de movimento. Um Keyboard Sensor não substitui alternativa de ponteiro único sem arraste.
+- **SHOULD** manter ícones estáticos na maior parte do tempo; usar transformações curtas e interrompíveis em alterações importantes. A linguagem visual não deve competir com enunciados, leitura PDF ou tabelas.
+- **MUST** seguir os tokens e a política de um controlador por propriedade em MOTION.md; não adicionar dnd-kit, Motion ou pacotes de ícones animados apenas porque foram usados como referência.
+- **MUST** registrar antes/depois e resultados de teste separadamente de orientações documentais; se o protótipo não foi alterado, não declarar funcionalidade implementada.
+
+Fontes: [Apple — Symbols](https://developer.apple.com/documentation/symbols), [Apple — Motion](https://developer.apple.com/design/human-interface-guidelines/motion), [Material 3 — Motion](https://m3.material.io/styles/motion/overview), [dnd-kit — Sortable](https://dndkit.com/concepts/sortable/), [MDN — View Transitions](https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API), [W3C WAI — G219](https://www.w3.org/WAI/WCAG22/Techniques/general/G219).
+
 ## 9. Referências catalogadas — 21 candidatos a skills + 1 agregador (auditoria em andamento)
 
 Os 22 itens abaixo são **21 candidatos a skills e 1 agregador comunitário (M09)**; **não correspondem a 22 SKILL.md individuais verificados**, e não são extensões oficiais de Apple ou Google. **Catalogar URL não comprova leitura integral de cada SKILL.md, README e referências internas.** Não afirmar que os 22 foram verificados ou que cada resumo corresponde ao estado atual do repositório sem registro de arquivo/revisão/data. Esta integração é uma síntese preliminar enquanto a análise aprofundada de cada fonte não estiver documentada. Alguns estão voltados a Android/SwiftUI; nem todo trecho de código se aplica a um protótipo HTML/CSS/JS. Para números ou requisitos, confrontar com a documentação oficial **vigente**.

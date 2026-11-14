@@ -13,6 +13,22 @@
 - **Recomendação local:** decisão de produto a validar, não resultado científico.
 - Em conflitos, priorizar acessibilidade, integridade dos dados, tarefa real e evidência de teste. Registre exceções justificadas na issue/PR.
 
+
+## Índice estrito de leis empíricas para UI/UX (separado de heurísticas e padrões)
+
+**Para pedidos de “leis de UX/UI”**, consultar [AGENTS.md §0](../../AGENTS.md) **antes** das listas editoriais de Laws of UX, componentes, motion e técnicas WCAG. Este índice só reúne relações científicas rastreáveis, **não transforma recomendações de design systems em leis**.
+
+| Lei/modelo original | Área e uso adequado | Fonte científica | Observação |
+|---|---|---|---|
+| **Fitts's Law** | Controle motor; distância/largura dos alvos de clique, handles e ícones. | [Fitts (1954)](https://doi.org/10.1037/h0055392) | Não define dimensões WCAG. |
+| **Hick–Hyman Law** | Escolha/incerteza; avaliar alternativas de navegação, filtros e ações. | [Hick (1952)](https://doi.org/10.1080/17470215208416600); [revisão (2018)](https://doi.org/10.1080/17470218.2017.1322622) | Não exige menu com número fixo de opções. |
+| **Steering Law** | Trajetórias motoras restritas; menus em cascata, drag, resize. | [Accot & Zhai (1997)](https://doi.org/10.1145/258549.258760) | Diferente de apontamento discreto. |
+| **Weber's Law** | Psicofísica perceptiva e limiares de diferença relativa. | [MIT — Weber's Law](https://vis.csail.mit.edu/classes/6.859/lectures/05-Perception.pdf) | Não substitui contraste normativo ou testes de percepção. |
+| **Zipf's Law** | Distribuições de frequência de palavras/ocorrências; útil para **analisar dados de busca reais**, se houver. | [Zipf (1949), registro](https://www.ncbi.nlm.nih.gov/nlmcatalog/274664); [revisão](https://pmc.ncbi.nlm.nih.gov/articles/PMC298679/) | Não define ordenação de menu sem telemetria. |
+| **Power Law of Practice / Law of Practice** | Modelo histórico de aprendizagem e melhora em tarefas repetidas. | [Newell & Rosenbloom](https://iiif.library.cmu.edu/file/Newell_box00089_fld06179_doc0001/Newell_box00089_fld06179_doc0001.pdf); [contestação empírica](https://pubmed.ncbi.nlm.nih.gov/10909131/) | **Contestado:** curvas exponenciais podem ajustar melhor dados individuais. |
+
+**Quatro diretamente aplicáveis à interação e percepção:** Fitts, Hick-Hyman, Steering e Weber. **Duas condicionais e com limites:** Zipf e Power Law of Practice. “Laws of UX” contém conceitos de várias classes, e **Jakob, Tesler, Gestalt, Nielsen, Apple Symbol Effects, Material 3 e Drag-and-Drop não são leis científicas da UI**. O objetivo é documentação correta, não impor fórmulas matemáticas a uma interface sem dados.
+
 ## Catálogo (86 itens)
 
 ### 1. Cognição, decisão e percepção
@@ -392,6 +408,24 @@ Espelho resumido de [AGENTS.md §18](../../AGENTS.md) e dos contratos de [DESIGN
 **WCAG 2.2 AAA complementares, não obrigatórios para AA:** **2.5.6 Concurrent Input Mechanisms**; **3.3.6 Error Prevention (All)**; **3.3.9 Accessible Authentication (Enhanced)**. [Fonte normativa WCAG 2.2](https://www.w3.org/TR/WCAG22/). Não confundí-los com os critérios A/AA já documentados.
 
 **Nota sobre testes:** scanners e ferramentas automáticas não determinam sozinhos se um produto é acessível; requerem interpretação e testes manuais de experiências e processos. [WAI — Selecting Evaluation Tools](https://www.w3.org/WAI/test-evaluate/tools/selecting/). A enumeração de fontes **não** equivale a teste de implementação.
+
+
+### R. Animated icons, Sortable e View Transitions — padrões publicados e acessibilidade (2026)
+
+Espelho das regras em [AGENTS.md §19](../../AGENTS.md), [DESIGN.md §8.22](../../DESIGN.md) e [MOTION.md §6](../../MOTION.md). Estes **não são leis universais de UX**: incluem efeitos nativos Apple, orientações Material 3, componentes e mecanismos de biblioteca, APIs Web e técnica informativa de conformidade WCAG.
+
+| Nome publicado | Categoria | Exemplo condicionado no Exam App | Fonte |
+|---|---|---|---|
+| **Symbol Effects: Discrete, Indefinite, Transition, Content Transition** | Apple Symbols, **plataformas nativas** | Referência para feedback de ícone de favorito, expandir, salvamento e substituição de símbolo; **não copiar asset ou API Apple para web**. | [Apple Symbols](https://developer.apple.com/documentation/symbols) |
+| **Bounce, Pulse, Wiggle, Rotate, Replace, Draw On / Draw Off** | Efeitos Apple/SF Symbols | Pequena mudança por evento/estado, evitando loops ou distração contínua. | [Apple SF Symbols](https://developer.apple.com/sf-symbols/) |
+| **Spatial Springs / Effects Springs** | Material 3 Expressive | Diferença entre mudanças espaciais e de cor/opacidade, em conjunto com tokens existentes. | [M3 Motion](https://m3.material.io/styles/motion/overview) |
+| **Sortable, Drag Handle, Drag Overlay, Drop Animation** | Padrões de drag-and-drop documentados por dnd-kit | Reordenar cards e listas preservando alça, destino, cancelamento e ordem. | [dnd-kit](https://dndkit.com/concepts/sortable/) |
+| **Pointer Sensor, Keyboard Sensor, Accessibility, AutoScroller** | Recursos dnd-kit | Entrada por pointer/teclado, anúncio, auto-scroll; nenhuma instalação exigida. | [dnd-kit manager](https://dndkit.com/concepts/drag-drop-manager/) |
+| **Layout Animations, Shared Layout, AnimatePresence, Reorder** | Padrões/APIs Motion | Transição card ↔ detalhe, reordenação, entrada/saída, se tiver justificativa. | [Motion Layout](https://motion.dev/docs/react-layout-animations), [Motion Reorder](https://motion.dev/docs/react-reorder) |
+| **View Transition API** | API de navegador | Transições entre DOM/rotas com fallback, estado lógico, foco e scroll tratados pela aplicação. | [MDN](https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API) |
+| **G219 — Ensuring that an alternative is available for dragging movements that operate on content** | Técnica W3C **suficiente** para **WCAG 2.5.7 AA** | Reordenar também por botões de mover ou menu de destino com clique/toque, independente do teclado. | [WAI G219](https://www.w3.org/WAI/WCAG22/Techniques/general/G219) |
+
+**Verificações:** toda interação arrastável deve distinguir drag, teclado e **ponteiro único sem drag**, além de cancelamento, drop inválido, retorno de foco, reduced motion, anúncio do resultado e salvamento real. Animações de ícones devem comunicar estado ou feedback, nunca substituir rótulos ou bloquear ação. Registrar evidência quando houver implementação concreta.
 
 ## Matriz de decisão por superfície
 

@@ -237,6 +237,37 @@ Este catálogo fornece os **nomes originais** (em inglês, quando publicados ass
 - **AVOID** aplicar indiscriminadamente "7 itens", "3 cliques", "400 ms", "tudo na mesma página", "somente 1 CTA" ou "proibido usar bordas". Decisões dependem de contexto, foco, acessibilidade, dados e testes.
 - **MUST** preservar as políticas de sincronização, evidências/board, SVG sem emojis e a integridade das tentativas já definidas neste AGENTS.md.
 
+
+### 0. Leis empíricas de UX/HCI — índice estrito separado de padrões
+
+**Objetivo desta seção:** quando alguém pedir **leis de UX/UI**, fornecer primeiro **leis empíricas ou relações quantitativas publicadas**, com nome original, fonte e limites. **Não** apresentar Material Design, Apple HIG, animações, drag-and-drop, WCAG, heurísticas de Nielsen ou padrões de componentes como "leis". **Não existe órgão que declare todas as "leis UX" oficialmente normativas**; são regularidades estudadas em campos como interação humano-computador, psicologia e linguística. O restante deste documento continua obrigatório, mas é de outras categorias.
+
+#### 0.1. Leis empíricas diretamente úteis para interação e percepção
+
+| Nome original estabelecido | Campo e relação estudada | Exemplo no Exam App | Fonte original / científica | Limitação |
+|---|---|---|---|---|
+| **Fitts's Law (1954)** | Controle motor: tempo de apontar relacionado à distância e largura efetiva do alvo. | Botões de responder, handles, alvos de ícones e itens do grafo. | [Paul Fitts, *The Information Capacity of the Human Motor System*](https://doi.org/10.1037/h0055392) | Não estabelece sozinho tamanho mínimo WCAG, satisfação ou obrigatoriedade de 44/48 px. |
+| **Hick–Hyman Law (1952–1953)** | Tempo de escolha em determinadas tarefas de reação relacionado à informação/incerteza das alternativas. | Organização de escolhas, menus e filtros; reduzir incerteza sem esconder opções úteis. | [W. E. Hick (1952)](https://doi.org/10.1080/17470215208416600); [revisão crítica (2018)](https://doi.org/10.1080/17470218.2017.1322622) | Prática, compatibilidade estímulo-resposta e contexto podem mudar o efeito; não define número fixo de opções. |
+| **Steering Law (Accot–Zhai, 1997)** | Tempo de navegação motora por trajetórias com largura/restrição variável. | Menus encadeados, corredores de drag, sliders e alças finas de resize. | [Accot & Zhai, *Beyond Fitts' Law* (CHI 1997)](https://doi.org/10.1145/258549.258760) | Não é regra geral para cliques simples; usar quando a trajetória precisa ser controlada. |
+| **Weber's Law** | Psicofísica: limiar diferencial depende proporcionalmente da intensidade de referência. | Investigar se mudanças de estado e diferenças visuais são perceptíveis. | [MIT — Perception, Weber's Law](https://vis.csail.mit.edu/classes/6.859/lectures/05-Perception.pdf) | Não prescreve tokens ou contrastes WCAG; medir condições perceptivas reais. |
+
+#### 0.2. Outras leis/regularidades científicas com relevância **condicional**
+
+| Nome original | Classe e aplicação apropriada | Fonte | Cuidado |
+|---|---|---|---|
+| **Zipf's Law** | Regularidade estatística de frequência × posição; **pode** orientar análise de termos de busca, rótulos ou popularidade quando houver dados reais do produto. | [G. K. Zipf, *Human Behavior and the Principle of Least Effort* (1949), registro bibliográfico](https://www.ncbi.nlm.nih.gov/nlmcatalog/274664); [revisão sobre distribuições de frequência](https://pmc.ncbi.nlm.nih.gov/articles/PMC298679/) | É uma lei estatística principalmente de linguagem/distribuições, **não** regra para ordenar menus ou assumir que 20% das rotas recebem 80% dos acessos. Ajustar e medir distribuição real. |
+| **Power Law of Practice / Law of Practice (Newell–Rosenbloom)** | Modelo histórico de aquisição de habilidade: desempenho pode melhorar com prática e ganhos decrescentes; hipótese para atalhos de especialistas e fluxos recorrentes. | [Newell & Rosenbloom, *Mechanisms of Skill Acquisition and the Law of Practice* (CMU)](https://iiif.library.cmu.edu/file/Newell_box00089_fld06179_doc0001/Newell_box00089_fld06179_doc0001.pdf); [Heathcote et al., revisão crítica (2000)](https://pubmed.ncbi.nlm.nih.gov/10909131/) | **A forma de potência é debatida**: estudo de dados individuais favoreceu ajustes exponenciais. Não apresentar como lei universal comprovada nem estimar tempo sem observações. |
+
+#### 0.3. Nomes populares com “Law” que **não** entram no índice estrito de leis empíricas
+
+- **Jakob's Law, Tesler's Law, Postel's Law, Parkinson's Law:** nomes estabelecidos em catálogos e outras disciplinas, mas, no escopo de decisões UI/UX, não equivalem a leis experimentais universais ou normas de conformidade.
+- **Miller's Law / The Magical Number Seven:** o estudo de memória de Miller não justifica regra de sete itens no menu. **Law of Proximity, Similarity, Prägnanz, Common Region e Uniform Connectedness:** são princípios perceptivos da família Gestalt; preservar sua terminologia publicada e classificar como princípios perceptivos.
+- **Law of Crossing / crossing-based interaction:** modelo/regularidades de interação estudadas por Accot e Zhai; diferenciar das leis básicas de apontamento. [IBM Research — *More than dotting the i's* (2002)](https://research.ibm.com/publications/more-than-dotting-the-is-foundations-for-crossing-based-interfaces).
+- **Animated Icons, Symbol Effects, Sortable, Drag-and-Drop, View Transition API, Layout Animations:** são **efeitos, padrões ou APIs**, nunca leis. Acessibilidade de arraste deve seguir [WCAG 2.5.7](https://www.w3.org/TR/WCAG22/#dragging-movements), não uma suposta “lei de drag”.
+- A lista editorial **Laws of UX** abaixo contém *30 conceitos de classes diferentes*, não 30 leis científicas comprovadas. **Somente promover uma nova entrada a esta seção 0** quando houver literatura científica rastreável e classificação correta.
+
+**Regra operacional para agentes:** em respostas/issues/PRs solicitando “leis de UX/UI”, apresentar as **quatro leis da seção 0.1** primeiro; acrescentar a seção 0.2 somente quando a tarefa envolver frequência de uso ou aquisição de habilidade, explicitando as limitações. Associar cada lei a uma hipótese verificável e dados/teste; não inventar métricas ou conformidade.
+
 ### 1. Laws of UX — 30 conceitos
 
 | Nome original | Português | Definição e aplicação |
@@ -939,6 +970,34 @@ Estas são **16 entradas adicionais** de sucesso WCAG, além das já documentada
 | **3.3.9 (AAA)** | **Accessible Authentication (Enhanced)** | Referência adicional para remover testes cognitivos nas etapas de autenticação, observando exceções/alternativas do critério. |
 
 **Fonte:** [WCAG 2.2](https://www.w3.org/TR/WCAG22/). Estes são **AAA**, não critérios necessários para alegação AA. Não inflar a lista principal de A/AA nem substituir 3.3.8 AA pelo 3.3.9 AAA.
+
+
+### 19. Motion de componentes, ícones animados e drag-and-drop — diretrizes oficiais e padrões (2026)
+
+**Escopo:** complementa os princípios de animação existentes, sem adicioná-los novamente como "leis". Separar **referência nativa Apple**, **design system Material 3**, **APIs Web/MDN**, **WCAG normativo** e **padrões dnd-kit/Motion**. O contrato de implementação e testes está em [MOTION.md §6](MOTION.md) e o mapeamento visual em [DESIGN.md §8.22](DESIGN.md). **Não instalar biblioteca nova só para reproduzir uma animação simples no protótipo HTML/CSS/JS.**
+
+| Nome publicado | Categoria / escopo | Uso para o Exam App | Fonte |
+|---|---|---|---|
+| **Symbol Effects — Discrete, Indefinite, Transition, Content Transition** | Sistema **Apple Symbols** (APIs nativas, não componentes web) | Ícones de favorito, expandir/recolher, salvar e status podem expressar uma alteração de estado com efeito breve. **Não** reproduzir SF Symbols/SDK proprietário na web; para SVG/Lucide usar efeitos próprios acessíveis. | [Apple — Symbols](https://developer.apple.com/documentation/symbols), [Apple HIG — Motion](https://developer.apple.com/design/human-interface-guidelines/motion) |
+| **Draw On / Draw Off; Bounce; Pulse; Wiggle; Rotate; Replace** | Nomes de efeitos de símbolos Apple; referência de linguagem visual | Ícone pode animar entre estados com continuidade e feedback, sem looping arbitrário; avaliar versão/plataforma dos efeitos e não tratá-los como requisito web. | [Apple SF Symbols](https://developer.apple.com/sf-symbols/), [Apple — Symbols](https://developer.apple.com/documentation/symbols) |
+| **Spatial Springs / Effects Springs (Material 3 Expressive)** | Design system M3 (não especificação de física da web) | Reposicionamento/escala/forma usam intenção espacial; cor/opacidade indicam estado sem bounce desnecessário. Já cobertos em MOTION.md §5: aplicar aos casos concretos. | [Material 3 — Motion](https://m3.material.io/styles/motion/overview), [Motion theming](https://m3.material.io/blog/m3-expressive-motion-theming) |
+| **Sortable / Drag Handle / Drag Overlay / Drop Animation** | Padrões documentados por **dnd-kit** | Reordenar cards/painéis com alça deliberada, prévia de item arrastado, destino visível, animação de assentamento/cancelamento e estado consistente. | [dnd-kit — Sortable](https://dndkit.com/concepts/sortable/), [Drag Overlay](https://dndkit.com/react/components/drag-overlay/) |
+| **Pointer Sensor / Keyboard Sensor / Accessibility / AutoScroller** | Recursos atuais de dnd-kit, implementação opcional | Mouse, toque, teclado, feedback anunciado e auto-scroll durante drag perto de bordas, com limite e testes. | [dnd-kit — DragDropManager](https://dndkit.com/concepts/drag-drop-manager/) |
+| **Layout Animations / Shared Layout / AnimatePresence / Reorder** | Motion (API e exemplos React, não bibliotecas obrigatórias) | Transição de lista, card ↔ detalhe e entrada/saída sem salto ou perda de foco; adotar somente se compatível com stack atual/futura. | [Motion — Layout](https://motion.dev/docs/react-layout-animations), [Reorder](https://motion.dev/docs/react-reorder) |
+| **View Transition API** | API Web (SPA/MPA), com compatibilidade condicionada | Transições de estado/rota e identidade visual entre vistas; fallback instantâneo, foco/scroll e estado lógico preservados. | [MDN — View Transition API](https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API), [Using](https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API/Using) |
+| **G219 — Ensuring that an alternative is available for dragging movements that operate on content** | Técnica W3C **suficiente**, informativa, para **WCAG 2.2 SC 2.5.7 (AA)** | Dar alternativa de **ponteiro único sem arrastar**: botões Mover acima/abaixo, escolher destino por menu, escolher posição, clicar nó de origem e destino. **Teclado por si só não satisfaz 2.5.7.** | [WAI — G219](https://www.w3.org/WAI/WCAG22/Techniques/general/G219), [SC 2.5.7](https://www.w3.org/WAI/WCAG22/Understanding/dragging-movements) |
+
+**Contrato de implementação:**
+
+1. **MUST** decidir o **significado** da animação: feedback de estado, orientação espacial, origem/destino, progresso ou gesto direto. Não animar todos os ícones no hover, criar loops decorativos, nem atrasar operações frequentes por estética.
+2. **MUST** manter nome/papel/valor e foco acessível dos botões com ícone antes, durante e depois da animação; estado e mensagem em texto/ARIA quando pertinente. Ícones ornamentais devem ficar fora da árvore acessível, mas o botão continua nomeado.
+3. **MUST** oferecer modo sem movimento espacial/loop quando há preferência reduced motion; preservar ação, estado e resultado. Para interações, **WCAG 2.3.3 Animation from Interactions é AAA**, ao passo que **2.5.7 Dragging Movements é AA**.
+4. **MUST** distinguir quatro caminhos de reordenação: **arrastar por ponteiro**, **controle por teclado**, **alternativa por toque/clique sem arraste** e **cancelar/desfazer**, quando aplicáveis. A mesma ordem final e as mesmas permissões devem valer em todos.
+5. **MUST** definir os estados de DnD: idle → armed → dragging → valid/invalid drop → committing → committed/failed, com Escape/cancelamento, drop fora do alvo, scroll, viewport dinâmico e persistência assíncrona; não anunciar "movido" antes de confirmar o estado apropriado.
+6. **SHOULD** usar drag handle em cards que contêm botão, link, input ou seleção de texto; não roubar seleção/scroll do conteúdo nem aceitar drop em área inválida. Posição/índice devem permanecer acessíveis e reversíveis.
+7. **MUST** aplicar WCAG 2.5.1, 2.5.2, 2.5.7 e 2.5.8 conforme pertinência, além de teclado/foco/reduced motion; registrar testes reais, incluindo touch, pointer cancel, arraste para fora, Escape e falha de gravação.
+8. **MUST** manter animações interrompíveis e o estado lógico independente do fim do efeito; não depender só de transitionend/animationend. Consultar [MOTION.md §5.10](MOTION.md).
+9. **MUST** registrar o fluxo com captura e, quando comportamento temporal importar, GIF/vídeo + descrição textual e resultado dos testes no board; **mudança apenas documental não exige imagem inventada**.
 
 <!-- UX-LAWS-CATALOG:END -->
 
