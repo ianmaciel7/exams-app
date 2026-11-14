@@ -290,7 +290,98 @@
     "e833",
     "e834",
     "e835",
-    "e836"
+    "e836",
+    "e900",
+    "e901",
+    "e902",
+    "e905",
+    "e906",
+    "e907",
+    "e908",
+    "e909",
+    "e910",
+    "e911",
+    "e912",
+    "e913",
+    "e914",
+    "e915",
+    "e916",
+    "e917",
+    "e918",
+    "e919",
+    "e920",
+    "e921",
+    "e922",
+    "e923",
+    "e924",
+    "e925",
+    "e926",
+    "e927",
+    "e928",
+    "e929",
+    "e930",
+    "e931",
+    "e932",
+    "e933",
+    "e934",
+    "e935",
+    "e936",
+    "e937",
+    "e938",
+    "e939",
+    "e940",
+    "e941",
+    "e942",
+    "e943",
+    "e944",
+    "e945",
+    "e946",
+    "e947",
+    "e948",
+    "e949",
+    "e950",
+    "e951",
+    "e952",
+    "e953",
+    "e954",
+    "e955",
+    "e956",
+    "e957",
+    "e958",
+    "e959",
+    "e960",
+    "e961",
+    "e962",
+    "e963",
+    "e964",
+    "e965",
+    "e966",
+    "e967",
+    "e968",
+    "e969",
+    "e970",
+    "e971",
+    "e972",
+    "e973",
+    "e974",
+    "e975",
+    "e976",
+    "e977",
+    "e978",
+    "e979",
+    "e980",
+    "e981",
+    "e982",
+    "e983",
+    "e984",
+    "e985",
+    "e986",
+    "e987",
+    "e988",
+    "e989",
+    "e990",
+    "e991",
+    "e992"
   ],
   "elements": {
     "e1": {
@@ -3145,6 +3236,736 @@
       "w": 1500,
       "h": 90,
       "text": "**Implementação das Issues #34 e #42 (branch codex/issue-34-42)**\n- Topbar sem duplicação do espaço ou toggle da sidebar com navegação expandida no desktop; seletor compacto mostra monograma quando recolhida.\n- Progresso aparece somente em documentos de leitura; barra secundária removida do modo simulado; páginas do app usam superfície elevada arredondada.\n- UI sem emojis: ícones vetoriais semânticos substituem os pictogramas e marcas Unicode; regra Zero Emoji Policy registrada em AGENTS.md e DESIGN.md."
+    },
+    "e900": {
+      "type": "container",
+      "x": 6700,
+      "y": 11000,
+      "w": 1600,
+      "h": 11500,
+      "color": "white",
+      "text": "30. Dossiê Funcional Completo: QConcursos (Todos os Botões/Dock), Readwise Reader (Hover/Popovers/PDF/TTS), Readwise SRS (Cloze/Mastery/Tuning) & Capacities Core (Issues #74 a #84)"
+    },
+    "e901": {
+      "type": "text",
+      "size": "large",
+      "x": 6730,
+      "y": 11060,
+      "w": 1500,
+      "h": 120,
+      "text": "Mapeamento Funcional Exaustivo (Clique em Todos os Botões, Hovers, Modais e Motores de Estudo) — Issues #74, #75, #76, #77, #78, #79, #80, #81, #82, #83 e #84"
+    },
+    "e902": {
+      "type": "shape",
+      "x": 6730,
+      "y": 11180,
+      "w": 1500,
+      "h": 920,
+      "text": "**1. QConcursos Elite — Varredura Botão-a-Botão: Filtros, Modais, Card da Questão e Study Dock Lateral (Issues #70–#76)**\n- **Dropdowns Individuais do Construtor de Filtros:** Cada botão (`Disciplina`, `Assunto`, `Banca`, `Instituição`, `Ano`, `Cargo`, `Nível`, `Dificuldade`) abre um popover multiselect pesquisável (`Busca rápida` + checkboxes hierárquicos com contagem de questões).\n- **Modais de Gestão de Filtro e Caderno:** `Salvar filtro` (permite salvar novo filtro ou atualizar existente com resumo de pílulas ativas); `Gerar caderno` (drawer lateral para criar caderno de até 1.000 questões filtradas); `Configurações de exibição` (toggles: exibir apenas comentadas, ocultar alternativas descartadas, etc.).\n- **Controles Interativos do Card de Questão:** `Texto associado (+)` expande o texto base inline; **Tesoura (`Descartar alternativa`)** aplica `line-through` + `opacity: 0.5` e exibe tooltip `Restaurar alternativa`; abas `Gabarito Comentado`, `Comentários`, `Estatísticas` (Donut + Barras A–E), `Cadernos` (salvar questão em caderno customizado), `Anotações` (editor rich text WYSIWYG) e modal `Reportar Erro` com 6 pílulas estruturadas (*Enunciado/alternativa errada*, *Disciplina/assunto errado*, *Gabarito errado*, *Questão anulada*, *Desatualizada*, *Duplicada*).\n- **Study Dock Lateral Flutuante (`36px` pill à direita):** (1) **Tamanho da Fonte (`Aa`)** com slider `14px` e botões `- Menor` / `+ Maior` / Reset; (2) **Cronômetro / Timer** de ciclo de estudo (`45 min`, `Iniciar`, `Resetar`, `Aviso ON`); (3) **Marca-texto (Highlighter)** para grifar o enunciado; (4) **Desempenho no Filtro** (Donut em tempo real: Resolvidas / Acertei / Errei); (5) **Meus Resumos / Folha de Respostas**; (6) **Modo Foco / Zen** (oculta header e sidebar).\n\n**2. Readwise Reader (`read.readwise.io/new` e `/new/read/01m7bwrzfjfdqqwwxfv4z1q1a8`) — Leitura Ativa, Hovers, Popovers, Action Tags, Ghostreader & TTS (Issues #77–#81)**\n- **Enhanced Text Mode vs. Original PDF View (Issue #77):** Reflow semântico de PDFs de 2 colunas (DOU/Editais) com menu `Appearance (Aa)` (fonte, tamanho, espaçamento, largura), indicador azul de **Foco por Parágrafo (`j`/`k`)** na margem esquerda, atalhos de uma tecla (`h` grifar, `n` nota Marginalia, `t` tag, `z` undo) e Sumário dinâmico (`[`).\n- **Painel Direito `Info | Notebook | Ghostreader` & Snapshot de PDF (Issue #78):** Aba `Notebook` com stream vivo de grifos ordenados por posição, salto em 1 clique, ferramenta de **Snapshot (recorte de tabelas/cronogramas de PDF como imagem)** e exportação Markdown/PDF anotado (`Shift+D`).\n- **Action Tags em Grifos (Issue #79):** `.qa [Pergunta?][Resposta]` cria Flashcard SRS na hora; `.c1` + `.c2` concatena *caput* e parágrafo/exceção de artigo de lei em um único destaque; `.h1`/`.h2` cria cabeçalhos no Notebook.\n- **Floating Highlight Popover, Copiloto Posicional & Player TTS (Issue #80):** Ao selecionar texto ou clicar num grifo, abre popover flutuante com `Delete`, `Add note (n)`, `Add/edit tags (t)` e menu `More (...)` (`Copy text`, `Chat about this (g)`, `Share as image`, `View in notebook`, `Auto highlight Shift+H`). Aba `Ghostreader` sabe a posição de leitura atual e oferece 15 skills (`Quiz Me`, `Explain from my Library`, `Extract key takeaways/deadlines`, `Simplify`). Botão `Listen` no topo abre o **Player Inferior de Text-to-Speech (TTS)** com velocidades `0.5x–2x` e seletor de voz neural.\n- **Funil de Triagem & Filtered Views (Issue #81):** Estados `Inbox -> Later (l) -> Shortlist -> Archive (e)` e queries booleanas (`category:pdf AND tag:edital AND progress < 100`).\n\n**3. Readwise SRS (`readwise.io`) — Daily Review, Cloze Deletion em 1 Clique, Frequency Tuning & Heatmap (Issues #82 e #83)**\n- **Daily Review & Mastery Generator (Issue #82):** Deck diário com barra de progresso, TTS integrado, curadoria (`Keep`, `Discard`, `Master`, `Feedback`) e gerador de **Cloze Deletion (`{{c1::...}}`)** clicando nas palavras do artigo de lei + **Q&A** (`Use highlight text as Answer`), avaliado com 4 níveis (`Never`, `Soon`, `Later`, `Someday`).\n- **Frequency Tuning, Edição Não-Destrutiva & Heatmap (Issue #83):** Sliders por livro/disciplina (`/configure/tune/books`) para priorizar matérias de Peso 2 ou com alto índice de erro; modal `Edited vs Original Highlight` + Chat Semântico entre fontes; página `/stats` com Heatmap estilo GitHub e contador de `Streak`.\n\n**4. Capacities Functional Core — Object-Oriented PKM (Issue #84)**\n- **Templates por Tipo de Objeto**, **Queries Dinâmicas Construtoras**, **Propriedades Tipadas Bidirecionais**, **Transclusão / Live Embed de Questões e Blocos** dentro de notas e **Diário de Estudo (`Daily Notes`)**."
+    },
+    "e905": {
+      "type": "image",
+      "x": 6730,
+      "y": 12160,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/qconcursos_filter_disciplina_open"
+    },
+    "e906": {
+      "type": "text",
+      "x": 6730,
+      "y": 12590,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 37 (QConcursos Botões — Issue #70): Dropdown `Disciplina` aberto com busca rápida e árvore de checkboxes**"
+    },
+    "e907": {
+      "type": "image",
+      "x": 7470,
+      "y": 12160,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/qconcursos_filter_assunto_open"
+    },
+    "e908": {
+      "type": "text",
+      "x": 7470,
+      "y": 12590,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 38 (QConcursos Botões — Issue #70): Dropdown `Assunto` em cascata hierárquica com contadores de questões**"
+    },
+    "e909": {
+      "type": "image",
+      "x": 6730,
+      "y": 12680,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/qconcursos_filter_banca_open"
+    },
+    "e910": {
+      "type": "text",
+      "x": 6730,
+      "y": 13110,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 39 (QConcursos Botões — Issue #70): Dropdown `Banca` aberto (FGV, Cebraspe, FCC, VUNESP) com busca instantânea**"
+    },
+    "e911": {
+      "type": "image",
+      "x": 7470,
+      "y": 12680,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/qconcursos_filter_dificuldade_open"
+    },
+    "e912": {
+      "type": "text",
+      "x": 7470,
+      "y": 13110,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 40 (QConcursos Botões — Issue #70): Dropdown `Dificuldade` (`Muito Fácil` a `Muito Difícil`) e modal `Salvar Filtro`**"
+    },
+    "e913": {
+      "type": "image",
+      "x": 6730,
+      "y": 13200,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/qconcursos_salvar_filtros_modal"
+    },
+    "e914": {
+      "type": "text",
+      "x": 6730,
+      "y": 13630,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 41 (QConcursos Botões — Issue #75): Modal `Salvar Filtro` (novo ou atualizar existente) com resumo de pílulas ativas**"
+    },
+    "e915": {
+      "type": "image",
+      "x": 7470,
+      "y": 13200,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/qconcursos_gerar_caderno_modal"
+    },
+    "e916": {
+      "type": "text",
+      "x": 7470,
+      "y": 13630,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 42 (QConcursos Botões — Issue #75): Drawer `Gerar Caderno` a partir do filtro ativo (limite de até 1.000 questões)**"
+    },
+    "e917": {
+      "type": "image",
+      "x": 6730,
+      "y": 13720,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/qconcursos_configuracoes_questoes_drawer"
+    },
+    "e918": {
+      "type": "text",
+      "x": 6730,
+      "y": 14150,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 43 (QConcursos Botões — Issue #70): Drawer `Configurações de Exibição` (mostrar apenas comentadas, ocultar alternativas descartadas)**"
+    },
+    "e919": {
+      "type": "image",
+      "x": 7470,
+      "y": 13720,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/qconcursos_texto_associado_expanded"
+    },
+    "e920": {
+      "type": "text",
+      "x": 7470,
+      "y": 14150,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 44 (QConcursos Botões — Issue #71): `Texto associado (+)` expandido inline acima do enunciado da questão**"
+    },
+    "e921": {
+      "type": "image",
+      "x": 6730,
+      "y": 14240,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/qconcursos_alternative_scissors_struck"
+    },
+    "e922": {
+      "type": "text",
+      "x": 6730,
+      "y": 14670,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 45 (QConcursos Botões — Issue #71): Alternativa A descartada com a **Tesoura** (`line-through`, `opacity: 0.5` e tooltip `Restaurar alternativa`)**"
+    },
+    "e923": {
+      "type": "image",
+      "x": 7470,
+      "y": 14240,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/qconcursos_question_cadernos_tab"
+    },
+    "e924": {
+      "type": "text",
+      "x": 7470,
+      "y": 14670,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 46 (QConcursos Botões — Issues #72, #75): Aba `Cadernos` dentro da questão para adicionar o item a um caderno de estudo**"
+    },
+    "e925": {
+      "type": "image",
+      "x": 6730,
+      "y": 14760,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/qconcursos_question_anotacoes_editor"
+    },
+    "e926": {
+      "type": "text",
+      "x": 6730,
+      "y": 15190,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 47 (QConcursos Botões — Issue #72): Aba `Anotações` com editor rich text WYSIWYG aberto na questão**"
+    },
+    "e927": {
+      "type": "image",
+      "x": 7470,
+      "y": 14760,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/qconcursos_question_notificar_erro"
+    },
+    "e928": {
+      "type": "text",
+      "x": 7470,
+      "y": 15190,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 48 (QConcursos Botões — Issue #72): Modal `Reportar Erro` com 6 pílulas estruturadas de classificação do problema**"
+    },
+    "e929": {
+      "type": "image",
+      "x": 6730,
+      "y": 15280,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/qconcursos_dock_fonte_aa_active"
+    },
+    "e930": {
+      "type": "text",
+      "x": 6730,
+      "y": 15710,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 49 (QConcursos Study Dock — Issue #74): Ferramenta `Tamanho do texto (Aa)` aberta no dock lateral flutuante (`14px`, `- Menor`, `+ Maior`)**"
+    },
+    "e931": {
+      "type": "image",
+      "x": 7470,
+      "y": 15280,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/qconcursos_dock_cronometro_open"
+    },
+    "e932": {
+      "type": "text",
+      "x": 7470,
+      "y": 15710,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 50 (QConcursos Study Dock — Issue #74): Ferramenta `Cronômetro` aberta no dock lateral (`45 min`, `Iniciar`, `Resetar`, `Aviso ON`)**"
+    },
+    "e933": {
+      "type": "image",
+      "x": 6730,
+      "y": 15800,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/qconcursos_dock_marcatexto_open"
+    },
+    "e934": {
+      "type": "text",
+      "x": 6730,
+      "y": 16230,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 51 (QConcursos Study Dock — Issue #74): Ferramenta `Marca-texto` ativa no dock lateral para grifar trechos do enunciado**"
+    },
+    "e935": {
+      "type": "image",
+      "x": 7470,
+      "y": 15800,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/qconcursos_dock_desempenho_active"
+    },
+    "e936": {
+      "type": "text",
+      "x": 7470,
+      "y": 16230,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 52 (QConcursos Study Dock — Issue #74): Popover `Desempenho no Filtro` no dock lateral (Donut 39% acertos / 61% erros)**"
+    },
+    "e937": {
+      "type": "image",
+      "x": 6730,
+      "y": 16320,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/qconcursos_dock_modo_foco"
+    },
+    "e938": {
+      "type": "text",
+      "x": 6730,
+      "y": 16750,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 53 (QConcursos Study Dock — Issue #74): `Modo Foco / Zen` ativado ocultando barras globais e maximizando a leitura**"
+    },
+    "e939": {
+      "type": "image",
+      "x": 7470,
+      "y": 16320,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/qconcursos_live_question_tab_gabarito_comentado"
+    },
+    "e940": {
+      "type": "text",
+      "x": 7470,
+      "y": 16750,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 54 (QConcursos Abas — Issue #72): Aba `Gabarito Comentado` com análise estruturada alternativa por alternativa**"
+    },
+    "e941": {
+      "type": "image",
+      "x": 6730,
+      "y": 16840,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/readwise_reader_inbox_triage"
+    },
+    "e942": {
+      "type": "text",
+      "x": 6730,
+      "y": 17270,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 55 (Readwise Reader `/new` — Issue #81): Interface de 3 painéis na `Inbox` (`/new`) com lista de triagem, metadados laterais e atalhos**"
+    },
+    "e943": {
+      "type": "image",
+      "x": 7470,
+      "y": 16840,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/readwise_reader_home_dashboard"
+    },
+    "e944": {
+      "type": "text",
+      "x": 7470,
+      "y": 17270,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 56 (Readwise Reader `/home` — Issue #81): Dashboard Home configurável com seções `Continue Reading`, `Recently Added` e `Shortlist`**"
+    },
+    "e945": {
+      "type": "image",
+      "x": 6730,
+      "y": 17360,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/readwise_reader_filtered_views_query"
+    },
+    "e946": {
+      "type": "text",
+      "x": 6730,
+      "y": 17790,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 57 (Readwise Reader — Issue #81): Motor de `Filtered Views` com gramática de queries booleanas (`category:pdf AND tag:edital`)**"
+    },
+    "e947": {
+      "type": "image",
+      "x": 7470,
+      "y": 17360,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/readwise_reader_doc2_loaded"
+    },
+    "e948": {
+      "type": "text",
+      "x": 7470,
+      "y": 17790,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 58 (Readwise Reader `/new/read/...` — Issue #77): Leitura em 3 painéis com Sumário à esquerda, foco por parágrafo e aba `Info` à direita**"
+    },
+    "e949": {
+      "type": "image",
+      "x": 6730,
+      "y": 17880,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/readwise_reader_doc2_paragraph_focus_j"
+    },
+    "e950": {
+      "type": "text",
+      "x": 6730,
+      "y": 18310,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 59 (Readwise Reader Hover/Teclado — Issue #77): Indicador azul de **Foco por Parágrafo** na margem esquerda navegável via teclas `j`/`k`**"
+    },
+    "e951": {
+      "type": "image",
+      "x": 7470,
+      "y": 17880,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/readwise_reader_doc2_highlight_popover"
+    },
+    "e952": {
+      "type": "text",
+      "x": 7470,
+      "y": 18310,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 60 (Readwise Reader Popover — Issue #80): **Floating Highlight Popover** acima do grifo amarelo (`Delete`, `Add note`, `Add/edit tags`, `...`)**"
+    },
+    "e953": {
+      "type": "image",
+      "x": 6730,
+      "y": 18400,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/readwise_reader_doc2_highlight_more_dropdown"
+    },
+    "e954": {
+      "type": "text",
+      "x": 6730,
+      "y": 18830,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 61 (Readwise Reader Popover — Issue #80): Menu `More (...)` do grifo (`Copy text`, `Chat about this`, `Share as image`, `View in notebook`, `Auto highlight`)**"
+    },
+    "e955": {
+      "type": "image",
+      "x": 7470,
+      "y": 18400,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/readwise_reader_doc2_highlight_add_note"
+    },
+    "e956": {
+      "type": "text",
+      "x": 7470,
+      "y": 18830,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 62 (Readwise Reader Marginalia — Issues #77, #79): Gaveta inline `Add note (n)` acoplada ao grifo com suporte a Action Tags (`.qa`, `.c1`)**"
+    },
+    "e957": {
+      "type": "image",
+      "x": 6730,
+      "y": 18920,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/readwise_reader_doc2_highlight_tag_picker"
+    },
+    "e958": {
+      "type": "text",
+      "x": 6730,
+      "y": 19350,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 63 (Readwise Reader Tags — Issue #80): Popover pesquisável `Add/edit tags (t)` sobre o destaque**"
+    },
+    "e959": {
+      "type": "image",
+      "x": 7470,
+      "y": 18920,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/readwise_reader_doc2_notebook_highlights"
+    },
+    "e960": {
+      "type": "text",
+      "x": 7470,
+      "y": 19350,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 64 (Readwise Reader Notebook — Issue #78): Aba `Notebook` no painel direito listando todos os grifos em ordem com salto em 1 clique e `Export`**"
+    },
+    "e961": {
+      "type": "image",
+      "x": 6730,
+      "y": 19440,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/readwise_reader_ghostreader_skills"
+    },
+    "e962": {
+      "type": "text",
+      "x": 6730,
+      "y": 19870,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 65 (Readwise Reader Ghostreader — Issue #80): Copiloto IA posicional (`Ghostreader`) com as 15 skills de estudo (`Quiz Me`, `Explain from Library`, etc.)**"
+    },
+    "e963": {
+      "type": "image",
+      "x": 7470,
+      "y": 19440,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/readwise_reader_appearance_menu"
+    },
+    "e964": {
+      "type": "text",
+      "x": 7470,
+      "y": 19870,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 66 (Readwise Reader `Aa` — Issue #77): Menu `Appearance (Aa)` com controle de tipografia, tamanho, espaçamento e largura de coluna**"
+    },
+    "e965": {
+      "type": "image",
+      "x": 6730,
+      "y": 19960,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/readwise_reader_doc2_tts_player"
+    },
+    "e966": {
+      "type": "text",
+      "x": 6730,
+      "y": 20390,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 67 (Readwise Reader TTS — Issue #80): Player inferior persistente de **Text-to-Speech (`Listen`)** com scrubber e pulo de 15s**"
+    },
+    "e967": {
+      "type": "image",
+      "x": 7470,
+      "y": 19960,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/readwise_reader_doc2_tts_speeds"
+    },
+    "e968": {
+      "type": "text",
+      "x": 7470,
+      "y": 20390,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 68 (Readwise Reader TTS — Issue #80): Seletor de velocidade de leitura (`0.5x` a `2x`) e vozes neurais no player TTS**"
+    },
+    "e969": {
+      "type": "image",
+      "x": 6730,
+      "y": 20480,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/readwise_reader_pdf_enhanced_docs"
+    },
+    "e970": {
+      "type": "text",
+      "x": 6730,
+      "y": 20910,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 69 (Readwise Reader PDF — Issues #77, #78): Documentação oficial do `Enhanced Text Mode` para PDFs e ferramenta de `Snapshotting` de tabelas**"
+    },
+    "e971": {
+      "type": "image",
+      "x": 7470,
+      "y": 20480,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/readwise_srs_daily_review_deck"
+    },
+    "e972": {
+      "type": "text",
+      "x": 7470,
+      "y": 20910,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 70 (Readwise SRS — Issue #82): Deck de `Daily Review` (`/dailyreview`) com barra de progresso, player TTS e botões `Discard`, `Master`, `Feedback`, `Keep`**"
+    },
+    "e973": {
+      "type": "image",
+      "x": 6730,
+      "y": 21000,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/readwise_srs_feedback_tuning_modal"
+    },
+    "e974": {
+      "type": "text",
+      "x": 6730,
+      "y": 21430,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 71 (Readwise SRS — Issue #82): Modal de calibração `Feedback` (`Never`, `Soon`, `Later`, `Someday`) para ajuste fino do intervalo**"
+    },
+    "e975": {
+      "type": "image",
+      "x": 7470,
+      "y": 21000,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/readwise_srs_mastery_cloze_creator"
+    },
+    "e976": {
+      "type": "text",
+      "x": 7470,
+      "y": 21430,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 72 (Readwise SRS Mastery — Issue #82): Gerador de **Cloze Deletion (`{{c1::...}}`)** em 1 clique selecionando palavras-chave do texto**"
+    },
+    "e977": {
+      "type": "image",
+      "x": 6730,
+      "y": 21520,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/readwise_srs_mastery_qa_creator"
+    },
+    "e978": {
+      "type": "text",
+      "x": 6730,
+      "y": 21950,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 73 (Readwise SRS Mastery — Issue #82): Gerador de **Flashcard Q&A** com botão `Use highlight text as Answer`**"
+    },
+    "e979": {
+      "type": "image",
+      "x": 7470,
+      "y": 21520,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/readwise_srs_cloze_active_recall_prompt"
+    },
+    "e980": {
+      "type": "text",
+      "x": 7470,
+      "y": 21950,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 74 (Readwise SRS Active Recall — Issue #82): Cartão Cloze apresentando a lacuna `_____ (5 words)` e botão `Reveal Keyphrase`**"
+    },
+    "e981": {
+      "type": "image",
+      "x": 6730,
+      "y": 22040,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/readwise_srs_cloze_answer_reveal_grading"
+    },
+    "e982": {
+      "type": "text",
+      "x": 6730,
+      "y": 22470,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 75 (Readwise SRS Grading — Issue #82): Resposta revelada no cartão Cloze com os 4 botões de estabilidade (`Never`, `Soon`, `Later`, `Someday`)**"
+    },
+    "e983": {
+      "type": "image",
+      "x": 7470,
+      "y": 22040,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/readwise_srs_highlight_edit_and_note"
+    },
+    "e984": {
+      "type": "text",
+      "x": 7470,
+      "y": 22470,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 76 (Readwise SRS Edit — Issue #83): Modal de edição não-destrutiva (`Edited Highlight` vs `Original Highlight`) e campo `NOTE`**"
+    },
+    "e985": {
+      "type": "image",
+      "x": 6730,
+      "y": 22560,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/readwise_srs_review_settings_algorithm"
+    },
+    "e986": {
+      "type": "text",
+      "x": 6730,
+      "y": 22990,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 77 (Readwise SRS Algoritmo — Issue #82): Painel `Review Settings` (`Highlights Per Day`, `Highlight Recency` slider, `Bonus Highlights`)**"
+    },
+    "e987": {
+      "type": "image",
+      "x": 7470,
+      "y": 22560,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/readwise_srs_frequency_tuning_by_source"
+    },
+    "e988": {
+      "type": "text",
+      "x": 7470,
+      "y": 22990,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 78 (Readwise SRS Tuning — Issue #83): Tela `Frequency Tuning` (`/configure/tune/books`) com slider de prioridade para cada fonte/disciplina**"
+    },
+    "e989": {
+      "type": "image",
+      "x": 6730,
+      "y": 23080,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/readwise_srs_daily_review_completed_streak"
+    },
+    "e990": {
+      "type": "text",
+      "x": 6730,
+      "y": 23510,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 79 (Readwise SRS Streak — Issue #83): Tela de conclusão da Revisão Diária (`6/6 reviewed today`), badge de `Streak` e botão `Review More Highlights`**"
+    },
+    "e991": {
+      "type": "image",
+      "x": 7470,
+      "y": 23080,
+      "w": 700,
+      "h": 420,
+      "src": "/_blob/readwise_srs_statistics_heatmap"
+    },
+    "e992": {
+      "type": "text",
+      "x": 7470,
+      "y": 23510,
+      "w": 700,
+      "h": 60,
+      "text": "**Evidência 80 (Readwise SRS Stats — Issue #83): Página `Statistics` (`/stats`) com Heatmap anual de revisões diárias, novos grifos e recordes de ofensiva**"
     }
   }
 }
