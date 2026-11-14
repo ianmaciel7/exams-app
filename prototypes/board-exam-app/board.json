@@ -258,6 +258,7 @@
     "e728",
     "e729",
     "e730",
+    "e731",
     "e630",
     "e800",
     "e801",
@@ -3993,6 +3994,14 @@
       "w": 700,
       "h": 500,
       "text": "**Resolução Técnica: Linha Superior Combinada [+ Novo] [Buscar], NewContentMenu & Ações Globais de 31px (Issue #50)**\n\n- **Linha Superior Combinada (`.side-comb`):**\n  - Localizada logo abaixo de `.side-top` (`padding: 4px 10px 8px; gap: 6px`).\n  - Botão `[+ Novo]` (`#sideNewBtn`): `flex: 1`, altura `33px`, `border-radius: 7px`, background sutil (`var(--hover)` / `var(--active)`), ícone SVG `[+]` de `16px` e label `Novo`.\n  - Botão `[Buscar]` (`#sideSearchBtn`): quadrado `33px × 33px`, `border-radius: 7px`, ícone SVG de lupa `16px`, atalho `(Ctrl+K)`.\n- **Popover Pesquisável NewContentMenu (`#newMenu`):**\n  - Abre posicionado imediatamente abaixo do botão `[+ Novo]` ao clicar ou via atalho `Ctrl+Alt+N` / `Cmd+Alt+N`.\n  - Campo de busca instantânea com foco automático (`#newMenuIn`), filtrando tipos de objetos por nome em português ou inglês.\n  - Lista rolável (`#newMenuList`) exibindo todos os tipos ativos do espaço com badge quadrado colorido `20x20px` (`.nm-badge.tone-type-*`), rótulo no singular e contagem de instâncias no espaço.\n  - Navegação completa por teclado: setas `↑↓` percorrem itens com destaque visual e `scrollIntoView`, `Enter` cria o tipo selecionado (`createObj(t)`), e `Esc` fecha o menu devolvendo o foco.\n  - Rodapé fixo com convenção Capacities: `↑↓ navegar · Esc abortar · ↵ selecionar`.\n- **Ações Globais da Sidebar de 31px:**\n  - Itens padronizados com altura de `31px`, `border-radius: 6px`, `font-size: 14px`, peso regular (`font-weight: 400`), espaçamento `gap: 8px` e ícones SVG vetoriais monocromáticos de `16px` (`stroke-width: 1.8`).\n  - Entradas primárias: `Início` (`#/espaco`), `Tarefas / Revisão` (`#/revisao`), `Explorar` (`#/explorar`).\n- **Conformidade com a Zero Emoji Policy (Issue #42):** 100% livre de emojis Unicode em tags, botões, badges e comentários."
+    },
+    "e731": {
+      "type": "shape",
+      "x": 3330,
+      "y": 15020,
+      "w": 700,
+      "h": 540,
+      "text": "**Resolução Técnica: Badges Quadrados 20x20px (18 Tons OKLCH), Linhas de 29px e Menu de Contexto Completo nos Tipos de Objeto (Issue #52)**\n\n- **ObjectIconBadge nos Tipos de Objeto (`.object-icon-badge`):**\n  - Badge quadrado de `20px × 20px` com `border-radius: 5px`, borda sutil de `0.5px solid var(--badge-border)` e fundo translúcido/tingido `var(--badge-bg)`.\n  - Ícone SVG vetorial de `13px` centralizado dentro do badge (`stroke-width: 1.8`).\n  - Suíte completa de 18 tons OKLCH calibrada para Light Mode e Dark Mode (`--tone-amber-*` até `--tone-violet-*`).\n  - Mapeamento semântico fiel por Tipo de Objeto: Concurso (`emerald`), Órgão (`orange`), Banca (`rose`), Edição (`blue`), Cargo (`purple`), Arquivo/Questão (`amber`), Documento (`cyan`), PDF (`red`), Disciplina (`green`), Simulado (`indigo`), Resposta (`gray`).\n- **Linhas de Tipo de Objeto na Sidebar (`.nav .tree-line`):**\n  - Altura estrita de `29px` (`height: 29px; min-height: 29px; box-sizing: border-box;`), `border-radius: 6px` e tipografia `14px` (`font-weight: 400`).\n  - No hover: revela à direita a contagem tabular (`font-variant-numeric: tabular-nums`) e o botão de contexto `⋯` de `22px × 22px` (`border-radius: 6px`).\n- **Cabeçalhos de Seção da Sidebar (`.sec-hw`):**\n  - Altura padronizada de `28px`, fonte `12px`, `font-weight: 600`, chevron discreto com transição de rotação a -90° no colapso e controles revelados no hover (`22px × 22px`).\n  - Linha `+ Adicionar seção` ajustada para altura de `29px` com `border-radius: 6px`.\n- **Menu de Contexto Completo do Tipo de Objeto (`⋯`):**\n  - Popover `.ctx` de `244px–260px` de largura com ações padronizadas do Capacities:\n    - `Abrir tipo` (`#/tipo/{t}`)\n    - `Criar {Tipo singular}` (`createObj(t)`)\n    - Divisor `<hr>`\n    - `Nova Coleção` (`csCreate(t)`)\n    - `Nova Query` (`csCreate(t)`)\n    - `Fixar na barra lateral` / `Desafixar da barra lateral` (`togglePinK`)\n    - Divisor `<hr>`\n    - `Configurações do tipo` (abre modal de edição com campos de nome no singular e no plural)\n    - Divisor `<hr>`\n    - `Excluir tipo de objeto` (com estilo destrutivo vermelho).\n- **Zero Emoji Policy (Issue #42):** 100% de conformidade com ícones vetoriais SVG monocromáticos, sem nenhum emoji Unicode na interface."
     }
   }
 }
