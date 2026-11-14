@@ -296,7 +296,41 @@ A WCAG 2.2 estabelece critérios específicos (como **2.3.1** para flashes e **2
 ### 5.9 Fontes e limites das recomendações
 
 - **Oficiais:** [Material 3 — motion](https://m3.material.io/styles/motion/overview), [Apple HIG](https://developer.apple.com/design/human-interface-guidelines/), [Apple Liquid Glass](https://developer.apple.com/documentation/technologyoverviews/liquid-glass), [MDN — Web Animations API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API), [MDN — prefers-reduced-motion](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion), [WCAG 2.2](https://www.w3.org/TR/WCAG22/).
-- **Skills comunitários, usados como inspiração técnica:** [abhixv / M3 Expressive](https://github.com/abhixv/google-m3-expressive-design-skill), [hamen / Material 3](https://github.com/hamen/material-3-skill), [gdlbo / Material](https://github.com/gdlbo/material-skill), [BuilderIO / Apple Design](https://github.com/BuilderIO/agent-native-product-visuals/tree/main/.agents/skills/apple-design), [bowen31337 / Apple Design](https://github.com/bowen31337/apple-design), [oye-rahul / Apple Web](https://github.com/oye-rahul/Apple-Design-Skill) e [rshankras / Apple Design Skills](https://github.com/rshankras/claude-code-apple-skills/tree/main/skills/design). A lista completa dos **22** repositórios consultados está em [DESIGN.md](DESIGN.md).
+- **Skills comunitários, usados como inspiração técnica:** [abhixv / M3 Expressive](https://github.com/abhixv/google-m3-expressive-design-skill), [hamen / Material 3](https://github.com/hamen/material-3-skill), [gdlbo / Material](https://github.com/gdlbo/material-skill), [BuilderIO / Apple Design](https://github.com/BuilderIO/agent-native-product-visuals/tree/main/.agents/skills/apple-design), [bowen31337 / Apple Design](https://github.com/bowen31337/apple-design), [oye-rahul / Apple Web](https://github.com/oye-rahul/Apple-Design-Skill) e [rshankras / Apple Design Skills](https://github.com/rshankras/claude-code-apple-skills/tree/main/skills/design). Os **22** repositórios catalogados (leitura individual ainda não comprovada para todos) estão em [DESIGN.md](DESIGN.md).
 - **Limite de verificação:** conceitos de spring/forma/easing extraídos de repositórios diferentes nem sempre têm equivalência paramétrica, mesmo quando usam a palavra "spring". Valores exatos de APIs, tokens e requisitos de plataforma devem ser validados na documentação oficial atual e no navegador real antes da implementação.
+
+### 5.10 Casos-limite omitidos: conteúdo dinâmico, responsividade e ownership
+
+**O contrato de interrupção da seção 5.2 não basta** quando a geometria muda durante o movimento. Validar explicitamente os cenários abaixo antes de adotar efeitos de M3 Expressive/Apple:
+
+| Mudança durante a animação | Falha provável | Estratégia recomendada |
+|---|---|---|
+| Accordion/textarea muda de altura e conteúdo é carregado | `height: auto` não interpola como valor numérico em muitos contextos; salto de layout e conteúdo cortado | Preferir layout estável/abertura instantânea em UI densa; se animar, medir tamanho, recalcular destino com `ResizeObserver` e encerrar com tamanho intrínseco, sem animar a página inteira |
+| Abrir/fechar painel enquanto breakpoint muda | Transform antiga produz deslocamento/overlay invisível | Reavaliar modo `docked` vs `overlay`, cancelar animação antiga e restaurar foco/scroll sem depender de `transitionend` |
+| Fonte carrega, usuário amplia zoom ou muda idioma | Geometria e origem visual ficam obsoletas | Invalide medições/cache de posição; evitar shared-element transition se os conteúdos não são realmente equivalentes |
+| Usuário clica em aba antes de terminar transição | Animação anterior escreve estado atrasado e ativa aba errada | Identidade única de transição/geração; somente última intenção altera estado lógico e foco |
+| Modal fecha enquanto requisição está pendente | Overlay/focus trap "fantasma", foco perdido | Abortar ou desacoplar request quando seguro, limpar listeners/frames e mover foco de modo síncrono ao disparador válido |
+| Tab oculta/sistema suspende e volta | `Δt` enorme, salto físico ou trabalho em loop | Limitar passo de integração, parar física e recalcular destino ao retomar; não tentar simular frames perdidos |
+| Filtro remove nós durante spring no grafo | Velocidade e arestas referenciam nós inexistentes | Cancelar transições obsoletas, recomputar rede/seleção e câmera, desenhar sob demanda |
+| Modo reduzido ativado no meio do spring | Física continua invisível ou reinicia na próxima interação | Cancelar RAF/WAAPI, zerar velocidades e revelar estado final imediatamente, mantendo semântica e foco |
+
+**Observações técnicas:**
+1. **Layout FLIP/View Transitions são ferramentas opcionais**, não exigência. Se houver compartilhamento de elementos, usar identidade estável, validar origem/destino e garantir fallback instantâneo. Não clonar visualmente conteúdo que permaneça interativo em duas regiões nem duplicar nomes acessíveis.
+2. **Animar `width`/`height`/`top`/`left`** pode provocar relayout; **animar `transform`** pode gerar falsa posição visual em relação ao hitbox, teclado ou seleção de texto. Decidir por medição e coerência, não pela regra "transform sempre".
+3. Não depender exclusivamente de `animationend`/`transitionend`: eventos podem não disparar por `display:none`, cancelamento, reduced motion ou troca de rota. Estado lógico e limpeza não podem ficar bloqueados.
+4. `ResizeObserver` observa geometria, mas também precisa de cleanup e prevenção de ciclos de resize. Não recalcular layout num loop por frame sem necessidade.
+5. Progressos e loaders são **estado de tarefa**, não loop de animação: timeout, erro terminal, retry limitado e botão de recuperação precisam existir independentemente do spinner.
+6. Ao alterar motion no protótipo, executar `npm run test:motion` e testes de navegação relevantes quando disponíveis; distinguir teste automatizado de verificação manual de foco/visão/motion.
+
+### 5.11 Checklist de implementação com evidências
+
+- [ ] Registrar estado inicial, alvo, propriedade animada, motivo, duration/easing ou parâmetros de spring, ponto de cancelamento e dono da propriedade CSS/JS.
+- [ ] Confirmar que UI e ARIA derivam do mesmo estado lógico; foco e hit targets existem ao abrir/fechar.
+- [ ] Testar clique repetido/reversão/interrupção, alteração de viewport/zoom e conteúdo dinâmico.
+- [ ] Testar `prefers-reduced-motion` antes **e durante** a animação e retorno de aba após suspensão.
+- [ ] Testar grafo com nó removido/filtrado e PDF com troca rápida de página/zoom.
+- [ ] Registrar evidência visual real (vídeo/GIF, se houver) e descrição textual no board; não dizer "animação implementada" se somente os docs foram alterados.
+
+Referências técnicas: [MDN — Web Animations API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API), [MDN — ResizeObserver](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver), [MDN — View Transitions](https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API), [MDN — prefers-reduced-motion](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion). **São mecanismos possíveis, não dependências novas.**
 
 <!-- MATERIAL-APPLE-MOTION:END -->
