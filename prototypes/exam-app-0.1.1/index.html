@@ -1349,9 +1349,25 @@ a.ot{display:block;padding:3px 0;min-height:24px}
 .ws-tab:hover .ws-tx,.ws-tab.on .ws-tx,.ws-tx:focus-visible{opacity:1}
 .ws-tx:hover{background:var(--active);color:var(--text)}
 @media(hover:none){.ws-tx{opacity:1}}
-.ws-load{position:absolute;left:0;right:0;bottom:-1px;height:2px;overflow:hidden;opacity:0;pointer-events:none;transition:opacity .15s}
+.ws-load{position:absolute;left:0;right:0;bottom:-1px;height:2px;overflow:hidden;opacity:0;pointer-events:none;transition:opacity .15s;z-index:10}
 .ws-load.on{opacity:1}
-.ws-load i{display:block;height:100%;width:35%;background:var(--accent);animation:wsl 1s ease-in-out infinite}
+.ws-load i{display:block;height:100%;width:35%;background:var(--accent);animation:wsl 1s ease-in-out infinite;transition:width .2s ease,background .2s ease}
+.ws-load.pending i{animation:wsl 1s ease-in-out infinite}
+.ws-load.success i{animation:none;width:100%;background:var(--study-good,#2e7d32)}
+.ws-load.empty i{animation:none;width:100%;background:var(--muted)}
+.ws-load.failed i{animation:none;width:100%;background:#b4412f}
+.ws-load.timed-out i{animation:none;width:100%;background:#d97706}
+.ws-load-banner{position:relative;background:var(--panel,var(--bg,#fff));border-bottom:1px solid var(--line);padding:8px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:13px;color:var(--text);animation:fadeIn .15s ease}
+.ws-load-banner.timed-out{border-left:4px solid #d97706}
+.ws-load-banner.failed{border-left:4px solid #b4412f}
+.ws-load-banner-actions{display:flex;align-items:center;gap:8px}
+.ws-load-banner-btn{padding:4px 10px;font-size:12px;font-weight:500;border-radius:6px;border:1px solid var(--line);background:var(--bg,#fff);color:var(--text);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:4px}
+.ws-load-banner-btn.pri{background:var(--accent);color:#fff;border-color:transparent}
+.ws-load-banner-btn:hover{background:var(--hover)}
+.ws-load-banner-btn.pri:hover{opacity:.9}
+@media(prefers-reduced-motion:reduce){
+  .ws-load i{animation:none!important;transform:none!important}
+}
 @keyframes wsl{0%{transform:translateX(-100%)}100%{transform:translateX(300%)}}
 
 .rp{width:var(--rpw,420px);flex:none;display:flex;flex-direction:column;background:var(--bg-back);border-left:none;padding:0 10px 10px 0;box-sizing:border-box;position:relative;min-width:0}
@@ -2946,13 +2962,14 @@ function trashType(t){
 }
 function restoreGroup(gid){ if(gid.startsWith('tipo:')){ const t=gid.slice(5); const dsc=k=>[k].concat(Object.keys(TYPES).filter(x=>TYPES[x].parent===k).flatMap(dsc)); dsc(t).forEach(k=>hiddenTypes.delete(k)); saveHidden(); } trashList=trashList.filter(x=>x.group!==gid); saveTrash(); paintNav(); route(true); }
 function purgeGroup(gid){ trashList.forEach(x=>{ if(x.group===gid) x.purged=true; }); saveTrash(); paintNav(); route(true); }
-function showTrash(){
+function showTrash(seq){
   const roots=trashList.filter(x=>x.root&&!x.purged).sort((a,b)=>b.at-a.at);
   const KN={concurso:'Concurso',edicao:'Edição',cargo:'Cargo',doc:'Documento',tipo:'Tipo de objeto'};
   const rows=roots.map(r=>{ const n=trashList.filter(x=>x.group===r.group&&!x.root).length, left=Math.max(0,30-Math.floor((Date.now()-r.at)/864e5));
     return '<div class="s-card trash-row"><div class="trash-tx"><strong>'+esc(r.label)+'</strong><small>'+KN[r.kind]+(n?' · mais '+n+(n===1?' item ligado':' itens ligados'):'')+' · apaga de vez em '+left+(left===1?' dia':' dias')+'</small></div><div class="s-inlineactions"><button class="s-button" data-t-restore="'+esc(r.group)+'">Restaurar</button><button class="s-button" data-t-purge="'+esc(r.group)+'" data-t-label="'+esc(r.label)+'">Excluir de vez</button></div></div>'; }).join('');
   const body=sBreadcrumb([['Espaço','#/espaco'],['Lixeira','']])+sHead('Lixeira','Itens excluídos','Os itens ficam aqui por 30 dias. Restaurar traz de volta o item e tudo que estava ligado a ele.',roots.length?'<button class="s-button" data-t-empty>Esvaziar lixeira</button>':'',sBadge(roots.length+(roots.length===1?' item':' itens')))+(roots.length?'<div class="trash-list">'+rows+'</div>':'<div class="s-surface s-empty">A lixeira está vazia. Quando você excluir um concurso, edição, cargo ou documento, ele aparece aqui.</div>');
   studyPage('Lixeira','Itens excluídos',body); $('docTitle').textContent='Lixeira';
+  wsLoadingEnd(roots.length?'success':'empty',{seq});
 }
 const hiddenNodes=new Set(store.get('hiddenNodes')||[]);
 const hiddenTypes=new Set(store.get('hiddenTypes')||[]);
@@ -3529,18 +3546,21 @@ let cur=null, token=0, zoom=1, io=null, baseW=0;
 const hasPdf=!!window.pdfjsLib;
 if(hasPdf) pdfjsLib.GlobalWorkerOptions.workerSrc='pdf.worker.min.js';
 function setZoomLabel(){ $('zfit').textContent=Math.round(zoom*100)+'%'; }
-function blank(title,html){ $('props').hidden=true; document.querySelector('.main').classList.remove('reading-mode'); if(cur&&cur.pdf){ try{cur.pdf.destroy();}catch(e){} } cur=null; token++;
+function blank(title,html,seq){ $('props').hidden=true; document.querySelector('.main').classList.remove('reading-mode'); if(cur&&cur.pdf){ try{cur.pdf.destroy();}catch(e){} } cur=null; token++;
   $('docTitle').textContent=title; $('docMeta').textContent=''; $('pg').textContent=''; $('rp').style.width='0'; $('zfit').textContent='';
-  view.innerHTML='<div class="msg">'+html+'</div>'; markCurrent(); }
+  view.innerHTML='<div class="msg">'+html+'</div>'; markCurrent();
+  if(title==='Não encontrado'||title==='Página não encontrada') wsLoadingEnd('failed',{seq,error:title});
+  else wsLoadingEnd('empty',{seq});
+}
 
-async function open(d){
+async function open(d,seq){
   document.querySelector('.main').classList.remove('on-board','study-mode');
   document.querySelector('.main').classList.toggle('reading-mode',d.classe!=='referência');
   $('docTitle').textContent=d.t; $('docMeta').textContent=d.g+' · '+d.m;
   { const ed=d.edicao&&edicaoById(d.edicao), cc=ed&&concursoById(ed.conc); if(ed&&cc) { const sep='<i class="bc-s" aria-hidden="true"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 1.5 7 5 3.5 8.5"/></svg></i>'; $('docMeta').innerHTML='<nav class="bc" aria-label="Localização do documento"><a href="#/concurso/'+esc(cc.id)+'">'+esc(cc.t)+'</a>'+sep+'<a href="#/edicao/'+esc(ed.id)+'">Edição '+ed.ano+'</a>'+sep+'<span class="bc-c">'+esc(d.g)+'</span></nav>'; } }
   document.title=d.t+' · Leitor';
   view.innerHTML='<div class="msg" role="status"><span class="spin" aria-hidden="true"></span> Abrindo “'+esc(d.t)+'”…</div>'; $('pg').textContent=''; $('rp').style.width='0';
-  if(!hasPdf){ view.innerHTML='<div class="msg" role="alert"><b>Não foi possível carregar o leitor de PDF.</b><br>O componente de leitura não abriu, então nenhum documento pode ser exibido agora.<br><button class="cta" data-retry>Tentar de novo</button></div>'; return; }
+  if(!hasPdf){ view.innerHTML='<div class="msg" role="alert"><b>Não foi possível carregar o leitor de PDF.</b><br>O componente de leitura não abriu, então nenhum documento pode ser exibido agora.<br><button class="cta" data-retry>Tentar de novo</button></div>'; wsLoadingEnd('failed',{seq,error:'Leitor de PDF indisponível'}); return; }
   const my=++token;
   setTimeout(()=>{ if(my===token&&cur&&!cur.pdf&&cur.d.id===d.id){ const m=view.querySelector('.msg'); if(m) m.innerHTML='<div role="status"><span class="spin" aria-hidden="true"></span> Ainda abrindo “'+esc(d.t)+'”…<br>Está demorando mais que o normal. Documentos grandes levam mais tempo.<br><a class="cta" href="#/quadro">Cancelar e voltar ao Quadro</a></div>'; } },4000);
   if(cur&&cur.pdf){ try{cur.pdf.destroy();}catch(e){} }
@@ -3551,7 +3571,7 @@ async function open(d){
   paintProps(d);
   try{
     const pdf=await Promise.race([pdfjsLib.getDocument(d.data?{data:d.data.slice()}:'pdfs/'+d.f).promise,new Promise((_,rj)=>setTimeout(()=>rj(new Error('timeout')),25000))]);
-    if(my!==token){ pdf.destroy(); return; }
+    if(my!==token || (seq && seq!==wsLoadCurrentSeq)){ pdf.destroy(); return; }
     const vp=(await pdf.getPage(1)).getViewport({scale:1});
     cur={d,pdf,w:vp.width,h:vp.height,total:pdf.numPages,rendered:new Set()};
     store.set('pages:'+d.id,pdf.numPages); paintProps(d);
@@ -3560,9 +3580,10 @@ async function open(d){
     const pos=(pendingPage&&pendingPage.id===d.id)?pendingPage:(!d.data&&(store.get('pos:'+d.id)||(d.start&&{page:d.start}))); pendingPage=null;
     if(pos&&pos.page>1){ const el=view.querySelector('[data-p="'+pos.page+'"]'); if(el) view.scrollTop=el.offsetTop-24; }
     onScroll();
+    wsLoadingEnd('success',{seq});
   }catch(e){ if(my===token){
     const why=e&&e.message==='timeout'?'O arquivo demorou mais de 25 segundos para abrir.':(e&&e.name==='MissingPDFException'?'O arquivo não foi encontrado no servidor.':(navigator.onLine===false?'Você está sem conexão.':'A conexão foi interrompida ou o arquivo está inválido.'));
-    view.innerHTML='<div class="msg" role="alert"><b>Não foi possível abrir “'+esc(d.t)+'”.</b><br>'+why+'<br>Seu ponto de leitura foi mantido.<br><button class="cta" data-retry>Tentar de novo</button> <a class="cta alt" href="#/quadro">Ir para o Quadro</a></div>'; token++; } }
+    view.innerHTML='<div class="msg" role="alert"><b>Não foi possível abrir “'+esc(d.t)+'”.</b><br>'+why+'<br>Seu ponto de leitura foi mantido.<br><button class="cta" data-retry>Tentar de novo</button> <a class="cta alt" href="#/quadro">Ir para o Quadro</a></div>'; token++; wsLoadingEnd('failed',{seq,error:why}); } }
 }
 function fitWidth(){ return Math.min(view.clientWidth-32,860); }
 function layout(){
@@ -4049,8 +4070,8 @@ function toast(msg,undo){ $('toastTxt').textContent=msg; undoFn=undo||null; $('t
 $('toastUndo').onclick=()=>{ const f=undoFn; undoFn=null; $('toast').classList.remove('on'); f&&f(); };
 
 /* ---- quadro ---- */
-function showBoard(){
-  blank('Quadro','');
+function showBoard(seq){
+  blank('Quadro','',seq);
   document.title='Quadro · '+spaces.find(x=>x.id===space).name;
   $('docMeta').textContent=spaces.find(x=>x.id===space).name;
   document.querySelector('.main').classList.add('on-board'); $('boardBtn').setAttribute('aria-current','page');
@@ -4062,6 +4083,7 @@ function showBoard(){
     (groups.length?groups.map(g=>opSec(g.g,opList(g.items.map(rowOf)),{count:g.items.length})).join(''):opEmpty('Nenhum documento ainda.'))})+'</div>';
   view.scrollTop=0;
   if(isPhone()) app.classList.remove('open');
+  wsLoadingEnd(list.length?'success':'empty',{seq});
 }
 /* ---- objetos: propriedades, tipos e listas (todo valor é link) ---- */
 const chipA=(txt,href)=>href&&txt?'<a class="chip" href="'+href+'" title="'+esc(txt)+'">'+esc(txt)+'</a>':'<span class="chip none">—</span>';
@@ -4839,12 +4861,13 @@ view.addEventListener('click',async e=>{
   }
 });
 
-async function nbRoute(h){
+async function nbRoute(h,seq){
   studyPage('Cadernos','Carregando','<div class="s-empty" role="status">Abrindo cadernos…</div>');
   try{
-    await loadQuestions();if(location.hash.slice(1)!==h)return;
+    await loadQuestions();if(seq&&seq!==wsLoadCurrentSeq)return;if(location.hash.slice(1)!==h)return;
     if(h.startsWith('/caderno/'))nbRender(h);else if(h==='/filtros')sfIndex();else nbIndex();
-  }catch(e){if(location.hash.slice(1)===h)studyError(e,'#/espaco');}
+    wsLoadingEnd('success',{seq});
+  }catch(e){if(location.hash.slice(1)===h){studyError(e,'#/espaco');wsLoadingEnd('failed',{seq,error:e.message});}}
 }
 
 const qfSt=k=>qfS[k]||(qfS[k]={f:{},x:{anuladas:true},text:'',open:false,panelOpen:false,cat:null,qs:''});
@@ -5050,7 +5073,7 @@ function discPage(en){
     body:perfSec(h=>h.m&&(findEnt('disciplina',h.m)||{}).id===en.id)+opSec('Questões',all.length?'<div class="op-list">'+qRows(all)+'</div>':opEmpty('Nenhuma questão nesta disciplina.'),{count:all.length})});
 }
 
-function showObjs(h0){
+function showObjs(h0,seq){
   const sp=spaces.find(x=>x.id===space), mine=objsOf(space), parts=h0.split('/');
   let title,meta,html;
   const cc=parts[1]==='concurso'&&CONCURSOS.find(c=>c.id===parts[2]&&c.sp===space&&!isT(c.id));
@@ -5060,11 +5083,11 @@ function showObjs(h0){
   const scOk=scTab&&((cc&&parts[1]==='concurso')||(ee&&parts[1]==='edicao')||(parts[1]==='cargo'&&CARGOS.find(x=>x.id===parts[2]&&!isT(x.id))));
   const needQ=!questionBank&&(parts[1]==='questao'||(parts[1]==='tipo'&&parts[2]==='questao')||parts[1]==='disciplina');
   if(needQ){
-    title='Questões'; meta=sp.name; html='<div class="s-surface s-empty" role="status" aria-live="polite" style="margin-top:20px">Abrindo questões…</div>'; loadQuestions().then(()=>{ if(location.hash.slice(1)===h0) showObjs(h0); }).catch(e=>{ if(location.hash.slice(1)===h0) studyError(e,'#/espaco'); });
+    title='Questões'; meta=sp.name; html='<div class="s-surface s-empty" role="status" aria-live="polite" style="margin-top:20px">Abrindo questões…</div>'; loadQuestions().then(()=>{ if(location.hash.slice(1)===h0) showObjs(h0,seq); }).catch(e=>{ if(location.hash.slice(1)===h0){ studyError(e,'#/espaco'); wsLoadingEnd('failed',{seq,error:e.message}); } });
   } else if(scOk){
     const kk=parts[1],obj=kk==='concurso'?cc:kk==='edicao'?ee:CARGOS.find(x=>x.id===parts[2]);
     title=obj.t+' · '+(scTab==='questoes'?'Questões':'Simulado'); meta=({concurso:'Concurso',edicao:'Edição',cargo:'Cargo'})[kk]+' · '+sp.name;
-    if(scHas(kk,parts[2])&&!questionBank){ html='<div class="s-surface s-empty" role="status" aria-live="polite" style="margin-top:20px">Abrindo questões…</div>'; loadQuestions().then(()=>{ if(location.hash.slice(1)===h0) showObjs(h0); }).catch(e=>{ if(location.hash.slice(1)===h0) studyError(e,'#/'+kk+'/'+parts[2]); }); }
+    if(scHas(kk,parts[2])&&!questionBank){ html='<div class="s-surface s-empty" role="status" aria-live="polite" style="margin-top:20px">Abrindo questões…</div>'; loadQuestions().then(()=>{ if(location.hash.slice(1)===h0) showObjs(h0,seq); }).catch(e=>{ if(location.hash.slice(1)===h0){ studyError(e,'#/'+kk+'/'+parts[2]); wsLoadingEnd('failed',{seq,error:e.message}); } }); }
     else html=scopedPage(kk,parts[2],scTab);
   } else if(cc){
     title=cc.t; meta='Concurso · '+sp.name;
@@ -5120,6 +5143,10 @@ function showObjs(h0){
   view.innerHTML='<div class="board">'+html+'</div>'; view.scrollTop=0;
   nav.querySelectorAll('a.doc.ty').forEach(a=>a.getAttribute('href')==='#'+h0?a.setAttribute('aria-current','page'):a.removeAttribute('aria-current'));
   if(isPhone()) app.classList.remove('open');
+  if(!needQ&&!(scOk&&scHas(parts[1],parts[2])&&!questionBank)){
+    const isEmp=html.includes('op-empty')||html.includes('s-empty')||html.includes('Nenhum objeto')||html.includes('não existe');
+    wsLoadingEnd(isEmp?'empty':'success',{seq});
+  }
 }
 
 /* Questões e simulado real a partir do JSON original da prova. */
@@ -5267,16 +5294,17 @@ function renderExamResult(){
  '<div class="s-layout"><div class="s-maincol">'+sSection('Resultado','<div class="s-card">'+(full?sBadge(passed?'Critérios de aprovação atendidos':'Critérios de aprovação não atendidos',passed):sBadge('Simulado parcial · '+T+(T===1?' questão':' questões')))+'<p class="s-note">Avaliação didática com base no gabarito preliminar cadastrado. Não representa resultado oficial.</p><div class="s-inlineactions"><button class="s-button" data-s-start>Refazer simulado</button></div></div>')+sSection('Desempenho por disciplina','<div class="s-card">'+Object.entries(s.byMatter).map(([name,v])=>'<div class="s-domain"><span class="s-domainname">'+esc(name)+'</span><span class="s-domaincount">'+v.correct+' / '+v.count+' · '+pctOf(v.correct,v.count)+'%</span><div class="s-progress"><i style="width:'+pctOf(v.correct,v.count)+'%"></i></div></div>').join('')+'</div>')+'</div><aside class="s-asidecol">'+sSection('Próximas ações','<div class="s-card"><div class="s-quicklist"><a href="#/questoes"><span>Revisar questões no banco</span><span>›</span></a><a href="#/cargo/dataprev-2026-ti-dev"><span>Voltar ao cargo</span><span>›</span></a><a href="#tipo1"><span>Ver PDF original</span><span>›</span></a></div></div>')+'</aside></div>';
  studyPage('Resultado','Simulado',content);
 }
-async function showStudyRoute(h){
+async function showStudyRoute(h,seq){
  document.querySelector('.main').classList.add('on-board','study-mode');
- if(!studyOk()){ const t=h.startsWith('/simulado')?'Simulados':'Questões'; studyPage(t,'Indisponível','<div class="s-head"><h1>'+t+'</h1></div><div class="s-surface s-empty">Não há prova nem banco de questões disponíveis. '+trashedWhy()+' está na lixeira e levou junto as questões e os simulados dele. Restaure pela Lixeira para voltar a usar. <a class="s-button main-cta" href="#/lixeira">Abrir a Lixeira</a></div>'); $('docTitle').textContent=t; return; }
+ if(!studyOk()){ const t=h.startsWith('/simulado')?'Simulados':'Questões'; studyPage(t,'Indisponível','<div class="s-head"><h1>'+t+'</h1></div><div class="s-surface s-empty">Não há prova nem banco de questões disponíveis. '+trashedWhy()+' está na lixeira e levou junto as questões e os simulados dele. Restaure pela Lixeira para voltar a usar. <a class="s-button main-cta" href="#/lixeira">Abrir a Lixeira</a></div>'); $('docTitle').textContent=t; wsLoadingEnd('empty',{seq}); return; }
  studyPage('Carregando','Questões','<div class="s-empty">Abrindo questões do concurso...</div>');
- try{await loadQuestions();if(location.hash.slice(1)!==h)return;
+ try{await loadQuestions();if(seq&&seq!==wsLoadCurrentSeq)return;if(location.hash.slice(1)!==h)return;
   if(h.startsWith('/questoes'))renderPractice();
   else if(h==='/simulado/exec')sExamQuestion();
   else if(h==='/simulado/resultado')renderExamResult();
   else renderExamHome();
- }catch(e){if(location.hash.slice(1)===h)studyError(e,'#/cargo/dataprev-2026-ti-dev');}
+  wsLoadingEnd('success',{seq});
+ }catch(e){if(location.hash.slice(1)===h){studyError(e,'#/cargo/dataprev-2026-ti-dev');wsLoadingEnd('failed',{seq,error:e.message});}}
 }
 let timerId=null;
 function stopExamTicker(){if(timerId){clearInterval(timerId);timerId=null;}}
@@ -5416,6 +5444,7 @@ function route(spaceChanged){
       try{ history.replaceState(null,'','#/espaco'); }catch(_){ location.hash='#/espaco'; }
     }
   }
+  const seq=wsLoadingStart(h0);
   if(h0==='/simulado/exec'||h0==='/simulado/resultado'){showStudyRoute(h0);return;}
   if(h0==='/lixeira'){ showTrash(); return; }
   if(h0==='/tipo/caderno'){ location.hash='/cadernos'; return; }
@@ -5434,7 +5463,7 @@ function route(spaceChanged){
   if(!d&&h.startsWith('/')){ blank('Página não encontrada','<b>Esta página não existe.</b><br><a class="cta" href="#/espaco">Voltar ao início</a>'); return; }
   if(!d) d=list.find(x=>x.id===store.get('last:'+space))||list[0];
   store.set('last:'+space,d.id);
-  if(cur&&cur.d.id===d.id){ cur.d=d; $('docTitle').textContent=d.t; if(pendingPage&&pendingPage.id===d.id&&cur.pdf){ const el=view.querySelector('[data-p="'+pendingPage.page+'"]'); if(el) view.scrollTop=el.offsetTop-24; pendingPage=null; } return; }
+  if(cur&&cur.d.id===d.id){ cur.d=d; $('docTitle').textContent=d.t; if(pendingPage&&pendingPage.id===d.id&&cur.pdf){ const el=view.querySelector('[data-p="'+pendingPage.page+'"]'); if(el) view.scrollTop=el.offsetTop-24; pendingPage=null; } wsLoadingEnd('success',{seq}); return; }
   if(isPhone()) app.classList.remove('open');
   open(d);
 }
@@ -5637,9 +5666,106 @@ function wsStep(d){ const t=curTab(), j=t.i+d; if(j<0||j>=t.hist.length) return;
 $('histBack').onclick=()=>wsStep(-1); $('histFwd').onclick=()=>wsStep(1);
 ['popstate','hashchange'].forEach(ev=>addEventListener(ev,()=>setTimeout(wsPaintNav,0))); setTimeout(wsPaintNav,400); setTimeout(wsPaintNav,1200);
 
-let ldT=null;
-function wsLoading(on){ const b=$('wsLoad'); clearTimeout(ldT); b.classList.toggle('on',on); b.setAttribute('aria-hidden',on?'false':'true'); if(on) ldT=setTimeout(()=>wsLoading(false),5000); }
-{ let q=null; new MutationObserver(()=>{ if(!$('wsLoad').classList.contains('on')) return; clearTimeout(q); q=setTimeout(()=>wsLoading(false),260); }).observe(view,{childList:true,subtree:true}); }
+/* ---- workspace loading state machine (Issue #161) ---- */
+let wsNavSeq=0, wsLoadState='idle', wsLoadTimer=null, wsLoadCurrentSeq=0, wsLoadCurrentRoute='';
+function removeWsLoadRecovery(){ document.getElementById('wsLoadBanner')?.remove(); }
+function renderWsLoadRecovery(msg,state,seq){
+  removeWsLoadRecovery();
+  const banner=document.createElement('div');
+  banner.id='wsLoadBanner';
+  banner.className='ws-load-banner '+(state||wsLoadState||'failed');
+  banner.setAttribute('role','alert');
+  banner.innerHTML='<span class="ws-load-banner-msg">'+esc(msg)+'</span>'+
+    '<div class="ws-load-banner-actions">'+
+      '<button type="button" class="ws-load-banner-btn pri" data-ws-retry>Tentar novamente</button>'+
+      '<a class="ws-load-banner-btn" href="#/espaco">Voltar ao início</a>'+
+      '<button type="button" class="ws-load-banner-btn" data-ws-dismiss aria-label="Fechar aviso">'+
+        '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>'+
+      '</button>'+
+    '</div>';
+  const tabs=$('wsTabs');
+  if(tabs&&tabs.parentNode) tabs.parentNode.insertBefore(banner,tabs.nextSibling);
+}
+function wsLoadingStart(routePath){
+  const seq=++wsNavSeq;
+  wsLoadCurrentSeq=seq;
+  wsLoadCurrentRoute=routePath||location.hash||'';
+  clearTimeout(wsLoadTimer);
+  removeWsLoadRecovery();
+  wsLoadState='pending';
+  const b=$('wsLoad');
+  if(b){
+    b.className='ws-load on pending';
+    b.setAttribute('role','status');
+    b.setAttribute('aria-busy','true');
+    b.setAttribute('aria-live','polite');
+    b.setAttribute('data-state','pending');
+    b.setAttribute('data-seq',String(seq));
+    let lbl=b.querySelector('.ws-load-label');
+    if(!lbl){ lbl=document.createElement('span'); lbl.className='sr-only ws-load-label'; b.appendChild(lbl); }
+    lbl.textContent='Carregando área de trabalho…';
+  }
+  wsLoadTimer=setTimeout(()=>{
+    if(wsLoadCurrentSeq===seq&&wsLoadState==='pending'){
+      wsLoadingEnd('timed-out',{seq,error:'Tempo limite excedido'});
+    }
+  },8000);
+  return seq;
+}
+function wsLoadingEnd(state,details){
+  details=details||{};
+  const seq=details.seq!==undefined?details.seq:wsLoadCurrentSeq;
+  if(seq&&seq!==wsLoadCurrentSeq) return false;
+  clearTimeout(wsLoadTimer); wsLoadTimer=null;
+  wsLoadState=state||'idle';
+  const b=$('wsLoad');
+  if(!b) return true;
+  b.setAttribute('data-state',wsLoadState);
+  b.setAttribute('aria-busy',wsLoadState==='pending'?'true':'false');
+  let lbl=b.querySelector('.ws-load-label');
+  if(!lbl){ lbl=document.createElement('span'); lbl.className='sr-only ws-load-label'; b.appendChild(lbl); }
+  if(wsLoadState==='success'){
+    b.className='ws-load on success';
+    b.setAttribute('role','status');
+    lbl.textContent='Conteúdo carregado com sucesso';
+    setTimeout(()=>{ if(wsLoadCurrentSeq===seq&&wsLoadState==='success'){ b.className='ws-load'; wsLoadState='idle'; } },250);
+  }else if(wsLoadState==='empty'){
+    b.className='ws-load on empty';
+    b.setAttribute('role','status');
+    lbl.textContent='Conteúdo carregado (nenhum item encontrado)';
+    setTimeout(()=>{ if(wsLoadCurrentSeq===seq&&wsLoadState==='empty'){ b.className='ws-load'; wsLoadState='idle'; } },350);
+  }else if(wsLoadState==='failed'){
+    b.className='ws-load on failed';
+    b.setAttribute('role','alert');
+    lbl.textContent=details.error?('Erro ao carregar: '+details.error):'Erro ao carregar conteúdo';
+    renderWsLoadRecovery('Não foi possível carregar o conteúdo solicitado.','failed',seq);
+  }else if(wsLoadState==='timed-out'){
+    b.className='ws-load on timed-out';
+    b.setAttribute('role','alert');
+    lbl.textContent='Tempo limite de carregamento esgotado';
+    renderWsLoadRecovery('O carregamento está demorando mais do que o normal.','timed-out',seq);
+  }else if(wsLoadState==='cancelled'){
+    b.className='ws-load';
+    b.setAttribute('role','status');
+    lbl.textContent='Navegação cancelada';
+  }else{
+    b.className='ws-load';
+    b.setAttribute('role','status');
+    lbl.textContent='';
+  }
+  return true;
+}
+function wsLoading(on,stateOrSeq){
+  if(on) return wsLoadingStart(location.hash);
+  const st=typeof stateOrSeq==='string'?stateOrSeq:'success';
+  const sq=typeof stateOrSeq==='number'?stateOrSeq:wsLoadCurrentSeq;
+  return wsLoadingEnd(st,{seq:sq});
+}
+window.wsLoadingState={get state(){return wsLoadState;},get seq(){return wsLoadCurrentSeq;},start:wsLoadingStart,end:wsLoadingEnd};
+document.addEventListener('click',e=>{
+  if(e.target.closest('[data-ws-retry]')){ removeWsLoadRecovery(); cur=null; route(false); }
+  else if(e.target.closest('[data-ws-dismiss]')){ removeWsLoadRecovery(); wsLoadingEnd('idle'); }
+});
 new MutationObserver(()=>{ const t=curTab(), s=($('docTitle').textContent||'').trim(); if(s&&s!=='…'&&t.title!==s){ t.title=s; wsSave(); wsPaint(); } }).observe($('docTitle'),{childList:true,characterData:true,subtree:true});
 
 var wsWin=0;
@@ -5949,22 +6075,23 @@ function stopGV(){ if(!GV) return;
   if(GV.onVisibilityChange) document.removeEventListener('visibilitychange',GV.onVisibilityChange);
   GV=null;
 }
-function showGraph(){
-  blank('Gráfico',''); const sp=spaces.find(x=>x.id===space); document.title='Gráfico · '+sp.name; $('docMeta').textContent=sp.name;
+function showGraph(seq){
+  blank('Gráfico','',seq); const sp=spaces.find(x=>x.id===space); document.title='Gráfico · '+sp.name; $('docMeta').textContent=sp.name;
   const mn=document.querySelector('.main'); mn.classList.add('on-board','on-graph'); $('boardBtn').removeAttribute('aria-current'); $('spaceRow').removeAttribute('aria-current');
   document.querySelectorAll('.actions a.row,.side-utils .util-row').forEach(a=>a.toggleAttribute('aria-current',a.getAttribute('href')==='#/grafico')); if(isPhone()) app.classList.remove('open');
   stopGV(); view.innerHTML='<div class="gv"><div class="gv-load" role="status"><i aria-hidden="true"></i>Montando o gráfico…</div></div>';
-  const tk=(showGraph.tk=(showGraph.tk||0)+1); setTimeout(()=>{ if(tk===showGraph.tk&&location.hash==='#/grafico') buildGraph(); },16); }
-function buildGraph(){
+  const tk=(showGraph.tk=(showGraph.tk||0)+1); setTimeout(()=>{ if(tk===showGraph.tk&&location.hash==='#/grafico') buildGraph(seq); },16); }
+function buildGraph(seq){
   const g=gr(), list=[...g.N.values()]; const loading=!questionBank&&typeof loadQuestions==='function';
-  if(loading) loadQuestions().then(()=>{ if(location.hash==='#/grafico') showGraph(); }).catch(()=>{});
-  if(!list.length){ view.innerHTML='<div class="msg"><b>Nenhum objeto neste espaço ainda.</b><br>Crie um concurso na barra lateral para ver as relações aqui.</div>'; return; }
+  if(loading) loadQuestions().then(()=>{ if(location.hash==='#/grafico') showGraph(seq); }).catch(()=>{});
+  if(!list.length){ view.innerHTML='<div class="msg"><b>Nenhum objeto neste espaço ainda.</b><br>Crie um concurso na barra lateral para ver as relações aqui.</div>'; wsLoadingEnd('empty',{seq}); return; }
   const kinds=KORD.filter(k=>list.some(n=>n.kind===k)), edgesN=list.reduce((s,n)=>s+n.out.length,0);
   view.innerHTML='<div class="gv" id="gv"><canvas id="gvc" tabindex="0" role="img" aria-label="Gráfico com '+list.length+' objetos e '+edgesN+' relações. Use a busca para abrir um objeto pelo teclado."></canvas>'
    +'<div class="gv-top"><div class="rp-search gv-search">'+WI.search+'<input type="search" id="gvq" placeholder="Buscar no gráfico" aria-label="Buscar objeto no gráfico" autocomplete="off"></div>'
    +'<div class="gv-zoom" role="group" aria-label="Zoom"><button type="button" id="gvIn" aria-label="Aproximar">'+WI.plus+'</button><button type="button" id="gvOut" aria-label="Afastar">'+WI.minus+'</button><button type="button" id="gvFit" aria-label="Ajustar à tela">'+WI.fit+'</button><button type="button" id="gvExport" aria-label="Exportar grafo como imagem PNG" title="Exportar PNG"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 17v4h16v-4"/></svg></button></div></div>'
    +'<div class="gv-footer"><div class="gv-leg" role="group" aria-label="Filtrar por tipo">'+kinds.map(k=>'<button type="button" class="gv-k k-'+k+'" data-gk="'+k+'" aria-pressed="'+(GVK[k]!==false)+'"><i aria-hidden="true"></i>'+esc(kn(k))+' <span>'+list.filter(n=>n.kind===k).length+'</span></button>').join('')+'</div>'
    +'<div class="gv-info" aria-live="polite">'+list.length+' objetos · '+edgesN+' relações'+(loading?' · carregando questões…':'')+'</div></div><div class="gv-tip" id="gvTip" hidden></div></div>';
+  wsLoadingEnd('success',{seq});
   const wrap=$('gv'), cv=$('gvc'), ctx=cv.getContext('2d');
   const nodes=list.map((n,i)=>{ const a=i*2.399963, r=16*Math.sqrt(i+1); return {n,x:Math.cos(a)*r,y:Math.sin(a)*r,vx:0,vy:0,deg:n.out.length+n.inn.length,on:GVK[n.kind]!==false}; });
   const ix=new Map(nodes.map((o,i)=>[o.n.href,i])), edges=[]; nodes.forEach((o,i)=>o.n.out.forEach(([h])=>{ const j=ix.get(h); if(j!==undefined) edges.push([i,j]); }));

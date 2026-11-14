@@ -2312,6 +2312,38 @@ Implementação e Auditoria Issue #145:
   * Exclusão e ausência de arestas órfãs;
   * Alerta explícito de contexto estrangeiro fixado no painel direito.
 
+## 49. Workspace Loading State Machine — Issue #161: eliminação de timers cegos, proteção contra corrida e recuperação acessível
+<!-- container e1450 @ (48000,11000) -->
+
+### 49. Workspace Loading State Machine — Issue #161 (Auditoria e Implementação)
+
+**1. Eliminação dos Timers Cegos e do MutationObserver Genérico:**
+- Eliminado o setTimeout(() => wsLoading(false), 5000) que ocultava arbitrariamente o indicador de carregamento após 5 segundos, mascarando eventuais falhas lentas ou bloqueios de rede.
+- Eliminado o MutationObserver genérico que desativava o loading 260ms após qualquer alteração no DOM em #view, sem nenhuma garantia de que o render era final, bem-sucedido ou livre de erros.
+
+**2. Máquina de Estados do Workspace Loading:**
+- Estados canônicos implementados: idle | pending | success | empty | failed | timed-out | cancelled.
+- Monotonic Sequence Counter (wsNavSeq): cada navegação recebe um seq incremental único. Respostas assíncronas obsoletas ou requisições canceladas por navegações mais recentes (seq !== wsLoadCurrentSeq) são rejeitadas silenciosamente, blindando o app contra condições de corrida entre rotas concorrentes.
+- Sinalização explícita de conclusão:
+  * route() inicia a transição com const seq = wsLoadingStart(h0) em estado pending com prazo máximo de deadline (8s).
+  * Renderizadores de rotas (showObjs, showStudyRoute, showGraph, showBoard, showTrash, nbRoute, blank, open) sinalizam explicitamente o desfecho com wsLoadingEnd('success'), wsLoadingEnd('empty') ou wsLoadingEnd('failed').
+
+**3. Tratamento de Falhas e Timeout Recuperável:**
+- Se o carregamento expirar (deadline de 8s) ou encontrar erro crítico (ex.: PDF corrompido, rede indisponível), o estado transita para timed-out ou failed.
+- O indicador NÃO desaparece silenciosamente fingindo sucesso; ele ganha destaque visual semântico (borda de aviso âmbar ou erro carmim) e exibe banner acessível (#wsLoadBanner) com ações de recuperação:
+  * Botão primário 'Tentar novamente' (data-ws-retry) que re-executa a rota.
+  * Link de retorno seguro 'Voltar ao início' (#/espaco).
+  * Botão de dispensar aviso (data-ws-dismiss).
+
+**4. Acessibilidade (ARIA) e Modo de Movimento Reduzido (WCAG 2.2):**
+- Elemento #wsLoad gerencia role='status' em pending/success/empty e role='alert' em failed/timed-out.
+- aria-busy='true' ativo durante pending e 'false' em repouso.
+- Rótulo acessível em .ws-load-label atualizado dinamicamente para leitores de tela sem gerar poluição sonora de anúncios repetidos.
+- Suporte a prefers-reduced-motion: reduce: a animação infinita de deslocamento espacial é desativada, mantendo barra estática com transição suave de opacidade sem perda de feedback visual.
+
+**5. Testes Automatizados e Política Zero Emoji:**
+- Criada suíte de testes tests/workspace-loading-state.test.mjs com 4 testes unitários automatizados cobrindo remoção de timers cegos, classes de CSS e reduced-motion, máquina de estados com cancelamento de corrida e conformidade estrita com a Zero Emoji Policy.
+
 ## 10. Arquivos do projeto (Dataprev 2026 e referências)
 <!-- container e363 @ (0,12666) -->
 
