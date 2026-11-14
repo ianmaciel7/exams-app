@@ -1,0 +1,23 @@
+name: Validate UX route inventory
+
+on:
+  pull_request:
+    branches: [dev]
+    paths:
+      - 'docs/ux/arquitetura-informacao-navegacao.md'
+      - 'tests/ux-route-inventory.test.mjs'
+      - 'prototypes/exam-app-0.1.1/index.html'
+      - '.github/workflows/validate-ux-route-inventory.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test tests/ux-route-inventory.test.mjs
