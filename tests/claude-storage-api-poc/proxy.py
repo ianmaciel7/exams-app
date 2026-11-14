@@ -152,7 +152,7 @@ class SecureStorageProxyHandler(http.server.BaseHTTPRequestHandler):
 
 def main():
     server_address = (HOST, PORT)
-    with socketserver.TCPServer(server_address, SecureStorageProxyHandler) as httpd:
+    with http.server.ThreadingHTTPServer(server_address, SecureStorageProxyHandler) as httpd:
         print(f"[Proxy] Servidor iniciado estritamente em http://{HOST}:{PORT}")
         httpd.serve_forever()
 
