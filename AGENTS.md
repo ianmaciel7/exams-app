@@ -790,4 +790,11 @@ Para cada alteração de **formulário, navegação, componente, efeito ou tema*
 - **MUST** distinguir **"links catalogados"** de **"SKILL.md efetivamente lido e verificado"**: não afirmar auditoria completa das 22 skills, compatibilidade ou conformidade sem registrar arquivo, caminho, revisão/commit e data, quando disponíveis. Conferir links com origem atual e corrigir moved/deleted.
 - **SHOULD** validar uma tarefa representativa por superfície (criar/editar, filtrar, navegar, responder, rever erro), não apenas screenshots estáticas; se for mudança só documental, não inventar evidência visual.
 
+### Verificação de atalhos, contraste e semântica por componente
+
+- **MUST** conferir cada atalho anunciado na documentação, tooltip e modal com o dispatcher realmente implementado, em Windows/macOS, sem prometer `Ctrl+W`/`Ctrl+T` ou outro comando reservado pelo navegador. O usuário precisa de alternativa visível por clique/menu e os campos em edição não podem capturar atalhos globais.
+- **MUST** medir contrastes de pares de cores e estados; OKLCH, Material 3 ou Apple HIG não comprovam automaticamente WCAG. Guardar resultado e contexto do cálculo quando declarar conformidade.
+- **MUST** diferenciar foco de diálogo modal (Tab contido quando modal) de padrão menu (setas, Enter, Escape e retorno ao invocador) e de popover não modal. Preferir elementos nativos com semântica correta; auditar no DOM real.
+- **SHOULD** testar conteúdo longo/localizado, idiomas e formatos de data/número, tamanho de fonte aumentado e ordem de leitura quando layout adaptativo reorganizar elementos. Ver [DESIGN.md §8.14](DESIGN.md).
+
 <!-- DESIGN-SYSTEM-INTEGRATION:END -->

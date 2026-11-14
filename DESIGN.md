@@ -35,7 +35,7 @@ Separadores contínuos no *shell* (por exemplo, `.side` e `.ws-tabs`) são excep
 
 ## 2. Design Tokens & Cores Semânticas (OKLCH)
 
-A paleta adota o espaço de cor **OKLCH**, garantindo uniformidade perceptiva de brilho (*lightness*) e contraste acessível em conformidade com as normas WCAG AA/AAA.
+A paleta adota o espaço de cor **OKLCH**, útil para controlar perceptualmente luminosidade e cromaticidade. **OKLCH, por si só, não garante contraste nem conformidade WCAG AA/AAA.** Medir cada par texto/superfície e indicador/superfície em todos os estados, inclusive claro, escuro, seleção, erro e alto contraste, conforme os critérios WCAG aplicáveis.
 
 ### 2.1 Cores de Entidade (Semantic Entity Badges)
 
@@ -169,16 +169,16 @@ A barra superior é a âncora de navegação e orientação do usuário, com alt
    - Clique abre dropdown acessível com busca e gerenciador de espaços.
 2. **Alternador de Sidebar Esquerda (`[◧]`)**:
    - Botão quadrado de 28px x 28px, borda arredondada de 6px, hover suave.
-   - Ativa/recolhe a navegação lateral com atalho global `Ctrl + \`.
+   - Ativa/recolhe a navegação lateral. **Atalho implementado no protótipo:** `Ctrl+B` no Windows/Linux (ou `⌘B` no macOS pelo modificador `Mod`); validar colisões com navegador e editores. `Ctrl+\` controla o **painel direito**, não a sidebar.
 3. **Controles de Histórico (`[<] [>]`)**:
    - Navegação Voltar/Avançar inspirada em navegadores web.
    - Estado desabilitado (`opacity: 0.35; cursor: default`) quando a pilha de histórico local estiver no início/fim.
 4. **Trilho de Abas Principais (`[Abas +]`)**:
    - Largura mínima por aba: `MAIN_TAB_MIN_WIDTH = 82px`. Espaçamento: `MAIN_TAB_GAP = 4px`.
    - Separador vertical sutil entre abas inativas (`height: 18px; width: 0.5px; opacity: 0.6`).
-   - Botão de fechar aba (`×`): área de 20px x 20px no canto direito da aba, visível permanentemente na aba ativa e no hover das abas inativas.
-   - Atalhos de teclado: `Alt + 1` até `Alt + 9` para alternar abas; `Ctrl + W` ou duplo clique na aba para fechar.
-   - Botão `+`: cria nova aba de visualização (explorador, grafo, busca).
+   - Botão de fechar aba (`×`): ícone visual compacto (baseline legado de 20px), **sem supor que a hit area efetiva é 20×20**. A área interativa deve satisfazer WCAG 2.2 SC 2.5.8 (24×24 CSS px ou exceção de espaçamento/equivalência/essencialidade aplicável e comprovada). Testar proximidade da aba, pin e controles vizinhos; manter descoberta por teclado/foco, não apenas hover.
+   - **Atalhos implementados no protótipo:** `Alt+1` a `Alt+9` para alternar abas e `Alt+W` para fechar a aba atual. **Não documentar `Ctrl+W` como atalho interno**: navegadores o reservam normalmente para fechar a aba do navegador. Duplo clique para fechar exige validação no código real; não presumir. Evitar capturar combinações do navegador/SO que conflitam; manter alternativa por clique/menu.
+   - Botão `+`: cria nova aba de visualização (explorador, grafo, busca). O comando implementado é `Alt+T`; `Ctrl+T` costuma pertencer à criação de aba do navegador e não deve ser anunciado como atalho do workspace. A interface real ainda precisa ser corrigida onde o tooltip apresenta `Ctrl+T`.
    - Botão de Overflow (`[▼]`): acionado automaticamente quando o número de abas excede a largura disponível, exibindo menu suspenso pesquisável de 256px.
 5. **Alternador de Painel Direito (`[◨]`)**:
    - Alinhado à extremidade direita da barra superior.
@@ -235,13 +235,13 @@ Unicode emoji e caracteres pictográficos não são usados na interface, em bot�
 ## 7. Acessibilidade (WCAG 2.2 AA)
 
 1. **Navegação Integral por Teclado**:
-   - `Tab` / `Shift+Tab` percorre ordenadamente todos os elementos interativos com anel de foco visível (`focus-visible: 2px solid var(--app-tab-text-active)` com offset de 2px).
+   - `Tab` / `Shift+Tab` percorre em ordem lógica os controles. Exemplo **CSS válido**: `:focus-visible { outline: 2px solid var(--app-tab-text-active); outline-offset: 2px; }`. Não remover foco sem alternativa visível; verificar se sticky bars e overlays não o ocultam.
 2. **Contraste de Cores**:
    - Razão mínima de contraste de 4.5:1 para texto normal e 3:1 para texto grande e componentes gráficos interativos.
 3. **Leitores de Tela (ARIA)**:
    - Abas utilizam `role="tablist"`, `role="tab"`, `aria-selected="true|false"` e `aria-controls`.
    - Alternativas utilizam `role="radiogroup"` e `role="radio"` com `aria-checked`.
-   - Modais e painéis suspensos utilizam `role="dialog"` ou `role="menu"` com gerenciamento de foco (focus trap).
+   - **Diálogo modal:** `role="dialog"`, `aria-modal="true"` apenas quando realmente modal, foco inicial adequado, Tab/Shift+Tab contidos no modal, Escape e restauração do foco ao fechar, segundo [APG Dialog Modal](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/). **Menu de ações:** `role="menu"`/`menuitem` apenas quando realmente for menu, com setas/Enter/Escape e retorno de foco segundo [APG Menu Button](https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/); não aplicar focus trap de modal a menus ou popovers comuns. Preferir elementos HTML semânticos nativos para navegação simples.
 
 <!-- MATERIAL-APPLE-INTEGRATION:START -->
 ## 8. Síntese aplicada — Material Design 3 Expressive × Apple HIG
@@ -534,6 +534,18 @@ Exemplo ilustrativo, a ser adaptado aos tokens CSS existentes:
 - Testar `prefers-reduced-motion` separadamente: menos movimento **não implica** menos transparência, e vice-versa.
 
 Fontes: [MDN — forced-colors](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/forced-colors), [MDN — prefers-reduced-transparency](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-transparency), [Apple HIG — Materials](https://developer.apple.com/design/human-interface-guidelines/materials).
+
+### 8.14 Localização, redação e apresentação numérica
+
+A UI deve ser robusta em **português brasileiro**, com suporte futuro a outros idiomas, antes de adotar densidade e animações de uma plataforma específica.
+
+- **MUST** declarar idioma do documento e de trechos estrangeiros quando aplicável; usar **Intl/ECMA-402** na formatação sensível a locale de datas, horas, números, percentuais e moedas. Evitar concatenação manual de mensagens localizáveis e datas ambíguas.
+- **MUST** acomodar expansão de textos, nomes longos de concursos/órgãos, siglas e tamanho de fonte ampliado, sem sobrepor campos ou esconder tarefas principais. Adaptar layout em vez de truncar conteúdo crítico.
+- **SHOULD** preferir propriedades CSS lógicas para alinhar blocos e testar bidi/RTL quando houver idiomas que o exijam; não espelhar indiscriminadamente números, gráficos e conteúdos oficiais de provas.
+- **MUST** manter cronômetros, notas e percentuais compreensíveis, com valores estáveis e anúncios acessíveis proporcionais ao significado da atualização. Preservar valores originais publicados em documentos oficiais.
+- **MUST** preservar ordem semântica do DOM e de leitura ao reordenar painéis em layouts adaptativos. Ordem visual não pode ocultar a ordem real de Tab e tecnologias assistivas.
+
+Referências: [Apple HIG — Layout](https://developer.apple.com/design/human-interface-guidelines/layout), [MDN — Intl](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl), [W3C Internationalization](https://www.w3.org/International/) e [WCAG 2.2](https://www.w3.org/TR/WCAG22/).
 
 ### 8.13 Matriz de rastreabilidade e qualidade
 
