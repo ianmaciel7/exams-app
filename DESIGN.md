@@ -742,6 +742,34 @@ Contratos visuais derivados de [AGENTS.md §19](AGENTS.md) e [MOTION.md §6](MOT
 
 Fontes: [Apple — Symbols](https://developer.apple.com/documentation/symbols), [Apple — Motion](https://developer.apple.com/design/human-interface-guidelines/motion), [Material 3 — Motion](https://m3.material.io/styles/motion/overview), [dnd-kit — Sortable](https://dndkit.com/concepts/sortable/), [MDN — View Transitions](https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API), [W3C WAI — G219](https://www.w3.org/WAI/WCAG22/Techniques/general/G219).
 
+
+### 8.23 Estrutura de páginas — decisões orientadas por tarefa e evidência (Context7 2026)
+
+As leis empíricas, princípios cognitivos e padrões documentados em [AGENTS.md §20](AGENTS.md) e no [catálogo UX/UI](docs/ux/ux-ui-principles.md) orientam **o motivo** da composição, não impõem aparência universal. A arquitetura de navegação por jornada já está em [docs/ux/arquitetura-informacao-navegacao.md](docs/ux/arquitetura-informacao-navegacao.md). **Não criar nova biblioteca CSS nem migrar para Material 3/Carbon/USWDS automaticamente**.
+
+| Tipo de página / tarefa | Conteúdo primário | Conteúdo secundário e relação espacial | Regra de adaptação / teste |
+|---|---|---|---|
+| **Home / escolher como estudar** | Ação e orientação para Questões, Simulados, Retomar/Revisar | Métricas e metadados úteis após escolha; sem cartões concorrentes com funções duplicadas. | Testar primeiro clique, entendimento dos rótulos, ordem de leitura e cartões em viewport estreita. |
+| **Questão avulsa / resolução** | Enunciado, figuras que o explicam, alternativas e ação para responder | Explicações e referências junto da resposta após envio; informações do concurso sob demanda. **Spatial Contiguity / Split-Attention.** | Não separar figura essencial do texto em painel inacessível nem obrigar alternar aba para decidir; preservar foco/seleção. |
+| **Configurar Simulado** | Parâmetros indispensáveis, consequência e botão para iniciar | Explicações próximas da regra correspondente, resumo antes de confirmar. **Signaling / Coherence.** | Testar erro e retorno, passos necessários, resumo de configuração e dependências. |
+| **Resultado / análise** | Resultado interpretável, pontos fortes/fracos e próxima ação | Gráfico de tendência quando adequado, tabela para valores e detalhes; **Cognitive Fit** em vez de gráficos ornamentais. | Alternativa textual/estruturada e informações consistentes no responsivo. |
+| **Explorar objetos / grafo** | Objetivo de exploração, busca, seleção e relações | Propriedades/contexto próximo do nó ativo quando possível; painel auxiliar sob demanda. **Proximity Compatibility**, com atenção a seleção independente. | Verificar seleção persistente, foco, zoom/pan, filtro, painel e histórico de navegação. |
+| **PDF / edital / leitura longa** | Conteúdo legível, paginação e busca | Sumário, notas, figura e legendas correspondentes situados para reduzir alternância mental. **Spatial Contiguity / Coherence.** | Reflow, zoom, retomar posição, scrollbar, teclado, reader e conteúdo longo/localizado. |
+| **Sidebar + painel direito** | Navegação primária estável e conteúdo principal | Mostrar propriedade relevante quando espaço permitir; senão drawer/superfície sob demanda. | Evitar três painéis que comprimam enunciado, sem forçar qualquer breakpoint nativo do Android na web. |
+
+**Guidelines de layout verificados via Context7:** [Material 3 Adaptive Design](https://m3.material.io/foundations/layout/layout-overview/adaptive-design) e [Scaffold](https://m3.material.io/foundations/layout/scaffold/overview) (bars, rails, panes e estratégias adaptativas); [Carbon 2x Grid](https://carbondesignsystem.com/elements/2x-grid/overview/) (ritmo de espaçamento e colunas); [USWDS Layout Grid](https://designsystem.digital.gov/utilities/layout-grid/) e [Side Navigation](https://designsystem.digital.gov/components/sidenav/) (responsivo, orientação e acesso).
+
+**Pesquisa científica:** [Wickens & Carswell, Proximity Compatibility Principle](https://doi.org/10.1518/001872095779049408), [Mayer, Spatial Contiguity](https://www.cambridge.org/core/books/abs/multimedia-learning/spatial-contiguity-principle/B9B79EDC777C375C7ED410B82EF80247), [Ayres & Sweller, Split-Attention](https://www.cambridge.org/core/books/abs/cambridge-handbook-of-multimedia-learning/splitattention-principle-in-multimedia-learning/497A2FCB9737E3009B3CF0E4D97F7B99), [Vessey, Cognitive Fit](https://doi.org/10.1111/j.1540-5915.1991.tb00344.x), [Mayer & Fiorella, Signaling e Coherence](https://doi.org/10.1017/9781108894333.019).
+
+**Critérios de aceite para mudanças reais de layout:**
+
+- **MUST** comparar antes/depois no mesmo fluxo, incluindo tarefa, hipótese, rótulos, conteúdo visível, ordens visual/DOM/foco, e **métrica de sucesso**; aparência mais minimalista não é sinônimo de melhora.
+- **MUST** verificar comparações lado a lado e contiguidade somente onde a tarefa requer **integração simultânea**; não criar espaços vazios ou bordas só para representar uma teoria.
+- **MUST** testar compacto/intermediário/amplo, zoom e reflow, língua expandida, teclado, leitor de tela quando possível, tema claro/escuro, scroll e retorno; preservar invariantes semânticos do conteúdo.
+- **SHOULD** usar títulos e rótulos informativos, agrupamento por função, densidade adequada e sinalização proporcional, evitando que sobrecarga de cards, badges ou animações concorra com o conteúdo.
+- **MUST** distinguir **implementado/testado** de **documentado**. Qualquer screenshot ou GIF deve refletir uma interface real verificada, persistida no board quando aplicável; não registrar evidência fictícia.
+- **AVOID** tornar F-pattern, Z-pattern, regra de terços, largura de 16 colunas ou número fixo de panes em requisitos universais. São observações ou escolhas dependentes de conteúdo e plataforma.
+
 ## 9. Referências catalogadas — 21 candidatos a skills + 1 agregador (auditoria em andamento)
 
 Os 22 itens abaixo são **21 candidatos a skills e 1 agregador comunitário (M09)**; **não correspondem a 22 SKILL.md individuais verificados**, e não são extensões oficiais de Apple ou Google. **Catalogar URL não comprova leitura integral de cada SKILL.md, README e referências internas.** Não afirmar que os 22 foram verificados ou que cada resumo corresponde ao estado atual do repositório sem registro de arquivo/revisão/data. Esta integração é uma síntese preliminar enquanto a análise aprofundada de cada fonte não estiver documentada. Alguns estão voltados a Android/SwiftUI; nem todo trecho de código se aplica a um protótipo HTML/CSS/JS. Para números ou requisitos, confrontar com a documentação oficial **vigente**.
