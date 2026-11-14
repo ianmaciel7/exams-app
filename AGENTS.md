@@ -940,6 +940,34 @@ Estas são **16 entradas adicionais** de sucesso WCAG, além das já documentada
 
 **Fonte:** [WCAG 2.2](https://www.w3.org/TR/WCAG22/). Estes são **AAA**, não critérios necessários para alegação AA. Não inflar a lista principal de A/AA nem substituir 3.3.8 AA pelo 3.3.9 AAA.
 
+
+### 19. Motion de componentes, ícones animados e drag-and-drop — diretrizes oficiais e padrões (2026)
+
+**Escopo:** complementa os princípios de animação existentes, sem adicioná-los novamente como "leis". Separar **referência nativa Apple**, **design system Material 3**, **APIs Web/MDN**, **WCAG normativo** e **padrões dnd-kit/Motion**. O contrato de implementação e testes está em [MOTION.md §6](MOTION.md) e o mapeamento visual em [DESIGN.md §8.22](DESIGN.md). **Não instalar biblioteca nova só para reproduzir uma animação simples no protótipo HTML/CSS/JS.**
+
+| Nome publicado | Categoria / escopo | Uso para o Exam App | Fonte |
+|---|---|---|---|
+| **Symbol Effects — Discrete, Indefinite, Transition, Content Transition** | Sistema **Apple Symbols** (APIs nativas, não componentes web) | Ícones de favorito, expandir/recolher, salvar e status podem expressar uma alteração de estado com efeito breve. **Não** reproduzir SF Symbols/SDK proprietário na web; para SVG/Lucide usar efeitos próprios acessíveis. | [Apple — Symbols](https://developer.apple.com/documentation/symbols), [Apple HIG — Motion](https://developer.apple.com/design/human-interface-guidelines/motion) |
+| **Draw On / Draw Off; Bounce; Pulse; Wiggle; Rotate; Replace** | Nomes de efeitos de símbolos Apple; referência de linguagem visual | Ícone pode animar entre estados com continuidade e feedback, sem looping arbitrário; avaliar versão/plataforma dos efeitos e não tratá-los como requisito web. | [Apple SF Symbols](https://developer.apple.com/sf-symbols/), [Apple — Symbols](https://developer.apple.com/documentation/symbols) |
+| **Spatial Springs / Effects Springs (Material 3 Expressive)** | Design system M3 (não especificação de física da web) | Reposicionamento/escala/forma usam intenção espacial; cor/opacidade indicam estado sem bounce desnecessário. Já cobertos em MOTION.md §5: aplicar aos casos concretos. | [Material 3 — Motion](https://m3.material.io/styles/motion/overview), [Motion theming](https://m3.material.io/blog/m3-expressive-motion-theming) |
+| **Sortable / Drag Handle / Drag Overlay / Drop Animation** | Padrões documentados por **dnd-kit** | Reordenar cards/painéis com alça deliberada, prévia de item arrastado, destino visível, animação de assentamento/cancelamento e estado consistente. | [dnd-kit — Sortable](https://dndkit.com/concepts/sortable/), [Drag Overlay](https://dndkit.com/react/components/drag-overlay/) |
+| **Pointer Sensor / Keyboard Sensor / Accessibility / AutoScroller** | Recursos atuais de dnd-kit, implementação opcional | Mouse, toque, teclado, feedback anunciado e auto-scroll durante drag perto de bordas, com limite e testes. | [dnd-kit — DragDropManager](https://dndkit.com/concepts/drag-drop-manager/) |
+| **Layout Animations / Shared Layout / AnimatePresence / Reorder** | Motion (API e exemplos React, não bibliotecas obrigatórias) | Transição de lista, card ↔ detalhe e entrada/saída sem salto ou perda de foco; adotar somente se compatível com stack atual/futura. | [Motion — Layout](https://motion.dev/docs/react-layout-animations), [Reorder](https://motion.dev/docs/react-reorder) |
+| **View Transition API** | API Web (SPA/MPA), com compatibilidade condicionada | Transições de estado/rota e identidade visual entre vistas; fallback instantâneo, foco/scroll e estado lógico preservados. | [MDN — View Transition API](https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API), [Using](https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API/Using) |
+| **G219 — Ensuring that an alternative is available for dragging movements that operate on content** | Técnica W3C **suficiente**, informativa, para **WCAG 2.2 SC 2.5.7 (AA)** | Dar alternativa de **ponteiro único sem arrastar**: botões Mover acima/abaixo, escolher destino por menu, escolher posição, clicar nó de origem e destino. **Teclado por si só não satisfaz 2.5.7.** | [WAI — G219](https://www.w3.org/WAI/WCAG22/Techniques/general/G219), [SC 2.5.7](https://www.w3.org/WAI/WCAG22/Understanding/dragging-movements) |
+
+**Contrato de implementação:**
+
+1. **MUST** decidir o **significado** da animação: feedback de estado, orientação espacial, origem/destino, progresso ou gesto direto. Não animar todos os ícones no hover, criar loops decorativos, nem atrasar operações frequentes por estética.
+2. **MUST** manter nome/papel/valor e foco acessível dos botões com ícone antes, durante e depois da animação; estado e mensagem em texto/ARIA quando pertinente. Ícones ornamentais devem ficar fora da árvore acessível, mas o botão continua nomeado.
+3. **MUST** oferecer modo sem movimento espacial/loop quando há preferência reduced motion; preservar ação, estado e resultado. Para interações, **WCAG 2.3.3 Animation from Interactions é AAA**, ao passo que **2.5.7 Dragging Movements é AA**.
+4. **MUST** distinguir quatro caminhos de reordenação: **arrastar por ponteiro**, **controle por teclado**, **alternativa por toque/clique sem arraste** e **cancelar/desfazer**, quando aplicáveis. A mesma ordem final e as mesmas permissões devem valer em todos.
+5. **MUST** definir os estados de DnD: idle → armed → dragging → valid/invalid drop → committing → committed/failed, com Escape/cancelamento, drop fora do alvo, scroll, viewport dinâmico e persistência assíncrona; não anunciar "movido" antes de confirmar o estado apropriado.
+6. **SHOULD** usar drag handle em cards que contêm botão, link, input ou seleção de texto; não roubar seleção/scroll do conteúdo nem aceitar drop em área inválida. Posição/índice devem permanecer acessíveis e reversíveis.
+7. **MUST** aplicar WCAG 2.5.1, 2.5.2, 2.5.7 e 2.5.8 conforme pertinência, além de teclado/foco/reduced motion; registrar testes reais, incluindo touch, pointer cancel, arraste para fora, Escape e falha de gravação.
+8. **MUST** manter animações interrompíveis e o estado lógico independente do fim do efeito; não depender só de transitionend/animationend. Consultar [MOTION.md §5.10](MOTION.md).
+9. **MUST** registrar o fluxo com captura e, quando comportamento temporal importar, GIF/vídeo + descrição textual e resultado dos testes no board; **mudança apenas documental não exige imagem inventada**.
+
 <!-- UX-LAWS-CATALOG:END -->
 
 <!-- DESIGN-SYSTEM-INTEGRATION:START -->
