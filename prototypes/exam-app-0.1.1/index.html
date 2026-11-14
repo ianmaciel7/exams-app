@@ -70,6 +70,26 @@
 .pdf-page-notice button:hover{background:var(--hover)}
 .pdf-page-notice button:disabled{opacity:.6;cursor:wait}
 </style>
+<style>
+/* Question notebooks and reusable Queries — responsive, semantic and zero emojis. */
+.qf-saved-actions,.nb-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.qf-saved-actions{padding-left:8px}
+.nb-list{display:grid;gap:14px;margin:16px 0}
+.nb-card{background:var(--bg-base);border:1px solid var(--line);padding:16px;border-radius:12px;box-shadow:var(--surface-shadow)}
+.nb-card h2{font-size:16px;margin:0 0 6px;font-weight:600}
+.nb-stats{display:flex;gap:12px;flex-wrap:wrap;margin:10px 0;font-variant-numeric:tabular-nums}
+.nb-progress{display:block;width:100%;height:10px;accent-color:var(--study-accent);margin:8px 0 16px}
+.nb-actions{margin:14px 0}
+.nb-row{display:flex;align-items:center;gap:8px}.nb-row .op-row{flex:1}
+.nb-membership{margin-top:12px;border-top:1px solid var(--line);padding-top:10px}
+.nb-membership>summary{cursor:pointer;color:var(--text);font-size:13px;font-weight:600}
+.nb-membership-body{display:flex;gap:9px;flex-direction:column;padding:10px 0}
+.nb-check{display:flex;align-items:center;gap:9px;min-height:32px;font-size:13px;color:var(--text)}
+.nb-check input{width:17px;height:17px;accent-color:var(--study-accent)}
+.nb-goal{display:flex;gap:8px;align-items:center;padding:8px 0;font-size:13px}
+.nb-goal input{width:75px;padding:7px;border:1px solid var(--line);border-radius:6px}
+@media(max-width:768px){.qf-saved-actions{padding-left:0}.nb-list{gap:10px}.nb-card{padding:12px}}
+</style>
 </head><body>
 <style>
 /* ===== Exam App 0.1.1 — páginas de estudo e detalhes, 2026 ===== */
@@ -3836,6 +3856,64 @@ function sfIndex(){
     sSection('Queries de Questão','<div class="s-card">'+sfLinks()+'</div>');
   studyPage('Filtros','Consultas salvas',content);
 }
+
+/* Caderno controls share the existing in-page dialog and route system. */
+view.addEventListener('change',e=>{
+  const t=e.target.closest('[data-nb-member]');if(!t)return;
+  const [qid,id]=t.dataset.nbMember.split('|'),book=nbFind(id);if(!book)return;
+  nbSave(nbAll().map(b=>{
+    if(b.id!==id)return b;
+    const ids=new Set(b.questionIds);if(t.checked)ids.add(qid);else ids.delete(qid);
+    return {...b,questionIds:[...ids]};
+  }));
+  toast(t.checked?'Questão adicionada ao caderno.':'Questão removida do caderno.');
+});
+view.addEventListener('click',async e=>{
+  let t;
+  if(t=e.target.closest('[data-qf-create-book]')){
+    const key=t.dataset.qfCreateBook,context=qfCtx[key];if(!context)return;
+    const list=qfFilter(key,context.all);if(!list.length){toast('Nenhuma questão com os filtros atuais.');return;}
+    await nbCreate(list.map(q=>q.id),false);return;
+  }
+  if(t=e.target.closest('[data-qf-save-filter]')){await sfCreate(t.dataset.qfSaveFilter);return;}
+  if(t=e.target.closest('[data-nb-single]')){await nbCreate([t.dataset.nbSingle],true);return;}
+  if(e.target.closest('[data-nb-empty]')){await nbCreate([],false);return;}
+  if(t=e.target.closest('[data-sf-delete]')){
+    const f=sfAll().find(x=>x.id===t.dataset.sfDelete&&x.sp===space);if(!f)return;
+    const ok=await dialog({alert:true,danger:true,title:'Excluir filtro salvo?',text:'O filtro “'+f.name+'” será removido. As questões não serão apagadas.',ok:'Excluir filtro'});
+    if(ok){sfSave(sfAll().filter(x=>x.id!==f.id));route(true);}return;
+  }
+  if(t=e.target.closest('[data-nb-continue]')){
+    const b=nbFind(t.dataset.nbContinue);if(!b)return;
+    const items=nbQuestionList(b),index=items.findIndex(q=>!nbAnswer(b.id,q.id));
+    qScopedPage['book:'+b.id]=Math.max(0,index);
+    const hash='/caderno/'+b.id+'?at='+qScopedPage['book:'+b.id];
+    if(location.hash==='#'+hash)nbRender(hash);else location.hash=hash;
+    return;
+  }
+  if(t=e.target.closest('[data-nb-retake]')){
+    const b=nbFind(t.dataset.nbRetake);if(!b)return;
+    const wrong=nbQuestionList(b).filter(q=>nbAnswer(b.id,q.id)&&nbAnswer(b.id,q.id)!==q.gabarito).map(q=>q.id);
+    if(!wrong.length){toast('Nenhuma questão errada para refazer.');return;}
+    const ok=await dialog({alert:true,title:'Refazer '+wrong.length+' questões erradas?',text:'O progresso desta tentativa será reiniciado apenas para essas questões. O histórico geral será preservado.',ok:'Refazer erradas'});
+    if(!ok)return;
+    const m=nbAnswerMap(),answers={...(m[b.id]||{})};
+    wrong.forEach(id=>delete answers[id]);m[b.id]=answers;store.set('cadernoAnswers',m);
+    nbSave(nbAll().map(x=>x.id===b.id?{...x,retakeIds:wrong}:x));
+    qScopedPage['book:'+b.id+':erradas']=0;location.hash='/caderno/'+b.id+'/erradas';
+    if(location.hash==='#/caderno/'+b.id+'/erradas')nbRender(location.hash.slice(1));
+    return;
+  }
+  if(t=e.target.closest('[data-nb-reset]')){
+    const b=nbFind(t.dataset.nbReset);if(!b)return;
+    const ok=await dialog({alert:true,danger:true,title:'Zerar progresso do caderno?',text:'Somente as respostas deste caderno serão limpas. As respostas originais das questões e o histórico geral permanecem.',ok:'Zerar progresso'});
+    if(!ok)return;
+    const answers=nbAnswerMap();delete answers[b.id];store.set('cadernoAnswers',answers);
+    nbSave(nbAll().map(x=>x.id===b.id?{...x,retakeIds:[]}:x));
+    qScopedPage['book:'+b.id]=0;route(true);return;
+  }
+});
+
 async function nbRoute(h){
   studyPage('Cadernos','Carregando','<div class="s-empty" role="status">Abrindo cadernos…</div>');
   try{
@@ -4225,8 +4303,26 @@ let timerId=null;
 function stopExamTicker(){if(timerId){clearInterval(timerId);timerId=null;}}
 function beginExamTicker(){stopExamTicker();if(location.hash==='#/simulado/exec')timerId=setInterval(()=>{if(location.hash==='#/simulado/exec'&&questionBank)sExamQuestion();else stopExamTicker()},1000)}
 /* Global and scoped practice use the same qfHTML input/refresh handlers above. */
-function qCorrect(id,val){ const q=qObjs().find(x=>x.id===id);if(!q||qSel(q))return; if(q.user){const a=uqAns();a[id]=val;store.set('uqAns',a);}else{const a=getAnswers();a[q.n]={selected:val,correct:val===q.gabarito};saveAnswers(a);}recHist(q,val===q.gabarito,'Prática',0,val);delete qPend[id];const y=view.scrollTop;if(location.hash.startsWith('#/questoes'))renderPractice();else showObjs(location.hash.slice(1));view.scrollTop=y; }
-view.addEventListener('change',e=>{if(e.target.id==='qtBanca'||e.target.id==='qtOrig'||e.target.id==='qtDisc'||e.target.id==='qtEd'||e.target.id==='qtSit'){const k={qtBanca:'banca',qtOrig:'orig',qtDisc:'disc',qtEd:'ed',qtSit:'sit'}[e.target.id];qtF[k]=e.target.value;showObjs(location.hash.slice(1));return;}if(e.target.id==='qtOrd'){simOrd=e.target.value;store.set('simOrd',simOrd);return;}if(e.target.id==='scMat'||e.target.id==='scSit'){if(e.target.id==='scMat')scMat=e.target.value;else scSit=e.target.value;showObjs(location.hash.slice(1));return;}if(e.target.name==='scCount'){scCount=e.target.value;store.set('scCount',scCount);return;}if(e.target.id==='cxEd'){cxEd=e.target.value;cxCargo=null;route(true);return;}if(e.target.id==='cxCargo'){cxCargo=e.target.value;route(true);return;}if(e.target.name==='simSrc'){simSrc=e.target.value;store.set('simSrc',simSrc);return;}if(e.target.name==='simOrd'){simOrd=e.target.value;store.set('simOrd',simOrd);return;}if(e.target.id==='simQty'){simQty=e.target.value;store.set('simQty',simQty);return;}if(e.target.id==='simDuration'){simDurationMin=Number(e.target.value)||0;store.set('simDurationMin',simDurationMin);return;}if(e.target.id==='qPer'){qPer=+e.target.value;store.set('qPer',qPer);qIndex=0;qfSyncURL();renderPractice();return;}if(e.target.id==='qAuto'){qAuto=e.target.checked;store.set('qAuto',qAuto);renderPractice();toast(qAuto?'Correção automática ligada':'Correção automática desligada');return;}if(e.target.name&&e.target.name.startsWith('qa-')){const id=e.target.name.slice(3);qPend[id]=e.target.value;if(qAuto)qCorrect(id,e.target.value);return;}if(e.target.id==='qFilter'){qFilter=e.target.value;qIndex=0;renderPractice();}if(e.target.id==='qMateria'){qMateria=e.target.value;qIndex=0;renderPractice();}if(e.target.name==='study-answer'&&location.hash==='#/simulado/exec'){const s=getExam();if(s&&!s.finished){const q=questionBank.questoes[s.index];s.answers[q.n]=e.target.value;saveExam(s); /* preserve input focus without full rerender */}}});
+function qCorrect(id,val,key){
+  const q=qObjs().find(x=>x.id===id),bookId=key&&key.startsWith('book:')?key.split(':')[1]:null;
+  if(!q)return;
+  if(bookId){
+    if(!nbFind(bookId)||nbAnswer(bookId,id))return;
+    const m=nbAnswerMap(),answers=m[bookId]||{};
+    answers[id]={selected:val,at:Date.now()};m[bookId]=answers;store.set('cadernoAnswers',m);
+  }else{
+    if(qSel(q))return;
+    if(q.user){const a=uqAns();a[id]=val;store.set('uqAns',a);}
+    else{const a=getAnswers();a[q.n]={selected:val,correct:val===q.gabarito};saveAnswers(a);}
+  }
+  recHist(q,val===q.gabarito,bookId?'Caderno':'Prática',0,val);
+  delete qPend[id];const y=view.scrollTop;
+  if(bookId)nbRender(location.hash.slice(1));
+  else if(location.hash.startsWith('#/questoes'))renderPractice();
+  else showObjs(location.hash.slice(1));
+  view.scrollTop=y;
+}
+view.addEventListener('change',e=>{if(e.target.id==='qtBanca'||e.target.id==='qtOrig'||e.target.id==='qtDisc'||e.target.id==='qtEd'||e.target.id==='qtSit'){const k={qtBanca:'banca',qtOrig:'orig',qtDisc:'disc',qtEd:'ed',qtSit:'sit'}[e.target.id];qtF[k]=e.target.value;showObjs(location.hash.slice(1));return;}if(e.target.id==='qtOrd'){simOrd=e.target.value;store.set('simOrd',simOrd);return;}if(e.target.id==='scMat'||e.target.id==='scSit'){if(e.target.id==='scMat')scMat=e.target.value;else scSit=e.target.value;showObjs(location.hash.slice(1));return;}if(e.target.name==='scCount'){scCount=e.target.value;store.set('scCount',scCount);return;}if(e.target.id==='cxEd'){cxEd=e.target.value;cxCargo=null;route(true);return;}if(e.target.id==='cxCargo'){cxCargo=e.target.value;route(true);return;}if(e.target.name==='simSrc'){simSrc=e.target.value;store.set('simSrc',simSrc);return;}if(e.target.name==='simOrd'){simOrd=e.target.value;store.set('simOrd',simOrd);return;}if(e.target.id==='simQty'){simQty=e.target.value;store.set('simQty',simQty);return;}if(e.target.id==='simDuration'){simDurationMin=Number(e.target.value)||0;store.set('simDurationMin',simDurationMin);return;}if(e.target.id==='qPer'){qPer=+e.target.value;store.set('qPer',qPer);qIndex=0;qfSyncURL();renderPractice();return;}if(e.target.id==='qAuto'){qAuto=e.target.checked;store.set('qAuto',qAuto);renderPractice();toast(qAuto?'Correção automática ligada':'Correção automática desligada');return;}if(e.target.name&&e.target.name.startsWith('qa-')){const id=e.target.name.slice(3),key=e.target.closest('[data-practice-key]')?.dataset.practiceKey||'study';qPend[id]=e.target.value;if(qAuto)qCorrect(id,e.target.value,key);return;}if(e.target.id==='qFilter'){qFilter=e.target.value;qIndex=0;renderPractice();}if(e.target.id==='qMateria'){qMateria=e.target.value;qIndex=0;renderPractice();}if(e.target.name==='study-answer'&&location.hash==='#/simulado/exec'){const s=getExam();if(s&&!s.finished){const q=questionBank.questoes[s.index];s.answers[q.n]=e.target.value;saveExam(s); /* preserve input focus without full rerender */}}});
 view.addEventListener('click',e=>{
  const rr0=()=>showObjs(location.hash.slice(1)); const rrKeep=()=>{ const y=view.scrollTop; rr0(); view.scrollTop=y; };
  const qa=e.target.closest('[data-qo-ans]'); if(qa){ const [id,l]=qa.dataset.qoAns.split('|'); const q=qObjs().find(x=>x.id===id); if(q&&!qSel(q)){ if(q.user){ const m=uqAns(); m[id]=l; store.set('uqAns',m); } else { const a=getAnswers(); a[q.n]={selected:l,correct:l===q.gabarito}; saveAnswers(a); } recHist(q,l===q.gabarito,'Prática',0,l); } rrKeep(); return; }
@@ -4254,15 +4350,15 @@ view.addEventListener('click',e=>{
   startSim(items);return;
  }
  if(e.target.closest('[data-study-retry]')){questionLoading=null;route(true);}
- const step=e.target.closest('[data-q-page]');if(step){const [key,dir]=step.dataset.qPage.split('|'),per=key==='study'?qPer:5;if(key==='study'){qIndex+=dir==='next'?per:-per;qIndex=Math.max(0,qIndex);qfSyncURL();renderPractice();}else{qScopedPage[key]=Math.max(0,(qScopedPage[key]||0)+(dir==='next'?per:-per));showObjs(location.hash.slice(1));}return;}
- const goTo=e.target.closest('[data-q-goto]');if(goTo){const [key,at]=goTo.dataset.qGoto.split('|');if(key==='study'){qIndex=+at;qfSyncURL();renderPractice();}else{qScopedPage[key]=+at;showObjs(location.hash.slice(1));}return;}
+ const step=e.target.closest('[data-q-page]');if(step){const [key,dir]=step.dataset.qPage.split('|'),per=key==='study'?qPer:(key.startsWith('book:')?1:5);if(key==='study'){qIndex+=dir==='next'?per:-per;qIndex=Math.max(0,qIndex);qfSyncURL();renderPractice();}else{qScopedPage[key]=Math.max(0,(qScopedPage[key]||0)+(dir==='next'?per:-per));if(key.startsWith('book:')){history.replaceState(history.state,'',location.pathname+location.search+location.hash.split('?')[0]+'?at='+qScopedPage[key]);nbRender(location.hash.slice(1));}else showObjs(location.hash.slice(1));}return;}
+ const goTo=e.target.closest('[data-q-goto]');if(goTo){const [key,at]=goTo.dataset.qGoto.split('|');if(key==='study'){qIndex=+at;qfSyncURL();renderPractice();}else{qScopedPage[key]=+at;if(key.startsWith('book:')){history.replaceState(history.state,'',location.pathname+location.search+location.hash.split('?')[0]+'?at='+qScopedPage[key]);nbRender(location.hash.slice(1));}else showObjs(location.hash.slice(1));}return;}
  const qSim=e.target.closest('[data-qf-sim]');if(qSim){const key=qSim.dataset.qfSim;const context=qfCtx[key];if(context)startSim(qfFilter(key,context.all));return;}
  if(e.target.closest('[data-q-prev]')){qIndex-=qPer;renderPractice();}
  if(e.target.closest('[data-q-next]')){qIndex+=qPer;renderPractice();}
  const rm=e.target.closest('[data-q-rm]'); if(rm){ const k=rm.dataset.qRm; if(k==='materia')qMateria='todas'; else if(k==='filter')qFilter='todas'; else qSearch=''; qIndex=0; renderPractice(); return; }
  if(e.target.closest('[data-q-clear]')){qFilter='todas';qMateria='todas';qSearch='';qIndex=0;renderPractice();}
  const jump=e.target.closest('[data-q-jump]');if(jump){qIndex=+jump.dataset.qJump;renderPractice();}
- const chk=e.target.closest('[data-q-check]'); if(chk){const id=chk.dataset.qCheck;if(!qPend[id]){toast('Escolha uma alternativa');return;}qCorrect(id,qPend[id]);return;}
+ const chk=e.target.closest('[data-q-check]'); if(chk){const id=chk.dataset.qCheck,key=chk.closest('[data-practice-key]')?.dataset.practiceKey||'study';if(!qPend[id]){toast('Escolha uma alternativa');return;}qCorrect(id,qPend[id],key);return;}
  if(e.target.closest('[data-s-start]')){
   let items=qObjs();
   if(simSrc==='erradas')items=items.filter(q=>qSel(q)&&qSel(q)!==q.gabarito);
