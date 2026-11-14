@@ -1,6 +1,6 @@
 # Catálogo de leis, heurísticas e padrões UX/UI — Exam App
 
-> **Status:** curadoria operacional inicial (14/11/2026), para uso por agentes; não representa o relatório final da Pesquisa Profunda em andamento. **Base consultada:** branch dev em 408271d7c56b088fefe9d17860a23c47731ff268. **Escopo:** documentação, sem alterar telas. Relacionado a [#102](https://github.com/ianmaciel7/exams-app/issues/102) e [arquitetura de navegação](arquitetura-informacao-navegacao.md).
+> **Status:** catálogo documental **incremental**, ampliado em 14/11/2026 por PRs de leis, princípios e padrões. **Não representa extração exaustiva dos 20 sites** nem demonstra implementação/testes de UI. **Baseline histórico da primeira versão:** `408271d7c56b088fefe9d17860a23c47731ff268` — **não é o HEAD atual da dev**; sempre consultar o commit vigente antes da auditoria. Escopo: documentação. Pesquisa de cobertura registrada na [síntese de 20 fontes](pesquisa-20-fontes-2026-11.md) e na [issue #122](https://github.com/ianmaciel7/exams-app/issues/122).
 
 **Animação e movimento:** os 12 princípios clássicos, as regras de motion para interfaces, os tokens do Exam App e os testes de movimento reduzido estão documentados em [MOTION.md](../../MOTION.md). São princípios artísticos e práticas de interação, não 12 leis normativas de UX.
 
@@ -28,6 +28,23 @@
 | **Power Law of Practice / Law of Practice** | Modelo histórico de aprendizagem e melhora em tarefas repetidas. | [Newell & Rosenbloom](https://iiif.library.cmu.edu/file/Newell_box00089_fld06179_doc0001/Newell_box00089_fld06179_doc0001.pdf); [contestação empírica](https://pubmed.ncbi.nlm.nih.gov/10909131/) | **Contestado:** curvas exponenciais podem ajustar melhor dados individuais. |
 
 **Quatro diretamente aplicáveis à interação e percepção:** Fitts, Hick-Hyman, Steering e Weber. **Duas condicionais e com limites:** Zipf e Power Law of Practice. “Laws of UX” contém conceitos de várias classes, e **Jakob, Tesler, Gestalt, Nielsen, Apple Symbol Effects, Material 3 e Drag-and-Drop não são leis científicas da UI**. O objetivo é documentação correta, não impor fórmulas matemáticas a uma interface sem dados.
+
+
+### Complemento científico — percepção, movimento e métricas (revisão do histórico)
+
+Espelho de [AGENTS.md §§0.2.1–0.2.2](../../AGENTS.md). Os nomes abaixo **não estavam no índice anterior**. A classificação evita confundir relações psicofísicas com leis gerais de UI ou normas de conformidade.
+
+| Nome original | Categoria | Fonte científica ou histórica | Limite para o Exam App |
+|---|---|---|---|
+| **Fechner's Law / Weber–Fechner Law** | Lei/modelo psicofísico histórico | [Análise de Fechner](https://pmc.ncbi.nlm.nih.gov/articles/PMC1994651/); [crítica](https://pubmed.ncbi.nlm.nih.gov/20550824/) | Hipótese logarítmica não é universal nem substitui WCAG. |
+| **Stevens' Power Law** | Lei psicofísica experimental | [Stevens (1957)](https://doi.org/10.1037/h0046162) | Dependente de modalidade e condições; sem tokens mágicos. |
+| **Piéron's Law** | Lei psicofísica de tempo de reação | [Revisão](https://pmc.ncbi.nlm.nih.gov/articles/PMC3249387/); [Pins & Bonnet (1996)](https://doi.org/10.3758/BF03206815) | Não é fórmula de latência de interface ou backend. |
+| **Korte's Laws** | Generalizações históricas de movimento aparente | [Korte (1915)](https://books.google.de/books/about/Kinematoskopische_Untersuchungen.html?id=lD7SoQEACAAJ); [revisão crítica](https://doi.org/10.1111/j.1467-9450.2009.00782.x) | A terceira lei não se sustenta universalmente; não prescrever duração de animação. |
+| **Yerkes–Dodson Law** | Achado psicológico histórico | [1908](https://doi.org/10.1002/cne.920180503); [crítica historiográfica](https://doi.org/10.1177/0959354394044004) | Não transformar em regra universal estresse × produtividade. |
+| **Goodhart's Law** | Lei nomeada da economia / governança de indicadores | [Cambridge — histórico e formulação](https://www.damtp.cam.ac.uk/user/mem2/papers/LHCE/goodhart.html) | Não é lei científica de UI; serve para evitar métricas-alvo distorcidas. |
+| **Campbell's Law** | Princípio de avaliação de políticas e indicadores | [Campbell (1979)](https://doi.org/10.1016/0149-7189(79)90048-X) | Não é lei de interface nem critério WCAG. |
+
+**Efeito que continua separado das leis:** [Endowed Progress Effect (Nunes & Drèze, 2006)](https://doi.org/10.1086/500480). A pesquisa sobre progresso artificial não autoriza inventar progresso de simulado ou gamificação enganosa.
 
 ## Catálogo (86 itens)
 

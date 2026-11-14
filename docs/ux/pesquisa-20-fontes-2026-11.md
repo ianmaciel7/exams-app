@@ -91,3 +91,14 @@ A classificação indica **a utilidade da fonte**, não certifica auditoria inte
 - [USWDS](https://designsystem.digital.gov/): padrões públicos de interface e acessibilidade.
 
 **Limites:** não há um inventário mundial fechado de "todas as leis de UI/UX". Os 20 links contêm sobreposição, conceitos não empíricos, diretrizes em mudança e possíveis conteúdos restritos. Para cumprir uma futura auditoria de cobertura *exaustiva*, levantar nomes e URLs de **cada entrada individual** por site, marcar acessível/não acessível, deduplicar por sinônimo e registrar evidência; não presumir que esta síntese já fez isso.
+
+
+## Reconciliação com pedidos anteriores (14/11/2026)
+
+**Diferença entre pedido e entrega:** o usuário pediu pesquisa **entrada a entrada** das leis/princípios presentes nos 20 catálogos, com fontes diversas, **nomes originais** e envio das leis para `dev`. Este arquivo contém a lista de 20 fontes e uma **síntese útil, porém não exaustiva**. As revisões incrementais de `AGENTS.md` ampliaram leis e padrões, mas **não há matriz que demonstre quais entradas de cada uma das 20 fontes foram efetivamente lidas, verificadas, deduplicadas e incorporadas**. O estado `closed` da [issue #122](https://github.com/ianmaciel7/exams-app/issues/122) **não transforma este inventário parcial em pesquisa integral comprovada**.
+
+**Leis antes omitidas, agora categorizadas:** Fechner, Stevens, Piéron, Korte e Yerkes–Dodson (psicofísica/história com ressalvas); Goodhart e Campbell (leis nomeadas de outras disciplinas, não leis específicas de UI/UX). Há outras entradas a classificar separadamente como **efeitos/vieses/heurísticas**, por exemplo Endowed Progress Effect, Stroop Effect, Change Blindness, Banner Blindness, Satisficing, Default Effect, Automation Bias e Interruption Cost. Não aumentar a contagem de leis apenas por serem nomes populares ou constarem em agregadores.
+
+**Lacuna de outra conversa:** a leitura individual de **21 candidatos a skills Material 3/Apple + 1 agregador** e o teste no protótipo seguem sem evidência de conclusão, rastreados na [issue #156](https://github.com/ianmaciel7/exams-app/issues/156) e em [DESIGN.md §9](../../DESIGN.md). Cadastrar URLs ou resumir skills **não comprova leitura integral**.
+
+**Próxima verificação mensurável:** tabela por fonte contendo `site → entrada original → link direto → status de acesso → classe científica/normativa → estudos/fonte primária → duplicatas → presença em AGENTS.md → evidência → próximo passo`; registrar explícita e honestamente inacessíveis, JS ou paywall. Para interfaces, conferir DOM/CSS/JS, screenshots/GIF e board nas jornadas de Questões, Simulados, Revisão, sidebar, grafo, PDF, responsividade e animações. **Este ajuste de documentação não altera nem valida o protótipo.**
