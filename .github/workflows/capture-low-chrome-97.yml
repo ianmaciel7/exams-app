@@ -1,0 +1,55 @@
+name: Capture Low-Chrome Visual Evidence
+
+on:
+  pull_request:
+    branches: [dev]
+    paths:
+      - 'prototypes/exam-app-0.1.1/index.html'
+      - 'scripts/capture-low-chrome-97.mjs'
+      - 'scripts/append-low-chrome-board.py'
+      - '.github/workflows/capture-low-chrome-97.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  screenshots:
+    if: github.head_ref == 'fix/low-chrome-shell-97' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser and dependencies
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Checkout baseline and launch both versions
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          git worktree add --detach /tmp/exams-base "$BASE_SHA"
+          python3 -m http.server 8765 --directory prototypes >/tmp/after-server.log 2>&1 &
+          python3 -m http.server 8766 --directory /tmp/exams-base/prototypes >/tmp/before-server.log 2>&1 &
+          sleep 2
+          curl --fail http://127.0.0.1:8765/exam-app-0.1.1/index.html -o /dev/null
+          curl --fail http://127.0.0.1:8766/exam-app-0.1.1/index.html -o /dev/null
+      - name: Capture paired states and verify absence of decorative borders
+        run: node scripts/capture-low-chrome-97.mjs
+      - name: Append screenshots to board and regenerate Markdown
+        run: |
+          python3 scripts/append-low-chrome-board.py
+          python3 prototypes/board-exam-app/board_to_md.py
+      - name: Commit evidence back to PR branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add prototypes/board-exam-app/board.json prototypes/board-exam-app/BOARD.md prototypes/board-exam-app/lowchrome_97_manifest.json
+          git add prototypes/board-exam-app/assets/lowchrome_97_*.png
+          git commit -m "test(ui): add 48 before/after screenshots and board evidence for #97"
+          git push origin HEAD:${{ github.head_ref }}

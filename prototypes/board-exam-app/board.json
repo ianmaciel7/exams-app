@@ -386,7 +386,104 @@
     "e989",
     "e990",
     "e991",
-    "e992"
+    "e992",
+    "e993",
+    "e994",
+    "e995",
+    "e996",
+    "e997",
+    "e998",
+    "e999",
+    "e1000",
+    "e1001",
+    "e1002",
+    "e1003",
+    "e1004",
+    "e1005",
+    "e1006",
+    "e1007",
+    "e1008",
+    "e1009",
+    "e1010",
+    "e1011",
+    "e1012",
+    "e1013",
+    "e1014",
+    "e1015",
+    "e1016",
+    "e1017",
+    "e1018",
+    "e1019",
+    "e1020",
+    "e1021",
+    "e1022",
+    "e1023",
+    "e1024",
+    "e1025",
+    "e1026",
+    "e1027",
+    "e1028",
+    "e1029",
+    "e1030",
+    "e1031",
+    "e1032",
+    "e1033",
+    "e1034",
+    "e1035",
+    "e1036",
+    "e1037",
+    "e1038",
+    "e1039",
+    "e1040",
+    "e1041",
+    "e1042",
+    "e1043",
+    "e1044",
+    "e1045",
+    "e1046",
+    "e1047",
+    "e1048",
+    "e1049",
+    "e1050",
+    "e1051",
+    "e1052",
+    "e1053",
+    "e1054",
+    "e1055",
+    "e1056",
+    "e1057",
+    "e1058",
+    "e1059",
+    "e1060",
+    "e1061",
+    "e1062",
+    "e1063",
+    "e1064",
+    "e1065",
+    "e1066",
+    "e1067",
+    "e1068",
+    "e1069",
+    "e1070",
+    "e1071",
+    "e1072",
+    "e1073",
+    "e1074",
+    "e1075",
+    "e1076",
+    "e1077",
+    "e1078",
+    "e1079",
+    "e1080",
+    "e1081",
+    "e1082",
+    "e1083",
+    "e1084",
+    "e1085",
+    "e1086",
+    "e1087",
+    "e1088",
+    "e1089"
   ],
   "elements": {
     "e1": {
@@ -4011,6 +4108,831 @@
       "w": 700,
       "h": 540,
       "text": "**Resolução Técnica: Substituição do Card de Usuário (.user-btn) pela Seção Ajuda & Recursos e Rodapé Horizontal de Ícones do Capacities (Issue #53)**\n\n- **Substituição do Card de Usuário (.user-btn):**\n  - Removido o card largo estilo Notion/Linear (.user-btn) contendo avatar 'I' e 'Ian / Plano pessoal' da base da barra lateral.\n  - Eliminação de cliques extras: funções essenciais como tema, atalhos e configurações agora contam com acesso direto de 1 clique no rodapé.\n- **Linhas Utilitárias Inferiores (.side-utils, altura 30px, ícones 16px):**\n  - Posicionadas imediatamente acima da barra fixa inferior, com alinhamento visual rigoroso:\n    - **Gráfico** (`#graphBtn`): abre a constelação global (`#/grafico`), com estado ativo sincronizado via `aria-current`.\n    - **Lixeira** (`#trashBtn`): abre a gestão de itens excluídos (`#/lixeira`), com contagem e restauração contextual.\n    - **Ajuda & Recursos** (`#sideHelpBtn`): grupo expansível com chevron indicativo e gaveta retrátil contendo:\n      - *Primeiros Passos* (`#helpSubSteps`): modal guiado com passos rápidos de uso do Exam App.\n      - *Documentação* (`#helpSubDocs`): acesso às especificações arquiteturais e de domínio.\n      - *Atalhos de Teclado* (`#helpSubShortcuts`): diálogo rápido com hotkeys do sistema (Ctrl+B, Ctrl+K, Ctrl+Alt+N, J/K, F2, +/-).\n      - *Feedback* (`#helpSubFeedback`): prompt modal para submissão de melhorias pelo usuário.\n- **Rodapé Horizontal de Ícones do Capacities (.side-foot):**\n  - Barra horizontal fixa de altura `38px` (`min-height: 38px`), `display: flex; align-items: center; border-top: 1px solid var(--line);`:\n    - **Grupo esquerdo** (`gap: 4px`):\n      1. `[Perfil / Conta]` (`#btnFootAccount`, `27px × 27px`): ícone vetorial SVG, abre popover de conta `#usPop`.\n      2. Pill `[PRO]` (`.badge-pro`): badge compacto com tipografia 10px bold, estilo âmbar sutil do Capacities Pro.\n      3. `[Configurações]` (`#btnFootSettings`, `27px × 27px`): abre modal com seleção de tema, zoom padrão e limpeza de dados.\n      4. `[Alternar Tema]` (`#btnFootTheme`, `27px × 27px`): alterna instantaneamente entre Modo Claro e Escuro em 1 clique direto, com sincronização automática do glifo SVG (sol no tema escuro, lua no tema claro).\n      5. `[Sync / Status]` (`#btnFootSync`, `27px × 27px`): status visual e feedback toast de sincronização offline/online.\n    - **Grupo direito** (`margin-left: auto`):\n      6. `[Atalhos de Teclado]` (`#btnFootShortcuts`, `27px × 27px`): abre diretamente a visualização de atalhos globais.\n- **Conformidade com a Zero Emoji Policy (Issue #42):** 100% de ícones vetoriais SVG monocromáticos (`currentColor`, `stroke-width: 1.8`), sem nenhum caractere emoji Unicode em toda a estrutura."
+    },
+    "e993": {
+      "type": "container",
+      "text": "31. Low-Chrome — Issue #97: evidências antes/depois por tema, largura e estado dos painéis",
+      "color": "white",
+      "x": 8500,
+      "y": 11000,
+      "w": 1590,
+      "h": 12010
+    },
+    "e994": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_before_light_1366_sideopen_rightopen",
+      "x": 8520,
+      "y": 11055,
+      "w": 745,
+      "h": 416
+    },
+    "e995": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 BEFORE | light | 1366px | sidebar aberta | contexto aberto",
+      "x": 8520,
+      "y": 11477,
+      "w": 740,
+      "h": 32
+    },
+    "e996": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_after_light_1366_sideopen_rightopen",
+      "x": 9315,
+      "y": 11055,
+      "w": 745,
+      "h": 416
+    },
+    "e997": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 AFTER | light | 1366px | sidebar aberta | contexto aberto",
+      "x": 9315,
+      "y": 11477,
+      "w": 740,
+      "h": 32
+    },
+    "e998": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_before_light_1366_sideopen_rightclosed",
+      "x": 8520,
+      "y": 11550,
+      "w": 745,
+      "h": 416
+    },
+    "e999": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 BEFORE | light | 1366px | sidebar aberta | contexto fechado",
+      "x": 8520,
+      "y": 11972,
+      "w": 740,
+      "h": 32
+    },
+    "e1000": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_after_light_1366_sideopen_rightclosed",
+      "x": 9315,
+      "y": 11550,
+      "w": 745,
+      "h": 416
+    },
+    "e1001": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 AFTER | light | 1366px | sidebar aberta | contexto fechado",
+      "x": 9315,
+      "y": 11972,
+      "w": 740,
+      "h": 32
+    },
+    "e1002": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_before_light_1366_sideclosed_rightopen",
+      "x": 8520,
+      "y": 12045,
+      "w": 745,
+      "h": 416
+    },
+    "e1003": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 BEFORE | light | 1366px | sidebar fechada | contexto aberto",
+      "x": 8520,
+      "y": 12467,
+      "w": 740,
+      "h": 32
+    },
+    "e1004": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_after_light_1366_sideclosed_rightopen",
+      "x": 9315,
+      "y": 12045,
+      "w": 745,
+      "h": 416
+    },
+    "e1005": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 AFTER | light | 1366px | sidebar fechada | contexto aberto",
+      "x": 9315,
+      "y": 12467,
+      "w": 740,
+      "h": 32
+    },
+    "e1006": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_before_light_1366_sideclosed_rightclosed",
+      "x": 8520,
+      "y": 12540,
+      "w": 745,
+      "h": 416
+    },
+    "e1007": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 BEFORE | light | 1366px | sidebar fechada | contexto fechado",
+      "x": 8520,
+      "y": 12962,
+      "w": 740,
+      "h": 32
+    },
+    "e1008": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_after_light_1366_sideclosed_rightclosed",
+      "x": 9315,
+      "y": 12540,
+      "w": 745,
+      "h": 416
+    },
+    "e1009": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 AFTER | light | 1366px | sidebar fechada | contexto fechado",
+      "x": 9315,
+      "y": 12962,
+      "w": 740,
+      "h": 32
+    },
+    "e1010": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_before_dark_1366_sideopen_rightopen",
+      "x": 8520,
+      "y": 13035,
+      "w": 745,
+      "h": 416
+    },
+    "e1011": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 BEFORE | dark | 1366px | sidebar aberta | contexto aberto",
+      "x": 8520,
+      "y": 13457,
+      "w": 740,
+      "h": 32
+    },
+    "e1012": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_after_dark_1366_sideopen_rightopen",
+      "x": 9315,
+      "y": 13035,
+      "w": 745,
+      "h": 416
+    },
+    "e1013": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 AFTER | dark | 1366px | sidebar aberta | contexto aberto",
+      "x": 9315,
+      "y": 13457,
+      "w": 740,
+      "h": 32
+    },
+    "e1014": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_before_dark_1366_sideopen_rightclosed",
+      "x": 8520,
+      "y": 13530,
+      "w": 745,
+      "h": 416
+    },
+    "e1015": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 BEFORE | dark | 1366px | sidebar aberta | contexto fechado",
+      "x": 8520,
+      "y": 13952,
+      "w": 740,
+      "h": 32
+    },
+    "e1016": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_after_dark_1366_sideopen_rightclosed",
+      "x": 9315,
+      "y": 13530,
+      "w": 745,
+      "h": 416
+    },
+    "e1017": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 AFTER | dark | 1366px | sidebar aberta | contexto fechado",
+      "x": 9315,
+      "y": 13952,
+      "w": 740,
+      "h": 32
+    },
+    "e1018": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_before_dark_1366_sideclosed_rightopen",
+      "x": 8520,
+      "y": 14025,
+      "w": 745,
+      "h": 416
+    },
+    "e1019": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 BEFORE | dark | 1366px | sidebar fechada | contexto aberto",
+      "x": 8520,
+      "y": 14447,
+      "w": 740,
+      "h": 32
+    },
+    "e1020": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_after_dark_1366_sideclosed_rightopen",
+      "x": 9315,
+      "y": 14025,
+      "w": 745,
+      "h": 416
+    },
+    "e1021": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 AFTER | dark | 1366px | sidebar fechada | contexto aberto",
+      "x": 9315,
+      "y": 14447,
+      "w": 740,
+      "h": 32
+    },
+    "e1022": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_before_dark_1366_sideclosed_rightclosed",
+      "x": 8520,
+      "y": 14520,
+      "w": 745,
+      "h": 416
+    },
+    "e1023": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 BEFORE | dark | 1366px | sidebar fechada | contexto fechado",
+      "x": 8520,
+      "y": 14942,
+      "w": 740,
+      "h": 32
+    },
+    "e1024": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_after_dark_1366_sideclosed_rightclosed",
+      "x": 9315,
+      "y": 14520,
+      "w": 745,
+      "h": 416
+    },
+    "e1025": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 AFTER | dark | 1366px | sidebar fechada | contexto fechado",
+      "x": 9315,
+      "y": 14942,
+      "w": 740,
+      "h": 32
+    },
+    "e1026": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_before_light_1024_sideopen_rightopen",
+      "x": 8520,
+      "y": 15015,
+      "w": 745,
+      "h": 416
+    },
+    "e1027": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 BEFORE | light | 1024px | sidebar aberta | contexto aberto",
+      "x": 8520,
+      "y": 15437,
+      "w": 740,
+      "h": 32
+    },
+    "e1028": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_after_light_1024_sideopen_rightopen",
+      "x": 9315,
+      "y": 15015,
+      "w": 745,
+      "h": 416
+    },
+    "e1029": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 AFTER | light | 1024px | sidebar aberta | contexto aberto",
+      "x": 9315,
+      "y": 15437,
+      "w": 740,
+      "h": 32
+    },
+    "e1030": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_before_light_1024_sideopen_rightclosed",
+      "x": 8520,
+      "y": 15510,
+      "w": 745,
+      "h": 416
+    },
+    "e1031": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 BEFORE | light | 1024px | sidebar aberta | contexto fechado",
+      "x": 8520,
+      "y": 15932,
+      "w": 740,
+      "h": 32
+    },
+    "e1032": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_after_light_1024_sideopen_rightclosed",
+      "x": 9315,
+      "y": 15510,
+      "w": 745,
+      "h": 416
+    },
+    "e1033": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 AFTER | light | 1024px | sidebar aberta | contexto fechado",
+      "x": 9315,
+      "y": 15932,
+      "w": 740,
+      "h": 32
+    },
+    "e1034": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_before_light_1024_sideclosed_rightopen",
+      "x": 8520,
+      "y": 16005,
+      "w": 745,
+      "h": 416
+    },
+    "e1035": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 BEFORE | light | 1024px | sidebar fechada | contexto aberto",
+      "x": 8520,
+      "y": 16427,
+      "w": 740,
+      "h": 32
+    },
+    "e1036": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_after_light_1024_sideclosed_rightopen",
+      "x": 9315,
+      "y": 16005,
+      "w": 745,
+      "h": 416
+    },
+    "e1037": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 AFTER | light | 1024px | sidebar fechada | contexto aberto",
+      "x": 9315,
+      "y": 16427,
+      "w": 740,
+      "h": 32
+    },
+    "e1038": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_before_light_1024_sideclosed_rightclosed",
+      "x": 8520,
+      "y": 16500,
+      "w": 745,
+      "h": 416
+    },
+    "e1039": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 BEFORE | light | 1024px | sidebar fechada | contexto fechado",
+      "x": 8520,
+      "y": 16922,
+      "w": 740,
+      "h": 32
+    },
+    "e1040": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_after_light_1024_sideclosed_rightclosed",
+      "x": 9315,
+      "y": 16500,
+      "w": 745,
+      "h": 416
+    },
+    "e1041": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 AFTER | light | 1024px | sidebar fechada | contexto fechado",
+      "x": 9315,
+      "y": 16922,
+      "w": 740,
+      "h": 32
+    },
+    "e1042": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_before_dark_1024_sideopen_rightopen",
+      "x": 8520,
+      "y": 16995,
+      "w": 745,
+      "h": 416
+    },
+    "e1043": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 BEFORE | dark | 1024px | sidebar aberta | contexto aberto",
+      "x": 8520,
+      "y": 17417,
+      "w": 740,
+      "h": 32
+    },
+    "e1044": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_after_dark_1024_sideopen_rightopen",
+      "x": 9315,
+      "y": 16995,
+      "w": 745,
+      "h": 416
+    },
+    "e1045": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 AFTER | dark | 1024px | sidebar aberta | contexto aberto",
+      "x": 9315,
+      "y": 17417,
+      "w": 740,
+      "h": 32
+    },
+    "e1046": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_before_dark_1024_sideopen_rightclosed",
+      "x": 8520,
+      "y": 17490,
+      "w": 745,
+      "h": 416
+    },
+    "e1047": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 BEFORE | dark | 1024px | sidebar aberta | contexto fechado",
+      "x": 8520,
+      "y": 17912,
+      "w": 740,
+      "h": 32
+    },
+    "e1048": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_after_dark_1024_sideopen_rightclosed",
+      "x": 9315,
+      "y": 17490,
+      "w": 745,
+      "h": 416
+    },
+    "e1049": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 AFTER | dark | 1024px | sidebar aberta | contexto fechado",
+      "x": 9315,
+      "y": 17912,
+      "w": 740,
+      "h": 32
+    },
+    "e1050": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_before_dark_1024_sideclosed_rightopen",
+      "x": 8520,
+      "y": 17985,
+      "w": 745,
+      "h": 416
+    },
+    "e1051": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 BEFORE | dark | 1024px | sidebar fechada | contexto aberto",
+      "x": 8520,
+      "y": 18407,
+      "w": 740,
+      "h": 32
+    },
+    "e1052": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_after_dark_1024_sideclosed_rightopen",
+      "x": 9315,
+      "y": 17985,
+      "w": 745,
+      "h": 416
+    },
+    "e1053": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 AFTER | dark | 1024px | sidebar fechada | contexto aberto",
+      "x": 9315,
+      "y": 18407,
+      "w": 740,
+      "h": 32
+    },
+    "e1054": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_before_dark_1024_sideclosed_rightclosed",
+      "x": 8520,
+      "y": 18480,
+      "w": 745,
+      "h": 416
+    },
+    "e1055": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 BEFORE | dark | 1024px | sidebar fechada | contexto fechado",
+      "x": 8520,
+      "y": 18902,
+      "w": 740,
+      "h": 32
+    },
+    "e1056": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_after_dark_1024_sideclosed_rightclosed",
+      "x": 9315,
+      "y": 18480,
+      "w": 745,
+      "h": 416
+    },
+    "e1057": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 AFTER | dark | 1024px | sidebar fechada | contexto fechado",
+      "x": 9315,
+      "y": 18902,
+      "w": 740,
+      "h": 32
+    },
+    "e1058": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_before_light_768_sideopen_rightopen",
+      "x": 8520,
+      "y": 18975,
+      "w": 745,
+      "h": 416
+    },
+    "e1059": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 BEFORE | light | 768px | sidebar aberta | contexto aberto",
+      "x": 8520,
+      "y": 19397,
+      "w": 740,
+      "h": 32
+    },
+    "e1060": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_after_light_768_sideopen_rightopen",
+      "x": 9315,
+      "y": 18975,
+      "w": 745,
+      "h": 416
+    },
+    "e1061": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 AFTER | light | 768px | sidebar aberta | contexto aberto",
+      "x": 9315,
+      "y": 19397,
+      "w": 740,
+      "h": 32
+    },
+    "e1062": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_before_light_768_sideopen_rightclosed",
+      "x": 8520,
+      "y": 19470,
+      "w": 745,
+      "h": 416
+    },
+    "e1063": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 BEFORE | light | 768px | sidebar aberta | contexto fechado",
+      "x": 8520,
+      "y": 19892,
+      "w": 740,
+      "h": 32
+    },
+    "e1064": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_after_light_768_sideopen_rightclosed",
+      "x": 9315,
+      "y": 19470,
+      "w": 745,
+      "h": 416
+    },
+    "e1065": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 AFTER | light | 768px | sidebar aberta | contexto fechado",
+      "x": 9315,
+      "y": 19892,
+      "w": 740,
+      "h": 32
+    },
+    "e1066": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_before_light_768_sideclosed_rightopen",
+      "x": 8520,
+      "y": 19965,
+      "w": 745,
+      "h": 416
+    },
+    "e1067": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 BEFORE | light | 768px | sidebar fechada | contexto aberto",
+      "x": 8520,
+      "y": 20387,
+      "w": 740,
+      "h": 32
+    },
+    "e1068": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_after_light_768_sideclosed_rightopen",
+      "x": 9315,
+      "y": 19965,
+      "w": 745,
+      "h": 416
+    },
+    "e1069": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 AFTER | light | 768px | sidebar fechada | contexto aberto",
+      "x": 9315,
+      "y": 20387,
+      "w": 740,
+      "h": 32
+    },
+    "e1070": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_before_light_768_sideclosed_rightclosed",
+      "x": 8520,
+      "y": 20460,
+      "w": 745,
+      "h": 416
+    },
+    "e1071": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 BEFORE | light | 768px | sidebar fechada | contexto fechado",
+      "x": 8520,
+      "y": 20882,
+      "w": 740,
+      "h": 32
+    },
+    "e1072": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_after_light_768_sideclosed_rightclosed",
+      "x": 9315,
+      "y": 20460,
+      "w": 745,
+      "h": 416
+    },
+    "e1073": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 AFTER | light | 768px | sidebar fechada | contexto fechado",
+      "x": 9315,
+      "y": 20882,
+      "w": 740,
+      "h": 32
+    },
+    "e1074": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_before_dark_768_sideopen_rightopen",
+      "x": 8520,
+      "y": 20955,
+      "w": 745,
+      "h": 416
+    },
+    "e1075": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 BEFORE | dark | 768px | sidebar aberta | contexto aberto",
+      "x": 8520,
+      "y": 21377,
+      "w": 740,
+      "h": 32
+    },
+    "e1076": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_after_dark_768_sideopen_rightopen",
+      "x": 9315,
+      "y": 20955,
+      "w": 745,
+      "h": 416
+    },
+    "e1077": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 AFTER | dark | 768px | sidebar aberta | contexto aberto",
+      "x": 9315,
+      "y": 21377,
+      "w": 740,
+      "h": 32
+    },
+    "e1078": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_before_dark_768_sideopen_rightclosed",
+      "x": 8520,
+      "y": 21450,
+      "w": 745,
+      "h": 416
+    },
+    "e1079": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 BEFORE | dark | 768px | sidebar aberta | contexto fechado",
+      "x": 8520,
+      "y": 21872,
+      "w": 740,
+      "h": 32
+    },
+    "e1080": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_after_dark_768_sideopen_rightclosed",
+      "x": 9315,
+      "y": 21450,
+      "w": 745,
+      "h": 416
+    },
+    "e1081": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 AFTER | dark | 768px | sidebar aberta | contexto fechado",
+      "x": 9315,
+      "y": 21872,
+      "w": 740,
+      "h": 32
+    },
+    "e1082": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_before_dark_768_sideclosed_rightopen",
+      "x": 8520,
+      "y": 21945,
+      "w": 745,
+      "h": 416
+    },
+    "e1083": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 BEFORE | dark | 768px | sidebar fechada | contexto aberto",
+      "x": 8520,
+      "y": 22367,
+      "w": 740,
+      "h": 32
+    },
+    "e1084": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_after_dark_768_sideclosed_rightopen",
+      "x": 9315,
+      "y": 21945,
+      "w": 745,
+      "h": 416
+    },
+    "e1085": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 AFTER | dark | 768px | sidebar fechada | contexto aberto",
+      "x": 9315,
+      "y": 22367,
+      "w": 740,
+      "h": 32
+    },
+    "e1086": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_before_dark_768_sideclosed_rightclosed",
+      "x": 8520,
+      "y": 22440,
+      "w": 745,
+      "h": 416
+    },
+    "e1087": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 BEFORE | dark | 768px | sidebar fechada | contexto fechado",
+      "x": 8520,
+      "y": 22862,
+      "w": 740,
+      "h": 32
+    },
+    "e1088": {
+      "type": "image",
+      "src": "/_blob/lowchrome_97_after_dark_768_sideclosed_rightclosed",
+      "x": 9315,
+      "y": 22440,
+      "w": 745,
+      "h": 416
+    },
+    "e1089": {
+      "type": "text",
+      "size": "small",
+      "text": "#97 AFTER | dark | 768px | sidebar fechada | contexto fechado",
+      "x": 9315,
+      "y": 22862,
+      "w": 740,
+      "h": 32
     }
   }
 }
