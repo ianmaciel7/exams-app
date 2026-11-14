@@ -34,11 +34,35 @@ All agents working in this repository must keep the codebase and the live Claude
 
 ## Planning board, evidence capture, and memory preservation (MANDATORY)
 
-- **Mandatory rule — Zero Information Loss:** Everything captured as evidence during any task — including browser screenshots, live reference app inspections (e.g., Capacities, QConcursos), historical branch/archive comparisons (`docs/archives/`), measured DOM/CSS metrics, UI/UX regressions, and architectural decisions — **MUST be immediately persisted in two places**:
+- **Mandatory rule — Zero Information Loss:** Everything captured as evidence during any task — including browser screenshots, live reference app inspections (e.g., Capacities, QConcursos, Readwise, Readwise Reader), historical branch/archive comparisons (`docs/archives/`), measured DOM/CSS metrics, UI/UX regressions, and architectural decisions — **MUST be immediately persisted in two places**:
   1. **The Planning Board:** Add structured cards/containers and image references to `prototypes/board-exam-app/board.json`, copy all screenshot/evidence files into `prototypes/board-exam-app/assets/`, and regenerate `prototypes/board-exam-app/BOARD.md` using `npm run board`.
   2. **GitHub Issues & Pull Requests:** Open or update corresponding GitHub Issues (`gh issue create` / `gh issue comment`) and Pull Requests (`gh pr create`) documenting the evidence, file paths, and acceptance criteria, and land the board updates into `dev` via PR so no evidence or context is ever lost between sessions or AI assistants.
 - `board.json` is the source of truth; never edit `BOARD.md` by hand. Regenerate it with `npm run board`.
 - **Zero-Emoji UI Policy (Issue #42):** Never use Unicode emojis in the application UI, buttons, headers, badges, or KPIs; always use clean monochrome or semantic vector `<svg>` icons (`stroke-width: 1.75`–`1.9`).
+
+### Evidence management & AI-readable documentation protocol (MANDATORY)
+
+Screenshots alone are **insufficient** because future AI agents (or text-only contexts) may read `BOARD.md` or repository files without inspecting every PNG, and trial access to reference SaaS apps (e.g., Readwise, Reader, QConcursos, Capacities) may expire. Every evidence capture MUST obey the following rules:
+
+1. **Dual Representation (Visual + Textual/Structural for AI Agents):**
+   - Never register a screenshot without a rich textual specification that another AI can parse to reconstruct the screen, its controls, and its behavior without seeing the image.
+   - Alongside `board.json` / `BOARD.md`, persist deep technical dossiers (such as `prototypes/board-exam-app/READWISE_DOSSIER.md`) containing:
+     - All visited routes/URLs and navigation hierarchy.
+     - Literal button labels, hover states, tooltips, dropdown items, and keyboard shortcuts.
+     - Exact schemas, query grammars (e.g., boolean filter queries), template variables/subroutines (e.g., Jinja2 prompts), and algorithm parameters.
+     - Raw DOM / ARIA accessibility tree snapshots (`browser_sandbox/outputs/step_*.json`) extracted during inspection.
+2. **Mandatory Screenshot Integrity Verification (No Blank/Skeleton Captures):**
+   - SPAs frequently render blank dark/light canvases (`~3 KB` PNGs) during initial hydration or route transitions.
+   - **Rule:** Before copying any screenshot to `prototypes/board-exam-app/assets/` or referencing it in `board.json`, **always verify file size (`> 10 KB`) and visually inspect the image** (`read_file`) to confirm the UI widgets, modals, or lists are actually rendered (and not a `404` or loading skeleton).
+3. **board_to_md.py Container Geometry & Ownership Contract:**
+   - `prototypes/board-exam-app/board_to_md.py` assigns an element `e` to a `container` `c` **only if the geometric center `(e.x + e.w/2, e.y + e.h/2)` falls strictly inside `(c.x .. c.x + c.w, c.y .. c.y + c.h)`**, and every element ID must also be listed in `board.json`'s `"order"` array.
+   - Whenever adding new evidence cards to a container in `board.json`, resize the container's `w` and `h` to encompass all child elements, append all new IDs to `"order"`, and run `npm run board` to verify that `BOARD.md` includes every new card under the expected section header.
+4. **Direct Extraction from Browser Sandbox Disk (Zero-Quota Recovery):**
+   - Browser subagents automatically persist every screenshot and DOM output on disk before returning:
+     - Screenshots: `~/.gemini/antigravity/brain/<subagent-id>/browser_sandbox/screenshots/step_*.png`
+     - DOM/Script outputs: `~/.gemini/antigravity/brain/<subagent-id>/browser_sandbox/outputs/step_*.json`
+     - Full logs: `~/.gemini/antigravity/brain/<subagent-id>/.system_generated/logs/transcript_full.jsonl`
+   - If a browser subagent hits a model rate limit (`RESOURCE_EXHAUSTED` / HTTP 429) or stops mid-run, **never lose or re-run the work already done**: immediately harvest all `.png` and `.json` files directly from `browser_sandbox/` via shell/Python scripts without invoking new subagents.
 
 ## Run the prototype (any tool)
 
