@@ -2353,6 +2353,22 @@
       "type": "text",
       "x": 20,
       "y": 8060
+    },
+    "e506": {
+      "color": "white",
+      "h": 500,
+      "text": "24. Dashboard Central de Estudos (#/espaco) - Especificação de UX",
+      "type": "container",
+      "w": 1500,
+      "x": 0,
+      "y": 8600
+    },
+    "e507": {
+      "size": "small",
+      "text": "### Reformulação da Home (#/espaco) em Dashboard de Estudos\n\n- **Hero do Concurso Alvo (Meta Principal)**:\n  - Destaque do certame ativo: Dataprev 2026 · FGV · Analista de Tecnologia da Informação (Engenharia de Software).\n  - Contagem regressiva em dias para a data da prova (13/10/2026).\n  - Termômetro do Edital: barra dinâmica de cobertura programática baseada no total de questões vistas.\n- **Seção Continuar de Onde Parou (Immediate Action Hero)**:\n  - Card 1 (Leitura): Retomada com 1 clique do último PDF acessado com indicação de página e % lido.\n  - Card 2 (Prática): Retomada com 1 clique da última sessão de resolução de questões ou simulado.\n- **KPIs de Estudo**:\n  - Taxa Geral de Acertos (com comparativo semanal).\n  - Questões respondidas hoje (com acompanhamento da meta diária de 25 questões).\n  - Ofensiva / Sequência de estudos (Streak em dias).\n  - Simulados concluídos e pontuações obtidas.\n- **Hub de Ações Rápidas**:\n  - Atalhos diretos para Simulado Rápido, Caderno de Erros, Grafo do Concurso e Importação de novos Editais/PDFs.\n- **Radar de Disciplinas Críticas**:\n  - Identificação das matérias com menor aproveitamento e CTA imediato 'Treinar Matéria'.",
+      "type": "text",
+      "x": 20,
+      "y": 8660
     }
   }
 }

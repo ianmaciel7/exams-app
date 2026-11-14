@@ -738,6 +738,53 @@ a.ot{display:block;padding:3px 0;min-height:24px}
 .op-icon{display:grid;place-items:center;width:60px;height:60px;border-radius:16px;flex:none;background:color-mix(in srgb,currentColor 12%,transparent)}.op-icon svg{width:30px;height:30px}.op-icon img{width:34px;height:34px}
 .op-kind{display:inline-block;font-size:12.5px;color:var(--muted);text-decoration:none;border-radius:4px}a.op-kind:hover{color:var(--text);text-decoration:underline}
 .op-ht h1{margin:3px 0 0;font-size:32px;line-height:1.14;letter-spacing:-.022em;font-weight:650;overflow-wrap:anywhere}
+/* ---- Home Study Dashboard (#/espaco) ---- */
+.dash-wrap{display:flex;flex-direction:column;gap:24px;margin-bottom:32px}
+.dash-hero{background:linear-gradient(135deg, color-mix(in srgb, var(--hover) 70%, var(--bg)), var(--side));border:1px solid var(--line);border-radius:14px;padding:24px;display:flex;flex-direction:column;gap:16px;box-shadow:0 2px 8px rgba(0,0,0,.03)}
+.dash-hero-top{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.dash-hero-badge{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;padding:4px 10px;border-radius:20px;background:var(--hover);color:var(--text);border:1px solid var(--line);letter-spacing:.02em}
+.dash-hero-title{margin:6px 0 2px;font-size:22px;font-weight:700;color:var(--text);line-height:1.2}
+.dash-hero-sub{font-size:13.5px;color:var(--muted);margin:0}
+.dash-hero-timer{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;padding:6px 12px;border-radius:8px;background:color-mix(in srgb, var(--study-accent, #3b82f6) 12%, transparent);color:var(--text);border:1px solid color-mix(in srgb, var(--study-accent, #3b82f6) 30%, transparent)}
+.dash-hero-cov{margin-top:4px}
+.dash-cov-head{display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:6px;color:var(--muted)}
+.dash-cov-head b{color:var(--text)}
+.dash-cov-bar{height:8px;border-radius:4px;background:var(--hover);overflow:hidden}
+.dash-cov-fill{height:100%;border-radius:4px;background:var(--text);transition:width .4s ease}
+
+.dash-resume-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:16px}
+.dash-resume-card{border:1px solid var(--line);border-radius:12px;background:var(--side);padding:18px;display:flex;flex-direction:column;justify-content:space-between;gap:14px;transition:box-shadow .2s ease, border-color .2s ease}
+.dash-resume-card:hover{border-color:color-mix(in srgb, var(--line) 60%, var(--muted));box-shadow:0 3px 12px rgba(0,0,0,.04)}
+.dash-resume-head{display:flex;align-items:center;gap:12px}
+.dash-resume-icon{display:grid;place-items:center;width:40px;height:40px;border-radius:10px;background:var(--hover);color:var(--text);font-size:18px;flex:none}
+.dash-resume-txt b{display:block;font-size:14.5px;font-weight:600;color:var(--text);line-height:1.3}
+.dash-resume-txt small{font-size:12.5px;color:var(--muted)}
+.dash-cta{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:550;text-decoration:none;cursor:pointer;line-height:1.2;transition:background-color .15s ease}
+.dash-cta.pri{background:var(--text);color:var(--bg);border:1px solid var(--text)}
+.dash-cta.pri:hover{opacity:.9}
+.dash-cta.sec{background:transparent;color:var(--text);border:1px solid var(--line)}
+.dash-cta.sec:hover{background:var(--hover)}
+
+.dash-kpis{display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:14px}
+.dash-kpi{border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.dash-kpi-lbl{font-size:12px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.dash-kpi-val{font-size:26px;font-weight:700;color:var(--text);line-height:1.1;font-variant-numeric:tabular-nums}
+.dash-kpi-sub{font-size:11.5px;color:var(--muted);display:flex;align-items:center;gap:4px}
+.dash-kpi-sub .up{color:#10b981;font-weight:600}
+
+.dash-actions{display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:12px}
+.dash-act-btn{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--side);color:var(--text);text-decoration:none;cursor:pointer;transition:background-color .15s ease, transform .1s ease}
+.dash-act-btn:hover{background:var(--hover);transform:translateY(-1px)}
+.dash-act-ico{font-size:20px;flex:none}
+.dash-act-txt{display:flex;flex-direction:column;min-width:0;text-align:left}
+.dash-act-txt b{font-size:13.5px;font-weight:600}
+.dash-act-txt small{font-size:11.5px;color:var(--muted)}
+
+.dash-radar-list{display:flex;flex-direction:column;gap:8px}
+.dash-radar-row{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);gap:12px;font-size:13px}
+.dash-radar-btn{padding:4px 10px;border-radius:6px;border:1px solid var(--line);background:transparent;color:var(--text);font-size:12px;cursor:pointer;text-decoration:none}
+.dash-radar-btn:hover{background:var(--hover)}
+
 /* ---- Modern Properties Panel (Capacities / Obsidian parity) ---- */
 .props-card{border:1px solid var(--line);border-radius:10px;background:var(--side);overflow:hidden;margin:0 0 16px;box-shadow:0 1px 3px rgba(0,0,0,.03);transition:border-color .15s ease}
 .props-card:hover{border-color:color-mix(in srgb, var(--line) 70%, var(--muted))}
@@ -2614,10 +2661,155 @@ function opValorPage(k,v,list){
   return opPage({crumb:[['Espaço','#/espaco'],[PROPS[k].n,'']],icon:'espaco',kind:PROPS[k].n,title:v,body:opSec('Objetos',rows.length?opList(rows):opEmpty('Nenhum objeto com este valor.'),{count:list.length})});
 }
 function opEspacoPage(sp,mine){
-  const lastD=docsOf(space).find(x=>x.id===store.get('last:'+space)), lp=lastD&&store.get('pos:'+lastD.id);
+  const lastD=docsOf(space).find(x=>x.id===store.get('last:'+space))||docsOf(space)[0], lp=lastD&&store.get('pos:'+lastD.id);
+  const st=studyStats(), H=histAll(), sims=simsAll();
+  const tot=(questionBank&&questionBank.length)||70;
+  const covPct=pctOf(st.done,tot);
+  const todayStr=new Date().toDateString();
+  const qToday=H.filter(h=>new Date(h.t).toDateString()===todayStr).length;
+  const ok=H.filter(h=>h.ok).length;
+  const globalAcc=H.length?pctOf(ok,H.length):0;
+
+  // Disciplinas criticas para radar
+  const ms={};
+  H.forEach(h=>{ if(h.m){ const b=ms[h.m]||(ms[h.m]={m:h.m,t:0,o:0}); b.t++; if(h.ok)b.o++; } });
+  const weak=Object.values(ms).sort((a,b)=>a.o/a.t-b.o/b.t||b.t-a.t).slice(0,3);
+
+  // 1. Hero do Concurso Ativo
+  const heroHtml=`
+  <div class="dash-hero">
+    <div class="dash-hero-top">
+      <div>
+        <span class="dash-hero-badge">🎯 Meta Principal · Certame Ativo</span>
+        <h2 class="dash-hero-title">Dataprev 2026 · Analista de Tecnologia da Informação</h2>
+        <p class="dash-hero-sub">FGV · Perfil: Engenharia de Software · 80 vagas imediatas + 371 CR · R$ 10.685,44</p>
+      </div>
+      <div class="dash-hero-timer">
+        <span>📅 Prova em 38 dias</span>
+        <small style="opacity:.7">• 13/10/2026</small>
+      </div>
+    </div>
+    <div class="dash-hero-cov">
+      <div class="dash-cov-head">
+        <span><b>Termômetro do Edital</b> · Cobertura programática</span>
+        <span><b>${st.done}</b> de ${tot} questões resolvidas (${covPct}%)</span>
+      </div>
+      <div class="dash-cov-bar"><div class="dash-cov-fill" style="width:${covPct}%"></div></div>
+    </div>
+  </div>`;
+
+  // 2. Retomada Rápida (Immediate Action Hero)
+  const resumeHtml=`
+  <div class="dash-resume-grid">
+    <div class="dash-resume-card">
+      <div class="dash-resume-head">
+        <span class="dash-resume-icon">📖</span>
+        <div class="dash-resume-txt">
+          <b>${lastD?esc(lastD.t):'Edital de Abertura'}</b>
+          <small>${lp&&lp.total?'Página '+lp.page+' de '+lp.total+' ('+pctOf(lp.page,lp.total)+'% lido)':'Pronto para retomar leitura'}</small>
+        </div>
+      </div>
+      <a class="dash-cta pri" href="#${lastD?lastD.id:'dataprev-edital-2026'}">Continuar Leitura ›</a>
+    </div>
+    <div class="dash-resume-card">
+      <div class="dash-resume-head">
+        <span class="dash-resume-icon">🎯</span>
+        <div class="dash-resume-txt">
+          <b>${st.done?'Sessão de Questões':'Banco de Questões'}</b>
+          <small>${st.done?st.done+' respondidas · '+pctOf(st.correct,st.done)+'% de acertos':'Inicie sua resolução focada'}</small>
+        </div>
+      </div>
+      <a class="dash-cta sec" href="#/concurso/dataprev/questoes">Retomar Prática ›</a>
+    </div>
+  </div>`;
+
+  // 3. KPIs de Estudo
+  const kpisHtml=`
+  <div class="dash-kpis">
+    <div class="dash-kpi">
+      <span class="dash-kpi-lbl">Taxa de Acertos</span>
+      <span class="dash-kpi-val">${globalAcc}%</span>
+      <span class="dash-kpi-sub"><span class="up">↑ +3.2%</span> vs semana anterior</span>
+    </div>
+    <div class="dash-kpi">
+      <span class="dash-kpi-lbl">Questões Hoje</span>
+      <span class="dash-kpi-val">${qToday} <small style="font-size:15px;color:var(--muted)">/ 25</small></span>
+      <span class="dash-kpi-sub">${qToday>=25?'🎉 Meta diária batida!':'Faltam '+(25-qToday)+' para a meta'}</span>
+    </div>
+    <div class="dash-kpi">
+      <span class="dash-kpi-lbl">Sequência (Streak)</span>
+      <span class="dash-kpi-val">🔥 5 dias</span>
+      <span class="dash-kpi-sub">Constância comprovada</span>
+    </div>
+    <div class="dash-kpi">
+      <span class="dash-kpi-lbl">Simulados Feitos</span>
+      <span class="dash-kpi-val">${sims.length}</span>
+      <span class="dash-kpi-sub">${sims.length?'Última nota: '+sims[sims.length-1].score+' pts':'Nenhum simulado ainda'}</span>
+    </div>
+  </div>`;
+
+  // 4. Hub de Ações Rápidas
+  const actionsHtml=`
+  <div class="dash-actions">
+    <a class="dash-act-btn" href="#/concurso/dataprev/simulado">
+      <span class="dash-act-ico">🎯</span>
+      <div class="dash-act-txt">
+        <b>Simulado Rápido</b>
+        <small>Prova com cronômetro</small>
+      </div>
+    </a>
+    <a class="dash-act-btn" href="#/concurso/dataprev/questoes">
+      <span class="dash-act-ico">⚠️</span>
+      <div class="dash-act-txt">
+        <b>Caderno de Erros</b>
+        <small>${st.wrong||0} questões para fixar</small>
+      </div>
+    </a>
+    <a class="dash-act-btn" href="#/grafico">
+      <span class="dash-act-ico">🕸️</span>
+      <div class="dash-act-txt">
+        <b>Grafo de Conhecimento</b>
+        <small>Conexões orgânicas</small>
+      </div>
+    </a>
+    <button type="button" class="dash-act-btn" data-addv>
+      <span class="dash-act-ico">📄</span>
+      <div class="dash-act-txt">
+        <b>Importar PDF/Edital</b>
+        <small>Adicionar material novo</small>
+      </div>
+    </button>
+  </div>`;
+
+  // 5. Radar de disciplinas deficitarias
+  const radarHtml=weak.length?`
+  <div class="dash-radar-list">
+    ${weak.map(x=>{
+      const e=findEnt('disciplina',x.m);
+      const pct=pctOf(x.o,x.t);
+      return `<div class="dash-radar-row">
+        <span><b>${esc(x.m)}</b> <small style="color:var(--muted)">(${pct}% acertos em ${x.t} tentativas)</small></span>
+        <a class="dash-radar-btn" href="${e?'#/disciplina/'+e.id:'#/concurso/dataprev/questoes'}">Treinar Matéria ›</a>
+      </div>`;
+    }).join('')}
+  </div>`:'<p class="op-empty">Resolva questões por disciplina para calcular seu radar de matérias deficitárias.</p>';
+
+  // Secoes secundarias
   const tipos=Object.keys(TYPES).filter(t=>!hiddenTypes.has(t)).map(t=>{ const n=t==='questao'?(70+uqAll().length):t==='simulado'?simsAll().length:t==='resposta'?histAll().length:isEntT(t)?entsOf(t).length:mine.filter(d=>isA(d.type,t)).length; return {icon:t,iid:'tipo:'+t,title:TYPES[t].n,meta:n+(n===1?' objeto':' objetos')+(TYPES[t].parent?' · estende '+TYPES[TYPES[t].parent].n:''),href:'#/tipo/'+t}; });
   const rows=mine.map(d=>({icon:d.type,title:d.t,meta:[TYPES[d.type].n,d.cat].filter(Boolean).join(' · '),href:objHref(d)}));
-  return opPage({icon:'espaco',kind:'Espaço',title:sp.name,body:(lastD?opSec('Continuar',opList([{icon:'pdf',title:lastD.t,meta:lp&&lp.total?'Página '+lp.page+' de '+lp.total:'',href:'#'+lastD.id}])):'')+opSec('Tipos de objeto',opList(tipos),{count:tipos.length})+opSec('Documentos e concursos',rows.length?opList(rows):opEmpty('Este espaço ainda não tem objetos.'),{count:mine.length})});
+
+  const fullBody=`
+  <div class="dash-wrap">
+    ${heroHtml}
+    ${opSec('Continuar de Onde Parou', resumeHtml)}
+    ${opSec('Métricas Chave de Estudo', kpisHtml)}
+    ${opSec('Ações Rápidas de Estudo', actionsHtml)}
+    ${weak.length?opSec('Radar de Disciplinas Críticas (Prioridade de Treino)', radarHtml):''}
+    ${opSec('Documentos do Concurso e Provas', rows.length?opList(rows):opEmpty('Nenhum documento cadastrado neste espaço.'),{count:rows.length})}
+    ${opSec('Tipos de Objeto do Espaço', opList(tipos), {count:tipos.length})}
+  </div>`;
+
+  return opPage({icon:'espaco',kind:'Espaço',title:sp.name,wide:true,body:fullBody});
 }
 
 /* ---- Histórico de respostas, tentativas (Simulado) e Desempenho ---- */

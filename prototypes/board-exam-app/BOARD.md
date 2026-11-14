@@ -602,14 +602,6 @@ Prints em /mnt/project-files/prints/redesign-paginas-objeto/
 
 Capturas enviadas por Ian durante a revisão da 0.1.1, em 12 e 13/11.
 
-![imagem e313](assets/265be9aa9703f3cc57f43d3c62f96de1.png)
-
-![imagem e315](assets/02126f3b520aaad9b5c9577b472379a8.png)
-
-**0.1.1, tela grande.** Ian sente vazio em tela larga; documentos do Concurso precisam mostrar de qual edição são.
-
-**0.1.1 (v97): "está um pouco estranho".** Painel direito apertado, rótulos quebrando, bloco Estudar repetindo as abas. Ajustado na v98.
-
 ![imagem e317](assets/5e04fb915ee94b2c67a5adb37585e685.png)
 
 ![imagem e319](assets/731ecd45a56634184b7bcd8df6de8c5b.png)
@@ -732,6 +724,36 @@ Capturas da fase em que o Ian pediu um artefato só para o protótipo e outro pa
 **Tipo PDF, antes e depois** (0.1.1).
 
 ### Feedback do Ian sobre a 0.1.1 (prints do protótipo)
+
+## 24. Dashboard Central de Estudos (#/espaco) - Especificação de UX
+<!-- container e506 @ (0,8600) -->
+
+![imagem e313](assets/265be9aa9703f3cc57f43d3c62f96de1.png)
+
+![imagem e315](assets/02126f3b520aaad9b5c9577b472379a8.png)
+
+### Reformulação da Home (#/espaco) em Dashboard de Estudos
+
+- **Hero do Concurso Alvo (Meta Principal)**:
+  - Destaque do certame ativo: Dataprev 2026 · FGV · Analista de Tecnologia da Informação (Engenharia de Software).
+  - Contagem regressiva em dias para a data da prova (13/10/2026).
+  - Termômetro do Edital: barra dinâmica de cobertura programática baseada no total de questões vistas.
+- **Seção Continuar de Onde Parou (Immediate Action Hero)**:
+  - Card 1 (Leitura): Retomada com 1 clique do último PDF acessado com indicação de página e % lido.
+  - Card 2 (Prática): Retomada com 1 clique da última sessão de resolução de questões ou simulado.
+- **KPIs de Estudo**:
+  - Taxa Geral de Acertos (com comparativo semanal).
+  - Questões respondidas hoje (com acompanhamento da meta diária de 25 questões).
+  - Ofensiva / Sequência de estudos (Streak em dias).
+  - Simulados concluídos e pontuações obtidas.
+- **Hub de Ações Rápidas**:
+  - Atalhos diretos para Simulado Rápido, Caderno de Erros, Grafo do Concurso e Importação de novos Editais/PDFs.
+- **Radar de Disciplinas Críticas**:
+  - Identificação das matérias com menor aproveitamento e CTA imediato 'Treinar Matéria'.
+
+**0.1.1, tela grande.** Ian sente vazio em tela larga; documentos do Concurso precisam mostrar de qual edição são.
+
+**0.1.1 (v97): "está um pouco estranho".** Painel direito apertado, rótulos quebrando, bloco Estudar repetindo as abas. Ajustado na v98.
 
 ## 10. Arquivos do projeto (Dataprev 2026 e referências)
 <!-- container e363 @ (0,12666) -->
