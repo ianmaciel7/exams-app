@@ -39,3 +39,13 @@ test('practice position and path filter are preserved across redraws', () => {
   assert.match(source, /store\.set\('qIndex',qIndex\)/);
   assert.match(source, /if\(qPracticeRoute!==path\)/);
 });
+
+test('native selects match explicit app themes and automatic OS preference', () => {
+  const head = html.slice(0, html.indexOf('</head>'));
+  assert.match(head, /:root\[data-theme="dark"\]\s*\{\s*color-scheme:\s*dark\s*;/);
+  assert.match(head, /:root\[data-theme="light"\]\s*\{\s*color-scheme:\s*light\s*;/);
+  assert.match(head, /@media\s*\(prefers-color-scheme:\s*dark\)\s*\{\s*:root:not\(\[data-theme="light"\]\)\s*\{\s*color-scheme:\s*dark\s*;/);
+  assert.ok(head.lastIndexOf('color-scheme:') > head.lastIndexOf(':root{color-scheme:light;'));
+  assert.ok(source.includes('<select id="qPer"'));
+  assert.match(source, /\[1,5,10,20\]\.map\(/);
+});
