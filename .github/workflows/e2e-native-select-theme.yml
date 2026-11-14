@@ -7,16 +7,21 @@ on:
       - 'prototypes/exam-app-0.1.1/index.html'
       - 'tests/native-select-theme.e2e.mjs'
       - '.github/workflows/e2e-native-select-theme.yml'
+      - 'scripts/append-native-select-board.py'
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   windows-select-theme:
+    if: github.head_ref == 'fix/native-select-color-scheme-120-v2' && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: windows-latest
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -52,3 +57,26 @@ jobs:
             prototypes/board-exam-app/assets/issue120_*.png
             prototypes/board-exam-app/issue120_e2e.json
           if-no-files-found: warn
+
+      - name: Register verified screenshots in board and generate BOARD.md
+        shell: pwsh
+        run: |
+          python scripts/append-native-select-board.py
+          if ($LASTEXITCODE -ne 0) { throw 'Invalid evidence or board append failure' }
+          npm run board
+          if ($LASTEXITCODE -ne 0) { throw 'Board generator failure' }
+          if (-not (Select-String -Path 'prototypes/board-exam-app/BOARD.md' -Pattern '37. Seletores nativos' -SimpleMatch)) { throw 'Issue #120 missing from generated board' }
+      - name: Persist verified E2E evidence to PR branch
+        shell: pwsh
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add prototypes/board-exam-app/board.json prototypes/board-exam-app/BOARD.md prototypes/board-exam-app/issue120_e2e.json
+          git add 'prototypes/board-exam-app/assets/issue120_*.png'
+          git diff --cached --quiet
+          if ($LASTEXITCODE -ne 0) {
+            git commit -m "test(ui): persist Windows Chromium select theme evidence in board (#120)"
+            if ($LASTEXITCODE -ne 0) { throw 'Could not commit Issue #120 evidence' }
+            git push origin "HEAD:${{ github.head_ref }}"
+            if ($LASTEXITCODE -ne 0) { throw 'Could not publish Issue #120 evidence' }
+          }
