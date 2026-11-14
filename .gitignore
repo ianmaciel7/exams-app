@@ -49,3 +49,4 @@ opencode.json
 .junie/skills
 .kilo/skills
 CLAUDE.md
+__pycache__/
