@@ -90,6 +90,14 @@
 .nb-goal input{width:75px;padding:7px;border:1px solid var(--line);border-radius:6px}
 @media(max-width:768px){.qf-saved-actions{padding-left:0}.nb-list{gap:10px}.nb-card{padding:12px}}
 </style>
+<style>
+/* Native form popups must use the same appearance as the app's theme. */
+:root[data-theme="dark"] { color-scheme: dark; }
+:root[data-theme="light"] { color-scheme: light; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { color-scheme: dark; }
+}
+</style>
 </head><body>
 <style>
 /* ===== Exam App 0.1.1 — páginas de estudo e detalhes, 2026 ===== */
