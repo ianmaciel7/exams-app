@@ -593,7 +593,27 @@
     "e1204",
     "e1205",
     "e1206",
-    "e1207"
+    "e1207",
+    "e1208",
+    "e1209",
+    "e1210",
+    "e1211",
+    "e1212",
+    "e1213",
+    "e1214",
+    "e1215",
+    "e1216",
+    "e1217",
+    "e1218",
+    "e1219",
+    "e1220",
+    "e1221",
+    "e1222",
+    "e1223",
+    "e1224",
+    "e1225",
+    "e1226",
+    "e1227"
   ],
   "elements": {
     "e1": {
@@ -6255,6 +6275,177 @@
       "y": 13704,
       "w": 760,
       "h": 55
+    },
+    "e1208": {
+      "type": "container",
+      "color": "white",
+      "text": "36. Filtros avançados — Issue #70: cascata, exclusões, URL, Queries e mobile",
+      "x": 22000,
+      "y": 11000,
+      "w": 1650,
+      "h": 2775
+    },
+    "e1209": {
+      "type": "text",
+      "size": "small",
+      "text": "Evidência real: Chromium 1366×900 e mobile 390×800; Playwright tests/advanced-question-filters.e2e.mjs, branch de PR. Seletores Disciplina→Assunto, exclusões de cadernos e anuladas, estado codificado na URL, recarga, Queries e simulado filtrado. A base oficial de 70 questões não possui classificação de Assunto; o teste usa questões manuais etiquetadas, sem inventar metadados da FGV. Sem inferência de conformidade WCAG ou testes com participantes.",
+      "x": 22018,
+      "y": 11008,
+      "w": 1580,
+      "h": 82
+    },
+    "e1210": {
+      "type": "image",
+      "src": "/_blob/issue70_before_simple",
+      "x": 22018,
+      "y": 11100,
+      "w": 755,
+      "h": 430
+    },
+    "e1211": {
+      "type": "text",
+      "size": "small",
+      "text": "ANTES: banco de questões sem construtor de filtros avançados",
+      "x": 22018,
+      "y": 11538,
+      "w": 760,
+      "h": 50
+    },
+    "e1212": {
+      "type": "image",
+      "src": "/_blob/issue70_after_open_panel",
+      "x": 22828,
+      "y": 11100,
+      "w": 755,
+      "h": 430
+    },
+    "e1213": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: painel com facetas estruturais e regras de inclusão/exclusão",
+      "x": 22828,
+      "y": 11538,
+      "w": 760,
+      "h": 50
+    },
+    "e1214": {
+      "type": "image",
+      "src": "/_blob/issue70_after_cascade",
+      "x": 22018,
+      "y": 11635,
+      "w": 755,
+      "h": 430
+    },
+    "e1215": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: Disciplina ativa Assunto, seleção aplicada e URL navegável",
+      "x": 22018,
+      "y": 12073,
+      "w": 760,
+      "h": 50
+    },
+    "e1216": {
+      "type": "image",
+      "src": "/_blob/issue70_after_exclusion",
+      "x": 22828,
+      "y": 11635,
+      "w": 755,
+      "h": 430
+    },
+    "e1217": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: exclusão de questões já incluídas em caderno",
+      "x": 22828,
+      "y": 12073,
+      "w": 760,
+      "h": 50
+    },
+    "e1218": {
+      "type": "image",
+      "src": "/_blob/issue70_after_reload_flags",
+      "x": 22018,
+      "y": 12170,
+      "w": 755,
+      "h": 430
+    },
+    "e1219": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: critérios persistidos após recarregar a página",
+      "x": 22018,
+      "y": 12608,
+      "w": 760,
+      "h": 50
+    },
+    "e1220": {
+      "type": "image",
+      "src": "/_blob/issue70_after_saved",
+      "x": 22828,
+      "y": 12170,
+      "w": 755,
+      "h": 430
+    },
+    "e1221": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: conjunto de filtros salvo como Query de Questão",
+      "x": 22828,
+      "y": 12608,
+      "w": 760,
+      "h": 50
+    },
+    "e1222": {
+      "type": "image",
+      "src": "/_blob/issue70_after_simulado_filtrado",
+      "x": 22018,
+      "y": 12705,
+      "w": 755,
+      "h": 430
+    },
+    "e1223": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: simulado criado com a seleção filtrada",
+      "x": 22018,
+      "y": 13143,
+      "w": 760,
+      "h": 50
+    },
+    "e1224": {
+      "type": "image",
+      "src": "/_blob/issue70_after_clear_defaults",
+      "x": 22828,
+      "y": 12705,
+      "w": 755,
+      "h": 430
+    },
+    "e1225": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: limpar filtros restaura exclusão padrão de anuladas",
+      "x": 22828,
+      "y": 13143,
+      "w": 760,
+      "h": 50
+    },
+    "e1226": {
+      "type": "image",
+      "src": "/_blob/issue70_after_mobile",
+      "x": 22018,
+      "y": 13240,
+      "w": 755,
+      "h": 430
+    },
+    "e1227": {
+      "type": "text",
+      "size": "small",
+      "text": "DEPOIS: filtros avançados adaptados a 390px",
+      "x": 22018,
+      "y": 13678,
+      "w": 760,
+      "h": 50
     }
   }
 }

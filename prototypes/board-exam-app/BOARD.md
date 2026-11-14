@@ -1906,6 +1906,47 @@ DEPOIS — Retomada na primeira questão pendente do caderno
 
 DEPOIS — Gerenciador de Cadernos em mobile 390px
 
+## 36. Filtros avançados — Issue #70: cascata, exclusões, URL, Queries e mobile
+<!-- container e1208 @ (22000,11000) -->
+
+Evidência real: Chromium 1366×900 e mobile 390×800; Playwright tests/advanced-question-filters.e2e.mjs, branch de PR. Seletores Disciplina→Assunto, exclusões de cadernos e anuladas, estado codificado na URL, recarga, Queries e simulado filtrado. A base oficial de 70 questões não possui classificação de Assunto; o teste usa questões manuais etiquetadas, sem inventar metadados da FGV. Sem inferência de conformidade WCAG ou testes com participantes.
+
+![imagem e1210](assets/issue70_before_simple.png)
+
+![imagem e1212](assets/issue70_after_open_panel.png)
+
+ANTES: banco de questões sem construtor de filtros avançados
+
+DEPOIS: painel com facetas estruturais e regras de inclusão/exclusão
+
+![imagem e1214](assets/issue70_after_cascade.png)
+
+![imagem e1216](assets/issue70_after_exclusion.png)
+
+DEPOIS: Disciplina ativa Assunto, seleção aplicada e URL navegável
+
+DEPOIS: exclusão de questões já incluídas em caderno
+
+![imagem e1218](assets/issue70_after_reload_flags.png)
+
+![imagem e1220](assets/issue70_after_saved.png)
+
+DEPOIS: critérios persistidos após recarregar a página
+
+DEPOIS: conjunto de filtros salvo como Query de Questão
+
+![imagem e1222](assets/issue70_after_simulado_filtrado.png)
+
+![imagem e1224](assets/issue70_after_clear_defaults.png)
+
+DEPOIS: simulado criado com a seleção filtrada
+
+DEPOIS: limpar filtros restaura exclusão padrão de anuladas
+
+![imagem e1226](assets/issue70_after_mobile.png)
+
+DEPOIS: filtros avançados adaptados a 390px
+
 ## 10. Arquivos do projeto (Dataprev 2026 e referências)
 <!-- container e363 @ (0,12666) -->
 
