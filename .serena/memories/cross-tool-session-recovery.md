@@ -37,6 +37,15 @@ This memory documents the exact file system locations, index structures, databas
   gh pr view <pr-number> --comments
   ```
 
+### Sending Messages to Claude Cloud Sessions via CLI
+Claude CLI allows queuing follow-up messages or steering instructions directly into running cloud sessions from any machine authenticated with `claude auth login`:
+```powershell
+claude -p "<mensagem>" --cloud <session-id> --output-format json
+```
+- `<session-id>`: ID of the cloud session (`session_01...` or URL `https://claude.ai/code/<id>`).
+- Does not require interactive TTY in print mode (`-p`).
+- Can also start a new cloud session for current git branch with `claude --cloud "<description>"` (requires interactive terminal).
+
 ### PowerShell Search for Channel and Message IDs
 ```powershell
 # Search for channel (chan_*) or message (cmsg_*) IDs across Claude project transcripts:
