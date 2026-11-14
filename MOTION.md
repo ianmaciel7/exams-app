@@ -334,3 +334,74 @@ A WCAG 2.2 estabelece critérios específicos (como **2.3.1** para flashes e **2
 Referências técnicas: [MDN — Web Animations API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API), [MDN — ResizeObserver](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver), [MDN — View Transitions](https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API), [MDN — prefers-reduced-motion](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion). **São mecanismos possíveis, não dependências novas.**
 
 <!-- MATERIAL-APPLE-MOTION:END -->
+
+
+## 6. Ícones animados, reordenação e arraste acessível (pesquisa 2026)
+
+Esta seção operacionaliza [AGENTS.md §19](AGENTS.md) e [DESIGN.md §8.22](DESIGN.md). **Ícones animados, drag-and-drop, View Transitions e layout animations são padrões técnicos/de design, não novas leis UX.** O sistema atual usa SVG/HTML/CSS/JS e já tem tokens de movimento; priorizar soluções nativas sem dependências e medir antes de considerar dnd-kit ou Motion.
+
+### 6.1. Icon Motion / Symbol Effects — o movimento deve carregar significado
+
+A Apple publica categorias de efeitos nativos **Discrete, Indefinite, Transition e Content Transition**, além de efeitos chamados **Bounce, Pulse, Wiggle, Rotate, Replace, Draw On e Draw Off**, entre outros. O objetivo aqui é aprender **vocabulário e propósito**, não importar SF Symbols para a web. [Apple Symbols](https://developer.apple.com/documentation/symbols), [Apple Motion](https://developer.apple.com/design/human-interface-guidelines/motion).
+
+| Evento ou estado real | Motion web opcional | Não fazer | Alternativa em reduced motion |
+|---|---|---|---|
+| **Favoritar / desafavoritar** | Troca discreta de estado com desenho de ícone ou escala contida e reversível. | Coração/estrela pulsando indefinidamente ou confirmar favorito antes de persistir se o caso exigir remoto. | Atualizar preenchimento/label/estado sem escala espacial. |
+| **Expandir / recolher painel** | Rotacionar chevron ou substituir símbolo de forma coerente com o estado expandido. | Indicar uma direção visual que discorde do estado real ou trocar foco durante transição. | Ícone de estado correto instantaneamente. |
+| **Salvar / sincronizar** | Animação discreta enquanto pendente, depois ícone/label de sucesso ou falha. | Spinner eterno, progresso mentiroso, animação de sucesso antes de salvar. | Status textual e mudança de símbolo/cor sem loop. |
+| **Erro / aviso / atenção** | Microênfase curta com texto, quando melhorar descoberta. | Shake agressivo, flashes, vibração repetida ou informação transmitida apenas pelo ícone. | Texto acionável, foco e contraste estáticos. |
+| **Item movido / reordenado** | Assentamento breve para posição final ou destaque funcional do novo lugar. | Bounce em cada item, mudança de ordem no DOM desconectada da visualização e foco perdido. | Ordem muda diretamente, estado/posição anunciados. |
+| **Carregamento** | Ícone com animação não bloqueante apenas enquanto houver operação ativa. | Ativar animação decorativa sem evento/estado, esconder erro atrás de looping. | Texto de progresso/espera, saída em timeout/falha. |
+
+**MUST** associar cada efeito a transição de estado explícita e oferecer feedback legível sem animação; rótulo acessível do botão reflete ação ou estado conforme semântica. **MUST** interromper/reverter efeito ao repetir clique, trocar rota, cancelar gravação ou alternar preferência de movimento. **SHOULD** usar um único evento ou efeito curto por ação; não exigir que a pessoa espere pelo término. Não copiar timing, asset ou API de símbolo da plataforma Apple diretamente para web.
+
+### 6.2. Ciclo de Drag-and-Drop / Sortable
+
+| Estado ou evento | Comportamento visual e de interação | Cancelamento e recuperação |
+|---|---|---|
+| **Idle** | Item em posição real; handle visível/descobrível quando houver arraste. Elementos internos permanecem clicáveis/editáveis. | Alteração de layout não altera a ordem lógica. |
+| **Armed / press** | Ativar drag somente após intenção identificável (handle, limiar de movimento ou ativação por teclado) sem destruir scroll normal. | Soltar sem deslocar mantém estado; não executar ação de clique acidental. |
+| **Dragging** | Item acompanha ponteiro **sem easing entre dedo e objeto**; mostrar cópia/overlay e indicação de origem/destino. | Escape, pointercancel, toque interrompido ou perda de foco retornam à situação anterior. |
+| **Over drop target** | Evidenciar alvo válido, posição de inserção e eventual proibição de drop; permitir auto-scroll controlado se necessário. | Alvo inválido não dispara gravação nem deslocamento persistente. |
+| **Drop / settle** | Assentamento curto conforme movimento reduzido; o efeito reflete a ordem lógica final e não bloqueia nova ação. | Drop fora de alvo cancela; nova interação interrompe a animação anterior. |
+| **Committing** | Persistir ordem/posição quando aplicável, com pending e prevenção de gravações concorrentes obsoletas. | Em erro, oferecer restauração/retry, sem mensagem de sucesso indevida. |
+| **Committed / reverted** | Atualizar anúncio de posição e foco; manter IDs estáveis, ordem DOM e dados alinhados. | Desfazer quando disponível recupera mesma informação via qualquer modalidade. |
+
+**Handle e sensores:** dnd-kit documenta [Sortable](https://dndkit.com/concepts/sortable/), [DragDropManager](https://dndkit.com/concepts/drag-drop-manager/) (PointerSensor, KeyboardSensor, Accessibility, AutoScroller) e [Drag Overlay](https://dndkit.com/react/components/drag-overlay/). **O pacote não é obrigatório** e recursos no adaptador React podem não existir de forma idêntica no protótipo DOM. Se a equipe adotar dnd-kit no futuro, avaliar **framework, versão e APIs** antes de codificar. O modelo de estado e requisitos continuam independentes de bibliotecas.
+
+**Acessibilidade — três acessos independentes:**
+1. **Teclado:** ativar reordenação por controle focável, mover destino usando comandos anunciáveis, confirmar ou cancelar com Escape, preservando foco. Ver [W3C APG — Keyboard Interface](https://www.w3.org/WAI/ARIA/apg/practices/keyboard-interface/).
+2. **Ponteiro direto:** drag com mouse/caneta/toque, com drop targets discerníveis, sem bloquear scroll/paste/seleção indevidamente.
+3. **Ponteiro único sem arraste:** botões "Mover para cima/baixo", menu "Mover para…" ou campo/controle para posição. **É uma exigência separada de teclado para WCAG 2.5.7 (AA)**, salvo exceção apropriada. Ver [W3C G219](https://www.w3.org/WAI/WCAG22/Techniques/general/G219) e [Understanding SC 2.5.7](https://www.w3.org/WAI/WCAG22/Understanding/dragging-movements).
+
+**Implementação web a verificar:**
+- Proteger gestos do navegador usando semântica adequada, limites de captura e tratamento de **pointerdown / pointermove / pointerup / pointercancel** e **lostpointercapture** quando captura for adotada. Não desativar touch scroll globalmente; limitar touch-action ao handle apenas se justificável e testado. [MDN — Pointer Events](https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events).
+- Manter **IDs/keys estáveis** durante drag e drop; overlay visual não pode duplicar papel/nome focável do item original. Foco/seleção e ordem visual devem corresponder à ordem DOM ou ter navegação documentada e testada.
+- Prevenir conflito entre **arrastar e clicar**, arrastar e selecionar texto, auto-scroll e scroll nativo, modais e drag, múltiplos ponteiros, drop fora, item removido durante drag, atraso do servidor, undo e mudanças de viewport.
+- **Preferir controle específico de drag handle** quando card possui links, botões, checkbox ou campo editável. Não tornar o card inteiro não selecionável apenas por ser arrastável.
+- Verificar WCAG **2.1.1 (A) Keyboard**, **2.5.1 (A) Pointer Gestures**, **2.5.2 (A) Pointer Cancellation**, **2.5.7 (AA) Dragging Movements**, **2.5.8 (AA) Target Size (Minimum)** e foco/nome/estado aplicáveis. Não confundir 2.5.7 com apenas suporte a teclado.
+
+### 6.3. Shared layout e View Transitions — continuidade, não efeito decorativo
+
+**Mecanismos documentados:** [MDN View Transition API](https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API) (same-document e cross-document, dependendo de navegador/condições), [Motion Layout](https://motion.dev/docs/react-layout-animations), [Motion Reorder](https://motion.dev/docs/react-reorder) e [Motion AnimatePresence](https://motion.dev/docs/react-animate-presence).
+
+- **SHOULD** usar transição entre card ↔ detalhe, item ↔ lista ou painel fechado ↔ aberto somente se esclarece **origem e destino**, não em toda rota ou clique.
+- **MUST** manter um **dono único** da posição/escala/opacidade em cada instante; ao interromper, transferir estado visual atual ou aplicar estado final sem salto, inclusive durante nova navegação/resize.
+- **MUST** garantir que conteúdo realmente esteja navegável enquanto a animação ocorre e que snapshots de View Transitions não criem uma **segunda interface focável ou estado lógico duplicado**.
+- **MUST** preservar scroll, seleção, foco e contexto quando necessário. Não atribuir à API View Transitions a correção automática de foco ou de estado de dados; isso continua sob responsabilidade da aplicação.
+- **MUST** prever **fallback de mudança instantânea** para ausência de suporte e **prefers-reduced-motion**; verificar diferentes browsers antes de optar por cross-document view transitions. Não presumir que View Transitions funciona em toda navegação.
+- **SHOULD** testar mudanças de filtros, ordenação e itens durante a transição; falhas de carga/async podem invalidar origem/destino e devem cancelar movimento obsoleto.
+- **AVOID** representar uma animação de slot, link ou card como garantia de que houve persistência no servidor.
+
+### 6.4. Matriz de testes de motion de componentes
+
+| Fluxo | Sequência mínima de teste | Evidência |
+|---|---|---|
+| Ícone alternável | Clique duas vezes rápido; aguarde resposta lenta/falha; alternar reduced motion durante efeito. | Ícone, label, estado ARIA e valor persistido coerentes; sem animação eterna. |
+| Reordenar lista/cards | Mouse drag, touch scroll + drag, teclado, mover por botão/menu sem arraste, drop inválido e Escape. | Mesma ordem final e feedback em todas as modalidades; status apropriado. |
+| Drag e navegação | Arrastar e rolar, sair do container, resize, trocar de aba/rota, remover item durante drag. | Sem ghost de overlay, foco preso ou animação residual; item em estado recuperável. |
+| Grafo | Mover nó, arrastar canvas, pan/zoom, selecionar nó por alternativa, cancelar e reduced motion. | Relações, foco, nó ativo e câmera preservados; alternativa não dependente de drag. |
+| View Transitions | Navegar rapidamente, back/forward, resize, mudança async no meio, navegador sem suporte. | Mudança completa sem bloquear input, foco e scroll; fallback funcional. |
+
+**MUST** registrar separadamente **documentado, implementado e testado**, com gravação/GIF do comportamento relevante e evidência reproduzível no board quando houver mudança de protótipo; esta especificação isolada não demonstra conformidade nem requer GIF fabricado.
+
