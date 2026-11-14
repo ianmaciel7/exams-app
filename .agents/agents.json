@@ -120,6 +120,25 @@
           "goose"
         ],
         "enabled": true
+      },
+      "serena": {
+        "label": "Serena",
+        "description": "Semantic code navigation and editing for the active Exam App workspace",
+        "transport": "stdio",
+        "command": "serena",
+        "args": [
+          "start-mcp-server",
+          "--project",
+          "${PROJECT_ROOT}"
+        ],
+        "targets": [
+          "codex",
+          "claude",
+          "claude_desktop",
+          "gemini",
+          "antigravity"
+        ],
+        "enabled": true
       }
     }
   },
