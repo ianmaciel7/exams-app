@@ -1785,6 +1785,51 @@ O que Ian mostrou como modelo para a sidebar: tipos de objeto, ordenar, hover, l
 | Readwise SRS | readwise_srs_statistics_heatmap.png | readwise.io/stats | 2026-11-13 | Heatmap anual de revisões diárias e contador de Streak (ofensiva) | Incluir Streak e estatísticas de consistência na Home e página de Desempenho | Adotar |
 | Readwise SRS | readwise_srs_export_highlights_top.png | readwise.io/export & /welcome/sync | 2026-11-14 | 32 conectores de importação e 16 integrações de exportação OAuth (Obsidian, Notion, etc.) | Descartar integrações OAuth com terceiros; fornecer exportação/backup próprio em CSV/Markdown/JSON | Descartar |
 
+## 32. Questões e Simulados — Issue #100: unificação dos fluxos e evidência E2E
+<!-- container e1155 @ (15000,11000) -->
+
+Fonte: Playwright Chromium 1366×900 (DPR 1), comparação da dev anterior e da branch de PR. Screenshots produzidos por tests/study-unification.e2e.mjs. Testes: busca oficial+manual, resposta, reload, lista contextual, criar simulado pelo filtro, quantidade/tempo e status de erros. Não representam inspeção do QConcursos, Capacities ou conformidade WCAG.
+
+![imagem e1157](assets/issue100_before_global.png)
+
+![imagem e1159](assets/issue100_after_global.png)
+
+ANTES: fluxo global separado da lista de objetos | PNG real: assets/issue100_before_global.png
+
+DEPOIS: banco unificado com filtros e status rápidos | PNG real: assets/issue100_after_global.png
+
+![imagem e1161](assets/issue100_before_manual.png)
+
+![imagem e1163](assets/issue100_after_manual.png)
+
+ANTES: busca de questão manual sem resultados na prática global | PNG real: assets/issue100_before_manual.png
+
+DEPOIS: questão manual encontrada e renderizada no mesmo fluxo | PNG real: assets/issue100_after_manual.png
+
+![imagem e1165](assets/issue100_before_simulado.png)
+
+![imagem e1167](assets/issue100_after_simulado.png)
+
+ANTES: configurador restrito à prova oficial Dataprev | PNG real: assets/issue100_before_simulado.png
+
+DEPOIS: banco completo, quantidade, tempo e ordem configuráveis | PNG real: assets/issue100_after_simulado.png
+
+![imagem e1169](assets/issue100_after_answer.png)
+
+![imagem e1171](assets/issue100_after_contexto.png)
+
+DEPOIS: resposta da questão manual, feedback e persistência | PNG real: assets/issue100_after_answer.png
+
+DEPOIS: mesma questão manual e filtro no contexto do concurso | PNG real: assets/issue100_after_contexto.png
+
+![imagem e1173](assets/issue100_after_manual_simulado.png)
+
+![imagem e1175](assets/issue100_after_erros.png)
+
+DEPOIS: simulado criado a partir do filtro da questão manual | PNG real: assets/issue100_after_manual_simulado.png
+
+DEPOIS: atalho de erros inclui resposta manual incorreta | PNG real: assets/issue100_after_erros.png
+
 ## 10. Arquivos do projeto (Dataprev 2026 e referências)
 <!-- container e363 @ (0,12666) -->
 
