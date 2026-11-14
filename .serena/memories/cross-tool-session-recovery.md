@@ -46,6 +46,19 @@ claude -p "<mensagem>" --cloud <session-id> --output-format json
 - Does not require interactive TTY in print mode (`-p`).
 - Can also start a new cloud session for current git branch with `claude --cloud "<description>"` (requires interactive terminal).
 
+### Claude Artifact Direct Sync (Zero-Token via CLI)
+Artifacts on `claude.ai/artifact/*` can be deployed directly from local files without requiring model generation turns, API keys, or waiting for 5-hour rate limits:
+```powershell
+# Direct patch of artifact with local index.html using cached Claude Code credentials:
+uvx --from claude-artifact-cli claude-artifact publish --mode patch --url <artifact-url> <local-file>
+
+# Check status/diff against live artifact:
+uvx --from claude-artifact-cli claude-artifact status --url <artifact-url> <local-file>
+```
+- Package: `claude-artifact-cli` (Nik Anand)
+- Uses internal endpoint `POST /api/frame/deploy/direct`
+- Script in `package.json`: `npm run sync:artifact`
+
 ### PowerShell Search for Channel and Message IDs
 ```powershell
 # Search for channel (chan_*) or message (cmsg_*) IDs across Claude project transcripts:

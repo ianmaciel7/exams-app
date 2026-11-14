@@ -28,6 +28,7 @@ The prototypes are static HTML. No build step, no dependencies beyond Python 3.
 
 ```bash
 npm run dev          # or: python -m http.server 8765 --directory prototypes
+npm run sync:artifact # publishes 0.1.1 directly to the live Claude artifact
 ```
 
 Then open:
@@ -48,6 +49,14 @@ Do not open `index.html` with `file://`: the app fetches PDFs and JSON, which ne
 ## Planning board
 
 - Read `prototypes/board-exam-app/BOARD.md` (text). `board.json` is the source of truth; never edit `BOARD.md` by hand. Regenerate it with `npm run board`.
+
+## Claude Artifact Sync (Zero-Token CLI)
+
+- The live Claude artifact at `https://claude.ai/artifact/MeCzKuKCsr6fY4F8AGxnyC` can be updated directly from `prototypes/exam-app-0.1.1/index.html` without burning model tokens, prompts, or waiting for 5-hour rate limits:
+  ```bash
+  npm run sync:artifact
+  ```
+- This uses `uvx --from claude-artifact-cli claude-artifact publish --mode patch` which uses the machine's cached Claude OAuth token to patch the artifact via Anthropic's direct frame deploy API (`/api/frame/deploy/direct`).
 
 ## Other
 
