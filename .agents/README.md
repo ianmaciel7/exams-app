@@ -83,7 +83,8 @@ MCPs. These source declarations are **not** proof of runtime connectivity.
 
 The shared source in `agents.json` declares `serena` for Codex,
 Claude Desktop, Gemini and Antigravity. Claude Code inherits the separately
-configured global Serena instead of receiving a project-scope duplicate. Its command uses the locally installed
+configured global Serena instead of receiving a project-scope duplicate.
+For other clients, the shared Serena command uses the locally installed
 `serena` executable and activates this repository with `--project ${PROJECT_ROOT}`.
 This is a **declaration**, not evidence that Serena is running on every Windows
 client. Do not commit machine-specific absolute executable paths or credentials.
