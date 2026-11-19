@@ -1,0 +1,214 @@
+# ExamTopics — Funcionamento e Funcionalidades
+
+**Site oficial:** https://www.examtopics.com/
+
+**Objetivo:** apresentar o funcionamento, a organização, os fluxos e as funcionalidades do ExamTopics.
+
+## 1. Visão geral
+
+O ExamTopics é uma plataforma web de preparação para exames de certificação profissional.
+
+Seu funcionamento é baseado em três pilares:
+
+**Catálogo de exames → Questões e respostas → Discussões da comunidade.**
+
+A plataforma disponibiliza questões organizadas por fornecedores, exames e tópicos. Os estudantes podem consultar respostas sugeridas e opiniões da comunidade.
+
+## 2. Jornada do usuário
+
+1. Acessa a página inicial.
+2. Pesquisa um exame ou navega pelos fornecedores.
+3. Seleciona um exame, como Microsoft AZ-900.
+4. Abre a página de questões.
+5. Lê o enunciado, as alternativas e a resposta sugerida.
+6. Consulta a votação da comunidade.
+7. Abre a discussão para ler comentários.
+8. Navega pelas próximas questões.
+9. Opcionalmente, cria uma conta ou contrata acesso adicional.
+
+## 3. Organização da plataforma
+
+- **Home:** página inicial, destaques e acesso ao catálogo.
+- **Vendors:** fornecedores de certificações, como Microsoft, AWS, Cisco e CompTIA.
+- **Exams:** exames identificados por código e nome.
+- **Topics:** agrupamentos de questões, como `Topic 1` e `Single Topic`.
+- **Questions:** questões numeradas com enunciados, alternativas e respostas.
+- **Discussions:** discussões específicas das questões.
+- **Users:** contas utilizadas para autenticação e participação.
+- **PRO / Access:** ofertas comerciais e acesso premium.
+
+## 4. Funcionalidades principais
+
+### Catálogo e navegação
+
+- Listagem de fornecedores.
+- Catálogo de exames por fornecedor.
+- Pesquisa por nome ou código do exame.
+- Página específica para cada exame.
+- Quantidade de questões e informações de atualização.
+- Navegação paginada entre questões.
+
+### Questões e respostas
+
+- Enunciados e instruções.
+- Alternativas quando aplicáveis.
+- Respostas sugeridas.
+- Imagens e diagramas.
+- Numeração e identificação do tópico.
+- Distribuição de votos em respostas.
+- Links para discussões.
+- Controle `Show Suggested Answer` em páginas de discussão.
+
+## 5. Tipos de questões e exemplos no site
+
+Os links abaixo apontam para exemplos no domínio `examtopics.com`.
+
+**Observação:** a presença de um formato no conteúdo não significa necessariamente que ele seja executável ou interativo na interface do ExamTopics.
+
+| Tipo | Exemplo |
+|---|---|
+| Single Choice | [PL-900 — Questão #6](https://www.examtopics.com/exams/microsoft/pl-900/view/1/) |
+| Multiple Choice | [PL-900 — Questão #9](https://www.examtopics.com/exams/microsoft/pl-900/view/1/) |
+| True / False | [Scrum PSM I](https://www.examtopics.com/exams/scrum/psm-i/view/) |
+| Yes / No | [PL-900 — Questão #4](https://www.examtopics.com/exams/microsoft/pl-900/view/1/) |
+| Drag and Drop | [PL-900 — Questão #7](https://www.examtopics.com/exams/microsoft/pl-900/view/1/) |
+| Matching | [PL-900 — Questão #5](https://www.examtopics.com/exams/microsoft/pl-900/view/1/) |
+| Ordering | [MB-320 — Questão #9](https://www.examtopics.com/discussions/microsoft/view/44493-exam-mb-320-topic-1-question-9-discussion/) |
+| Hotspot / Hot Area | [PL-900 — Questão #4](https://www.examtopics.com/exams/microsoft/pl-900/view/1/) |
+| Dropdown | [MD-102 — Questão #5](https://www.examtopics.com/discussions/microsoft/view/118252-exam-md-102-topic-1-question-5-discussion/) |
+| Fill in the Blank | [GIAC GCPM](https://www.examtopics.com/exams/giac/gcpm/view/) |
+| Simulation / PBQ | [AZ-400 — Questão #2](https://www.examtopics.com/discussions/microsoft/view/37479-exam-az-400-topic-8-question-2-discussion/) |
+| Case Study | [SC-401 — Questão #1](https://www.examtopics.com/discussions/microsoft/view/169321-exam-sc-401-topic-1-question-1-discussion/) |
+| Resposta em imagem | [Microsoft 70-762](https://www.examtopics.com/exams/microsoft/70-762/view/) |
+
+### Variações adicionais
+
+- **Matriz Yes/No:** [Certiport ITS-303](https://www.examtopics.com/exams/certiport/its-303/view/).
+- **Hotspot com múltiplas áreas:** [Microsoft PL-900](https://www.examtopics.com/exams/microsoft/pl-900/view/1/).
+- **Múltipla escolha com quantidade fixa:** [Cisco 200-901](https://www.examtopics.com/exams/cisco/200-901/view/).
+- **Conteúdo JSON no enunciado:** [Microsoft DP-900](https://www.examtopics.com/exams/microsoft/dp-900/view/).
+
+### Observações sobre os formatos
+
+- Matching e Ordering podem ser variações lógicas de Drag and Drop.
+- Yes/No e Dropdown podem aparecer dentro de imagens do tipo Hotspot.
+- Case Study representa um contexto compartilhado, não necessariamente um tipo de resposta.
+- Simulation pode aparecer apenas como enunciado e instruções de tarefa.
+- Imagem é uma forma de apresentação, não necessariamente uma modalidade independente de questão.
+- Alguns exemplos foram recuperados de pesquisas anteriores e nem todos foram revalidados individualmente.
+
+## 6. Comunidade e discussões
+
+### Organização
+
+- Fórum organizado por fornecedor.
+- Discussões associadas às questões.
+- Listagens de discussões e comentários.
+- Identificação dos autores.
+
+### Participação
+
+- Publicação de comentários.
+- Votos positivos.
+- Destaques `Most Voted`, `Highly Voted` e `Most Recent`.
+- Denúncia de comentários.
+- Indicação de respostas nos comentários.
+
+### Votação de respostas
+
+- Distribuição de votos por resposta.
+- Respostas preferidas pela comunidade.
+- Possível divergência entre a resposta sugerida e a mais votada.
+- Votos em comentários associados a respostas podem contribuir para a votação comunitária.
+
+## 7. Usuários e autenticação
+
+- Cadastro com e-mail, nickname e senha.
+- Login.
+- Recuperação de senha.
+- Reenvio de ativação de conta.
+- Participação nas discussões mediante autenticação.
+
+## 8. Acesso gratuito e pago
+
+### Gratuito
+
+- Navegação pelo catálogo.
+- Consulta de questões disponíveis publicamente.
+- Limites de acesso e verificações CAPTCHA em determinadas circunstâncias.
+
+### Contributor Access
+
+- Acesso associado a um exame específico.
+- Recursos adicionais de consulta e discussão.
+- Atualizações conforme a oferta contratada.
+- Possibilidade de adquirir material PDF.
+
+### ExamTopics PRO
+
+- Acesso premium.
+- Ativação de até 10 exames conforme a oferta consultada.
+- Discussões integradas.
+- Benefícios relacionados a restrições de acesso e CAPTCHA.
+- Checkout e cobrança.
+
+As condições comerciais podem mudar.
+
+## 9. Outras áreas do site
+
+- Notícias e artigos.
+- Estatísticas apresentadas nas páginas dos exames.
+- Informações institucionais.
+- Contato e suporte.
+- Termos de uso e política de privacidade.
+
+## 10. Características da experiência (UX)
+
+A navegação segue predominantemente a estrutura:
+
+**Home → Vendor → Exam → Topic / Question → Discussion**
+
+Características:
+
+- Organização hierárquica por fornecedor e exame.
+- Leitura sequencial de questões.
+- Paginação.
+- Respostas sugeridas próximas ao conteúdo.
+- Discussões vinculadas a perguntas específicas.
+- Elementos visuais apresentados diretamente na página.
+- Busca como caminho alternativo para localizar exames.
+
+## 11. Funcionalidades não confirmadas
+
+Não foram confirmadas na interface pública consultada:
+
+- Simulados cronometrados com avaliação individual.
+- Histórico completo de tentativas.
+- Correção automática de respostas do estudante.
+- Repetição espaçada.
+- Filtros avançados por dificuldade, ano ou status.
+- Execução interativa de todos os formatos especiais.
+- Coleções pessoais e sistema de anotações.
+
+A ausência de confirmação não prova que esses recursos não existam em áreas restritas.
+
+## 12. Referências principais
+
+- [Página inicial](https://www.examtopics.com/)
+- [Catálogo de exames](https://www.examtopics.com/exams/)
+- [Busca](https://www.examtopics.com/search/)
+- [Questões AZ-900](https://www.examtopics.com/exams/microsoft/az-900/view/)
+- [Discussões](https://www.examtopics.com/discussions/)
+- [Cadastro](https://www.examtopics.com/signup/)
+- [ExamTopics PRO](https://www.examtopics.com/unlimited/)
+
+## Resumo final
+
+O ExamTopics é uma plataforma de preparação para certificações que combina:
+
+1. Catálogo e pesquisa de exames.
+2. Consulta de questões em diferentes formatos.
+3. Respostas sugeridas e votação comunitária.
+4. Discussões e comentários.
+5. Contas de usuários.
+6. Ofertas de acesso gratuito e premium.

@@ -1,0 +1,52 @@
+<!-- @dsCard height=288 -->
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  html, body { margin: 0; background: var(--bg); }
+  .cover { position: relative; width: 960px; height: 288px; overflow: hidden; background: var(--bg); font-family: var(--font-sans); }
+  .cover svg { position: absolute; inset: 0; }
+  .accent { fill: var(--accent); }
+  .ink { fill: var(--text); }
+  .correct { fill: var(--correct); }
+  .incorrect { fill: var(--incorrect); }
+  .tint { fill: var(--border-strong); }
+  .r-lg { rx: var(--radius-lg); }
+  .r-md { rx: var(--radius-md); }
+  .bubble { fill: none; stroke: var(--on-accent); stroke-width: 2; }
+  .bubble.on { fill: var(--on-accent); }
+  .words { position: absolute; left: 40px; bottom: 36px; max-width: 440px; }
+  .name { margin: 0; font-size: 88px; line-height: .92; font-weight: 700; color: var(--text); letter-spacing: -0.01em; }
+  .tagline { margin: 16px 0 0; font-size: 14px; line-height: 20px; color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="cover">
+  <svg width="960" height="288" viewBox="0 0 960 288" aria-hidden="true">
+    <!--
+      blocks: accent 240x192 (slab, bleeds top/right), text 112x192 (bleeds bottom), correct 112x80, incorrect 112x80, border-strong relief block 96x80
+      arrangement: one tall accent slab with satellites, bleeding off the top, right and bottom edges, all right of x=480
+      pattern: literal motif, an answer-sheet bubble grid (4 rows x 5, one filled per row) in on-accent over the accent slab; chosen because the product is answering exam questions
+      scales: block sides from space-3 (16px) multiples, gaps space-3, bubble pitch space-4 (32px), bubble r = radius-md (8px), corners radius-lg / radius-md
+    -->
+    <rect class="tint r-md" x="480" y="-12" width="96" height="92"/>
+    <rect class="ink r-lg" x="592" y="96" width="112" height="208"/>
+    <rect class="accent r-lg" x="720" y="-12" width="252" height="204"/>
+    <rect class="correct r-md" x="720" y="208" width="112" height="92"/>
+    <rect class="incorrect r-md" x="848" y="208" width="124" height="92"/>
+    <g>
+      <circle class="bubble" cx="760" cy="40" r="8"/><circle class="bubble on" cx="792" cy="40" r="8"/><circle class="bubble" cx="824" cy="40" r="8"/><circle class="bubble" cx="856" cy="40" r="8"/><circle class="bubble" cx="888" cy="40" r="8"/>
+      <circle class="bubble" cx="760" cy="72" r="8"/><circle class="bubble" cx="792" cy="72" r="8"/><circle class="bubble" cx="824" cy="72" r="8"/><circle class="bubble on" cx="856" cy="72" r="8"/><circle class="bubble" cx="888" cy="72" r="8"/>
+      <circle class="bubble on" cx="760" cy="104" r="8"/><circle class="bubble" cx="792" cy="104" r="8"/><circle class="bubble" cx="824" cy="104" r="8"/><circle class="bubble" cx="856" cy="104" r="8"/><circle class="bubble" cx="888" cy="104" r="8"/>
+      <circle class="bubble" cx="760" cy="136" r="8"/><circle class="bubble" cx="792" cy="136" r="8"/><circle class="bubble on" cx="824" cy="136" r="8"/><circle class="bubble" cx="856" cy="136" r="8"/><circle class="bubble" cx="888" cy="136" r="8"/>
+    </g>
+  </svg>
+  <div class="words">
+    <h1 class="name">Exam App</h1>
+    <p class="tagline">A calm, plain study tool for competitive exams and certifications.</p>
+  </div>
+</div>
+<script></script>
+</body>
+</html>
