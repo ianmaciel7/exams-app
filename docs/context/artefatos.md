@@ -1,9 +1,11 @@
 # Artefatos do projeto "Exams App"
 
-Lista exportada em 2026-11-19 (links apenas; o conteúdo dos artefatos não é exportável por aqui).
+Lista exportada em 2026-11-20 (links apenas; o conteúdo dos artefatos não é exportável por aqui).
 
 | Título | Link | Atualizado em |
 |---|---|---|
+| Referência – Crucial Exams | https://claude.ai/artifact/S6z5K8t4sBHqqrR2jvNMai | 2026-11-19 21:42 UTC |
+| Referência – Linear | https://claude.ai/artifact/TAqCvHVHbkFZ32tCaEXcAm | 2026-11-19 21:38 UTC |
 | Referência – Readwise Reader | https://claude.ai/artifact/T6u8F8VwYhzAUkqHq4oCBi | 2026-11-19 17:35 UTC |
 | Referência – Anki | https://claude.ai/artifact/3QXKL4tB84FcCJM6pxdtKQ | 2026-11-19 17:35 UTC |
 | Referência – Capacities | https://claude.ai/artifact/RS4JbEcKH8J5TeTJu9FD6M | 2026-11-19 17:35 UTC |

@@ -11,9 +11,9 @@ Legenda: **Confirmado** = lido na documentação oficial ou visto na captura (fo
 
 ## Índice dos arquivos
 1. [funcionalidades.md](funcionalidades.md): decks, notas, cartas, tipos de nota, agendamento, botões, estatísticas, sincronização, complementos.
-2. [jornada-estudo.md](jornada-estudo.md): criar deck, adicionar nota, estudar, avaliar, ver estatísticas.
+2. [jornada.md](jornada.md): criar deck, adicionar nota, estudar, avaliar, ver estatísticas.
 3. [algoritmo-repeticao.md](algoritmo-repeticao.md): repetição espaçada explicada de forma simples (SM-2 e FSRS).
-4. [inventario-telas-componentes.md](inventario-telas-componentes.md): telas e componentes confirmados pela documentação e pelas capturas.
+4. [inventario-telas.md](inventario-telas.md): telas e componentes confirmados pela documentação e pelas capturas.
 5. [o-que-aprender.md](o-que-aprender.md): o que vale levar para o Exams App.
 
 ## Imagens (pasta `imagens/`)

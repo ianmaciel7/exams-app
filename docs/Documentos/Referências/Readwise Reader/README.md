@@ -18,10 +18,10 @@ Referência interna para o Exams App (app de estudos para concursos e certifica�
 - F4: https://readwise.io/changelog (não lido em detalhe; só capturado)
 
 **Arquivos**
-- [funcionalidades.md](funcionalidades.md): o que o produto faz
-- [jornada-usuario.md](jornada-usuario.md): passos do usuário, do cadastro à revisão
-- [organizacao-produto.md](organizacao-produto.md): como o conteúdo é organizado (biblioteca, estados, tags, filtros)
-- [fluxo-navegacao.md](fluxo-navegacao.md): mapa de navegação entre páginas públicas
+- [visao-geral.md](visao-geral.md): o que o produto faz
+- [jornada.md](jornada.md): passos do usuário, do cadastro à revisão
+- [organizacao.md](organizacao.md): como o conteúdo é organizado (biblioteca, estados, tags, filtros)
+- [fluxo.md](fluxo.md): mapa de navegação entre páginas públicas
 - [inventario-telas.md](inventario-telas.md): telas e páginas vistas
 - [inventario-componentes.md](inventario-componentes.md): componentes vistos nas páginas públicas
 - [matriz-interacoes.md](matriz-interacoes.md): elemento → ação → resultado → destino
