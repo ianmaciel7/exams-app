@@ -1,0 +1,38 @@
+id: review-route-test-sdk-mock
+snapshots:
+  "vi.mock(\"@/lib/firebase/client\", () => ({ getFirebaseUI: vi.fn() }));":
+    labels:
+    - source: "vi.mock(\"@/lib/firebase/client\", () => ({ getFirebaseUI: vi.fn() }))"
+      style: primary
+      start: 0
+      end: 68
+    - source: vi.mock
+      style: secondary
+      start: 0
+      end: 7
+    - source: "\"@/lib/firebase/client\""
+      style: secondary
+      start: 8
+      end: 31
+    - source: "\"@/lib/firebase/client\""
+      style: secondary
+      start: 8
+      end: 31
+  "vi.mock(\"firebase/auth\", () => ({ onAuthStateChanged: vi.fn() }));":
+    labels:
+    - source: "vi.mock(\"firebase/auth\", () => ({ onAuthStateChanged: vi.fn() }))"
+      style: primary
+      start: 0
+      end: 65
+    - source: vi.mock
+      style: secondary
+      start: 0
+      end: 7
+    - source: "\"firebase/auth\""
+      style: secondary
+      start: 8
+      end: 23
+    - source: "\"firebase/auth\""
+      style: secondary
+      start: 8
+      end: 23

@@ -1,0 +1,129 @@
+{
+  "created": "2026-11-14T16:28:09.185Z",
+  "cases": [
+    {
+      "width": 390,
+      "navigateToCanvasMs": 420,
+      "reduced": {
+        "reduced": true,
+        "nodeCount": 90,
+        "edgeCount": 299,
+        "hidden": false,
+        "canvasWidth": 368,
+        "canvasHeight": 792,
+        "drawCalls": 2
+      },
+      "idle": {
+        "reduced": true,
+        "nodeCount": 90,
+        "edgeCount": 299,
+        "hidden": false,
+        "canvasWidth": 368,
+        "canvasHeight": 792,
+        "drawCalls": 2
+      },
+      "zoomed": {
+        "reduced": true,
+        "nodeCount": 90,
+        "edgeCount": 299,
+        "hidden": false,
+        "canvasWidth": 368,
+        "canvasHeight": 792,
+        "drawCalls": 3
+      },
+      "filtered": {
+        "reduced": true,
+        "nodeCount": 90,
+        "edgeCount": 299,
+        "hidden": false,
+        "canvasWidth": 368,
+        "canvasHeight": 792,
+        "drawCalls": 4
+      },
+      "normal": {
+        "reduced": false,
+        "nodeCount": 90,
+        "edgeCount": 299,
+        "hidden": false,
+        "canvasWidth": 368,
+        "canvasHeight": 792,
+        "drawCalls": 18
+      },
+      "restored": {
+        "reduced": true,
+        "nodeCount": 90,
+        "edgeCount": 299,
+        "hidden": false,
+        "canvasWidth": 368,
+        "canvasHeight": 792,
+        "drawCalls": 19
+      },
+      "screenshot": "issue128_restored_390.png"
+    },
+    {
+      "width": 1366,
+      "navigateToCanvasMs": 372,
+      "reduced": {
+        "reduced": true,
+        "nodeCount": 90,
+        "edgeCount": 299,
+        "hidden": false,
+        "canvasWidth": 1060,
+        "canvasHeight": 792,
+        "drawCalls": 2
+      },
+      "idle": {
+        "reduced": true,
+        "nodeCount": 90,
+        "edgeCount": 299,
+        "hidden": false,
+        "canvasWidth": 1060,
+        "canvasHeight": 792,
+        "drawCalls": 2
+      },
+      "zoomed": {
+        "reduced": true,
+        "nodeCount": 90,
+        "edgeCount": 299,
+        "hidden": false,
+        "canvasWidth": 1060,
+        "canvasHeight": 792,
+        "drawCalls": 3
+      },
+      "filtered": {
+        "reduced": true,
+        "nodeCount": 90,
+        "edgeCount": 299,
+        "hidden": false,
+        "canvasWidth": 1060,
+        "canvasHeight": 792,
+        "drawCalls": 4
+      },
+      "normal": {
+        "reduced": false,
+        "nodeCount": 90,
+        "edgeCount": 299,
+        "hidden": false,
+        "canvasWidth": 1060,
+        "canvasHeight": 792,
+        "drawCalls": 18
+      },
+      "restored": {
+        "reduced": true,
+        "nodeCount": 90,
+        "edgeCount": 299,
+        "hidden": false,
+        "canvasWidth": 1060,
+        "canvasHeight": 792,
+        "drawCalls": 19
+      },
+      "screenshot": "issue128_restored_1366.png"
+    }
+  ],
+  "pageErrors": [],
+  "limitations": [
+    "Measured with headless Chromium on CI, not physical Android/iOS or screen reader.",
+    "This test does not establish a CPU/battery/FPS budget or full WCAG conformance.",
+    "Only the global graph route is covered, not the right contextual mini-graph."
+  ]
+}

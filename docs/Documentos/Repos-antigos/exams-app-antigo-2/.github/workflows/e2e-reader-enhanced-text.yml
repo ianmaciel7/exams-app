@@ -1,0 +1,52 @@
+name: E2E Enhanced PDF Reader
+on:
+  pull_request:
+    branches: [dev]
+    paths:
+      - 'prototype/exam-app-0.1.1__index.html'
+      - 'tests/reader-enhanced-text.test.mjs'
+      - 'tests/reader-enhanced-text.e2e.mjs'
+      - '.github/workflows/e2e-reader-enhanced-text.yml'
+permissions:
+  contents: read
+jobs:
+  reader-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test tests/reader-enhanced-text.test.mjs
+  browser-two-column:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser and PDF generation fixture
+        run: |
+          npm install --no-save playwright pdf-lib
+          npx playwright install --with-deps chromium
+      - name: Start local prototype
+        run: |
+          python3 -m http.server 8765 --directory prototype >/tmp/pdf-reflow.log 2>&1 &
+          for i in $(seq 1 25); do
+            if curl -fsS http://127.0.0.1:8765/exam-app-0.1.1__index.html -o /dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/pdf-reflow.log
+          exit 1
+      - name: Test PDF.js two-column text extraction and keyboard actions in Chromium
+        run: node tests/reader-enhanced-text.e2e.mjs
+      - name: Upload reader screenshots and test journal
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: issue77-reader-e2e-evidence
+          path: |
+            prototype/issue77_*.png
+            prototype/issue77_reader_e2e.json
+          if-no-files-found: warn

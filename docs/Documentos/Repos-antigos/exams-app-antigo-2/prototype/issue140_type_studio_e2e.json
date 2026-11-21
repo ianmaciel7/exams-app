@@ -1,0 +1,37 @@
+{
+  "date": "2026-11-16T16:16:28.626Z",
+  "cases": [
+    {
+      "phase": "after",
+      "step": "search-preview-cancel",
+      "screenshot": "issue140_preset_preview.png"
+    },
+    {
+      "phase": "after",
+      "step": "create-type-and-duplicate-validation",
+      "type": "custom-nota-juridica",
+      "screenshot": "issue140_created_type.png"
+    },
+    {
+      "phase": "after",
+      "step": "create-and-edit-object",
+      "screenshot": "issue140_created_object.png",
+      "path": "#/custom-object/custom-object-mwjgub14-6pp4xtk"
+    },
+    {
+      "phase": "after",
+      "step": "persist-after-reload",
+      "screenshot": "issue140_after_reload.png"
+    },
+    {
+      "phase": "after",
+      "step": "restore-existing-type",
+      "screenshot": "issue140_restored_builtin.png"
+    }
+  ],
+  "pageErrors": [],
+  "limitations": [
+    "Only browser-local HTML prototype data. No cloud sync, object query engine, SRS flashcards or production domain persistence.",
+    "Chromium automation, not a substitute for physical mobile/touch and screen-reader testing."
+  ]
+}

@@ -1,0 +1,50 @@
+name: Validate board
+
+on:
+  pull_request:
+    branches: [dev]
+    paths:
+      - 'prototype/**'
+      - '.github/workflows/validate-board.yml'
+  push:
+    branches: [dev]
+    paths:
+      - 'prototype/**'
+      - '.github/workflows/validate-board.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validar integridade do canvas original
+        working-directory: prototype
+        run: python3 -I validate_board.py
+      - name: Validar taxonomia, documentos e cobertura dos boards
+        working-directory: prototype
+        run: python3 -I validate_board_index.py
+      - name: Validar índice do board mestre
+        working-directory: prototype
+        run: |
+          python3 -I render_board_mestre.py
+          git diff --exit-code -- board-mestre.md || { echo 'board-mestre.md desatualizado; rode render_board_mestre.py'; exit 1; }
+      - name: Validar vínculos de features do board mestre
+        working-directory: prototype
+        run: python3 -I validate_feature_links.py
+      - name: Validar inventário integral ExamTopics no Board de Evidências
+        working-directory: prototype
+        run: python3 -I validate_examtopics_evidence.py
+      - name: Regenerar BOARD.md e verificar diff
+        working-directory: prototype
+        run: |
+          python3 -I board_to_md.py
+          if ! git diff --exit-code -- BOARD.md; then
+            echo "BOARD.md desatualizado em relação ao board.json. Rode board_to_md.py e commite."
+            exit 1
+          fi

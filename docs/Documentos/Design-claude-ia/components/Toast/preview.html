@@ -1,0 +1,32 @@
+<!-- @dsCard group="Feedback" height=460 -->
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;font:400 16px/1.55 var(--font-sans);color:var(--body)}
+.pane{background:var(--canvas);color:var(--body);padding:20px 24px}
+.pane+.pane{border-top:1px solid var(--hairline)}
+.tag{font:500 12px/1.4 var(--font-sans);letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:0 0 12px}
+.row{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}
+.col{display:flex;flex-direction:column;gap:12px}
+*:focus-visible,.focus{outline:2px solid var(--primary);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+button{font-family:var(--font-sans);cursor:pointer}
+button:disabled{cursor:not-allowed}
+.btn{height:40px;padding:0 20px;border-radius:var(--radius-md);border:1px solid transparent;font:500 14px/1 var(--font-sans)}
+.btn.p{background:var(--ink);color:var(--canvas)}
+.btn.s{background:var(--surface-raised);color:var(--ink);border-color:var(--ring)}
+kbd{font:500 11px/16px var(--font-sans);color:var(--muted);border:1px solid var(--hairline);border-radius:6px;padding:0 5px;background:var(--surface-raised)}
+.btn.g{background:transparent;color:var(--ink)}
+.help{font:400 13px/1.4 var(--font-sans);color:var(--muted);margin-top:6px}
+.err{color:var(--error)}
+label.l{display:block;font:500 13px/1.4 var(--font-sans);color:var(--ink);margin-bottom:6px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.ts{display:flex;gap:12px;align-items:flex-start;width:340px;max-width:100%;box-sizing:border-box;padding:14px 16px;border-radius:var(--radius-lg);border:1px solid var(--hairline);box-shadow:var(--shadow-popover);font:400 14px/1.4 var(--font-sans);color:var(--ink);margin-bottom:10px}
+.ts.n{background:var(--surface-dark);color:var(--on-dark)}.ts.s{background:var(--success-soft)}.ts.i{background:var(--info-soft)}.ts.e{background:var(--error-soft)}
+.ts b{display:block;font-weight:600}.ts .ic{font-size:16px;line-height:1.4;flex:none}.ts .a{margin-left:auto;background:none;border:0;color:inherit;font:600 14px var(--font-sans);text-decoration:underline;padding:0 4px}
+.ts .c{background:none;border:0;color:inherit;font-size:18px;line-height:1;padding:0 2px}.ts.s,.ts.i,.ts.e{background:var(--surface-raised)}.ts{border-radius:12px}
+.ts .ic{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-top:1px;border:1px solid var(--hairline)}
+.ts.s .ic{background:var(--success-soft)}.ts.i .ic{background:var(--info-soft)}.ts.e .ic{background:var(--error-soft)}.ts.n .ic{border-color:transparent;background:var(--surface-dark-elevated)}</style></head><body><div class="pane"><p class="tag">Light</p><div class="row"><div><div class="ts n" role="status"><span class="ic" aria-hidden="true">✓</span><div><b>Answer saved</b>Question 12 of 60</div><button class="a">Undo</button></div>
+<div class="ts s" role="status"><span class="ic" aria-hidden="true">✓</span><div><b>Exam submitted</b>Your score will be ready shortly.</div></div></div>
+<div><div class="ts i" role="status"><span class="ic" aria-hidden="true">i</span><div><b>3 cards due today</b>Review them to keep your streak.</div><button class="c" aria-label="Close">×</button></div>
+<div class="ts e" role="alert"><span class="ic" aria-hidden="true">!</span><div><b>Sync failed</b>We will retry in 30 seconds.</div><button class="a">Retry</button></div></div></div></div><div class="pane" data-theme="dark"><p class="tag">Dark</p><div class="row"><div><div class="ts n" role="status"><span class="ic" aria-hidden="true">✓</span><div><b>Answer saved</b>Question 12 of 60</div><button class="a">Undo</button></div>
+<div class="ts s" role="status"><span class="ic" aria-hidden="true">✓</span><div><b>Exam submitted</b>Your score will be ready shortly.</div></div></div>
+<div><div class="ts i" role="status"><span class="ic" aria-hidden="true">i</span><div><b>3 cards due today</b>Review them to keep your streak.</div><button class="c" aria-label="Close">×</button></div>
+<div class="ts e" role="alert"><span class="ic" aria-hidden="true">!</span><div><b>Sync failed</b>We will retry in 30 seconds.</div><button class="a">Retry</button></div></div></div></div></body></html>

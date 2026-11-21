@@ -1,0 +1,37 @@
+name: Validate evidence catalog
+
+on:
+  pull_request:
+    branches: [dev]
+    paths:
+      - 'prototype/**'
+      - 'scripts/build-evidence-catalog.py'
+      - 'scripts/validate-evidence-catalog.py'
+      - 'tests/test_evidence_catalog_dates.py'
+      - '.github/workflows/validate-evidence-catalog.yml'
+  push:
+    branches: [dev]
+    paths:
+      - 'prototype/**'
+      - 'scripts/build-evidence-catalog.py'
+      - 'scripts/validate-evidence-catalog.py'
+      - '.github/workflows/validate-evidence-catalog.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  evidence-catalog:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test stable evidence dates across squash merges
+        run: python3 -m unittest discover -s tests -p test_evidence_catalog_dates.py
+      - name: Validate catalog against the repository
+        run: python3 scripts/validate-evidence-catalog.py

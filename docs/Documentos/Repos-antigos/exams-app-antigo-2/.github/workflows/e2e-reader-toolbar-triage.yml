@@ -1,0 +1,53 @@
+name: E2E PDF Toolbar Triage
+on:
+  pull_request:
+    branches: [dev]
+    paths:
+      - 'prototype/exam-app-0.1.1__index.html'
+      - 'tests/reader-toolbar-triage.test.mjs'
+      - 'tests/reader-toolbar-triage.e2e.mjs'
+      - '.github/workflows/e2e-reader-toolbar-triage.yml'
+  push:
+    branches: [dev]
+    paths:
+      - 'prototype/exam-app-0.1.1__index.html'
+      - 'tests/reader-toolbar-triage.test.mjs'
+      - 'tests/reader-toolbar-triage.e2e.mjs'
+      - '.github/workflows/e2e-reader-toolbar-triage.yml'
+permissions:
+  contents: read
+jobs:
+  reader-toolbar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify toolbar state, shortcuts and isolation
+        run: node --test tests/reader-toolbar-triage.test.mjs
+      - name: Install Chromium
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Start local prototype
+        run: |
+          python3 -m http.server 8765 --directory prototype >/tmp/reader-toolbar.log 2>&1 &
+          for i in $(seq 1 25); do
+            if curl -fsS http://127.0.0.1:8765/exam-app-0.1.1__index.html -o /dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/reader-toolbar.log
+          exit 1
+      - name: Verify PDF toolbar triage in mobile/desktop Chromium
+        run: node tests/reader-toolbar-triage.e2e.mjs
+      - name: Store screenshot evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: issue81-reader-toolbar-evidence
+          path: |
+            prototype/issue81_reader_toolbar_*.png
+            prototype/issue81_reader_toolbar_e2e.json
+          if-no-files-found: warn

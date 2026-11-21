@@ -1,0 +1,13 @@
+id: require-component-props
+valid:
+  - 'type MyButtonProps = ComponentProps<typeof Button> & { profile: ProfileState };'
+  - 'type CardProps = ComponentProps<"div"> & { title: string };'
+  - 'type ContainerProps = HTMLAttributes<HTMLDivElement>;'
+  - 'interface ProviderProps extends PropsWithChildren { value: string; }'
+  - 'type ThemeContextProps = { theme: string };'
+  - 'type PageProps = { params: Promise<{ slug: string }> };'
+  - 'type LayoutProps = { children: ReactNode };'
+invalid:
+  - 'type MyComponentProps = { customProp: string };'
+  - 'interface MyComponentProps { title: string; }'
+  - 'type ProfilePreferenceFieldsProps = { profile: ProfileClientState };'

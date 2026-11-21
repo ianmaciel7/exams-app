@@ -1,0 +1,36 @@
+id: require-field-data-invalid
+valid:
+  - |
+    <Controller
+      control={form.control}
+      name="email"
+      render={({ field, fieldState }) => (
+        <Field data-invalid={!!fieldState.error}>
+          <FieldLabel htmlFor="email">Email</FieldLabel>
+          <Input {...field} id="email" aria-invalid={!!fieldState.error} />
+          {fieldState.error && <FieldError>{fieldState.error.message}</FieldError>}
+        </Field>
+      )}
+    />
+  - |
+    <Controller
+      control={form.control}
+      name="locale"
+      render={({ field }) => (
+        <Field>
+          <FieldLabel htmlFor="locale">Language</FieldLabel>
+        </Field>
+      )}
+    />
+invalid:
+  - |
+    <Controller
+      control={form.control}
+      name="email"
+      render={({ field, fieldState }) => (
+        <Field>
+          <FieldLabel htmlFor="email">Email</FieldLabel>
+          <Input {...field} id="email" />
+        </Field>
+      )}
+    />

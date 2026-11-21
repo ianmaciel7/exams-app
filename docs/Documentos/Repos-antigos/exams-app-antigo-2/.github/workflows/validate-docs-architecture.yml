@@ -1,0 +1,48 @@
+name: Validate docs architecture
+
+on:
+  pull_request:
+    paths:
+      - "prototype/**"
+      - "prototype/**"
+      - "prototype/**"
+      - "scripts/validate-docs-architecture.py"
+      - "scripts/render-mermaid-check.mjs"
+      - ".github/workflows/validate-docs-architecture.yml"
+  push:
+    branches: [dev]
+    paths:
+      - "prototype/**"
+      - "prototype/**"
+      - "prototype/**"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: JSON e links locais
+        run: python3 -I scripts/validate-docs-architecture.py
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Instalar Playwright (Chromium)
+        run: |
+          mkdir -p "$RUNNER_TEMP/pw" && cd "$RUNNER_TEMP/pw"
+          npm init -y >/dev/null
+          npm i playwright@1.49.1 >/dev/null
+          npx playwright install --with-deps chromium
+          echo "NODE_PATH=$RUNNER_TEMP/pw/node_modules" >> "$GITHUB_ENV"
+      - name: Renderizar Mermaid em Chromium headless
+        run: node scripts/render-mermaid-check.mjs "$RUNNER_TEMP/mermaid-screenshots"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mermaid-screenshots
+          path: ${{ runner.temp }}/mermaid-screenshots

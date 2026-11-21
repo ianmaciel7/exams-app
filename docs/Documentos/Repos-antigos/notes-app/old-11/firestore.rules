@@ -1,0 +1,282 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isOwner(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+
+    function hasValidSpaceShape(userId, spaceId) {
+      let data = request.resource.data;
+      return data.keys().hasOnly([
+          'id',
+          'ownerId',
+          'name',
+          'description',
+          'icon',
+          'stateVersion',
+          'schemaVersion',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.id == spaceId
+        && data.ownerId == userId
+        && data.name is string
+        && data.name.size() > 0
+        && data.name.size() <= 50
+        && data.description is string
+        && data.description.size() <= 200
+        && data.icon in ['folder', 'book', 'briefcase', 'code', 'archive', 'compass']
+        && data.stateVersion is int
+        && data.schemaVersion == 1
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    // Nested content is only creatable while its parent space exists, so
+    // forged or deleted spaces cannot accumulate orphaned data.
+    function spaceExists(userId, spaceId) {
+      return exists(/databases/$(database)/documents/users/$(userId)/spaces/$(spaceId));
+    }
+
+    // Field shapes below follow DER.md section 3 (schemaVersion 4). Fields the
+    // DER marks optional or polymorphic (Object extensions) are type-checked
+    // only when present.
+    function hasNestedBase(spaceId) {
+      let data = request.resource.data;
+      return data.schemaVersion == 4 && data.spaceId == spaceId;
+    }
+
+    function hasValidObjectShape(spaceId) {
+      let data = request.resource.data;
+      return data.keys().hasAll([
+          'schemaVersion',
+          'spaceId',
+          'objectTypeId',
+          'title',
+          'lifecycleState',
+          'stateVersion',
+          'createdAt',
+          'updatedAt'
+        ])
+        && hasNestedBase(spaceId)
+        && data.objectTypeId is string
+        && data.objectTypeId.size() > 0
+        && data.title is string
+        && data.title.size() > 0
+        && data.lifecycleState in ['active', 'archived', 'trash', 'pendingApproval']
+        && data.stateVersion is int
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp
+        && data.get('properties', {}) is map
+        && (data.get('content', null) == null || data.get('content', null) is map)
+        && data.get('conceptIds', []) is list
+        && data.get('outgoingLinkIds', []) is list
+        && (data.get('deletedAt', null) == null || data.get('deletedAt', null) is timestamp);
+    }
+
+    function hasValidRelationShape(spaceId) {
+      let data = request.resource.data;
+      return data.keys().hasAll([
+          'schemaVersion',
+          'spaceId',
+          'sourceObjectId',
+          'targetObjectId',
+          'relationType',
+          'createdAt',
+          'updatedAt'
+        ])
+        && hasNestedBase(spaceId)
+        && data.sourceObjectId is string
+        && data.sourceObjectId.size() > 0
+        && data.targetObjectId is string
+        && data.targetObjectId.size() > 0
+        && data.relationType is string
+        && data.relationType.size() > 0
+        && data.get('isBidirectional', true) is bool
+        && data.get('sortOrder', 0) is int
+        && (data.get('deletedAt', null) == null || data.get('deletedAt', null) is timestamp)
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function hasValidCardShape(spaceId) {
+      let data = request.resource.data;
+      return data.keys().hasAll([
+          'schemaVersion',
+          'spaceId',
+          'questionId',
+          'state',
+          'due',
+          'stability',
+          'difficulty',
+          'elapsedDays',
+          'scheduledDays',
+          'stateVersion',
+          'updatedAt'
+        ])
+        && hasNestedBase(spaceId)
+        && data.questionId is string
+        && data.questionId.size() > 0
+        && data.get('cardIndex', 0) is int
+        && data.state is int
+        && data.state >= 0
+        && data.state <= 3
+        && data.due is timestamp
+        && data.stability is number
+        && data.difficulty is number
+        && data.difficulty >= 1
+        && data.difficulty <= 10
+        && data.elapsedDays is int
+        && data.scheduledDays is int
+        && data.get('reps', 0) is int
+        && data.get('lapses', 0) is int
+        && (data.get('lastReview', null) == null || data.get('lastReview', null) is timestamp)
+        && data.stateVersion is int
+        && data.updatedAt is timestamp;
+    }
+
+    function hasValidAttemptShape(spaceId) {
+      let data = request.resource.data;
+      return data.keys().hasAll([
+          'schemaVersion',
+          'spaceId',
+          'questionId',
+          'cardId',
+          'rating',
+          'reviewMode',
+          'elapsedMilliseconds',
+          'fsrsSnapshot',
+          'reviewedAt'
+        ])
+        && data.keys().hasOnly([
+          'schemaVersion',
+          'spaceId',
+          'questionId',
+          'cardId',
+          'rating',
+          'reviewMode',
+          'elapsedMilliseconds',
+          'userConfidence',
+          'questionType',
+          'submittedAnswer',
+          'isCorrect',
+          'fsrsSnapshot',
+          'reviewedAt'
+        ])
+        && hasNestedBase(spaceId)
+        && data.questionId is string
+        && data.questionId.size() > 0
+        && data.questionId.size() <= 100
+        && data.cardId is string
+        && data.cardId.size() > 0
+        && data.cardId.size() <= 100
+        && data.rating is int
+        && data.rating >= 1
+        && data.rating <= 4
+        && data.reviewMode in ['review', 'mockExam']
+        && data.elapsedMilliseconds is int
+        && data.elapsedMilliseconds >= 0
+        && data.elapsedMilliseconds <= 86400000
+        && (!('userConfidence' in data) || data.userConfidence in ['guessed', 'uncertain', 'confident'])
+        && (!('questionType' in data) || (
+          data.questionType in [
+            'single-choice',
+            'multiple-choice',
+            'true-false',
+            'fill-blank',
+            'dropdown',
+            'matching',
+            'ordering',
+            'drag-and-drop',
+            'hotspot',
+            'matrix',
+            'simulation',
+            'case-study'
+          ]
+          && ('submittedAnswer' in data)
+          && data.submittedAnswer is map
+          && data.submittedAnswer.keys().hasAll(['type', 'value'])
+          && data.submittedAnswer.type == data.questionType
+          && ('isCorrect' in data)
+          && data.isCorrect is bool
+        ))
+        && data.fsrsSnapshot is map
+        && data.reviewedAt is timestamp;
+    }
+
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+    }
+
+    match /users/{userId}/spaces/{spaceId} {
+      allow read, delete: if isOwner(userId);
+
+      allow create: if isOwner(userId)
+        && hasValidSpaceShape(userId, spaceId)
+        && request.resource.data.stateVersion == 1;
+
+      allow update: if isOwner(userId)
+        && hasValidSpaceShape(userId, spaceId)
+        && request.resource.data.id == resource.data.id
+        && request.resource.data.ownerId == resource.data.ownerId
+        && request.resource.data.schemaVersion == resource.data.schemaVersion
+        && request.resource.data.createdAt == resource.data.createdAt
+        && request.resource.data.stateVersion == resource.data.stateVersion + 1;
+    }
+
+    // Any collection under a space: the owner may read and delete (deleting a
+    // space cascades client-side). Writes are only allowed through the
+    // per-collection rules below, so a collection without a documented schema
+    // (objectTypes, templates, views, inbox) is not writable until one is added.
+    match /users/{userId}/spaces/{spaceId}/{collectionId}/{document=**} {
+      allow read, delete: if isOwner(userId);
+    }
+
+    match /users/{userId}/spaces/{spaceId}/objects/{objectId} {
+      allow create: if isOwner(userId)
+        && spaceExists(userId, spaceId)
+        && hasValidObjectShape(spaceId)
+        && request.resource.data.stateVersion == 1;
+
+      allow update: if isOwner(userId)
+        && hasValidObjectShape(spaceId)
+        && request.resource.data.spaceId == resource.data.spaceId
+        && request.resource.data.createdAt == resource.data.createdAt
+        && request.resource.data.stateVersion == resource.data.stateVersion + 1;
+    }
+
+    match /users/{userId}/spaces/{spaceId}/relations/{relationId} {
+      allow create: if isOwner(userId)
+        && spaceExists(userId, spaceId)
+        && hasValidRelationShape(spaceId);
+
+      allow update: if isOwner(userId)
+        && hasValidRelationShape(spaceId)
+        && request.resource.data.spaceId == resource.data.spaceId
+        && request.resource.data.sourceObjectId == resource.data.sourceObjectId
+        && request.resource.data.targetObjectId == resource.data.targetObjectId
+        && request.resource.data.createdAt == resource.data.createdAt;
+    }
+
+    match /users/{userId}/spaces/{spaceId}/cards/{cardId} {
+      allow create: if isOwner(userId)
+        && spaceExists(userId, spaceId)
+        && hasValidCardShape(spaceId)
+        && request.resource.data.stateVersion == 1;
+
+      allow update: if isOwner(userId)
+        && hasValidCardShape(spaceId)
+        && request.resource.data.spaceId == resource.data.spaceId
+        && request.resource.data.questionId == resource.data.questionId
+        && request.resource.data.stateVersion == resource.data.stateVersion + 1;
+    }
+
+    // Append-only practice log (INV-11): no update rule exists.
+    match /users/{userId}/spaces/{spaceId}/attempts/{attemptId} {
+      allow create: if isOwner(userId)
+        && spaceExists(userId, spaceId)
+        && hasValidAttemptShape(spaceId);
+    }
+  }
+}

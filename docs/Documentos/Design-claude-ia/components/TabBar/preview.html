@@ -1,0 +1,154 @@
+<!-- @dsCard group="Navigation" height=760 -->
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;font:400 16px/1.55 var(--font-sans);color:var(--body)}
+.pane{background:var(--canvas);color:var(--body);padding:20px 24px}
+.pane+.pane{border-top:1px solid var(--hairline)}
+.tag{font:500 12px/1.4 var(--font-sans);letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:0 0 12px}
+.row{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}
+.col{display:flex;flex-direction:column;gap:12px}
+*:focus-visible,.focus{outline:2px solid var(--primary);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+button{font-family:var(--font-sans);cursor:pointer}
+button:disabled{cursor:not-allowed}
+.btn{height:40px;padding:0 20px;border-radius:var(--radius-md);border:1px solid transparent;font:500 14px/1 var(--font-sans)}
+.btn.p{background:var(--ink);color:var(--canvas)}
+.btn.s{background:var(--surface-raised);color:var(--ink);border-color:var(--ring)}
+kbd{font:500 11px/16px var(--font-sans);color:var(--muted);border:1px solid var(--hairline);border-radius:6px;padding:0 5px;background:var(--surface-raised)}
+.btn.g{background:transparent;color:var(--ink)}
+.help{font:400 13px/1.4 var(--font-sans);color:var(--muted);margin-top:6px}
+.err{color:var(--error)}
+label.l{display:block;font:500 13px/1.4 var(--font-sans);color:var(--ink);margin-bottom:6px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.tb0{display:flex;flex-direction:column;gap:20px}
+.bar{display:flex;align-items:center;gap:6px;height:46px;box-sizing:border-box;padding:0 8px;background:var(--surface-soft);border:1px solid var(--hairline);border-radius:12px;position:relative;width:100%;max-width:880px}
+.bar.narrow{max-width:430px}
+.ib{width:30px;height:30px;flex:none;display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:6px;background:transparent;color:var(--ink)}
+.ib:hover:not(:disabled){background:var(--surface-card)}.ib:disabled{opacity:.35;cursor:default}.ib[aria-pressed=true]{background:var(--surface-cream-strong)}
+.sp{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 8px;border:0;border-radius:6px;background:transparent;color:var(--ink);font:500 13px var(--font-sans)}.sp:hover{background:var(--surface-card)}
+.mono{width:20px;height:20px;border-radius:5px;background:var(--surface-cream-strong);display:inline-flex;align-items:center;justify-content:center;font:600 11px var(--font-sans)}
+.vs{width:1px;height:18px;background:var(--hairline);flex:none;margin:0 2px}
+.tabs{display:flex;align-items:center;gap:4px;min-width:0;flex:0 1 auto;overflow:hidden;height:100%}
+.tab{position:relative;flex:0 0 auto;width:var(--w,168px);min-width:82px;height:32px;box-sizing:border-box;display:flex;align-items:center;gap:6px;padding:3px 2px 3px 8px;border:1px solid transparent;border-radius:8px;color:var(--muted);font:400 13px var(--font-sans);cursor:pointer;background:transparent}
+.tab:hover{background:var(--surface-card);color:var(--ink)}
+.tab[aria-selected=true]{background:var(--surface-raised);border-color:var(--hairline);color:var(--ink);font-weight:500;box-shadow:0 1px 2px rgba(20,20,19,.06)}
+.tab+.tab::before{content:"";position:absolute;left:-3px;top:50%;width:1px;height:18px;margin-top:-9px;background:var(--hairline)}
+.tab:hover::before,.tab:hover+.tab::before,.tab[aria-selected=true]::before,.tab[aria-selected=true]+.tab::before{opacity:0}
+.tab .ti{flex:none;display:inline-flex;color:currentColor}.tab .tt{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tab .ta{flex:none;display:flex;gap:0;width:0;overflow:hidden}
+.tab:hover .ta,.tab:focus-within .ta,.tab[aria-selected=true] .ta{width:48px}
+.tab.narrow:hover .ta,.tab.narrow:focus-within .ta,.tab.narrow[aria-selected=true] .ta{width:24px}.tab.narrow .tp{display:none}
+.tab .ta button{width:24px;height:24px;border:0;border-radius:6px;background:transparent;color:var(--muted);display:inline-flex;align-items:center;justify-content:center;opacity:0}
+.tab:hover .ta button,.tab:focus-within .ta button,.tab[aria-selected=true] .ta button.tp[aria-pressed=true]{opacity:1}
+.tab[aria-selected=true] .ta .tx{opacity:0}.tab[aria-selected=true]:hover .ta .tx,.tab[aria-selected=true]:focus-within .ta .tx{opacity:1}
+.tab .ta button:hover{background:var(--surface-cream-strong);color:var(--ink)}.tab .tp[aria-pressed=true]{color:var(--ink);opacity:1}
+.tab.pinned{width:auto;min-width:0;padding-right:8px}.tab.pinned .ta{display:none}
+.tab.pinned .tt{display:none}.tab.pinned .ti{margin-right:0}
+.tab.drop-before{box-shadow:inset 2px 0 var(--ink)}.tab.drop-after{box-shadow:inset -2px 0 var(--ink)}.tab.dragging{opacity:.5}
+.tab:focus-visible{outline:2px solid var(--primary);outline-offset:-2px}
+.rgt{margin-left:auto;display:flex;align-items:center;gap:2px}
+.menu{position:absolute;z-index:5;min-width:236px;box-sizing:border-box;padding:6px;background:var(--surface-raised);border:1px solid var(--hairline);border-radius:12px;box-shadow:var(--shadow-popover);font:400 13px/1.4 var(--font-sans);color:var(--ink);display:none}
+.menu.on{display:block}.menu[hidden]{display:none}
+.menu .row{display:flex;align-items:center;gap:8px;width:100%;min-height:32px;padding:0 8px;border:0;border-radius:8px;background:transparent;color:var(--ink);font:400 13px var(--font-sans);text-align:left}
+.menu .row:hover,.menu .row:focus-visible{background:var(--surface-card);outline:none}.menu .row[disabled]{color:var(--muted-soft);cursor:not-allowed}.menu .row.cur{font-weight:600}
+.menu hr{border:0;border-top:1px solid var(--hairline-soft);margin:4px 0}
+.menu input{width:100%;box-sizing:border-box;height:32px;padding:0 10px;margin-bottom:4px;border:1px solid var(--border-strong);border-radius:8px;background:var(--surface-raised);color:var(--ink);font:400 13px var(--font-sans)}
+.menu .t{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.menu .ic{display:inline-flex;color:var(--muted)}
+.hint{font:400 13px/1.5 var(--font-sans);color:var(--muted);margin:10px 0 0}
+.live{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}</style></head><body><div class="pane"><p class="tag">Claro</p><div class="tb0">
+<div><div class="bar" data-tabbar tabindex="-1" aria-label="Barra superior do espaço">
+<button class="sp" aria-haspopup="listbox"><span class="mono">I</span>INSS <span data-i="d"></span></button>
+<button class="ib" aria-label="Recolher barra lateral (Ctrl + B)" aria-pressed="false" data-i="sb"></button>
+<button class="ib" aria-label="Voltar" disabled data-i="l"></button><button class="ib" aria-label="Avançar" disabled data-i="r"></button><span class="vs"></span>
+<div class="tabs" role="tablist" aria-label="Abas abertas"></div>
+<button class="ib" aria-label="Nova aba (Alt + T)" data-new data-i="plus"></button>
+<button class="ib" aria-label="Todas as abas" aria-haspopup="menu" aria-expanded="false" data-ovf hidden data-i="d"></button>
+<div class="rgt"><button class="ib" aria-label="Painel contextual (Ctrl + \)" aria-pressed="false" data-i="rp"></button></div>
+<div class="menu" data-ctx role="menu" hidden></div><div class="menu" data-ovm hidden style="width:256px"></div><span class="live" role="status" aria-live="polite"></span></div>
+<p class="hint">Clique numa aba e use Alt + T, Alt + W, Alt + 1 a 9, Alt + Shift + setas, Shift + P, setas, Home e End. Arraste para reordenar. Botão direito abre o menu da aba.</p></div>
+<div><div class="bar narrow" data-tabbar data-narrow tabindex="-1" aria-label="Barra superior estreita">
+<div class="tabs" role="tablist" aria-label="Abas abertas, largura estreita"></div>
+<button class="ib" aria-label="Nova aba" data-new data-i="plus"></button>
+<button class="ib" aria-label="Todas as abas" aria-haspopup="menu" aria-expanded="false" data-ovf hidden data-i="d"></button>
+<div class="menu" data-ctx role="menu" hidden></div><div class="menu" data-ovm hidden style="width:256px;right:8px;top:44px"></div><span class="live" role="status" aria-live="polite"></span></div>
+<p class="hint">Largura estreita: as abas que não cabem vão para o menu de excesso, pesquisável.</p></div></div></div><div class="pane" data-theme="dark"><p class="tag">Escuro</p><div class="tb0">
+<div><div class="bar" data-tabbar tabindex="-1" aria-label="Barra superior do espaço">
+<button class="sp" aria-haspopup="listbox"><span class="mono">I</span>INSS <span data-i="d"></span></button>
+<button class="ib" aria-label="Recolher barra lateral (Ctrl + B)" aria-pressed="false" data-i="sb"></button>
+<button class="ib" aria-label="Voltar" disabled data-i="l"></button><button class="ib" aria-label="Avançar" disabled data-i="r"></button><span class="vs"></span>
+<div class="tabs" role="tablist" aria-label="Abas abertas"></div>
+<button class="ib" aria-label="Nova aba (Alt + T)" data-new data-i="plus"></button>
+<button class="ib" aria-label="Todas as abas" aria-haspopup="menu" aria-expanded="false" data-ovf hidden data-i="d"></button>
+<div class="rgt"><button class="ib" aria-label="Painel contextual (Ctrl + \)" aria-pressed="false" data-i="rp"></button></div>
+<div class="menu" data-ctx role="menu" hidden></div><div class="menu" data-ovm hidden style="width:256px"></div><span class="live" role="status" aria-live="polite"></span></div>
+<p class="hint">Clique numa aba e use Alt + T, Alt + W, Alt + 1 a 9, Alt + Shift + setas, Shift + P, setas, Home e End. Arraste para reordenar. Botão direito abre o menu da aba.</p></div>
+<div><div class="bar narrow" data-tabbar data-narrow tabindex="-1" aria-label="Barra superior estreita">
+<div class="tabs" role="tablist" aria-label="Abas abertas, largura estreita"></div>
+<button class="ib" aria-label="Nova aba" data-new data-i="plus"></button>
+<button class="ib" aria-label="Todas as abas" aria-haspopup="menu" aria-expanded="false" data-ovf hidden data-i="d"></button>
+<div class="menu" data-ctx role="menu" hidden></div><div class="menu" data-ovm hidden style="width:256px;right:8px;top:44px"></div><span class="live" role="status" aria-live="polite"></span></div>
+<p class="hint">Largura estreita: as abas que não cabem vão para o menu de excesso, pesquisável.</p></div></div></div><script>
+const I={
+sb:'<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="12" height="10" rx="2"/><path d="M6 3v10"/></svg>',
+rp:'<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="12" height="10" rx="2"/><path d="M10 3v10"/></svg>',
+l:'<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 4L6 8l4 4"/></svg>',
+r:'<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>',
+d:'<svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg>',
+plus:'<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg>',
+x:'<svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg>',
+pin:'<svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2.5l4 4-2 .5-2.5 2.5.3 3-1 1-2.3-2.3L3 13.5M6.5 6.5l3 3M7 3.5l-1 1 5 5"/></svg>',
+doc:'<svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2.5h5l3 3v8H4z"/><path d="M9 2.5v3h3"/></svg>',
+q:'<svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="5.5"/><path d="M6.5 6.5a1.5 1.5 0 113 0c0 1-1.5 1.2-1.5 2.3M8 11h.01"/></svg>',
+g:'<svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="4" cy="4" r="1.5"/><circle cx="12" cy="5" r="1.5"/><circle cx="8" cy="12" r="1.5"/><path d="M5.3 4.4l5.4.4M5 5.3l2.2 5.4M11.3 6.3L9 10.8"/></svg>',
+dots:'<svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><circle cx="3.5" cy="8" r="1.2"/><circle cx="8" cy="8" r="1.2"/><circle cx="12.5" cy="8" r="1.2"/></svg>'};
+document.querySelectorAll('[data-i]').forEach(function(e){e.innerHTML=I[e.dataset.i]});
+document.querySelectorAll('[data-tabbar]').forEach(function(root){
+var narrow=root.hasAttribute('data-narrow'),list=root.querySelector('.tabs'),ctx=root.querySelector('[data-ctx]'),ovm=root.querySelector('[data-ovm]'),ovf=root.querySelector('[data-ovf]'),live=root.querySelector('.live'),n=0;
+var kinds=['doc','q','g'];
+var tabs=[{id:'a',t:'Painel do espaço',k:'doc',p:true},{id:'b',t:'Questões do INSS 2026',k:'q'},{id:'c',t:'Edital.pdf',k:'doc'},{id:'d',t:'Grafo de conhecimento',k:'g'},{id:'e',t:'Caderno de erros',k:'q'},{id:'f',t:'Resumo de Direito',k:'doc'},{id:'g',t:'Simulado 4',k:'q'}];
+if(narrow)tabs=tabs.slice(0,6);var act='b',drag=null;
+function say(s){live.textContent=s}
+function paint(focus){
+ var pin=tabs.filter(function(t){return t.p}),rest=tabs.filter(function(t){return !t.p}),order=pin.concat(rest);tabs=order;
+ list.innerHTML=tabs.map(function(t,i){var on=t.id===act;
+  return '<div class="tab'+(on?'':'')+(t.p?' pinned':'')+'" role="tab" draggable="true" data-id="'+t.id+'" aria-selected="'+on+'" tabindex="'+(on?0:-1)+'" aria-keyshortcuts="Shift+P" aria-label="'+t.t+(t.p?', fixada':'')+'" title="'+t.t+(t.p?' · fixada':'')+'"><span class="ti" aria-hidden="true">'+I[t.k]+'</span><span class="tt">'+t.t+'</span><span class="ta"><button type="button" class="tp" tabindex="-1" aria-pressed="'+!!t.p+'" aria-label="'+(t.p?'Desafixar':'Fixar')+' aba '+t.t+'" data-pin="'+t.id+'">'+I.pin+'</button><button type="button" class="tx" tabindex="-1" aria-label="Fechar aba '+t.t+'" data-x="'+t.id+'">'+I.x+'</button></span></div>';}).join('');
+ var avail=root.clientWidth-(narrow?90:330),per=Math.max(82,Math.min(168,Math.floor(avail/Math.max(1,tabs.length))-4)),pinned=tabs.filter(function(t){return t.p}).length;
+ var cap=Math.max(1,Math.floor(avail/(82+4)));var cramped=tabs.length>cap;
+ list.querySelectorAll('.tab').forEach(function(e,i){e.style.setProperty('--w',(cramped?96:per)+'px');if((cramped?96:per)<120)e.classList.add('narrow');if(cramped&&i>=cap&&tabs[i].id!==act)e.style.display='none'});
+ ovf.hidden=!cramped;
+ if(focus){var f=list.querySelector('[data-id="'+focus+'"]');f&&f.focus()}
+}
+function close(id){if(tabs.length<2)return;var i=tabs.findIndex(function(t){return t.id===id});tabs.splice(i,1);if(act===id)act=tabs[Math.min(i,tabs.length-1)].id;say('Aba fechada');paint(act)}
+function add(){n++;var id='n'+n;tabs.splice(tabs.findIndex(function(t){return t.id===act})+1,0,{id:id,t:'Nova aba '+n,k:kinds[n%3]});act=id;say('Nova aba aberta');paint(id)}
+function pin(id){var t=tabs.find(function(t){return t.id===id});t.p=!t.p;say(t.p?'Aba fixada':'Aba desafixada');paint(id)}
+function step(d){var i=tabs.findIndex(function(t){return t.id===act});act=tabs[(i+d+tabs.length)%tabs.length].id;paint(act)}
+function closeMenus(){ctx.classList.remove('on');ctx.hidden=true;ovm.classList.remove('on');ovm.hidden=true;ovf.setAttribute('aria-expanded','false')}
+function items(id){var t=tabs.find(function(q){return q.id===id}),i=tabs.indexOf(t),np=tabs.filter(function(q){return !q.p}).length;
+ return [['Fechar',tabs.length<2,function(){close(id)}],['Fechar outras',tabs.length<2,function(){tabs=tabs.filter(function(q){return q.id===id||q.p});act=id;paint(id)}],['Fechar à direita',i>=tabs.length-1,function(){tabs=tabs.filter(function(q,j){return j<=i||q.p});if(!tabs.some(function(q){return q.id===act}))act=id;paint(act)}],null,[t.p?'Desafixar':'Fixar',false,function(){pin(id)}],['Duplicar',false,function(){n++;var c={id:'n'+n,t:t.t,k:t.k};tabs.splice(i+1,0,c);act=c.id;paint(c.id)}],['Abrir no painel direito',false,function(){say('Aberto no painel direito')}]]}
+function showCtx(id,x,y){closeMenus();ctx.innerHTML=items(id).map(function(a){return a?'<button class="row" role="menuitem" '+(a[1]?'disabled':'')+'>'+a[0]+'</button>':'<hr>'}).join('');var k=0;ctx.querySelectorAll('.row').forEach(function(b){while(!items(id)[k])k++;var a=items(id)[k++];b.onclick=function(){if(!a[1]){a[2]();closeMenus()}}});
+ ctx.hidden=false;ctx.classList.add('on');var r=root.getBoundingClientRect();ctx.style.left=Math.min(x-r.left,r.width-250)+'px';ctx.style.top=(y-r.top+4)+'px';var f=ctx.querySelector('.row:not([disabled])');f&&f.focus()}
+list.addEventListener('contextmenu',function(e){var t=e.target.closest('[data-id]');if(!t)return;e.preventDefault();showCtx(t.dataset.id,e.clientX,e.clientY)});
+list.addEventListener('click',function(e){var x=e.target.closest('[data-x]'),p=e.target.closest('[data-pin]'),t=e.target.closest('[data-id]');if(x){close(x.dataset.x);return}if(p){pin(p.dataset.pin);return}if(t){act=t.dataset.id;paint(act)}});
+list.addEventListener('keydown',function(e){var t=e.target.closest('[data-id]');if(!t||e.target.closest('button'))return;var ids=tabs.map(function(q){return q.id}),i=ids.indexOf(t.dataset.id);
+ if(e.shiftKey&&!e.altKey&&!e.ctrlKey&&!e.metaKey&&e.key.toLowerCase()==='p'){e.preventDefault();pin(t.dataset.id);return}
+ var j=null;if(e.key==='ArrowRight'&&!e.altKey)j=(i+1)%ids.length;if(e.key==='ArrowLeft'&&!e.altKey)j=(i-1+ids.length)%ids.length;if(e.key==='Home')j=0;if(e.key==='End')j=ids.length-1;
+ if(j!==null){e.preventDefault();list.querySelector('[data-id="'+ids[j]+'"]').focus();return}
+ if(e.key==='Enter'||e.key===' '){e.preventDefault();act=t.dataset.id;paint(act)}
+ if(e.key==='ContextMenu'||(e.shiftKey&&e.key==='F10')){e.preventDefault();var r=t.getBoundingClientRect();showCtx(t.dataset.id,r.left,r.bottom)}});
+root.addEventListener('keydown',function(e){if(e.target.closest('.menu input'))return;
+ if(e.key==='Escape'){closeMenus();return}
+ if(e.altKey&&!e.ctrlKey&&!e.metaKey&&!e.shiftKey){var k=e.key.toLowerCase();
+  if(k==='t'){e.preventDefault();add()}else if(k==='w'){e.preventDefault();close(act)}else if(/^[1-9]$/.test(k)){e.preventDefault();var t=k==='9'?tabs[tabs.length-1]:tabs[+k-1];if(t){act=t.id;paint(act)}}}
+ if(e.altKey&&e.shiftKey&&e.key==='ArrowRight'){e.preventDefault();step(1)}if(e.altKey&&e.shiftKey&&e.key==='ArrowLeft'){e.preventDefault();step(-1)}});
+document.addEventListener('click',function(e){if(!e.target.closest('.menu')&&!e.target.closest('[data-ovf]'))closeMenus()});
+root.querySelector('[data-new]').onclick=add;
+ovf.onclick=function(){var open=ovm.classList.contains('on');closeMenus();if(open)return;
+ function draw(q){ovm.innerHTML='<input type="search" placeholder="Buscar abas" aria-label="Buscar abas"><div role="listbox" aria-label="Abas abertas">'+tabs.filter(function(t){return t.t.toLowerCase().indexOf(q.toLowerCase())>-1}).map(function(t){return '<button class="row'+(t.id===act?' cur':'')+'" role="option" aria-selected="'+(t.id===act)+'" data-go="'+t.id+'"><span class="ic">'+I[t.k]+'</span><span class="t">'+t.t+'</span></button>'}).join('')+'</div>';
+  var inp=ovm.querySelector('input');inp.value=q;inp.oninput=function(){draw(inp.value);ovm.querySelector('input').focus()};ovm.querySelectorAll('[data-go]').forEach(function(b){b.onclick=function(){act=b.dataset.go;closeMenus();paint(act)}})}
+ draw('');ovm.hidden=false;ovm.classList.add('on');ovf.setAttribute('aria-expanded','true');ovm.querySelector('input').focus()};
+list.addEventListener('dragstart',function(e){var t=e.target.closest('[data-id]');if(!t)return;drag=t.dataset.id;t.classList.add('dragging');e.dataTransfer.setData('text/plain',drag);e.dataTransfer.effectAllowed='move'});
+function clr(){list.querySelectorAll('.drop-before,.drop-after,.dragging').forEach(function(x){x.classList.remove('drop-before','drop-after','dragging')})}
+list.addEventListener('dragover',function(e){if(!drag)return;e.preventDefault();var t=e.target.closest('[data-id]');list.querySelectorAll('.drop-before,.drop-after').forEach(function(x){x.classList.remove('drop-before','drop-after')});if(!t||t.dataset.id===drag)return;var r=t.getBoundingClientRect();t.classList.add(e.clientX<r.left+r.width/2?'drop-before':'drop-after')});
+list.addEventListener('drop',function(e){if(!drag)return;e.preventDefault();var t=e.target.closest('[data-id]');if(t&&t.dataset.id!==drag){var r=t.getBoundingClientRect(),after=e.clientX>=r.left+r.width/2,m=tabs.find(function(q){return q.id===drag});tabs=tabs.filter(function(q){return q.id!==drag});var i=tabs.findIndex(function(q){return q.id===t.dataset.id});tabs.splice(after?i+1:i,0,m);say('Aba movida')}drag=null;clr();paint(act)});
+list.addEventListener('dragend',function(){drag=null;clr()});
+new ResizeObserver(function(){paint()}).observe(root);paint();
+});
+</script></body></html>

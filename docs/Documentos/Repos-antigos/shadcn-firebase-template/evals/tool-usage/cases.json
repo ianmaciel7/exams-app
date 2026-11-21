@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "id": "DOC-01",
+      "prompt": "Explain how the installed Next.js version handles a route metadata API. Use current documentation before answering. Do not modify repository files.",
+      "expectedToolPatterns": ["context7"],
+      "expectedReceiptTools": ["context7"]
+    },
+    {
+      "id": "UI-01",
+      "prompt": "Inspect the current application for a visible interaction regression and verify it in a browser if a runnable session is available. Do not modify repository files; clearly report an unavailable browser or server.",
+      "expectedToolPatterns": ["playwright|cua_repl"],
+      "expectedReceiptTools": ["playwright|cua_repl"]
+    },
+    {
+      "id": "RUNTIME-01",
+      "prompt": "Diagnose the currently running Next.js route before proposing a fix. Use runtime diagnostics if a development server is available. Do not modify repository files; clearly report an unavailable server.",
+      "expectedToolPatterns": ["next.*devtools|devtools.*next"],
+      "expectedReceiptTools": ["next.*devtools|devtools.*next"]
+    },
+    {
+      "id": "CODE-01",
+      "prompt": "Locate the profile-save behavior and its callers. Use symbol-aware code navigation before broad text search. Do not modify repository files.",
+      "expectedToolPatterns": ["serena|graphify"],
+      "expectedReceiptTools": ["serena|graphify"]
+    },
+    {
+      "id": "VERIFY-01",
+      "prompt": "Choose and run the smallest validation tier for a component-only diff. Do not modify repository files; report the command and result.",
+      "expectedToolPatterns": [
+        "verify|pnpm.*check:components|pnpm.*verify:fast"
+      ],
+      "expectedReceiptTools": ["verify|pnpm"]
+    }
+  ]
+}

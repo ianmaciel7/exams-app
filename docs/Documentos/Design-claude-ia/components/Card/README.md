@@ -1,0 +1,1 @@
+Cards group content on cream, hairline or dark surfaces with a 12px radius and 32px padding. Feature cards use surface-card, comparison and pricing cards use canvas with a hairline border, showcase cards use surface-dark. No shadows: depth comes from the surface contrast. Alternate surfaces between neighbouring bands.

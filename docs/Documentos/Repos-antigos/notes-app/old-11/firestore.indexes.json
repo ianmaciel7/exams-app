@@ -1,0 +1,39 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "objects",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "objectTypeId", "order": "ASCENDING" },
+        { "fieldPath": "properties.examId", "order": "ASCENDING" },
+        { "fieldPath": "properties.orderIndex", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "relations",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "targetObjectId", "order": "ASCENDING" },
+        { "fieldPath": "relationType", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "cards",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "state", "order": "ASCENDING" },
+        { "fieldPath": "due", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "attempts",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "questionId", "order": "ASCENDING" },
+        { "fieldPath": "reviewedAt", "order": "DESCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

@@ -1,0 +1,42 @@
+{
+  "date": "2026-11-14T14:57:48.910Z",
+  "events": [
+    {
+      "name": "before_simple",
+      "hash": "#/questoes"
+    },
+    {
+      "name": "after_open_panel",
+      "hash": "#/questoes"
+    },
+    {
+      "name": "after_cascade",
+      "hash": "#/questoes?disc=L%C3%ADngua+Portuguesa&assunto=Interpreta%C3%A7%C3%A3o+de+Texto"
+    },
+    {
+      "name": "after_exclusion",
+      "hash": "#/questoes?disc=L%C3%ADngua+Portuguesa&assunto=Interpreta%C3%A7%C3%A3o+de+Texto&x_cadernos=1"
+    },
+    {
+      "name": "after_reload_flags",
+      "hash": "#/questoes?disc=L%C3%ADngua+Portuguesa&assunto=Interpreta%C3%A7%C3%A3o+de+Texto&x_anotacoes=1"
+    },
+    {
+      "name": "after_saved",
+      "hash": "#/questoes?disc=L%C3%ADngua+Portuguesa&assunto=Interpreta%C3%A7%C3%A3o+de+Texto"
+    },
+    {
+      "name": "after_simulado_filtrado",
+      "hash": "#/simulado/exec"
+    },
+    {
+      "name": "after_clear_defaults",
+      "hash": "#/questoes"
+    },
+    {
+      "name": "after_mobile",
+      "hash": "#/questoes"
+    }
+  ],
+  "errors": []
+}

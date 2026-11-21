@@ -1,0 +1,59 @@
+name: E2E Daily Review and Linked Sources
+on:
+  pull_request:
+    branches: [dev]
+    paths:
+      - 'prototype/exam-app-0.1.1__index.html'
+      - 'tests/ux-route-inventory.test.mjs'
+      - 'tests/srs-activity.test.mjs'
+      - 'tests/srs-feedback-dialog.test.mjs'
+      - 'tests/srs-frequency-tuning.test.mjs'
+      - 'tests/srs-nondestructive-edit.test.mjs'
+      - 'tests/daily-review.e2e.mjs'
+      - '.github/workflows/e2e-daily-review.yml'
+  push:
+    branches: [dev]
+    paths:
+      - 'prototype/exam-app-0.1.1__index.html'
+      - 'tests/daily-review.e2e.mjs'
+      - '.github/workflows/e2e-daily-review.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  daily-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test domain helpers and route contracts
+        run: node --test tests/ux-route-inventory.test.mjs tests/srs-activity.test.mjs tests/srs-feedback-dialog.test.mjs tests/srs-frequency-tuning.test.mjs tests/srs-nondestructive-edit.test.mjs
+      - name: Install Chromium
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Start local prototype
+        run: |
+          python3 -m http.server 8765 --directory prototype >/tmp/daily-review.log 2>&1 &
+          for i in $(seq 1 25); do
+            if curl -fsS http://127.0.0.1:8765/exam-app-0.1.1__index.html -o /dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/daily-review.log
+          exit 1
+      - name: Test QA, cloze, TTS, grading, persistence and direct imports
+        run: node tests/daily-review.e2e.mjs
+      - name: Upload true browser screenshots and journal
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: issue82-daily-review-evidence
+          path: |
+            prototype/issue82_*.png
+            prototype/issue83_*.png
+            prototype/issue82_daily_review_e2e.json
+          if-no-files-found: warn

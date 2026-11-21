@@ -1,0 +1,92 @@
+id: require-component-props
+language: tsx
+files:
+  - src/app/**/*.tsx
+  - src/app/**/*.ts
+  - src/components/**/*.tsx
+  - src/components/**/*.ts
+ignores:
+  - "**/*.test.tsx"
+  - "**/*.test.ts"
+  - "**/*.stories.tsx"
+  - src/components/ui/*.tsx
+  - src/components/firebase/**
+  - src/components/ai-elements/**
+severity: error
+message: Component prop types should extend ComponentProps, HTMLAttributes, or PropsWithChildren.
+note: |
+  Component prop types in application code should inherit standard element properties
+  (via ComponentProps<...>, HTMLAttributes<...>, or PropsWithChildren) so components remain
+  composable, support className pass-through, and conform to the shadcn design pattern.
+  Excluded from this rule:
+    - Next.js route conventions (PageProps, LayoutProps, RouteContext)
+    - Context value props (ending in ContextProps)
+  Example:
+    export type MyComponentProps = ComponentProps<"div"> & {
+      customProp: string;
+    };
+rule:
+  any:
+    - kind: type_alias_declaration
+      all:
+        - has:
+            field: name
+            regex: 'Props$'
+        - not:
+            has:
+              field: name
+              regex: '(ContextProps|PageProps|LayoutProps|RouteContextProps)$'
+        - not:
+            has:
+              field: value
+              matches: inherited-props
+    - kind: interface_declaration
+      all:
+        - has:
+            field: name
+            regex: 'Props$'
+        - not:
+            has:
+              field: name
+              regex: '(ContextProps|PageProps|LayoutProps|RouteContextProps)$'
+        - not:
+            has:
+              kind: extends_type_clause
+              has:
+                matches: standard-props
+utils:
+  standard-props:
+    any:
+      - kind: generic_type
+        has:
+          field: name
+          regex: '^(React\.)?(ComponentProps|HTMLAttributes|PropsWithChildren)$'
+      - kind: type_identifier
+        regex: '^PropsWithChildren$'
+      - kind: nested_type_identifier
+        regex: '^React\.PropsWithChildren$'
+  # Only intersections and parentheses can carry inherited props to the alias.
+  # Stop before object members, wrapper arguments, and union alternatives.
+  inherited-props:
+    any:
+      - matches: standard-props
+      - all:
+          - kind: generic_type
+          - has:
+              field: name
+              regex: '^(Omit|Pick)$'
+          - has:
+              kind: type_arguments
+              has:
+                matches: standard-props
+      - all:
+          - any:
+              - kind: intersection_type
+              - kind: parenthesized_type
+          - has:
+              matches: standard-props
+              stopBy:
+                not:
+                  any:
+                    - kind: intersection_type
+                    - kind: parenthesized_type

@@ -1,0 +1,24 @@
+{
+  "Metadata": {
+    "title": "shadcn-template",
+    "description": "Plantilla Next.js + shadcn/ui con Biome, React Compiler e i18n"
+  },
+  "App": {
+    "getStartedPrefix": "Para comenzar, edita el archivo",
+    "pageFile": "page.tsx",
+    "getStartedSuffix": ".",
+    "instructionsPrefix": "¿Buscas un punto de partida o más instrucciones? Visita",
+    "templates": "Plantillas",
+    "instructionsMiddle": "o el centro de",
+    "learning": "Aprendizaje",
+    "instructionsSuffix": ".",
+    "deployNow": "Deploy Now",
+    "documentation": "Documentation"
+  },
+  "Theme": {
+    "toggle": "Alternar tema",
+    "light": "Claro",
+    "dark": "Oscuro",
+    "system": "Sistema"
+  }
+}

@@ -1,0 +1,83 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+# testing
+/coverage
+/test-results
+/playwright-report
+/blob-report
+/playwright/.cache
+# Playwright pixel-diff baselines are OS/renderer-specific (filenames encode
+# the platform, e.g. *-chromium-win32.png vs *-chromium-linux.png). Baselines
+# generated on a local machine will not match CI's Linux Chromium, so they
+# are kept out of git until there is a CI-side generation step; see the note
+# in tests/e2e/layout-regression.spec.ts.
+/tests/e2e/*-snapshots/
+# next.js
+/.next/
+/out/
+# production
+/build
+# environment
+.env*
+# vercel
+.vercel
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+# logs
+.firebase/
+.firebase-data/
+*-debug.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+# misc
+.DS_Store
+*.pem
+# serena
+.serena/project.local.yml
+# claude code — machine-local state only. Shared AI config is checked in:
+# .agents/ (hooks, rules, skills) and .claude/agents/ (subagent definitions).
+.claude/agent-memory/
+.claude/scheduled_tasks.lock
+.claude/settings.local.json
+# generated QA artifacts (/qa skill)
+qa-output/
+# graphify
+graphify-out/cache/
+graphify-out/.graphify_*
+graphify-out/????-??-??/
+graphify-out/memory/
+graphify-out/reflections/
+# repomix
+repomix-output.xml
+.agents/local.json
+.agents/generated/
+.agents/agents.json.*.bak
+CLAUDE.md
+.agents/mcp_config.json
+.codex/
+.gemini/
+.mcp.json
+.vscode/mcp.json
+.cursor/
+.antigravity/
+.windsurf/
+.opencode/
+opencode.json
+.junie/mcp/
+.grok/config.toml
+.factory/mcp.json
+.devin/mcp_config.json
+.claude/skills
+.junie/skills
+.kilo/skills

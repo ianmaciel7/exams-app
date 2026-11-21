@@ -1,0 +1,33 @@
+name: Validate Contextual Panel Tabs
+
+on:
+  pull_request:
+    branches: [dev]
+    paths:
+      - 'prototype/exam-app-0.1.1__index.html'
+      - 'tests/right-panel-tabs.test.mjs'
+      - 'tests/right-panel-explore.test.mjs'
+      - 'tests/contextual-graph-links.test.mjs'
+      - '.github/workflows/validate-right-panel-tabs.yml'
+  push:
+    branches: [dev]
+    paths:
+      - 'prototype/exam-app-0.1.1__index.html'
+      - 'tests/right-panel-tabs.test.mjs'
+      - 'tests/right-panel-explore.test.mjs'
+      - 'tests/contextual-graph-links.test.mjs'
+      - '.github/workflows/validate-right-panel-tabs.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  right-panel-tabs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test tests/right-panel-tabs.test.mjs tests/right-panel-explore.test.mjs tests/contextual-graph-links.test.mjs tests/study-navigation.test.mjs

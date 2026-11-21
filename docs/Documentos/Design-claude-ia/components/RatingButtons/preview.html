@@ -1,0 +1,27 @@
+<!-- @dsCard group="Study" height=380 -->
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;font:400 16px/1.55 var(--font-sans);color:var(--body)}
+.pane{background:var(--canvas);color:var(--body);padding:20px 24px}
+.pane+.pane{border-top:1px solid var(--hairline)}
+.tag{font:500 12px/1.4 var(--font-sans);letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:0 0 12px}
+.row{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}
+.col{display:flex;flex-direction:column;gap:12px}
+*:focus-visible,.focus{outline:2px solid var(--primary);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+button{font-family:var(--font-sans);cursor:pointer}
+button:disabled{cursor:not-allowed}
+.btn{height:40px;padding:0 20px;border-radius:var(--radius-md);border:1px solid transparent;font:500 14px/1 var(--font-sans)}
+.btn.p{background:var(--ink);color:var(--canvas)}
+.btn.s{background:var(--surface-raised);color:var(--ink);border-color:var(--ring)}
+kbd{font:500 11px/16px var(--font-sans);color:var(--muted);border:1px solid var(--hairline);border-radius:6px;padding:0 5px;background:var(--surface-raised)}
+.btn.g{background:transparent;color:var(--ink)}
+.help{font:400 13px/1.4 var(--font-sans);color:var(--muted);margin-top:6px}
+.err{color:var(--error)}
+label.l{display:block;font:500 13px/1.4 var(--font-sans);color:var(--ink);margin-bottom:6px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.rb{display:grid;grid-template-columns:repeat(4,96px);gap:8px;margin-bottom:12px}
+.rb button{height:56px;border-radius:var(--radius-md);border:1px solid var(--border-strong);background:var(--surface-raised);color:var(--ink);font:500 14px/1.2 var(--font-sans);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.rb button small{font:400 12px var(--font-sans);color:var(--muted)}.rb button:hover:not(:disabled){background:var(--surface-soft)}
+.rb .g{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}.rb .g small{color:var(--on-primary)}.rb .ag{color:var(--error)}
+.rb button:disabled{background:var(--primary-disabled);color:var(--muted);border-color:var(--hairline)}.rb button:disabled small{color:var(--muted)}.rb button{border-color:var(--ring);border-radius:10px}.rb .g{background:var(--ink);border-color:var(--ink);color:var(--canvas)}.rb .g small{color:var(--canvas)}</style></head><body><div class="pane"><p class="tag">Light</p><div class="rb" role="group" aria-label="How well did you remember?"><button class="ag" aria-label="Again, next review in less than 1 minute">Again 1<small>&lt;1 min</small></button><button>Hard 2<small>6 min</small></button><button class="g focus">Good 3<small>1 day</small></button><button>Easy 4<small>4 days</small></button></div>
+<div class="rb" role="group" aria-label="Disabled until the answer is shown"><button disabled>Again 1<small>&lt;1 min</small></button><button disabled>Hard 2<small>6 min</small></button><button disabled>Good 3<small>1 day</small></button><button disabled>Easy 4<small>4 days</small></button></div></div><div class="pane" data-theme="dark"><p class="tag">Dark</p><div class="rb" role="group" aria-label="How well did you remember?"><button class="ag" aria-label="Again, next review in less than 1 minute">Again 1<small>&lt;1 min</small></button><button>Hard 2<small>6 min</small></button><button class="g focus">Good 3<small>1 day</small></button><button>Easy 4<small>4 days</small></button></div>
+<div class="rb" role="group" aria-label="Disabled until the answer is shown"><button disabled>Again 1<small>&lt;1 min</small></button><button disabled>Hard 2<small>6 min</small></button><button disabled>Good 3<small>1 day</small></button><button disabled>Easy 4<small>4 days</small></button></div></div></body></html>

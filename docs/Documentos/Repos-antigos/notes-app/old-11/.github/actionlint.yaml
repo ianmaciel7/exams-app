@@ -1,0 +1,5 @@
+# Repository-specific actionlint settings.
+# Add runner labels, config variables, or path-specific ignores here as needed.
+paths:
+  .github/workflows/**/*.{yml,yaml}:
+    ignore: []

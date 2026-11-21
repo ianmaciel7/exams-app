@@ -1,0 +1,11 @@
+language js
+
+or {
+  `export async function GET($_, {params}: {params: $_}) { $_ }` as $handler,
+  `export async function POST($_, {params}: {params: $_}) { $_ }` as $handler,
+  `export async function PUT($_, {params}: {params: $_}) { $_ }` as $handler,
+  `export async function PATCH($_, {params}: {params: $_}) { $_ }` as $handler,
+  `export async function DELETE($_, {params}: {params: $_}) { $_ }` as $handler
+} where {
+  register_diagnostic(span=$handler, message="Use Next.js's generated RouteContext helper with the route literal instead of declaring route params manually.", severity="error")
+}

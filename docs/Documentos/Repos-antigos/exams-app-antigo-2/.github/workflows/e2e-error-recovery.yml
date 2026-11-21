@@ -1,0 +1,51 @@
+name: E2E Strict Error Recovery
+on:
+  pull_request:
+    branches: [dev]
+    paths:
+      - 'prototype/exam-app-0.1.1__index.html'
+      - 'tests/error-recovery.e2e.mjs'
+      - '.github/workflows/e2e-error-recovery.yml'
+  push:
+    branches: [dev]
+    paths:
+      - 'prototype/exam-app-0.1.1__index.html'
+      - 'tests/error-recovery.e2e.mjs'
+      - '.github/workflows/e2e-error-recovery.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  recovery:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Chromium
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Start local prototype
+        run: |
+          python3 -m http.server 8765 --directory prototype >/tmp/error-recovery.log 2>&1 &
+          for i in $(seq 1 25); do
+            if curl -fsS http://127.0.0.1:8765/exam-app-0.1.1__index.html -o /dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/error-recovery.log
+          exit 1
+      - name: Validate immutable wrong-to-correct lifecycle, notebook and edital
+        run: node tests/error-recovery.e2e.mjs
+      - name: Upload browser screenshots and evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: issue76-recovery-evidence
+          path: |
+            prototype/issue76_*.png
+            prototype/issue76_recovery_e2e.json
+          if-no-files-found: warn

@@ -1,0 +1,29 @@
+id: require-component-props-parameter
+snapshots:
+  "async function IntlProvider() {\n  return <div />;\n}\n":
+    labels:
+    - source: |-
+        async function IntlProvider() {
+          return <div />;
+        }
+      style: primary
+      start: 0
+      end: 51
+  "function CardContent() {\n  return <div />;\n}\n":
+    labels:
+    - source: |-
+        function CardContent() {
+          return <div />;
+        }
+      style: primary
+      start: 0
+      end: 44
+  "function ProfileSection() {\n  return <section />;\n}\n":
+    labels:
+    - source: |-
+        function ProfileSection() {
+          return <section />;
+        }
+      style: primary
+      start: 0
+      end: 51

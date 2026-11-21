@@ -1,0 +1,77 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Iniciar Stack Completo (Servidor + Proxy Claude)",
+      "type": "shell",
+      "command": "python scripts/dev-stack.py",
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "^$"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^.*EXAM APP - STACK COMPLETO.*$",
+          "endsPattern": ".*Stack ativo e sincronizado.*"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Iniciar Servidor HTTP do Protótipo (Porta 8765)",
+      "type": "shell",
+      "command": "python -m http.server 8765 --directory prototype",
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "^$"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^.*$",
+          "endsPattern": "Serving HTTP on.*"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Iniciar Proxy Claude Storage (Porta 8766)",
+      "type": "shell",
+      "command": "python services/proxy/claude_storage_proxy.py",
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "^$"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^.*$",
+          "endsPattern": ".*Servidor iniciado e blindado.*"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Atualizar Planning Board (BOARD.md)",
+      "type": "shell",
+      "command": "npm run board",
+      "problemMatcher": []
+    },
+    {
+      "label": "Publicar Claude Live Artifact",
+      "type": "shell",
+      "command": "npm run sync:artifact",
+      "problemMatcher": []
+    }
+  ]
+}

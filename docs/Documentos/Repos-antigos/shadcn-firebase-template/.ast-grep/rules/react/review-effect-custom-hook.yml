@@ -1,0 +1,24 @@
+id: review-effect-custom-hook
+language: tsx
+files:
+  - src/app/**/*.tsx
+  - src/components/**/*.tsx
+  - src/hooks/**/*.tsx
+  - src/i18n/**/*.tsx
+  - src/lib/**/*.tsx
+ignores:
+  - src/components/ai-elements/**
+  - src/components/ui/*.tsx
+  - "**/*.test.tsx"
+  - "**/*.stories.tsx"
+severity: warning
+message: Review whether this Effect would be clearer inside a descriptive custom Hook; remove unnecessary Effects first.
+note: |
+  React recommends considering a custom Hook whenever writing an Effect,
+  because it can make the Effect's purpose and data flow clearer. This is a
+  review prompt, not a requirement to wrap every Effect.
+  See https://react.dev/learn/reusing-logic-with-custom-hooks#when-to-use-custom-hooks
+rule:
+  any:
+    - pattern: useEffect($$$)
+    - pattern: React.useEffect($$$)

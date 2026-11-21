@@ -1,0 +1,27 @@
+name: Validate All Node Domain Contracts
+on:
+  pull_request:
+    branches: [dev]
+    paths:
+      - 'prototype/exam-app-0.1.1__index.html'
+      - 'tests/*.test.mjs'
+      - '.github/workflows/domain-node-smoke.yml'
+  push:
+    branches: [dev]
+    paths:
+      - 'prototype/exam-app-0.1.1__index.html'
+      - 'tests/*.test.mjs'
+      - '.github/workflows/domain-node-smoke.yml'
+permissions:
+  contents: read
+jobs:
+  node-contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test all Node domain contracts, not only selected files
+        run: node --test tests/*.test.mjs

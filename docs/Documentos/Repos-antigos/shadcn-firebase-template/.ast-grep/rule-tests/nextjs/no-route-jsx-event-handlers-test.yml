@@ -1,0 +1,20 @@
+id: no-route-jsx-event-handlers
+valid:
+  - |
+    import { SaveButton } from "./_components/save-button-client";
+    export default function Page() {
+      return <SaveButton />;
+    }
+  - |
+    export default function Page() {
+      return <Component aria-label="Save" />;
+    }
+invalid:
+  - |
+    export default function Page() {
+      return <button onClick={() => save()}>Save</button>;
+    }
+  - |
+    export default function Page() {
+      return <form onSubmit={submit}><button>Save</button></form>;
+    }

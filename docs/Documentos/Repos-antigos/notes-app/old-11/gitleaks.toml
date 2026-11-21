@@ -1,0 +1,11 @@
+title = "notes-app Gitleaks configuration"
+
+[extend]
+useDefault = true
+
+# These directories are generated locally and are not source material.
+[[allowlists]]
+description = "Generated and dependency directories"
+paths = [
+  '''(^|/)(node_modules|\.next|out|build|coverage|dist|graphify-out)(/|$)'''
+]

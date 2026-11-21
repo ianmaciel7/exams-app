@@ -1,0 +1,117 @@
+[
+  {
+    "command": [
+      "python",
+      "prototypes/validate_board.py"
+    ],
+    "exit_code": 0,
+    "seconds": 0.06,
+    "output": "OK: 835 elementos, 835 em order, sem problemas de integridade\n"
+  },
+  {
+    "command": [
+      "python",
+      "prototypes/validate_board_index.py"
+    ],
+    "exit_code": 0,
+    "seconds": 0.03,
+    "output": "OK: 7 boards, 59/59 containers, 42 vínculos de documentos.\n"
+  },
+  {
+    "command": [
+      "python",
+      "prototypes/validate_feature_links.py"
+    ],
+    "exit_code": 0,
+    "seconds": 0.06,
+    "output": "OK: 8 features vinculadas por ID; miniaturas e grupos verificados.\n"
+  },
+  {
+    "command": [
+      "python",
+      "prototypes/validate_examtopics_evidence.py"
+    ],
+    "exit_code": 0,
+    "seconds": 0.04,
+    "output": "OK: 57 achados, 16 fontes, 5 imagens históricas visíveis e rastreadas no Board 06\n"
+  },
+  {
+    "command": [
+      "python",
+      "scripts/validate-docs-architecture.py"
+    ],
+    "exit_code": 0,
+    "seconds": 0.02,
+    "output": "Arquitetura, features e planejamento achatados: JSON e links locais OK\n"
+  },
+  {
+    "command": [
+      "python",
+      "scripts/check-docs-migration.py"
+    ],
+    "exit_code": 1,
+    "seconds": 0.14,
+    "output": "Entradas do mapa: 109; erros: 5\n - sha256 divergente: prototypes/03-fluxos-de-estudo.md (mapa: dd8a60d57c84c7be, atual: 33ebb86eb71f431e)\n - sha256 divergente: prototypes/05-pesquisa-e-decisoes.md (mapa: 8d96be5a5acdd76c, atual: 2a57014b97bca8de)\n - sha256 divergente: prototypes/catalog.json (mapa: bda509ad4d7fbcfb, atual: 767b08f0aa9089a1)\n - sha256 divergente: prototypes/examtopics-inventory.md (mapa: 2094684af5994e8b, atual: c3e883020f07c2e5)\n - sha256 divergente: prototypes/analise-examtopics.md (mapa: 36181db0f67f98de, atual: 22627e242da90937)\n"
+  },
+  {
+    "command": [
+      "python",
+      "scripts/validate-evidence-catalog.py"
+    ],
+    "exit_code": 0,
+    "seconds": 21.09,
+    "output": "aviso: lista de referências quebradas diverge do catálogo commitado; rode o build e revise\ncatálogo válido: 374 mídias, 183 órfãs, 19 grupos de duplicatas\n"
+  },
+  {
+    "command": [
+      "node",
+      "--test",
+      "tests/claude-storage-sync-engine.test.mjs",
+      "tests/collection-graph-canvas.test.mjs",
+      "tests/contextual-graph-links.test.mjs",
+      "tests/contextual-question-layout.test.mjs",
+      "tests/custom-object-type-studio.test.mjs",
+      "tests/editorial-home.test.mjs",
+      "tests/error-recovery.test.mjs",
+      "tests/graph-hub-filter.test.mjs",
+      "tests/graph-search-fit.test.mjs",
+      "tests/graph-space-isolation.test.mjs",
+      "tests/home-icon-contract.test.mjs",
+      "tests/home-recent-objects.test.mjs",
+      "tests/motion-graph.test.mjs",
+      "tests/object-alias-graph-search.test.mjs",
+      "tests/object-header-actions.test.mjs",
+      "tests/object-link-hovercard.test.mjs",
+      "tests/object-properties-inline.test.mjs",
+      "tests/object-related-footer.test.mjs",
+      "tests/question-confirm.test.mjs",
+      "tests/question-pedagogy.test.mjs",
+      "tests/question-rich-notes-graph.test.mjs",
+      "tests/reader-enhanced-text.test.mjs",
+      "tests/reader-sidebar-nav.test.mjs",
+      "tests/reader-toolbar-triage.test.mjs",
+      "tests/reader-triage-filtered-views.test.mjs",
+      "tests/right-panel-explore.test.mjs",
+      "tests/right-panel-resize.test.mjs",
+      "tests/right-panel-shift-click.test.mjs",
+      "tests/right-panel-tabs.test.mjs",
+      "tests/space-switcher.test.mjs",
+      "tests/srs-activity.test.mjs",
+      "tests/srs-feedback-dialog.test.mjs",
+      "tests/srs-frequency-tuning.test.mjs",
+      "tests/srs-nondestructive-edit.test.mjs",
+      "tests/study-dock.test.mjs",
+      "tests/study-navigation.test.mjs",
+      "tests/tabs-semantic-a11y.test.mjs",
+      "tests/type-saved-queries.test.mjs",
+      "tests/type-workspace.test.mjs",
+      "tests/ux-route-inventory.test.mjs",
+      "tests/workspace-command-router.test.mjs",
+      "tests/workspace-loading-state.test.mjs",
+      "tests/workspace-tab-keyboard.test.mjs"
+    ],
+    "exit_code": 0,
+    "seconds": 3.25,
+    "output": "ctual dispatch logic (2.645577ms)\n✔ guide distinguishes implemented navigation from future contracts (0.227606ms)\n✔ guide covers decisions, empirical validation, and issue boundaries (0.217021ms)\n✔ SRS cards persist, reveal, grade, isolate spaces, and apply theme/recency settings (3.861728ms)\n✔ saved question highlights are imported into SRS with provenance and no duplicates (1.600135ms)\n✔ recency slider displays persisted zero and daily reset follows local day (0.365737ms)\n✔ SRS merge preserves recovered-attempt ledger, contextual tabs and both evidence sections (5.963266ms)\n✔ chords are canonical on Windows and macOS; wrong modifiers do not match (3.732221ms)\n✔ global commands execute once and are suppressed in textboxes, IME, and modal (1.509368ms)\n✔ workspace history chords route to one owner with no duplicate browser fallback (1.547325ms)\n✔ command catalog is generated rather than a static hardcoded table (7.89043ms)\n✔ Mod respects the actual OS and button hints follow the registered command (2.10242ms)\n✔ tab cycling avoids browser and operating-system reserved Mod+Tab chords (1.785438ms)\n✔ workspace loading eliminates blind 5s timeout and blind 260ms mutation observer (3.331941ms)\n✔ workspace loading CSS contains state classes and respects prefers-reduced-motion (1.101607ms)\n✔ workspace loading state machine transitions, accessibility and race cancellation (3.197977ms)\n✔ workspace loading satisfies zero emoji policy (0.287477ms)\n✔ workspace tab exposes documented keyboard shortcut and pin state (1.101537ms)\n✔ mouse and keyboard share the same pin toggle implementation (0.652043ms)\n✔ main and contextual tab action targets have a 24 px layout minimum (0.201667ms)\nℹ tests 214\nℹ suites 0\nℹ pass 214\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 3110.003039\n"
+  }
+]

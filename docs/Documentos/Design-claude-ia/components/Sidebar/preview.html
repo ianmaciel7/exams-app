@@ -1,0 +1,111 @@
+<!-- @dsCard group="Navigation" height=1000 -->
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;font:400 16px/1.55 var(--font-sans);color:var(--body)}
+.pane{background:var(--canvas);color:var(--body);padding:20px 24px}
+.pane+.pane{border-top:1px solid var(--hairline)}
+.tag{font:500 12px/1.4 var(--font-sans);letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:0 0 12px}
+.row{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}
+.col{display:flex;flex-direction:column;gap:12px}
+*:focus-visible,.focus{outline:2px solid var(--primary);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+button{font-family:var(--font-sans);cursor:pointer}
+button:disabled{cursor:not-allowed}
+.btn{height:40px;padding:0 20px;border-radius:var(--radius-md);border:1px solid transparent;font:500 14px/1 var(--font-sans)}
+.btn.p{background:var(--ink);color:var(--canvas)}
+.btn.s{background:var(--surface-raised);color:var(--ink);border-color:var(--ring)}
+kbd{font:500 11px/16px var(--font-sans);color:var(--muted);border:1px solid var(--hairline);border-radius:6px;padding:0 5px;background:var(--surface-raised)}
+.btn.g{background:transparent;color:var(--ink)}
+.help{font:400 13px/1.4 var(--font-sans);color:var(--muted);margin-top:6px}
+.err{color:var(--error)}
+label.l{display:block;font:500 13px/1.4 var(--font-sans);color:var(--ink);margin-bottom:6px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.demo{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}
+.shell{position:relative;display:flex;width:760px;max-width:100%;height:380px;border:1px solid var(--hairline);border-radius:16px;overflow:hidden;background:var(--canvas)}
+.shell:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+.side{position:relative;flex:none;width:var(--sw,240px);box-sizing:border-box;display:flex;flex-direction:column;padding:10px 8px 8px;border-right:1px solid var(--hairline);background:var(--canvas);transition:width .18s ease;overflow:hidden}
+.shell.col .side{width:0;padding:0;border-right:0}
+.shell.peek .side{position:absolute;z-index:4;left:6px;top:6px;bottom:6px;width:var(--sw,240px);padding:10px 8px 8px;border:1px solid var(--hairline);border-radius:12px;background:var(--surface-raised);box-shadow:var(--shadow-popover)}
+.top{display:flex;align-items:center;gap:4px;margin-bottom:8px}.sp{flex:1;display:flex;align-items:center;gap:8px;height:32px;padding:0 8px;border:0;border-radius:8px;background:transparent;color:var(--ink);font:600 14px var(--font-sans);text-align:left}.sp:hover{background:var(--surface-card)}
+.mono{width:20px;height:20px;border-radius:5px;background:var(--surface-cream-strong);display:inline-flex;align-items:center;justify-content:center;font:600 11px var(--font-sans)}
+.ib{width:30px;height:30px;flex:none;display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:8px;background:transparent;color:var(--ink)}.ib:hover{background:var(--surface-card)}
+.se{display:flex;align-items:center;gap:6px;height:36px;box-sizing:border-box;padding:0 10px;border:1px solid var(--hairline);border-radius:8px;background:var(--surface-raised);color:var(--muted);font:400 14px var(--font-sans);margin-bottom:6px}.se span{flex:1;white-space:nowrap}
+.nav{flex:1;overflow:auto;min-height:0;white-space:nowrap}
+.gh{display:flex;align-items:center;gap:4px;width:100%;height:30px;margin-top:10px;padding:0 8px;border:0;border-radius:8px;background:transparent;color:var(--ink);font:600 14px var(--font-sans);text-align:left}.gh:hover{background:var(--surface-card)}
+.gh .ch{display:inline-flex;transition:transform .15s;color:var(--muted)}.gh[aria-expanded=false] .ch{transform:rotate(-90deg)}
+.grp[hidden]{display:none}ul{list-style:none;margin:0;padding:0}
+.row{position:relative;display:flex;align-items:center;height:32px;border-radius:8px;color:var(--body);font:400 14px var(--font-sans)}
+.row>a{flex:1;min-width:0;display:flex;align-items:center;gap:8px;height:100%;padding:0 8px;padding-left:calc(8px + var(--d,0)*14px);color:inherit;text-decoration:none;border-radius:8px;overflow:hidden;text-overflow:ellipsis}
+.row:hover,.row:focus-within{background:var(--surface-card)}
+.row.act{background:var(--surface-cream-strong);color:var(--ink);font-weight:500}
+.row .ac{display:none;gap:0;padding-right:4px}.row:hover .ac,.row:focus-within .ac{display:flex}
+.row .ac button{width:24px;height:24px;border:0;border-radius:6px;background:transparent;color:var(--muted);display:inline-flex;align-items:center;justify-content:center}.row .ac button:hover{background:var(--surface-cream-strong);color:var(--ink)}
+.row .tg{width:16px;height:16px;border:0;background:transparent;color:var(--muted);display:inline-flex;align-items:center;justify-content:center;padding:0;margin-left:calc(4px + var(--d,0)*14px);flex:none}.row .tg+a{padding-left:4px}
+.row .n{margin-left:auto;margin-right:8px;font:500 12px var(--font-sans);color:var(--muted)}
+.row a:focus-visible,.gh:focus-visible,.row button:focus-visible,.ib:focus-visible,.sp:focus-visible{outline:2px solid var(--primary);outline-offset:-2px}
+.rz{position:absolute;top:0;right:-3px;bottom:0;width:6px;cursor:col-resize;z-index:3}.rz:hover,.rz:focus-visible{background:linear-gradient(90deg,transparent 2px,var(--ring) 2px,var(--ring) 4px,transparent 4px);outline:none}.rz:focus-visible{background:linear-gradient(90deg,transparent 1px,var(--primary) 1px,var(--primary) 5px,transparent 5px)}
+.shell.col .rz,.shell.peek .rz{display:none}
+.main{flex:1;min-width:0;padding:16px 20px}.main h3{font:400 26px/1.2 var(--font-serif);letter-spacing:-.3px;color:var(--ink);margin:6px 0 8px}.main p{font:400 14px/1.55 var(--font-sans);margin:0 0 8px;color:var(--body)}
+.mt{display:flex;align-items:center;gap:6px;margin-bottom:6px}.edge{position:absolute;left:0;top:0;bottom:0;width:10px;z-index:3}
+.live{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}.hint{font:400 13px/1.5 var(--font-sans);color:var(--muted);margin:10px 0 0;max-width:760px}
+.phone{position:relative;width:300px;height:380px;border:1px solid var(--hairline);border-radius:20px;overflow:hidden;background:var(--canvas)}
+.phone .scrim{position:absolute;inset:0;background:var(--overlay)}.phone .dr{position:absolute;left:0;top:0;bottom:0;width:min(86%,270px);background:var(--surface-raised);box-shadow:var(--shadow-popover);padding:12px 8px;box-sizing:border-box;overflow:hidden}
+.phone .pm{padding:14px 16px;font:400 13px var(--font-sans);color:var(--muted)}</style></head><body><div class="pane"><p class="tag">Claro</p><div class="demo"><div><div class="shell" data-side tabindex="0" aria-label="Exemplo de barra lateral: Ctrl+B ou [ recolhe">
+<div class="edge" data-edge></div>
+<aside class="side" aria-label="Principal" data-aside>
+<div class="top"><button class="sp" aria-haspopup="listbox"><span class="mono">I</span>INSS</button><button class="ib" aria-label="Recolher barra lateral (Ctrl + B)" data-col data-i="sb"></button></div>
+<div class="se" role="search"><span>Buscar</span><kbd>Ctrl</kbd><kbd>K</kbd></div>
+<nav class="nav" aria-label="Seções" data-nav></nav>
+<div class="rz" role="separator" aria-orientation="vertical" aria-label="Largura da barra lateral" aria-valuemin="160" aria-valuemax="360" aria-valuenow="240" tabindex="0" data-rz></div>
+</aside>
+<main class="main"><div class="mt"><button class="ib" aria-label="Abrir barra lateral" data-open data-i="sb" hidden></button></div><h3 data-h>Questões do INSS</h3><p>Arraste o divisor (160 a 360 px) ou use as setas, Home e End nele. Arrastar abaixo do mínimo recolhe. Com a barra recolhida, passe o mouse na borda esquerda ou no botão para ver um peek temporário, que não fixa o estado.</p><p data-st style="color:var(--muted)"></p></main><span class="live" role="status" aria-live="polite" data-live></span></div>
+<p class="hint">Atalhos: <kbd>Ctrl</kbd> <kbd>B</kbd> ou <kbd>[</kbd> recolhe e abre. <kbd>Esc</kbd> fecha o peek. Seções recolhem; linhas mostram fixar e mais ações ao passar o mouse ou focar.</p></div>
+<div><div class="phone" aria-label="Gaveta no celular, aberta"><div class="pm">Questões do INSS</div><div class="scrim"></div><aside class="dr" aria-label="Principal (gaveta)"><div class="top"><button class="sp"><span class="mono">I</span>INSS</button><button class="ib" aria-label="Fechar">×</button></div><div class="se"><span>Buscar</span></div><ul><li class="row"><a href="#">Questões</a></li><li class="row act"><a href="#" aria-current="page">Simulados</a></li><li class="row"><a href="#">Revisão</a></li></ul></aside></div>
+<p class="hint">Telefone (menos de 768 px): vira gaveta modal de até 300 px (86 % da tela), com scrim; foco entra na gaveta e volta ao botão que a abriu; Esc fecha; o estado da gaveta nunca é salvo.</p></div></div></div><div class="pane" data-theme="dark"><p class="tag">Escuro</p><div class="demo"><div><div class="shell" data-side tabindex="0" aria-label="Exemplo de barra lateral: Ctrl+B ou [ recolhe">
+<div class="edge" data-edge></div>
+<aside class="side" aria-label="Principal" data-aside>
+<div class="top"><button class="sp" aria-haspopup="listbox"><span class="mono">I</span>INSS</button><button class="ib" aria-label="Recolher barra lateral (Ctrl + B)" data-col data-i="sb"></button></div>
+<div class="se" role="search"><span>Buscar</span><kbd>Ctrl</kbd><kbd>K</kbd></div>
+<nav class="nav" aria-label="Seções" data-nav></nav>
+<div class="rz" role="separator" aria-orientation="vertical" aria-label="Largura da barra lateral" aria-valuemin="160" aria-valuemax="360" aria-valuenow="240" tabindex="0" data-rz></div>
+</aside>
+<main class="main"><div class="mt"><button class="ib" aria-label="Abrir barra lateral" data-open data-i="sb" hidden></button></div><h3 data-h>Questões do INSS</h3><p>Arraste o divisor (160 a 360 px) ou use as setas, Home e End nele. Arrastar abaixo do mínimo recolhe. Com a barra recolhida, passe o mouse na borda esquerda ou no botão para ver um peek temporário, que não fixa o estado.</p><p data-st style="color:var(--muted)"></p></main><span class="live" role="status" aria-live="polite" data-live></span></div>
+<p class="hint">Atalhos: <kbd>Ctrl</kbd> <kbd>B</kbd> ou <kbd>[</kbd> recolhe e abre. <kbd>Esc</kbd> fecha o peek. Seções recolhem; linhas mostram fixar e mais ações ao passar o mouse ou focar.</p></div>
+<div><div class="phone" aria-label="Gaveta no celular, aberta"><div class="pm">Questões do INSS</div><div class="scrim"></div><aside class="dr" aria-label="Principal (gaveta)"><div class="top"><button class="sp"><span class="mono">I</span>INSS</button><button class="ib" aria-label="Fechar">×</button></div><div class="se"><span>Buscar</span></div><ul><li class="row"><a href="#">Questões</a></li><li class="row act"><a href="#" aria-current="page">Simulados</a></li><li class="row"><a href="#">Revisão</a></li></ul></aside></div>
+<p class="hint">Telefone (menos de 768 px): vira gaveta modal de até 300 px (86 % da tela), com scrim; foco entra na gaveta e volta ao botão que a abriu; Esc fecha; o estado da gaveta nunca é salvo.</p></div></div></div><script>
+const I={
+sb:'<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="12" height="10" rx="2"/><path d="M6 3v10"/></svg>',
+rp:'<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="12" height="10" rx="2"/><path d="M10 3v10"/></svg>',
+l:'<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 4L6 8l4 4"/></svg>',
+r:'<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>',
+d:'<svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg>',
+plus:'<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg>',
+x:'<svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg>',
+pin:'<svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2.5l4 4-2 .5-2.5 2.5.3 3-1 1-2.3-2.3L3 13.5M6.5 6.5l3 3M7 3.5l-1 1 5 5"/></svg>',
+doc:'<svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2.5h5l3 3v8H4z"/><path d="M9 2.5v3h3"/></svg>',
+q:'<svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="5.5"/><path d="M6.5 6.5a1.5 1.5 0 113 0c0 1-1.5 1.2-1.5 2.3M8 11h.01"/></svg>',
+g:'<svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="4" cy="4" r="1.5"/><circle cx="12" cy="5" r="1.5"/><circle cx="8" cy="12" r="1.5"/><path d="M5.3 4.4l5.4.4M5 5.3l2.2 5.4M11.3 6.3L9 10.8"/></svg>',
+dots:'<svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><circle cx="3.5" cy="8" r="1.2"/><circle cx="8" cy="8" r="1.2"/><circle cx="12.5" cy="8" r="1.2"/></svg>'};
+document.querySelectorAll('[data-i]').forEach(function(e){e.innerHTML=I[e.dataset.i]});
+var DATA=[{g:'Fixados',k:'pin',items:[['Caderno de erros','',0,'12']]},{g:'Estudo',k:'est',items:[['Questões','',0,''],['Simulados','',0,''],['Revisão','',0,'24']]},{g:'Leituras',k:'lei',items:[['Edital.pdf','',0,''],['Resumo de Direito.pdf','',0,'']]},{g:'Concursos',k:'con',items:[['INSS','t',0,''],['2026','t',1,''],['Técnico do Seguro Social','',2,''],['CNU','t',0,'']]}];
+document.querySelectorAll('[data-side]').forEach(function(sh,si){
+var aside=sh.querySelector('[data-aside]'),nav=sh.querySelector('[data-nav]'),rz=sh.querySelector('[data-rz]'),live=sh.querySelector('[data-live]'),st=sh.querySelector('[data-st]'),h=sh.querySelector('[data-h]'),openB=sh.querySelector('[data-open]'),edge=sh.querySelector('[data-edge]');
+var w=240,col=false,peek=false,pt=null,ct=null,closed={},act='Questões';
+function say(s){live.textContent=s;st.textContent=s}
+function draw(){nav.innerHTML=DATA.map(function(g){var o=!closed[g.k];return '<button class="gh" aria-expanded="'+o+'" data-g="'+g.k+'"><span class="ch">'+I.d+'</span>'+g.g+'</button><ul class="grp" '+(o?'':'hidden')+'>'+g.items.map(function(it){var tree=it[1]==='t';return '<li class="row'+(it[0]===act?' act':'')+'" style="--d:'+it[2]+'">'+(tree?'<button class="tg" aria-label="Expandir '+it[0]+'" tabindex="-1">'+I.d+'</button>':'')+'<a href="#" data-a="'+it[0]+'" '+(it[0]===act?'aria-current="page"':'')+'>'+it[0]+(it[3]&&!tree?'<span class="n"><span class="sr">, '+it[3]+' pendentes</span>'+it[3]+'</span>':'')+'</a><span class="ac"><button aria-label="Fixar '+it[0]+'">'+I.pin+'</button><button aria-label="Mais ações de '+it[0]+'">'+I.dots+'</button></span></li>'}).join('')+'</ul>'}).join('')}
+nav.addEventListener('click',function(e){var g=e.target.closest('[data-g]');if(g){closed[g.dataset.g]=!closed[g.dataset.g];draw();var b=nav.querySelector('[data-g="'+g.dataset.g+'"]');b&&b.focus();return}var a=e.target.closest('[data-a]');if(a){e.preventDefault();act=a.dataset.a;h.textContent=act;draw();var n=nav.querySelector('[data-a="'+act+'"]');n&&n.focus();}});
+function set(){sh.style.setProperty('--sw',w+'px');sh.classList.toggle('col',col&&!peek);sh.classList.toggle('peek',col&&peek);rz.setAttribute('aria-valuenow',w);openB.hidden=!col;sh.querySelector('[data-col]').setAttribute('aria-label',col?'Abrir barra lateral (Ctrl + B)':'Recolher barra lateral (Ctrl + B)')}
+function toggle(kb){clearTimeout(pt);clearTimeout(ct);peek=false;col=!col;set();say(col?'Barra lateral recolhida':'Barra lateral aberta');if(kb)(col?openB:sh.querySelector('[data-col]')).focus()}
+sh.querySelector('[data-col]').onclick=function(){toggle(false)};openB.onclick=function(){toggle(false)};
+function sched(on){if(!col)return;clearTimeout(on?ct:pt);if(on){if(pt)return;pt=setTimeout(function(){pt=null;peek=true;set()},300)}else{clearTimeout(pt);pt=null;ct=setTimeout(function(){ct=null;peek=false;set()},150)}}
+[openB,edge].forEach(function(e){e.addEventListener('pointerenter',function(){sched(true)});e.addEventListener('pointerleave',function(){sched(false)});e.addEventListener('focus',function(){sched(true)})});
+aside.addEventListener('pointerenter',function(){clearTimeout(ct);ct=null});aside.addEventListener('pointerleave',function(){if(col&&peek)sched(false)});
+sh.addEventListener('keydown',function(e){var ed=e.target.closest&&e.target.closest('input,textarea,select,[contenteditable]');
+ if(e.key==='Escape'&&peek){peek=false;set();return}
+ if(ed)return;
+ if((e.key==='b'||e.key==='B')&&e.ctrlKey&&!e.altKey&&!e.shiftKey){e.preventDefault();toggle(true)}
+ if(e.key==='['&&!e.ctrlKey&&!e.metaKey&&!e.altKey){e.preventDefault();toggle(true)}});
+var drag=null;rz.addEventListener('pointerdown',function(e){if(e.button)return;rz.setPointerCapture(e.pointerId);drag={x:e.clientX,w:w}});
+rz.addEventListener('pointermove',function(e){if(!drag)return;var n=drag.w+e.clientX-drag.x;if(n<160){drag=null;toggle(false);return}w=Math.min(360,n);set()});
+rz.addEventListener('pointerup',function(){drag=null;say('Largura '+w+' px')});
+rz.addEventListener('keydown',function(e){var k=e.key;if(k==='ArrowLeft')w=Math.max(160,w-16);else if(k==='ArrowRight')w=Math.min(360,w+16);else if(k==='Home')w=160;else if(k==='End')w=360;else return;e.preventDefault();set();say('Largura '+w+' px')});
+draw();set()});
+</script></body></html>

@@ -1,0 +1,1 @@
+Pricing tiers sit in a 3-up grid of 12px cards with 32px padding. Standard tiers use canvas with a hairline border; the featured tier uses surface-dark with on-dark text. The price uses display-sm. Prices shown are placeholders.

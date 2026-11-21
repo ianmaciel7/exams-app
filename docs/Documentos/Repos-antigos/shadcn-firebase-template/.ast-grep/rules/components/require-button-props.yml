@@ -1,0 +1,42 @@
+id: require-button-props
+language: tsx
+files:
+  - src/app/**/*.tsx
+  - src/app/**/*.ts
+  - src/components/**/*.tsx
+  - src/components/**/*.ts
+ignores:
+  - "**/*.test.tsx"
+  - "**/*.test.ts"
+  - "**/*.stories.tsx"
+  - src/components/ui/*.tsx
+severity: error
+message: Component props ending in ButtonProps should extend ComponentProps<typeof Button> or ComponentProps<"button">.
+note: |
+  Custom button components should inherit standard button properties (such as
+  className, disabled, onClick, variant, and HTML attributes) so they behave like
+  standard buttons and remain composable.
+  Example:
+    type MyButtonProps = ComponentProps<typeof Button> & {
+      customProp: string;
+    };
+rule:
+  any:
+    - kind: type_alias_declaration
+      all:
+        - has:
+            field: name
+            regex: 'ButtonProps$'
+        - not:
+            has:
+              field: value
+              regex: 'ComponentProps<'
+    - kind: interface_declaration
+      all:
+        - has:
+            field: name
+            regex: 'ButtonProps$'
+        - not:
+            has:
+              kind: extends_type_clause
+              regex: 'ComponentProps<'

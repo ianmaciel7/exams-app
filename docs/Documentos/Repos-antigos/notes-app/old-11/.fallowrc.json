@@ -1,0 +1,21 @@
+{
+  "$schema": "./node_modules/fallow/schema.json",
+  "ignorePatterns": [".agents/skills/**", ".worktrees/**"],
+  "health": {
+    "maxCyclomatic": 10,
+    "maxCognitive": 10,
+    "maxCrap": 30,
+    "maxUnitSize": 60,
+    "ignore": [
+      "src/components/ui/**",
+      "**/*.test.ts",
+      "**/*.test.tsx",
+      "**/*.test.mjs",
+      "**/*.stories.tsx",
+      "e2e/**"
+    ]
+  },
+  "audit": {
+    "gate": "new-only"
+  }
+}

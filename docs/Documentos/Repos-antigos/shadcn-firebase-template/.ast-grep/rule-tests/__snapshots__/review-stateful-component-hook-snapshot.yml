@@ -1,0 +1,42 @@
+id: review-stateful-component-hook
+snapshots:
+  "const AuthPanel = () => { useState(false); React.useEffect(() => {}, []); return <div />; };":
+    labels:
+    - source: >-
+        const AuthPanel = () => { useState(false); React.useEffect(() => {}, []);
+        return <div />; };
+      style: primary
+      start: 0
+      end: 92
+    - source: <div />
+      style: secondary
+      start: 81
+      end: 88
+    - source: useState(false)
+      style: secondary
+      start: 26
+      end: 41
+    - source: React.useEffect(() => {}, [])
+      style: secondary
+      start: 43
+      end: 72
+  "function ProfileClient() { useState(false); useEffect(() => {}, []); return <div />; }":
+    labels:
+    - source: >-
+        function ProfileClient() { useState(false); useEffect(() => {}, []); return
+        <div />; }
+      style: primary
+      start: 0
+      end: 86
+    - source: <div />
+      style: secondary
+      start: 76
+      end: 83
+    - source: useState(false)
+      style: secondary
+      start: 27
+      end: 42
+    - source: useEffect(() => {}, [])
+      style: secondary
+      start: 44
+      end: 67

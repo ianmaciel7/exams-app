@@ -1,0 +1,5 @@
+# OSV-Scanner v2 configuration.
+#
+# Keep vulnerability exceptions explicit and temporary. Add an [[IgnoredVulns]]
+# entry only with a documented reason and, when appropriate, an ignoreUntil
+# date. Do not use this file to suppress an unresolved dependency issue.

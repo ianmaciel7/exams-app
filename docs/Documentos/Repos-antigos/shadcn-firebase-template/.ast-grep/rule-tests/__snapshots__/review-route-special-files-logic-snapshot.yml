@@ -1,0 +1,42 @@
+id: review-route-special-files-logic
+snapshots:
+  "export default function Page() {\n  const [count, setCount] = useState(0);\n  return <div>{count}</div>;\n}\n":
+    labels:
+    - source: useState(0)
+      style: primary
+      start: 61
+      end: 72
+    - source: useState
+      style: secondary
+      start: 61
+      end: 69
+  "export default function Page() {\n  const router = useRouter();\n  return <div>{router.pathname}</div>;\n}\n":
+    labels:
+    - source: useRouter()
+      style: primary
+      start: 50
+      end: 61
+    - source: useRouter
+      style: secondary
+      start: 50
+      end: 59
+  "export default function Page() {\n  const t = useTranslations(\"Home\");\n  return <h1>{t(\"title\")}</h1>;\n}\n":
+    labels:
+    - source: useTranslations("Home")
+      style: primary
+      start: 45
+      end: 68
+    - source: useTranslations
+      style: secondary
+      start: 45
+      end: 60
+  "export default function Page() {\n  React.useEffect(() => connect(), []);\n  return <div />;\n}\n":
+    labels:
+    - source: React.useEffect(() => connect(), [])
+      style: primary
+      start: 35
+      end: 71
+    - source: React.useEffect
+      style: secondary
+      start: 35
+      end: 50

@@ -1,0 +1,212 @@
+{
+  "created": "2026-11-14T16:23:38.784Z",
+  "cases": [
+    {
+      "phase": "before",
+      "width": 390,
+      "observed": "undefined in icon slot",
+      "screenshot": "issue132_before_390.png"
+    },
+    {
+      "phase": "after",
+      "width": 320,
+      "docScrollWidth": 320,
+      "iconText": "",
+      "svgCount": 1,
+      "label": "Fazer simulado\nConfigure a prova e acompanhe seu resultado",
+      "target": "#/simulado",
+      "rect": {
+        "left": 31,
+        "right": 279,
+        "width": 248
+      },
+      "textWidth": 178,
+      "textScrollWidth": 178,
+      "screenshot": "issue132_after_320.png"
+    },
+    {
+      "phase": "after",
+      "width": 360,
+      "docScrollWidth": 360,
+      "iconText": "",
+      "svgCount": 1,
+      "label": "Fazer simulado\nConfigure a prova e acompanhe seu resultado",
+      "target": "#/simulado",
+      "rect": {
+        "left": 31,
+        "right": 319,
+        "width": 288
+      },
+      "textWidth": 218,
+      "textScrollWidth": 218
+    },
+    {
+      "phase": "after",
+      "width": 375,
+      "docScrollWidth": 375,
+      "iconText": "",
+      "svgCount": 1,
+      "label": "Fazer simulado\nConfigure a prova e acompanhe seu resultado",
+      "target": "#/simulado",
+      "rect": {
+        "left": 31,
+        "right": 334,
+        "width": 303
+      },
+      "textWidth": 233,
+      "textScrollWidth": 233
+    },
+    {
+      "phase": "after",
+      "width": 390,
+      "docScrollWidth": 390,
+      "iconText": "",
+      "svgCount": 1,
+      "label": "Fazer simulado\nConfigure a prova e acompanhe seu resultado",
+      "target": "#/simulado",
+      "rect": {
+        "left": 31,
+        "right": 349,
+        "width": 318
+      },
+      "textWidth": 248,
+      "textScrollWidth": 248,
+      "screenshot": "issue132_after_390.png"
+    },
+    {
+      "phase": "after",
+      "width": 412,
+      "docScrollWidth": 412,
+      "iconText": "",
+      "svgCount": 1,
+      "label": "Fazer simulado\nConfigure a prova e acompanhe seu resultado",
+      "target": "#/simulado",
+      "rect": {
+        "left": 31,
+        "right": 371,
+        "width": 340
+      },
+      "textWidth": 266.34375,
+      "textScrollWidth": 266
+    },
+    {
+      "phase": "after",
+      "width": 480,
+      "docScrollWidth": 480,
+      "iconText": "",
+      "svgCount": 1,
+      "label": "Fazer simulado\nConfigure a prova e acompanhe seu resultado",
+      "target": "#/simulado",
+      "rect": {
+        "left": 31,
+        "right": 439,
+        "width": 408
+      },
+      "textWidth": 266.34375,
+      "textScrollWidth": 266
+    },
+    {
+      "phase": "after",
+      "width": 600,
+      "docScrollWidth": 600,
+      "iconText": "",
+      "svgCount": 1,
+      "label": "Fazer simulado\nConfigure a prova e acompanhe seu resultado",
+      "target": "#/simulado",
+      "rect": {
+        "left": 301,
+        "right": 559,
+        "width": 258
+      },
+      "textWidth": 188,
+      "textScrollWidth": 188
+    },
+    {
+      "phase": "after",
+      "width": 768,
+      "docScrollWidth": 768,
+      "iconText": "",
+      "svgCount": 1,
+      "label": "Fazer simulado\nConfigure a prova e acompanhe seu resultado",
+      "target": "#/simulado",
+      "rect": {
+        "left": 385,
+        "right": 727,
+        "width": 342
+      },
+      "textWidth": 266.34375,
+      "textScrollWidth": 266,
+      "screenshot": "issue132_after_768.png"
+    },
+    {
+      "phase": "after",
+      "width": 820,
+      "docScrollWidth": 820,
+      "iconText": "",
+      "svgCount": 1,
+      "label": "Fazer simulado\nConfigure a prova e acompanhe seu resultado",
+      "target": "#/simulado",
+      "rect": {
+        "left": 553,
+        "right": 779,
+        "width": 226
+      },
+      "textWidth": 156,
+      "textScrollWidth": 156
+    },
+    {
+      "phase": "after",
+      "width": 1024,
+      "docScrollWidth": 1024,
+      "iconText": "",
+      "svgCount": 1,
+      "label": "Fazer simulado\nConfigure a prova e acompanhe seu resultado",
+      "target": "#/simulado",
+      "rect": {
+        "left": 655,
+        "right": 983,
+        "width": 328
+      },
+      "textWidth": 258,
+      "textScrollWidth": 258
+    },
+    {
+      "phase": "after",
+      "width": 1280,
+      "docScrollWidth": 1280,
+      "iconText": "",
+      "svgCount": 1,
+      "label": "Fazer simulado\nConfigure a prova e acompanhe seu resultado",
+      "target": "#/simulado",
+      "rect": {
+        "left": 783,
+        "right": 1239,
+        "width": 456
+      },
+      "textWidth": 266.34375,
+      "textScrollWidth": 266,
+      "screenshot": "issue132_after_1280.png"
+    },
+    {
+      "phase": "after",
+      "width": 1440,
+      "docScrollWidth": 1440,
+      "iconText": "",
+      "svgCount": 1,
+      "label": "Fazer simulado\nConfigure a prova e acompanhe seu resultado",
+      "target": "#/simulado",
+      "rect": {
+        "left": 863,
+        "right": 1377,
+        "width": 514
+      },
+      "textWidth": 266.34375,
+      "textScrollWidth": 266
+    }
+  ],
+  "pageErrors": [],
+  "limitations": [
+    "Chromium emulation does not replace tests on a real Android/iOS device.",
+    "This test covers the primary Home CTAs and layout, not every screen and drawer of Issue #132."
+  ]
+}

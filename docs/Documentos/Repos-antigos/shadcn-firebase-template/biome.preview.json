@@ -1,0 +1,24 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.6.2/schema.json",
+  "plugins": [
+    {
+      "path": "./.biome/plugins/match-component-filename.js",
+      "includes": [
+        "src/app/**/_components/**/*.tsx",
+        "src/components/ui/extensions/**/*.tsx",
+        ".biome/plugins/fixtures/**/*.tsx"
+      ]
+    }
+  ],
+  "linter": {
+    "rules": {
+      "preset": "none"
+    }
+  },
+  "formatter": {
+    "enabled": false
+  },
+  "assist": {
+    "enabled": false
+  }
+}

@@ -1,0 +1,7 @@
+#!/bin/sh
+# Issue #278: local agent generation remains available; all remote writes stay off.
+if command -v agents >/dev/null 2>&1; then
+    agents sync || true
+fi
+# No artifact publish and no Claude branch mirror during the migration.
+echo '[#278] Claude publication and branch mirroring are disabled.'

@@ -1,0 +1,7 @@
+id: review-stateful-component-hook
+valid:
+  - function StatusLabel() { useState(false); return <span />; }
+  - function useOnlineStatus() { useState(false); useEffect(() => {}, []); }
+invalid:
+  - function ProfileClient() { useState(false); useEffect(() => {}, []); return <div />; }
+  - const AuthPanel = () => { useState(false); React.useEffect(() => {}, []); return <div />; };

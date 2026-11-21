@@ -1,0 +1,1537 @@
+{
+  "schema_version": 2,
+  "title": "Inventário integral de evidências ExamTopics × dev",
+  "observed_at": "2026-11-17",
+  "last_integration": "2026-11-17",
+  "exam_app_baseline": "a594e16f60464e517a298cde958b160ea837ae5d",
+  "methods": [
+    "Firecrawl páginas públicas sem login",
+    "GitHub dev leitura estática"
+  ],
+  "content_policy": "Não copiar questões protegidas nem indicar imagens históricas como capturas novas",
+  "sources": [
+    {
+      "id": "ET-01",
+      "title": "Catálogo geral",
+      "url": "https://www.examtopics.com/exams/",
+      "access": "público"
+    },
+    {
+      "id": "ET-02",
+      "title": "Exames Google",
+      "url": "https://www.examtopics.com/exams/google/",
+      "access": "público"
+    },
+    {
+      "id": "ET-03",
+      "title": "Exame AZ-900",
+      "url": "https://www.examtopics.com/exams/microsoft/az-900/",
+      "access": "público"
+    },
+    {
+      "id": "ET-04",
+      "title": "Banco AZ-900",
+      "url": "https://www.examtopics.com/exams/microsoft/az-900/view/",
+      "access": "público"
+    },
+    {
+      "id": "ET-05",
+      "title": "Banco AWS CLF-C02",
+      "url": "https://www.examtopics.com/exams/amazon/aws-certified-cloud-practitioner-clf-c02/view/",
+      "access": "público"
+    },
+    {
+      "id": "ET-06",
+      "title": "AZ-900 página 2",
+      "url": "https://www.examtopics.com/exams/microsoft/az-900/view/2/",
+      "access": "tela de login pública"
+    },
+    {
+      "id": "ET-07",
+      "title": "AZ-900 página 30",
+      "url": "https://www.examtopics.com/exams/microsoft/az-900/view/30/",
+      "access": "tela de login pública"
+    },
+    {
+      "id": "ET-08",
+      "title": "Discussão AZ-900",
+      "url": "https://www.examtopics.com/discussions/microsoft/view/93155-exam-az-900-topic-1-question-401-discussion/",
+      "access": "público"
+    },
+    {
+      "id": "ET-09",
+      "title": "Discussões Microsoft",
+      "url": "https://www.examtopics.com/discussions/microsoft/",
+      "access": "público"
+    },
+    {
+      "id": "ET-10",
+      "title": "Login",
+      "url": "https://www.examtopics.com/login/",
+      "access": "formulário público"
+    },
+    {
+      "id": "ET-11",
+      "title": "Cadastro",
+      "url": "https://www.examtopics.com/signup/",
+      "access": "formulário público"
+    },
+    {
+      "id": "ET-12",
+      "title": "ExamTopics PRO",
+      "url": "https://www.examtopics.com/unlimited/",
+      "access": "oferta pública; benefícios não testados"
+    },
+    {
+      "id": "ET-13",
+      "title": "Checkout PRO",
+      "url": "https://www.examtopics.com/pro/",
+      "access": "oferta pública"
+    },
+    {
+      "id": "ET-14",
+      "title": "Termos",
+      "url": "https://www.examtopics.com/terms/",
+      "access": "público"
+    },
+    {
+      "id": "ET-15",
+      "title": "Blog",
+      "url": "https://www.examtopics.com/news/",
+      "access": "público"
+    },
+    {
+      "id": "ET-16",
+      "title": "Catálogo histórico AZ-104",
+      "url": "https://www.examtopics.com/exams/microsoft/az-104/view/",
+      "access": "referência para capturas históricas; não reverificado nesta auditoria"
+    }
+  ],
+  "existing_visual_assets": [
+    {
+      "id": "EX-IMG-01",
+      "path": "prototype/examtopics_az104_header_and_overview.png",
+      "caption": "Cabeçalho e visão geral; captura AZ-104 histórica",
+      "related": [
+        "ET-E02",
+        "ET-E03",
+        "ET-E10",
+        "ET-E11"
+      ],
+      "origin": "captura antiga armazenada no repositório",
+      "captured_at": null,
+      "verified_on_2026_11_17": false,
+      "sha256": "cd9a6e511167e3c1fbcf34d3a3e40681b6536587162dbc5e2e7914b5ba4fae0b",
+      "catalog_id": "EV-3D095C0C",
+      "catalog_record_date": "2026-11-16"
+    },
+    {
+      "id": "EX-IMG-02",
+      "path": "prototype/examtopics_az104_question_card.png",
+      "caption": "Card da questão; captura AZ-104 histórica",
+      "related": [
+        "ET-E07",
+        "ET-E08",
+        "ET-E09"
+      ],
+      "origin": "captura antiga armazenada no repositório",
+      "captured_at": null,
+      "verified_on_2026_11_17": false,
+      "sha256": "c6ec4d3f7b65bb22da3ee2dc9fb195f058aa4cb4f1d1b29c7d20e08ee08f7a2c",
+      "catalog_id": "EV-A4C5D49B",
+      "catalog_record_date": "2026-11-16"
+    },
+    {
+      "id": "EX-IMG-03",
+      "path": "prototype/examtopics_az104_solution_reveal.png",
+      "caption": "Revelação do gabarito e votação; captura AZ-104 histórica",
+      "related": [
+        "ET-E13",
+        "ET-E17",
+        "ET-E18"
+      ],
+      "origin": "captura antiga armazenada no repositório",
+      "captured_at": null,
+      "verified_on_2026_11_17": false,
+      "sha256": "3b008e747c98d2394eeac6c4a969db95cad1735f8ba966930264fbfb048b2d2e",
+      "catalog_id": "EV-06924DC9",
+      "catalog_record_date": "2026-11-16"
+    },
+    {
+      "id": "EX-IMG-04",
+      "path": "prototype/examtopics_az104_discussion_modal.png",
+      "caption": "Discussão e votos; captura AZ-104 histórica",
+      "related": [
+        "ET-E19",
+        "ET-E20",
+        "ET-E21"
+      ],
+      "origin": "captura antiga armazenada no repositório",
+      "captured_at": null,
+      "verified_on_2026_11_17": false,
+      "sha256": "2881221a950dbb43231ba69cc8bc8a05633ae1ef7dc52179081489a270a30ac5",
+      "catalog_id": "EV-601DF4CD",
+      "catalog_record_date": "2026-11-16"
+    },
+    {
+      "id": "EX-IMG-05",
+      "path": "prototype/examtopics_az104_pagination_and_footer.png",
+      "caption": "Paginação e rodapé; captura AZ-104 histórica",
+      "related": [
+        "ET-E10",
+        "ET-E11"
+      ],
+      "origin": "captura antiga armazenada no repositório",
+      "captured_at": null,
+      "verified_on_2026_11_17": false,
+      "sha256": "7c4fe024dc5fceb2191930c245303ce98712bf7b5a438b3cc036a43e7ed6ce96",
+      "catalog_id": "EV-006986D1",
+      "catalog_record_date": "2026-11-16"
+    }
+  ],
+  "observations": [
+    {
+      "id": "ET-E01",
+      "category": "Catálogo",
+      "title": "Lista de fornecedores de certificação",
+      "status": "observado",
+      "source_ids": [
+        "ET-01",
+        "ET-02"
+      ],
+      "exam_app": {
+        "state": "não localizado",
+        "code_evidence": "—",
+        "decision": "adiar"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/exams/",
+        "https://www.examtopics.com/exams/google/"
+      ],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "inspeção pública Firecrawl sem login"
+    },
+    {
+      "id": "ET-E02",
+      "category": "Catálogo",
+      "title": "Listagem de exames por fornecedor",
+      "status": "observado",
+      "source_ids": [
+        "ET-01",
+        "ET-02"
+      ],
+      "exam_app": {
+        "state": "parcial",
+        "code_evidence": "Concurso/Edição",
+        "decision": "adaptar"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/exams/",
+        "https://www.examtopics.com/exams/google/"
+      ],
+      "visual_evidence_ids": [
+        "EX-IMG-01"
+      ],
+      "visual_evidence_status": "apenas captura histórica AZ-104; sem nova captura nesta auditoria",
+      "method": "inspeção pública Firecrawl sem login"
+    },
+    {
+      "id": "ET-E03",
+      "category": "Catálogo",
+      "title": "Pesquisa por nome ou código de exame",
+      "status": "observado",
+      "source_ids": [
+        "ET-01"
+      ],
+      "exam_app": {
+        "state": "parcial",
+        "code_evidence": "qfHTML",
+        "decision": "condicionar a certificações"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/exams/"
+      ],
+      "visual_evidence_ids": [
+        "EX-IMG-01"
+      ],
+      "visual_evidence_status": "apenas captura histórica AZ-104; sem nova captura nesta auditoria",
+      "method": "inspeção pública Firecrawl sem login"
+    },
+    {
+      "id": "ET-E04",
+      "category": "Catálogo",
+      "title": "Rótulo de exame popular",
+      "status": "observado",
+      "source_ids": [
+        "ET-02"
+      ],
+      "exam_app": {
+        "state": "não verificado",
+        "code_evidence": "—",
+        "decision": "opcional"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/exams/google/"
+      ],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "inspeção pública Firecrawl sem login"
+    },
+    {
+      "id": "ET-E05",
+      "category": "Catálogo",
+      "title": "Página de detalhes de exame",
+      "status": "observado",
+      "source_ids": [
+        "ET-03"
+      ],
+      "exam_app": {
+        "state": "parcial",
+        "code_evidence": "scBody",
+        "decision": "adaptar"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/exams/microsoft/az-900/"
+      ],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "inspeção pública Firecrawl sem login"
+    },
+    {
+      "id": "ET-E06",
+      "category": "Catálogo",
+      "title": "Contagem de questões do exame",
+      "status": "observado",
+      "source_ids": [
+        "ET-03",
+        "ET-04"
+      ],
+      "exam_app": {
+        "state": "no código",
+        "code_evidence": "qfParts",
+        "decision": "manter"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/exams/microsoft/az-900/",
+        "https://www.examtopics.com/exams/microsoft/az-900/view/"
+      ],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "inspeção pública Firecrawl sem login"
+    },
+    {
+      "id": "ET-E07",
+      "category": "Catálogo",
+      "title": "Data de atualização do banco",
+      "status": "observado",
+      "source_ids": [
+        "ET-04"
+      ],
+      "exam_app": {
+        "state": "parcial",
+        "code_evidence": "—",
+        "decision": "proveniência/atualização"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/exams/microsoft/az-900/view/"
+      ],
+      "visual_evidence_ids": [
+        "EX-IMG-02"
+      ],
+      "visual_evidence_status": "apenas captura histórica AZ-104; sem nova captura nesta auditoria",
+      "method": "inspeção pública Firecrawl sem login"
+    },
+    {
+      "id": "ET-E08",
+      "category": "Questões",
+      "title": "Questão identificada por número e tópico",
+      "status": "observado",
+      "source_ids": [
+        "ET-04",
+        "ET-05"
+      ],
+      "exam_app": {
+        "state": "no código",
+        "code_evidence": "qObjs",
+        "decision": "manter"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/exams/microsoft/az-900/view/",
+        "https://www.examtopics.com/exams/amazon/aws-certified-cloud-practitioner-clf-c02/view/"
+      ],
+      "visual_evidence_ids": [
+        "EX-IMG-02"
+      ],
+      "visual_evidence_status": "apenas captura histórica AZ-104; sem nova captura nesta auditoria",
+      "method": "inspeção pública Firecrawl sem login"
+    },
+    {
+      "id": "ET-E09",
+      "category": "Questões",
+      "title": "Enunciado e alternativas com letras",
+      "status": "observado",
+      "source_ids": [
+        "ET-04",
+        "ET-05"
+      ],
+      "exam_app": {
+        "state": "no código",
+        "code_evidence": "sQuestionMarkup",
+        "decision": "manter"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/exams/microsoft/az-900/view/",
+        "https://www.examtopics.com/exams/amazon/aws-certified-cloud-practitioner-clf-c02/view/"
+      ],
+      "visual_evidence_ids": [
+        "EX-IMG-02"
+      ],
+      "visual_evidence_status": "apenas captura histórica AZ-104; sem nova captura nesta auditoria",
+      "method": "inspeção pública Firecrawl sem login"
+    },
+    {
+      "id": "ET-E10",
+      "category": "Questões",
+      "title": "Paginação por página de questões",
+      "status": "observado",
+      "source_ids": [
+        "ET-04"
+      ],
+      "exam_app": {
+        "state": "no código",
+        "code_evidence": "renderPracticeList",
+        "decision": "manter"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/exams/microsoft/az-900/view/"
+      ],
+      "visual_evidence_ids": [
+        "EX-IMG-01",
+        "EX-IMG-05"
+      ],
+      "visual_evidence_status": "apenas captura histórica AZ-104; sem nova captura nesta auditoria",
+      "method": "inspeção pública Firecrawl sem login"
+    },
+    {
+      "id": "ET-E11",
+      "category": "Questões",
+      "title": "Intervalo X–Y e total de N questões",
+      "status": "observado",
+      "source_ids": [
+        "ET-04"
+      ],
+      "exam_app": {
+        "state": "no código",
+        "code_evidence": "renderPracticeList",
+        "decision": "manter"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/exams/microsoft/az-900/view/"
+      ],
+      "visual_evidence_ids": [
+        "EX-IMG-01",
+        "EX-IMG-05"
+      ],
+      "visual_evidence_status": "apenas captura histórica AZ-104; sem nova captura nesta auditoria",
+      "method": "inspeção pública Firecrawl sem login"
+    },
+    {
+      "id": "ET-E12",
+      "category": "Questões",
+      "title": "Navegação anterior e próxima página",
+      "status": "observado",
+      "source_ids": [
+        "ET-04"
+      ],
+      "exam_app": {
+        "state": "no código",
+        "code_evidence": "renderPracticeList",
+        "decision": "manter"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/exams/microsoft/az-900/view/"
+      ],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "inspeção pública Firecrawl sem login"
+    },
+    {
+      "id": "ET-E13",
+      "category": "Questões",
+      "title": "Revelar ou ocultar solução/gabarito",
+      "status": "observado",
+      "source_ids": [
+        "ET-04"
+      ],
+      "exam_app": {
+        "state": "no código",
+        "code_evidence": "qPedModule",
+        "decision": "adaptar"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/exams/microsoft/az-900/view/"
+      ],
+      "visual_evidence_ids": [
+        "EX-IMG-03"
+      ],
+      "visual_evidence_status": "apenas captura histórica AZ-104; sem nova captura nesta auditoria",
+      "method": "inspeção pública Firecrawl sem login"
+    },
+    {
+      "id": "ET-E14",
+      "category": "Questões",
+      "title": "Resposta sugerida apresentada após revelar",
+      "status": "observado",
+      "source_ids": [
+        "ET-04"
+      ],
+      "exam_app": {
+        "state": "no código",
+        "code_evidence": "qPedModule",
+        "decision": "preferir oficial"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/exams/microsoft/az-900/view/"
+      ],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "inspeção pública Firecrawl sem login"
+    },
+    {
+      "id": "ET-E15",
+      "category": "Questões",
+      "title": "Enunciado com diagramas e imagens (exhibits)",
+      "status": "observado",
+      "source_ids": [
+        "ET-04"
+      ],
+      "exam_app": {
+        "state": "parcial",
+        "code_evidence": "PDF Reader/textoAssociado",
+        "decision": "aprofundar E2E"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/exams/microsoft/az-900/view/"
+      ],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "inspeção pública Firecrawl sem login"
+    },
+    {
+      "id": "ET-E16",
+      "category": "Questões",
+      "title": "Cenários e estudos de caso nos enunciados",
+      "status": "observado",
+      "source_ids": [
+        "ET-04"
+      ],
+      "exam_app": {
+        "state": "parcial",
+        "code_evidence": "textoAssociado",
+        "decision": "separar contexto/tipo"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/exams/microsoft/az-900/view/"
+      ],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "inspeção pública Firecrawl sem login"
+    },
+    {
+      "id": "ET-E17",
+      "category": "Comunidade",
+      "title": "Alternativa mais votada indicada",
+      "status": "observado",
+      "source_ids": [
+        "ET-04"
+      ],
+      "exam_app": {
+        "state": "fora do escopo",
+        "code_evidence": "—",
+        "decision": "não copiar"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/exams/microsoft/az-900/view/"
+      ],
+      "visual_evidence_ids": [
+        "EX-IMG-03"
+      ],
+      "visual_evidence_status": "apenas captura histórica AZ-104; sem nova captura nesta auditoria",
+      "method": "inspeção pública Firecrawl sem login"
+    },
+    {
+      "id": "ET-E18",
+      "category": "Comunidade",
+      "title": "Distribuição percentual de votos por alternativa",
+      "status": "observado",
+      "source_ids": [
+        "ET-04"
+      ],
+      "exam_app": {
+        "state": "fora do escopo",
+        "code_evidence": "qMetrics (apenas pessoais)",
+        "decision": "não copiar"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/exams/microsoft/az-900/view/"
+      ],
+      "visual_evidence_ids": [
+        "EX-IMG-03"
+      ],
+      "visual_evidence_status": "apenas captura histórica AZ-104; sem nova captura nesta auditoria",
+      "method": "inspeção pública Firecrawl sem login"
+    },
+    {
+      "id": "ET-E19",
+      "category": "Comunidade",
+      "title": "Discussão individual por questão",
+      "status": "observado",
+      "source_ids": [
+        "ET-08"
+      ],
+      "exam_app": {
+        "state": "fora do escopo",
+        "code_evidence": "qNote (notas locais)",
+        "decision": "adaptar para justificativas"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/discussions/microsoft/view/93155-exam-az-900-topic-1-question-401-discussion/"
+      ],
+      "visual_evidence_ids": [
+        "EX-IMG-04"
+      ],
+      "visual_evidence_status": "apenas captura histórica AZ-104; sem nova captura nesta auditoria",
+      "method": "inspeção pública Firecrawl sem login"
+    },
+    {
+      "id": "ET-E20",
+      "category": "Comunidade",
+      "title": "Comentários de usuários",
+      "status": "observado",
+      "source_ids": [
+        "ET-08",
+        "ET-09"
+      ],
+      "exam_app": {
+        "state": "fora do escopo",
+        "code_evidence": "—",
+        "decision": "não copiar"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/discussions/microsoft/view/93155-exam-az-900-topic-1-question-401-discussion/",
+        "https://www.examtopics.com/discussions/microsoft/"
+      ],
+      "visual_evidence_ids": [
+        "EX-IMG-04"
+      ],
+      "visual_evidence_status": "apenas captura histórica AZ-104; sem nova captura nesta auditoria",
+      "method": "inspeção pública Firecrawl sem login"
+    },
+    {
+      "id": "ET-E21",
+      "category": "Comunidade",
+      "title": "Respostas/réplicas em discussões",
+      "status": "observado",
+      "source_ids": [
+        "ET-08"
+      ],
+      "exam_app": {
+        "state": "fora do escopo",
+        "code_evidence": "—",
+        "decision": "não copiar"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/discussions/microsoft/view/93155-exam-az-900-topic-1-question-401-discussion/"
+      ],
+      "visual_evidence_ids": [
+        "EX-IMG-04"
+      ],
+      "visual_evidence_status": "apenas captura histórica AZ-104; sem nova captura nesta auditoria",
+      "method": "inspeção pública Firecrawl sem login"
+    },
+    {
+      "id": "ET-E22",
+      "category": "Comunidade",
+      "title": "Alternativa escolhida em comentário",
+      "status": "observado",
+      "source_ids": [
+        "ET-08"
+      ],
+      "exam_app": {
+        "state": "fora do escopo",
+        "code_evidence": "—",
+        "decision": "não copiar"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/discussions/microsoft/view/93155-exam-az-900-topic-1-question-401-discussion/"
+      ],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "inspeção pública Firecrawl sem login"
+    },
+    {
+      "id": "ET-E23",
+      "category": "Comunidade",
+      "title": "Votos/curtidas em comentários",
+      "status": "observado",
+      "source_ids": [
+        "ET-08"
+      ],
+      "exam_app": {
+        "state": "fora do escopo",
+        "code_evidence": "—",
+        "decision": "não copiar"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/discussions/microsoft/view/93155-exam-az-900-topic-1-question-401-discussion/"
+      ],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "inspeção pública Firecrawl sem login"
+    },
+    {
+      "id": "ET-E24",
+      "category": "Comunidade",
+      "title": "Denunciar comentário",
+      "status": "observado",
+      "source_ids": [
+        "ET-08"
+      ],
+      "exam_app": {
+        "state": "fora do escopo",
+        "code_evidence": "—",
+        "decision": "não copiar"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/discussions/microsoft/view/93155-exam-az-900-topic-1-question-401-discussion/"
+      ],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "inspeção pública Firecrawl sem login"
+    },
+    {
+      "id": "ET-E25",
+      "category": "Comunidade",
+      "title": "Identificação do autor e data da postagem",
+      "status": "observado",
+      "source_ids": [
+        "ET-08"
+      ],
+      "exam_app": {
+        "state": "fora do escopo",
+        "code_evidence": "—",
+        "decision": "não copiar"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/discussions/microsoft/view/93155-exam-az-900-topic-1-question-401-discussion/"
+      ],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "inspeção pública Firecrawl sem login"
+    },
+    {
+      "id": "ET-E26",
+      "category": "Conta e acesso",
+      "title": "Login por email e senha",
+      "status": "formulário observado",
+      "source_ids": [
+        "ET-10"
+      ],
+      "exam_app": {
+        "state": "não homologado",
+        "code_evidence": "store (não é autenticação)",
+        "decision": "futuro"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/login/"
+      ],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "inspeção pública Firecrawl sem login"
+    },
+    {
+      "id": "ET-E27",
+      "category": "Conta e acesso",
+      "title": "Cadastro com apelido, email e senha",
+      "status": "formulário observado",
+      "source_ids": [
+        "ET-11"
+      ],
+      "exam_app": {
+        "state": "não homologado",
+        "code_evidence": "—",
+        "decision": "futuro"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/signup/"
+      ],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "inspeção pública Firecrawl sem login"
+    },
+    {
+      "id": "ET-E28",
+      "category": "Conta e acesso",
+      "title": "Verificação de email no fluxo de cadastro",
+      "status": "fluxo descrito publicamente",
+      "source_ids": [
+        "ET-10",
+        "ET-11"
+      ],
+      "exam_app": {
+        "state": "não homologado",
+        "code_evidence": "—",
+        "decision": "futuro"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/login/",
+        "https://www.examtopics.com/signup/"
+      ],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "inspeção pública Firecrawl sem login"
+    },
+    {
+      "id": "ET-E29",
+      "category": "Conta e acesso",
+      "title": "Recuperação de senha",
+      "status": "formulário observado",
+      "source_ids": [
+        "ET-10"
+      ],
+      "exam_app": {
+        "state": "não homologado",
+        "code_evidence": "—",
+        "decision": "futuro"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/login/"
+      ],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "inspeção pública Firecrawl sem login"
+    },
+    {
+      "id": "ET-E30",
+      "category": "Conta e acesso",
+      "title": "Reenvio de verificação/ativação",
+      "status": "fluxo descrito publicamente",
+      "source_ids": [
+        "ET-10",
+        "ET-11"
+      ],
+      "exam_app": {
+        "state": "não homologado",
+        "code_evidence": "—",
+        "decision": "futuro"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/login/",
+        "https://www.examtopics.com/signup/"
+      ],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "inspeção pública Firecrawl sem login"
+    },
+    {
+      "id": "ET-E31",
+      "category": "Conta e acesso",
+      "title": "Exigência de login para avançar da primeira página de AZ-900",
+      "status": "observado",
+      "source_ids": [
+        "ET-06",
+        "ET-07"
+      ],
+      "exam_app": {
+        "state": "não implementado",
+        "code_evidence": "renderPracticeList",
+        "decision": "não copiar bloqueio"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/exams/microsoft/az-900/view/2/",
+        "https://www.examtopics.com/exams/microsoft/az-900/view/30/"
+      ],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "inspeção pública Firecrawl sem login"
+    },
+    {
+      "id": "ET-E32",
+      "category": "Conta e acesso",
+      "title": "Oferta de salvar histórico de navegação ao cadastrar",
+      "status": "texto da interface observado",
+      "source_ids": [
+        "ET-06"
+      ],
+      "exam_app": {
+        "state": "parcial",
+        "code_evidence": "histAll",
+        "decision": "persistência multi-conta pendente"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/exams/microsoft/az-900/view/2/"
+      ],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "inspeção pública Firecrawl sem login"
+    },
+    {
+      "id": "ET-E33",
+      "category": "Premium e conteúdo",
+      "title": "Contributor Access por exame",
+      "status": "oferta pública",
+      "source_ids": [
+        "ET-03",
+        "ET-12"
+      ],
+      "exam_app": {
+        "state": "fora do escopo",
+        "code_evidence": "—",
+        "decision": "não copiar"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/exams/microsoft/az-900/",
+        "https://www.examtopics.com/unlimited/"
+      ],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "leitura de oferta pública sem contratação"
+    },
+    {
+      "id": "ET-E34",
+      "category": "Premium e conteúdo",
+      "title": "ExamTopics PRO com ativação de até dez exames",
+      "status": "oferta pública",
+      "source_ids": [
+        "ET-12"
+      ],
+      "exam_app": {
+        "state": "fora do escopo",
+        "code_evidence": "—",
+        "decision": "não copiar"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/unlimited/"
+      ],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "leitura de oferta pública sem contratação"
+    },
+    {
+      "id": "ET-E35",
+      "category": "Premium e conteúdo",
+      "title": "Oferta de atualizações durante prazo contratado",
+      "status": "oferta pública",
+      "source_ids": [
+        "ET-12"
+      ],
+      "exam_app": {
+        "state": "fora do escopo",
+        "code_evidence": "—",
+        "decision": "não copiar"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/unlimited/"
+      ],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "leitura de oferta pública sem contratação"
+    },
+    {
+      "id": "ET-E36",
+      "category": "Premium e conteúdo",
+      "title": "PRO promete navegação sem CAPTCHA/MFA",
+      "status": "oferta pública",
+      "source_ids": [
+        "ET-12"
+      ],
+      "exam_app": {
+        "state": "fora do escopo",
+        "code_evidence": "—",
+        "decision": "não copiar"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/unlimited/"
+      ],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "leitura de oferta pública sem contratação"
+    },
+    {
+      "id": "ET-E37",
+      "category": "Premium e conteúdo",
+      "title": "PRO anuncia discussões integradas",
+      "status": "oferta pública",
+      "source_ids": [
+        "ET-12"
+      ],
+      "exam_app": {
+        "state": "fora do escopo",
+        "code_evidence": "—",
+        "decision": "não copiar"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/unlimited/"
+      ],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "leitura de oferta pública sem contratação"
+    },
+    {
+      "id": "ET-E38",
+      "category": "Premium e conteúdo",
+      "title": "Aquisição separada de PDF de questões e respostas",
+      "status": "oferta pública",
+      "source_ids": [
+        "ET-03",
+        "ET-13"
+      ],
+      "exam_app": {
+        "state": "fora do escopo",
+        "code_evidence": "PDF Reader (outro objetivo)",
+        "decision": "não copiar"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/exams/microsoft/az-900/",
+        "https://www.examtopics.com/pro/"
+      ],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "leitura de oferta pública sem contratação"
+    },
+    {
+      "id": "ET-E39",
+      "category": "Premium e conteúdo",
+      "title": "Checkout de produto digital e termos",
+      "status": "formulário/oferta",
+      "source_ids": [
+        "ET-13",
+        "ET-14"
+      ],
+      "exam_app": {
+        "state": "fora do escopo",
+        "code_evidence": "—",
+        "decision": "não copiar"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/pro/",
+        "https://www.examtopics.com/terms/"
+      ],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "leitura de oferta pública sem contratação"
+    },
+    {
+      "id": "ET-E40",
+      "category": "Premium e conteúdo",
+      "title": "Blog e conteúdo sobre certificações",
+      "status": "observado",
+      "source_ids": [
+        "ET-15"
+      ],
+      "exam_app": {
+        "state": "não localizado",
+        "code_evidence": "—",
+        "decision": "opcional"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/news/"
+      ],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "inspeção pública Firecrawl sem login"
+    },
+    {
+      "id": "ET-E41",
+      "category": "Não confirmado no ExamTopics",
+      "title": "Filtro de questões por ano e dificuldade",
+      "status": "não identificado no acesso público",
+      "source_ids": [
+        "ET-04"
+      ],
+      "exam_app": {
+        "state": "no código",
+        "code_evidence": "QF_CATS",
+        "decision": "não atribuir ao concorrente"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/exams/microsoft/az-900/view/"
+      ],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "busca de controles no HTML público; ausência não comprovada"
+    },
+    {
+      "id": "ET-E42",
+      "category": "Não confirmado no ExamTopics",
+      "title": "Filtro de questões por tipo ou situação da resposta",
+      "status": "não identificado no acesso público",
+      "source_ids": [
+        "ET-04"
+      ],
+      "exam_app": {
+        "state": "no código",
+        "code_evidence": "QF_CATS",
+        "decision": "não atribuir ao concorrente"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/exams/microsoft/az-900/view/"
+      ],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "busca de controles no HTML público; ausência não comprovada"
+    },
+    {
+      "id": "ET-E43",
+      "category": "Não confirmado no ExamTopics",
+      "title": "Filtros múltiplos, chips, filtros salvos",
+      "status": "não identificado no acesso público",
+      "source_ids": [
+        "ET-04"
+      ],
+      "exam_app": {
+        "state": "no código",
+        "code_evidence": "qfHTML/sfAll",
+        "decision": "diferencial"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/exams/microsoft/az-900/view/"
+      ],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "busca de controles no HTML público; ausência não comprovada"
+    },
+    {
+      "id": "ET-E44",
+      "category": "Não confirmado no ExamTopics",
+      "title": "Pesquisa pelo texto de questões",
+      "status": "não identificado no acesso público",
+      "source_ids": [
+        "ET-04"
+      ],
+      "exam_app": {
+        "state": "no código",
+        "code_evidence": "qfHTML",
+        "decision": "diferencial"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/exams/microsoft/az-900/view/"
+      ],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "busca de controles no HTML público; ausência não comprovada"
+    },
+    {
+      "id": "ET-E45",
+      "category": "Não confirmado no ExamTopics",
+      "title": "Resposta interativa corrigida automaticamente",
+      "status": "não identificado no acesso público",
+      "source_ids": [
+        "ET-04"
+      ],
+      "exam_app": {
+        "state": "no código",
+        "code_evidence": "qCorrect",
+        "decision": "diferencial"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/exams/microsoft/az-900/view/"
+      ],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "busca de controles no HTML público; ausência não comprovada"
+    },
+    {
+      "id": "ET-E46",
+      "category": "Não confirmado no ExamTopics",
+      "title": "Drag-and-drop e hotspot executáveis no navegador",
+      "status": "não verificado; imagens/cenários não provam interação",
+      "source_ids": [
+        "ET-04"
+      ],
+      "exam_app": {
+        "state": "não localizado",
+        "code_evidence": "sQuestionMarkup (rádio)",
+        "decision": "pesquisar quando houver dados"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/exams/microsoft/az-900/view/"
+      ],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "busca de controles no HTML público; ausência não comprovada"
+    },
+    {
+      "id": "ET-E47",
+      "category": "Não confirmado no ExamTopics",
+      "title": "Simulado cronometrado, configurador e score final",
+      "status": "não identificado no acesso público",
+      "source_ids": [
+        "ET-03",
+        "ET-04"
+      ],
+      "exam_app": {
+        "state": "no código",
+        "code_evidence": "sSimOpts/finishExam",
+        "decision": "diferencial"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/exams/microsoft/az-900/",
+        "https://www.examtopics.com/exams/microsoft/az-900/view/"
+      ],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "busca de controles no HTML público; ausência não comprovada"
+    },
+    {
+      "id": "ET-E48",
+      "category": "Não confirmado no ExamTopics",
+      "title": "Histórico de tentativas e dashboard pessoal",
+      "status": "não verificado em conta autenticada",
+      "source_ids": [
+        "ET-06"
+      ],
+      "exam_app": {
+        "state": "no código",
+        "code_evidence": "histAll/qMetrics",
+        "decision": "não atribuir ao concorrente"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/exams/microsoft/az-900/view/2/"
+      ],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "busca de controles no HTML público; ausência não comprovada"
+    },
+    {
+      "id": "ET-E49",
+      "category": "Não confirmado no ExamTopics",
+      "title": "Favoritos, flashcards e revisão espaçada",
+      "status": "não identificado no acesso público",
+      "source_ids": [
+        "ET-04"
+      ],
+      "exam_app": {
+        "state": "no código (Exam App)",
+        "code_evidence": "qMarks/SRS",
+        "decision": "não atribuir ao concorrente"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [
+        "https://www.examtopics.com/exams/microsoft/az-900/view/"
+      ],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "busca de controles no HTML público; ausência não comprovada"
+    },
+    {
+      "id": "ET-E50",
+      "category": "Comparação dev",
+      "title": "Filtro Disciplina > Assunto e demais critérios",
+      "status": "evidência estática do código dev",
+      "source_ids": [
+        "DEV-01"
+      ],
+      "exam_app": {
+        "state": "no código",
+        "code_evidence": "QF_CATS/qfVals",
+        "decision": "manter"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "inspeção estática do código da dev"
+    },
+    {
+      "id": "ET-E51",
+      "category": "Comparação dev",
+      "title": "Chips, limpar filtros e sincronizar URL",
+      "status": "evidência estática do código dev",
+      "source_ids": [
+        "DEV-01"
+      ],
+      "exam_app": {
+        "state": "no código",
+        "code_evidence": "qfChipsHTML/qfSyncURL",
+        "decision": "manter"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "inspeção estática do código da dev"
+    },
+    {
+      "id": "ET-E52",
+      "category": "Comparação dev",
+      "title": "Cadernos, favoritos e filtros salvos",
+      "status": "evidência estática do código dev",
+      "source_ids": [
+        "DEV-01"
+      ],
+      "exam_app": {
+        "state": "no código",
+        "code_evidence": "nbAll/sfAll/qMarks",
+        "decision": "manter"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "inspeção estática do código da dev"
+    },
+    {
+      "id": "ET-E53",
+      "category": "Comparação dev",
+      "title": "Simulado com timer, correção e resultado",
+      "status": "evidência estática do código dev",
+      "source_ids": [
+        "DEV-01"
+      ],
+      "exam_app": {
+        "state": "no código",
+        "code_evidence": "sExamQuestion/finishExam",
+        "decision": "manter"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "inspeção estática do código da dev"
+    },
+    {
+      "id": "ET-E54",
+      "category": "Comparação dev",
+      "title": "Exhibits acessíveis em todos contextos de questões",
+      "status": "sem E2E específico nesta auditoria",
+      "source_ids": [
+        "DEV-01"
+      ],
+      "exam_app": {
+        "state": "parcial",
+        "code_evidence": "PDF Reader/textoAssociado",
+        "decision": "testar"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "inspeção estática do código da dev"
+    },
+    {
+      "id": "ET-E55",
+      "category": "Comparação dev",
+      "title": "Tipos de resposta múltiplas, hotspot, drag-drop",
+      "status": "sem implementação interativa localizada",
+      "source_ids": [
+        "DEV-01"
+      ],
+      "exam_app": {
+        "state": "não localizado",
+        "code_evidence": "sQuestionMarkup",
+        "decision": "futuro"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "inspeção estática do código da dev"
+    },
+    {
+      "id": "ET-E56",
+      "category": "Comparação dev",
+      "title": "Fornecedor > certificação > exame e metadados de versão",
+      "status": "não localizado como catálogo próprio",
+      "source_ids": [
+        "DEV-01"
+      ],
+      "exam_app": {
+        "state": "não localizado",
+        "code_evidence": "CONCURSOS",
+        "decision": "futuro"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "inspeção estática do código da dev"
+    },
+    {
+      "id": "ET-E57",
+      "category": "Comparação dev",
+      "title": "Conta real e sincronização multi-dispositivo",
+      "status": "não homologados nesta auditoria",
+      "source_ids": [
+        "DEV-01"
+      ],
+      "exam_app": {
+        "state": "parcial",
+        "code_evidence": "store/bridge",
+        "decision": "futuro"
+      },
+      "scope": "observação pública/estática; não equivale a teste autenticado",
+      "observed_at": "2026-11-17",
+      "source_urls": [],
+      "visual_evidence_ids": [],
+      "visual_evidence_status": "sem captura visual vinculada; há evidência pública textual/HTML ou estática conforme status",
+      "method": "inspeção estática do código da dev"
+    }
+  ],
+  "category_counts": {
+    "Catálogo": 7,
+    "Questões": 9,
+    "Comunidade": 9,
+    "Conta e acesso": 7,
+    "Premium e conteúdo": 8,
+    "Não confirmado no ExamTopics": 9,
+    "Comparação dev": 8
+  },
+  "total_observations": 57,
+  "code_sources": [
+    {
+      "path": "prototype/exam-app-0.1.1__index.html",
+      "method": "static_analysis",
+      "symbols": [
+        "qObjs",
+        "QF_CATS",
+        "qfHTML",
+        "qfSyncURL",
+        "renderPracticeList",
+        "sQuestionMarkup",
+        "sSimOpts",
+        "finishExam",
+        "qMetrics",
+        "qMarks"
+      ]
+    },
+    {
+      "path": "tests/advanced-question-filters.e2e.mjs",
+      "executed_in_this_audit": false
+    },
+    {
+      "path": "tests/study-unification.e2e.mjs",
+      "executed_in_this_audit": false
+    },
+    {
+      "path": "tests/question-pedagogy.e2e.mjs",
+      "executed_in_this_audit": false
+    }
+  ],
+  "unverified": [
+    "Conta autenticada e funcionalidades restritas",
+    "Fluxo de compra e benefícios efetivos do PRO",
+    "Capturas novas desktop/tablet/mobile",
+    "Testes E2E e leitor de tela nesta auditoria"
+  ],
+  "report": "prototype/evidencias-examtopics-2026-11-17.md",
+  "related_issue": "https://github.com/ianmaciel7/exams-app/issues/28",
+  "board_container_id": "e17000",
+  "board_order_fix": "Contêiner e17000 precede os elementos de evidência no order, evitando ocultação pelo fundo do contêiner.",
+  "direct_source_links_in_board": true
+}

@@ -1,0 +1,38 @@
+id: review-route-special-files-logic
+valid:
+  - |
+    import { ProductList } from "./_components/product-list";
+
+    export default async function Page() {
+      const user = await getUser();
+      return <ProductList user={user} />;
+    }
+  - |
+    export async function generateMetadata() {
+      const t = await getTranslations("Metadata");
+      return { title: t("title") };
+    }
+    export default function Layout({ children }: { children: React.ReactNode }) {
+      return <main>{children}</main>;
+    }
+invalid:
+  - |
+    export default function Page() {
+      const [count, setCount] = useState(0);
+      return <div>{count}</div>;
+    }
+  - |
+    export default function Page() {
+      const t = useTranslations("Home");
+      return <h1>{t("title")}</h1>;
+    }
+  - |
+    export default function Page() {
+      React.useEffect(() => connect(), []);
+      return <div />;
+    }
+  - |
+    export default function Page() {
+      const router = useRouter();
+      return <div>{router.pathname}</div>;
+    }

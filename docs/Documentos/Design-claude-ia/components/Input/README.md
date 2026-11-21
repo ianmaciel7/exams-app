@@ -1,0 +1,1 @@
+Text inputs are 40px high with an 8px radius, 10px by 14px padding and a 1px hairline border. Focus moves the border to primary and adds the shadow-focus ring. Labels sit above in caption style. Errors use the error color for border and helper text.

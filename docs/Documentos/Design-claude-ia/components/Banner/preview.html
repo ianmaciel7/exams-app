@@ -1,0 +1,30 @@
+<!-- @dsCard group="Feedback" height=620 -->
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;font:400 16px/1.55 var(--font-sans);color:var(--body)}
+.pane{background:var(--canvas);color:var(--body);padding:20px 24px}
+.pane+.pane{border-top:1px solid var(--hairline)}
+.tag{font:500 12px/1.4 var(--font-sans);letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:0 0 12px}
+.row{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}
+.col{display:flex;flex-direction:column;gap:12px}
+*:focus-visible,.focus{outline:2px solid var(--primary);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+button{font-family:var(--font-sans);cursor:pointer}
+button:disabled{cursor:not-allowed}
+.btn{height:40px;padding:0 20px;border-radius:var(--radius-md);border:1px solid transparent;font:500 14px/1 var(--font-sans)}
+.btn.p{background:var(--ink);color:var(--canvas)}
+.btn.s{background:var(--surface-raised);color:var(--ink);border-color:var(--ring)}
+kbd{font:500 11px/16px var(--font-sans);color:var(--muted);border:1px solid var(--hairline);border-radius:6px;padding:0 5px;background:var(--surface-raised)}
+.btn.g{background:transparent;color:var(--ink)}
+.help{font:400 13px/1.4 var(--font-sans);color:var(--muted);margin-top:6px}
+.err{color:var(--error)}
+label.l{display:block;font:500 13px/1.4 var(--font-sans);color:var(--ink);margin-bottom:6px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.bn{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:var(--radius-lg);border:1px solid var(--hairline);font:400 14px/1.5 var(--font-sans);color:var(--ink);margin-bottom:10px}
+.bn.i{background:var(--info-soft)}.bn.s{background:var(--success-soft)}.bn.w{background:var(--warning-soft)}.bn.e{background:var(--error-soft)}
+.bn b{font-weight:600}.bn .ic{font-weight:700;width:20px;text-align:center;flex:none}.bn .a{margin-left:auto;color:inherit;font-weight:600;text-decoration:underline;white-space:nowrap}
+.bn .c{background:none;border:0;color:inherit;font-size:18px;width:36px;height:24px;margin:-2px -8px -2px 0}.bn{border-radius:12px;padding:14px 18px;align-items:center}.bn.i,.bn.s{background:var(--surface-raised)}.bn.s .ic{color:var(--ink)}</style></head><body><div class="pane"><p class="tag">Light</p><div class="bn i" role="status"><span class="ic" aria-hidden="true">i</span><span><b>New questions added.</b> 48 questions for AZ-900 this week.</span><a class="a" href="#">See what's new</a></div>
+<div class="bn s" role="status"><span class="ic" aria-hidden="true">✓</span><span><b>Backup complete.</b> Your notes are saved.</span><button class="c" aria-label="Dismiss">×</button></div>
+<div class="bn w" role="alert"><span class="ic" aria-hidden="true">!</span><span><b>You are offline.</b> Answers will sync when you reconnect.</span></div>
+<div class="bn e" role="alert"><span class="ic" aria-hidden="true">✕</span><span><b>Could not load the exam.</b> Check your connection and try again.</span><a class="a" href="#">Try again</a></div></div><div class="pane" data-theme="dark"><p class="tag">Dark</p><div class="bn i" role="status"><span class="ic" aria-hidden="true">i</span><span><b>New questions added.</b> 48 questions for AZ-900 this week.</span><a class="a" href="#">See what's new</a></div>
+<div class="bn s" role="status"><span class="ic" aria-hidden="true">✓</span><span><b>Backup complete.</b> Your notes are saved.</span><button class="c" aria-label="Dismiss">×</button></div>
+<div class="bn w" role="alert"><span class="ic" aria-hidden="true">!</span><span><b>You are offline.</b> Answers will sync when you reconnect.</span></div>
+<div class="bn e" role="alert"><span class="ic" aria-hidden="true">✕</span><span><b>Could not load the exam.</b> Check your connection and try again.</span><a class="a" href="#">Try again</a></div></div></body></html>

@@ -1,0 +1,24 @@
+{
+  "Metadata": {
+    "title": "shadcn-template",
+    "description": "Template Next.js + shadcn/ui com Biome, React Compiler e i18n"
+  },
+  "App": {
+    "getStartedPrefix": "Para começar, edite o arquivo",
+    "pageFile": "page.tsx",
+    "getStartedSuffix": ".",
+    "instructionsPrefix": "Procurando um ponto de partida ou mais instruções? Acesse",
+    "templates": "Templates",
+    "instructionsMiddle": "ou a central de",
+    "learning": "Aprendizado",
+    "instructionsSuffix": ".",
+    "deployNow": "Deploy Now",
+    "documentation": "Documentation"
+  },
+  "Theme": {
+    "toggle": "Alternar tema",
+    "light": "Claro",
+    "dark": "Escuro",
+    "system": "Sistema"
+  }
+}

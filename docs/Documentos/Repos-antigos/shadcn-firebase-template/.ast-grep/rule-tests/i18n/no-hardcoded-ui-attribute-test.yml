@@ -1,0 +1,10 @@
+id: no-hardcoded-ui-attribute
+valid:
+  - const a = <button aria-label={t("close")} />;
+  - const a = <img alt="" src={src} />;
+  - const a = <input placeholder={t("name")} />;
+  - const a = <div data-testid="close" />;
+invalid:
+  - const a = <button aria-label="Close" />;
+  - const a = <input placeholder="Your name" />;
+  - const a = <img alt="Logo" src={src} />;

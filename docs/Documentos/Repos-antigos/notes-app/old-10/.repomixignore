@@ -1,0 +1,11 @@
+# Large directories & caches
+.worktrees/
+graphify-out/
+.ladle/
+.firebase/
+.firebase-data/
+.next/
+build/
+node_modules/
+*.tsbuildinfo
+repomix-output.xml

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:best-practices"],
+  "timezone": "America/Sao_Paulo",
+  "schedule": ["after 10pm on friday", "before 5am on monday"],
+  "prConcurrentLimit": 5,
+  "prHourlyLimit": 2,
+  "rangeStrategy": "bump",
+  "packageRules": [
+    {
+      "description": "Group non-major production dependency updates",
+      "matchManagers": ["pnpm"],
+      "matchDepTypes": ["dependencies"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "production dependencies (non-major)"
+    },
+    {
+      "description": "Group non-major development dependency updates",
+      "matchManagers": ["pnpm"],
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "development dependencies (non-major)"
+    }
+  ],
+  "ignorePaths": [".next/**", "build/**", "graphify-out/**"]
+}

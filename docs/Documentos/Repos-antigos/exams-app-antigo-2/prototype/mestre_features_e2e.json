@@ -1,0 +1,91 @@
+{
+ "executado_em": "2026-11-16T22:55:47.764Z",
+ "resultados": [
+  {
+   "largura": 320,
+   "checks": {
+    "lista de features": "pass",
+    "filtro de estado": "pass",
+    "busca": "pass",
+    "detalhe com evidências": "pass",
+    "diagrama Mermaid renderizado": "pass",
+    "ADR sem vínculo mostrado como vazio": "pass",
+    "retorno ao Board Mestre": "pass",
+    "grupo volta ao board": "pass",
+    "teclado: foco em link de feature": "pass",
+    "sem rolagem horizontal": "pass",
+    "sem erros de página": "pass"
+   },
+   "erros": []
+  },
+  {
+   "largura": 390,
+   "checks": {
+    "lista de features": "pass",
+    "filtro de estado": "pass",
+    "busca": "pass",
+    "detalhe com evidências": "pass",
+    "diagrama Mermaid renderizado": "pass",
+    "ADR sem vínculo mostrado como vazio": "pass",
+    "retorno ao Board Mestre": "pass",
+    "grupo volta ao board": "pass",
+    "teclado: foco em link de feature": "pass",
+    "sem rolagem horizontal": "pass",
+    "sem erros de página": "pass"
+   },
+   "erros": []
+  },
+  {
+   "largura": 768,
+   "checks": {
+    "lista de features": "pass",
+    "filtro de estado": "pass",
+    "busca": "pass",
+    "detalhe com evidências": "pass",
+    "diagrama Mermaid renderizado": "pass",
+    "ADR sem vínculo mostrado como vazio": "pass",
+    "retorno ao Board Mestre": "pass",
+    "grupo volta ao board": "pass",
+    "teclado: foco em link de feature": "pass",
+    "sem rolagem horizontal": "pass",
+    "sem erros de página": "pass"
+   },
+   "erros": []
+  },
+  {
+   "largura": 1366,
+   "checks": {
+    "lista de features": "pass",
+    "filtro de estado": "pass",
+    "busca": "pass",
+    "detalhe com evidências": "pass",
+    "diagrama Mermaid renderizado": "pass",
+    "ADR sem vínculo mostrado como vazio": "pass",
+    "retorno ao Board Mestre": "pass",
+    "grupo volta ao board": "pass",
+    "teclado: foco em link de feature": "pass",
+    "sem rolagem horizontal": "pass",
+    "sem erros de página": "pass"
+   },
+   "erros": []
+  },
+  {
+   "largura": 1920,
+   "checks": {
+    "lista de features": "pass",
+    "filtro de estado": "pass",
+    "busca": "pass",
+    "detalhe com evidências": "pass",
+    "diagrama Mermaid renderizado": "pass",
+    "ADR sem vínculo mostrado como vazio": "pass",
+    "retorno ao Board Mestre": "pass",
+    "grupo volta ao board": "pass",
+    "teclado: foco em link de feature": "pass",
+    "sem rolagem horizontal": "pass",
+    "sem erros de página": "pass"
+   },
+   "erros": []
+  }
+ ],
+ "falhas": []
+}

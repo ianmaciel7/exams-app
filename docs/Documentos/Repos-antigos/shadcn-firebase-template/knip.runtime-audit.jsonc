@@ -1,0 +1,7 @@
+{
+  "entry": ["src/app/{page,layout,loading,error,not-found,route}.{ts,tsx}"],
+  "project": ["src/**/*.{ts,tsx}"],
+  "ignoreIssues": {
+    "src/components/firebase/**": ["unresolved"]
+  }
+}

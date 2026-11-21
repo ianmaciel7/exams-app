@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Teste Comparativo: claude.use(db) vs window.storage</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #f8fafc; }
+    pre { background: #0f172a; color: #f8fafc; padding: 12px; border-radius: 6px; }
+    .badge { padding: 4px 8px; border-radius: 4px; font-weight: bold; }
+    .ok { background: #dcfce7; color: #166534; }
+    .fail { background: #fee2e2; color: #991b1b; }
+  </style>
+</head>
+<body>
+  <h1>Diagnóstico Comparativo de Armazenamento no Artifact Real</h1>
+  <div id="results">Verificando...</div>
+  <pre id="log"></pre>
+
+  <script>
+    const logEl = document.getElementById('log');
+    const resEl = document.getElementById('results');
+    function log(msg) {
+      logEl.textContent += msg + '\n';
+      console.log(msg);
+    }
+
+    async function runDiagnostics() {
+      log('[Test] Iniciando diagnóstico de APIs de armazenamento...');
+
+      // 1. Teste de window.storage
+      log('[Test 1] Verificando existência de window.storage...');
+      const hasWindowStorage = typeof window.storage !== 'undefined';
+      log('window.storage existe? ' + hasWindowStorage);
+
+      let windowStorageValue = null;
+      let windowStorageError = null;
+      if (hasWindowStorage) {
+        try {
+          windowStorageValue = await window.storage.get('bridge-poc:teste-001');
+          log('window.storage.get("bridge-poc:teste-001"): ' + JSON.stringify(windowStorageValue));
+        } catch (e) {
+          windowStorageError = e.message || String(e);
+          log('window.storage.get falhou: ' + windowStorageError);
+        }
+      } else {
+        log('window.storage não está definido no escopo global (undefined).');
+      }
+
+      // 2. Teste de claude.use("db")
+      log('\n[Test 2] Verificando claude.use("db")...');
+      const hasClaude = typeof window.claude !== 'undefined' && typeof window.claude.use === 'function';
+      log('window.claude.use existe? ' + hasClaude);
+
+      let dbDocData = null;
+      let dbError = null;
+      if (hasClaude) {
+        try {
+          const db = await window.claude.use("db");
+          log('claude.use("db") resolveu: ' + (db ? 'OK' : 'NULL'));
+          if (db) {
+            const docRef = db.doc("bridge-poc/teste-001");
+            const snap = await docRef.get();
+            log('Snapshot exists? ' + snap.exists);
+            if (snap.exists) {
+              dbDocData = snap.data();
+              log('Dados recuperados do claude.use("db"): ' + JSON.stringify(dbDocData));
+            }
+          }
+        } catch (e) {
+          dbError = e.message || String(e);
+          log('claude.use("db") falhou: ' + dbError);
+        }
+      }
+
+      // Renderizar resumo na tela
+      resEl.innerHTML = `
+        <p><strong>window.storage:</strong> <span class="badge ${hasWindowStorage ? 'ok' : 'fail'}">${hasWindowStorage ? 'Presente' : 'Ausente (undefined)'}</span></p>
+        <p><strong>claude.use("db"):</strong> <span class="badge ${dbDocData ? 'ok' : 'fail'}">${dbDocData ? 'Funcional e Conectado' : 'Não conectado'}</span></p>
+        <p><strong>Dados lidos no Artifact:</strong> <code>${JSON.stringify(dbDocData || windowStorageValue || 'nenhum')}</code></p>
+      `;
+    }
+
+    window.addEventListener('DOMContentLoaded', runDiagnostics);
+  </script>
+</body>
+</html>

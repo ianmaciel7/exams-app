@@ -1,0 +1,43 @@
+{
+  "files.exclude": {
+    "**/.codex": true,
+    "**/.claude": true,
+    "**/.cursor": true,
+    "**/.agents/mcp_config.json": true,
+    "**/.windsurf": true,
+    "**/.opencode": true,
+    "**/.junie": true,
+    "**/.mcp.json": true,
+    "**/opencode.json": true,
+    "**/.agents/generated": true,
+    "**/.grok": true,
+    "**/.amp": true,
+    "**/.factory": true,
+    "**/.kilo": true,
+    "**/kilo.jsonc": true,
+    "**/.devin": true,
+    "**/.zed": true
+  },
+  "search.exclude": {
+    "**/.codex": true,
+    "**/.claude": true,
+    "**/.cursor": true,
+    "**/.agents/mcp_config.json": true,
+    "**/.windsurf": true,
+    "**/.opencode": true,
+    "**/.junie": true,
+    "**/.mcp.json": true,
+    "**/opencode.json": true,
+    "**/.agents/generated": true,
+    "**/.grok": true,
+    "**/.amp": true,
+    "**/.factory": true,
+    "**/.kilo": true,
+    "**/kilo.jsonc": true,
+    "**/.devin": true,
+    "**/.zed": true
+  },
+  "chat.tools.autoApprove": true,
+  "chat.commandCenter.enabled": false,
+  "security.workspace.trust.untrustedFiles": "open"
+}

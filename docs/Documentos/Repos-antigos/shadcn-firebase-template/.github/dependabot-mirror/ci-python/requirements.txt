@@ -1,0 +1,5 @@
+# Python CI tools. Dependabot's pip ecosystem bumps these pins; the security
+# job in workflows/ci.yml installs them with `pip install -r`.
+semgrep==1.182.0
+zizmor==1.31.1
+pre-commit==4.7.0

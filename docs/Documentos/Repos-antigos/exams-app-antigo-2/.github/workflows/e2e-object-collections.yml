@@ -1,0 +1,53 @@
+name: E2E Object Collection Membership
+on:
+  pull_request:
+    branches: [dev]
+    paths:
+      - 'prototype/exam-app-0.1.1__index.html'
+      - 'tests/type-workspace.test.mjs'
+      - 'tests/object-collections.e2e.mjs'
+      - '.github/workflows/e2e-object-collections.yml'
+  push:
+    branches: [dev]
+    paths:
+      - 'prototype/exam-app-0.1.1__index.html'
+      - 'tests/type-workspace.test.mjs'
+      - 'tests/object-collections.e2e.mjs'
+      - '.github/workflows/e2e-object-collections.yml'
+permissions:
+  contents: read
+jobs:
+  collections:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate collection and type workspace behavior
+        run: node --test tests/type-workspace.test.mjs
+      - name: Install Chromium
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Serve prototype
+        run: |
+          python3 -m http.server 8765 --directory prototype >/tmp/object-collections.log 2>&1 &
+          for i in $(seq 1 25); do
+            if curl -fsS http://127.0.0.1:8765/exam-app-0.1.1__index.html -o /dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/object-collections.log
+          exit 1
+      - name: Validate object collection CRUD and type filter in browser
+        run: node tests/object-collections.e2e.mjs
+      - name: Upload screenshots and test manifest
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: issues56-57-object-collections-evidence
+          path: |
+            prototype/issues56_57_*.png
+            prototype/issues56_57_object_collections_e2e.json
+          if-no-files-found: warn

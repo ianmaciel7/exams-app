@@ -1,0 +1,25 @@
+{
+  "$schema": "https://repomix.com/schemas/latest/schema.json",
+  "input": {
+    "maxFileSize": 50000000
+  },
+  "output": {
+    "filePath": "repomix-output.xml",
+    "style": "xml",
+    "filePathStyle": "target-relative",
+    "fileSummary": true,
+    "directoryStructure": true,
+    "files": true,
+    "removeComments": false,
+    "removeEmptyLines": false,
+    "showLineNumbers": false
+  },
+  "ignore": {
+    "useGitignore": true,
+    "useDefaultPatterns": true,
+    "customPatterns": ["repomix-output.*", ".env*", "**/*.pem", "**/*.key"]
+  },
+  "security": {
+    "enableSecurityCheck": true
+  }
+}

@@ -1,0 +1,32 @@
+id: no-dynamic-tailwind-class
+language: tsx
+files:
+  - src/app/**/*.tsx
+  - src/components/**/*.tsx
+  - src/hooks/**/*.tsx
+ignores:
+  - "**/*.test.tsx"
+  - "**/*.stories.tsx"
+  - src/components/ui/*.tsx
+  - src/components/ai-elements/**
+severity: error
+message: Tailwind cannot see class names assembled from a template literal, so the CSS is never generated.
+note: |
+  Tailwind CSS scans source files for complete class names as plain text
+  (https://tailwindcss.com/docs/detecting-classes-in-source-files). A class such
+  as `bg-${color}-500` is never found. Map the variable to a full class name
+  instead, for example `{ red: "bg-red-500" }[color]`.
+rule:
+  kind: template_string
+  regex: '[a-z0-9]-\$\{'
+  inside:
+    stopBy: end
+    any:
+      - kind: jsx_attribute
+        has:
+          kind: property_identifier
+          regex: ^className$
+      - kind: call_expression
+        has:
+          field: function
+          regex: ^(cn|clsx|cva)$

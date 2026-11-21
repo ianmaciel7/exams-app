@@ -1,0 +1,71 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"${CLAUDE_PROJECT_DIR}/.agents/hooks/command-safety.ps1\"",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"${CLAUDE_PROJECT_DIR}/.agents/hooks/enforce-rtk.ps1\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"${CLAUDE_PROJECT_DIR}/.agents/hooks/post-edit-check.ps1\"",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "frontend-design@claude-plugins-official": true,
+    "claude-code-setup@claude-plugins-official": true
+  },
+  "permissions": {
+    "allow": [
+      "Bash",
+      "Bash(*)",
+      "FileRead",
+      "FileRead(*)",
+      "FileEdit",
+      "FileEdit(*)",
+      "FileWrite",
+      "FileWrite(*)",
+      "GlobTool",
+      "GlobTool(*)",
+      "GrepTool",
+      "GrepTool(*)",
+      "LS",
+      "LS(*)",
+      "WebFetch",
+      "WebFetch(*)",
+      "WebSearch",
+      "WebSearch(*)"
+    ],
+    "deny": []
+  },
+  "autoApprove": [
+    "Bash",
+    "FileRead",
+    "FileEdit",
+    "FileWrite",
+    "GlobTool",
+    "GrepTool",
+    "LS",
+    "WebFetch",
+    "WebSearch"
+  ]
+}

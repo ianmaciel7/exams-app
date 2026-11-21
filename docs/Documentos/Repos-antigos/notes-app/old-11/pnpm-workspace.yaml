@@ -1,0 +1,14 @@
+allowBuilds:
+  '@firebase/util': true
+  '@parcel/watcher': true
+  '@swc/core': true
+  esbuild: true
+  msw: false
+  protobufjs: true
+  sharp: false
+  unrs-resolver: false
+
+overrides:
+  dependency-cruiser>picomatch: 4.0.7
+  typed-rest-client>qs: 6.16.0
+  tmp: 0.2.7

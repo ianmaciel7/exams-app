@@ -1,0 +1,253 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.5.15/schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "plugins": [
+    "./.biome/rules/dom/no-document-write.grit",
+    "./.biome/rules/nextjs/prefer-layout-props.grit",
+    "./.biome/rules/nextjs/prefer-page-props.grit",
+    "./.biome/rules/nextjs/prefer-route-context.grit"
+  ],
+  "files": {
+    "ignoreUnknown": true,
+    "includes": [
+      "**",
+      "!node_modules",
+      "!.next",
+      "!dist",
+      "!build",
+      "!.agents",
+      "!.claude",
+      "!.serena",
+      "!.semgrep",
+      "!src/components/firebase",
+      "!public/*.svg"
+    ]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2
+  },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
+    }
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "complexity": {
+        "noExcessiveCognitiveComplexity": {
+          "level": "error",
+          "options": {
+            "maxAllowedComplexity": 15
+          }
+        }
+      },
+      "suspicious": {
+        "noReactForwardRef": "error"
+      },
+      "style": {
+        "noJsxLiterals": {
+          "level": "error",
+          "options": {
+            "ignoreProps": true
+          }
+        }
+      },
+      "preset": "recommended"
+    },
+    "domains": {
+      "next": "recommended",
+      "react": "recommended"
+    }
+  },
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  },
+  "overrides": [
+    {
+      "includes": [
+        "src/components/ai-elements/**",
+        "src/components/ui/**",
+        "!src/components/ui/extensions/**"
+      ],
+      "formatter": {
+        "enabled": false
+      },
+      "assist": {
+        "enabled": false
+      },
+      "linter": {
+        "rules": {
+          "a11y": {
+            "useSemanticElements": "off",
+            "useFocusableInteractive": "off",
+            "useAriaPropsForRole": "off",
+            "useAnchorContent": "off",
+            "noLabelWithoutControl": "off",
+            "noNoninteractiveTabindex": "off",
+            "useKeyWithClickEvents": "off",
+            "noRedundantRoles": "off"
+          },
+          "suspicious": {
+            "noReactForwardRef": "off",
+            "noArrayIndexKey": "off",
+            "noDoubleEquals": "off",
+            "noDocumentCookie": "off"
+          },
+          "security": {
+            "noDangerouslySetInnerHtml": "off"
+          },
+          "correctness": {
+            "useExhaustiveDependencies": "off",
+            "noUnusedImports": "off"
+          },
+          "complexity": {
+            "noExcessiveCognitiveComplexity": "off"
+          },
+          "performance": {
+            "noImgElement": "off"
+          },
+          "style": {
+            "noDefaultExport": "error",
+            "noJsxLiterals": "off",
+            "useExportType": "error",
+            "useExportsLast": "error"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/app/typeset.css"],
+      "formatter": {
+        "enabled": false
+      }
+    },
+    {
+      "includes": ["src/**/*.stories.tsx"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noDefaultExport": "off",
+            "useExportsLast": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "src/app/**",
+        "src/components/**",
+        "src/hooks/**",
+        "!src/components/ui/*.tsx",
+        "!src/components/ai-elements/**",
+        "!src/components/firebase/**"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "paths": {
+                  "next/router": "Use next/navigation in App Router code.",
+                  "next/head": "Use the App Router Metadata API.",
+                  "next/document": "Use the App Router root layout.",
+                  "next/app": "Use App Router layouts and providers."
+                }
+              }
+            }
+          },
+          "correctness": {
+            "noNestedComponentDefinitions": "error",
+            "noReactPropAssignments": "error"
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "src/app/**/page.tsx",
+        "src/app/**/layout.tsx",
+        "src/app/**/template.tsx"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "paths": {
+                  "next/router": "Use next/navigation in App Router code.",
+                  "next/head": "Use the App Router Metadata API.",
+                  "next/document": "Use the App Router root layout.",
+                  "next/app": "Use App Router layouts and providers.",
+                  "firebase": "Route entrypoints must access Firebase through a data layer.",
+                  "firebase-admin": "Route entrypoints must access Firebase through a data layer.",
+                  "@/lib/firebase/client": "Use a server data module or a dedicated client component."
+                },
+                "patterns": [
+                  {
+                    "group": ["firebase/*", "firebase-admin/*"],
+                    "message": "Route entrypoints must access Firebase through a data layer."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "src/**",
+        "!src/components/ai-elements/**",
+        "!src/components/firebase/**",
+        "!src/components/ui/*.tsx",
+        "!src/**/*.test.ts",
+        "!src/**/*.test.tsx",
+        "!src/**/*.spec.ts",
+        "!src/**/*.spec.tsx",
+        "!src/**/*.stories.ts",
+        "!src/**/*.stories.tsx"
+      ],
+      "linter": {
+        "rules": {
+          "complexity": {
+            "noExcessiveCognitiveComplexity": {
+              "level": "error",
+              "options": {
+                "maxAllowedComplexity": 8
+              }
+            },
+            "noExcessiveLinesPerFunction": {
+              "level": "error",
+              "options": {
+                "maxLines": 40,
+                "skipBlankLines": true,
+                "skipIifes": false
+              }
+            }
+          },
+          "nursery": {
+            "noExcessiveNestedCallbacks": {
+              "level": "error",
+              "options": {
+                "max": 2
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

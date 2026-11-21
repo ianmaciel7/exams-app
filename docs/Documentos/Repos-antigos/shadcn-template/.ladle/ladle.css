@@ -1,0 +1,11 @@
+@import "../src/app/globals.css";
+
+/* Tailwind detects sources relative to the Vite config (.ladle/), so point it
+   at the application source explicitly. */
+@source "../src";
+
+/* next/font supplies Geist in the application; Ladle falls back to system fonts. */
+:root {
+  --font-geist: ui-sans-serif, system-ui, sans-serif;
+  --font-geist-mono: ui-monospace, monospace;
+}

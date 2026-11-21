@@ -1,0 +1,32 @@
+<!-- @dsCard group="Forms" height=340 -->
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;font:400 16px/1.55 var(--font-sans);color:var(--body)}
+.pane{background:var(--canvas);color:var(--body);padding:20px 24px}
+.pane+.pane{border-top:1px solid var(--hairline)}
+.tag{font:500 12px/1.4 var(--font-sans);letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:0 0 12px}
+.row{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}
+.col{display:flex;flex-direction:column;gap:12px}
+*:focus-visible,.focus{outline:2px solid var(--primary);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+button{font-family:var(--font-sans);cursor:pointer}
+button:disabled{cursor:not-allowed}
+.btn{height:40px;padding:0 20px;border-radius:var(--radius-md);border:1px solid transparent;font:500 14px/1 var(--font-sans)}
+.btn.p{background:var(--ink);color:var(--canvas)}
+.btn.s{background:var(--surface-raised);color:var(--ink);border-color:var(--ring)}
+kbd{font:500 11px/16px var(--font-sans);color:var(--muted);border:1px solid var(--hairline);border-radius:6px;padding:0 5px;background:var(--surface-raised)}
+.btn.g{background:transparent;color:var(--ink)}
+.help{font:400 13px/1.4 var(--font-sans);color:var(--muted);margin-top:6px}
+.err{color:var(--error)}
+label.l{display:block;font:500 13px/1.4 var(--font-sans);color:var(--ink);margin-bottom:6px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.cb{display:flex;align-items:center;gap:10px;font:400 16px/1.4 var(--font-sans);color:var(--ink);min-height:28px}
+input[type=checkbox]{appearance:none;-webkit-appearance:none;margin:0;width:20px;height:20px;border:1.5px solid var(--border-strong);border-radius:4px;background:var(--surface-raised) center/16px no-repeat;flex:none}
+input[type=checkbox]:checked{background-color:var(--primary);border-color:var(--primary);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23fff' stroke-width='2'%3E%3Cpath d='M3.5 8.5l3 3 6-7'/%3E%3C/svg%3E")}
+input[type=checkbox].ind{background-color:var(--primary);border-color:var(--primary);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23fff' stroke-width='2'%3E%3Cpath d='M4 8h8'/%3E%3C/svg%3E")}
+input[type=checkbox].h{box-shadow:0 0 0 6px var(--surface-soft)}
+input[type=checkbox]:disabled{background-color:var(--primary-disabled);border-color:var(--hairline);cursor:not-allowed}
+input[type=checkbox].e{border-color:var(--error)}
+.cb.d{color:var(--muted)}</style></head><body><div class="pane"><p class="tag">Light</p><div class="row" style="gap:28px"><div class="col"><label class="cb"><input type="checkbox"> Unchecked</label><label class="cb"><input type="checkbox" checked> Checked</label><label class="cb"><input type="checkbox" class="ind" aria-checked="mixed"> Indeterminate</label></div>
+<div class="col"><label class="cb"><input type="checkbox" class="h"> Hover</label><label class="cb"><input type="checkbox" class="focus" checked> Focus</label><label class="cb d"><input type="checkbox" disabled> Disabled</label></div>
+<div><label class="cb"><input type="checkbox" class="e" aria-invalid="true"> I accept the terms</label><div class="help err">You must accept to continue.</div></div></div></div><div class="pane" data-theme="dark"><p class="tag">Dark</p><div class="row" style="gap:28px"><div class="col"><label class="cb"><input type="checkbox"> Unchecked</label><label class="cb"><input type="checkbox" checked> Checked</label><label class="cb"><input type="checkbox" class="ind" aria-checked="mixed"> Indeterminate</label></div>
+<div class="col"><label class="cb"><input type="checkbox" class="h"> Hover</label><label class="cb"><input type="checkbox" class="focus" checked> Focus</label><label class="cb d"><input type="checkbox" disabled> Disabled</label></div>
+<div><label class="cb"><input type="checkbox" class="e" aria-invalid="true"> I accept the terms</label><div class="help err">You must accept to continue.</div></div></div></div></body></html>

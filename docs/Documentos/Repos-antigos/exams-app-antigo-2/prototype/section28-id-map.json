@@ -1,0 +1,445 @@
+{
+  "source": "dev 2e4bb56",
+  "elements": [
+    {
+      "id": "e701",
+      "group": "e7101",
+      "old_xy": [
+        3330,
+        11060
+      ],
+      "new_xy": [
+        3330,
+        11070
+      ],
+      "sha256_before": "69db8ba4f79479e2",
+      "sha256_after": "69db8ba4f79479e2",
+      "content_changed": false
+    },
+    {
+      "id": "e702",
+      "group": "e7101",
+      "old_xy": [
+        3330,
+        11180
+      ],
+      "new_xy": [
+        3330,
+        11190
+      ],
+      "sha256_before": "b0a893ce5cd45800",
+      "sha256_after": "b0a893ce5cd45800",
+      "content_changed": false
+    },
+    {
+      "id": "e705",
+      "group": "e7102",
+      "old_xy": [
+        3330,
+        11900
+      ],
+      "new_xy": [
+        3330,
+        11980
+      ],
+      "sha256_before": "d5398b480866c16e",
+      "sha256_after": "d5398b480866c16e",
+      "content_changed": false
+    },
+    {
+      "id": "e707",
+      "group": "e7102",
+      "old_xy": [
+        4070,
+        11900
+      ],
+      "new_xy": [
+        4070,
+        11980
+      ],
+      "sha256_before": "ba40d2a2a757becb",
+      "sha256_after": "ba40d2a2a757becb",
+      "content_changed": false
+    },
+    {
+      "id": "e706",
+      "group": "e7102",
+      "old_xy": [
+        3330,
+        12330
+      ],
+      "new_xy": [
+        3330,
+        12410
+      ],
+      "sha256_before": "78cba273b3efdaa8",
+      "sha256_after": "78cba273b3efdaa8",
+      "content_changed": false
+    },
+    {
+      "id": "e708",
+      "group": "e7102",
+      "old_xy": [
+        4070,
+        12330
+      ],
+      "new_xy": [
+        4070,
+        12410
+      ],
+      "sha256_before": "5a634e2c26bb6488",
+      "sha256_after": "5a634e2c26bb6488",
+      "content_changed": false
+    },
+    {
+      "id": "e709",
+      "group": "e7102",
+      "old_xy": [
+        3330,
+        12420
+      ],
+      "new_xy": [
+        3330,
+        12500
+      ],
+      "sha256_before": "a7c5e32b039bdb22",
+      "sha256_after": "a7c5e32b039bdb22",
+      "content_changed": false
+    },
+    {
+      "id": "e711",
+      "group": "e7102",
+      "old_xy": [
+        4070,
+        12420
+      ],
+      "new_xy": [
+        4070,
+        12500
+      ],
+      "sha256_before": "38a807120beabbc4",
+      "sha256_after": "38a807120beabbc4",
+      "content_changed": false
+    },
+    {
+      "id": "e710",
+      "group": "e7102",
+      "old_xy": [
+        3330,
+        12850
+      ],
+      "new_xy": [
+        3330,
+        12930
+      ],
+      "sha256_before": "d3ef9770c701c142",
+      "sha256_after": "d3ef9770c701c142",
+      "content_changed": false
+    },
+    {
+      "id": "e712",
+      "group": "e7102",
+      "old_xy": [
+        4070,
+        12850
+      ],
+      "new_xy": [
+        4070,
+        12930
+      ],
+      "sha256_before": "2a9e54735c7ad81d",
+      "sha256_after": "2a9e54735c7ad81d",
+      "content_changed": false
+    },
+    {
+      "id": "e713",
+      "group": "e7102",
+      "old_xy": [
+        3330,
+        12940
+      ],
+      "new_xy": [
+        3330,
+        13020
+      ],
+      "sha256_before": "d63a766974af1c32",
+      "sha256_after": "d63a766974af1c32",
+      "content_changed": false
+    },
+    {
+      "id": "e715",
+      "group": "e7102",
+      "old_xy": [
+        4070,
+        12940
+      ],
+      "new_xy": [
+        4070,
+        13020
+      ],
+      "sha256_before": "04afd10c28fe889e",
+      "sha256_after": "04afd10c28fe889e",
+      "content_changed": false
+    },
+    {
+      "id": "e714",
+      "group": "e7102",
+      "old_xy": [
+        3330,
+        13370
+      ],
+      "new_xy": [
+        3330,
+        13450
+      ],
+      "sha256_before": "63dc19ce71c69f3a",
+      "sha256_after": "63dc19ce71c69f3a",
+      "content_changed": false
+    },
+    {
+      "id": "e716",
+      "group": "e7102",
+      "old_xy": [
+        4070,
+        13370
+      ],
+      "new_xy": [
+        4070,
+        13450
+      ],
+      "sha256_before": "805294f585a87491",
+      "sha256_after": "805294f585a87491",
+      "content_changed": false
+    },
+    {
+      "id": "e717",
+      "group": "e7103",
+      "old_xy": [
+        3330,
+        13460
+      ],
+      "new_xy": [
+        3330,
+        13620
+      ],
+      "sha256_before": "3d35a5f31442df79",
+      "sha256_after": "3d35a5f31442df79",
+      "content_changed": false
+    },
+    {
+      "id": "e719",
+      "group": "e7103",
+      "old_xy": [
+        4070,
+        13460
+      ],
+      "new_xy": [
+        4070,
+        13620
+      ],
+      "sha256_before": "288c13c718844263",
+      "sha256_after": "288c13c718844263",
+      "content_changed": false
+    },
+    {
+      "id": "e718",
+      "group": "e7103",
+      "old_xy": [
+        3330,
+        13890
+      ],
+      "new_xy": [
+        3330,
+        14050
+      ],
+      "sha256_before": "955398b6b8abbcb1",
+      "sha256_after": "955398b6b8abbcb1",
+      "content_changed": false
+    },
+    {
+      "id": "e720",
+      "group": "e7103",
+      "old_xy": [
+        4070,
+        13890
+      ],
+      "new_xy": [
+        4070,
+        14050
+      ],
+      "sha256_before": "b8a791c78c486634",
+      "sha256_after": "b8a791c78c486634",
+      "content_changed": false
+    },
+    {
+      "id": "e721",
+      "group": "e7103",
+      "old_xy": [
+        3330,
+        13980
+      ],
+      "new_xy": [
+        3330,
+        14140
+      ],
+      "sha256_before": "910b0c7a92077720",
+      "sha256_after": "910b0c7a92077720",
+      "content_changed": false
+    },
+    {
+      "id": "e723",
+      "group": "e7103",
+      "old_xy": [
+        4070,
+        13980
+      ],
+      "new_xy": [
+        4070,
+        14140
+      ],
+      "sha256_before": "bcb6d1e2c6e9f876",
+      "sha256_after": "bcb6d1e2c6e9f876",
+      "content_changed": false
+    },
+    {
+      "id": "e722",
+      "group": "e7103",
+      "old_xy": [
+        3330,
+        14410
+      ],
+      "new_xy": [
+        3330,
+        14570
+      ],
+      "sha256_before": "3214e797804c4055",
+      "sha256_after": "3214e797804c4055",
+      "content_changed": false
+    },
+    {
+      "id": "e724",
+      "group": "e7103",
+      "old_xy": [
+        4070,
+        14410
+      ],
+      "new_xy": [
+        4070,
+        14570
+      ],
+      "sha256_before": "0eccb552728a6d8b",
+      "sha256_after": "0eccb552728a6d8b",
+      "content_changed": false
+    },
+    {
+      "id": "e725",
+      "group": "e7103",
+      "old_xy": [
+        3330,
+        14500
+      ],
+      "new_xy": [
+        3330,
+        14660
+      ],
+      "sha256_before": "652642f9b6b6534e",
+      "sha256_after": "652642f9b6b6534e",
+      "content_changed": false
+    },
+    {
+      "id": "e726",
+      "group": "e7103",
+      "old_xy": [
+        3330,
+        14930
+      ],
+      "new_xy": [
+        3330,
+        15090
+      ],
+      "sha256_before": "2c2e8ef53c18083a",
+      "sha256_after": "2c2e8ef53c18083a",
+      "content_changed": false
+    },
+    {
+      "id": "e728",
+      "group": "e7104",
+      "old_xy": [
+        4070,
+        14500
+      ],
+      "new_xy": [
+        4070,
+        15260
+      ],
+      "sha256_before": "8119597a722cc150",
+      "sha256_after": "8119597a722cc150",
+      "content_changed": false
+    },
+    {
+      "id": "e729",
+      "group": "e7104",
+      "old_xy": [
+        4070,
+        15020
+      ],
+      "new_xy": [
+        4070,
+        15780
+      ],
+      "sha256_before": "a25347dde207688d",
+      "sha256_after": "a25347dde207688d",
+      "content_changed": false
+    },
+    {
+      "id": "e730",
+      "group": "e7104",
+      "old_xy": [
+        4070,
+        15580
+      ],
+      "new_xy": [
+        4070,
+        16340
+      ],
+      "sha256_before": "ee54048c395776d4",
+      "sha256_after": "ee54048c395776d4",
+      "content_changed": false
+    },
+    {
+      "id": "e731",
+      "group": "e7104",
+      "old_xy": [
+        3330,
+        15020
+      ],
+      "new_xy": [
+        3330,
+        15780
+      ],
+      "sha256_before": "9095e06002a4c71b",
+      "sha256_after": "9095e06002a4c71b",
+      "content_changed": false
+    },
+    {
+      "id": "e732",
+      "group": "e7104",
+      "old_xy": [
+        3330,
+        15580
+      ],
+      "new_xy": [
+        3330,
+        16340
+      ],
+      "sha256_before": "49b7447f84e7d5d4",
+      "sha256_after": "49b7447f84e7d5d4",
+      "content_changed": false
+    }
+  ],
+  "text_migrations": [
+    "e1372",
+    "e700"
+  ],
+  "note": "sha256 covers element content without x/y, so it shows content changes only; coordinates are in old_xy/new_xy"
+}

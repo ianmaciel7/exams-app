@@ -1,0 +1,28 @@
+{
+  "$schema": "https://raw.githubusercontent.com/DavidAnson/markdownlint-cli2/main/schema/markdownlint-cli2-config-schema.json",
+  "config": {
+    "default": true,
+    "MD013": false,
+    "MD033": false,
+    // DESIGN.md is a spec-defined document whose front matter has `name:`
+    // and whose body starts at `## Overview`.
+    "MD041": { "front_matter_title": "^\\s*name\\s*[:=]" },
+    "MD060": false
+  },
+  // Skip vendored/generated agent files and accepted ADRs 0001-0005, which
+  // are immutable per .agents/rules/adr-naming.md.
+  "globs": ["**/*.md"],
+  "ignores": [
+    "node_modules",
+    ".next",
+    "reports",
+    ".agents",
+    ".claude",
+    ".cursor",
+    ".gemini",
+    ".serena",
+    "AGENTS.md",
+    "CLAUDE.md",
+    "docs/adr/000[1-5]-*.md"
+  ]
+}

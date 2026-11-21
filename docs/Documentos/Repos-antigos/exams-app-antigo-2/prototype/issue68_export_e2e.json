@@ -1,0 +1,31 @@
+{
+  "date": "2026-11-14T16:30:52.510Z",
+  "cases": [
+    {
+      "width": 736,
+      "height": 1584,
+      "cssWidth": 368,
+      "cssHeight": 792,
+      "savedFile": "issue68_export_graph_390.png",
+      "pngBytes": 285656,
+      "screenshot": "issue68_graph_toolbar_390.png",
+      "keyboardExport": true,
+      "viewportWidth": 390
+    },
+    {
+      "width": 2120,
+      "height": 1584,
+      "cssWidth": 1060,
+      "cssHeight": 792,
+      "savedFile": "issue68_export_graph_1366.png",
+      "pngBytes": 1168483,
+      "screenshot": "issue68_graph_toolbar_1366.png",
+      "keyboardExport": true,
+      "viewportWidth": 1366
+    }
+  ],
+  "errors": [],
+  "limits": [
+    "This is a functional PNG export test, not completion of all graph controls in Issue #68."
+  ]
+}

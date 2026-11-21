@@ -1,0 +1,23 @@
+<!-- @dsCard group="Navigation" height=220 -->
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;font:400 16px/1.55 var(--font-sans);color:var(--body)}
+.pane{background:var(--canvas);color:var(--body);padding:20px 24px}
+.pane+.pane{border-top:1px solid var(--hairline)}
+.tag{font:500 12px/1.4 var(--font-sans);letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:0 0 12px}
+.row{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}
+.col{display:flex;flex-direction:column;gap:12px}
+*:focus-visible,.focus{outline:2px solid var(--primary);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+button{font-family:var(--font-sans);cursor:pointer}
+button:disabled{cursor:not-allowed}
+.btn{height:40px;padding:0 20px;border-radius:var(--radius-md);border:1px solid transparent;font:500 14px/1 var(--font-sans)}
+.btn.p{background:var(--ink);color:var(--canvas)}
+.btn.s{background:var(--surface-raised);color:var(--ink);border-color:var(--ring)}
+kbd{font:500 11px/16px var(--font-sans);color:var(--muted);border:1px solid var(--hairline);border-radius:6px;padding:0 5px;background:var(--surface-raised)}
+.btn.g{background:transparent;color:var(--ink)}
+.help{font:400 13px/1.4 var(--font-sans);color:var(--muted);margin-top:6px}
+.err{color:var(--error)}
+label.l{display:block;font:500 13px/1.4 var(--font-sans);color:var(--ink);margin-bottom:6px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.bc ol{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0;padding:0;list-style:none;font:400 14px/1.4 var(--font-sans)}
+.bc a{color:var(--muted);text-decoration:none;border-radius:var(--radius-xs)}.bc a:hover{color:var(--ink);text-decoration:underline}
+.bc li+li::before{content:"/";color:var(--muted-soft);margin-right:8px}.bc [aria-current]{color:var(--ink);font-weight:500}.bc li+li::before{content:"›";font-size:16px;margin-right:8px}.bc a{color:var(--muted)}.bc [aria-current]{color:var(--ink);font-weight:500}</style></head><body><div class="pane"><p class="tag">Light</p><nav class="bc" aria-label="Breadcrumb"><ol><li><a href="#">Exams</a></li><li><a href="#">Microsoft</a></li><li><a href="#" class="focus">AZ-900</a></li><li><span aria-current="page">Questions</span></li></ol></nav></div><div class="pane" data-theme="dark"><p class="tag">Dark</p><nav class="bc" aria-label="Breadcrumb"><ol><li><a href="#">Exams</a></li><li><a href="#">Microsoft</a></li><li><a href="#" class="focus">AZ-900</a></li><li><span aria-current="page">Questions</span></li></ol></nav></div></body></html>

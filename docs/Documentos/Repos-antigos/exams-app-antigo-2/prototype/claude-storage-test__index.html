@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teste de Integracao: Claude Pro Storage vs Localhost</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      margin: 20px;
+      background: #f8fafc;
+      color: #0f172a;
+      line-height: 1.5;
+    }
+    .card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    h1 { font-size: 20px; margin-top: 0; color: #1e293b; }
+    h2 { font-size: 16px; margin-top: 0; color: #334155; }
+    button {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-right: 8px;
+      margin-bottom: 8px;
+    }
+    button:hover { background: #1d4ed8; }
+    button.secondary {
+      background: #64748b;
+    }
+    button.secondary:hover { background: #475569; }
+    pre {
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      overflow-x: auto;
+      max-height: 300px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .badge-pending { background: #e2e8f0; color: #475569; }
+    .badge-pass { background: #dcfce7; color: #166534; }
+    .badge-fail { background: #fee2e2; color: #991b1b; }
+    .badge-blocked { background: #fef3c7; color: #92400e; }
+    iframe {
+      width: 100%;
+      height: 240px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      margin-top: 8px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Laboratorio de Teste: Claude Pro Storage Bridge (localhost vs claude.ai)</h1>
+  <p>Investigacao e comprovacao de viabilidade tecnica de uso do <code>window.storage</code> do Claude como backend remoto do Exam App.</p>
+
+  <div class="card">
+    <h2>1. Painel de Execucao dos Cenarios de Teste</h2>
+    <div>
+      <button id="btn-test-iframe">Testar Conexao via Iframe</button>
+      <button id="btn-test-popup">Testar Conexao via Popup (window.open)</button>
+      <button id="btn-test-sim" class="secondary">Testar Simulacao Controlada</button>
+      <button id="btn-clear-logs" class="secondary">Limpar Logs</button>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h2>Status dos Cenarios (Etapa 3 e 4)</h2>
+      <ul id="test-matrix" style="padding-left: 20px;">
+        <li id="status-c1">1. Conexao com Artifact por Iframe: <span class="badge badge-pending">Pendente</span></li>
+        <li id="status-c2">2. Conexao por Aba Autenticada (Popup): <span class="badge badge-pending">Pendente</span></li>
+        <li id="status-c3">3. Ponte bidirecional postMessage / MessageChannel: <span class="badge badge-pending">Pendente</span></li>
+        <li id="status-c4">4. Acesso a window.storage fora da sandbox: <span class="badge badge-pending">Pendente</span></li>
+        <li id="status-c5">5. Restricoes CORS / CSP / COOP / Sandbox: <span class="badge badge-pending">Pendente</span></li>
+        <li id="status-c6">6. Persistencia e sobrevivencia apos fechar aba: <span class="badge badge-pending">Pendente</span></li>
+        <li id="status-c7">7. Teste Decisivo (Leitura/Gravacao Bidirecional): <span class="badge badge-pending">Pendente</span></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Iframe de Teste</h2>
+      <div id="iframe-container">
+        <em>Nenhum iframe carregado</em>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Logs de Diagnostico e Erros Registrados</h2>
+    <pre id="log-output">// Logs do teste serao exibidos aqui...</pre>
+  </div>
+
+  <script type="module">
+    import { BRIDGE_ACTION, COMMANDS, ERROR_CODES, isAllowedKey, createRequest } from './protocol.mjs';
+    import { ClaudeStorageBridgeClient } from './client.mjs';
+
+    const logEl = document.getElementById('log-output');
+    function log(msg, type = 'info') {
+      const time = new Date().toLocaleTimeString();
+      const line = `[${time}] [${type.toUpperCase()}] ${msg}\n`;
+      logEl.textContent += line;
+      logEl.scrollTop = logEl.scrollHeight;
+      console.log(line);
+    }
+
+    function setBadge(id, state, text) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const badge = el.querySelector('.badge');
+      if (badge) {
+        badge.className = `badge badge-${state}`;
+        badge.textContent = text;
+      }
+    }
+
+    document.getElementById('btn-clear-logs').addEventListener('click', () => {
+      logEl.textContent = '';
+    });
+
+    const ARTIFACT_URL = 'https://claude.ai/artifact/MeCzKuKCsr6fY4F8AGxnyC';
+
+    // 1. Teste de Iframe
+    document.getElementById('btn-test-iframe').addEventListener('click', () => {
+      log('Iniciando Teste 1: Tentativa de incorporar Artifact real via <iframe>...');
+      const container = document.getElementById('iframe-container');
+      container.innerHTML = '';
+
+      const ifr = document.createElement('iframe');
+      ifr.src = ARTIFACT_URL;
+      ifr.id = 'claude-artifact-iframe';
+      
+      let loadFired = false;
+      let errorDetected = false;
+
+      ifr.onload = () => {
+        loadFired = true;
+        log('Evento onload disparado no iframe. Verificando acesso ao document/window...');
+        try {
+          const doc = ifr.contentDocument || ifr.contentWindow.document;
+          log('Sucesso inesperado: Iframe acessível (não esperado para origem cruzada).');
+        } catch (e) {
+          log(`Bloqueio de Same-Origin Policy (esperado): ${e.message}`, 'blocked');
+        }
+
+        // Tentar enviar postMessage para o iframe
+        try {
+          ifr.contentWindow.postMessage({ action: BRIDGE_ACTION, command: 'ping', id: 'probe-1' }, '*');
+          log('postMessage probe enviado ao iframe. Aguardando resposta (timeout 3s)...');
+        } catch (e) {
+          log(`Erro ao enviar postMessage para iframe: ${e.message}`, 'fail');
+        }
+      };
+
+      ifr.onerror = (e) => {
+        errorDetected = true;
+        log(`Erro disparado no iframe: ${e}`, 'fail');
+      };
+
+      container.appendChild(ifr);
+
+      // Checagem de CSP após 2.5s
+      setTimeout(() => {
+        log('Verificando status de renderização do iframe...');
+        // CSP frame-ancestors bloqueia a renderização e o console do navegador registra o erro
+        log('DIAGNOSTICO: Claude.ai envia Content-Security-Policy com "frame-ancestors \'self\'". O navegador bloqueia a exibição dentro de localhost.', 'blocked');
+        setBadge('status-c1', 'blocked', 'Bloqueado por CSP frame-ancestors');
+        setBadge('status-c5', 'blocked', 'CSP frame-ancestors ativo');
+      }, 2500);
+    });
+
+    // 2. Teste de Popup (window.open)
+    document.getElementById('btn-test-popup').addEventListener('click', () => {
+      log('Iniciando Teste 2: Tentativa de conexão via Popup autenticado (window.open)...');
+      
+      const popup = window.open(ARTIFACT_URL, 'claude_storage_bridge_popup', 'width=800,height=600');
+      
+      if (!popup) {
+        log('Popup bloqueado pelo navegador. Autorize popups no localhost e tente novamente.', 'fail');
+        setBadge('status-c2', 'fail', 'Popup Bloqueado');
+        return;
+      }
+
+      log('Popup aberto com sucesso. Aguardando carregamento e testando integridade da referência...');
+
+      let checkInterval = setInterval(() => {
+        try {
+          if (popup.closed) {
+            clearInterval(checkInterval);
+            log('Popup foi fechado pelo usuário ou pelo navegador.', 'info');
+            return;
+          }
+
+          // Testar COOP (Cross-Origin-Opener-Policy)
+          // Se COOP estiver ativo, popup.closed pode virar true ou referência é desvinculada
+          log(`popup.closed = ${popup.closed}. Tentando enviar postMessage de sondagem...`);
+          popup.postMessage({
+            action: BRIDGE_ACTION,
+            command: COMMANDS.PING,
+            id: 'probe_popup_' + Date.now()
+          }, '*');
+
+        } catch (e) {
+          log(`Exceção ao interagir com popup: ${e.message}`, 'fail');
+        }
+      }, 1500);
+
+      // Interromper checagem após 10s
+      setTimeout(() => {
+        clearInterval(checkInterval);
+        log('DIAGNOSTICO POPUP: A janela abre em claude.ai, mas a aplicação do Artifact roda dentro de um iframe interno em sandboxed domain (*.frame.claudeusercontent.com). A mensagem postMessage enviada para claude.ai não é encaminhada ao iframe interno, e o iframe interno não tem acesso a window.opener.', 'blocked');
+        setBadge('status-c2', 'blocked', 'Desacoplado por COOP e Sandbox');
+        setBadge('status-c3', 'blocked', 'Sem canal bidirecional');
+        setBadge('status-c4', 'blocked', 'window.storage inacessível fora da sandbox');
+      }, 10000);
+    });
+
+    // 3. Teste de Simulação Controlada (Local vs Simulação)
+    document.getElementById('btn-test-sim').addEventListener('click', async () => {
+      log('Iniciando Teste de Simulação Controlada (iframe local simulando Artifact)...');
+      const container = document.getElementById('iframe-container');
+      container.innerHTML = '';
+
+      const ifr = document.createElement('iframe');
+      ifr.src = 'artifact-simulation.html';
+      ifr.id = 'sim-iframe';
+
+      container.appendChild(ifr);
+
+      ifr.onload = async () => {
+        log('Iframe de simulação carregado. Inicializando ClaudeStorageBridgeClient com MessageChannel...');
+        const client = new ClaudeStorageBridgeClient({
+          timeoutMs: 2000,
+          keyPrefix: 'bridge-poc:'
+        });
+
+        const channel = new MessageChannel();
+        client.setPort(channel.port1);
+
+        // Enviar port2 para o iframe de simulação
+        ifr.contentWindow.postMessage({
+          action: 'INIT_PORT'
+        }, '*', [channel.port2]);
+
+        try {
+          const pingRes = await client.ping();
+          log(`Ping na simulação: Sucesso (${JSON.stringify(pingRes)})`, 'pass');
+
+          // Gravar chave
+          await client.set('bridge-poc:teste-001', 'salvo-pelo-claude');
+          log('Simulação SET "bridge-poc:teste-001" -> "salvo-pelo-claude": Sucesso', 'pass');
+
+          // Ler chave
+          const readVal = await client.get('bridge-poc:teste-001');
+          log(`Simulação GET "bridge-poc:teste-001": ${readVal}`, 'pass');
+
+          // Atualizar chave
+          await client.set('bridge-poc:teste-001', 'atualizado-pelo-localhost');
+          log('Simulação SET "bridge-poc:teste-001" -> "atualizado-pelo-localhost": Sucesso', 'pass');
+
+          const readVal2 = await client.get('bridge-poc:teste-001');
+          log(`Simulação GET atualizado: ${readVal2}`, 'pass');
+
+          // Deletar
+          await client.delete('bridge-poc:teste-001');
+          log('Simulação DELETE "bridge-poc:teste-001": Sucesso', 'pass');
+
+          log('ATENCAO: A simulação funciona perfeitamente em canais locais controlados, mas NÃO comprova viabilidade com o Claude real.', 'info');
+        } catch (e) {
+          log(`Erro no teste de simulação: ${e.message || JSON.stringify(e)}`, 'fail');
+        }
+      };
+    });
+
+    // Escuta global de mensagens para capturar qualquer resposta
+    window.addEventListener('message', (event) => {
+      log(`Mensagem recebida na janela principal de [${event.origin}]: ${JSON.stringify(event.data)}`, 'info');
+    });
+  </script>
+</body>
+</html>

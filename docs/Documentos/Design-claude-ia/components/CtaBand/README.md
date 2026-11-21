@@ -1,0 +1,1 @@
+CTA bands close a page section with a display-sm serif headline and one button, in a 12px radius container with 64px padding. The coral band uses a cream inverted button; the dark band keeps the coral button. Use at most one coral band per page.

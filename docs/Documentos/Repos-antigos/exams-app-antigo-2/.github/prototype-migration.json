@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "issue": "https://github.com/ianmaciel7/exams-app/issues/278",
+  "state": "migration-hold",
+  "artifact_publication": "disabled",
+  "claude_branch_mirroring": "disabled",
+  "generated_evidence_pushes": "disabled",
+  "resume": "Separate reviewed change verifying target, source paths, capabilities and rollback."
+}

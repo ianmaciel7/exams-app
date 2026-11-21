@@ -1,0 +1,1 @@
+The top navigation is a 64px canvas bar holding the wordmark, a centered menu and the Sign in and Try Exams App actions. Links use nav-link type in ink. On mobile it collapses to a hamburger menu. The consumer provides the logo and routes.

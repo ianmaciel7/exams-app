@@ -1,0 +1,44 @@
+name: Validate migration baseline and remote hold
+
+on:
+  pull_request:
+    branches: [dev]
+    paths:
+      - 'scripts/prototype-migration-inventory.py'
+      - 'scripts/claude-sync-gate.py'
+      - 'tests/test_prototype_migration.py'
+      - 'prototype/issue278-*'
+      - 'prototype/boards/**'
+      - 'prototype/app/**'
+      - 'prototype/archive/**'
+      - 'prototype/tools/**'
+      - 'scripts/validate-issue278-navigation.py'
+      - '.github/**'
+      - '.githooks/**'
+      - 'package.json'
+  push:
+    branches: [dev]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inventory:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Materialize exact Git bytes without checkout newline conversion
+        run: git -c core.autocrlf=false checkout-index --force --all
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check exact baseline, binary integrity and remote publication hold
+        run: python -m unittest discover -s tests -p test_prototype_migration.py
+      - name: Check seven board indexes, every original blob and publication hold
+        run: python scripts/validate-issue278-navigation.py

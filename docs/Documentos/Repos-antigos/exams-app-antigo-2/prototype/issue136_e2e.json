@@ -1,0 +1,249 @@
+{
+  "date": "2026-11-14T16:36:41.883Z",
+  "cases": [
+    {
+      "phase": "before",
+      "route": "/concurso/dataprev/questoes",
+      "width": 1366,
+      "card": {
+        "left": 315,
+        "right": 1325,
+        "width": 1010
+      },
+      "heading": {
+        "display": "inline",
+        "text": "Questão 1"
+      },
+      "options": [
+        {
+          "display": "inline",
+          "top": 653.421875,
+          "left": 315,
+          "right": 754,
+          "height": 17,
+          "text": "AO texto se inicia pela definição de “processamento de dados”."
+        },
+        {
+          "display": "inline",
+          "top": 653.421875,
+          "left": 754,
+          "right": 1262,
+          "height": 17,
+          "text": "BAs duas ocorrências do conectivo “como” possuem o mesmo significado."
+        },
+        {
+          "display": "inline",
+          "top": 653.421875,
+          "left": 315,
+          "right": 1315,
+          "height": 38.296875,
+          "text": "CPor meio do processamento de dados, informações úteis resultam da con"
+        },
+        {
+          "display": "inline",
+          "top": 674.71875,
+          "left": 315,
+          "right": 1292,
+          "height": 38.296875,
+          "text": "DDe acordo com o texto, os métodos avançados de processamento são resp"
+        },
+        {
+          "display": "inline",
+          "top": 696.015625,
+          "left": 315,
+          "right": 1291,
+          "height": 37.296875,
+          "text": "EO advérbio “historicamente” se refere a realidades passadas no terren"
+        }
+      ],
+      "count": 5,
+      "practiceList": false,
+      "screenshot": "issue136_before_context_1366.png"
+    },
+    {
+      "phase": "after",
+      "route": "/concurso/dataprev/questoes",
+      "width": 1366,
+      "card": {
+        "left": 315,
+        "right": 1325,
+        "width": 1010
+      },
+      "heading": {
+        "display": "block",
+        "text": "Questão 1"
+      },
+      "options": [
+        {
+          "display": "flex",
+          "top": 813.140625,
+          "left": 305,
+          "right": 1315,
+          "height": 39,
+          "text": "A\nO texto se inicia pela definição de “processamento de dados”."
+        },
+        {
+          "display": "flex",
+          "top": 854.140625,
+          "left": 305,
+          "right": 1315,
+          "height": 39,
+          "text": "B\nAs duas ocorrências do conectivo “como” possuem o mesmo significado."
+        },
+        {
+          "display": "flex",
+          "top": 895.140625,
+          "left": 305,
+          "right": 1315,
+          "height": 39,
+          "text": "C\nPor meio do processamento de dados, informações úteis resultam da co"
+        },
+        {
+          "display": "flex",
+          "top": 936.140625,
+          "left": 305,
+          "right": 1315,
+          "height": 39,
+          "text": "D\nDe acordo com o texto, os métodos avançados de processamento são res"
+        },
+        {
+          "display": "flex",
+          "top": 977.140625,
+          "left": 305,
+          "right": 1315,
+          "height": 39,
+          "text": "E\nO advérbio “historicamente” se refere a realidades passadas no terre"
+        }
+      ],
+      "count": 5,
+      "practiceList": true,
+      "screenshot": "issue136_after_context_1366.png",
+      "answerSelected": true
+    },
+    {
+      "phase": "after",
+      "route": "/concurso/dataprev/questoes",
+      "width": 390,
+      "card": {
+        "left": 31,
+        "right": 349,
+        "width": 318
+      },
+      "heading": {
+        "display": "block",
+        "text": "Questão 1"
+      },
+      "options": [
+        {
+          "display": "flex",
+          "top": 1285.875,
+          "left": 21,
+          "right": 339,
+          "height": 60,
+          "text": "A\nO texto se inicia pela definição de “processamento de dados”."
+        },
+        {
+          "display": "flex",
+          "top": 1347.875,
+          "left": 21,
+          "right": 339,
+          "height": 81,
+          "text": "B\nAs duas ocorrências do conectivo “como” possuem o mesmo significado."
+        },
+        {
+          "display": "flex",
+          "top": 1430.875,
+          "left": 21,
+          "right": 339,
+          "height": 81,
+          "text": "C\nPor meio do processamento de dados, informações úteis resultam da co"
+        },
+        {
+          "display": "flex",
+          "top": 1513.875,
+          "left": 21,
+          "right": 339,
+          "height": 81,
+          "text": "D\nDe acordo com o texto, os métodos avançados de processamento são res"
+        },
+        {
+          "display": "flex",
+          "top": 1596.875,
+          "left": 21,
+          "right": 339,
+          "height": 81,
+          "text": "E\nO advérbio “historicamente” se refere a realidades passadas no terre"
+        }
+      ],
+      "count": 5,
+      "practiceList": true,
+      "screenshot": "issue136_after_context_390.png",
+      "answerSelected": true
+    },
+    {
+      "phase": "after",
+      "route": "/questoes",
+      "width": 1366,
+      "card": {
+        "left": 315,
+        "right": 1325,
+        "width": 1010
+      },
+      "heading": {
+        "display": "block",
+        "text": "Questão 1"
+      },
+      "options": [
+        {
+          "display": "flex",
+          "top": 802.015625,
+          "left": 305,
+          "right": 1315,
+          "height": 39,
+          "text": "A\nO texto se inicia pela definição de “processamento de dados”."
+        },
+        {
+          "display": "flex",
+          "top": 843.015625,
+          "left": 305,
+          "right": 1315,
+          "height": 39,
+          "text": "B\nAs duas ocorrências do conectivo “como” possuem o mesmo significado."
+        },
+        {
+          "display": "flex",
+          "top": 884.015625,
+          "left": 305,
+          "right": 1315,
+          "height": 39,
+          "text": "C\nPor meio do processamento de dados, informações úteis resultam da co"
+        },
+        {
+          "display": "flex",
+          "top": 925.015625,
+          "left": 305,
+          "right": 1315,
+          "height": 39,
+          "text": "D\nDe acordo com o texto, os métodos avançados de processamento são res"
+        },
+        {
+          "display": "flex",
+          "top": 966.015625,
+          "left": 305,
+          "right": 1315,
+          "height": 39,
+          "text": "E\nO advérbio “historicamente” se refere a realidades passadas no terre"
+        }
+      ],
+      "count": 5,
+      "practiceList": true,
+      "screenshot": "issue136_after_global_1366.png",
+      "answerSelected": true
+    }
+  ],
+  "errors": [],
+  "limitations": [
+    "Chromium captures are genuine but not the original user-provided screenshot.",
+    "This test covers the contextual question list, global study list and primary radio selection; other journeys require their own E2E."
+  ]
+}

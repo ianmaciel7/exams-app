@@ -1,0 +1,17 @@
+{
+  "path": ["./src"],
+  "format": ["typescript", "tsx"],
+  "minLines": 8,
+  "minTokens": 80,
+  "mode": "mild",
+  "reporters": ["console", "json"],
+  "output": "reports/jscpd",
+  "ignore": [
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/components/ai-elements/**",
+    "**/components/firebase/**",
+    "**/components/ui/**"
+  ],
+  "gitignore": true
+}

@@ -1,0 +1,54 @@
+name: E2E Object Alias and Graph Search
+on:
+  pull_request:
+    branches: [dev]
+    paths:
+      - 'prototype/exam-app-0.1.1__index.html'
+      - 'tests/object-alias-graph-search.test.mjs'
+      - 'tests/object-alias-graph-search.e2e.mjs'
+      - '.github/workflows/e2e-object-alias-graph.yml'
+  push:
+    branches: [dev]
+    paths:
+      - 'prototype/exam-app-0.1.1__index.html'
+      - 'tests/object-alias-graph-search.test.mjs'
+      - 'tests/object-alias-graph-search.e2e.mjs'
+      - '.github/workflows/e2e-object-alias-graph.yml'
+permissions:
+  contents: read
+jobs:
+  object-alias:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test object read model and per-space isolation
+        run: node --test tests/object-alias-graph-search.test.mjs
+      - name: Install Chromium
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Start prototype
+        run: |
+          python3 -m http.server 8765 --directory prototype >/tmp/object-alias.log 2>&1 &
+          for i in $(seq 1 25); do
+            if curl -fsS http://127.0.0.1:8765/exam-app-0.1.1__index.html -o /dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/object-alias.log
+          exit 1
+      - name: Verify editable aliases and graph/contextual search
+        run: node tests/object-alias-graph-search.e2e.mjs
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: issue57-object-alias-graph-evidence
+          path: |
+            prototype/issue57_graph_alias_*.png
+            prototype/issue57_context_alias_*.png
+            prototype/issue57_alias_graph_e2e.json
+          if-no-files-found: warn

@@ -1,0 +1,77 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+/playwright-report/
+/test-results/
+/reports/
+/graphify-out/
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# agents & local tool state
+.agents/local.json
+.agents/generated/
+.agents/agents.json.*.bak
+.agents/plugin-data/
+.agents/mcp_config.json
+CLAUDE.md
+.codex/
+.gemini/
+.mcp.json
+.vscode/mcp.json
+.cursor/
+.antigravity/
+.windsurf/
+.opencode/
+opencode.json
+.junie/mcp/
+.grok/config.toml
+.factory/mcp.json
+.devin/mcp_config.json
+.claude/skills
+.junie/skills
+.kilo/skills
+
+# serena local state
+.serena/
+
+# mutation testing
+/.stryker-tmp/
+
+

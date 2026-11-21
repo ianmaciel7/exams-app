@@ -1,0 +1,32 @@
+id: require-component-props-parameter
+valid:
+  - |
+    type ProfileCardProps = ComponentProps<"div">;
+    function ProfileCard(props: ProfileCardProps) {
+      return <div {...props} />;
+    }
+  - |
+    function ProfileCard({ children }: PropsWithChildren) {
+      return <div>{children}</div>;
+    }
+  - |
+    function loadProfile() {
+      return Promise.resolve(null);
+    }
+  - |
+    function useProfileStatus() {
+      return { status: "ready" };
+    }
+invalid:
+  - |
+    function ProfileSection() {
+      return <section />;
+    }
+  - |
+    async function IntlProvider() {
+      return <div />;
+    }
+  - |
+    function CardContent() {
+      return <div />;
+    }

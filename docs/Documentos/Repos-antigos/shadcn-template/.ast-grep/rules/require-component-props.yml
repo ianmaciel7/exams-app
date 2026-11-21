@@ -1,0 +1,55 @@
+id: require-component-props
+language: tsx
+files:
+  - src/app/**/*.tsx
+  - src/app/**/*.ts
+  - src/components/**/*.tsx
+  - src/components/**/*.ts
+ignores:
+  - "**/*.test.tsx"
+  - "**/*.test.ts"
+  - "**/*.stories.tsx"
+  - src/components/ui/*.tsx
+  - src/components/firebase/**
+  - src/components/ai-elements/**
+severity: error
+message: Component prop types should extend ComponentProps, HTMLAttributes, or PropsWithChildren.
+note: |
+  Component prop types in application code should inherit standard element properties
+  (via ComponentProps<...>, HTMLAttributes<...>, or PropsWithChildren) so components remain
+  composable, support className pass-through, and conform to the shadcn design pattern.
+  Excluded from this rule:
+    - Next.js route conventions (PageProps, LayoutProps, RouteContext)
+    - Context value props (ending in ContextProps)
+  Example:
+    export type MyComponentProps = ComponentProps<"div"> & {
+      customProp: string;
+    };
+rule:
+  any:
+    - kind: type_alias_declaration
+      all:
+        - has:
+            field: name
+            regex: 'Props$'
+        - not:
+            has:
+              field: name
+              regex: '(ContextProps|PageProps|LayoutProps|RouteContextProps)$'
+        - not:
+            has:
+              field: value
+              regex: '(ComponentProps|HTMLAttributes|PropsWithChildren)<'
+    - kind: interface_declaration
+      all:
+        - has:
+            field: name
+            regex: 'Props$'
+        - not:
+            has:
+              field: name
+              regex: '(ContextProps|PageProps|LayoutProps|RouteContextProps)$'
+        - not:
+            has:
+              kind: extends_type_clause
+              regex: '(ComponentProps|HTMLAttributes|PropsWithChildren)'

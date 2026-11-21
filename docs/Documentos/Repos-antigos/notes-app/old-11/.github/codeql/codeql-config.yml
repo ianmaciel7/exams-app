@@ -1,0 +1,13 @@
+name: "CodeQL config"
+
+paths:
+  - src
+
+paths-ignore:
+  - node_modules
+  - .next
+  - build
+  - graphify-out
+
+queries:
+  - uses: security-extended

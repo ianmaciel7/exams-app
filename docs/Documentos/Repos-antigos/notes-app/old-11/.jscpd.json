@@ -1,0 +1,16 @@
+{
+  "format": ["typescript", "tsx", "javascript", "json"],
+  "ignore": [
+    "**/node_modules/**",
+    "**/.next/**",
+    "**/build/**",
+    "**/*.stories.tsx",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/src/components/ui/**"
+  ],
+  "minTokens": 50,
+  "minLines": 5,
+  "reporters": ["console"],
+  "threshold": 10
+}

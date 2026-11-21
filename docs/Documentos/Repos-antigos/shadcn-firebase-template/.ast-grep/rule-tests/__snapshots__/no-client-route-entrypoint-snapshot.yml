@@ -1,0 +1,14 @@
+id: no-client-route-entrypoint
+snapshots:
+  "\"use client\";\nexport default function Page() {\n  return <button />;\n}\n":
+    labels:
+    - source: "\"use client\";"
+      style: primary
+      start: 0
+      end: 13
+  "\"use client\";\nexport default function Template({ children }) {\n  return <div>{children}</div>;\n}\n":
+    labels:
+    - source: "\"use client\";"
+      style: primary
+      start: 0
+      end: 13

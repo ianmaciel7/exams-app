@@ -1,0 +1,39 @@
+name: Check Dev Automation (migration hold)
+
+on:
+  push:
+    branches: [dev]
+  pull_request:
+    branches: [dev]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Issue #278: deliberately no branch mirror or artifact deployment.
+# Re-enabling publication requires a separately reviewed target/path decision.
+jobs:
+  agents-sync-check:
+    name: Check Agents Sync
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install @agents-dev/cli
+        run: npm install -g @agents-dev/cli@latest
+
+      # source-only mode intentionally does not version generated per-platform files.
+      # On a clean CI runner, checking before generation always reports drift.
+      - name: Generate per-platform agent integrations
+        run: agents sync
+
+      - name: Validate reproducible Agents Sync
+        run: |
+          agents sync --check
+          git diff --exit-code -- AGENTS.md .agents/agents.json

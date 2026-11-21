@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Simulacao de Artifact Claude com window.storage</title>
+  <style>
+    body { font-family: sans-serif; padding: 12px; font-size: 13px; background: #f1f5f9; color: #334155; }
+    h3 { margin-top: 0; }
+    pre { background: #fff; padding: 8px; border: 1px solid #cbd5e1; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <h3>Simulador de Artifact (Worker Interno)</h3>
+  <p>Status: Aguardando INIT_PORT via postMessage...</p>
+  <pre id="sim-log">Pronto.</pre>
+
+  <script type="module">
+    import { ClaudeStorageBridgeServer } from './server.mjs';
+
+    const logEl = document.getElementById('sim-log');
+    function log(msg) {
+      logEl.textContent += '\n' + msg;
+    }
+
+    // Mock do window.storage como Claude Artifacts oferecem
+    window.storage = {
+      _data: new Map(),
+      async get(key) { return this._data.get(key) || null; },
+      async set(key, val) { this._data.set(key, val); return true; },
+      async delete(key) { return this._data.delete(key); },
+      async list(prefix) {
+        const res = [];
+        for (const k of this._data.keys()) {
+          if (!prefix || k.startsWith(prefix)) res.push(k);
+        }
+        return res;
+      }
+    };
+
+    const server = new ClaudeStorageBridgeServer({
+      allowedOrigins: ['http://localhost:8765', 'http://127.0.0.1:8765'],
+      storage: window.storage,
+      onLog: log
+    });
+
+    window.addEventListener('message', (event) => {
+      if (event.data && event.data.action === 'INIT_PORT' && event.ports && event.ports[0]) {
+        const port = event.ports[0];
+        log('Canal MessagePort recebido com sucesso da janela pai.');
+        port.onmessage = (e) => {
+          log(`[Sim-Worker] Comando recebido: ${JSON.stringify(e.data)}`);
+          server.handleMessage(e, port);
+        };
+      }
+    });
+  </script>
+</body>
+</html>

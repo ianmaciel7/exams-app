@@ -1,0 +1,45 @@
+name: E2E Contextual Shift Click
+on:
+  pull_request:
+    branches: [dev]
+    paths:
+      - 'prototype/exam-app-0.1.1__index.html'
+      - 'tests/right-panel-shift-click.test.mjs'
+      - 'tests/right-panel-shift-click.e2e.mjs'
+      - '.github/workflows/e2e-panel-shift-click.yml'
+permissions:
+  contents: read
+jobs:
+  panel-modifiers:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test modifier precedence in actual handler source
+        run: node --test tests/right-panel-shift-click.test.mjs
+      - name: Install Chromium
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Exercise Shift+Click, dedupe and refresh in Chromium
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m http.server 8765 --directory prototype >/tmp/exams-panel-shift.log 2>&1 &
+          for i in $(seq 1 20); do
+            if curl -fsS http://127.0.0.1:8765/exam-app-0.1.1__index.html -o /dev/null; then break; fi
+            sleep 1
+          done
+          node tests/right-panel-shift-click.e2e.mjs
+      - name: Upload actual browser screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: issue55-contextual-shift-click-evidence
+          path: |
+            prototype/issue55_shift_click_*.png
+            prototype/issue55_shift_click_e2e.json
+          if-no-files-found: warn

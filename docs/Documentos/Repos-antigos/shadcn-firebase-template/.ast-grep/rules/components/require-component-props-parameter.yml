@@ -1,0 +1,21 @@
+id: require-component-props-parameter
+language: tsx
+files:
+  - src/app/**/_components/**/*.tsx
+  - src/components/ui/extensions/**/*.tsx
+ignores:
+  - "**/*.test.tsx"
+  - "**/*.stories.tsx"
+severity: error
+message: Project-owned React components must declare a props parameter, even when the caller does not pass attributes.
+note: |
+  Owned components expose a consistent typed props interface using ComponentProps,
+  PropsWithChildren or an equivalent native React type. Generated shadcn/Firebase
+  registry components and Next.js route entrypoints are not governed by this rule.
+rule:
+  any:
+    - pattern: function $COMPONENT() { $$$BODY }
+    - pattern: async function $COMPONENT() { $$$BODY }
+constraints:
+  COMPONENT:
+    regex: '^[A-Z][A-Za-z0-9]*$'

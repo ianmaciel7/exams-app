@@ -1,0 +1,26 @@
+id: review-route-test-sdk-mock
+language: tsx
+files:
+  - src/app/**/routes.test.tsx
+  - src/app/**/routes.test.ts
+  - src/app/**/page.test.tsx
+  - src/app/**/page.test.ts
+severity: warning
+message: Avoid broad backend SDK mocks inside route-level tests; prefer lightweight route wiring tests or colocated component tests.
+note: |
+  Official Next.js testing patterns (vitest guide) and repository standards (CODING_STANDARDS.md)
+  recommend keeping App Router route tests lightweight, validating route navigation and composition
+  boundaries (as in src/app/(public)/routes.test.tsx and src/app/(protected)/routes.test.tsx).
+  Feature-level interactions and SDK logic should be tested in colocated unit tests
+  next to the component under _components/ or through Playwright E2E tests.
+rule:
+  kind: call_expression
+  all:
+    - has:
+        field: function
+        regex: '^vi\.mock$'
+    - has:
+        field: arguments
+        has:
+          kind: string
+          regex: '^(["''])?(firebase/|@/lib/firebase)'

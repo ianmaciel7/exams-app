@@ -1,0 +1,1 @@
+Code windows show real product chrome on surface-dark with a surface-dark-soft code area, JetBrains Mono at 14px/1.6 and 24px padding. Code scrolls horizontally instead of wrapping. Use amber and teal accents for syntax, never coral.

@@ -1,0 +1,26 @@
+{
+  "generated_from": "prototype/exam-app-0.1.1__index.html + js/claude-storage-sync.js",
+  "source_sha": "9beadadd8be27c7d99d3ecdf5b5cf099137e23cc",
+  "observed_at": "2026-11-16",
+  "features": [
+    {"id": "workspace", "title": "Workspace", "status": "implementado", "page": "docs/features/workspace.md", "issues": [], "prs": [250, 249]},
+    {"id": "questoes", "title": "Questões e navegador", "status": "implementado", "page": "docs/features/questoes.md", "issues": [], "prs": []},
+    {"id": "simulados", "title": "Simulados", "status": "parcial", "page": "docs/features/simulados.md", "issues": [], "prs": []},
+    {"id": "pdf-reader", "title": "Leitor de PDF", "status": "implementado", "page": "docs/features/pdf-reader.md", "issues": [], "prs": []},
+    {"id": "revisao", "title": "Revisão e cartões", "status": "parcial", "page": "docs/features/revisao.md", "issues": [], "prs": []},
+    {"id": "grafo", "title": "Grafo da coleção", "status": "implementado", "page": "docs/features/grafo.md", "issues": [227], "prs": [246]},
+    {"id": "tipos-propriedades", "title": "Tipos e propriedades", "status": "implementado", "page": "docs/features/tipos-propriedades.md", "issues": [], "prs": []},
+    {"id": "claude-storage", "title": "Sincronização (Claude Storage)", "status": "parcial", "page": "docs/features/claude-storage.md", "issues": [], "prs": []}
+  ],
+  "diagrams": [
+    {"id": "c4-l1", "title": "C4 L1 contexto (AS-IS)", "page": "docs/architecture/c4.md"},
+    {"id": "c4-l2", "title": "C4 L2 containers (AS-IS)", "page": "docs/architecture/c4.md"},
+    {"id": "er-dominio", "title": "ER do domínio (AS-IS)", "page": "docs/architecture/dominio.md"}
+  ],
+  "adrs": [
+    {"id": "0001", "title": "Protótipo estático, sem build", "status": "vigente", "page": "docs/architecture/adr/0001-prototipo-estatico-sem-build.md"},
+    {"id": "0002", "title": "IA via capacidade sample", "status": "vigente", "page": "docs/architecture/adr/0002-ia-via-capacidade-sample.md"},
+    {"id": "0003", "title": "Persistência offline-first com Outbox", "status": "vigente no código", "page": "docs/architecture/adr/0003-persistencia-offline-first-outbox.md"}
+  ],
+  "planning": {"page": "docs/planning/estado-atual.md", "tags": 0, "releases": 0, "milestones": 0, "open_issues": 0}
+}

@@ -1,0 +1,16 @@
+{
+  "created": "2026-11-15T15:08:00.273Z",
+  "checks": [
+    "first incorrect attempt recorded after actual submit",
+    "notebook groups unresolved mistake by week/topic and opening solution does not heal",
+    "retry reset keeps unresolved question in error filter",
+    "only a new correct confirmed practice answer recovers wrong item",
+    "verticalized topic priorities and theory study checkboxes persist",
+    "topic practice action opens the question bank with matching discipline and subject filters"
+  ],
+  "pageErrors": [],
+  "limitations": [
+    "Chromium desktop browser local persistence; multi-device synchronization and actual study outcomes are outside this test.",
+    "Recovery scheduling is derived exclusively from confirmed attempts in local history."
+  ]
+}

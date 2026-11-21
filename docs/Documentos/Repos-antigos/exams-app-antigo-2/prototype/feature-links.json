@@ -1,0 +1,4893 @@
+{
+ "schema_version": 1,
+ "diagramas": [
+  {
+   "id": "c4-l1",
+   "title": "C4 L1 contexto (AS-IS)",
+   "page": "prototype/c4.md",
+   "mermaid": "flowchart LR\n  pessoa[\"Pessoa estudante<br/>(navegador)\"]\n  app[\"Exam App 0.1.1<br/>página estática de estudo\"]\n  claude[\"Visualizador Claude (artifact)<br/>fornece capacidades sample, db, user, downloads\"]\n  pdfs[\"PDFs de provas e editais<br/>arquivos em pdfs/\"]\n  pessoa -->|estuda, organiza, simula| app\n  app -->|pede IA e dados, se disponíveis| claude\n  app -->|lê PDF local| pdfs"
+  },
+  {
+   "id": "c4-l2",
+   "title": "C4 L2 containers (AS-IS)",
+   "page": "prototype/c4.md",
+   "mermaid": "flowchart TB\n  subgraph navegador[\"Navegador (AS-IS)\"]\n    ui[\"Interface e roteamento<br/>index.html (route, render*)\"]\n    store[\"Estado em memória<br/>store (pages:, objetos, espaços)\"]\n    sync[\"Motor offline-first<br/>js/claude-storage-sync.js<br/>ClaudeStorageSyncEngine (Outbox)\"]\n    pdfjs[\"PDF.js<br/>pdf.min.js + pdf.worker.min.js\"]\n  end\n  ui --> store\n  store --> sync\n  ui --> pdfjs\n  sync -->|usa capacidade db| db[(\"Banco do artifact\")]\n  ui -->|usa capacidade sample| ia[\"IA do visualizador\"]\n  ui -->|usa capacidade downloads| dl[\"Download de arquivos\"]\n  sync -.->|dev local: 127.0.0.1:8766| proxy[\"Proxy local (não versionado nesta pasta)\"]"
+  },
+  {
+   "id": "er-dominio",
+   "title": "ER do domínio (AS-IS)",
+   "page": "prototype/dominio.md",
+   "mermaid": "erDiagram\n  CONCURSO ||--o{ EDICAO : \"tem\"\n  ORGAO ||--o{ CONCURSO : \"promove\"\n  BANCA ||--o{ EDICAO : \"organiza\"\n  EDICAO ||--o{ CARGO : \"oferece\"\n  ARQUIVO ||--o{ DOCUMENTO : \"especializa\"\n  DOCUMENTO ||--o{ PDF : \"especializa\"\n  EDICAO ||--o{ DOCUMENTO : \"agrupa\"\n  CARGO ||--o{ DOCUMENTO : \"agrupa\"\n  QUESTAO }o--|| DISCIPLINA : \"classificada por\"\n  QUESTAO }o--o{ EDICAO : \"aparece em\"\n  SIMULADO }o--|| EDICAO : \"de\"\n  SIMULADO }o--o| CARGO : \"para\"\n  RESPOSTA }o--|| QUESTAO : \"responde\"\n  RESPOSTA }o--|| SIMULADO : \"pertence a\"\n  CADERNO }o--o{ QUESTAO : \"guarda\""
+  }
+ ],
+ "source": [
+  "prototype/features-index.json",
+  "prototype/catalog.json",
+  "prototype/board-mestre.json"
+ ],
+ "unclassified": {
+  "midias": 374,
+  "orfaos": 183,
+  "duplicatas_grupos": 19,
+  "testes_json": 17,
+  "pares_antes_depois": 32
+ },
+ "features": [
+  {
+   "id": "workspace",
+   "title": "Workspace",
+   "status": "implementado",
+   "doc": {
+    "path": "prototype/workspace.md",
+    "url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/workspace.md",
+    "fonte": "índice"
+   },
+   "sintese": [
+    "- Problema: organizar concursos, documentos e anotações em espaços isolados, com várias abas.",
+    "- Quem usa: estudante com mais de um objetivo.",
+    "- Status: implementado no protótipo 0.1.1 (abas, barra de tabs, painel direito com Explorar, Gráfico, Backlinks, Relacionados e IA). Evidência: `prototype/exam-app-0.1.1__index.html`.",
+    "- Fluxo principal: escolher espaço → abrir objeto em nova aba → navegar pela sidebar → usar painel direito."
+   ],
+   "adrs": [],
+   "diagramas": [
+    {
+     "id": "c4-l1",
+     "fonte": "global (sem vínculo por feature no índice)"
+    },
+    {
+     "id": "c4-l2",
+     "fonte": "global (sem vínculo por feature no índice)"
+    },
+    {
+     "id": "er-dominio",
+     "fonte": "global (sem vínculo por feature no índice)"
+    }
+   ],
+   "issues": [
+    {
+     "numero": 83,
+     "url": "https://github.com/ianmaciel7/exams-app/issues/83",
+     "fonte": "índice ou catálogo (ID)"
+    },
+    {
+     "numero": 128,
+     "url": "https://github.com/ianmaciel7/exams-app/issues/128",
+     "fonte": "índice ou catálogo (ID)"
+    },
+    {
+     "numero": 132,
+     "url": "https://github.com/ianmaciel7/exams-app/issues/132",
+     "fonte": "índice ou catálogo (ID)"
+    },
+    {
+     "numero": 136,
+     "url": "https://github.com/ianmaciel7/exams-app/issues/136",
+     "fonte": "índice ou catálogo (ID)"
+    },
+    {
+     "numero": 138,
+     "url": "https://github.com/ianmaciel7/exams-app/issues/138",
+     "fonte": "índice ou catálogo (ID)"
+    }
+   ],
+   "prs": [
+    {
+     "numero": 250,
+     "url": "https://github.com/ianmaciel7/exams-app/pull/250",
+     "fonte": "índice (ID)"
+    },
+    {
+     "numero": 249,
+     "url": "https://github.com/ianmaciel7/exams-app/pull/249",
+     "fonte": "índice (ID)"
+    }
+   ],
+   "testes": [
+    {
+     "id": "EV-1C4781EA",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_dark_1024_sideclosed_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_dark_1024_sideclosed_rightclosed.png",
+     "src": "lowchrome_97_after_dark_1024_sideclosed_rightclosed.png",
+     "par": {
+      "antes": "EV-438F90AD",
+      "depois": "EV-1C4781EA"
+     }
+    },
+    {
+     "id": "EV-C28BD30C",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_dark_1024_sideclosed_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_dark_1024_sideclosed_rightopen.png",
+     "src": "lowchrome_97_after_dark_1024_sideclosed_rightopen.png",
+     "par": {
+      "antes": "EV-9B457D03",
+      "depois": "EV-C28BD30C"
+     }
+    },
+    {
+     "id": "EV-BC5D8509",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_dark_1024_sideopen_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_dark_1024_sideopen_rightclosed.png",
+     "src": "lowchrome_97_after_dark_1024_sideopen_rightclosed.png",
+     "par": {
+      "antes": "EV-06B4F737",
+      "depois": "EV-BC5D8509"
+     }
+    },
+    {
+     "id": "EV-758A63FD",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_dark_1024_sideopen_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_dark_1024_sideopen_rightopen.png",
+     "src": "lowchrome_97_after_dark_1024_sideopen_rightopen.png",
+     "par": {
+      "antes": "EV-10DE33D3",
+      "depois": "EV-758A63FD"
+     }
+    },
+    {
+     "id": "EV-2EB888EA",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_dark_1366_sideclosed_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_dark_1366_sideclosed_rightclosed.png",
+     "src": "lowchrome_97_after_dark_1366_sideclosed_rightclosed.png",
+     "par": {
+      "antes": "EV-CBD77C73",
+      "depois": "EV-2EB888EA"
+     }
+    },
+    {
+     "id": "EV-E62B32BB",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_dark_1366_sideclosed_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_dark_1366_sideclosed_rightopen.png",
+     "src": "lowchrome_97_after_dark_1366_sideclosed_rightopen.png",
+     "par": {
+      "antes": "EV-09E5F50A",
+      "depois": "EV-E62B32BB"
+     }
+    },
+    {
+     "id": "EV-0960E8A6",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_dark_1366_sideopen_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_dark_1366_sideopen_rightclosed.png",
+     "src": "lowchrome_97_after_dark_1366_sideopen_rightclosed.png",
+     "par": {
+      "antes": "EV-9F60C93F",
+      "depois": "EV-0960E8A6"
+     }
+    },
+    {
+     "id": "EV-34F2A8A1",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_dark_1366_sideopen_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_dark_1366_sideopen_rightopen.png",
+     "src": "lowchrome_97_after_dark_1366_sideopen_rightopen.png",
+     "par": {
+      "antes": "EV-F5C81BFA",
+      "depois": "EV-34F2A8A1"
+     }
+    },
+    {
+     "id": "EV-689FBB79",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_dark_768_sideclosed_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_dark_768_sideclosed_rightclosed.png",
+     "src": "lowchrome_97_after_dark_768_sideclosed_rightclosed.png",
+     "par": {
+      "antes": "EV-71437B94",
+      "depois": "EV-689FBB79"
+     }
+    },
+    {
+     "id": "EV-AA09E670",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_dark_768_sideclosed_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_dark_768_sideclosed_rightopen.png",
+     "src": "lowchrome_97_after_dark_768_sideclosed_rightopen.png",
+     "par": {
+      "antes": "EV-1E06635F",
+      "depois": "EV-AA09E670"
+     }
+    },
+    {
+     "id": "EV-AD1D7202",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_dark_768_sideopen_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_dark_768_sideopen_rightclosed.png",
+     "src": "lowchrome_97_after_dark_768_sideopen_rightclosed.png",
+     "par": {
+      "antes": "EV-459E3A06",
+      "depois": "EV-AD1D7202"
+     }
+    },
+    {
+     "id": "EV-9ED6AC93",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_dark_768_sideopen_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_dark_768_sideopen_rightopen.png",
+     "src": "lowchrome_97_after_dark_768_sideopen_rightopen.png",
+     "par": {
+      "antes": "EV-8DF28F38",
+      "depois": "EV-9ED6AC93"
+     }
+    },
+    {
+     "id": "EV-F1C7E641",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_light_1024_sideclosed_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_light_1024_sideclosed_rightclosed.png",
+     "src": "lowchrome_97_after_light_1024_sideclosed_rightclosed.png",
+     "par": {
+      "antes": "EV-2D7A1158",
+      "depois": "EV-F1C7E641"
+     }
+    },
+    {
+     "id": "EV-BD1DE3B9",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_light_1024_sideclosed_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_light_1024_sideclosed_rightopen.png",
+     "src": "lowchrome_97_after_light_1024_sideclosed_rightopen.png",
+     "par": {
+      "antes": "EV-308B3DAE",
+      "depois": "EV-BD1DE3B9"
+     }
+    },
+    {
+     "id": "EV-4A9E72AE",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_light_1024_sideopen_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_light_1024_sideopen_rightclosed.png",
+     "src": "lowchrome_97_after_light_1024_sideopen_rightclosed.png",
+     "par": {
+      "antes": "EV-3C37423F",
+      "depois": "EV-4A9E72AE"
+     }
+    },
+    {
+     "id": "EV-0FC85A0C",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_light_1024_sideopen_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_light_1024_sideopen_rightopen.png",
+     "src": "lowchrome_97_after_light_1024_sideopen_rightopen.png",
+     "par": {
+      "antes": "EV-F4C3DCE6",
+      "depois": "EV-0FC85A0C"
+     }
+    },
+    {
+     "id": "EV-274432BD",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_light_1366_sideclosed_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_light_1366_sideclosed_rightclosed.png",
+     "src": "lowchrome_97_after_light_1366_sideclosed_rightclosed.png",
+     "par": {
+      "antes": "EV-F5948D83",
+      "depois": "EV-274432BD"
+     }
+    },
+    {
+     "id": "EV-D2C84331",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_light_1366_sideclosed_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_light_1366_sideclosed_rightopen.png",
+     "src": "lowchrome_97_after_light_1366_sideclosed_rightopen.png",
+     "par": {
+      "antes": "EV-F551E6D4",
+      "depois": "EV-D2C84331"
+     }
+    },
+    {
+     "id": "EV-C1953378",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_light_1366_sideopen_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_light_1366_sideopen_rightclosed.png",
+     "src": "lowchrome_97_after_light_1366_sideopen_rightclosed.png",
+     "par": {
+      "antes": "EV-42EC0E0E",
+      "depois": "EV-C1953378"
+     }
+    },
+    {
+     "id": "EV-478D2EB6",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_light_1366_sideopen_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_light_1366_sideopen_rightopen.png",
+     "src": "lowchrome_97_after_light_1366_sideopen_rightopen.png",
+     "par": {
+      "antes": "EV-35E4BB43",
+      "depois": "EV-478D2EB6"
+     }
+    },
+    {
+     "id": "EV-D7060E7F",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_light_768_sideclosed_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_light_768_sideclosed_rightclosed.png",
+     "src": "lowchrome_97_after_light_768_sideclosed_rightclosed.png",
+     "par": {
+      "antes": "EV-6A9EC0C5",
+      "depois": "EV-D7060E7F"
+     }
+    },
+    {
+     "id": "EV-0912C577",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_light_768_sideclosed_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_light_768_sideclosed_rightopen.png",
+     "src": "lowchrome_97_after_light_768_sideclosed_rightopen.png",
+     "par": {
+      "antes": "EV-B68A76B0",
+      "depois": "EV-0912C577"
+     }
+    },
+    {
+     "id": "EV-2D494C32",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_light_768_sideopen_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_light_768_sideopen_rightclosed.png",
+     "src": "lowchrome_97_after_light_768_sideopen_rightclosed.png",
+     "par": {
+      "antes": "EV-C73A97DA",
+      "depois": "EV-2D494C32"
+     }
+    },
+    {
+     "id": "EV-6E4A660C",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_light_768_sideopen_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_light_768_sideopen_rightopen.png",
+     "src": "lowchrome_97_after_light_768_sideopen_rightopen.png",
+     "par": {
+      "antes": "EV-505980DC",
+      "depois": "EV-6E4A660C"
+     }
+    },
+    {
+     "id": "EV-438F90AD",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_dark_1024_sideclosed_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_dark_1024_sideclosed_rightclosed.png",
+     "src": "lowchrome_97_before_dark_1024_sideclosed_rightclosed.png",
+     "par": {
+      "antes": "EV-438F90AD",
+      "depois": "EV-1C4781EA"
+     }
+    },
+    {
+     "id": "EV-9B457D03",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_dark_1024_sideclosed_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_dark_1024_sideclosed_rightopen.png",
+     "src": "lowchrome_97_before_dark_1024_sideclosed_rightopen.png",
+     "par": {
+      "antes": "EV-9B457D03",
+      "depois": "EV-C28BD30C"
+     }
+    },
+    {
+     "id": "EV-06B4F737",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_dark_1024_sideopen_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_dark_1024_sideopen_rightclosed.png",
+     "src": "lowchrome_97_before_dark_1024_sideopen_rightclosed.png",
+     "par": {
+      "antes": "EV-06B4F737",
+      "depois": "EV-BC5D8509"
+     }
+    },
+    {
+     "id": "EV-10DE33D3",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_dark_1024_sideopen_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_dark_1024_sideopen_rightopen.png",
+     "src": "lowchrome_97_before_dark_1024_sideopen_rightopen.png",
+     "par": {
+      "antes": "EV-10DE33D3",
+      "depois": "EV-758A63FD"
+     }
+    },
+    {
+     "id": "EV-CBD77C73",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_dark_1366_sideclosed_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_dark_1366_sideclosed_rightclosed.png",
+     "src": "lowchrome_97_before_dark_1366_sideclosed_rightclosed.png",
+     "par": {
+      "antes": "EV-CBD77C73",
+      "depois": "EV-2EB888EA"
+     }
+    },
+    {
+     "id": "EV-09E5F50A",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_dark_1366_sideclosed_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_dark_1366_sideclosed_rightopen.png",
+     "src": "lowchrome_97_before_dark_1366_sideclosed_rightopen.png",
+     "par": {
+      "antes": "EV-09E5F50A",
+      "depois": "EV-E62B32BB"
+     }
+    },
+    {
+     "id": "EV-9F60C93F",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_dark_1366_sideopen_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_dark_1366_sideopen_rightclosed.png",
+     "src": "lowchrome_97_before_dark_1366_sideopen_rightclosed.png",
+     "par": {
+      "antes": "EV-9F60C93F",
+      "depois": "EV-0960E8A6"
+     }
+    },
+    {
+     "id": "EV-F5C81BFA",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_dark_1366_sideopen_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_dark_1366_sideopen_rightopen.png",
+     "src": "lowchrome_97_before_dark_1366_sideopen_rightopen.png",
+     "par": {
+      "antes": "EV-F5C81BFA",
+      "depois": "EV-34F2A8A1"
+     }
+    },
+    {
+     "id": "EV-71437B94",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_dark_768_sideclosed_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_dark_768_sideclosed_rightclosed.png",
+     "src": "lowchrome_97_before_dark_768_sideclosed_rightclosed.png",
+     "par": {
+      "antes": "EV-71437B94",
+      "depois": "EV-689FBB79"
+     }
+    },
+    {
+     "id": "EV-1E06635F",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_dark_768_sideclosed_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_dark_768_sideclosed_rightopen.png",
+     "src": "lowchrome_97_before_dark_768_sideclosed_rightopen.png",
+     "par": {
+      "antes": "EV-1E06635F",
+      "depois": "EV-AA09E670"
+     }
+    },
+    {
+     "id": "EV-459E3A06",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_dark_768_sideopen_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_dark_768_sideopen_rightclosed.png",
+     "src": "lowchrome_97_before_dark_768_sideopen_rightclosed.png",
+     "par": {
+      "antes": "EV-459E3A06",
+      "depois": "EV-AD1D7202"
+     }
+    },
+    {
+     "id": "EV-8DF28F38",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_dark_768_sideopen_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_dark_768_sideopen_rightopen.png",
+     "src": "lowchrome_97_before_dark_768_sideopen_rightopen.png",
+     "par": {
+      "antes": "EV-8DF28F38",
+      "depois": "EV-9ED6AC93"
+     }
+    },
+    {
+     "id": "EV-2D7A1158",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_light_1024_sideclosed_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_light_1024_sideclosed_rightclosed.png",
+     "src": "lowchrome_97_before_light_1024_sideclosed_rightclosed.png",
+     "par": {
+      "antes": "EV-2D7A1158",
+      "depois": "EV-F1C7E641"
+     }
+    },
+    {
+     "id": "EV-308B3DAE",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_light_1024_sideclosed_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_light_1024_sideclosed_rightopen.png",
+     "src": "lowchrome_97_before_light_1024_sideclosed_rightopen.png",
+     "par": {
+      "antes": "EV-308B3DAE",
+      "depois": "EV-BD1DE3B9"
+     }
+    },
+    {
+     "id": "EV-3C37423F",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_light_1024_sideopen_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_light_1024_sideopen_rightclosed.png",
+     "src": "lowchrome_97_before_light_1024_sideopen_rightclosed.png",
+     "par": {
+      "antes": "EV-3C37423F",
+      "depois": "EV-4A9E72AE"
+     }
+    },
+    {
+     "id": "EV-F4C3DCE6",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_light_1024_sideopen_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_light_1024_sideopen_rightopen.png",
+     "src": "lowchrome_97_before_light_1024_sideopen_rightopen.png",
+     "par": {
+      "antes": "EV-F4C3DCE6",
+      "depois": "EV-0FC85A0C"
+     }
+    },
+    {
+     "id": "EV-F5948D83",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_light_1366_sideclosed_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_light_1366_sideclosed_rightclosed.png",
+     "src": "lowchrome_97_before_light_1366_sideclosed_rightclosed.png",
+     "par": {
+      "antes": "EV-F5948D83",
+      "depois": "EV-274432BD"
+     }
+    },
+    {
+     "id": "EV-F551E6D4",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_light_1366_sideclosed_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_light_1366_sideclosed_rightopen.png",
+     "src": "lowchrome_97_before_light_1366_sideclosed_rightopen.png",
+     "par": {
+      "antes": "EV-F551E6D4",
+      "depois": "EV-D2C84331"
+     }
+    },
+    {
+     "id": "EV-42EC0E0E",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_light_1366_sideopen_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_light_1366_sideopen_rightclosed.png",
+     "src": "lowchrome_97_before_light_1366_sideopen_rightclosed.png",
+     "par": {
+      "antes": "EV-42EC0E0E",
+      "depois": "EV-C1953378"
+     }
+    },
+    {
+     "id": "EV-35E4BB43",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_light_1366_sideopen_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_light_1366_sideopen_rightopen.png",
+     "src": "lowchrome_97_before_light_1366_sideopen_rightopen.png",
+     "par": {
+      "antes": "EV-35E4BB43",
+      "depois": "EV-478D2EB6"
+     }
+    },
+    {
+     "id": "EV-6A9EC0C5",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_light_768_sideclosed_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_light_768_sideclosed_rightclosed.png",
+     "src": "lowchrome_97_before_light_768_sideclosed_rightclosed.png",
+     "par": {
+      "antes": "EV-6A9EC0C5",
+      "depois": "EV-D7060E7F"
+     }
+    },
+    {
+     "id": "EV-B68A76B0",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_light_768_sideclosed_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_light_768_sideclosed_rightopen.png",
+     "src": "lowchrome_97_before_light_768_sideclosed_rightopen.png",
+     "par": {
+      "antes": "EV-B68A76B0",
+      "depois": "EV-0912C577"
+     }
+    },
+    {
+     "id": "EV-C73A97DA",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_light_768_sideopen_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_light_768_sideopen_rightclosed.png",
+     "src": "lowchrome_97_before_light_768_sideopen_rightclosed.png",
+     "par": {
+      "antes": "EV-C73A97DA",
+      "depois": "EV-2D494C32"
+     }
+    },
+    {
+     "id": "EV-505980DC",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_light_768_sideopen_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_light_768_sideopen_rightopen.png",
+     "src": "lowchrome_97_before_light_768_sideopen_rightopen.png",
+     "par": {
+      "antes": "EV-505980DC",
+      "depois": "EV-6E4A660C"
+     }
+    }
+   ],
+   "evidencias": [
+    {
+     "id": "EV-B9DA5922",
+     "tipo": "a classificar",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/467eb8f7f105cfc51e345390bbecd9c4.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/467eb8f7f105cfc51e345390bbecd9c4.png",
+     "src": "467eb8f7f105cfc51e345390bbecd9c4.png",
+     "par": null
+    },
+    {
+     "id": "EV-7595E35C",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/capacities_live_collapsed_sidebar.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/capacities_live_collapsed_sidebar.png",
+     "src": "capacities_live_collapsed_sidebar.png",
+     "par": null
+    },
+    {
+     "id": "EV-44066168",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/capacities_live_right_panel_related.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/capacities_live_right_panel_related.png",
+     "src": "capacities_live_right_panel_related.png",
+     "par": null
+    },
+    {
+     "id": "EV-0D09685C",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/capacities_live_right_panel_tab_overflow.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/capacities_live_right_panel_tab_overflow.png",
+     "src": "capacities_live_right_panel_tab_overflow.png",
+     "par": null
+    },
+    {
+     "id": "EV-CE2986A7",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": 128,
+     "caminho": "prototype/issue128_reduced_1366.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue128_reduced_1366.png",
+     "src": "issue128_reduced_1366.png",
+     "par": null
+    },
+    {
+     "id": "EV-B0A2376D",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": 128,
+     "caminho": "prototype/issue128_reduced_390.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue128_reduced_390.png",
+     "src": "issue128_reduced_390.png",
+     "par": null
+    },
+    {
+     "id": "EV-ABF13588",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": 128,
+     "caminho": "prototype/issue128_restored_1366.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue128_restored_1366.png",
+     "src": "issue128_restored_1366.png",
+     "par": null
+    },
+    {
+     "id": "EV-9D8A7404",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": 128,
+     "caminho": "prototype/issue128_restored_390.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue128_restored_390.png",
+     "src": "issue128_restored_390.png",
+     "par": null
+    },
+    {
+     "id": "EV-BE009A8E",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": 132,
+     "caminho": "prototype/issue132_after_1280.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue132_after_1280.png",
+     "src": "issue132_after_1280.png",
+     "par": null
+    },
+    {
+     "id": "EV-D628B8EA",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": 132,
+     "caminho": "prototype/issue132_after_320.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue132_after_320.png",
+     "src": "issue132_after_320.png",
+     "par": null
+    },
+    {
+     "id": "EV-5462A36C",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": 132,
+     "caminho": "prototype/issue132_after_390.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue132_after_390.png",
+     "src": "issue132_after_390.png",
+     "par": {
+      "antes": "EV-948AB196",
+      "depois": "EV-5462A36C"
+     }
+    },
+    {
+     "id": "EV-28B4E626",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": 132,
+     "caminho": "prototype/issue132_after_768.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue132_after_768.png",
+     "src": "issue132_after_768.png",
+     "par": null
+    },
+    {
+     "id": "EV-948AB196",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": 132,
+     "caminho": "prototype/issue132_before_390.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue132_before_390.png",
+     "src": "issue132_before_390.png",
+     "par": {
+      "antes": "EV-948AB196",
+      "depois": "EV-5462A36C"
+     }
+    },
+    {
+     "id": "EV-671876AB",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": 136,
+     "caminho": "prototype/issue136_after_context_1366.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue136_after_context_1366.png",
+     "src": "issue136_after_context_1366.png",
+     "par": {
+      "antes": "EV-4EA12FC6",
+      "depois": "EV-671876AB"
+     }
+    },
+    {
+     "id": "EV-3C71C4E1",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": 136,
+     "caminho": "prototype/issue136_after_context_390.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue136_after_context_390.png",
+     "src": "issue136_after_context_390.png",
+     "par": null
+    },
+    {
+     "id": "EV-6AF6FE34",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": 136,
+     "caminho": "prototype/issue136_after_global_1366.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue136_after_global_1366.png",
+     "src": "issue136_after_global_1366.png",
+     "par": null
+    },
+    {
+     "id": "EV-4EA12FC6",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": 136,
+     "caminho": "prototype/issue136_before_context_1366.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue136_before_context_1366.png",
+     "src": "issue136_before_context_1366.png",
+     "par": {
+      "antes": "EV-4EA12FC6",
+      "depois": "EV-671876AB"
+     }
+    },
+    {
+     "id": "EV-64C42711",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": 138,
+     "caminho": "prototype/issue138_after_drag_desktop.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue138_after_drag_desktop.png",
+     "src": "issue138_after_drag_desktop.png",
+     "par": null
+    },
+    {
+     "id": "EV-9DCAA13D",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": 138,
+     "caminho": "prototype/issue138_after_keyboard_desktop.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue138_after_keyboard_desktop.png",
+     "src": "issue138_after_keyboard_desktop.png",
+     "par": null
+    },
+    {
+     "id": "EV-E6DA16C5",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": 138,
+     "caminho": "prototype/issue138_after_mobile_390.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue138_after_mobile_390.png",
+     "src": "issue138_after_mobile_390.png",
+     "par": null
+    },
+    {
+     "id": "EV-340DC64C",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": 138,
+     "caminho": "prototype/issue138_before_desktop.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue138_before_desktop.png",
+     "src": "issue138_before_desktop.png",
+     "par": null
+    },
+    {
+     "id": "EV-7678D4DD",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": 138,
+     "caminho": "prototype/issue138_search_desktop.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue138_search_desktop.png",
+     "src": "issue138_search_desktop.png",
+     "par": null
+    },
+    {
+     "id": "EV-F32A3973",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": 83,
+     "caminho": "prototype/issue83_frequency_silent_1366.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue83_frequency_silent_1366.png",
+     "src": "issue83_frequency_silent_1366.png",
+     "par": null
+    },
+    {
+     "id": "EV-77AD9831",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": 83,
+     "caminho": "prototype/issue83_frequency_silent_390.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue83_frequency_silent_390.png",
+     "src": "issue83_frequency_silent_390.png",
+     "par": null
+    },
+    {
+     "id": "EV-72F03533",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": 83,
+     "caminho": "prototype/issue83_nondestructive_edit_1366.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue83_nondestructive_edit_1366.png",
+     "src": "issue83_nondestructive_edit_1366.png",
+     "par": null
+    },
+    {
+     "id": "EV-3ECFFA2D",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": 83,
+     "caminho": "prototype/issue83_nondestructive_edit_390.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue83_nondestructive_edit_390.png",
+     "src": "issue83_nondestructive_edit_390.png",
+     "par": null
+    },
+    {
+     "id": "EV-DA94C847",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": 83,
+     "caminho": "prototype/issue83_review_heatmap_1366.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue83_review_heatmap_1366.png",
+     "src": "issue83_review_heatmap_1366.png",
+     "par": null
+    },
+    {
+     "id": "EV-D891B182",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": 83,
+     "caminho": "prototype/issue83_review_heatmap_390.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue83_review_heatmap_390.png",
+     "src": "issue83_review_heatmap_390.png",
+     "par": null
+    },
+    {
+     "id": "EV-FF30AFBC",
+     "tipo": "a classificar",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/j6-mestre-320.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/j6-mestre-320.png",
+     "src": "j6-mestre-320.png",
+     "par": null
+    },
+    {
+     "id": "EV-E3B671AB",
+     "tipo": "a classificar",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/j6-mestre-390.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/j6-mestre-390.png",
+     "src": "j6-mestre-390.png",
+     "par": null
+    },
+    {
+     "id": "EV-1C4781EA",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_dark_1024_sideclosed_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_dark_1024_sideclosed_rightclosed.png",
+     "src": "lowchrome_97_after_dark_1024_sideclosed_rightclosed.png",
+     "par": {
+      "antes": "EV-438F90AD",
+      "depois": "EV-1C4781EA"
+     }
+    },
+    {
+     "id": "EV-C28BD30C",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_dark_1024_sideclosed_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_dark_1024_sideclosed_rightopen.png",
+     "src": "lowchrome_97_after_dark_1024_sideclosed_rightopen.png",
+     "par": {
+      "antes": "EV-9B457D03",
+      "depois": "EV-C28BD30C"
+     }
+    },
+    {
+     "id": "EV-BC5D8509",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_dark_1024_sideopen_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_dark_1024_sideopen_rightclosed.png",
+     "src": "lowchrome_97_after_dark_1024_sideopen_rightclosed.png",
+     "par": {
+      "antes": "EV-06B4F737",
+      "depois": "EV-BC5D8509"
+     }
+    },
+    {
+     "id": "EV-758A63FD",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_dark_1024_sideopen_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_dark_1024_sideopen_rightopen.png",
+     "src": "lowchrome_97_after_dark_1024_sideopen_rightopen.png",
+     "par": {
+      "antes": "EV-10DE33D3",
+      "depois": "EV-758A63FD"
+     }
+    },
+    {
+     "id": "EV-2EB888EA",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_dark_1366_sideclosed_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_dark_1366_sideclosed_rightclosed.png",
+     "src": "lowchrome_97_after_dark_1366_sideclosed_rightclosed.png",
+     "par": {
+      "antes": "EV-CBD77C73",
+      "depois": "EV-2EB888EA"
+     }
+    },
+    {
+     "id": "EV-E62B32BB",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_dark_1366_sideclosed_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_dark_1366_sideclosed_rightopen.png",
+     "src": "lowchrome_97_after_dark_1366_sideclosed_rightopen.png",
+     "par": {
+      "antes": "EV-09E5F50A",
+      "depois": "EV-E62B32BB"
+     }
+    },
+    {
+     "id": "EV-0960E8A6",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_dark_1366_sideopen_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_dark_1366_sideopen_rightclosed.png",
+     "src": "lowchrome_97_after_dark_1366_sideopen_rightclosed.png",
+     "par": {
+      "antes": "EV-9F60C93F",
+      "depois": "EV-0960E8A6"
+     }
+    },
+    {
+     "id": "EV-34F2A8A1",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_dark_1366_sideopen_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_dark_1366_sideopen_rightopen.png",
+     "src": "lowchrome_97_after_dark_1366_sideopen_rightopen.png",
+     "par": {
+      "antes": "EV-F5C81BFA",
+      "depois": "EV-34F2A8A1"
+     }
+    },
+    {
+     "id": "EV-689FBB79",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_dark_768_sideclosed_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_dark_768_sideclosed_rightclosed.png",
+     "src": "lowchrome_97_after_dark_768_sideclosed_rightclosed.png",
+     "par": {
+      "antes": "EV-71437B94",
+      "depois": "EV-689FBB79"
+     }
+    },
+    {
+     "id": "EV-AA09E670",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_dark_768_sideclosed_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_dark_768_sideclosed_rightopen.png",
+     "src": "lowchrome_97_after_dark_768_sideclosed_rightopen.png",
+     "par": {
+      "antes": "EV-1E06635F",
+      "depois": "EV-AA09E670"
+     }
+    },
+    {
+     "id": "EV-AD1D7202",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_dark_768_sideopen_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_dark_768_sideopen_rightclosed.png",
+     "src": "lowchrome_97_after_dark_768_sideopen_rightclosed.png",
+     "par": {
+      "antes": "EV-459E3A06",
+      "depois": "EV-AD1D7202"
+     }
+    },
+    {
+     "id": "EV-9ED6AC93",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_dark_768_sideopen_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_dark_768_sideopen_rightopen.png",
+     "src": "lowchrome_97_after_dark_768_sideopen_rightopen.png",
+     "par": {
+      "antes": "EV-8DF28F38",
+      "depois": "EV-9ED6AC93"
+     }
+    },
+    {
+     "id": "EV-F1C7E641",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_light_1024_sideclosed_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_light_1024_sideclosed_rightclosed.png",
+     "src": "lowchrome_97_after_light_1024_sideclosed_rightclosed.png",
+     "par": {
+      "antes": "EV-2D7A1158",
+      "depois": "EV-F1C7E641"
+     }
+    },
+    {
+     "id": "EV-BD1DE3B9",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_light_1024_sideclosed_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_light_1024_sideclosed_rightopen.png",
+     "src": "lowchrome_97_after_light_1024_sideclosed_rightopen.png",
+     "par": {
+      "antes": "EV-308B3DAE",
+      "depois": "EV-BD1DE3B9"
+     }
+    },
+    {
+     "id": "EV-4A9E72AE",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_light_1024_sideopen_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_light_1024_sideopen_rightclosed.png",
+     "src": "lowchrome_97_after_light_1024_sideopen_rightclosed.png",
+     "par": {
+      "antes": "EV-3C37423F",
+      "depois": "EV-4A9E72AE"
+     }
+    },
+    {
+     "id": "EV-0FC85A0C",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_light_1024_sideopen_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_light_1024_sideopen_rightopen.png",
+     "src": "lowchrome_97_after_light_1024_sideopen_rightopen.png",
+     "par": {
+      "antes": "EV-F4C3DCE6",
+      "depois": "EV-0FC85A0C"
+     }
+    },
+    {
+     "id": "EV-274432BD",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_light_1366_sideclosed_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_light_1366_sideclosed_rightclosed.png",
+     "src": "lowchrome_97_after_light_1366_sideclosed_rightclosed.png",
+     "par": {
+      "antes": "EV-F5948D83",
+      "depois": "EV-274432BD"
+     }
+    },
+    {
+     "id": "EV-D2C84331",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_light_1366_sideclosed_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_light_1366_sideclosed_rightopen.png",
+     "src": "lowchrome_97_after_light_1366_sideclosed_rightopen.png",
+     "par": {
+      "antes": "EV-F551E6D4",
+      "depois": "EV-D2C84331"
+     }
+    },
+    {
+     "id": "EV-C1953378",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_light_1366_sideopen_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_light_1366_sideopen_rightclosed.png",
+     "src": "lowchrome_97_after_light_1366_sideopen_rightclosed.png",
+     "par": {
+      "antes": "EV-42EC0E0E",
+      "depois": "EV-C1953378"
+     }
+    },
+    {
+     "id": "EV-478D2EB6",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_light_1366_sideopen_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_light_1366_sideopen_rightopen.png",
+     "src": "lowchrome_97_after_light_1366_sideopen_rightopen.png",
+     "par": {
+      "antes": "EV-35E4BB43",
+      "depois": "EV-478D2EB6"
+     }
+    },
+    {
+     "id": "EV-D7060E7F",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_light_768_sideclosed_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_light_768_sideclosed_rightclosed.png",
+     "src": "lowchrome_97_after_light_768_sideclosed_rightclosed.png",
+     "par": {
+      "antes": "EV-6A9EC0C5",
+      "depois": "EV-D7060E7F"
+     }
+    },
+    {
+     "id": "EV-0912C577",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_light_768_sideclosed_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_light_768_sideclosed_rightopen.png",
+     "src": "lowchrome_97_after_light_768_sideclosed_rightopen.png",
+     "par": {
+      "antes": "EV-B68A76B0",
+      "depois": "EV-0912C577"
+     }
+    },
+    {
+     "id": "EV-2D494C32",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_light_768_sideopen_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_light_768_sideopen_rightclosed.png",
+     "src": "lowchrome_97_after_light_768_sideopen_rightclosed.png",
+     "par": {
+      "antes": "EV-C73A97DA",
+      "depois": "EV-2D494C32"
+     }
+    },
+    {
+     "id": "EV-6E4A660C",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_after_light_768_sideopen_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_after_light_768_sideopen_rightopen.png",
+     "src": "lowchrome_97_after_light_768_sideopen_rightopen.png",
+     "par": {
+      "antes": "EV-505980DC",
+      "depois": "EV-6E4A660C"
+     }
+    },
+    {
+     "id": "EV-438F90AD",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_dark_1024_sideclosed_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_dark_1024_sideclosed_rightclosed.png",
+     "src": "lowchrome_97_before_dark_1024_sideclosed_rightclosed.png",
+     "par": {
+      "antes": "EV-438F90AD",
+      "depois": "EV-1C4781EA"
+     }
+    },
+    {
+     "id": "EV-9B457D03",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_dark_1024_sideclosed_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_dark_1024_sideclosed_rightopen.png",
+     "src": "lowchrome_97_before_dark_1024_sideclosed_rightopen.png",
+     "par": {
+      "antes": "EV-9B457D03",
+      "depois": "EV-C28BD30C"
+     }
+    },
+    {
+     "id": "EV-06B4F737",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_dark_1024_sideopen_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_dark_1024_sideopen_rightclosed.png",
+     "src": "lowchrome_97_before_dark_1024_sideopen_rightclosed.png",
+     "par": {
+      "antes": "EV-06B4F737",
+      "depois": "EV-BC5D8509"
+     }
+    },
+    {
+     "id": "EV-10DE33D3",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_dark_1024_sideopen_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_dark_1024_sideopen_rightopen.png",
+     "src": "lowchrome_97_before_dark_1024_sideopen_rightopen.png",
+     "par": {
+      "antes": "EV-10DE33D3",
+      "depois": "EV-758A63FD"
+     }
+    },
+    {
+     "id": "EV-CBD77C73",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_dark_1366_sideclosed_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_dark_1366_sideclosed_rightclosed.png",
+     "src": "lowchrome_97_before_dark_1366_sideclosed_rightclosed.png",
+     "par": {
+      "antes": "EV-CBD77C73",
+      "depois": "EV-2EB888EA"
+     }
+    },
+    {
+     "id": "EV-09E5F50A",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_dark_1366_sideclosed_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_dark_1366_sideclosed_rightopen.png",
+     "src": "lowchrome_97_before_dark_1366_sideclosed_rightopen.png",
+     "par": {
+      "antes": "EV-09E5F50A",
+      "depois": "EV-E62B32BB"
+     }
+    },
+    {
+     "id": "EV-9F60C93F",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_dark_1366_sideopen_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_dark_1366_sideopen_rightclosed.png",
+     "src": "lowchrome_97_before_dark_1366_sideopen_rightclosed.png",
+     "par": {
+      "antes": "EV-9F60C93F",
+      "depois": "EV-0960E8A6"
+     }
+    },
+    {
+     "id": "EV-F5C81BFA",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_dark_1366_sideopen_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_dark_1366_sideopen_rightopen.png",
+     "src": "lowchrome_97_before_dark_1366_sideopen_rightopen.png",
+     "par": {
+      "antes": "EV-F5C81BFA",
+      "depois": "EV-34F2A8A1"
+     }
+    },
+    {
+     "id": "EV-71437B94",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_dark_768_sideclosed_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_dark_768_sideclosed_rightclosed.png",
+     "src": "lowchrome_97_before_dark_768_sideclosed_rightclosed.png",
+     "par": {
+      "antes": "EV-71437B94",
+      "depois": "EV-689FBB79"
+     }
+    },
+    {
+     "id": "EV-1E06635F",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_dark_768_sideclosed_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_dark_768_sideclosed_rightopen.png",
+     "src": "lowchrome_97_before_dark_768_sideclosed_rightopen.png",
+     "par": {
+      "antes": "EV-1E06635F",
+      "depois": "EV-AA09E670"
+     }
+    },
+    {
+     "id": "EV-459E3A06",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_dark_768_sideopen_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_dark_768_sideopen_rightclosed.png",
+     "src": "lowchrome_97_before_dark_768_sideopen_rightclosed.png",
+     "par": {
+      "antes": "EV-459E3A06",
+      "depois": "EV-AD1D7202"
+     }
+    },
+    {
+     "id": "EV-8DF28F38",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_dark_768_sideopen_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_dark_768_sideopen_rightopen.png",
+     "src": "lowchrome_97_before_dark_768_sideopen_rightopen.png",
+     "par": {
+      "antes": "EV-8DF28F38",
+      "depois": "EV-9ED6AC93"
+     }
+    },
+    {
+     "id": "EV-2D7A1158",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_light_1024_sideclosed_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_light_1024_sideclosed_rightclosed.png",
+     "src": "lowchrome_97_before_light_1024_sideclosed_rightclosed.png",
+     "par": {
+      "antes": "EV-2D7A1158",
+      "depois": "EV-F1C7E641"
+     }
+    },
+    {
+     "id": "EV-308B3DAE",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_light_1024_sideclosed_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_light_1024_sideclosed_rightopen.png",
+     "src": "lowchrome_97_before_light_1024_sideclosed_rightopen.png",
+     "par": {
+      "antes": "EV-308B3DAE",
+      "depois": "EV-BD1DE3B9"
+     }
+    },
+    {
+     "id": "EV-3C37423F",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_light_1024_sideopen_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_light_1024_sideopen_rightclosed.png",
+     "src": "lowchrome_97_before_light_1024_sideopen_rightclosed.png",
+     "par": {
+      "antes": "EV-3C37423F",
+      "depois": "EV-4A9E72AE"
+     }
+    },
+    {
+     "id": "EV-F4C3DCE6",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_light_1024_sideopen_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_light_1024_sideopen_rightopen.png",
+     "src": "lowchrome_97_before_light_1024_sideopen_rightopen.png",
+     "par": {
+      "antes": "EV-F4C3DCE6",
+      "depois": "EV-0FC85A0C"
+     }
+    },
+    {
+     "id": "EV-F5948D83",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_light_1366_sideclosed_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_light_1366_sideclosed_rightclosed.png",
+     "src": "lowchrome_97_before_light_1366_sideclosed_rightclosed.png",
+     "par": {
+      "antes": "EV-F5948D83",
+      "depois": "EV-274432BD"
+     }
+    },
+    {
+     "id": "EV-F551E6D4",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_light_1366_sideclosed_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_light_1366_sideclosed_rightopen.png",
+     "src": "lowchrome_97_before_light_1366_sideclosed_rightopen.png",
+     "par": {
+      "antes": "EV-F551E6D4",
+      "depois": "EV-D2C84331"
+     }
+    },
+    {
+     "id": "EV-42EC0E0E",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_light_1366_sideopen_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_light_1366_sideopen_rightclosed.png",
+     "src": "lowchrome_97_before_light_1366_sideopen_rightclosed.png",
+     "par": {
+      "antes": "EV-42EC0E0E",
+      "depois": "EV-C1953378"
+     }
+    },
+    {
+     "id": "EV-35E4BB43",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_light_1366_sideopen_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_light_1366_sideopen_rightopen.png",
+     "src": "lowchrome_97_before_light_1366_sideopen_rightopen.png",
+     "par": {
+      "antes": "EV-35E4BB43",
+      "depois": "EV-478D2EB6"
+     }
+    },
+    {
+     "id": "EV-6A9EC0C5",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_light_768_sideclosed_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_light_768_sideclosed_rightclosed.png",
+     "src": "lowchrome_97_before_light_768_sideclosed_rightclosed.png",
+     "par": {
+      "antes": "EV-6A9EC0C5",
+      "depois": "EV-D7060E7F"
+     }
+    },
+    {
+     "id": "EV-B68A76B0",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_light_768_sideclosed_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_light_768_sideclosed_rightopen.png",
+     "src": "lowchrome_97_before_light_768_sideclosed_rightopen.png",
+     "par": {
+      "antes": "EV-B68A76B0",
+      "depois": "EV-0912C577"
+     }
+    },
+    {
+     "id": "EV-C73A97DA",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_light_768_sideopen_rightclosed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_light_768_sideopen_rightclosed.png",
+     "src": "lowchrome_97_before_light_768_sideopen_rightclosed.png",
+     "par": {
+      "antes": "EV-C73A97DA",
+      "depois": "EV-2D494C32"
+     }
+    },
+    {
+     "id": "EV-505980DC",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/lowchrome_97_before_light_768_sideopen_rightopen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/lowchrome_97_before_light_768_sideopen_rightopen.png",
+     "src": "lowchrome_97_before_light_768_sideopen_rightopen.png",
+     "par": {
+      "antes": "EV-505980DC",
+      "depois": "EV-6E4A660C"
+     }
+    }
+   ],
+   "grupos": [
+    {
+     "id": "02/e500",
+     "name": "Workspace de três painéis",
+     "board": "02 Workspace & UX",
+     "blocks": [
+      "e500"
+     ],
+     "fonte": "inferido"
+    },
+    {
+     "id": "02/e800",
+     "name": "Painel direito e motor de grafo",
+     "board": "02 Workspace & UX",
+     "blocks": [
+      "e800"
+     ],
+     "fonte": "inferido"
+    },
+    {
+     "id": "02/e1397",
+     "name": "Atalhos e roteador de comandos",
+     "board": "02 Workspace & UX",
+     "blocks": [
+      "e1397"
+     ],
+     "fonte": "inferido"
+    }
+   ],
+   "release": {
+    "estado": "não verificado",
+    "observacao": "Nenhuma release, tag ou milestone registrada (planning/estado-atual.md). Sem datas inferidas.",
+    "fonte": "docs/planning/estado-atual.md"
+   }
+  },
+  {
+   "id": "questoes",
+   "title": "Questões e navegador",
+   "status": "implementado",
+   "doc": {
+    "path": "prototype/questoes.md",
+    "url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/questoes.md",
+    "fonte": "índice"
+   },
+   "sintese": [
+    "- Problema: praticar questões por banca, ano, disciplina e concurso.",
+    "- Quem usa: estudante em preparação.",
+    "- Status: implementado no protótipo 0.1.1 (70 questões reais do Dataprev 2026, filtros e navegador). Evidência: `index.html` e `/concursos/dataprev-2026/questoes/` no projeto.",
+    "- Fluxo principal: filtrar → abrir questão em tela própria → responder → ver gabarito."
+   ],
+   "adrs": [],
+   "diagramas": [
+    {
+     "id": "c4-l1",
+     "fonte": "global (sem vínculo por feature no índice)"
+    },
+    {
+     "id": "c4-l2",
+     "fonte": "global (sem vínculo por feature no índice)"
+    },
+    {
+     "id": "er-dominio",
+     "fonte": "global (sem vínculo por feature no índice)"
+    }
+   ],
+   "issues": [
+    {
+     "numero": 70,
+     "url": "https://github.com/ianmaciel7/exams-app/issues/70",
+     "fonte": "índice ou catálogo (ID)"
+    },
+    {
+     "numero": 75,
+     "url": "https://github.com/ianmaciel7/exams-app/issues/75",
+     "fonte": "índice ou catálogo (ID)"
+    },
+    {
+     "numero": 76,
+     "url": "https://github.com/ianmaciel7/exams-app/issues/76",
+     "fonte": "índice ou catálogo (ID)"
+    },
+    {
+     "numero": 82,
+     "url": "https://github.com/ianmaciel7/exams-app/issues/82",
+     "fonte": "índice ou catálogo (ID)"
+    },
+    {
+     "numero": 100,
+     "url": "https://github.com/ianmaciel7/exams-app/issues/100",
+     "fonte": "índice ou catálogo (ID)"
+    }
+   ],
+   "prs": [],
+   "testes": [],
+   "evidencias": [
+    {
+     "id": "EV-4B2BB58B",
+     "tipo": "inspeção técnica",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/audit2026_questao_collapsed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/audit2026_questao_collapsed.png",
+     "src": "audit2026_questao_collapsed.png",
+     "par": null
+    },
+    {
+     "id": "EV-200B5091",
+     "tipo": "inspeção técnica",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/audit2026_questao_expanded.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/audit2026_questao_expanded.png",
+     "src": "audit2026_questao_expanded.png",
+     "par": null
+    },
+    {
+     "id": "EV-EA4158D7",
+     "tipo": "inspeção técnica",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/audit2026_tipo_questao_wrap.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/audit2026_tipo_questao_wrap.png",
+     "src": "audit2026_tipo_questao_wrap.png",
+     "par": null
+    },
+    {
+     "id": "EV-601DF4CD",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/examtopics_az104_discussion_modal.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/examtopics_az104_discussion_modal.png",
+     "src": "examtopics_az104_discussion_modal.png",
+     "par": null
+    },
+    {
+     "id": "EV-3D095C0C",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/examtopics_az104_header_and_overview.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/examtopics_az104_header_and_overview.png",
+     "src": "examtopics_az104_header_and_overview.png",
+     "par": null
+    },
+    {
+     "id": "EV-006986D1",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/examtopics_az104_pagination_and_footer.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/examtopics_az104_pagination_and_footer.png",
+     "src": "examtopics_az104_pagination_and_footer.png",
+     "par": null
+    },
+    {
+     "id": "EV-A4C5D49B",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/examtopics_az104_question_card.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/examtopics_az104_question_card.png",
+     "src": "examtopics_az104_question_card.png",
+     "par": null
+    },
+    {
+     "id": "EV-06924DC9",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/examtopics_az104_solution_reveal.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/examtopics_az104_solution_reveal.png",
+     "src": "examtopics_az104_solution_reveal.png",
+     "par": null
+    },
+    {
+     "id": "EV-B58B0AF1",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": 100,
+     "caminho": "prototype/issue100_after_answer.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue100_after_answer.png",
+     "src": "issue100_after_answer.png",
+     "par": null
+    },
+    {
+     "id": "EV-097D0D64",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": 100,
+     "caminho": "prototype/issue100_after_contexto.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue100_after_contexto.png",
+     "src": "issue100_after_contexto.png",
+     "par": null
+    },
+    {
+     "id": "EV-E328ED92",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": 100,
+     "caminho": "prototype/issue100_after_erros.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue100_after_erros.png",
+     "src": "issue100_after_erros.png",
+     "par": null
+    },
+    {
+     "id": "EV-125D5511",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": 100,
+     "caminho": "prototype/issue100_after_global.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue100_after_global.png",
+     "src": "issue100_after_global.png",
+     "par": {
+      "antes": "EV-EAC6A02C",
+      "depois": "EV-125D5511"
+     }
+    },
+    {
+     "id": "EV-1B7F0D0B",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": 100,
+     "caminho": "prototype/issue100_after_manual.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue100_after_manual.png",
+     "src": "issue100_after_manual.png",
+     "par": {
+      "antes": "EV-DE9FADBE",
+      "depois": "EV-1B7F0D0B"
+     }
+    },
+    {
+     "id": "EV-EAC6A02C",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": 100,
+     "caminho": "prototype/issue100_before_global.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue100_before_global.png",
+     "src": "issue100_before_global.png",
+     "par": {
+      "antes": "EV-EAC6A02C",
+      "depois": "EV-125D5511"
+     }
+    },
+    {
+     "id": "EV-DE9FADBE",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": 100,
+     "caminho": "prototype/issue100_before_manual.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue100_before_manual.png",
+     "src": "issue100_before_manual.png",
+     "par": {
+      "antes": "EV-DE9FADBE",
+      "depois": "EV-1B7F0D0B"
+     }
+    },
+    {
+     "id": "EV-E376DBE6",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": 70,
+     "caminho": "prototype/issue70_after_cascade.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue70_after_cascade.png",
+     "src": "issue70_after_cascade.png",
+     "par": null
+    },
+    {
+     "id": "EV-747DC3C2",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": 70,
+     "caminho": "prototype/issue70_after_clear_defaults.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue70_after_clear_defaults.png",
+     "src": "issue70_after_clear_defaults.png",
+     "par": null
+    },
+    {
+     "id": "EV-DD1B059F",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": 70,
+     "caminho": "prototype/issue70_after_exclusion.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue70_after_exclusion.png",
+     "src": "issue70_after_exclusion.png",
+     "par": null
+    },
+    {
+     "id": "EV-7E400C01",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": 70,
+     "caminho": "prototype/issue70_after_mobile.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue70_after_mobile.png",
+     "src": "issue70_after_mobile.png",
+     "par": null
+    },
+    {
+     "id": "EV-05180814",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": 70,
+     "caminho": "prototype/issue70_after_open_panel.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue70_after_open_panel.png",
+     "src": "issue70_after_open_panel.png",
+     "par": null
+    },
+    {
+     "id": "EV-F7573343",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": 70,
+     "caminho": "prototype/issue70_after_reload_flags.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue70_after_reload_flags.png",
+     "src": "issue70_after_reload_flags.png",
+     "par": null
+    },
+    {
+     "id": "EV-9DBD7F7B",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": 70,
+     "caminho": "prototype/issue70_after_saved.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue70_after_saved.png",
+     "src": "issue70_after_saved.png",
+     "par": null
+    },
+    {
+     "id": "EV-4382E80C",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": 70,
+     "caminho": "prototype/issue70_before_simple.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue70_before_simple.png",
+     "src": "issue70_before_simple.png",
+     "par": null
+    },
+    {
+     "id": "EV-82FB4F7A",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": 75,
+     "caminho": "prototype/issue75_after_book_answer.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue75_after_book_answer.png",
+     "src": "issue75_after_book_answer.png",
+     "par": null
+    },
+    {
+     "id": "EV-AA84535F",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": 75,
+     "caminho": "prototype/issue75_after_book_created.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue75_after_book_created.png",
+     "src": "issue75_after_book_created.png",
+     "par": null
+    },
+    {
+     "id": "EV-12C94AE0",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": 75,
+     "caminho": "prototype/issue75_after_continue_pending.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue75_after_continue_pending.png",
+     "src": "issue75_after_continue_pending.png",
+     "par": null
+    },
+    {
+     "id": "EV-C8D69A53",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": 75,
+     "caminho": "prototype/issue75_after_filter.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue75_after_filter.png",
+     "src": "issue75_after_filter.png",
+     "par": null
+    },
+    {
+     "id": "EV-574144E8",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": 75,
+     "caminho": "prototype/issue75_after_mobile.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue75_after_mobile.png",
+     "src": "issue75_after_mobile.png",
+     "par": null
+    },
+    {
+     "id": "EV-EE944DB3",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": 75,
+     "caminho": "prototype/issue75_after_question_member.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue75_after_question_member.png",
+     "src": "issue75_after_question_member.png",
+     "par": null
+    },
+    {
+     "id": "EV-C174103B",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": 75,
+     "caminho": "prototype/issue75_after_retake_errors.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue75_after_retake_errors.png",
+     "src": "issue75_after_retake_errors.png",
+     "par": null
+    },
+    {
+     "id": "EV-5320105F",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": 75,
+     "caminho": "prototype/issue75_after_saved_query.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue75_after_saved_query.png",
+     "src": "issue75_after_saved_query.png",
+     "par": null
+    },
+    {
+     "id": "EV-6C748CC2",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": 76,
+     "caminho": "prototype/issue76_raiox_vertical.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue76_raiox_vertical.png",
+     "src": "issue76_raiox_vertical.png",
+     "par": null
+    },
+    {
+     "id": "EV-AC965D4A",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": 76,
+     "caminho": "prototype/issue76_recovered.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue76_recovered.png",
+     "src": "issue76_recovered.png",
+     "par": null
+    },
+    {
+     "id": "EV-E7A0FC3D",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": 76,
+     "caminho": "prototype/issue76_wrong_confirmed.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue76_wrong_confirmed.png",
+     "src": "issue76_wrong_confirmed.png",
+     "par": null
+    },
+    {
+     "id": "EV-323207E1",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": 82,
+     "caminho": "prototype/issue82_cloze_1366.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue82_cloze_1366.png",
+     "src": "issue82_cloze_1366.png",
+     "par": null
+    },
+    {
+     "id": "EV-093E862A",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": 82,
+     "caminho": "prototype/issue82_cloze_390.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue82_cloze_390.png",
+     "src": "issue82_cloze_390.png",
+     "par": null
+    },
+    {
+     "id": "EV-1A6A1FC3",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": 82,
+     "caminho": "prototype/issue82_feedback_dialog_1366.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue82_feedback_dialog_1366.png",
+     "src": "issue82_feedback_dialog_1366.png",
+     "par": null
+    },
+    {
+     "id": "EV-46023A16",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": 82,
+     "caminho": "prototype/issue82_feedback_dialog_390.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue82_feedback_dialog_390.png",
+     "src": "issue82_feedback_dialog_390.png",
+     "par": null
+    },
+    {
+     "id": "EV-91D8FE6C",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": 82,
+     "caminho": "prototype/issue82_qa_revealed_1366.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue82_qa_revealed_1366.png",
+     "src": "issue82_qa_revealed_1366.png",
+     "par": null
+    },
+    {
+     "id": "EV-7D84A407",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": 82,
+     "caminho": "prototype/issue82_qa_revealed_390.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue82_qa_revealed_390.png",
+     "src": "issue82_qa_revealed_390.png",
+     "par": null
+    },
+    {
+     "id": "EV-85B25E3C",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": 82,
+     "caminho": "prototype/issue82_question_import_1366.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue82_question_import_1366.png",
+     "src": "issue82_question_import_1366.png",
+     "par": null
+    },
+    {
+     "id": "EV-AE331D1F",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": 82,
+     "caminho": "prototype/issue82_question_import_390.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue82_question_import_390.png",
+     "src": "issue82_question_import_390.png",
+     "par": null
+    },
+    {
+     "id": "EV-8421275B",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_alternative_scissors_struck.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_alternative_scissors_struck.png",
+     "src": "qconcursos_alternative_scissors_struck.png",
+     "par": null
+    },
+    {
+     "id": "EV-05E35A5A",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_configuracoes_questoes_drawer.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_configuracoes_questoes_drawer.png",
+     "src": "qconcursos_configuracoes_questoes_drawer.png",
+     "par": null
+    },
+    {
+     "id": "EV-5F61CF37",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_desempenho_charts_and_table.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_desempenho_charts_and_table.png",
+     "src": "qconcursos_desempenho_charts_and_table.png",
+     "par": null
+    },
+    {
+     "id": "EV-6F381195",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_desempenho_disciplina_expanded.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_desempenho_disciplina_expanded.png",
+     "src": "qconcursos_desempenho_disciplina_expanded.png",
+     "par": null
+    },
+    {
+     "id": "EV-6857861D",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_desempenho_top_overview.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_desempenho_top_overview.png",
+     "src": "qconcursos_desempenho_top_overview.png",
+     "par": null
+    },
+    {
+     "id": "EV-66C8BFF3",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_dock_cronometro_open.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_dock_cronometro_open.png",
+     "src": "qconcursos_dock_cronometro_open.png",
+     "par": null
+    },
+    {
+     "id": "EV-601DD34F",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_dock_desempenho_active.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_dock_desempenho_active.png",
+     "src": "qconcursos_dock_desempenho_active.png",
+     "par": null
+    },
+    {
+     "id": "EV-971E8205",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_dock_folha_respostas.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_dock_folha_respostas.png",
+     "src": "qconcursos_dock_folha_respostas.png",
+     "par": null
+    },
+    {
+     "id": "EV-E7E51671",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_dock_fonte_aa_active.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_dock_fonte_aa_active.png",
+     "src": "qconcursos_dock_fonte_aa_active.png",
+     "par": null
+    },
+    {
+     "id": "EV-B612D6D0",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_dock_marcatexto_open.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_dock_marcatexto_open.png",
+     "src": "qconcursos_dock_marcatexto_open.png",
+     "par": null
+    },
+    {
+     "id": "EV-AAC6704A",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_dock_modo_foco.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_dock_modo_foco.png",
+     "src": "qconcursos_dock_modo_foco.png",
+     "par": null
+    },
+    {
+     "id": "EV-8C8261FF",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_dock_resumos_paywall_modal.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_dock_resumos_paywall_modal.png",
+     "src": "qconcursos_dock_resumos_paywall_modal.png",
+     "par": null
+    },
+    {
+     "id": "EV-AB51C557",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_filter_assunto_open.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_filter_assunto_open.png",
+     "src": "qconcursos_filter_assunto_open.png",
+     "par": null
+    },
+    {
+     "id": "EV-9515C7A8",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_filter_assunto_tree_open.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_filter_assunto_tree_open.png",
+     "src": "qconcursos_filter_assunto_tree_open.png",
+     "par": null
+    },
+    {
+     "id": "EV-61F04946",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_filter_banca_open.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_filter_banca_open.png",
+     "src": "qconcursos_filter_banca_open.png",
+     "par": null
+    },
+    {
+     "id": "EV-95281AF8",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_filter_dificuldade_open.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_filter_dificuldade_open.png",
+     "src": "qconcursos_filter_dificuldade_open.png",
+     "par": null
+    },
+    {
+     "id": "EV-78869277",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_filter_disciplina_open.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_filter_disciplina_open.png",
+     "src": "qconcursos_filter_disciplina_open.png",
+     "par": null
+    },
+    {
+     "id": "EV-025A4DA8",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_gerar_caderno_modal.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_gerar_caderno_modal.png",
+     "src": "qconcursos_gerar_caderno_modal.png",
+     "par": null
+    },
+    {
+     "id": "EV-36C64E0A",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_list_toolbar_options.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_list_toolbar_options.png",
+     "src": "qconcursos_list_toolbar_options.png",
+     "par": null
+    },
+    {
+     "id": "EV-B76E0DDB",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_live_filter_actions_bar.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_live_filter_actions_bar.png",
+     "src": "qconcursos_live_filter_actions_bar.png",
+     "par": null
+    },
+    {
+     "id": "EV-0C65D561",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_live_filter_builder_top.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_live_filter_builder_top.png",
+     "src": "qconcursos_live_filter_builder_top.png",
+     "par": null
+    },
+    {
+     "id": "EV-C4E38362",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_live_home_caderno_erros.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_live_home_caderno_erros.png",
+     "src": "qconcursos_live_home_caderno_erros.png",
+     "par": null
+    },
+    {
+     "id": "EV-E3813414",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_live_home_caderno_questoes_tab.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_live_home_caderno_questoes_tab.png",
+     "src": "qconcursos_live_home_caderno_questoes_tab.png",
+     "par": null
+    },
+    {
+     "id": "EV-175D5786",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_live_home_proxima_acao.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_live_home_proxima_acao.png",
+     "src": "qconcursos_live_home_proxima_acao.png",
+     "par": null
+    },
+    {
+     "id": "EV-D79D632B",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_live_home_raiox_curso.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_live_home_raiox_curso.png",
+     "src": "qconcursos_live_home_raiox_curso.png",
+     "par": null
+    },
+    {
+     "id": "EV-270FF1F0",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_live_home_ritmo_disciplinas.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_live_home_ritmo_disciplinas.png",
+     "src": "qconcursos_live_home_ritmo_disciplinas.png",
+     "par": null
+    },
+    {
+     "id": "EV-EA531B53",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_live_question_answered_feedback.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_live_question_answered_feedback.png",
+     "src": "qconcursos_live_question_answered_feedback.png",
+     "par": null
+    },
+    {
+     "id": "EV-92A01037",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_live_question_initial_state.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_live_question_initial_state.png",
+     "src": "qconcursos_live_question_initial_state.png",
+     "par": null
+    },
+    {
+     "id": "EV-AA67064B",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_live_question_option_selected_orange.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_live_question_option_selected_orange.png",
+     "src": "qconcursos_live_question_option_selected_orange.png",
+     "par": null
+    },
+    {
+     "id": "EV-FE85046A",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_live_question_scissors_eliminated.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_live_question_scissors_eliminated.png",
+     "src": "qconcursos_live_question_scissors_eliminated.png",
+     "par": null
+    },
+    {
+     "id": "EV-6C33A25C",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_live_question_tab_anotacoes.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_live_question_tab_anotacoes.png",
+     "src": "qconcursos_live_question_tab_anotacoes.png",
+     "par": null
+    },
+    {
+     "id": "EV-56CBF0F4",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_live_question_tab_aulas_video.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_live_question_tab_aulas_video.png",
+     "src": "qconcursos_live_question_tab_aulas_video.png",
+     "par": null
+    },
+    {
+     "id": "EV-93EDA90D",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_live_question_tab_cadernos_save.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_live_question_tab_cadernos_save.png",
+     "src": "qconcursos_live_question_tab_cadernos_save.png",
+     "par": null
+    },
+    {
+     "id": "EV-4DA79B6B",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_live_question_tab_comentarios.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_live_question_tab_comentarios.png",
+     "src": "qconcursos_live_question_tab_comentarios.png",
+     "par": null
+    },
+    {
+     "id": "EV-AD3ECA10",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_live_question_tab_estatisticas.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_live_question_tab_estatisticas.png",
+     "src": "qconcursos_live_question_tab_estatisticas.png",
+     "par": null
+    },
+    {
+     "id": "EV-7D3CBF40",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_live_question_tab_gabarito_comentado.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_live_question_tab_gabarito_comentado.png",
+     "src": "qconcursos_live_question_tab_gabarito_comentado.png",
+     "par": null
+    },
+    {
+     "id": "EV-481E0575",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_live_question_texto_associado.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_live_question_texto_associado.png",
+     "src": "qconcursos_live_question_texto_associado.png",
+     "par": null
+    },
+    {
+     "id": "EV-8C9BE85F",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_question_anotacoes_editor.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_question_anotacoes_editor.png",
+     "src": "qconcursos_question_anotacoes_editor.png",
+     "par": null
+    },
+    {
+     "id": "EV-0F1ED472",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_question_cadernos_tab.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_question_cadernos_tab.png",
+     "src": "qconcursos_question_cadernos_tab.png",
+     "par": null
+    },
+    {
+     "id": "EV-888A2968",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_question_notificar_erro.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_question_notificar_erro.png",
+     "src": "qconcursos_question_notificar_erro.png",
+     "par": null
+    },
+    {
+     "id": "EV-16CE889F",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_salvar_filtros_modal.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_salvar_filtros_modal.png",
+     "src": "qconcursos_salvar_filtros_modal.png",
+     "par": null
+    },
+    {
+     "id": "EV-7A66B6F1",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_texto_associado_expanded.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_texto_associado_expanded.png",
+     "src": "qconcursos_texto_associado_expanded.png",
+     "par": null
+    }
+   ],
+   "grupos": [
+    {
+     "id": "03/e1155",
+     "name": "Banco de questões e simulados",
+     "board": "03 Fluxos de estudo",
+     "blocks": [
+      "e1155"
+     ],
+     "fonte": "inferido"
+    },
+    {
+     "id": "03/e1208",
+     "name": "Filtros avançados",
+     "board": "03 Fluxos de estudo",
+     "blocks": [
+      "e1208"
+     ],
+     "fonte": "inferido"
+    },
+    {
+     "id": "03/e1188",
+     "name": "Cadernos e queries de questões",
+     "board": "03 Fluxos de estudo",
+     "blocks": [
+      "e1188"
+     ],
+     "fonte": "inferido"
+    },
+    {
+     "id": "03/e1381",
+     "name": "Questões contextuais",
+     "board": "03 Fluxos de estudo",
+     "blocks": [
+      "e1381"
+     ],
+     "fonte": "inferido"
+    },
+    {
+     "id": "03/e508",
+     "name": "Navegação por teclado, grade e relatório",
+     "board": "03 Fluxos de estudo",
+     "blocks": [
+      "e508"
+     ],
+     "fonte": "inferido"
+    }
+   ],
+   "release": {
+    "estado": "não verificado",
+    "observacao": "Nenhuma release, tag ou milestone registrada (planning/estado-atual.md). Sem datas inferidas.",
+    "fonte": "docs/planning/estado-atual.md"
+   }
+  },
+  {
+   "id": "simulados",
+   "title": "Simulados",
+   "status": "parcial",
+   "doc": {
+    "path": "prototype/simulados.md",
+    "url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/simulados.md",
+    "fonte": "índice"
+   },
+   "sintese": [
+    "- Problema: treinar em condição de prova, com tempo e nota.",
+    "- Quem usa: estudante perto da prova.",
+    "- Status: parcial. Existe no protótipo (configuração, cronômetro, navegador, resultado), mas a parte de histórico e refazer como simulado depende de decisões em aberto.",
+    "- Fluxo principal: escolher concurso e número de questões → modo prova ou estudo → responder → resultado com nota → erradas vão ao caderno."
+   ],
+   "adrs": [],
+   "diagramas": [
+    {
+     "id": "c4-l1",
+     "fonte": "global (sem vínculo por feature no índice)"
+    },
+    {
+     "id": "c4-l2",
+     "fonte": "global (sem vínculo por feature no índice)"
+    },
+    {
+     "id": "er-dominio",
+     "fonte": "global (sem vínculo por feature no índice)"
+    }
+   ],
+   "issues": [
+    {
+     "numero": 70,
+     "url": "https://github.com/ianmaciel7/exams-app/issues/70",
+     "fonte": "índice ou catálogo (ID)"
+    },
+    {
+     "numero": 100,
+     "url": "https://github.com/ianmaciel7/exams-app/issues/100",
+     "fonte": "índice ou catálogo (ID)"
+    }
+   ],
+   "prs": [],
+   "testes": [],
+   "evidencias": [
+    {
+     "id": "EV-02584A42",
+     "tipo": "inspeção técnica",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/audit2026_simulado_exec.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/audit2026_simulado_exec.png",
+     "src": "audit2026_simulado_exec.png",
+     "par": null
+    },
+    {
+     "id": "EV-23D9B7D7",
+     "tipo": "inspeção técnica",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/audit2026_simulado_resultado.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/audit2026_simulado_resultado.png",
+     "src": "audit2026_simulado_resultado.png",
+     "par": null
+    },
+    {
+     "id": "EV-7015B5D0",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": 100,
+     "caminho": "prototype/issue100_after_manual_simulado.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue100_after_manual_simulado.png",
+     "src": "issue100_after_manual_simulado.png",
+     "par": null
+    },
+    {
+     "id": "EV-1CF15C1E",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": 100,
+     "caminho": "prototype/issue100_after_simulado.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue100_after_simulado.png",
+     "src": "issue100_after_simulado.png",
+     "par": {
+      "antes": "EV-31B7082C",
+      "depois": "EV-1CF15C1E"
+     }
+    },
+    {
+     "id": "EV-31B7082C",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": 100,
+     "caminho": "prototype/issue100_before_simulado.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue100_before_simulado.png",
+     "src": "issue100_before_simulado.png",
+     "par": {
+      "antes": "EV-31B7082C",
+      "depois": "EV-1CF15C1E"
+     }
+    },
+    {
+     "id": "EV-8F7952FB",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": 70,
+     "caminho": "prototype/issue70_after_simulado_filtrado.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue70_after_simulado_filtrado.png",
+     "src": "issue70_after_simulado_filtrado.png",
+     "par": null
+    },
+    {
+     "id": "EV-CE2AA495",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_criar_simulado_config_modal.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_criar_simulado_config_modal.png",
+     "src": "qconcursos_criar_simulado_config_modal.png",
+     "par": null
+    }
+   ],
+   "grupos": [
+    {
+     "id": "03/e1155",
+     "name": "Banco de questões e simulados",
+     "board": "03 Fluxos de estudo",
+     "blocks": [
+      "e1155"
+     ],
+     "fonte": "inferido"
+    }
+   ],
+   "release": {
+    "estado": "não verificado",
+    "observacao": "Nenhuma release, tag ou milestone registrada (planning/estado-atual.md). Sem datas inferidas.",
+    "fonte": "docs/planning/estado-atual.md"
+   }
+  },
+  {
+   "id": "pdf-reader",
+   "title": "Leitor de PDF",
+   "status": "implementado",
+   "doc": {
+    "path": "prototype/pdf-reader.md",
+    "url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/pdf-reader.md",
+    "fonte": "índice"
+   },
+   "sintese": [
+    "- Problema: ler editais e provas dentro do app, com destaques.",
+    "- Quem usa: estudante que estuda a partir de documentos oficiais.",
+    "- Status: implementado no protótipo 0.1.1 com PDF.js (`pdf.min.js`, `pdf.worker.min.js`). Evidência: `index.html` linha ~4217 (carregamento com timeout e nova tentativa).",
+    "- Fluxo principal: abrir documento → navegar → destacar trecho → criar cartão a partir do destaque."
+   ],
+   "adrs": [],
+   "diagramas": [
+    {
+     "id": "c4-l1",
+     "fonte": "global (sem vínculo por feature no índice)"
+    },
+    {
+     "id": "c4-l2",
+     "fonte": "global (sem vínculo por feature no índice)"
+    },
+    {
+     "id": "er-dominio",
+     "fonte": "global (sem vínculo por feature no índice)"
+    }
+   ],
+   "issues": [
+    {
+     "numero": 75,
+     "url": "https://github.com/ianmaciel7/exams-app/issues/75",
+     "fonte": "índice ou catálogo (ID)"
+    },
+    {
+     "numero": 76,
+     "url": "https://github.com/ianmaciel7/exams-app/issues/76",
+     "fonte": "índice ou catálogo (ID)"
+    },
+    {
+     "numero": 77,
+     "url": "https://github.com/ianmaciel7/exams-app/issues/77",
+     "fonte": "índice ou catálogo (ID)"
+    }
+   ],
+   "prs": [],
+   "testes": [
+    {
+     "id": "EV-E95314C6",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/pdf112_after_dpr2_zoom1.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/pdf112_after_dpr2_zoom1.png",
+     "src": "pdf112_after_dpr2_zoom1.png",
+     "par": {
+      "antes": "EV-F85FF3D5",
+      "depois": "EV-E95314C6"
+     }
+    },
+    {
+     "id": "EV-92703D13",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/pdf112_after_dpr2_zoom2.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/pdf112_after_dpr2_zoom2.png",
+     "src": "pdf112_after_dpr2_zoom2.png",
+     "par": {
+      "antes": "EV-8E32DCA0",
+      "depois": "EV-92703D13"
+     }
+    },
+    {
+     "id": "EV-F85FF3D5",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/pdf112_before_dpr2_zoom1.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/pdf112_before_dpr2_zoom1.png",
+     "src": "pdf112_before_dpr2_zoom1.png",
+     "par": {
+      "antes": "EV-F85FF3D5",
+      "depois": "EV-E95314C6"
+     }
+    },
+    {
+     "id": "EV-8E32DCA0",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/pdf112_before_dpr2_zoom2.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/pdf112_before_dpr2_zoom2.png",
+     "src": "pdf112_before_dpr2_zoom2.png",
+     "par": {
+      "antes": "EV-8E32DCA0",
+      "depois": "EV-92703D13"
+     }
+    }
+   ],
+   "evidencias": [
+    {
+     "id": "EV-16C7ED09",
+     "tipo": "a classificar",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/antes-depois-tipo-pdf.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/antes-depois-tipo-pdf.png",
+     "src": "antes-depois-tipo-pdf.png",
+     "par": null
+    },
+    {
+     "id": "EV-263DD539",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": 75,
+     "caminho": "prototype/issue75_before_no_notebooks.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue75_before_no_notebooks.png",
+     "src": "issue75_before_no_notebooks.png",
+     "par": null
+    },
+    {
+     "id": "EV-5DBBE9C0",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": 76,
+     "caminho": "prototype/issue76_notebook_pending.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue76_notebook_pending.png",
+     "src": "issue76_notebook_pending.png",
+     "par": null
+    },
+    {
+     "id": "EV-AD61AF3E",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": 77,
+     "caminho": "prototype/issue77_reader_marginalia_1366.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue77_reader_marginalia_1366.png",
+     "src": "issue77_reader_marginalia_1366.png",
+     "par": null
+    },
+    {
+     "id": "EV-1195C225",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": 77,
+     "caminho": "prototype/issue77_reader_marginalia_390.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue77_reader_marginalia_390.png",
+     "src": "issue77_reader_marginalia_390.png",
+     "par": null
+    },
+    {
+     "id": "EV-A3540329",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": 77,
+     "caminho": "prototype/issue77_reader_original_1366.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue77_reader_original_1366.png",
+     "src": "issue77_reader_original_1366.png",
+     "par": null
+    },
+    {
+     "id": "EV-899DD3D4",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": 77,
+     "caminho": "prototype/issue77_reader_original_390.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue77_reader_original_390.png",
+     "src": "issue77_reader_original_390.png",
+     "par": null
+    },
+    {
+     "id": "EV-C2ACF691",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": 77,
+     "caminho": "prototype/issue77_reader_text_highlight_1366.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue77_reader_text_highlight_1366.png",
+     "src": "issue77_reader_text_highlight_1366.png",
+     "par": null
+    },
+    {
+     "id": "EV-2078432A",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": 77,
+     "caminho": "prototype/issue77_reader_text_highlight_390.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue77_reader_text_highlight_390.png",
+     "src": "issue77_reader_text_highlight_390.png",
+     "par": null
+    },
+    {
+     "id": "EV-E95314C6",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/pdf112_after_dpr2_zoom1.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/pdf112_after_dpr2_zoom1.png",
+     "src": "pdf112_after_dpr2_zoom1.png",
+     "par": {
+      "antes": "EV-F85FF3D5",
+      "depois": "EV-E95314C6"
+     }
+    },
+    {
+     "id": "EV-92703D13",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": null,
+     "caminho": "prototype/pdf112_after_dpr2_zoom2.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/pdf112_after_dpr2_zoom2.png",
+     "src": "pdf112_after_dpr2_zoom2.png",
+     "par": {
+      "antes": "EV-8E32DCA0",
+      "depois": "EV-92703D13"
+     }
+    },
+    {
+     "id": "EV-F85FF3D5",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/pdf112_before_dpr2_zoom1.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/pdf112_before_dpr2_zoom1.png",
+     "src": "pdf112_before_dpr2_zoom1.png",
+     "par": {
+      "antes": "EV-F85FF3D5",
+      "depois": "EV-E95314C6"
+     }
+    },
+    {
+     "id": "EV-8E32DCA0",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": null,
+     "caminho": "prototype/pdf112_before_dpr2_zoom2.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/pdf112_before_dpr2_zoom2.png",
+     "src": "pdf112_before_dpr2_zoom2.png",
+     "par": {
+      "antes": "EV-8E32DCA0",
+      "depois": "EV-92703D13"
+     }
+    },
+    {
+     "id": "EV-B4479156",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/qconcursos_highlighter_applied.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/qconcursos_highlighter_applied.png",
+     "src": "qconcursos_highlighter_applied.png",
+     "par": null
+    },
+    {
+     "id": "EV-671E6763",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_3pane_reading.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_3pane_reading.png",
+     "src": "readwise_reader_3pane_reading.png",
+     "par": null
+    },
+    {
+     "id": "EV-EE01CD9D",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_appearance_menu.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_appearance_menu.png",
+     "src": "readwise_reader_appearance_menu.png",
+     "par": null
+    },
+    {
+     "id": "EV-C80CEBCD",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_command_palette_help.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_command_palette_help.png",
+     "src": "readwise_reader_command_palette_help.png",
+     "par": null
+    },
+    {
+     "id": "EV-0A3AF3D7",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_doc2_export_modal.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_doc2_export_modal.png",
+     "src": "readwise_reader_doc2_export_modal.png",
+     "par": null
+    },
+    {
+     "id": "EV-9599193B",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_doc2_ghostreader.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_doc2_ghostreader.png",
+     "src": "readwise_reader_doc2_ghostreader.png",
+     "par": null
+    },
+    {
+     "id": "EV-E63984B0",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_doc2_highlight_add_note.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_doc2_highlight_add_note.png",
+     "src": "readwise_reader_doc2_highlight_add_note.png",
+     "par": null
+    },
+    {
+     "id": "EV-432BDDF0",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_doc2_highlight_more_dropdown.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_doc2_highlight_more_dropdown.png",
+     "src": "readwise_reader_doc2_highlight_more_dropdown.png",
+     "par": null
+    },
+    {
+     "id": "EV-F407E7DD",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_doc2_highlight_popover.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_doc2_highlight_popover.png",
+     "src": "readwise_reader_doc2_highlight_popover.png",
+     "par": null
+    },
+    {
+     "id": "EV-CA01F4BD",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_doc2_highlight_tag_picker.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_doc2_highlight_tag_picker.png",
+     "src": "readwise_reader_doc2_highlight_tag_picker.png",
+     "par": null
+    },
+    {
+     "id": "EV-F3FC5D94",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_doc2_hover_appearance.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_doc2_hover_appearance.png",
+     "src": "readwise_reader_doc2_hover_appearance.png",
+     "par": null
+    },
+    {
+     "id": "EV-77F4B130",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_doc2_hover_archive.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_doc2_hover_archive.png",
+     "src": "readwise_reader_doc2_hover_archive.png",
+     "par": null
+    },
+    {
+     "id": "EV-49ECFAA1",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_doc2_hover_author.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_doc2_hover_author.png",
+     "src": "readwise_reader_doc2_hover_author.png",
+     "par": null
+    },
+    {
+     "id": "EV-A0762005",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_doc2_hover_discover.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_doc2_hover_discover.png",
+     "src": "readwise_reader_doc2_hover_discover.png",
+     "par": null
+    },
+    {
+     "id": "EV-B52F21CA",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_doc2_hover_later.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_doc2_hover_later.png",
+     "src": "readwise_reader_doc2_hover_later.png",
+     "par": null
+    },
+    {
+     "id": "EV-3365EA3F",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_doc2_hover_listen.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_doc2_hover_listen.png",
+     "src": "readwise_reader_doc2_hover_listen.png",
+     "par": null
+    },
+    {
+     "id": "EV-2F1C9880",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_doc2_left_panel.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_doc2_left_panel.png",
+     "src": "readwise_reader_doc2_left_panel.png",
+     "par": null
+    },
+    {
+     "id": "EV-80A5B5ED",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_doc2_loaded.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_doc2_loaded.png",
+     "src": "readwise_reader_doc2_loaded.png",
+     "par": null
+    },
+    {
+     "id": "EV-235CB9D8",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_doc2_more_menu.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_doc2_more_menu.png",
+     "src": "readwise_reader_doc2_more_menu.png",
+     "par": null
+    },
+    {
+     "id": "EV-694D1BB1",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_doc2_notebook.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_doc2_notebook.png",
+     "src": "readwise_reader_doc2_notebook.png",
+     "par": null
+    },
+    {
+     "id": "EV-2562CC4F",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_doc2_notebook_highlights.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_doc2_notebook_highlights.png",
+     "src": "readwise_reader_doc2_notebook_highlights.png",
+     "par": null
+    },
+    {
+     "id": "EV-594829B4",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_doc2_text_selected_popover.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_doc2_text_selected_popover.png",
+     "src": "readwise_reader_doc2_text_selected_popover.png",
+     "par": null
+    },
+    {
+     "id": "EV-F46895AD",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_doc2_tts_player.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_doc2_tts_player.png",
+     "src": "readwise_reader_doc2_tts_player.png",
+     "par": null
+    },
+    {
+     "id": "EV-B29A0985",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_doc2_tts_speeds.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_doc2_tts_speeds.png",
+     "src": "readwise_reader_doc2_tts_speeds.png",
+     "par": null
+    },
+    {
+     "id": "EV-60FEC5FB",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_doc2_tts_voices.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_doc2_tts_voices.png",
+     "src": "readwise_reader_doc2_tts_voices.png",
+     "par": null
+    },
+    {
+     "id": "EV-3CF5736A",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_filtered_views_query.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_filtered_views_query.png",
+     "src": "readwise_reader_filtered_views_query.png",
+     "par": null
+    },
+    {
+     "id": "EV-41543C4B",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_ghostreader_docs_jinja2.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_ghostreader_docs_jinja2.png",
+     "src": "readwise_reader_ghostreader_docs_jinja2.png",
+     "par": null
+    },
+    {
+     "id": "EV-A6177AB6",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_ghostreader_docs_prompts_1.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_ghostreader_docs_prompts_1.png",
+     "src": "readwise_reader_ghostreader_docs_prompts_1.png",
+     "par": null
+    },
+    {
+     "id": "EV-B060BDB5",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_ghostreader_docs_prompts_2.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_ghostreader_docs_prompts_2.png",
+     "src": "readwise_reader_ghostreader_docs_prompts_2.png",
+     "par": null
+    },
+    {
+     "id": "EV-C1F87606",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_ghostreader_skills.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_ghostreader_skills.png",
+     "src": "readwise_reader_ghostreader_skills.png",
+     "par": null
+    },
+    {
+     "id": "EV-39CBA889",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_highlight_action_tags.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_highlight_action_tags.png",
+     "src": "readwise_reader_highlight_action_tags.png",
+     "par": null
+    },
+    {
+     "id": "EV-96F87492",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_home_configure_btn.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_home_configure_btn.png",
+     "src": "readwise_reader_home_configure_btn.png",
+     "par": null
+    },
+    {
+     "id": "EV-A2CFCA09",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_home_dashboard.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_home_dashboard.png",
+     "src": "readwise_reader_home_dashboard.png",
+     "par": null
+    },
+    {
+     "id": "EV-A512C192",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_inbox_list.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_inbox_list.png",
+     "src": "readwise_reader_inbox_list.png",
+     "par": null
+    },
+    {
+     "id": "EV-106C0E3E",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_inbox_triage.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_inbox_triage.png",
+     "src": "readwise_reader_inbox_triage.png",
+     "par": null
+    },
+    {
+     "id": "EV-A6877CEA",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_manage_views_table.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_manage_views_table.png",
+     "src": "readwise_reader_manage_views_table.png",
+     "par": null
+    },
+    {
+     "id": "EV-DB820EE3",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_notebook_export.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_notebook_export.png",
+     "src": "readwise_reader_notebook_export.png",
+     "par": null
+    },
+    {
+     "id": "EV-300A1C85",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_pdf_docs_metadata.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_pdf_docs_metadata.png",
+     "src": "readwise_reader_pdf_docs_metadata.png",
+     "par": null
+    },
+    {
+     "id": "EV-994BFC15",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_pdf_docs_overview.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_pdf_docs_overview.png",
+     "src": "readwise_reader_pdf_docs_overview.png",
+     "par": null
+    },
+    {
+     "id": "EV-BAD42E68",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_pdf_docs_search_snap.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_pdf_docs_search_snap.png",
+     "src": "readwise_reader_pdf_docs_search_snap.png",
+     "par": null
+    },
+    {
+     "id": "EV-E6CED2AC",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_pdf_docs_text_view.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_pdf_docs_text_view.png",
+     "src": "readwise_reader_pdf_docs_text_view.png",
+     "par": null
+    },
+    {
+     "id": "EV-5D31D835",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_pdf_enhanced_docs.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_pdf_enhanced_docs.png",
+     "src": "readwise_reader_pdf_enhanced_docs.png",
+     "par": null
+    },
+    {
+     "id": "EV-42BF8E90",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_shortcuts_palette.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_shortcuts_palette.png",
+     "src": "readwise_reader_shortcuts_palette.png",
+     "par": null
+    },
+    {
+     "id": "EV-D7093B71",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_views_table.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_views_table.png",
+     "src": "readwise_reader_views_table.png",
+     "par": null
+    }
+   ],
+   "grupos": [
+    {
+     "id": "03/e1477",
+     "name": "PDF Reader: reflow e anotações",
+     "board": "03 Fluxos de estudo",
+     "blocks": [
+      "e1477"
+     ],
+     "fonte": "inferido"
+    },
+    {
+     "id": "03/e1177",
+     "name": "PDF.js: texto, canvas, DPR e zoom",
+     "board": "03 Fluxos de estudo",
+     "blocks": [
+      "e1177"
+     ],
+     "fonte": "inferido"
+    }
+   ],
+   "release": {
+    "estado": "não verificado",
+    "observacao": "Nenhuma release, tag ou milestone registrada (planning/estado-atual.md). Sem datas inferidas.",
+    "fonte": "docs/planning/estado-atual.md"
+   }
+  },
+  {
+   "id": "revisao",
+   "title": "Revisão e cartões",
+   "status": "parcial",
+   "doc": {
+    "path": "prototype/revisao.md",
+    "url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/revisao.md",
+    "fonte": "índice"
+   },
+   "sintese": [
+    "- Problema: revisar no momento certo, com agendamento por resposta.",
+    "- Quem usa: estudante em revisão espaçada.",
+    "- Status: parcial. Agendamento Esqueci/Difícil/Bom/Fácil e cartão de estudo existem no protótipo; configuração de canais e horário está planejada.",
+    "- Fluxo principal: ver \"Para hoje\" → responder cartão → próxima revisão agendada."
+   ],
+   "adrs": [],
+   "diagramas": [
+    {
+     "id": "c4-l1",
+     "fonte": "global (sem vínculo por feature no índice)"
+    },
+    {
+     "id": "c4-l2",
+     "fonte": "global (sem vínculo por feature no índice)"
+    },
+    {
+     "id": "er-dominio",
+     "fonte": "global (sem vínculo por feature no índice)"
+    }
+   ],
+   "issues": [],
+   "prs": [],
+   "testes": [],
+   "evidencias": [
+    {
+     "id": "EV-C3A9A341",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_srs_bookreview_ai_chat.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_srs_bookreview_ai_chat.png",
+     "src": "readwise_srs_bookreview_ai_chat.png",
+     "par": null
+    },
+    {
+     "id": "EV-F41F2B15",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_srs_bookreview_chat_panel_open.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_srs_bookreview_chat_panel_open.png",
+     "src": "readwise_srs_bookreview_chat_panel_open.png",
+     "par": null
+    },
+    {
+     "id": "EV-9D1B31C4",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_srs_bookreview_deep_work_full.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_srs_bookreview_deep_work_full.png",
+     "src": "readwise_srs_bookreview_deep_work_full.png",
+     "par": null
+    },
+    {
+     "id": "EV-B849D355",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_srs_bookreview_highlight_actions_menu.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_srs_bookreview_highlight_actions_menu.png",
+     "src": "readwise_srs_bookreview_highlight_actions_menu.png",
+     "par": null
+    },
+    {
+     "id": "EV-72924DFD",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_srs_cloze_active_recall_prompt.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_srs_cloze_active_recall_prompt.png",
+     "src": "readwise_srs_cloze_active_recall_prompt.png",
+     "par": null
+    },
+    {
+     "id": "EV-16000A51",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_srs_cloze_answer_reveal_grading.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_srs_cloze_answer_reveal_grading.png",
+     "src": "readwise_srs_cloze_answer_reveal_grading.png",
+     "par": null
+    },
+    {
+     "id": "EV-7F65E127",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_srs_connect_sync_dropdown_open.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_srs_connect_sync_dropdown_open.png",
+     "src": "readwise_srs_connect_sync_dropdown_open.png",
+     "par": null
+    },
+    {
+     "id": "EV-05C6270B",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_srs_csv_import_modal.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_srs_csv_import_modal.png",
+     "src": "readwise_srs_csv_import_modal.png",
+     "par": null
+    },
+    {
+     "id": "EV-63E53312",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_srs_daily_review_completed_streak.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_srs_daily_review_completed_streak.png",
+     "src": "readwise_srs_daily_review_completed_streak.png",
+     "par": null
+    },
+    {
+     "id": "EV-455B8314",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_srs_daily_review_deck.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_srs_daily_review_deck.png",
+     "src": "readwise_srs_daily_review_deck.png",
+     "par": null
+    },
+    {
+     "id": "EV-1C0CDFBB",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_srs_export_highlights_full.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_srs_export_highlights_full.png",
+     "src": "readwise_srs_export_highlights_full.png",
+     "par": null
+    },
+    {
+     "id": "EV-3D02E3AD",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_srs_export_highlights_top.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_srs_export_highlights_top.png",
+     "src": "readwise_srs_export_highlights_top.png",
+     "par": null
+    },
+    {
+     "id": "EV-08F02341",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_srs_export_integrations.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_srs_export_integrations.png",
+     "src": "readwise_srs_export_integrations.png",
+     "par": null
+    },
+    {
+     "id": "EV-21AAE6B1",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_srs_feedback_tuning_modal.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_srs_feedback_tuning_modal.png",
+     "src": "readwise_srs_feedback_tuning_modal.png",
+     "par": null
+    },
+    {
+     "id": "EV-F4EA0F76",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_srs_freeform_input_book_select.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_srs_freeform_input_book_select.png",
+     "src": "readwise_srs_freeform_input_book_select.png",
+     "par": null
+    },
+    {
+     "id": "EV-A7CEA066",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_srs_freeform_input_highlight_form.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_srs_freeform_input_highlight_form.png",
+     "src": "readwise_srs_freeform_input_highlight_form.png",
+     "par": null
+    },
+    {
+     "id": "EV-AA6A58B0",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_srs_frequency_tuning_by_source.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_srs_frequency_tuning_by_source.png",
+     "src": "readwise_srs_frequency_tuning_by_source.png",
+     "par": null
+    },
+    {
+     "id": "EV-B7D88D68",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_srs_frequency_tuning_dropdown.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_srs_frequency_tuning_dropdown.png",
+     "src": "readwise_srs_frequency_tuning_dropdown.png",
+     "par": null
+    },
+    {
+     "id": "EV-08D9847A",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_srs_highlight_edit_and_note.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_srs_highlight_edit_and_note.png",
+     "src": "readwise_srs_highlight_edit_and_note.png",
+     "par": null
+    },
+    {
+     "id": "EV-2FADECD5",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_srs_highlight_tagging_modal.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_srs_highlight_tagging_modal.png",
+     "src": "readwise_srs_highlight_tagging_modal.png",
+     "par": null
+    },
+    {
+     "id": "EV-6E6E4159",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_srs_import_sync_sources_mid1.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_srs_import_sync_sources_mid1.png",
+     "src": "readwise_srs_import_sync_sources_mid1.png",
+     "par": null
+    },
+    {
+     "id": "EV-9FF77CC1",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_srs_import_sync_sources_mid2.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_srs_import_sync_sources_mid2.png",
+     "src": "readwise_srs_import_sync_sources_mid2.png",
+     "par": null
+    },
+    {
+     "id": "EV-0F4F7102",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_srs_import_sync_sources_top.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_srs_import_sync_sources_top.png",
+     "src": "readwise_srs_import_sync_sources_top.png",
+     "par": null
+    },
+    {
+     "id": "EV-21C85EB1",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_srs_import_upload_bottom.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_srs_import_upload_bottom.png",
+     "src": "readwise_srs_import_upload_bottom.png",
+     "par": null
+    },
+    {
+     "id": "EV-6F156B22",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_srs_inline_action_tags_guide.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_srs_inline_action_tags_guide.png",
+     "src": "readwise_srs_inline_action_tags_guide.png",
+     "par": null
+    },
+    {
+     "id": "EV-DCBD0F86",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_srs_mastery_cloze_creator.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_srs_mastery_cloze_creator.png",
+     "src": "readwise_srs_mastery_cloze_creator.png",
+     "par": null
+    },
+    {
+     "id": "EV-30936919",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_srs_mastery_qa_creator.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_srs_mastery_qa_creator.png",
+     "src": "readwise_srs_mastery_qa_creator.png",
+     "par": null
+    },
+    {
+     "id": "EV-B67FDCB7",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_srs_preferences_email_schedule_1.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_srs_preferences_email_schedule_1.png",
+     "src": "readwise_srs_preferences_email_schedule_1.png",
+     "par": null
+    },
+    {
+     "id": "EV-0EA7A7D4",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_srs_preferences_email_schedule_2.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_srs_preferences_email_schedule_2.png",
+     "src": "readwise_srs_preferences_email_schedule_2.png",
+     "par": null
+    },
+    {
+     "id": "EV-7D3E7CCE",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_srs_review_settings_algorithm.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_srs_review_settings_algorithm.png",
+     "src": "readwise_srs_review_settings_algorithm.png",
+     "par": null
+    },
+    {
+     "id": "EV-0CF07827",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_srs_statistics_heatmap.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_srs_statistics_heatmap.png",
+     "src": "readwise_srs_statistics_heatmap.png",
+     "par": null
+    }
+   ],
+   "grupos": [
+    {
+     "id": "03/e1465",
+     "name": "Revisão diária",
+     "board": "03 Fluxos de estudo",
+     "blocks": [
+      "e1465"
+     ],
+     "fonte": "inferido"
+    },
+    {
+     "id": "03/e1453",
+     "name": "Recuperação de erros",
+     "board": "03 Fluxos de estudo",
+     "blocks": [
+      "e1453"
+     ],
+     "fonte": "inferido"
+    }
+   ],
+   "release": {
+    "estado": "não verificado",
+    "observacao": "Nenhuma release, tag ou milestone registrada (planning/estado-atual.md). Sem datas inferidas.",
+    "fonte": "docs/planning/estado-atual.md"
+   }
+  },
+  {
+   "id": "grafo",
+   "title": "Grafo da coleção",
+   "status": "implementado",
+   "doc": {
+    "path": "prototype/grafo.md",
+    "url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/grafo.md",
+    "fonte": "índice"
+   },
+   "sintese": [
+    "- Problema: ver conexões entre objetos.",
+    "- Quem usa: estudante que organiza conteúdo por relações.",
+    "- Status: implementado no protótipo 0.1.1 (motor Canvas, ícones e tags).",
+    "- Issues e PRs relacionados: issue #227 (fechada); PR #246 (grafo da coleção em canvas). PR #243 foi aberta contra `main` por engano; a PR #244 levou o trabalho para `dev`, e a PR #245 reverteu `main` ao commit inicial."
+   ],
+   "adrs": [],
+   "diagramas": [
+    {
+     "id": "c4-l1",
+     "fonte": "global (sem vínculo por feature no índice)"
+    },
+    {
+     "id": "c4-l2",
+     "fonte": "global (sem vínculo por feature no índice)"
+    },
+    {
+     "id": "er-dominio",
+     "fonte": "global (sem vínculo por feature no índice)"
+    }
+   ],
+   "issues": [
+    {
+     "numero": 68,
+     "url": "https://github.com/ianmaciel7/exams-app/issues/68",
+     "fonte": "índice ou catálogo (ID)"
+    },
+    {
+     "numero": 227,
+     "url": "https://github.com/ianmaciel7/exams-app/issues/227",
+     "fonte": "índice ou catálogo (ID)"
+    }
+   ],
+   "prs": [
+    {
+     "numero": 246,
+     "url": "https://github.com/ianmaciel7/exams-app/pull/246",
+     "fonte": "índice (ID)"
+    }
+   ],
+   "testes": [],
+   "evidencias": [
+    {
+     "id": "EV-8A5CDCED",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/archive_notes_app_old_4_graph_sidepanel.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/archive_notes_app_old_4_graph_sidepanel.png",
+     "src": "archive_notes_app_old_4_graph_sidepanel.png",
+     "par": null
+    },
+    {
+     "id": "EV-746317BA",
+     "tipo": "inspeção técnica",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/audit2026_graph_collision.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/audit2026_graph_collision.png",
+     "src": "audit2026_graph_collision.png",
+     "par": null
+    },
+    {
+     "id": "EV-D8797E8A",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/capacities_global_graph_search_dropdown_open.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/capacities_global_graph_search_dropdown_open.png",
+     "src": "capacities_global_graph_search_dropdown_open.png",
+     "par": null
+    },
+    {
+     "id": "EV-60A65B83",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/capacities_global_graph_search_node_nav.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/capacities_global_graph_search_node_nav.png",
+     "src": "capacities_global_graph_search_node_nav.png",
+     "par": null
+    },
+    {
+     "id": "EV-3CCD4F15",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/capacities_live_3pane_local_graph.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/capacities_live_3pane_local_graph.png",
+     "src": "capacities_live_3pane_local_graph.png",
+     "par": null
+    },
+    {
+     "id": "EV-12243876",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/capacities_live_global_graph_constellation.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/capacities_live_global_graph_constellation.png",
+     "src": "capacities_live_global_graph_constellation.png",
+     "par": null
+    },
+    {
+     "id": "EV-77CE3663",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/capacities_live_global_graph_search_autozoom.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/capacities_live_global_graph_search_autozoom.png",
+     "src": "capacities_live_global_graph_search_autozoom.png",
+     "par": null
+    },
+    {
+     "id": "EV-7CD72FA7",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/capacities_live_graph_3tier_nodes_resized.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/capacities_live_graph_3tier_nodes_resized.png",
+     "src": "capacities_live_graph_3tier_nodes_resized.png",
+     "par": null
+    },
+    {
+     "id": "EV-4FAE1CD9",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/capacities_live_graph_filter_popover.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/capacities_live_graph_filter_popover.png",
+     "src": "capacities_live_graph_filter_popover.png",
+     "par": null
+    },
+    {
+     "id": "EV-2526ED2C",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": 68,
+     "caminho": "prototype/issue68_export_graph_1366.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue68_export_graph_1366.png",
+     "src": "issue68_export_graph_1366.png",
+     "par": null
+    },
+    {
+     "id": "EV-96F80568",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": 68,
+     "caminho": "prototype/issue68_export_graph_390.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue68_export_graph_390.png",
+     "src": "issue68_export_graph_390.png",
+     "par": null
+    },
+    {
+     "id": "EV-B54B8D8C",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": 68,
+     "caminho": "prototype/issue68_graph_toolbar_1366.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue68_graph_toolbar_1366.png",
+     "src": "issue68_graph_toolbar_1366.png",
+     "par": null
+    },
+    {
+     "id": "EV-C6C072EE",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": 68,
+     "caminho": "prototype/issue68_graph_toolbar_390.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue68_graph_toolbar_390.png",
+     "src": "issue68_graph_toolbar_390.png",
+     "par": null
+    },
+    {
+     "id": "EV-CC551AF0",
+     "tipo": "evidência externa",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/readwise_reader_doc2_paragraph_focus_j.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/readwise_reader_doc2_paragraph_focus_j.png",
+     "src": "readwise_reader_doc2_paragraph_focus_j.png",
+     "par": null
+    }
+   ],
+   "grupos": [
+    {
+     "id": "02/e510",
+     "name": "Explorar, grafo e navegação contextual",
+     "board": "02 Workspace & UX",
+     "blocks": [
+      "e510"
+     ],
+     "fonte": "inferido"
+    },
+    {
+     "id": "04/e1407",
+     "name": "Isolamento do grafo por espaço",
+     "board": "04 Arquitetura técnica",
+     "blocks": [
+      "e1407"
+     ],
+     "fonte": "inferido"
+    }
+   ],
+   "release": {
+    "estado": "não verificado",
+    "observacao": "Nenhuma release, tag ou milestone registrada (planning/estado-atual.md). Sem datas inferidas.",
+    "fonte": "docs/planning/estado-atual.md"
+   }
+  },
+  {
+   "id": "tipos-propriedades",
+   "title": "Tipos e propriedades",
+   "status": "implementado",
+   "doc": {
+    "path": "prototype/tipos-propriedades.md",
+    "url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/tipos-propriedades.md",
+    "fonte": "índice"
+   },
+   "sintese": [
+    "- Problema: modelar concursos, editais, provas e questões com herança e propriedades.",
+    "- Quem usa: todas as pessoas do app.",
+    "- Status: implementado no protótipo 0.1.1 (constante `TYPES`, 13 tipos).",
+    "- Fluxo principal: abrir valor de propriedade → ver lista filtrada de tudo que compartilha o valor."
+   ],
+   "adrs": [],
+   "diagramas": [
+    {
+     "id": "c4-l1",
+     "fonte": "global (sem vínculo por feature no índice)"
+    },
+    {
+     "id": "c4-l2",
+     "fonte": "global (sem vínculo por feature no índice)"
+    },
+    {
+     "id": "er-dominio",
+     "fonte": "global (sem vínculo por feature no índice)"
+    }
+   ],
+   "issues": [
+    {
+     "numero": 139,
+     "url": "https://github.com/ianmaciel7/exams-app/issues/139",
+     "fonte": "índice ou catálogo (ID)"
+    },
+    {
+     "numero": 140,
+     "url": "https://github.com/ianmaciel7/exams-app/issues/140",
+     "fonte": "índice ou catálogo (ID)"
+    },
+    {
+     "numero": 227,
+     "url": "https://github.com/ianmaciel7/exams-app/issues/227",
+     "fonte": "índice ou catálogo (ID)"
+    }
+   ],
+   "prs": [],
+   "testes": [],
+   "evidencias": [
+    {
+     "id": "EV-3F547D54",
+     "tipo": "a classificar",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/antes-depois-cargo.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/antes-depois-cargo.png",
+     "src": "antes-depois-cargo.png",
+     "par": null
+    },
+    {
+     "id": "EV-A1B2B193",
+     "tipo": "inspeção técnica",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/audit2026_cargo_props.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/audit2026_cargo_props.png",
+     "src": "audit2026_cargo_props.png",
+     "par": null
+    },
+    {
+     "id": "EV-6ACFCB20",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": 139,
+     "caminho": "prototype/issue139_after_contexts.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue139_after_contexts.png",
+     "src": "issue139_after_contexts.png",
+     "par": null
+    },
+    {
+     "id": "EV-4F895275",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": 139,
+     "caminho": "prototype/issue139_after_help.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue139_after_help.png",
+     "src": "issue139_after_help.png",
+     "par": {
+      "antes": "EV-BA5C7E78",
+      "depois": "EV-4F895275"
+     }
+    },
+    {
+     "id": "EV-D0A1B8EE",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": 139,
+     "caminho": "prototype/issue139_after_new_item.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue139_after_new_item.png",
+     "src": "issue139_after_new_item.png",
+     "par": null
+    },
+    {
+     "id": "EV-EB264DE2",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": 139,
+     "caminho": "prototype/issue139_after_search.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue139_after_search.png",
+     "src": "issue139_after_search.png",
+     "par": null
+    },
+    {
+     "id": "EV-BA5C7E78",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "antes",
+     "issue": 139,
+     "caminho": "prototype/issue139_before_help.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue139_before_help.png",
+     "src": "issue139_before_help.png",
+     "par": {
+      "antes": "EV-BA5C7E78",
+      "depois": "EV-4F895275"
+     }
+    },
+    {
+     "id": "EV-AAF15CBB",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": "depois",
+     "issue": 140,
+     "caminho": "prototype/issue140_after_reload.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue140_after_reload.png",
+     "src": "issue140_after_reload.png",
+     "par": null
+    },
+    {
+     "id": "EV-C94FC0EC",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": 140,
+     "caminho": "prototype/issue140_created_object.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue140_created_object.png",
+     "src": "issue140_created_object.png",
+     "par": null
+    },
+    {
+     "id": "EV-62AE963D",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": 140,
+     "caminho": "prototype/issue140_created_type.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue140_created_type.png",
+     "src": "issue140_created_type.png",
+     "par": null
+    },
+    {
+     "id": "EV-269135D3",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": 140,
+     "caminho": "prototype/issue140_preset_preview.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue140_preset_preview.png",
+     "src": "issue140_preset_preview.png",
+     "par": null
+    },
+    {
+     "id": "EV-3886B9D6",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": 140,
+     "caminho": "prototype/issue140_restored_builtin.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue140_restored_builtin.png",
+     "src": "issue140_restored_builtin.png",
+     "par": null
+    },
+    {
+     "id": "EV-A4075980",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": 227,
+     "caminho": "prototype/issue227_collection_canvas_dark.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue227_collection_canvas_dark.png",
+     "src": "issue227_collection_canvas_dark.png",
+     "par": null
+    },
+    {
+     "id": "EV-74B8C7CC",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": 227,
+     "caminho": "prototype/issue227_collection_canvas_light.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/issue227_collection_canvas_light.png",
+     "src": "issue227_collection_canvas_light.png",
+     "par": null
+    }
+   ],
+   "grupos": [
+    {
+     "id": "01/e52",
+     "name": "Espaço → Objeto → Tipo",
+     "board": "01 Produto & domínio",
+     "blocks": [
+      "e52"
+     ],
+     "fonte": "inferido"
+    },
+    {
+     "id": "01/e104",
+     "name": "Modelo de objetos e relações",
+     "board": "01 Produto & domínio",
+     "blocks": [
+      "e104"
+     ],
+     "fonte": "inferido"
+    },
+    {
+     "id": "02/e504",
+     "name": "Painel de propriedades",
+     "board": "02 Workspace & UX",
+     "blocks": [
+      "e504"
+     ],
+     "fonte": "inferido"
+    }
+   ],
+   "release": {
+    "estado": "não verificado",
+    "observacao": "Nenhuma release, tag ou milestone registrada (planning/estado-atual.md). Sem datas inferidas.",
+    "fonte": "docs/planning/estado-atual.md"
+   }
+  },
+  {
+   "id": "claude-storage",
+   "title": "Sincronização (Claude Storage)",
+   "status": "parcial",
+   "doc": {
+    "path": "prototype/claude-storage.md",
+    "url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/claude-storage.md",
+    "fonte": "índice"
+   },
+   "sintese": [
+    "- Problema: não perder alterações e sincronizar sem backend próprio.",
+    "- Status: parcial. O motor offline-first com Outbox existe em `js/claude-storage-sync.js` (ADR 0003). Não há evidência, neste repositório, de sincronização verificada com o banco real.",
+    "- Fluxo principal: alteração local → fila de saída → envio com `opId` → remoção da fila após confirmação.",
+    "- Relações: ADR [0003](0003-persistencia-offline-first-outbox.md)."
+   ],
+   "adrs": [
+    {
+     "id": "0003",
+     "title": "Persistência offline-first com Outbox",
+     "status": "vigente no código",
+     "fonte": "documento da feature (ID)"
+    }
+   ],
+   "diagramas": [
+    {
+     "id": "c4-l1",
+     "fonte": "global (sem vínculo por feature no índice)"
+    },
+    {
+     "id": "c4-l2",
+     "fonte": "global (sem vínculo por feature no índice)"
+    },
+    {
+     "id": "er-dominio",
+     "fonte": "global (sem vínculo por feature no índice)"
+    }
+   ],
+   "issues": [],
+   "prs": [],
+   "testes": [
+    {
+     "id": "EV-680B5C72",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/board-exam-app__assets__claude-storage-bridge__evidence-claude-web-artifact-public.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/board-exam-app__assets__claude-storage-bridge__evidence-claude-web-artifact-public.png",
+     "src": "board-exam-app__assets__claude-storage-bridge__evidence-claude-web-artifact-public.png",
+     "par": null
+    },
+    {
+     "id": "EV-470F0295",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/board-exam-app__assets__claude-storage-bridge__evidence-e2e-sync-badge-active.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/board-exam-app__assets__claude-storage-bridge__evidence-e2e-sync-badge-active.png",
+     "src": "board-exam-app__assets__claude-storage-bridge__evidence-e2e-sync-badge-active.png",
+     "par": null
+    },
+    {
+     "id": "EV-06B777D6",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/board-exam-app__assets__claude-storage-bridge__evidence-homologation-clean-recovery.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/board-exam-app__assets__claude-storage-bridge__evidence-homologation-clean-recovery.png",
+     "src": "board-exam-app__assets__claude-storage-bridge__evidence-homologation-clean-recovery.png",
+     "par": null
+    },
+    {
+     "id": "EV-BD6F411D",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/board-exam-app__assets__claude-storage-bridge__evidence-iframe-csp-blocked.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/board-exam-app__assets__claude-storage-bridge__evidence-iframe-csp-blocked.png",
+     "src": "board-exam-app__assets__claude-storage-bridge__evidence-iframe-csp-blocked.png",
+     "par": null
+    }
+   ],
+   "evidencias": [
+    {
+     "id": "EV-680B5C72",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/board-exam-app__assets__claude-storage-bridge__evidence-claude-web-artifact-public.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/board-exam-app__assets__claude-storage-bridge__evidence-claude-web-artifact-public.png",
+     "src": "board-exam-app__assets__claude-storage-bridge__evidence-claude-web-artifact-public.png",
+     "par": null
+    },
+    {
+     "id": "EV-470F0295",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/board-exam-app__assets__claude-storage-bridge__evidence-e2e-sync-badge-active.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/board-exam-app__assets__claude-storage-bridge__evidence-e2e-sync-badge-active.png",
+     "src": "board-exam-app__assets__claude-storage-bridge__evidence-e2e-sync-badge-active.png",
+     "par": null
+    },
+    {
+     "id": "EV-06B777D6",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/board-exam-app__assets__claude-storage-bridge__evidence-homologation-clean-recovery.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/board-exam-app__assets__claude-storage-bridge__evidence-homologation-clean-recovery.png",
+     "src": "board-exam-app__assets__claude-storage-bridge__evidence-homologation-clean-recovery.png",
+     "par": null
+    },
+    {
+     "id": "EV-BD6F411D",
+     "tipo": "teste executado",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/board-exam-app__assets__claude-storage-bridge__evidence-iframe-csp-blocked.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/board-exam-app__assets__claude-storage-bridge__evidence-iframe-csp-blocked.png",
+     "src": "board-exam-app__assets__claude-storage-bridge__evidence-iframe-csp-blocked.png",
+     "par": null
+    },
+    {
+     "id": "EV-A925D01D",
+     "tipo": "a classificar",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/board-exam-app__assets__evidence-claude-web-artifact-public.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/board-exam-app__assets__evidence-claude-web-artifact-public.png",
+     "src": "board-exam-app__assets__evidence-claude-web-artifact-public.png",
+     "par": null
+    },
+    {
+     "id": "EV-3A10609F",
+     "tipo": "a classificar",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/board-exam-app__assets__evidence-e2e-sync-badge-active.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/board-exam-app__assets__evidence-e2e-sync-badge-active.png",
+     "src": "board-exam-app__assets__evidence-e2e-sync-badge-active.png",
+     "par": null
+    },
+    {
+     "id": "EV-5A6BBC0D",
+     "tipo": "a classificar",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/board-exam-app__assets__evidence-homologation-clean-recovery.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/board-exam-app__assets__evidence-homologation-clean-recovery.png",
+     "src": "board-exam-app__assets__evidence-homologation-clean-recovery.png",
+     "par": null
+    },
+    {
+     "id": "EV-69502B0A",
+     "tipo": "a classificar",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/board-exam-app__assets__evidence-iframe-csp-blocked.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/board-exam-app__assets__evidence-iframe-csp-blocked.png",
+     "src": "board-exam-app__assets__evidence-iframe-csp-blocked.png",
+     "par": null
+    },
+    {
+     "id": "EV-4CF22728",
+     "tipo": "captura do protótipo",
+     "data": "2026-11-16",
+     "estado": null,
+     "issue": null,
+     "caminho": "prototype/claude-artifact-audit-seq128.png",
+     "repo_url": "https://github.com/ianmaciel7/exams-app/blob/dev/prototype/claude-artifact-audit-seq128.png",
+     "src": "claude-artifact-audit-seq128.png",
+     "par": null
+    }
+   ],
+   "grupos": [
+    {
+     "id": "04/e1440",
+     "name": "Claude Storage — homologação",
+     "board": "04 Arquitetura técnica",
+     "blocks": [
+      "e1440"
+     ],
+     "fonte": "inferido"
+    },
+    {
+     "id": "04/e1371",
+     "name": "Claude Storage Bridge — PoC",
+     "board": "04 Arquitetura técnica",
+     "blocks": [
+      "e1371"
+     ],
+     "fonte": "inferido"
+    }
+   ],
+   "release": {
+    "estado": "não verificado",
+    "observacao": "Nenhuma release, tag ou milestone registrada (planning/estado-atual.md). Sem datas inferidas.",
+    "fonte": "docs/planning/estado-atual.md"
+   }
+  }
+ ],
+ "sem_feature": 80
+}

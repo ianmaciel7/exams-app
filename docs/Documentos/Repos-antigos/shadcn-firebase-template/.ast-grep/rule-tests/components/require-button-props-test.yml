@@ -1,0 +1,10 @@
+id: require-button-props
+valid:
+  - "type SignOutButtonProps = ComponentProps<typeof Button> & { profile: ProfileState };"
+  - "type AudioPlayerPlayButtonProps = ComponentProps<typeof MediaPlayButton>;"
+  - "type ConversationScrollButtonProps = ComponentProps<typeof Button>;"
+  - 'type FilePathButtonProps = ComponentProps<"button"> & { frame: StackFrame };'
+  - "interface CustomModalProps { isOpen: boolean; }"
+invalid:
+  - "type SignOutButtonProps = { profile: ProfileState };"
+  - "interface SubmitButtonProps { label: string; }"

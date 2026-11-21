@@ -1,0 +1,44 @@
+name: Validate study prototype
+
+on:
+  pull_request:
+    branches: [dev]
+    paths:
+      - 'prototype/exam-app-0.1.1__index.html'
+      - 'tests/study-navigation.test.mjs'
+      - 'tests/workspace-command-router.test.mjs'
+      - 'tests/question-confirm.test.mjs'
+      - 'tests/editorial-home.test.mjs'
+      - 'tests/type-workspace.test.mjs'
+      - 'tests/question-pedagogy.test.mjs'
+      - 'tests/study-dock.test.mjs'
+      - 'tests/error-recovery.test.mjs'
+      - 'tests/home-icon-contract.test.mjs'
+      - '.github/workflows/validate-prototype.yml'
+  push:
+    branches: [dev]
+    paths:
+      - 'prototype/exam-app-0.1.1__index.html'
+      - 'tests/study-navigation.test.mjs'
+      - 'tests/workspace-command-router.test.mjs'
+      - 'tests/question-confirm.test.mjs'
+      - 'tests/editorial-home.test.mjs'
+      - 'tests/type-workspace.test.mjs'
+      - 'tests/question-pedagogy.test.mjs'
+      - 'tests/study-dock.test.mjs'
+      - 'tests/error-recovery.test.mjs'
+      - 'tests/home-icon-contract.test.mjs'
+      - '.github/workflows/validate-prototype.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  static-prototype:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test tests/study-navigation.test.mjs tests/workspace-command-router.test.mjs tests/question-confirm.test.mjs tests/editorial-home.test.mjs tests/home-icon-contract.test.mjs tests/type-workspace.test.mjs tests/question-pedagogy.test.mjs tests/study-dock.test.mjs tests/error-recovery.test.mjs

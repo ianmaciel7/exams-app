@@ -1,0 +1,60 @@
+name: E2E Workspace Command Router and Evidence
+
+on:
+  pull_request:
+    branches: [dev]
+    paths:
+      - 'prototype/exam-app-0.1.1__index.html'
+      - 'tests/workspace-command-router.test.mjs'
+      - 'tests/workspace-command-router.e2e.mjs'
+      - 'scripts/append-command-router-board.py'
+      - '.github/workflows/e2e-workspace-command-router.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  command-router:
+    if: (github.head_ref == 'refactor/139-keyboard-command-router' || startsWith(github.head_ref, 'fix/issue-139-')) && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Static commands and existing navigation regression
+        run: node --test tests/workspace-command-router.test.mjs tests/study-navigation.test.mjs
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Compare original static shortcuts and new router; commit true evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          git worktree add --detach /tmp/exams-before-139 0c7465431938d3d48a49166c928e8066fa67b912
+          python3 -m http.server 8765 --directory prototype >/tmp/exams-after-139.log 2>&1 &
+          python3 -m http.server 8766 --directory /tmp/exams-before-139/prototypes >/tmp/exams-before-139.log 2>&1 &
+          for i in $(seq 1 20); do
+            if curl -fsS http://127.0.0.1:8765/exam-app-0.1.1__index.html -o /dev/null &&
+               curl -fsS http://127.0.0.1:8766/exam-app-0.1.1/index.html -o /dev/null; then break; fi
+            sleep 1
+          done
+          node tests/workspace-command-router.e2e.mjs
+          python3 scripts/append-command-router-board.py
+          npm run board
+          grep -q '46. Atalhos de teclado' prototype/BOARD.md
+          echo "Chromium command evidence validated; tracked screenshots already belong to this PR."
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: issue139-command-router-evidence
+          path: |
+            prototype/issue139_*.png
+            prototype/issue139_commands_e2e.json
+          if-no-files-found: warn

@@ -1,0 +1,46 @@
+name: E2E Graph Search Auto-Fit
+on:
+  pull_request:
+    branches: [dev]
+    paths:
+      - 'prototype/exam-app-0.1.1__index.html'
+      - 'tests/graph-search-fit.test.mjs'
+      - 'tests/graph-search.e2e.mjs'
+      - '.github/workflows/e2e-graph-search.yml'
+permissions:
+  contents: read
+jobs:
+  graph-search:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate search camera contract
+        run: node --test tests/graph-search-fit.test.mjs
+      - name: Install Chromium
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Validate real graph search in Chromium
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m http.server 8765 --directory prototype >/tmp/exams-search.log 2>&1 &
+          for i in $(seq 1 20); do
+            if curl -fsS http://127.0.0.1:8765/exam-app-0.1.1__index.html -o /dev/null; then break; fi
+            sleep 1
+          done
+          node tests/graph-search.e2e.mjs
+      - name: Upload actual search screenshots and report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: issue68-graph-search-evidence
+          path: |
+            prototype/issue68_search_autofit_*.png
+            prototype/issue68_hubs_*.png
+            prototype/issue68_search_autofit_e2e.json
+          if-no-files-found: warn
