@@ -28,6 +28,8 @@ Support exam preparation by making it easier to answer questions, run mock exams
 - Mock exams should follow the format of the real competitive examination. Scoring and any exam-specific rules still need to be established.
 - An available reference is Dataprev 2026, IT Analyst — Software Development, objective exam, booklet type 1: 70 multiple-choice questions, five options per question, one correct answer, and four hours including answer-sheet marking. Source: local `analista-de-tecnologia-da-informacao-desenvolvimento-de-software-cns003-tipo-1.pdf`. Confirm scoring and amendments before treating the complete exam rules as final.
 - Progress should show the percentage of correct answers and identify stronger and weaker areas, broken down by exam, subject, and topic. Calculation details remain open.
+- The preferred starting point is progress. In the initial version, questions are found by exam; other ways to find them may be added later.
+- Previously missed questions should be accessible through a filter on the questions page and from the performance or metrics area. The name and whether that area belongs in a profile are undecided.
 - A future object structure inspired by Capacities is an intention, not a v0.1.0 requirement. Plan for data evolution and migrations without assuming its eventual schema.
 
 ## Product Principles
