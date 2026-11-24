@@ -28,3 +28,5 @@ This record preserves the thinking for this release as it was captured on 2026-1
 ## Subsequent decisions
 
 Append dated decisions here as they are made, including context and what they supersede. Preserve earlier entries rather than rewriting them to match the latest product direction.
+
+- **2026-11-24 — Navigation direction:** Select an exam to open its questions. Selecting a weak topic should lead to its practice questions. Related information should be navigable through links across the system. The working name for the metrics area is **Performance**; placement relative to a profile remains open. This resolves the weak-topic question above, while the mock-exam entry point remains open.
