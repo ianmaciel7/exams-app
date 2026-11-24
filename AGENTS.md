@@ -7,6 +7,7 @@
 ## Boards and project memory
 
 - Store boards in `docs/boards/`, each in its own descriptively named directory.
+- Give every whiteboard a distinct, descriptive name. Also verify that its browser tab title identifies the board: a unique board name inside the canvas does not guarantee a unique tab title. If the viewer displays a generic title such as `Whiteboard`, report the limitation rather than claiming it is fixed, and investigate the viewer's title handling before changing shared plugin code.
 - Use `docs/boards/overview/` for the overall project. Create additional boards when a topic, flow, or investigation needs its own space.
 - Record important information, decisions, findings, and references on the relevant board; preserve visual evidence and associated files too.
 - Keep links or paths to related sketches, wireframes, prototypes, and versions to make navigation easier.

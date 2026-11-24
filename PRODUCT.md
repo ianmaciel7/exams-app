@@ -1,0 +1,37 @@
+# Product
+
+<!-- impeccable:product-schema 1 -->
+
+## Platform
+
+web
+
+## Stack
+
+The initial prototype will use simple HTML. Next.js is intended for a future project version; its adoption and timing remain open.
+
+For the prototype, question data will come from a simple file. A Firebase administration panel is intended for the future; the database, import process, and migration tooling have not been selected.
+
+## Users
+
+For version 0.1.0, the sole intended user is the product owner, who is studying for a public-service competitive examination.
+
+## Product Purpose
+
+Support exam preparation by making it easier to answer questions, run mock exams, and track study progress, including questions answered correctly or incorrectly.
+
+## Capabilities and Constraints
+
+- Version 0.1.0 is scoped to answering questions, mock exams, and progress tracking.
+- Exam selection, including choosing multiple exams and viewing their questions, has been discussed as part of the study experience; its precise behavior remains open.
+- For the prototype, questions will be supplied in a simple file. The user has exam materials in a ChatGPT project; their contents and exact ingestion process remain to be reviewed.
+- Mock exams should follow the format of the real competitive examination. Scoring and any exam-specific rules still need to be established.
+- An available reference is Dataprev 2026, IT Analyst — Software Development, objective exam, booklet type 1: 70 multiple-choice questions, five options per question, one correct answer, and four hours including answer-sheet marking. Source: local `analista-de-tecnologia-da-informacao-desenvolvimento-de-software-cns003-tipo-1.pdf`. Confirm scoring and amendments before treating the complete exam rules as final.
+- Progress should show the percentage of correct answers and identify stronger and weaker areas, broken down by exam, subject, and topic. Calculation details remain open.
+- A future object structure inspired by Capacities is an intention, not a v0.1.0 requirement. Plan for data evolution and migrations without assuming its eventual schema.
+
+## Product Principles
+
+- Keep the first version focused on the owner's actual study workflow.
+- Make correct and incorrect answers and saved progress easy to follow.
+- Treat unconfirmed capabilities and design decisions as open questions.
