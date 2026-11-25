@@ -10,6 +10,8 @@ function findCli() {
     if (!existsSync(override)) throw new Error(`Whiteboard CLI not found: ${override}`);
     return override;
   }
+  const geminiCli = join(homedir(), '.gemini', 'config', 'plugins', 'open-artifact', 'skills', 'open-artifact', 'vendor', 'artifact-types', 'whiteboard', 'scripts', 'cli.mjs');
+  if (existsSync(geminiCli)) return geminiCli;
   const cache = join(homedir(), '.codex', 'plugins', 'cache', 'created-by-me-remote', 'open-artifact');
   if (!existsSync(cache)) throw new Error('Open Artifact is not installed; set OPEN_ARTIFACT_WHITEBOARD_CLI to its whiteboard CLI.');
   const versions = readdirSync(cache, { withFileTypes: true })
@@ -55,7 +57,14 @@ try {
     'write-db', resolve(root),
     JSON.stringify(links.map(([id, href]) => ({ op: 'update', path: `elements/${id}`, data: { href } }))),
   ]);
-  updateLinks(boards.hub, [['e5', urls.overview], ['e7', urls.releases], ['e11', urls.architecture]]);
+  updateLinks(boards.hub, [
+    ['e5', urls.overview],
+    ['e7', urls.releases],
+    ['e11', urls.architecture],
+    ['e12', urls.screens],
+    ['e13', urls.flows],
+    ['e14', urls.sketch],
+  ]);
   updateLinks(boards.releases, [['e24', urls.architecture], ['e25', urls.screens], ['e26', urls.flows], ['e27', urls.sketch]]);
   console.log('\nExam App boards are ready:');
   for (const [name, url] of Object.entries(urls)) console.log(`${name}: ${url}`);

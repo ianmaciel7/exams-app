@@ -1,18 +1,20 @@
 # Project documentation
 
-Start with the project hub in `boards/project-hub/`. It links to the overview, release stages, and the current information architecture board.
+Start with the project hub in `boards/project-hub/`. It links to the overview, release stages, and all active release stage whiteboards (information architecture, screen inventory, user flows, and sketch).
 
-In VS Code, run **Open Exam App boards** from Run and Debug, or execute `node scripts/open-boards.mjs` from the repository root. The launcher starts the boards and refreshes their local links. It uses the installed Open Artifact whiteboard CLI; set `OPEN_ARTIFACT_WHITEBOARD_CLI` to its `cli.mjs` path if it is installed elsewhere.
+In VS Code, run **Open Exam App boards** from Run and Debug, or execute `node scripts/open-boards.mjs` from the repository root. The launcher starts the boards and refreshes their local links. It automatically discovers the installed Open Artifact whiteboard CLI in Antigravity/Gemini (`~/.gemini/config/plugins/open-artifact/`) and Codex (`~/.codex/plugins/cache/created-by-me-remote/open-artifact/`); set `OPEN_ARTIFACT_WHITEBOARD_CLI` to an explicit `cli.mjs` path to override.
 
 - `boards/overview/`: project-wide ideas and notes.
+- `boards/project-hub/`: central hub linking to all active project boards and context.
 - `boards/release-stages/`: progress and stage outputs for releases.
 - `releases/<version>/`: the decisions and artifacts specific to a release.
 - `releases/v0.1.0/product.md`: product discovery and decision history for v0.1.0.
 - `references/`: supporting reference material, including `2026-11-24-chatgpt-conversation-brazilian-civil-service-exams-structure.md`, an original Portuguese conversation export covering Brazilian civil service examination structure. These are references, not approved specifications.
 - `references/2026-11-25-performance-and-account-menu-research.md`: sources and open decisions for the Performance area, account menu, and question-origin imagery.
 - `references/2026-11-25-qconcursos-archive-evidence.md`: recovered historical question screenshots, provenance and evidence limits.
-- `releases/v0.1.0/information-architecture/`: the editable information architecture board for v0.1.0.
-- `releases/v0.1.0/screen-inventory/` and `releases/v0.1.0/user-flows/`: editable working drafts for screens, states and study paths.
-- `releases/v0.1.0/sketch/`: editable questions-page sketch.
+- `releases/v0.1.0/information-architecture/`: the editable information architecture board and documentation for v0.1.0.
+- `releases/v0.1.0/screen-inventory/`: screen inventory board and screen/state specifications.
+- `releases/v0.1.0/user-flows/`: user flows board and core study journey specifications.
+- `releases/v0.1.0/sketch/`: questions-page sketch board and structural specifications.
 
 Create directories for additional stages when their artifacts exist. Keep runnable prototypes under the repository's `prototypes/` directory and link to them from the relevant release.

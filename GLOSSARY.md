@@ -4,26 +4,38 @@ Terms used to describe studying for competitive examinations in Exam App.
 
 ## Language
 
+**Competition**:
+The competitive selection process (concurso público) for which the user prepares. Ordinary question practice is scoped to one selected competition at a time.
+
 **Exam**:
-A competitive examination for which the user prepares.
+An assessment associated with a competition; its relationship to official booklets, stages, and editions is verified against official competition notices.
 
 **Question**:
-An item answered during study or a mock exam.
+An item answered during study or a mock exam, displaying available provenance (year, examining board, organization, exam).
 
 **Answer**:
 The user's response to a question, which can be correct or incorrect.
 
 **Mock exam**:
-A practice assessment intended to follow the format of a real exam.
+A practice assessment. A competition-specific mock follows real examination format and verified rules; a mixed mock combines questions from multiple competitions and is clearly identified as mixed.
 
 **Subject**:
-An area of study used to organize and review performance on questions.
+An area of study used to classify questions and organize performance reviews (e.g., Software Engineering, Portuguese).
 
 **Topic**:
-An area within a subject used to organize and review performance on questions.
+A sub-area within a subject used to refine practice and performance breakdowns.
 
 **Study progress**:
-The user's recorded performance over time, including correct answers and accuracy across exams, subjects, and topics.
+The user's recorded performance over time, including attempt counts and accuracy across competitions, subjects, and topics.
 
 **Accuracy**:
-The percentage of answers that are correct. Its calculation rules remain to be defined.
+Correct attempts divided by all recorded attempts in the selected context, presented with both counts (numerator and denominator). Ordinary practice and mock exams are tracked separately.
+
+**Missed question (Errei)**:
+A question whose latest evaluated attempt was incorrect. A subsequent correct attempt removes the question from the missed-questions filter while preserving all previous attempts in history and metrics.
+
+**Home**:
+The entry page, providing a compact progress overview and competition selection.
+
+**Performance**:
+The dedicated metrics and progress area, accessed via the avatar menu at the bottom of the sidebar.

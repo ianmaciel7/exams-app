@@ -23,7 +23,7 @@ Support exam preparation by making it easier to answer questions, run mock exams
 ## Capabilities and Constraints
 
 - Version 0.1.0 is scoped to answering questions, mock exams, and progress tracking.
-- In ordinary practice, allow the learner to choose automatic answer checking or a Verify action. Mock exams reveal results only after completion; the presentation of this choice is not yet specified.
+- In ordinary practice, allow the learner to choose automatic answer checking (represented as a toggle switch beside the question filters) or a manual Verify action. Mock exams reveal results only after completion.
 - On Questions, show multiple questions in a scrollable list by default, with controls for quantity and a one-question view. Place filters below the Questions heading, with the automatic-check option nearby.
 - The missed-questions filter includes questions whose latest checked attempt was incorrect. A later correct attempt removes the question from that filter while preserving every attempt in history and metrics.
 - Ordinary question practice is scoped to one selected competition. Subject and topic filters remain on the questions page. Questions from different competitions may be combined only in mock exams; the configuration and ordering of mixed mock exams remain to be defined.
