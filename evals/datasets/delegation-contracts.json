@@ -1,9 +1,79 @@
 [
   {
-    "id": "tc-contract-01-ui-component",
-    "description": "Delegation of questions focus mode component must contain all 7 mandatory contract fields",
+    "id": "tc-orch-01-pattern-selection",
+    "description": "Orchestrator must dynamically select Parallelization with Git Worktrees for concurrent module edits",
+    "input_task": "Coordinate concurrent development of 3 independent prototype screens by separate agents.",
+    "sample_output": "### [ORCH-PLAN-01] Parallel Screen Development\n- **Architectural Pattern:** Parallelization / Orchestrator-Workers.\n- **Concurrency & Isolation:** Use Git Worktrees (`workspace: share` / `branch`) for each worker to eliminate file contention.\n- **Worker 1 (Questions List):** Ownership `prototypes/screens/questions/`.\n- **Worker 2 (Mock Config):** Ownership `prototypes/screens/mock-config/`.\n- **Worker 3 (Performance Dashboard):** Ownership `prototypes/screens/performance/`.\n- **Acceptance Criteria:** Independent branches created in separate worktrees with zero merge conflicts.\n- **Validation:** Coordinator integrates and runs test suite across all 3 worktrees before landing.",
+    "expected_fields": [
+      "Architectural Pattern",
+      "Git Worktree",
+      "Ownership",
+      "Acceptance Criteria",
+      "Validation"
+    ],
+    "prohibited_patterns": [
+      "Single Agent",
+      "same working directory"
+    ]
+  },
+  {
+    "id": "tc-orch-02-evaluator-isolation",
+    "description": "Implementation agent must NOT be the sole validator; an independent Evaluator/Verifier is required",
+    "input_task": "Implement and validate the exam scoring and attempt calculation engine.",
+    "sample_output": "### [TASK-ENGINE-02] Exam Scoring Engine Implementation\n- **Goal:** Implement the attempt-based scoring module in `prototypes/scoring/`.\n- **Ownership:** `prototypes/scoring/calculator.mjs` and `prototypes/scoring/types.ts`.\n- **Tools & Permissions:** Full edit and test execution tools within scoring directory.\n- **Acceptance Criteria:** Correct attempts divided by total recorded attempts; mock exams separated from practice.\n- **Independent Validation:** Implementation agent must NOT be sole validator. A separate Evaluator / Verifier agent runs the test harness (`evals/run-evals.mjs`) and audits edge cases (0 attempts, division by zero).\n- **Return Format:** Synthesized report pointing to passing test suite results.",
+    "expected_fields": [
+      "Goal",
+      "Ownership",
+      "Acceptance Criteria",
+      "Independent Validation",
+      "Return Format"
+    ],
+    "prohibited_patterns": [
+      "self-validated",
+      "no independent review",
+      "TODO"
+    ]
+  },
+  {
+    "id": "tc-orch-03-context-budgeting",
+    "description": "Delegation and task return must enforce context budgeting and prohibit raw command/log dumping",
+    "input_task": "Return the results of auditing 200 historical question screenshots in the archive.",
+    "sample_output": "### [TASK-AUDIT-03] Historical Question Evidence Audit\n- **Goal:** Synthesize audit findings from historical Exams Archive screenshots.\n- **Context Budgeting:** Do not dump raw file listings or 200 image base64 outputs into coordinator context.\n- **Ownership:** `docs/references/2026-11-25-qconcursos-archive-evidence.md`.\n- **Tools & Permissions:** Read-only tools (`read_file`, `search_archive`).\n- **Acceptance Criteria:** Report summarizes key interface states (initial question, answered feedback, dock tools) with exact blob SHAs.\n- **Validation:** Independent link check verifying referenced SHAs exist in archive release.\n- **Return Format:** Executive markdown summary pointing to documentation file, with zero raw terminal dumps.",
+    "expected_fields": [
+      "Goal",
+      "Context Budgeting",
+      "Ownership",
+      "Tools & Permissions",
+      "Acceptance Criteria",
+      "Validation",
+      "Return Format"
+    ],
+    "prohibited_patterns": [
+      "raw output dump",
+      "verbose terminal log"
+    ]
+  },
+  {
+    "id": "tc-orch-04-swarm-collaboration",
+    "description": "Complex cross-cutting challenge must select Swarm / Agent Teams with shared message board",
+    "input_task": "Redesign question interface reconciling historical archive evidence, UI/UX audit, and prototype implementation.",
+    "sample_output": "### [ORCH-SWARM-04] Question Interface Cross-Functional Alignment\n- **Architectural Pattern:** Swarm / Agent Teams (`/swarm`).\n- **Team Composition:**\n  1. Researcher (@archive-expert): Queries historical QConcursos captures in Exams Archive.\n  2. Designer (@uiux-specialist): Audits visual hierarchy and microinteractions via `especialista-ui-ux`.\n  3. Implementer (@code-author): Updates whiteboard sketch and component prototype.\n  4. Evaluator (@verifier): Validates accessibility, keyboard navigation, and anti-hallucination.\n- **Coordination Mechanism:** Shared message board for inter-agent mentions, overseen by coordinator.\n- **Validation:** Independent review against design guidelines before landing.",
+    "expected_fields": [
+      "Architectural Pattern",
+      "Swarm",
+      "Coordination Mechanism",
+      "Validation"
+    ],
+    "prohibited_patterns": [
+      "Single Agent",
+      "uncoordinated"
+    ]
+  },
+  {
+    "id": "tc-orch-05-full-delegation-contract",
+    "description": "Standard delegation must fulfill all 7 mandatory contract fields without omission",
     "input_task": "Delegate the implementation of the single-question focus mode view for Questions page to a subagent.",
-    "sample_output": "### [TASK-UI-01] Focus Mode View Component\n- **Goal:** Implement the toggleable single-question focus view on the Questions page.\n- **Context & Scope:** Builds upon v0.1.0 Questions sketch. Restricted to Questions view; does not modify mock exams.\n- **Ownership:** `prototypes/focus-mode/` and `docs/releases/v0.1.0/sketch/`.\n- **Tools & Permissions:** Write tools enabled for assigned directories only; no network access.\n- **Acceptance Criteria:** Component toggles between list view and one-question view smoothly; preserves selected question index.\n- **Validation:** Independent review by UI/UX specialist and unit test verifying state toggle.\n- **Return Format:** Synthesized summary with component path and verification evidence.",
+    "sample_output": "### [TASK-UI-05] Focus Mode View Component\n- **Goal:** Implement the toggleable single-question focus view on the Questions page.\n- **Context & Scope:** Builds upon v0.1.0 Questions sketch. Restricted to Questions view; does not modify mock exams.\n- **Ownership:** `prototypes/focus-mode/` and `docs/releases/v0.1.0/sketch/`.\n- **Tools & Permissions:** Write tools enabled for assigned directories only; no network access.\n- **Acceptance Criteria:** Component toggles between list view and one-question view smoothly; preserves selected question index.\n- **Validation:** Independent review by UI/UX specialist and unit test verifying state toggle.\n- **Return Format:** Synthesized summary with component path and verification evidence.",
     "expected_fields": [
       "Goal",
       "Context & Scope",
@@ -17,26 +87,6 @@
       "TODO",
       "undefined",
       "TBD"
-    ]
-  },
-  {
-    "id": "tc-contract-02-readonly-research",
-    "description": "Historical research delegation must enforce read-only permissions and no state mutation",
-    "input_task": "Delegate historical archive lookup of FGV booklet type 1 to research subagent.",
-    "sample_output": "### [TASK-RES-02] FGV Booklet Historical Research\n- **Goal:** Retrieve and verify question count and duration for Dataprev 2026 IT Analyst booklet type 1 in archive.\n- **Context & Scope:** Historical investigation only. Do not alter current release decisions without confirmation.\n- **Ownership:** Read-only inspection of `docs/references/` and Exams Archive snapshots.\n- **Tools & Permissions:** Read-only tools (`read_file`, `search_archive`). No write or git operations allowed.\n- **Acceptance Criteria:** Verified duration (4 hours), question count (70), and official FGV notice URL.\n- **Validation:** Independent verification against FGV official booklet PDF.\n- **Return Format:** Markdown reference report with exact SHAs and source links.",
-    "expected_fields": [
-      "Goal",
-      "Context & Scope",
-      "Ownership",
-      "Tools & Permissions",
-      "Acceptance Criteria",
-      "Validation",
-      "Return Format"
-    ],
-    "prohibited_patterns": [
-      "write_file",
-      "edit_file",
-      "git push"
     ]
   }
 ]

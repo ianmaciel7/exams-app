@@ -54,6 +54,28 @@ Per project conventions, this sketch uses intentionally loose, procedurally curv
   - `[Books]` Notebooks shortcut (Cadernos)
   - `[Notes]` Annotation and drawing tool (Anotacoes)
 
+## Question — States & Variants Exploration
+
+To provide comprehensive design clarity for the atomic `Question` component before advancing to wireframes, a dedicated expansion section was created on the single sketch board directly adjacent to the main screen layout (spanning `x: 1650` to `x: 7000`).
+
+The exploration is organized across 9 structural groups:
+
+1. **Question Anatomy (Baseline & Labels):** Full labeled structural breakdown of all static labels, provenance metadata, breadcrumbs, statement area, options list, action controls, and learning resource drawer tabs.
+2. **Interactive Elements Taxonomy:** Systematic representation of 12 distinct UI control types (Static text, Links, Buttons, Icon buttons, Radio buttons, Checkboxes, Toggles, Tabs, Dropdowns, Disclosures, Badges, and Tooltips).
+3. **Answer States Matrix (14 States):** Discrete cards illustrating Default/Unanswered, Selected option, Disabled answer button, Enabled answer button, Verifying with loading spinner, Correct answer feedback, Incorrect answer with highlighted error and official key, Previously answered attempt, Struck alternative, Multiple struck alternatives, Restored alternative, Annulled question alert, Outdated law warning, and Local offline fallback.
+4. **Content Variants (16 Variants):** Exploring layout responsiveness across 4-choice multiple choice, 5-choice multiple choice, True/False format, Short statement, Long multi-paragraph statement, Long multi-line options, Without associated text, Associated text collapsed accordion, Associated text expanded reading passage, Inline reference diagram/image, Markdown structured table, Mathematical equation, Code snippet with syntax box, Multiple associated exams badge, and Missing optional source metadata (demonstrating graceful degradation without inventing data).
+5. **Expanded Resource Tabs Drawers:** Complete visual drawer content for all 6 footer tabs:
+   - **Commented Key:** Teacher written resolution and video solution reference.
+   - **Lessons (3):** List of related syllabus video modules with watch actions.
+   - **Comments:** Community discussion thread with comment composer and upvoting.
+   - **Statistics:** Percentage accuracy, option distribution bars, and candidate personal attempt statistics.
+   - **Notebooks:** Checkbox list of candidate study notebooks with inline creation.
+   - **Notes:** Private markdown note editor with save/delete controls.
+6. **Question Actions & Trigger-Consequence Map:** Detailed behavioral table mapping user triggers (radio click, verify click, retry click, strike click, ID badge copy, taxonomy link click, disclosure click, tab click, report error click) to their exact consequences and undo/rollback procedures.
+7. **Feedback Messages & System Alerts:** Visual styling and behavior of inline banners for Correct answers, Incorrect answers, Annulled questions, Outdated legislation, and Offline synchronization errors.
+8. **Component Micro-Interaction States:** Atomic button and radio states under user pointer and keyboard interactions (Default, Hover, Focus ring for accessibility, Pressed, Disabled, and Loading).
+9. **Interaction Rules & Behavioral Matrix:** Ten explicit product interaction rules codifying tab drawer mutual exclusivity, list independence, pre-submission option flexibility, struck option selection rules, attempt immutability post-verification, history preservation upon retry, auto-check vs. manual verify modes, filter navigation scoping, and study session memory.
+
 ## Evolution & Directory Alignment
 - Exploration originally began under `sketch/questions/v1` and `sketch/questions/v2`.
 - At the user's request, the sketch was consolidated into a single active board and aligned directly under `docs/releases/v0.1.0/sketch/` to conform to stage directory standards across `information-architecture/`, `screen-inventory/`, and `user-flows/`.
