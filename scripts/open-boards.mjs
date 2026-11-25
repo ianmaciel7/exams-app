@@ -43,7 +43,7 @@ try {
     architecture: 'docs/releases/v0.1.0/information-architecture',
     screens: 'docs/releases/v0.1.0/screen-inventory',
     flows: 'docs/releases/v0.1.0/user-flows',
-    sketch: 'docs/releases/v0.1.0/sketch/questions/v2',
+    sketch: 'docs/releases/v0.1.0/sketch',
   };
   const urls = {};
   for (const [name, path] of Object.entries(boards)) {
