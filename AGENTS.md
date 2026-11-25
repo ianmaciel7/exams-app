@@ -27,3 +27,51 @@
 - Do not remove existing versions, evidence, or decisions without authorization.
 - Preserve release-specific product discovery and decisions in `docs/releases/<version>/product.md` (lowercase). Keep the root `PRODUCT.md` as evolving product context; append dated decisions and note superseded assumptions in the relevant release record instead of rewriting its history. Reference each stage's actual output and status on the release board, and mark proposed or missing artifacts clearly.
 - Keep each release's information architecture, screen inventory, user flows, sketches, wireframes, and mockups under `docs/releases/<version>/` in descriptively named stage folders. Create folders when an artifact exists, not as empty placeholders. Interactive application prototypes belong under `prototypes/` and should be referenced from the release record.
+
+## Hierarchical multi-agent orchestration
+
+### Orchestration model
+- Adopt a hierarchical **Orchestrator-Workers** model based on the official guidelines and best practices of Anthropic Claude Code, OpenAI Codex, and Google Antigravity.
+- Use native platform capabilities rather than reinventing existing multi-agent primitives.
+- Structure agent roles dynamically across five levels:
+  1. **Orchestrator / Coordinator:** Primary agent responsible for understanding goals, retrieving context, decomposing tasks, delegating, tracking progress, handling blockers, integrating results, and running acceptance validation. Preserves context by delegating heavy operational work.
+  2. **Worker Sessions / Threads:** Independent focused sessions executing defined work scopes.
+  3. **Subagents:** Specialized on-demand agents for research, code exploration, implementation slices, or domain tools.
+  4. **Agent Teams / Swarms:** Collaborative teams for problems requiring shared state and inter-agent communication.
+  5. **Evaluators / Verifiers:** Independent validation agents responsible for review, automated tests, UI/UX audit, accessibility, and quality verification. Implementation agents must not be the sole validation source.
+
+### Architectural patterns
+Select dynamically the simplest pattern adequate for the problem:
+- **Single Agent:** Simple, atomic tasks.
+- **Orchestrator-Workers:** Dynamic decomposition and task delegation.
+- **Parallelization:** Independent concurrent tasks.
+- **Prompt Chaining:** Sequential dependent stages.
+- **Routing:** Directing tasks to domain specialists (e.g., UI/UX specialist, historical archive research).
+- **Agent Teams / Swarm:** Distributed collaboration on complex interconnected challenges.
+- **Evaluator-Optimizer:** Iterative refinement against explicit quality gates.
+- **Manager Pattern:** Centralized coordination of multiple specialized subagents.
+
+### Delegation contract
+Every delegated activity must specify:
+- **Identifier:** Short unique task ID.
+- **Goal:** Clear, actionable objective.
+- **Context & Scope:** Relevant background, explicit inclusions, and exclusions.
+- **Ownership:** Exact files, directories, or modules assigned to the agent.
+- **Tools & Permissions:** Minimum necessary privileges (e.g., read-only vs. write).
+- **Acceptance Criteria & Validation:** Concrete, verifiable success conditions and the independent verification procedure.
+- **Return Format:** Structured, synthesized summary pointing to generated artifacts rather than raw conversational logs.
+
+### Context management and isolation
+- Maintain independent context windows across agents; share only relevant inputs and summarize outputs.
+- Never flood the coordinator with raw command dumps or bulk file reads.
+- Use Git Worktrees when multiple agents perform concurrent edits to avoid file contention.
+- Monitor token and resource consumption; avoid uncontrolled recursive agent spawns.
+
+### Platform-native capabilities
+- **Anthropic Claude Code:** Claude Projects, Coordinator, Project Threads, Project Memory, Subagents, Agent Teams, Git Worktrees, Skills, Hooks, and `CLAUDE.md`.
+- **OpenAI Codex:** Subagents, Parallel Agent Workflows, Agent Threads, Custom Agents, Git Worktrees, `AGENTS.md`, and Agent Skills.
+- **Google Antigravity:** Custom Subagents (`invoke_subagent`), Background Tasks, Asynchronous Execution, `/swarm`, Dynamic Workflows (`run_workflow`), Git Worktrees, Skills, Rules, and Hooks.
+
+### Independent validation and quality gates
+- Separate implementation from verification. Employ automated test suites, accessibility checks, visual inspections, and independent agent reviews before signing off on deliverables.
+- Record findings, decisions, and evidence in project whiteboards (`docs/boards/`, `docs/releases/`) and documentation.
