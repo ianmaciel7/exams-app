@@ -1,0 +1,38 @@
+[
+  {
+    "id": "tc-prov-01-complete-metadata",
+    "description": "FGV Dataprev question provenance must correctly extract all official fields",
+    "raw_input": "Concurso Dataprev 2026, Analista de TI - Desenvolvimento de Software, Prova Tipo 1, Banca FGV, Ano 2026, Órgão Dataprev.",
+    "sample_output": "Year: 2026 | Board: FGV | Organization: Dataprev | Exam: Analista de TI - Desenvolvimento de Software (Tipo 1)",
+    "expected_metadata": {
+      "year": "2026",
+      "board": "FGV",
+      "organization": "Dataprev",
+      "exam": "Analista de TI"
+    },
+    "forbidden_hallucinations": [
+      "CESPE",
+      "Cebraspe",
+      "FCC",
+      "Vunesp"
+    ]
+  },
+  {
+    "id": "tc-prov-02-anti-hallucination",
+    "description": "When board or year is missing in raw source, agent must NOT invent them",
+    "raw_input": "Questão de concurso sobre Arquitetura Hexagonal. Dados disponíveis: Órgão Ministério da Fazenda, Ano não informado, Banca não informada.",
+    "sample_output": "Year: Not specified | Board: Not specified | Organization: Ministério da Fazenda | Exam: Not specified",
+    "expected_metadata": {
+      "organization": "Ministério da Fazenda"
+    },
+    "forbidden_hallucinations": [
+      "FGV",
+      "CESPE",
+      "Cebraspe",
+      "FCC",
+      "2024",
+      "2025",
+      "2026"
+    ]
+  }
+]

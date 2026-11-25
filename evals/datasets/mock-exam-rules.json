@@ -1,0 +1,45 @@
+[
+  {
+    "id": "tc-rules-01-accuracy-calculation",
+    "description": "Accuracy calculation must show correct attempts divided by total recorded attempts (7/10 = 70%)",
+    "inputs": {
+      "total_attempts": 10,
+      "correct_attempts": 7,
+      "mode": "practice"
+    },
+    "expected_result": {
+      "accuracy_percentage": 70,
+      "display_format": "7/10 (70%)",
+      "practice_and_mock_separated": true
+    }
+  },
+  {
+    "id": "tc-rules-02-missed-filter-transition",
+    "description": "A question answered wrong on attempt 1 enters missed filter; answered right on attempt 2 leaves filter",
+    "inputs": {
+      "question_id": "q-101",
+      "attempts": [
+        { "attempt_number": 1, "is_correct": false },
+        { "attempt_number": 2, "is_correct": true }
+      ]
+    },
+    "expected_result": {
+      "in_active_missed_filter": false,
+      "preserved_attempt_count": 2,
+      "history_retained": true
+    }
+  },
+  {
+    "id": "tc-rules-03-mock-interruption-timer",
+    "description": "Interrupted mock exam must pause remaining time and resume on return",
+    "inputs": {
+      "initial_duration_minutes": 240,
+      "elapsed_minutes_before_exit": 45
+    },
+    "expected_result": {
+      "paused": true,
+      "remaining_minutes_on_resume": 195,
+      "auto_submit_on_expiry": true
+    }
+  }
+]

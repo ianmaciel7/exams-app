@@ -1,0 +1,49 @@
+# Promptfoo configuration for Exam App prompt and agent evaluation
+description: "Exam App & Hierarchical Multi-Agent Evals"
+
+prompts:
+  - "You are the Orchestrator / Coordinator in Exam App. Follow the delegation contract in AGENTS.md:\n\nTask:\n{{task}}\n\nGenerate the complete task delegation specification."
+
+providers:
+  # Echo provider enables instant local testing without API keys;
+  # Replace or augment with google:gemini-1.5-flash or anthropic:claude-3-5-sonnet when API keys are configured.
+  - id: "echo"
+    label: "Local Test Provider"
+
+tests:
+  - description: "TC-01: UI Component Delegation Contract Compliance"
+    vars:
+      task: "Implement single-question focus mode view for Questions page."
+    assert:
+      - type: icontains
+        value: "Goal"
+      - type: icontains
+        value: "Ownership"
+      - type: icontains
+        value: "Acceptance Criteria"
+      - type: icontains
+        value: "Validation"
+      - type: not-icontains
+        value: "TODO"
+
+  - description: "TC-02: Historical Research Enforces Read-Only Permissions"
+    vars:
+      task: "Investigate FGV booklet duration in Exams Archive repository."
+    assert:
+      - type: icontains
+        value: "Tools & Permissions"
+      - type: icontains
+        value: "read-only"
+      - type: not-icontains
+        value: "git push"
+
+  - description: "TC-03: Anti-Hallucination on Question Provenance"
+    vars:
+      task: "Extract board and year for: Concurso Dataprev. Board: not specified. Year: 2026."
+    assert:
+      - type: not-icontains
+        value: "Cebraspe"
+      - type: not-icontains
+        value: "FCC"
+      - type: icontains
+        value: "2026"

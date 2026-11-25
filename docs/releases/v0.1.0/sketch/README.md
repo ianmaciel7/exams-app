@@ -28,11 +28,31 @@ Per project conventions, this sketch uses intentionally loose, procedurally curv
 
 ### 4. Question Cards & Provenance
 - Inspired by the QConcursos structure recovered from the Exams Archive (documented in [QConcursos archive evidence](../../../references/2026-11-25-qconcursos-archive-evidence.md)):
-  - **Header:** Question number, ID, and hierarchical Subject › Topic breadcrumbs.
+  - **Header:** Question number (`01`, `02`), question ID badge (`Q4445036`), and hierarchical `Subject › Topic` breadcrumbs.
   - **Source Provenance:** Explicit metadata displaying Year · Board (Banca) · Organization (Órgão) · Exam (Prova). Missing fields are never fabricated.
-  - **Statement:** Main question text, with optional expandable associated text ("+ Associated text").
-  - **Options:** Vertical lettered choices with interactive radio controls.
-  - **Action & Feedback:** "Answer" / "Verify" action, with tabbed resource anchors below (Key, Lessons, Comments).
+  - **Statement:** Main question text, with expandable associated text control (`+ Associated text`).
+  - **Options:** Vertical lettered choices with interactive radio controls. Question 1 illustrates the answered state with selected correct choice in green (`● B ... [Correct]`) and eliminated choice struck-through (`~~D~~`).
+  - **Footer Action Row:**
+    - Left: `[ Answer ]` / `[ Responder ]` action button.
+    - Inline Feedback (on answered question): `Correct answer`.
+    - Right: `[ Report error ]` / `Reportar Erro` action.
+  - **Card Divider:** Clean horizontal divider separating the action area from question learning resources.
+  - **Resource Tabs Strip:**
+    - `Commented key` (Gabarito Comentado: official and teacher solutions)
+    - `Lessons (3)` (Aulas: video lesson reference with badge count)
+    - `Comments` (Comentarios: community discussion)
+    - `Statistics` (Estatisticas: attempt accuracy and alternative selection distribution)
+    - `Notebooks` (Cadernos: save to notebook)
+    - `Notes` (Anotacoes: personal candidate notes)
+
+### 5. Floating Question Tools Dock
+- Located on the right edge of the question workspace, inspired by QConcursos focus and study tools:
+  - `[Focus]` Focus Mode (Modo Foco toggle)
+  - `[Timer]` Timer / Stopwatch (Relogio)
+  - `[Aa]` Font size adjustment
+  - `[Strike]` Strike-through tool (Riscador de alternativas)
+  - `[Books]` Notebooks shortcut (Cadernos)
+  - `[Notes]` Annotation and drawing tool (Anotacoes)
 
 ## Evolution & Directory Alignment
 - Exploration originally began under `sketch/questions/v1` and `sketch/questions/v2`.
