@@ -41,6 +41,9 @@ try {
     releases: 'docs/boards/release-stages',
     hub: 'docs/boards/project-hub',
     architecture: 'docs/releases/v0.1.0/information-architecture',
+    screens: 'docs/releases/v0.1.0/screen-inventory',
+    flows: 'docs/releases/v0.1.0/user-flows',
+    sketch: 'docs/releases/v0.1.0/sketch/questions/v2',
   };
   const urls = {};
   for (const [name, path] of Object.entries(boards)) {
@@ -53,7 +56,7 @@ try {
     JSON.stringify(links.map(([id, href]) => ({ op: 'update', path: `elements/${id}`, data: { href } }))),
   ]);
   updateLinks(boards.hub, [['e5', urls.overview], ['e7', urls.releases], ['e11', urls.architecture]]);
-  updateLinks(boards.releases, [['e24', urls.architecture]]);
+  updateLinks(boards.releases, [['e24', urls.architecture], ['e25', urls.screens], ['e26', urls.flows], ['e27', urls.sketch]]);
   console.log('\nExam App boards are ready:');
   for (const [name, url] of Object.entries(urls)) console.log(`${name}: ${url}`);
   console.log('\nOpen the hub URL in your browser. Links are local and may change after a server restart.');

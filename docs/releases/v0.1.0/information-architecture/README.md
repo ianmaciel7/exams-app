@@ -7,18 +7,18 @@ Information architecture is broader than a sitemap. The area descriptions and na
 ## Release-stage boundaries
 
 - **Information architecture:** maintain the destination map, content groupings, labels, findability and high-level navigation here and on this board.
-- **Screen inventory:** a separate pending release stage will define screens and states. When its artifact exists, link it here and keep this architecture overview concise instead of duplicating the inventory.
-- **User flows:** a separate pending release stage will detail the steps for key tasks. When its artifact exists, link it here; the navigation overview remains high-level.
+- **Screen inventory:** the separate [screen inventory board](../screen-inventory/) is a working draft of screens and states. Keep this architecture overview concise instead of duplicating the inventory.
+- **User flows:** the separate [user flows board](../user-flows/) is a working draft of key task paths; the navigation overview here remains high-level.
 - **Research and decisions:** retain release decisions in [product.md](../product.md) and source material in [docs/references](../../../references/). The board holds concise findings and references, not duplicate full records.
 
-The [release stages board](../../../boards/release-stages/) tracks the status of these outputs. No screen inventory or user flow artifact exists yet.
+The [release stages board](../../../boards/release-stages/) tracks the status of these outputs. Both new artifacts need review and usability validation.
 
 ## Destinations and navigation
 
 - **Home:** the entry page, separate from Performance. Show a compact progress summary and a way to choose a competition. If no progress exists, offer the competition selection path.
 - **Questions:** choosing a competition opens its questions. Ordinary practice stays within that competition; filters, including subject, topic and missed questions, appear on the same page. Each question shows the source fields available in the data.
-- **Performance:** accessed through the avatar menu. Show accuracy and strengths and weaknesses by competition, subject and topic. Link a weak topic or missed questions to filtered practice in the relevant competition.
-- **Mock exams:** accessible from Questions. Provide entry to a new mock, previous mocks, and their results and progress. A competition-specific mock uses that competition's rules once verified. A mixed mock can draw from multiple competitions and is identified as mixed, not as an official exam. Whether this destination becomes a separate screen or an in-page experience remains open until screen inventory and flows.
+- **Performance:** accessed through the avatar menu at the bottom of the sidebar. Show accuracy and strengths and weaknesses by competition, subject and topic. Link a weak topic or missed questions to filtered practice in the relevant competition.
+- **Mock exams:** a function within Questions, using the same question-page structure. Provide entry to a new mock, previous mocks, and their results and progress. A competition-specific mock uses that competition's rules once verified. A mixed mock can draw from multiple competitions and is identified as mixed, not as an official exam. The detailed presentation of configuration, history and results remains for screen inventory and flows.
 
 ## Organization, labels and findability
 
@@ -26,7 +26,7 @@ The [release stages board](../../../boards/release-stages/) tracks the status of
 - **Labels:** These English names are the release's accepted working labels. The relationship and terminology of a competition and a particular exam or edition still need clarification against source materials.
 - **Content relationships:** Questions have source provenance and may be classified by subject and topic. Subjects or topics can recur across competitions; this is a findability observation, not a strict hierarchy or approved data model. Ordinary practice remains within one selected competition; mixing competitions is limited to mock exams.
 - **Navigation:** The avatar menu offers Performance; choosing a competition opens Questions; Questions offers access to Mock exams. Other cross-links are described below as path checks.
-- **Findability:** Subject, topic and missed-question filters are on Questions; a mixed mock can optionally narrow its scope by subject or topic. Free-text search is not an agreed v0.1.0 requirement. The actual filter labels and availability depend on the source data.
+- **Findability:** Subject, topic and missed-question filters are on Questions. Missed means the latest checked attempt was incorrect; a later correct attempt removes the question from this filter without erasing history. A mixed mock can optionally narrow its scope by subject or topic. Free-text search is not an agreed v0.1.0 requirement. The actual filter labels and availability depend on the source data.
 
 ### Working terminology
 

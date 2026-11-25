@@ -10,6 +10,9 @@ In VS Code, run **Open Exam App boards** from Run and Debug, or execute `node sc
 - `releases/v0.1.0/product.md`: product discovery and decision history for v0.1.0.
 - `references/`: supporting reference material, including `2026-11-24-chatgpt-conversation-brazilian-civil-service-exams-structure.md`, an original Portuguese conversation export covering Brazilian civil service examination structure. These are references, not approved specifications.
 - `references/2026-11-25-performance-and-account-menu-research.md`: sources and open decisions for the Performance area, account menu, and question-origin imagery.
+- `references/2026-11-25-qconcursos-archive-evidence.md`: recovered historical question screenshots, provenance and evidence limits.
 - `releases/v0.1.0/information-architecture/`: the editable information architecture board for v0.1.0.
+- `releases/v0.1.0/screen-inventory/` and `releases/v0.1.0/user-flows/`: editable working drafts for screens, states and study paths.
+- `releases/v0.1.0/sketch/questions/v2/`: editable questions-page sketch.
 
 Create directories for additional stages when their artifacts exist. Keep runnable prototypes under the repository's `prototypes/` directory and link to them from the relevant release.
