@@ -2,6 +2,8 @@
 
 Start with the project hub in `boards/project-hub/`. It links to the overview, release stages, and the current information architecture board.
 
+In VS Code, run **Open Exam App boards** from Run and Debug, or execute `node scripts/open-boards.mjs` from the repository root. The launcher starts the boards and refreshes their local links. It uses the installed Open Artifact whiteboard CLI; set `OPEN_ARTIFACT_WHITEBOARD_CLI` to its `cli.mjs` path if it is installed elsewhere.
+
 - `boards/overview/`: project-wide ideas and notes.
 - `boards/release-stages/`: progress and stage outputs for releases.
 - `releases/<version>/`: the decisions and artifacts specific to a release.

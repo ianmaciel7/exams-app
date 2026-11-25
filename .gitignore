@@ -13,7 +13,8 @@ coverage/
 *.log
 
 # Editor and operating system files
-.vscode/
+.vscode/*
+!.vscode/launch.json
 .idea/
 .DS_Store
 Thumbs.db
