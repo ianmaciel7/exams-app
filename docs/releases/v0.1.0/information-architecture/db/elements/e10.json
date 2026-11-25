@@ -1,1 +1,1 @@
-{"type":"text","x":720,"y":850,"text":"- Profile: needed in v0.1.0?\n- Performance inside or outside profile?\n- How does a mock exam start?\n- Multiple-exam selection behavior.\n- Exact exam and scoring rules.","size":"body","wrap":500,"color":"ink"}
+{"type":"text","x":720,"y":850,"text":"- Profile: not recommended for now; confirm.\n- Mock exams from questions: placement to decide.\n- Mixed exams: ordering and labels to decide.\n- Exact exam and scoring rules remain open.","size":"body","wrap":500,"color":"ink"}

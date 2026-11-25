@@ -2,7 +2,7 @@
 
 ## Language
 
-- Write all repository content in English, including file and directory names, documentation, board content, and code comments.
+- Write project-authored content in English, including file and directory names, documentation, board content, and code comments. Preserve imported references and source evidence in their original language when appropriate.
 
 ## Boards and project memory
 
@@ -12,6 +12,7 @@
 - Use `docs/boards/overview/` for the overall project. Create additional boards when a topic, flow, or investigation needs its own space.
 - Use `docs/boards/release-stages/` to track releases and link to their stage artifacts; `docs/releases/` holds the actual release-specific records and boards.
 - Record important information, decisions, findings, and references on the relevant board; preserve visual evidence and associated files too.
+- Store reference materials under `docs/references/`; when the source date is known, prefix their filenames with `YYYY-MM-DD`. Keep original reference contents intact and distinguish claims and proposals from verified project decisions.
 - Keep links or paths to related sketches, wireframes, prototypes, and versions to make navigation easier.
 - Preserve each board's content and native format. Do not replace a visual board with a Markdown document.
 - For UI sketches and wireframes, follow `skills/sketch-wireframe/SKILL.md` and distinguish sketch, low-, mid-, and high-fidelity wireframes, mockups, and interactive prototypes. For editable Open Artifact sketches, also follow the whiteboard skill.
