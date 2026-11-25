@@ -2,7 +2,16 @@
 
 This is the initial architecture baseline, not a user-validated final design. The whiteboard separates destinations, navigation, area content, and decisions and research into distinct regions. Destinations sit at the same visual level without asserting unconfirmed hierarchy; navigation arrows appear separately. Home is the entry point, not an assumed parent of every destination.
 
-Information architecture is broader than a sitemap. The compact page descriptions below inventory current content and capabilities; the release's dedicated screen inventory and user flows are later stage outputs, not completed by this document.
+Information architecture is broader than a sitemap. The area descriptions and navigation paths below are a concise architecture overview, not a complete screen inventory or detailed user flows.
+
+## Release-stage boundaries
+
+- **Information architecture:** maintain the destination map, content groupings, labels, findability and high-level navigation here and on this board.
+- **Screen inventory:** a separate pending release stage will define screens and states. When its artifact exists, link it here and keep this architecture overview concise instead of duplicating the inventory.
+- **User flows:** a separate pending release stage will detail the steps for key tasks. When its artifact exists, link it here; the navigation overview remains high-level.
+- **Research and decisions:** retain release decisions in [product.md](../product.md) and source material in [docs/references](../../../references/). The board holds concise findings and references, not duplicate full records.
+
+The [release stages board](../../../boards/release-stages/) tracks the status of these outputs. No screen inventory or user flow artifact exists yet.
 
 ## Destinations and navigation
 
@@ -18,6 +27,16 @@ Information architecture is broader than a sitemap. The compact page description
 - **Content relationships:** Questions have source provenance and may be classified by subject and topic. Subjects or topics can recur across competitions; this is a findability observation, not a strict hierarchy or approved data model. Ordinary practice remains within one selected competition; mixing competitions is limited to mock exams.
 - **Navigation:** The avatar menu offers Performance; choosing a competition opens Questions; Questions offers access to Mock exams. Other cross-links are described below as path checks.
 - **Findability:** Subject, topic and missed-question filters are on Questions; a mixed mock can optionally narrow its scope by subject or topic. Free-text search is not an agreed v0.1.0 requirement. The actual filter labels and availability depend on the source data.
+
+### Working terminology
+
+- **Competition:** the selection process the learner chooses for ordinary practice.
+- **Exam:** an assessment associated with a competition; its precise relationship to editions, stages and official booklets requires source review.
+- **Mock exam:** a practice assessment; a mixed mock may draw from more than one competition and is not presented as one official exam.
+- **Subject / topic:** working labels for classifying question content; the same subject or topic can recur in different competitions. **Question** means an individual item to answer.
+- **Performance / accuracy:** performance is the progress area; accuracy is correct attempts divided by all attempts in the selected context.
+
+These are working distinctions for the interface, not an approved domain or database model. Verify terminology against the official materials before locking labels or relationships.
 
 ## Mixed mock configuration
 
@@ -43,4 +62,5 @@ These paths have been checked against the map, not tested with an interactive pr
 - [NN/g: IA and Navigation](https://www.nngroup.com/articles/ia-vs-navigation/) distinguishes content organization from controls for navigating it.
 - [Yale: Site Mapping and Information Architecture](https://usability.yale.edu/ux/plan/establish-structure-findability/site-mapping-and-information-architecture) describes structuring content and features around findability.
 - [NN/g: Tree Testing](https://www.nngroup.com/articles/tree-testing/) describes testing whether people can locate items in a hierarchy.
+- [NN/g: Iterative Design](https://www.nngroup.com/articles/parallel-and-iterative-design/) and [Figma: Prototyping](https://www.figma.com/resource-library/what-is-prototyping/) describe testing and revising at different fidelities. For this release, inventory and flows can evolve together; validate key paths early and use additional fidelity only when it answers a specific question.
 - The historical Exams Archive was consulted on 2026-11-25, but its searchable local index was unavailable and no historical IA source content was recovered. Archive reports list historical search categories only; they do not substantiate a specific navigation decision. Earlier research and its limitations remain recorded on the board and in `docs/references/`.
