@@ -2,12 +2,16 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
+// Open Artifact v0.16.3: whiteboard-core/src/schema.ts (MAX_BOARD_ELEMENTS).
+export const MAX_BOARD_ELEMENTS = 800;
+
 export function checkBoard(root) {
   const errors = [];
   const db = join(root, 'db');
   try {
     const meta = JSON.parse(readFileSync(join(db, 'board/meta.json'), 'utf8'));
     if (!Array.isArray(meta.order)) throw new Error('meta.order must be an array');
+    if (meta.order.length > MAX_BOARD_ELEMENTS) errors.push(`board exceeds ${MAX_BOARD_ELEMENTS} elements (${meta.order.length})`);
     const ids = new Set(meta.order);
     if (ids.size !== meta.order.length) errors.push('duplicate IDs in meta.order');
     const files = readdirSync(join(db, 'elements')).filter((name) => name.endsWith('.json'));
