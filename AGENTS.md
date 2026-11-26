@@ -63,6 +63,9 @@ Select dynamically the simplest pattern adequate for the problem:
 - Prefer capability-based choices over fixed model names; availability, quality, cost, and latency vary across providers and sessions. Respect higher-priority instructions and platform restrictions, and do not claim a model override occurred without verifying it.
 - If model selection is unavailable or subagents inherit the coordinator's model, use the available default and report that limitation when it matters. Model assignments and agent capabilities must be configured through each platform's supported native mechanisms; this guidance alone does not enforce them.
 - The coordinator remains accountable for checking delegated findings against evidence and the user's requirements, regardless of the model used.
+- Route by risk and uncertainty, not task size alone: bounded reversible work can use a lighter tier; ordinary implementation needs adequate capability; security, data integrity, concurrency, irreversible changes, or repeated failure warrant escalation or independent review. Reassess and de-escalate routine work after new evidence.
+- Model selection is host-dependent: use an authorized available tier, never bypass access or silently incur additional paid usage, and disclose unsupported routing or fallback when it affects the task. Do not claim the coordinator model switched automatically.
+- Evaluate choices using acceptance outcomes and observable model, effort, latency, and usage where available; do not invent measurements or log private prompts or credentials. Keep scope and verification proportionate to risk.
 
 ### Delegation contract
 Every delegated activity must specify:

@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "status": "not_run",
+  "cases": [
+    {
+      "id": "mechanical",
+      "scenario": "Locate an exact known file without independent work",
+      "expected": "direct_or_light"
+    },
+    {
+      "id": "routine",
+      "scenario": "Implement a bounded ordinary change with tests",
+      "expected": "standard"
+    },
+    {
+      "id": "complex",
+      "scenario": "Investigate an ambiguous cross-cutting failure",
+      "expected": "escalate"
+    },
+    {
+      "id": "high-risk-small",
+      "scenario": "Change one authentication or data-integrity condition",
+      "expected": "escalate"
+    },
+    {
+      "id": "repeated-failure",
+      "scenario": "Repeat a failed approach without new evidence",
+      "expected": "reassess_and_escalate"
+    },
+    {
+      "id": "unavailable",
+      "scenario": "Requested model unavailable or access denied",
+      "expected": "authorized_fallback_or_disclose"
+    },
+    {
+      "id": "de-escalation",
+      "scenario": "Run routine verification after a difficult issue is resolved",
+      "expected": "reassess_and_deescalate"
+    }
+  ]
+}
