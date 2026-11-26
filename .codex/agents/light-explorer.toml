@@ -1,0 +1,4 @@
+name = "light-explorer"
+description = "Lightweight agent for mechanical, bounded, read-only searches and inspections"
+model = "gpt-6.2-sol"
+model_reasoning_effort = "low"

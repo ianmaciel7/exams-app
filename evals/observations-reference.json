@@ -1,0 +1,170 @@
+{
+  "mechanical": {
+    "baseline": {
+      "model": "standard",
+      "effort": "medium",
+      "correct": true,
+      "routing_appropriate": true,
+      "evidence": "baseline fixed standard model resolved file lookup",
+      "wall_ms": 1200,
+      "tool_calls": 2,
+      "agent_calls": 0,
+      "tokens": 450
+    },
+    "adaptive": {
+      "model": "light",
+      "effort": "low",
+      "correct": true,
+      "routing_appropriate": true,
+      "evidence": "direct tool execution used without premium reasoning",
+      "wall_ms": 320,
+      "tool_calls": 1,
+      "agent_calls": 0,
+      "tokens": 120
+    }
+  },
+  "routine": {
+    "baseline": {
+      "model": "standard",
+      "effort": "medium",
+      "correct": true,
+      "routing_appropriate": true,
+      "evidence": "standard model executed bounded change with unit test",
+      "wall_ms": 3500,
+      "tool_calls": 4,
+      "agent_calls": 0,
+      "tokens": 1600
+    },
+    "adaptive": {
+      "model": "standard",
+      "effort": "medium",
+      "correct": true,
+      "routing_appropriate": true,
+      "evidence": "standard tier maintained for implementation and tests",
+      "wall_ms": 3450,
+      "tool_calls": 4,
+      "agent_calls": 0,
+      "tokens": 1580
+    }
+  },
+  "complex": {
+    "baseline": {
+      "model": "standard",
+      "effort": "medium",
+      "correct": true,
+      "routing_appropriate": false,
+      "evidence": "standard model required two retry turns to diagnose cross-cutting issue",
+      "wall_ms": 7800,
+      "tool_calls": 9,
+      "agent_calls": 0,
+      "tokens": 3800
+    },
+    "adaptive": {
+      "model": "advanced",
+      "effort": "high",
+      "correct": true,
+      "routing_appropriate": true,
+      "evidence": "escalated reasoning resolved ambiguous root cause on first pass",
+      "wall_ms": 4200,
+      "tool_calls": 5,
+      "agent_calls": 0,
+      "tokens": 2400
+    }
+  },
+  "high-risk-small": {
+    "baseline": {
+      "model": "standard",
+      "effort": "low",
+      "correct": true,
+      "routing_appropriate": false,
+      "evidence": "standard low effort overlooked authorization boundary condition",
+      "wall_ms": 2200,
+      "tool_calls": 3,
+      "agent_calls": 0,
+      "tokens": 980
+    },
+    "adaptive": {
+      "model": "advanced",
+      "effort": "high",
+      "correct": true,
+      "routing_appropriate": true,
+      "evidence": "escalated reasoning and reviewer pass verified auth invariant",
+      "wall_ms": 3100,
+      "tool_calls": 4,
+      "agent_calls": 1,
+      "tokens": 1450
+    }
+  },
+  "repeated-failure": {
+    "baseline": {
+      "model": "standard",
+      "effort": "medium",
+      "correct": true,
+      "routing_appropriate": false,
+      "evidence": "baseline repeated the same failing patch attempt before succeeding",
+      "wall_ms": 8900,
+      "tool_calls": 11,
+      "agent_calls": 0,
+      "tokens": 4200
+    },
+    "adaptive": {
+      "model": "advanced",
+      "effort": "high",
+      "correct": true,
+      "routing_appropriate": true,
+      "evidence": "detected repeated failure, escalated reasoning and revised strategy",
+      "wall_ms": 4600,
+      "tool_calls": 6,
+      "agent_calls": 0,
+      "tokens": 2600
+    }
+  },
+  "unavailable": {
+    "baseline": {
+      "model": "unknown",
+      "effort": "unknown",
+      "correct": true,
+      "routing_appropriate": false,
+      "evidence": "baseline stalled on unavailable model without fallback path",
+      "wall_ms": 6100,
+      "tool_calls": 4,
+      "agent_calls": 0,
+      "tokens": 1200
+    },
+    "adaptive": {
+      "model": "standard",
+      "effort": "medium",
+      "correct": true,
+      "routing_appropriate": true,
+      "evidence": "fell back to authorized tier and reported limitation cleanly",
+      "wall_ms": 1900,
+      "tool_calls": 2,
+      "agent_calls": 0,
+      "tokens": 750
+    }
+  },
+  "de-escalation": {
+    "baseline": {
+      "model": "advanced",
+      "effort": "high",
+      "correct": true,
+      "routing_appropriate": false,
+      "evidence": "baseline retained expensive high-effort model for trivial lint check",
+      "wall_ms": 4100,
+      "tool_calls": 2,
+      "agent_calls": 0,
+      "tokens": 1900
+    },
+    "adaptive": {
+      "model": "light",
+      "effort": "low",
+      "correct": true,
+      "routing_appropriate": true,
+      "evidence": "de-escalated to lightweight check following successful resolution",
+      "wall_ms": 480,
+      "tool_calls": 1,
+      "agent_calls": 0,
+      "tokens": 210
+    }
+  }
+}
