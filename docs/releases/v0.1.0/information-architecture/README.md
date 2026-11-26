@@ -9,9 +9,9 @@ Information architecture is broader than a sitemap. The area descriptions and na
 - **Information architecture:** maintain the destination map, content groupings, labels, findability and high-level navigation here and on this board.
 - **Screen inventory:** the separate [screen inventory board](../screen-inventory/) is a working draft of screens and states. Keep this architecture overview concise instead of duplicating the inventory.
 - **User flows:** the separate [user flows board](../user-flows/) is a working draft of key task paths; the navigation overview here remains high-level.
-- **Research and decisions:** retain release decisions in [product.md](../product.md) and source material in [docs/references](../../../references/). The board holds concise findings and references, not duplicate full records.
+- **Research and decisions:** retain release decisions in [product.md](../product/product.md) and source material in [docs/references](../../../references/). The board holds concise findings and references, not duplicate full records.
 
-The [release stages board](../../../boards/release-stages/) tracks these outputs. The [release decision register](../product.md#current-release-baseline) distinguishes recorded approvals from design baselines. Home's summary and competition selector, the weak-topic link, and detailed mixed-mock setup are design baselines. Navigation has been reviewed against the map. Usability validation remains pending.
+The [release stages board](../../../boards/release-stages/) tracks these outputs. The [release decision register](../product/product.md#current-release-baseline) distinguishes recorded approvals from design baselines. Home's summary and competition selector, the weak-topic link, and detailed mixed-mock setup are design baselines. Navigation has been reviewed against the map. Usability validation remains pending.
 
 ## Destinations and navigation
 
@@ -67,4 +67,4 @@ These paths have been checked against the map, not tested with an interactive pr
 
 ## Current workspace refinements
 
-The conceptual Questions destination remains unchanged; its visible redundant subtitle is removed under the competition heading. The collapsed rail preserves access to competitions and Performance. Question metadata link affordances include ID, subject, topic/subtopic, year, board, organization and exam when present; exact navigation targets and filter dependencies remain proposed. Statistics expands inline; no separate Associated text or Commented key control. See [V010-16–19](../product.md#current-release-baseline) for scope and status.
+The conceptual Questions destination remains unchanged; its visible redundant subtitle is removed under the competition heading. The collapsed rail preserves access to competitions and Performance. Question metadata link affordances include ID, subject, topic/subtopic, year, board, organization and exam when present; exact navigation targets and filter dependencies remain proposed. Statistics expands inline; no separate Associated text or Commented key control. See [V010-16–19](../product/product.md#current-release-baseline) for scope and status.

@@ -1,6 +1,6 @@
 # User Flows — v0.1.0
 
-This document accompanies the editable [user flows whiteboard](./). The [release decision register](../product.md#current-release-baseline) records approvals and design baselines. The paths below await a prototype walkthrough and usability validation.
+This document accompanies the editable [user flows whiteboard](./). The [release decision register](../product/product.md#current-release-baseline) records approvals and design baselines. The paths below await a prototype walkthrough and usability validation.
 
 ## Primary Study Flows
 

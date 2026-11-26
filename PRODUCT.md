@@ -22,7 +22,7 @@ Support exam preparation by making it easier to answer questions, run mock exams
 
 ## Capabilities and Constraints
 
-The [v0.1.0 decision register](docs/releases/v0.1.0/product.md#current-release-baseline) records release scope, evidence and acceptance checks.
+The [v0.1.0 decision register](docs/releases/v0.1.0/product/product.md#current-release-baseline) records release scope, evidence and acceptance checks.
 
 - Version 0.1.0 is scoped to answering questions, mock exams, and progress tracking.
 - In ordinary practice, allow the learner to choose automatic answer checking (represented as a toggle switch beside the question filters) or a manual Verify action. Mock exams reveal results only after completion.
@@ -50,7 +50,7 @@ The [v0.1.0 decision register](docs/releases/v0.1.0/product.md#current-release-b
 
 ## Current interface decisions (v0.1.0)
 
-- The sidebar is a collapsible competition switcher; Home remains a conceptual entry destination, not a sidebar link. Mock exams is accessed from the competition workspace; Missed is available through Status and Performance review. See the [release baseline](docs/releases/v0.1.0/product.md#current-release-baseline).
+- The sidebar is a collapsible competition switcher; Home remains a conceptual entry destination, not a sidebar link. Mock exams is accessed from the competition workspace; Missed is available through Status and Performance review. See the [release baseline](docs/releases/v0.1.0/product/product.md#current-release-baseline).
 - Question ID, subject, topic, subtopic when present, year, board, organization and exam have link affordances; their routes and filter destinations are proposed. Show only available data. Statistics is the sole retained question resource disclosure. Commented key is excluded; no separate Associated text control is shown, but required supporting content remains inline. Preserve correctness feedback and attempt history.
 - Active-filter chips, Clear filters, result count, automatic filter application and Subject/Topic dependency are design proposals awaiting functional validation. Free-text question search is not an agreed requirement.
 - The latest [Sketch](docs/releases/v0.1.0/sketch/) uses abstract content, native editable notes and the project-launcher hand-drawn ink pass. Sketch approval is not implementation or usability approval.

@@ -4,7 +4,7 @@ This record preserves the thinking for this release as it was captured on 2026-1
 
 ## Current release baseline
 
-v0.1.0 focuses on the product owner's study workflow: practice questions, run mock exams, and track progress. The register below consolidates the dated history as of 2026-11-26. **Recorded approval** identifies an explicit user request, acceptance, or correction reported in that history. The original messages were unavailable for independent verification in this review. **Design baseline** identifies a direction documented for design and walkthroughs. **Proposed** requires separate user confirmation. Implementation and usability validation are pending. See [issue #1, work package 1](https://github.com/ianmaciel7/exams-app/issues/1) and the [shared terminology](../../../GLOSSARY.md).
+v0.1.0 focuses on the product owner's study workflow: practice questions, run mock exams, and track progress. The register below consolidates the dated history as of 2026-11-26. **Recorded approval** identifies an explicit user request, acceptance, or correction reported in that history. The original messages were unavailable for independent verification in this review. **Design baseline** identifies a direction documented for design and walkthroughs. **Proposed** requires separate user confirmation. Implementation and usability validation are pending. See [issue #1, work package 1](https://github.com/ianmaciel7/exams-app/issues/1) and the [shared terminology](../../../../GLOSSARY.md).
 
 | ID | Status | Decision | Dated source and supersession | Affected artifacts |
 | --- | --- | --- | --- | --- |

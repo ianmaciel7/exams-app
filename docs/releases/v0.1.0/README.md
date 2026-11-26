@@ -4,7 +4,7 @@ This index locates the current planning artifacts. A documented baseline is not 
 
 | Artifact | Purpose and source of truth | Progress | Validation |
 | --- | --- | --- | --- |
-| [Product discovery](product.md) | Release decisions and history; root `PRODUCT.md` provides evolving product context | Baseline documented | User validation pending |
+| [Product](product/) | Discovery board; [release decisions and history](product/product.md) are the source of truth, with root `PRODUCT.md` for evolving context | Baseline documented | User validation pending |
 | [Information Architecture](information-architecture/) | Destinations, organization and navigation | Baseline documented | Usability validation pending |
 | [Screen Inventory](screen-inventory/) | Screens, surfaces and states | Baseline documented | Usability validation pending |
 | [User Flows](user-flows/) | Study paths and decision branches | Baseline documented | Usability validation pending |

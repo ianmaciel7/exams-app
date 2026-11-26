@@ -119,6 +119,7 @@ try {
     overview: ['art_examappoverview', 'docs/boards/overview'],
     releases: ['art_examappreleasestages', 'docs/boards/release-stages'],
     hub: ['art_examappprojecthub', 'docs/boards/project-hub'],
+    product: ['art_examappproductv010', 'docs/releases/v0.1.0/product'],
     architecture: ['art_examappinformationarchitecturev010', 'docs/releases/v0.1.0/information-architecture'],
     screens: ['art_examappscreeninventoryv010', 'docs/releases/v0.1.0/screen-inventory'],
     flows: ['art_examappuserflowsv010', 'docs/releases/v0.1.0/user-flows'],

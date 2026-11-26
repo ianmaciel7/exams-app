@@ -1,0 +1,47 @@
+# Whiteboard Guidelines
+
+### Open Artifact Whiteboard Tools & Architecture
+
+All project whiteboards are powered by the Open Artifact Whiteboard runtime, persisted as granular files under `<board-dir>/db/`:
+- **Data Persistence Architecture:**
+  - `db/board/meta.json`: Core metadata (`id`, `title`, and `order`: an array of element IDs establishing strict layer order and render z-index).
+  - `db/board/inks.json`: Palette definitions and custom stroke/fill swatches.
+  - `db/elements/<element-id>.json`: One atomic JSON file per element, ensuring fine-grained Git tracking, conflict-free concurrent editing, and easy programmatic manipulation.
+
+- **Available Native Tools & Elements:**
+  - **Text (`type: "text"`) and native sticky notes (`type: "note"`):**
+    - Properties: `x`, `y`, `text`, `size` (`small`, `body`, `large`, `title`), `color` (hex string).
+    - Multi-line & word wrapping: for native text use the version-supported `wrap`/`width` property; for native `note` use `x`, `y`, `w`, `h`, `text`, a supported `color` and optional `tilt`. Do not substitute a free-text element for a native sticky note. Verify the installed schema.
+    - Usage: Structural headings, section titles, metadata chips, note callouts, code blocks, and data labels.
+  - **Hand-drawn Vector Linework & Pen Tool (`type: "stroke"`):**
+    - Properties: `x`, `y`, `points` (flat coordinate array `[x0, y0, x1, y1, ...]` relative to `(x, y)`), `width` (native stroke thickness from 1.0 to 40; use the reusable marker-sketch preset (typically 1.8–3.4) for Sketch boards), `color` (hex string).
+    - Usage: Loose paper-sketch polylines, arrows, borders, underline emphasis, dividers, and hand-drawn UI vector icons.
+  - **Containers, Frames & Macro-Sections:**
+    - Constructed using paired horizontal and vertical strokes (`_frame_t`, `_frame_b`, `_frame_l`, `_frame_r`).
+    - Use macro-section frames and concise banners only when they help the owning stage communicate its purpose. A simple Sketch does not require multiple macro-sections, formal banners or specification panels. When a banner is useful, it may contain:
+      1. Section tag (e.g. `SECTION 1 · APPLICATION SHELL`, size: `small`, accent color).
+      2. Section title (e.g. `Application Workspace & Navigation`, size: `title`).
+      3. Section subtitle / description (size: `body`, muted gray).
+      4. Header divider stroke separating banner from content.
+  - **Hand-Drawn UI Vector Iconography:**
+    - Never substitute drawn UI icons with emojis or unicode text symbols.
+    - Construct all icons as vector stroke primitives:
+      - Terminals: `[> _]` (window outline + prompt chevron + cursor).
+      - Briefcases: briefcase (rounded rectangular body + upper handle).
+      - Home: home (slanted roof lines + body rectangle).
+      - Questions: `[?]` (circle outline + question mark arc + dot).
+      - Settings: gear (gear outline with central circular hole).
+      - Theme: crescent (crescent moon curve).
+      - Status: Segmented dashed circle (6 discrete diagonal arc strokes).
+      - Share / Exit: Curved forward arrow with arched tail.
+  - **Popover Menus & Elevated Cards:**
+    - Enclosing card frame with directional pointer triangle pointing to the triggering anchor (e.g. user avatar).
+    - Elevated internal items separated by divider strokes, with icon + text alignment and generous padding.
+  - **Connectors, Dividers & Flow Arrows:**
+    - Directed polylines connecting steps in user flows or separating structural card regions.
+
+- **Layout, Baselines & Quality Gates:**
+  - **Macro-baselines:** Align comparable section headers when multiple sections are actually needed. Do not impose production-level precision or extra section containers on exploratory Sketches.
+  - **Padding & breathing room:** Leave enough visual clearance to prevent clipping and collisions. Exact production dimensions belong to later fidelity stages; the Sketch uses approximate spacing.
+  - **Visual Verification Gate:** Always verify whiteboard changes with a browser subagent at both full-board overview (e.g. 16% zoom) and close-up detail (200% zoom) to guarantee zero clipped text, zero overlapping borders, and crisp visual hierarchy before committing.
+

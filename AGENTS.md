@@ -20,50 +20,9 @@
 - Preserve each board's content and native format. Do not replace a visual board with a Markdown document.
 - For UI sketches, use `especialista-ui-ux:sketch-de-interface` when available; for wireframes, use the relevant UI/UX plugin skill. Distinguish sketch, low-, mid-, and high-fidelity wireframes, mockups, and interactive prototypes. For editable Open Artifact sketches, also follow the whiteboard skill.
 
-### Open Artifact Whiteboard Tools & Architecture
+### Open Artifact whiteboards
 
-All project whiteboards are powered by the Open Artifact Whiteboard runtime, persisted as granular files under `<board-dir>/db/`:
-- **Data Persistence Architecture:**
-  - `db/board/meta.json`: Core metadata (`id`, `title`, and `order`: an array of element IDs establishing strict layer order and render z-index).
-  - `db/board/inks.json`: Palette definitions and custom stroke/fill swatches.
-  - `db/elements/<element-id>.json`: One atomic JSON file per element, ensuring fine-grained Git tracking, conflict-free concurrent editing, and easy programmatic manipulation.
-
-- **Available Native Tools & Elements:**
-  - **Text (`type: "text"`) and native sticky notes (`type: "note"`):**
-    - Properties: `x`, `y`, `text`, `size` (`small`, `body`, `large`, `title`), `color` (hex string).
-    - Multi-line & word wrapping: for native text use the version-supported `wrap`/`width` property; for native `note` use `x`, `y`, `w`, `h`, `text`, a supported `color` and optional `tilt`. Do not substitute a free-text element for a native sticky note. Verify the installed schema.
-    - Usage: Structural headings, section titles, metadata chips, note callouts, code blocks, and data labels.
-  - **Hand-drawn Vector Linework & Pen Tool (`type: "stroke"`):**
-    - Properties: `x`, `y`, `points` (flat coordinate array `[x0, y0, x1, y1, ...]` relative to `(x, y)`), `width` (native stroke thickness from 1.0 to 40; use the reusable marker-sketch preset (typically 1.8–3.4) for Sketch boards), `color` (hex string).
-    - Usage: Loose paper-sketch polylines, arrows, borders, underline emphasis, dividers, and hand-drawn UI vector icons.
-  - **Containers, Frames & Macro-Sections:**
-    - Constructed using paired horizontal and vertical strokes (`_frame_t`, `_frame_b`, `_frame_l`, `_frame_r`).
-    - Use macro-section frames and concise banners only when they help the owning stage communicate its purpose. A simple Sketch does not require multiple macro-sections, formal banners or specification panels. When a banner is useful, it may contain:
-      1. Section tag (e.g. `SECTION 1 · APPLICATION SHELL`, size: `small`, accent color).
-      2. Section title (e.g. `Application Workspace & Navigation`, size: `title`).
-      3. Section subtitle / description (size: `body`, muted gray).
-      4. Header divider stroke separating banner from content.
-  - **Hand-Drawn UI Vector Iconography:**
-    - Never substitute drawn UI icons with emojis or unicode text symbols.
-    - Construct all icons as vector stroke primitives:
-      - Terminals: `[> _]` (window outline + prompt chevron + cursor).
-      - Briefcases: `[💼]` (rounded rectangular body + upper handle).
-      - Home: `[☖]` (slanted roof lines + body rectangle).
-      - Questions: `[?]` (circle outline + question mark arc + dot).
-      - Settings: `[⚙]` (gear outline with central circular hole).
-      - Theme: `[🌙]` (crescent moon curve).
-      - Status: Segmented dashed circle (6 discrete diagonal arc strokes).
-      - Share / Exit: Curved forward arrow with arched tail.
-  - **Popover Menus & Elevated Cards:**
-    - Enclosing card frame with directional pointer triangle pointing to the triggering anchor (e.g. user avatar).
-    - Elevated internal items separated by divider strokes, with icon + text alignment and generous padding.
-  - **Connectors, Dividers & Flow Arrows:**
-    - Directed polylines connecting steps in user flows or separating structural card regions.
-
-- **Layout, Baselines & Quality Gates:**
-  - **Macro-baselines:** Align comparable section headers when multiple sections are actually needed. Do not impose production-level precision or extra section containers on exploratory Sketches.
-  - **Padding & breathing room:** Leave enough visual clearance to prevent clipping and collisions. Exact production dimensions belong to later fidelity stages; the Sketch uses approximate spacing.
-  - **Visual Verification Gate:** Always verify whiteboard changes with a browser subagent at both full-board overview (e.g. 16% zoom) and close-up detail (200% zoom) to guarantee zero clipped text, zero overlapping borders, and crisp visual hierarchy before committing.
+Before creating or changing any project whiteboard, read [whiteboard guidelines](docs/boards/whiteboard-guidelines.md) and the applicable whiteboard skill. Those requirements apply to project-wide and release-specific boards.
 
 ## Wireframes, prototypes, and versions
 
@@ -72,13 +31,13 @@ All project whiteboards are powered by the Open Artifact Whiteboard runtime, per
 - When versions need to remain accessible side by side for comparison, use subdirectories such as `v1/` and `v2/`; record their purpose and main differences on the relevant board.
 - For small changes that do not need to coexist, prefer Git history over duplicating directories.
 - Do not remove existing versions, evidence, or decisions without authorization.
-- Preserve release-specific product discovery and decisions in `docs/releases/<version>/product.md` (lowercase). Keep the root `PRODUCT.md` as evolving product context; append dated decisions and note superseded assumptions in the relevant release record instead of rewriting its history. Reference each stage's actual output and status on the release board, and mark proposed or missing artifacts clearly.
+- Preserve release-specific product discovery and decisions in `docs/releases/<version>/product/product.md` (lowercase). Keep the root `PRODUCT.md` as evolving product context; append dated decisions and note superseded assumptions in the relevant release record instead of rewriting its history. Reference each stage's actual output and status on the release board, and mark proposed or missing artifacts clearly.
 - Keep each release's information architecture, screen inventory, user flows, sketches, wireframes, and mockups under `docs/releases/<version>/` in descriptively named stage folders. Create folders when an artifact exists, not as empty placeholders. Interactive application prototypes belong under `prototypes/` and should be referenced from the release record.
 
 ## Hierarchical multi-agent orchestration
 
 ### Orchestration model
-- Adopt a hierarchical **Orchestrator-Workers** model based on the official guidelines and best practices of Anthropic Claude Code, OpenAI Codex, and Google Antigravity.
+- Choose the simplest suitable approach, from a single agent to an orchestrator with workers. Use multi-agent work when independent tasks, specialization, or independent review justify its overhead.
 - Use native platform capabilities rather than reinventing existing multi-agent primitives.
 - Structure agent roles dynamically across five levels:
   1. **Orchestrator / Coordinator:** Primary agent responsible for understanding goals, retrieving context, decomposing tasks, delegating, tracking progress, handling blockers, integrating results, and running acceptance validation. Preserves context by delegating heavy operational work.
@@ -116,10 +75,13 @@ Every delegated activity must specify:
 - **Return Format:** Structured, synthesized summary pointing to generated artifacts rather than raw conversational logs.
 
 ### Context management and isolation
-- Maintain independent context windows across agents; share only relevant inputs and summarize outputs.
-- Never flood the coordinator with raw command dumps or bulk file reads.
-- Use Git Worktrees when multiple agents perform concurrent edits to avoid file contention.
-- Monitor token and resource consumption; avoid uncontrolled recursive agent spawns.
+- Reuse verified findings while their sources are unchanged. Retrieve the smallest relevant source section; read each applicable skill's required instructions, then open only references needed for the task.
+- Process large logs, board JSON and search results locally; return concise findings with source paths and enough evidence for verification. Request focused browser state or screenshots; avoid full accessibility trees for large canvases when not needed.
+- Delegate independent work only when its quality, speed or isolation benefits outweigh extra context and coordination. Give each worker only the context it needs; avoid duplicating the same investigation. Respect platform and user instructions governing delegation and model choice.
+- Batch independent reads and checks when safe. Rerun validation when changed inputs, failures, or uncertainty justify it; choose coverage and independent verification proportionate to risk and the applicable quality gates.
+- Use Git worktrees when concurrent edits would conflict. Do not force worktrees for read-only or isolated work.
+- Treat context compaction and prompt caching as host-managed. Do not claim cache hits or savings without measurements, and do not use arbitrary token caps that compromise required work.
+- Record durable decisions and evidence once in their authoritative location and link to them from the relevant board. Avoid copying transcripts or repeating unchanged material.
 
 ### Platform-native capabilities
 - **Anthropic Claude Code:** Claude Projects, Coordinator, Project Threads, Project Memory, Subagents, Agent Teams, Git Worktrees, Skills, Hooks, and `CLAUDE.md`.

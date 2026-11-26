@@ -4,7 +4,7 @@
 
 Explore the primary desktop Questions workspace for one selected competition: composition, hierarchy, navigation and the few visual states necessary to discuss the layout. This is an editable low-fidelity Open Artifact sketch, not a wireframe, component contract or working prototype. Progress: In progress. Native Light/Dark capture passed for the previous revision; the corrected collapsed rail requires a fresh native capture. User review, usability and functional validation remain pending.
 
-Source of truth: [release decisions](../product.md#current-release-baseline), [stage responsibilities](../../../../AGENTS.md#stage-responsibilities-and-fidelity-boundaries), [IA](../information-architecture/), [screen inventory](../screen-inventory/) and [user flows](../user-flows/).
+Source of truth: [release decisions](../product/product.md#current-release-baseline), [stage responsibilities](../../../../AGENTS.md#stage-responsibilities-and-fidelity-boundaries), [IA](../information-architecture/), [screen inventory](../screen-inventory/) and [user flows](../user-flows/).
 
 ## Active visual studies
 

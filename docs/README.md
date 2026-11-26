@@ -12,10 +12,11 @@ Run `node scripts/check-boards.mjs` for a read-only check of board order, elemen
 - `boards/project-hub/`: central hub linking to all active project boards and context.
 - `boards/release-stages/`: progress and stage outputs for releases.
 - `releases/<version>/`: the decisions and artifacts specific to a release; each release has a README index.
-- `releases/v0.1.0/product.md`: product discovery and decision history for v0.1.0.
+- `releases/v0.1.0/product/`: Product discovery board and `product.md` decision history for v0.1.0.
 - `references/`: supporting reference material, including `2026-11-24-chatgpt-conversation-brazilian-civil-service-exams-structure.md`, an original Portuguese conversation export covering Brazilian civil service examination structure. These are references, not approved specifications.
 - `references/2026-11-25-performance-and-account-menu-research.md`: sources and open decisions for the Performance area, account menu, and question-origin imagery.
 - `references/2026-11-25-qconcursos-archive-evidence.md`: recovered historical question screenshots, provenance and evidence limits.
+- `references/2026-11-26-context-efficiency-audit.md`: context and delegation baseline, findings, and measurement procedure.
 - `releases/v0.1.0/information-architecture/`: the editable information architecture board and documentation for v0.1.0.
 - `releases/v0.1.0/screen-inventory/`: screen inventory board and screen/state specifications.
 - `releases/v0.1.0/user-flows/`: user flows board and core study journey specifications.
@@ -25,7 +26,7 @@ Create directories for additional stages when their artifacts exist. Keep runnab
 
 ## Current release and Sketch review
 
-Use the [release baseline](releases/v0.1.0/product.md#current-release-baseline) as the current decision source. Historical references and dated discovery entries are not current requirements. The project-local launcher applies consistent hand-drawn ink only to Sketch boards; original native geometry and external exports remain unchanged. Inspect both themes and native notes; never treat screenshots as proof of interactions. Latest verified capture: [run 45884414167](https://github.com/ianmaciel7/exams-app/actions/runs/45884414167), experimental commit `87f5f5c` (no redundant Questions subtitle).
+Use the [release baseline](releases/v0.1.0/product/product.md#current-release-baseline) as the current decision source. Historical references and dated discovery entries are not current requirements. The project-local launcher applies consistent hand-drawn ink only to Sketch boards; original native geometry and external exports remain unchanged. Inspect both themes and native notes; never treat screenshots as proof of interactions. Latest verified capture: [run 45884414167](https://github.com/ianmaciel7/exams-app/actions/runs/45884414167), experimental commit `87f5f5c` (no redundant Questions subtitle).
 
 ## Stage ownership
 

@@ -2,7 +2,7 @@
 
 This document defines the working screen inventory and key component states for Exam App v0.1.0, accompanying the editable [screen inventory whiteboard](./).
 
-It builds on the [Information Architecture](../information-architecture/) baseline and [release decision register](../product.md#current-release-baseline). Candidate states are design hypotheses for review. Implementation and usability validation remain pending.
+It builds on the [Information Architecture](../information-architecture/) baseline and [release decision register](../product/product.md#current-release-baseline). Candidate states are design hypotheses for review. Implementation and usability validation remain pending.
 
 ## Base Screens
 
