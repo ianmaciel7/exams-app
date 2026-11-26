@@ -14,10 +14,10 @@ Per project conventions, this sketch uses intentionally loose, procedurally curv
 ### 1. Sidebar (Left Navigation)
 - **Collapsible Toggle:** A dedicated sidebar toggle button `[◨]` anchored at the top right of the sidebar header (referenced from modern AI and productivity apps such as ChatGPT, documented in `docs/references/assets/2026-11-26-chatgpt-sidebar-collapse-button.png`).
 - **States Explored:**
-  - **Expanded Sidebar (Default):** Full 255px panel showing logo, active competition selector (`Dataprev 2026`), navigation shortcuts, and bottom account avatar.
-  - **Collapsed Sidebar (Icon Rail):** 70px compact rail displayed adjacent to the main screen, presenting essential icon anchors (`[◨]` toggle, active exam icon, `[?]` questions, `[✎]` mock exams, and `(•)` account avatar) with hover tooltips for label discovery.
+  - **Expanded Sidebar (Default):** Full 255px panel showing logo, active competition selector with icon (`[☷] Active Exam: Dataprev 2026`), navigation items with standard semantic icons (`[☖] Home`, `[?] Questions`, `[✎] Mock exams`, `[📊] Performance`), study list shortcuts (`[📁] Notebooks`, `[✕] Missed / Errei`), and bottom account avatar.
+  - **Collapsed Sidebar (Icon Rail):** 70px compact rail displayed adjacent to the main screen, presenting essential icon anchors (`[◨]` toggle, `[☷]` active exam, `[?]` questions, `[✎]` mock exams, and `(•)` account avatar) with hover tooltips for label discovery.
 - **Competition Context:** Top selector displaying the active competition (concurso).
-- **Primary Destinations:** Home and Questions; the sketch explores access to Mock exams within Questions. Exact controls remain open.
+- **Primary Destinations:** Home, Questions, and Mock exams, aligned with user flows and information architecture baselines.
 - **Account & Settings:** Avatar anchored at the **bottom of the sidebar** (confirmed by user decision, superseding the top-avatar proposal).
   - Clicking the avatar opens a popover menu with access to **Performance**.
   - Verified by historical sidebar prototypes and reference products documented in [Performance and account menu research](../../../references/2026-11-25-performance-and-account-menu-research.md).
