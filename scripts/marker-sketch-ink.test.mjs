@@ -27,3 +27,11 @@ test('different strokes have different seeded weight and bounded amplitude', () 
   assert.ok(inkProfile('small',14,2.2).amplitude<inkProfile('large',200,2.2).amplitude);
   assert.equal(sketchPath(()=>({x:0,y:0}),0,0,'dot',2),null);
 });
+
+test('thin rectangular geometry receives denser sampling than macro span alone', () => {
+  const sample = s => ({x:s,y:0});
+  const a = sketchPath(sample,235,235,'frame',2.4,42);
+  const b = sketchPath(sample,235,235,'frame',2.4);
+  assert.ok(a.points.length > b.points.length);
+  assert.deepEqual(a.points.at(-1), {x:235,y:0});
+});

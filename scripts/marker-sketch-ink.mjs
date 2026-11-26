@@ -15,18 +15,19 @@ export function inkProfile(id, span, width) {
     micro,
   };
 }
-export function sketchPath(sample, length, span, id, width) {
+export function sketchPath(sample, length, span, id, width, detailSpan = span) {
   if (!Number.isFinite(length) || length < 2 || !Number.isFinite(span) || span < 1) return null;
   const p = inkProfile(id, span, width);
   const first = sample(0), last = sample(length);
   const closed = Math.hypot(first.x - last.x, first.y - last.y) < 0.7;
-  const n = clamp(Math.ceil(length / p.step), 6, 320);
+  const step = Math.min(p.step, Math.max(1.15, detailSpan / 8));
+  const n = clamp(Math.ceil(length / step), 6, 320);
   const knots = Array.from({length: 7}, (_, i) => seed(id + ':drift:' + i) * 2 - 1);
   const points = [];
   for (let i = 0; i <= n; i++) {
     const t = i / n, s = length * t, q = sample(s);
     if (i === 0 || i === n) { points.push(i === n && closed ? first : q); continue; }
-    const d = Math.min(p.step * 0.4, length / 80);
+    const d = Math.min(step * 0.4, length / 80);
     const a = sample(Math.max(0, s - d)), b = sample(Math.min(length, s + d));
     const tx = b.x - a.x, ty = b.y - a.y, norm = Math.hypot(tx, ty) || 1;
     const k = t * (knots.length - 1), j = Math.min(knots.length - 2, Math.floor(k));
@@ -64,7 +65,7 @@ export function installSketchInk(root = document) {
       const width = prior && currentWidth === prior.width ? prior.baseWidth : currentWidth;
       try {
         const length = hit.getTotalLength(), box = hit.getBBox(), span = Math.max(box.width, box.height);
-        const result = sketchPath(s => hit.getPointAtLength(s), length, span, svg.getAttribute('data-wb-id'), width);
+        const result = sketchPath(s => hit.getPointAtLength(s), length, span, svg.getAttribute('data-wb-id'), width, Math.min(box.width, box.height));
         if (!result) continue;
         cache.set(ink, {original:d, rendered:result.d, width:result.width, baseWidth:width});
         ink.setAttribute('d', result.d);
