@@ -16,11 +16,11 @@ Source of truth: [release decisions](../product/product.md#current-release-basel
 
 Use abstract strokes for illustrative content and metadata values; link affordances remain blue and underlined, including year. Keep functional labels and essential state cues recognizable. Abstract competition icons; functional icons retain simple semantic geometry. Keep the same hand-drawn ink grammar across small and large strokes, using the project-local launcher and Excalifont. No final design tokens, production measurements or decorative polish.
 
-Performance is direct navigation above the footer. Settings appears once in the footer. Mock exams remain within Questions and ordinary practice remains competition-scoped. Required supporting content stays inline. The Questions toolbar (filters, Auto-check, sorting, result count, questions per page, and List/One) and per-question Statistics are unprioritized ideas with no release assignment. Link destinations, the practice evaluation trigger, and runtime behavior require validation.
+Navigation is strictly scoped to the approved controls: the sidebar header (app title, search, and sidebar collapse toggle) and the competition switcher (DATAPREV and PPSA). Unapproved controls (dark/light theme toggle, focus mode, avatar/profile, settings gear, performance link/icon, status ring, and exit arrow) have been removed from both the expanded workspace (1.A) and the collapsed rail (1.B). Mock exams remain within Questions and ordinary practice remains competition-scoped. Required supporting content stays inline. The Questions toolbar (filters, Auto-check, sorting, result count, questions per page, and List/One) and per-question Statistics are unprioritized ideas with no release assignment. Link destinations, the practice evaluation trigger, and runtime behavior require validation.
 
-## Collapsed rail correction (2026-11-26)
+## Collapsed rail refinement (2026-11-26)
 
-The rail retains the existing compact navigation, selected competition cue, direct Performance destination and avatar indication. Align the recognizable controls to a common approximate centerline, group the upper controls and lower navigation by whitespace, and reuse the Settings gear from the expanded footer without adding an account popover. Remove the duplicate external study frame and divider. The ink remains native and editable; no production dimensions or interaction contract are implied. A new native Light/Dark capture and user review are pending.
+The collapsed rail (1.B) retains top collapse toggle, search, DATAPREV icon, PPSA icon, and the "Expand rail" caption. All unapproved bottom controls have been pruned. The ink remains native and editable; no production dimensions or interaction contract are implied. A new native Light/Dark capture and user review are pending.
 
 ## Supporting references — not active Sketch content
 

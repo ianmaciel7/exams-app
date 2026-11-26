@@ -52,29 +52,31 @@ Before creating or changing any project whiteboard, read [whiteboard guidelines]
 
 ## Hierarchical multi-agent orchestration
 
-### Orchestration model
-- Choose the simplest suitable approach, from a single agent to an orchestrator with workers. Use multi-agent work when independent tasks, specialization, or independent review justify its overhead.
+### Orchestration model and mandatory delegation
+- The coordinator/primary agent is strictly an orchestrator. It must preserve its context for planning, integration, and user communication rather than exhausting it on operational chores.
+- **Prohibition of coordinator monopolization:** The coordinator MUST NOT execute heavy operational work directly in the coordinator session. Specifically, the coordinator must not perform multi-file code modifications, write or execute scripts for data manipulation or board mutations, perform deep repository or archive explorations, or execute batch refactoring. All operational implementation, exploratory code/archive research, and board modifications MUST be delegated to specialized worker subagents via platform-native delegation (`invoke_subagent`).
+- **Strict separation of implementation and verification:** The coordinator and the worker agent MUST NEVER be the sole verifiers of their own work. Every implementation task MUST have an independent evaluator/verifier subagent validate the results (running test suites, integrity checks, diff inspections, and verifying alignment with requirements) before the coordinator accepts the deliverable. Self-certification and unverified completion claims are strictly forbidden.
 - Use native platform capabilities rather than reinventing existing multi-agent primitives.
 - Structure agent roles dynamically across five levels:
-  1. **Orchestrator / Coordinator:** Primary agent responsible for understanding goals, retrieving context, decomposing tasks, delegating, tracking progress, handling blockers, integrating results, and running acceptance validation. Preserves context by delegating heavy operational work.
+  1. **Orchestrator / Coordinator:** Primary agent responsible for understanding goals, retrieving high-level context, decomposing tasks, delegating via formal contracts, tracking progress, handling blockers, integrating results, and routing deliverables to independent verifiers. Never performs heavy operational execution or self-validation.
   2. **Worker Sessions / Threads:** Independent focused sessions executing defined work scopes.
   3. **Subagents:** Specialized on-demand agents for research, code exploration, implementation slices, or domain tools.
   4. **Agent Teams / Swarms:** Collaborative teams for problems requiring shared state and inter-agent communication.
   5. **Evaluators / Verifiers:** Independent validation agents responsible for review, automated tests, UI/UX audit, accessibility, and quality verification. Implementation agents must not be the sole validation source.
 
 ### Architectural patterns
-Select dynamically the simplest pattern adequate for the problem:
-- **Single Agent:** Simple, atomic tasks.
-- **Orchestrator-Workers:** Dynamic decomposition and task delegation.
-- **Parallelization:** Independent concurrent tasks.
-- **Prompt Chaining:** Sequential dependent stages.
+Select dynamically the simplest pattern adequate for the problem while strictly respecting the delegation mandate:
+- **Single Agent:** Restricted strictly to trivial, single-step questions (e.g., answering a factual question from existing context without code edits or board mutations). Any multi-step task, file editing, script execution, or board change requires orchestrator-worker delegation.
+- **Orchestrator-Workers:** Default pattern for all non-trivial tasks. The coordinator decomposes work and delegates to worker subagents, followed by an evaluator subagent.
+- **Parallelization:** Independent concurrent tasks dispatched across parallel worker subagents.
+- **Prompt Chaining:** Sequential dependent stages where the output of one worker feeds the contract of the next.
 - **Routing:** Directing tasks to domain specialists (e.g., UI/UX specialist, historical archive research).
 - **Agent Teams / Swarm:** Distributed collaboration on complex interconnected challenges.
-- **Evaluator-Optimizer:** Iterative refinement against explicit quality gates.
+- **Evaluator-Optimizer:** Iterative refinement against explicit quality gates, pairing a worker with an independent verifier.
 - **Manager Pattern:** Centralized coordination of multiple specialized subagents.
 
 ### Model selection for delegation
-- Use a capable coordinator for planning, integration, and final review. Keep small or sequential tasks in the main agent when delegation adds no value.
+- Use a capable coordinator for planning, integration, and final review. Delegate operational work, multi-file edits, and board updates to workers rather than doing them in the coordinator session.
 - When the platform and session permit model selection, choose a lighter model for bounded, low-risk work, and a more capable or vision-specialized model when the task requires it. A specialist may be more capable than the coordinator.
 - Prefer capability-based choices over fixed model names; availability, quality, cost, and latency vary across providers and sessions. Respect higher-priority instructions and platform restrictions, and do not claim a model override occurred without verifying it.
 - If model selection is unavailable or subagents inherit the coordinator's model, use the available default and report that limitation when it matters. Model assignments and agent capabilities must be configured through each platform's supported native mechanisms; this guidance alone does not enforce them.
@@ -108,7 +110,8 @@ Every delegated activity must specify:
 - **Google Antigravity:** Custom Subagents (`invoke_subagent`), Background Tasks, Asynchronous Execution, `/swarm`, Dynamic Workflows (`run_workflow`), Git Worktrees, Skills, Rules, and Hooks.
 
 ### Independent validation and quality gates
-- Separate implementation from verification. Employ automated test suites, accessibility checks, visual inspections, and independent agent reviews before signing off on deliverables.
+- Strictly separate implementation from verification. Employ automated test suites, accessibility checks, visual inspections, and independent evaluator subagents before signing off on deliverables.
+- Neither the implementing subagent nor the coordinator may sign off on work without independent verification. The coordinator must dispatch an evaluator/verifier subagent to run verification steps (such as `node scripts/check-boards.mjs`, test suites, and requirements compliance checks) and report findings.
 - Record findings, decisions, and evidence in project whiteboards (`docs/boards/`, `docs/releases/`) and documentation.
 
 ### Sketch ink consistency
