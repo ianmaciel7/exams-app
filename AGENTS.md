@@ -29,9 +29,9 @@ All project whiteboards are powered by the Open Artifact Whiteboard runtime, per
   - `db/elements/<element-id>.json`: One atomic JSON file per element, ensuring fine-grained Git tracking, conflict-free concurrent editing, and easy programmatic manipulation.
 
 - **Available Native Tools & Elements:**
-  - **Text & Sticky Notes (`type: "text"`):**
+  - **Text (`type: "text"`) and native sticky notes (`type: "note"`):**
     - Properties: `x`, `y`, `text`, `size` (`small`, `body`, `large`, `title`), `color` (hex string).
-    - Multi-line & Word Wrapping: Set `width` (integer pixel span) to enable paragraph wrapping for annotations, card descriptions, and callout sticky notes.
+    - Multi-line & word wrapping: for native text use the version-supported `wrap`/`width` property; for native `note` use `x`, `y`, `w`, `h`, `text`, a supported `color` and optional `tilt`. Do not substitute a free-text element for a native sticky note. Verify the installed schema.
     - Usage: Structural headings, section titles, metadata chips, note callouts, code blocks, and data labels.
   - **Hand-drawn Vector Linework & Pen Tool (`type: "stroke"`):**
     - Properties: `x`, `y`, `points` (flat coordinate array `[x0, y0, x1, y1, ...]` relative to `(x, y)`), `width` (native stroke thickness from 1.0 to 40; use the reusable marker-sketch preset (typically 1.8–3.4) for Sketch boards), `color` (hex string).
@@ -129,3 +129,36 @@ Every delegated activity must specify:
 ### Independent validation and quality gates
 - Separate implementation from verification. Employ automated test suites, accessibility checks, visual inspections, and independent agent reviews before signing off on deliverables.
 - Record findings, decisions, and evidence in project whiteboards (`docs/boards/`, `docs/releases/`) and documentation.
+
+### Sketch ink consistency
+
+- Use the shared project-local `scripts/marker-sketch-ink.mjs` viewer pass when opening Sketch boards with `scripts/open-boards.mjs`. Treat all measurable native stroke paths consistently, including small icons and curved controls. Preserve topology, corner definition, endpoints, closed loops, semantic colors, hit paths and native editable geometry. Avoid periodic jitter and heavy double outlines. Native exports outside the launcher keep original geometry.
+- Keep illustrative content abstract; retain recognizable essential controls and states. Use native `note` elements for design notes outside the interface, not free text posing as sticky notes. Keep the board at or below 800 elements for Open Artifact v0.16.3.
+- Validate `node --test scripts/marker-sketch.test.mjs scripts/marker-sketch-ink.test.mjs scripts/check-boards.test.mjs` and `node scripts/check-boards.mjs`, then inspect real browser captures in Light and Dark. Confirm stroke coverage and small-icon styling, not just font availability. Report unvalidated behavior and export limits.
+
+### Current workspace documentation alignment
+- Keep current release decisions in the register and reconcile Markdown plus native IA, screen-inventory, user-flow and release-stage boards. Preserve historical references and distinguish proposed interaction from approved scope. The visible Questions subtitle is omitted beneath the competition heading; Questions remains the conceptual destination name. Avoid reintroducing the account popover, duplicate Settings, Commented key or separate Associated text control.
+
+## Stage responsibilities and fidelity boundaries
+
+Treat the following as this project's activity and artifact ownership contract, not a mandatory waterfall or a universal UX process. Select the smallest artifact that answers the current question. Activities can overlap, be revisited, or be skipped with a recorded reason; a stage never becomes complete just because a later artifact exists. Keep the release stage board, release index and actual artifacts aligned.
+
+| Activity | Owns / expected output | Does not own |
+| --- | --- | --- |
+| 01 Product discovery | Problem, users, goals, scope, constraints, assumptions, evidence, decisions and success criteria. Release decision register. | Screen layout, detailed component design, production code. |
+| 02 Information architecture | Destinations, content groups, hierarchy, terminology, relationships, navigation/findability. Concise destination map. | Screen-by-screen layout, detailed action sequences, exhaustive state matrices. |
+| 03 Screen inventory | Required screens, surfaces/overlays, key states and coverage gaps; links to flows. | Full wireframes, component internals, final visual design or implementation. |
+| 04 User flows | Task paths, entry/exit points, decisions, alternatives, error/recovery paths and outcomes. | Pixel-level layout, component catalog, final tokens or exhaustive event contracts. |
+| 05 Sketch | Quick exploratory drawings of composition, hierarchy, approximate regions, recognizable controls, a few states/alternatives that clarify the hypothesis, and concise external native notes. | Taxonomy tables, exhaustive component/state catalogs, full content fixtures, detailed statistics specifications, trigger/consequence matrices, production dimensions/tokens, mockups or executable interaction. |
+| 06 Low-fidelity wireframe | Selected structural layout: content priority, placement, hierarchy, essential controls and representative responsive/state variants. | Final styling, decorative polish, exhaustive technical interaction or implementation. |
+| 07 Mid-fidelity wireframe | Refined layout, realistic representative content where needed, component placement, important responsive and state behavior, more precise spacing and hierarchy. | Final brand treatment, production-ready visuals, complete implementation. |
+| 08 High-fidelity wireframe | Near-final structural and content detail, critical edge cases, consistent components and accessibility intent where relevant. | Mandatory final color/brand styling, working backend or proof of usability. |
+| 09 Mockup | Visual design: final-intent typography, color, spacing, component variants, imagery and responsive visual decisions. | Working behavior, data persistence, backend or verified interaction merely from appearance. |
+| 10 Interactive prototype | Executable or clickable representative tasks, transitions, state changes, feedback and recovery for validating hypotheses. Record what is simulated, test evidence and limits. | Production system guarantees, final data architecture or claimed accessibility/usability without testing. |
+
+### Supporting work is not another mandatory stage
+
+- Store research, historical captures, detailed example question formats, component anatomy/taxonomy, exhaustive state matrices, metric definitions, trigger/event/transition rules and exploratory technical contracts as clearly labeled supporting references or scoped interaction specifications. Place approved requirements in the decision register or the owning specification; link instead of duplicating. Interaction/component specifications, design-system documentation, accessibility review and usability testing can support multiple stages as needed. Production implementation and QA are separate from these design artifacts.
+- Do not dump every reference into the active board. In Sketch, keep a screen or small set of thumbnails and short notes that directly answer the exploration question. Use abstract content and recognizable actions; retain only the essential state/overlay sketches that materially clarify the layout. Move out-of-stage material to a linked reference artifact (preserve original source and scope/status). Do not promote an exploratory reference into an approved requirement or mark a later stage as started just because reference material exists.
+- For each change, identify the owning stage and hypothesis, inspect the entire active board, remove or relocate non-owning content, preserve stable IDs and links where feasible, update the decision register and stage status, then verify board integrity and the relevant visual/interaction evidence. Review the full board, not just the edited crop. Do not create empty stage folders or force all fidelity levels when they add no value.
+- Distinguish **Progress** (Not started, In progress, Baseline documented, Completed) from **Validation** (Pending, In progress, Passed, Not applicable). A static sketch or screenshot can establish appearance only; interaction, accessibility, official exam rules and usability need independent evidence. Explicitly record remaining uncertainty.

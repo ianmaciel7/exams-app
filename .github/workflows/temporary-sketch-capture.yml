@@ -55,21 +55,7 @@ jobs:
               console.log(status);
               if(!status.marker||!status.font||status.theme!==theme)throw new Error('Marker or theme did not load');
               await page.screenshot({path:'/tmp/capture/overview-'+theme+'.png'});
-              await page.mouse.move(650,850);
-              await page.mouse.wheel(-696,-103);
-              await page.waitForTimeout(400);
-              await page.mouse.move(960,540);
-              await page.keyboard.down('Control');
-              for(let i=0;i<5;i++){await page.mouse.wheel(0,-30);await page.waitForTimeout(120);}
-              await page.keyboard.up('Control');
-              await page.waitForTimeout(900);
-              await page.screenshot({path:'/tmp/capture/first-'+theme+'.png',clip:{x:405,y:75,width:1110,height:930}});
-              await page.mouse.move(960,540);
-              await page.keyboard.down('Control');
-              await page.mouse.wheel(0,120);
-              await page.keyboard.up('Control');
-              await page.waitForTimeout(700);
-              await page.screenshot({path:'/tmp/capture/annotated-'+theme+'.png'});
+              await page.screenshot({path:'/tmp/capture/first-'+theme+'.png'});
               await page.close();
             }
             await browser.close();
