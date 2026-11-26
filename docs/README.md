@@ -6,7 +6,7 @@ In Codex, use the **Run** local environment action. In VS Code, run **Open Exam 
 
 The launcher uses an isolated local Open Artifact server and generates a temporary editor asset copy under `node_modules/.cache/exam-app-open-artifact/`. It adds a browser-tab title that follows each board's metadata without changing the shared plugin installation. Restart the launcher after updating the plugin. Previously opened tabs use the old server and must be reopened from the new hub URL.
 
-Run `node scripts/check-boards.mjs` for a read-only check of board order, element references and local URL drift. Run `node --test scripts/check-boards.test.mjs` to test that check. These checks do not replace the Open Artifact validator or visual review.
+Run `node scripts/check-boards.mjs` for a read-only check of board order, element references and local URL drift. Run `node --test scripts/check-boards.test.mjs scripts/marker-sketch.test.mjs scripts/marker-sketch-ink.test.mjs` to test board integrity and Sketch ink behavior. The native board limit is 800 elements for Open Artifact v0.16.3. These checks do not replace the Open Artifact validator or visual review.
 
 - `boards/overview/`: project-wide ideas and notes.
 - `boards/project-hub/`: central hub linking to all active project boards and context.
@@ -22,3 +22,7 @@ Run `node scripts/check-boards.mjs` for a read-only check of board order, elemen
 - `releases/v0.1.0/sketch/`: questions-page sketch board and structural specifications.
 
 Create directories for additional stages when their artifacts exist. Keep runnable prototypes under the repository's `prototypes/` directory and link to them from the relevant release.
+
+## Current release and Sketch review
+
+Use the [release baseline](releases/v0.1.0/product.md#current-release-baseline) as the current decision source. Historical references and dated discovery entries are not current requirements. The project-local launcher applies consistent hand-drawn ink only to Sketch boards; original native geometry and external exports remain unchanged. Inspect both themes and native notes; never treat screenshots as proof of interactions. Latest verified capture: [run 45884414167](https://github.com/ianmaciel7/exams-app/actions/runs/45884414167), experimental commit `87f5f5c` (no redundant Questions subtitle).

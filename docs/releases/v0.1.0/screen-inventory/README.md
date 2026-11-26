@@ -13,8 +13,8 @@ The personal study entry point, separate from the full Performance area.
   - *Recorded activity:* compact progress summary and competition selection. Summary metrics remain open.
   - *No competitions available:* candidate empty state.
 - **Key regions:**
-  - Sidebar serving as a focused competition switcher listing the learner's active competitions as cards (`DATAPREV` with terminal icon and `PPSA` with briefcase icon), header search `[🔍]` and collapse toggle `[◨]`, and bottom avatar menu.
-  - Avatar Popover menu linking to `Performance`, `Mock exams`, `Missed (Errei)`, and `Settings`.
+  - Collapsible competition switcher with abstract content icons in the Sketch, recognizable search and collapse controls, and a compact footer.
+  - Performance directly above the footer, one Settings gear in the footer; no avatar popover. Mock exams and Missed belong to the Questions workspace; missed review also belongs to Performance.
   - Primary content: compact metrics snapshot and competition cards.
 
 ### 2. Questions
@@ -28,7 +28,7 @@ The primary workspace for answering questions within the selected competition.
   - *No matching questions:* candidate empty state for an active filter.
   - *Available source details:* show exam, year, examining board and organization where available.
 - **Controls & Filters:**
-  - Positioned immediately below the Questions heading.
+  - Positioned below the active competition heading; no redundant Questions subtitle.
   - Subject and topic selectors.
   - Missed-questions filter ("Errei"): filters by latest evaluated attempt.
   - Automatic answer checking toggle switch: positioned adjacent to filters.
@@ -44,7 +44,7 @@ Mock exams are hosted inside Questions, utilizing the same core question card st
   - *Previous mocks:* design baseline for opening earlier results. The history presentation and empty state require review.
 
 ### 3. Performance
-The dedicated analytics and progress area, reached through the bottom avatar menu in the sidebar.
+The dedicated analytics and progress area, reached directly above the sidebar footer.
 - **States:**
   - *Empty / small sample:* cautious presentation noting insufficient attempts.
   - *Detailed analytics:* overall accuracy (correct attempts / total recorded attempts), breakdown by competition, subject, and topic, with distinct metrics for ordinary practice vs. mock exams.
@@ -54,3 +54,10 @@ The dedicated analytics and progress area, reached through the bottom avatar men
 - Exact pagination and loading behavior for long question lists; the default scrollable multiple-question view, quantity selector, and one-question option are already decided.
 - Exact scoring rules for official competitions vs. mixed mock exams.
 - Filter refresh after evaluation, mock setup and history presentation, and restoration after reload or closure.
+
+## Question component and filter states
+
+- Provenance: ID, subject, topic/subtopic, year, board, organization, exam have link affordances where supplied; never invent metadata. Proposed routes require validation.
+- Statement: abstracted by strokes in the Sketch; any required supporting content is inline. No separate Associated text control. Statistics is an inline disclosure (collapsed/expanded); Commented key is excluded. Preserve automatic/manual verification and short correctness feedback.
+- Filters: proposed active chips, remove, Clear filters, result count, Subject/Topic dependency, default and active/empty/loading/error states for review. Sort, quantity and List/One stay recognizable. Applying automatically and resetting page are proposals, not implemented states.
+- Notes are native design annotations outside the UI, not a new Notes screen. All states remain design candidates or recorded scope, not verified interactions.

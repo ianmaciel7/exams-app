@@ -38,4 +38,13 @@ A question whose latest evaluated attempt was incorrect. A subsequent correct at
 The entry page, providing a compact progress overview and competition selection.
 
 **Performance**:
-The dedicated metrics and progress area, accessed via the avatar menu at the bottom of the sidebar.
+The dedicated metrics and progress area, accessed directly in the sidebar above the footer.
+
+**Statistics**:
+The retained inline question-resource disclosure for practice metrics. It is not a navigation link or a commented answer key.
+
+**Design annotation**:
+A native editable sticky note outside the application frame that explains design intent. It is not an application feature.
+
+**Sketch**:
+A low-fidelity exploratory artifact with abstract example content, recognizable controls and visual state cues. It does not implement or validate interactions.
