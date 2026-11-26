@@ -22,8 +22,8 @@ Per project conventions, this sketch uses intentionally loose, procedurally curv
   - **Avatar / Profile icon:** Compact silhouette linking to user profile and Performance popover.
   - **Settings (Gear icon):** Shortcut to application preferences and configuration.
   - **Theme Toggle (Moon icon):** Dark / Light mode toggle switch.
-  - **Status Indicator (Dashed circle):** System status / focus session tracker.
-  - **Exit / Logout (Door with Arrow icon):** Session exit control positioned on the right edge.
+  - **Status Indicator (6-Dash Segmented Circle):** System sync / status indicator matching the reference dashed circle.
+  - **Exit / Share Action (Curved Arrow icon):** Right-aligned curved forward/exit action icon without a door frame, directly matching the reference screenshot.
   - Per product decision, subscription plan badges (e.g. Pro) are omitted from the interface. Aligns with historical sidebar prototypes documented in [Performance and account menu research](../../../references/2026-11-25-performance-and-account-menu-research.md).
 
 ### 2. Header & Action Area
