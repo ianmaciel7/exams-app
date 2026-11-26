@@ -31,7 +31,7 @@ All project whiteboards are powered by the Open Artifact Whiteboard runtime, per
 - **Available Native Tools & Elements:**
   - **Text (`type: "text"`) and native sticky notes (`type: "note"`):**
     - Properties: `x`, `y`, `text`, `size` (`small`, `body`, `large`, `title`), `color` (hex string).
-    - Multi-line & Word Wrapping: Set `width` (integer pixel span) to enable paragraph wrapping for annotations, card descriptions, and callout sticky notes.
+    - Multi-line & word wrapping: for native text use the version-supported `wrap`/`width` property; for native `note` use `x`, `y`, `w`, `h`, `text`, a supported `color` and optional `tilt`. Do not substitute a free-text element for a native sticky note. Verify the installed schema.
     - Usage: Structural headings, section titles, metadata chips, note callouts, code blocks, and data labels.
   - **Hand-drawn Vector Linework & Pen Tool (`type: "stroke"`):**
     - Properties: `x`, `y`, `points` (flat coordinate array `[x0, y0, x1, y1, ...]` relative to `(x, y)`), `width` (native stroke thickness from 1.0 to 40; use the reusable marker-sketch preset (typically 1.8–3.4) for Sketch boards), `color` (hex string).

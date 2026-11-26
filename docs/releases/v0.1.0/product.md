@@ -30,7 +30,7 @@ The 2026-11-25 **Question Component States and Interaction Rules** history entry
 
 | ID | Status | Sketch behavior requiring confirmation |
 | --- | --- | --- |
-| V010-11 | Proposed | Make footer drawers mutually exclusive within each question. |
+| V010-11 | Superseded | The current question resource strip retains Statistics only; a multi-drawer exclusivity rule is not required in v0.1.0. |
 | V010-12 | Proposed | Keep other question cards open when a drawer opens. |
 | V010-13 | Proposed | Make a verified attempt immutable through the question component. |
 | V010-14 | Proposed | Define how the retry control creates another attempt and presents earlier attempts. |
