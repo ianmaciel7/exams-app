@@ -71,6 +71,8 @@ Reference captures document historical appearances. Statistics is the sole retai
 
 ## Subsequent decisions
 
+- **2026-11-26 — Collapsed rail Sketch correction:** Center and enlarge existing icon groups, reduce redundant outlines, and represent the existing Settings affordance in the compact footer. This is a visual correction consistent with V010-16 and V010-18, not a new navigation or account feature. Native Light/Dark recapture and user review remain pending.
+
 Append dated decisions here as they are made, including context and what they supersede. Preserve earlier entries rather than rewriting them to match the latest product direction.
 
 - **2026-11-24 — Navigation direction:** Select an exam to open its questions. Selecting a weak topic should lead to its practice questions. Related information should be navigable through links across the system. The working name for the metrics area is **Performance**; placement relative to a profile remains open. This resolves the weak-topic question above, while the mock-exam entry point remains open.
