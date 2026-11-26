@@ -101,3 +101,5 @@ Competition switcher refinement: compact single-line rows with 32-unit height an
 
 
 **Low-fidelity content refinement:** In the primary Questions workspace, long statements and answer-choice prose are represented by variable-length strokes, keeping A–D, radios, correct/struck states, feedback, filters, titles, provenance links and disclosure labels readable. Detailed reference boards remain available for content-format and state analysis; placeholder marks are not actual question content. Do not infer implementation or copy changes from placeholder geometry.
+
+**Annotated Sketch proposal:** Six keyed annotations beneath the workspace explain direct Performance navigation, single Settings shortcut, proposed link destinations, placeholder content, answer verification and inline Statistics. Small numbered callouts point to relevant elements; annotations are documentation, not app UI. Preserve visual hierarchy and avoid crossing content or repeating every obvious label. No new scope or behavior implemented.

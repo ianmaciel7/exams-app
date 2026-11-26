@@ -60,6 +60,12 @@ jobs:
               await page.keyboard.up('Control');
               await page.waitForTimeout(900);
               await page.screenshot({path:'/tmp/capture/first-'+theme+'.png',clip:{x:405,y:75,width:1110,height:930}});
+              await page.mouse.move(960,540);
+              await page.keyboard.down('Control');
+              await page.mouse.wheel(0,120);
+              await page.keyboard.up('Control');
+              await page.waitForTimeout(700);
+              await page.screenshot({path:'/tmp/capture/annotated-'+theme+'.png'});
               await page.close();
             }
             await browser.close();
