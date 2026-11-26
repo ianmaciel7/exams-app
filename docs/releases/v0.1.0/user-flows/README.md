@@ -55,9 +55,9 @@ Questions Page
         ├── Answer, skip, or change options at will
         ├── If interrupted (navigating away / closing):
         │     └── Timer automatically pauses, saved with remaining time
-        └── If time expires:
-              └── Automatic final submission with answers recorded so far
-  ──> Click "Finish Mock Exam"
+  ──> Finish the session:
+        ├── User clicks "Finish Mock Exam" ──> Submit recorded answers
+        └── Time expires ──> Automatically submit answers recorded so far
   ──> Results & Review screen (correct, incorrect, score, full review)
 ```
 

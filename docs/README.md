@@ -2,7 +2,9 @@
 
 Start with the project hub in `boards/project-hub/`. It links to the overview, release stages, and all active release stage whiteboards (information architecture, screen inventory, user flows, and sketch).
 
-In VS Code, run **Open Exam App boards** from Run and Debug, or execute `node scripts/open-boards.mjs` from the repository root. The launcher starts the boards and refreshes their local links. It automatically discovers the installed Open Artifact whiteboard CLI in Antigravity/Gemini (`~/.gemini/config/plugins/open-artifact/`) and Codex (`~/.codex/plugins/cache/created-by-me-remote/open-artifact/`); set `OPEN_ARTIFACT_WHITEBOARD_CLI` to an explicit `cli.mjs` path to override.
+In Codex, use the **Run** local environment action. In VS Code, run **Open Exam App boards** from Run and Debug, or execute `node scripts/open-boards.mjs` from the repository root. The launcher starts the boards and refreshes their local links. It requires Node.js 22 or later and an installed Open Artifact whiteboard CLI. It automatically discovers the CLI in Antigravity/Gemini (`~/.gemini/config/plugins/open-artifact/`) and Codex (`~/.codex/plugins/cache/created-by-me-remote/open-artifact/`); set `OPEN_ARTIFACT_WHITEBOARD_CLI` to an explicit `cli.mjs` path to override. The Codex local environment does not install these external dependencies; they must already be available on the host.
+
+The launcher uses an isolated local Open Artifact server and generates a temporary editor asset copy under `node_modules/.cache/exam-app-open-artifact/`. It adds a browser-tab title that follows each board's metadata without changing the shared plugin installation. Restart the launcher after updating the plugin. Previously opened tabs use the old server and must be reopened from the new hub URL.
 
 - `boards/overview/`: project-wide ideas and notes.
 - `boards/project-hub/`: central hub linking to all active project boards and context.

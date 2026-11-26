@@ -53,6 +53,13 @@ Select dynamically the simplest pattern adequate for the problem:
 - **Evaluator-Optimizer:** Iterative refinement against explicit quality gates.
 - **Manager Pattern:** Centralized coordination of multiple specialized subagents.
 
+### Model selection for delegation
+- Use a capable coordinator for planning, integration, and final review. Keep small or sequential tasks in the main agent when delegation adds no value.
+- When the platform and session permit model selection, choose a lighter model for bounded, low-risk work, and a more capable or vision-specialized model when the task requires it. A specialist may be more capable than the coordinator.
+- Prefer capability-based choices over fixed model names; availability, quality, cost, and latency vary across providers and sessions. Respect higher-priority instructions and platform restrictions, and do not claim a model override occurred without verifying it.
+- If model selection is unavailable or subagents inherit the coordinator's model, use the available default and report that limitation when it matters. Model assignments and agent capabilities must be configured through each platform's supported native mechanisms; this guidance alone does not enforce them.
+- The coordinator remains accountable for checking delegated findings against evidence and the user's requirements, regardless of the model used.
+
 ### Delegation contract
 Every delegated activity must specify:
 - **Identifier:** Short unique task ID.

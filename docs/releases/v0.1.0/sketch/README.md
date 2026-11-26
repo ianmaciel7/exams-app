@@ -5,13 +5,15 @@ This document describes the design decisions, layout, and visual evidence behind
 ## Scope & Purpose
 The questions sketch represents the primary workspace of the product, translating product discovery decisions and information architecture into a structural, preliminary visual sketch.
 
+**Scope status:** This board is a static exploration, not a specification of implemented behavior. The user-approved decisions are recorded in [the release product history](../product.md): competition-scoped practice, filters beneath Questions, an auto-check/manual-verify choice, scrolling through multiple questions by default with quantity and single-question options, mock exams within Questions, and access to Performance through the account menu at the bottom of the sidebar. The detailed component variants, tools, states and interaction rules shown below are reference examples or proposals unless separately approved in that history. Their presence does not add them to v0.1.0.
+
 Per project conventions, this sketch uses intentionally loose, procedurally curved linework (inspired by rough UI sketching and paper prototyping techniques) with editable text blocks, allowing rapid inspection before moving to higher-fidelity wireframes.
 
 ## Interface Regions & Decisions
 
 ### 1. Sidebar (Left Navigation)
 - **Competition Context:** Top selector displaying the active competition (concurso).
-- **Primary Destinations:** Direct shortcuts to Home, Questions, and Mock exams.
+- **Primary Destinations:** Home and Questions; the sketch explores access to Mock exams within Questions. Exact controls remain open.
 - **Account & Settings:** Avatar anchored at the **bottom of the sidebar** (confirmed by user decision, superseding the top-avatar proposal).
   - Clicking the avatar opens a popover menu with access to **Performance**.
   - Verified by historical sidebar prototypes and reference products documented in [Performance and account menu research](../../../references/2026-11-25-performance-and-account-menu-research.md).
@@ -31,7 +33,7 @@ Per project conventions, this sketch uses intentionally loose, procedurally curv
   - **Header:** Question number (`01`, `02`), question ID badge (`Q4445036`), and hierarchical `Subject › Topic` breadcrumbs.
   - **Source Provenance:** Explicit metadata displaying Year · Board (Banca) · Organization (Órgão) · Exam (Prova). Missing fields are never fabricated.
   - **Statement:** Main question text, with expandable associated text control (`+ Associated text`).
-  - **Options:** Vertical lettered choices with interactive radio controls. Question 1 illustrates the answered state with selected correct choice in green (`● B ... [Correct]`) and eliminated choice struck-through (`~~D~~`).
+  - **Options:** Vertical lettered choices represented with radio controls. Question 1 illustrates a proposed answered state; the static sketch has no interactive controls.
   - **Footer Action Row:**
     - Left: `[ Answer ]` / `[ Responder ]` action button.
     - Inline Feedback (on answered question): `Correct answer`.
@@ -56,7 +58,7 @@ Per project conventions, this sketch uses intentionally loose, procedurally curv
 
 ## Question — States & Variants Exploration
 
-To provide comprehensive design clarity for the atomic `Question` component before advancing to wireframes, a dedicated expansion section was created on the single sketch board directly adjacent to the main screen layout (spanning `x: 1650` to `x: 7000`).
+A detailed, unvalidated exploration of the `Question` component is present on the same board adjacent to the main screen layout (spanning `x: 1650` to `x: 7000`). It is preserved for review, not a required prerequisite for wireframes or an approved feature list.
 
 The exploration is organized across 9 structural groups:
 
@@ -74,7 +76,7 @@ The exploration is organized across 9 structural groups:
 6. **Question Actions & Trigger-Consequence Map:** Detailed behavioral table mapping user triggers (radio click, verify click, retry click, strike click, ID badge copy, taxonomy link click, disclosure click, tab click, report error click) to their exact consequences and undo/rollback procedures.
 7. **Feedback Messages & System Alerts:** Visual styling and behavior of inline banners for Correct answers, Incorrect answers, Annulled questions, Outdated legislation, and Offline synchronization errors.
 8. **Component Micro-Interaction States:** Atomic button and radio states under user pointer and keyboard interactions (Default, Hover, Focus ring for accessibility, Pressed, Disabled, and Loading).
-9. **Interaction Rules & Behavioral Matrix:** Ten explicit product interaction rules codifying tab drawer mutual exclusivity, list independence, pre-submission option flexibility, struck option selection rules, attempt immutability post-verification, history preservation upon retry, auto-check vs. manual verify modes, filter navigation scoping, and study session memory.
+9. **Interaction Proposals & Behavioral Matrix:** Ten candidate behaviors covering tab drawer mutual exclusivity, list independence, pre-submission option flexibility, struck option selection, attempt immutability, retries, checking modes, filter navigation, and session memory. Only decisions independently recorded in the release product history are confirmed; all remaining behavior needs review.
 
 ## Evolution & Directory Alignment
 - Exploration originally began under `sketch/questions/v1` and `sketch/questions/v2`.

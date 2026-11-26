@@ -1,6 +1,6 @@
-import { existsSync, readdirSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
-import { join, resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
 // OPEN_ARTIFACT_WHITEBOARD_CLI can point to another installation of the CLI.
@@ -36,8 +36,43 @@ function call(cli, args) {
   return result.stdout.trim();
 }
 
+// Keep the title fix in the project rather than modifying a shared plugin install.
+function prepareWhiteboardAssets(cli) {
+  const candidates = [
+    resolve(dirname(cli), '../../open-artifact/vendor/type-server'),
+    resolve(dirname(cli), '../../../type-server'),
+  ];
+  const source = candidates.find((path) => existsSync(join(path, 'editors', 'whiteboard', 'index.html')));
+  if (!source) throw new Error(`Could not locate whiteboard assets for ${cli}`);
+  const cache = resolve('node_modules/.cache/exam-app-open-artifact');
+  const assets = join(cache, 'assets');
+  mkdirSync(join(assets, 'editors'), { recursive: true });
+  cpSync(join(source, 'editors', 'whiteboard'), join(assets, 'editors', 'whiteboard'), { recursive: true, force: true });
+  cpSync(join(source, 'shell'), join(assets, 'shell'), { recursive: true, force: true });
+  cpSync(join(source, 'support.js'), join(assets, 'support.js'));
+  const index = join(assets, 'editors', 'whiteboard', 'index.html');
+  const html = readFileSync(index, 'utf8');
+  const script = `<script id="exam-app-board-title">
+    async function syncExamAppBoardTitle() {
+      try {
+        const response = await fetch('./_api/db/get?path=board%2Fmeta', { cache: 'no-store' });
+        if (!response.ok) return;
+        const result = await response.json();
+        if (typeof result.data?.title === 'string' && result.data.title.trim()) document.title = result.data.title.trim();
+      } catch { /* Preserve the fallback title until the board is available. */ }
+    }
+    syncExamAppBoardTitle();
+    setInterval(syncExamAppBoardTitle, 5000);
+  </script>`;
+  if (!html.includes('</head>')) throw new Error('Whiteboard editor has no head element');
+  writeFileSync(index, html.replace('</head>', `${script}\n  </head>`));
+  process.env.OPEN_ARTIFACT_ASSETS = assets;
+  process.env.OPEN_ARTIFACT_TYPE_SERVER_HOME = join(cache, 'server');
+}
+
 try {
   const cli = findCli();
+  prepareWhiteboardAssets(cli);
   const boards = {
     overview: 'docs/boards/overview',
     releases: 'docs/boards/release-stages',

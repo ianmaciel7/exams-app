@@ -30,7 +30,7 @@ The primary workspace for answering questions within the selected competition.
   - Automatic answer checking toggle switch: positioned adjacent to filters.
   - Mock exam entry button: opens mock exam configuration.
 
-### 3. Mock Exams (within Questions)
+#### Mock exam states within Questions
 Mock exams are hosted inside Questions, utilizing the same core question card structure.
 - **States:**
   - *Configuration modal/panel:* choice between competition-specific and mixed scope, question count selector (defaulting to official exam count if known), timer duration setting.
@@ -38,7 +38,7 @@ Mock exams are hosted inside Questions, utilizing the same core question card st
   - *Results & Review:* shown only upon completion or time expiration; detailed breakdown of correct/incorrect answers, score, and answer key review.
   - *Interrupted session:* paused state with option to resume remaining time or abandon.
 
-### 4. Performance
+### 3. Performance
 The dedicated analytics and progress area, accessed exclusively via the bottom avatar menu in the sidebar.
 - **States:**
   - *Empty / small sample:* cautious presentation noting insufficient attempts.
@@ -46,6 +46,6 @@ The dedicated analytics and progress area, accessed exclusively via the bottom a
   - *Drill-down action:* clicking a weak topic or missed questions directly navigates to filtered practice in Questions.
 
 ## Open Questions & Review Items
-- Exact pagination / infinite scroll behavior for long question lists.
+- Exact pagination and loading behavior for long question lists; the default scrollable multiple-question view, quantity selector, and one-question option are already decided.
 - Exact scoring rules for official competitions vs. mixed mock exams.
 - Persistence schema for interrupted sessions across browser restarts.

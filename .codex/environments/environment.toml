@@ -1,0 +1,10 @@
+version = 1
+name = "Exam App"
+
+[setup]
+script = ""
+
+[[actions]]
+name = "Run"
+icon = "run"
+command = "node scripts/open-boards.mjs"
