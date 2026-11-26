@@ -52,5 +52,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: sketch-v010-dark
-          path: /tmp/capture/sketch.png
+          path: /tmp/capture/sketch-dark.png
           retention-days: 2
+          if-no-files-found: error
