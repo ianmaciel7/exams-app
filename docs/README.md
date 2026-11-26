@@ -30,4 +30,4 @@ Use the [release baseline](releases/v0.1.0/product/product.md#current-release-ba
 
 ## Stage ownership
 
-Follow the [stage responsibilities and fidelity boundaries](../AGENTS.md#stage-responsibilities-and-fidelity-boundaries). Detailed exploratory question anatomy, content variants and interaction studies live in the [v0.1.0 reference board](releases/v0.1.0/references/question-component-study/) rather than in the active Sketch. The launcher registers it separately and the Project Hub links to it. References do not advance release stages.
+Follow the [stage responsibilities and fidelity boundaries](../AGENTS.md#stage-responsibilities-and-fidelity-boundaries). References do not advance release stages.

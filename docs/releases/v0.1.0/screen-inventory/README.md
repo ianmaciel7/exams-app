@@ -14,24 +14,17 @@ The personal study entry point, separate from the full Performance area.
   - *No competitions available:* candidate empty state.
 - **Key regions:**
   - Collapsible competition switcher with abstract content icons in the Sketch, recognizable search and collapse controls, and a compact footer.
-  - Performance directly above the footer, one Settings gear in the footer; no avatar popover. Mock exams and Missed belong to the Questions workspace; missed review also belongs to Performance.
+  - Performance directly above the footer and one Settings gear in the footer. Mock exams are entered within Questions.
   - Primary content: compact metrics snapshot and competition cards.
 
 ### 2. Questions
 The primary workspace for answering questions within the selected competition.
 - **States:**
-  - *List view (default):* scrollable list of multiple questions with a per-page/quantity selector.
-  - *Focus view:* single question at a time.
-  - *Filtered view:* filtered by subject, topic, or missed questions ("Errei").
-  - *Unanswered / active selection:* question statement, lettered options, and action controls (e.g., Verify when auto-check is off).
-  - *Evaluated answer:* show correctness after automatic checking or manual Verify.
-  - *No matching questions:* candidate empty state for an active filter.
+  - *Unanswered / active selection:* question statement and lettered options.
+  - *Evaluated answer:* show correctness after evaluation.
   - *Available source details:* show exam, year, examining board and organization where available.
-- **Controls & Filters:**
-  - Positioned below the active competition heading; no redundant Questions subtitle.
-  - Subject and topic selectors.
-  - Missed-questions filter ("Errei"): filters by latest evaluated attempt.
-  - Automatic answer checking toggle switch: positioned adjacent to filters.
+- **Header:**
+  - Active competition heading.
   - Mock exam entry button: opens mock exam configuration.
 
 #### Mock exam states within Questions
@@ -48,16 +41,15 @@ The dedicated analytics and progress area, reached directly above the sidebar fo
 - **States:**
   - *Empty / small sample:* cautious presentation noting insufficient attempts.
   - *Detailed analytics:* overall accuracy (correct attempts / total recorded attempts), breakdown by competition, subject, and topic, with distinct metrics for ordinary practice vs. mock exams.
-  - *Weak-topic link:* the design baseline opens filtered Questions in the relevant competition.
 
 ## Open Questions & Review Items
-- Exact pagination and loading behavior for long question lists; the default scrollable multiple-question view, quantity selector, and one-question option are already decided.
+- Practice evaluation trigger and loading behavior.
 - Exact scoring rules for official competitions vs. mixed mock exams.
-- Filter refresh after evaluation, mock setup and history presentation, and restoration after reload or closure.
+- Mock setup and history presentation, and restoration after reload or closure.
 
-## Question component and filter states
+## Question component states
 
 - Provenance: ID, subject, topic/subtopic, year, board, organization, exam have link affordances where supplied; never invent metadata. Proposed routes require validation.
-- Statement: abstracted by strokes in the Sketch; any required supporting content is inline. No separate Associated text control. Statistics is an inline disclosure (collapsed/expanded); Commented key is excluded. Preserve automatic/manual verification and short correctness feedback.
-- Filters: proposed active chips, remove, Clear filters, result count, Subject/Topic dependency, default and active/empty/loading/error states for review. Sort, quantity and List/One stay recognizable. Applying automatically and resetting page are proposals, not implemented states.
+- Statement and answer options use abstract strokes in the Sketch. Required supporting content stays inline. Show short correctness feedback after evaluation.
+- The Questions toolbar (filters, Auto-check, sorting, result count, questions per page, and List/One) and per-question Statistics are unprioritized ideas with no release assignment.
 - Notes are native design annotations outside the UI, not a new Notes screen. All states remain design candidates or recorded scope, not verified interactions.

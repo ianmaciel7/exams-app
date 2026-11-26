@@ -6,23 +6,18 @@ This document accompanies the editable [user flows whiteboard](./). The [release
 
 ### 01. Ordinary Question Practice
 
-Home → select a competition → Questions in that competition → optionally filter or change the auto-check setting → choose an answer.
+Home → select a competition → Questions in that competition → choose an answer → see correctness after evaluation. The evaluation trigger remains open.
 
-- Auto-check on → evaluate the selected answer immediately → show correctness.
-- Auto-check off → select Verify → evaluate the answer and show correctness.
 
-### 02. Missed Questions Review
+### 02. Missed Questions Review (unprioritized idea)
 
-Entry via Status in Questions under the selected competition (or proposed review path from Performance) → apply the missed-question filter → answer an item whose latest evaluated attempt was incorrect.
+The earlier flow used a Status filter or a Performance review link to find questions whose latest evaluated attempt was incorrect. The v0.1.0 release excludes this path.
 
-- Incorrect → the item remains eligible for the filter.
-- Correct → the item stops qualifying for the filter. The timing of the visible list refresh remains open.
 
-Both attempts stay in the history and count toward practice accuracy.
 
-### 03. Weak-Topic Practice from Performance
+### 03. Weak-Topic Practice from Performance (unprioritized idea)
 
-Direct sidebar Performance item above footer → Performance → choose a weak topic → Questions filtered to the topic and scoped to its competition. The weak-topic link is a design baseline.
+Performance retains its direct sidebar entry and topic metrics. The earlier link to filtered Questions is outside v0.1.0.
 
 ### 04. Taking a Competition-Specific Mock Exam
 
@@ -42,10 +37,10 @@ Questions → Mock exams → choose mixed scope → select two or more competiti
 
 ## Decisions & Verification Notes
 
-- Check that both evaluation modes update practice metrics and preserve attempts, and that a later correct attempt removes the question from the missed filter after refresh.
+- Check that evaluated answers update practice metrics and that all evaluated attempts remain in history.
 - Check that ordinary practice stays within one competition and that mock correctness appears only after completion.
-- Verify official scoring, answer keys and navigation restrictions against each source. QConcursos behavior after a later correct attempt remains unverified. [QConcursos filter documentation](https://suporte.qconcursos.com/pt-BR/articles/12118570-como-usar-os-filtros-de-questoes)
+- Verify official scoring, answer keys and navigation restrictions against each source.
 
-### 07. Filter and provenance interaction (proposed)
+### 07. Question provenance (proposed)
 
-Choose a competition → select Subject → optionally select Topic, Status or More → apply on change → update result count and reset pagination. Removing Subject clears its dependent Topic; remove individual chips or Clear filters without resetting Auto-check or view preferences. Open ID or provenance links only to defined destinations; proposed filtered routes retain the competition context. Statistics expands inline on the same question; no separate Associated text or Commented key control. Confirm routes, loading/empty/error handling and keyboard interaction in a prototype before approval.
+Open ID or provenance links only to defined destinations. Confirm exact routes and keyboard interaction in a prototype before approval. The Questions toolbar (filters, Auto-check, sorting, result count, questions per page, and List/One) and per-question Statistics are unprioritized ideas with no release assignment.

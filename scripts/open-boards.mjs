@@ -124,7 +124,6 @@ try {
     screens: ['art_examappscreeninventoryv010', 'docs/releases/v0.1.0/screen-inventory'],
     flows: ['art_examappuserflowsv010', 'docs/releases/v0.1.0/user-flows'],
     sketch: ['art_examappsketchv010', 'docs/releases/v0.1.0/sketch'],
-    questionStudyReference: ['art_examappquestionstudyreferencev010', 'docs/releases/v0.1.0/references/question-component-study'],
   };
   for (const [, path] of Object.values(boards)) {
     const root = join(projectRoot, path);

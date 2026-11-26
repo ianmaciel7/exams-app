@@ -42,6 +42,10 @@ All project whiteboards are powered by the Open Artifact Whiteboard runtime, per
 
 - **Layout, Baselines & Quality Gates:**
   - **Macro-baselines:** Align comparable section headers when multiple sections are actually needed. Do not impose production-level precision or extra section containers on exploratory Sketches.
-  - **Padding & breathing room:** Leave enough visual clearance to prevent clipping and collisions. Exact production dimensions belong to later fidelity stages; the Sketch uses approximate spacing.
-  - **Visual Verification Gate:** Always verify whiteboard changes with a browser subagent at both full-board overview (e.g. 16% zoom) and close-up detail (200% zoom) to guarantee zero clipped text, zero overlapping borders, and crisp visual hierarchy before committing.
+  - **Padding, breathing room & spacious composition:** Never compress distinct views or artboards (such as an expanded workspace and a collapsed rail) into a single tight bounding box. Maintain generous visual clearance (150px to 250px) between separate states or artboards to prevent spatial congestion. Place external design notes comfortably beneath interfaces with ample margin (80px to 120px).
+  - **Token-Efficient Verification & Native CLI Tooling:**
+    - Do not launch heavy browser subagents for routine visual inspection or coordinate guessing.
+    - Use Open Artifact native CLI commands (`context <dir>` to inspect active viewer viewport and zoom; `comments <dir>` / `wait <dir>` to read canvas comments; `write-db <dir>` for batch atomic mutations).
+    - Validate structural and data integrity via `node scripts/check-boards.mjs`.
+    - When visual verification is required, prefer Open Artifact native snapshot tools or direct viewer confirmation over multi-turn browser subagent loops.
 

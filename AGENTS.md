@@ -20,9 +20,25 @@
 - Preserve each board's content and native format. Do not replace a visual board with a Markdown document.
 - For UI sketches, use `especialista-ui-ux:sketch-de-interface` when available; for wireframes, use the relevant UI/UX plugin skill. Distinguish sketch, low-, mid-, and high-fidelity wireframes, mockups, and interactive prototypes. For editable Open Artifact sketches, also follow the whiteboard skill.
 
-### Open Artifact whiteboards
+### Open Artifact whiteboards and token-efficient execution
 
 Before creating or changing any project whiteboard, read [whiteboard guidelines](docs/boards/whiteboard-guidelines.md) and the applicable whiteboard skill. Those requirements apply to project-wide and release-specific boards.
+
+- **Token efficiency and native Open Artifact APIs:**
+  - Never dump, iterate, or re-read hundreds of atomic JSON files (`db/elements/*.json`) into conversation transcripts or terminal logs.
+  - Use native Open Artifact CLI operations:
+    - `write-db <dir> <json|file>`: Apply atomic batch mutations (`[{op: "set"|"update"|"delete", path, data}]`) in a single payload rather than rewriting individual files piecemeal.
+    - `read-db <dir> [path]`: Query specific documents or collections targetedly.
+    - `context <dir>`: Inspect the viewer's active viewport, zoom level, and selected elements directly without launching heavy browser subagents.
+    - `comments <dir>` / `wait <dir>`: Read comment threads and user requests submitted from the canvas via "Send to agent".
+    - `check <dir>` and `node scripts/check-boards.mjs`: Validate schema and board integrity in one step.
+  - Use native high-level elements: use `type: "note"` for multi-line sticky notes and text wrapping properties rather than decomposing sentences or cards into dozens of separate stroke and text files. Avoid micro-element explosion (e.g., separate files for individual underlines or dots).
+- **Interactive canvas collaboration over blind coordinate guessing:**
+  - The live board is served locally and viewed directly by the user in their browser. Do not spawn browser subagents for routine visual checks or coordinate exploration; use `context <dir>`, read user comments, and allow the user to make or review visual adjustments directly on the canvas.
+- **Spacious composition and prevention of spatial congestion:**
+  - Never trap distinct interface states or artboards (such as an expanded workspace and a collapsed rail) inside a single suffocating bounding box.
+  - Separate distinct representations with generous whitespace (150px to 250px gap).
+  - Avoid tight outer section frames. Give ample padding (80px to 120px) around content, and place external design notes comfortably beneath workspaces without crowding the interface borders.
 
 ## Wireframes, prototypes, and versions
 

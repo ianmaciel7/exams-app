@@ -16,8 +16,8 @@ Progress values: **Not started**, **In progress**, **Baseline documented**, and 
 
 Release board titles use `<Artifact Name> — v<release>`; directory names remain lowercase kebab-case. Artifact iterations use Git history unless versions must coexist. Historical wording and original references are preserved.
 
-The current stage records use direct Performance navigation, a single Settings shortcut, Mock exams within Questions, and Statistics-only question resources. See the current decision register for proposed filter and link behavior. The previous Sketch revision was visually captured. The corrected rail requires a new native capture; it is not implemented, and no stage was promoted to Completed.
+The stage records use direct Performance navigation, a single Settings shortcut, and Mock exams within Questions. The Questions toolbar (filters, Auto-check, sorting, result count, questions per page, and List/One) and per-question Statistics are unprioritized ideas with no release assignment. The previous Sketch revision was visually captured. Native capture and usability validation remain pending for the current revision.
 
 ## Stage boundaries and supporting material
 
-See [AGENTS.md — stage responsibilities](../../../AGENTS.md#stage-responsibilities-and-fidelity-boundaries) for the ten activity contracts and validation policy. The [question component study reference](references/question-component-study/) preserves the former detailed sections of Sketch (anatomy/taxonomy, answer-state matrix, content variants, Statistics details and interaction rules). These are supporting studies, not approved component specifications and not evidence that later stages have started.
+See [AGENTS.md — stage responsibilities](../../../AGENTS.md#stage-responsibilities-and-fidelity-boundaries) for the ten activity contracts and validation policy.
