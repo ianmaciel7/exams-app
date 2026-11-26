@@ -30,12 +30,12 @@ Per project conventions, this sketch uses intentionally loose, procedurally curv
   - Per product decision, subscription plan badges (e.g. Pro) are omitted from the interface. Aligns with historical sidebar prototypes documented in [Performance and account menu research](../../../references/2026-11-25-performance-and-account-menu-research.md).
 
 ### 2. Header & Action Area
-- **Breadcrumb & Title:** Heading indicating the active competition and current view ("Questions").
+- **Breadcrumb & Title:** Heading indicating the active competition; omit the redundant "Questions" subtitle.
 - **View Controls:** List view (default) vs. single-question focus mode; per-page count selector.
 - **Mock Exam Entry:** A compact `Mock exams` button at the right of the competition header, within Questions.
 
 ### 3. Filter Bar & Auto-Check
-- Positioned immediately beneath the Questions title.
+- Positioned beneath the competition heading.
 - **Filters:** Dropdown selectors for Subject (Disciplina) and Topic (Assunto), plus the "Errei" (Missed questions) filter.
 - **Auto-Check Toggle:** Positioned as an inline toggle switch beside the filter selectors, letting the learner toggle between instant verification and manual "Verify" checking.
 
@@ -106,7 +106,7 @@ Competition switcher refinement: compact single-line rows with 32-unit height an
 
 The user approved publishing the annotated workspace. The overall Sketch stage remains in progress; review of layout does not validate navigation, accessibility, or task usability. The board must remain within the native 800-element limit; group related notes or create a separate linked board before expanding it. The integrity checker rejects oversized boards.
 
-**Lower-fidelity visual grammar — 2026-11-26:** The primary workspace uses variable-length strokes for competition row names, competition heading and example metadata values, with abstract square-cross competition icons in both sidebar variants. Blue paired strokes preserve the link affordance, including year; field labels, section name, action labels, selection indicators and essential functional icons remain recognizable. Full example content and icon references are preserved in Git history and detailed reference sections. Six native yellow sticky notes outside the interface explain the design, not app features. Do not substitute free text for requested native notes. No change to functional scope or destinations.
+**Lower-fidelity visual grammar — 2026-11-26:** The primary workspace uses variable-length strokes for competition row names, competition heading and example metadata values, with abstract square-cross competition icons in both sidebar variants. Blue paired strokes preserve the link affordance, including year; field labels, action labels, selection indicators and essential functional icons remain recognizable. Full example content and icon references are preserved in Git history and detailed reference sections. Six native yellow sticky notes outside the interface explain the design, not app features. Do not substitute free text for requested native notes. No change to functional scope or destinations.
 
 **Filter bar refinement — 2026-11-26:** The primary workspace now illustrates two active selections using removable chips and a Clear filters action, a result-count placeholder, and an abstract page-size value. The displayed example has an active subject, so Topic is enabled. Proposed interaction: Topic is disabled without Subject; clear dependent Topic when Subject changes or is removed; filters apply on change within the selected competition; Clear filters resets all question filters (not Auto-check or view preferences); result count updates and page returns to the first page. Keep active-filter chips visible only when applicable. Preserve Sort, List/One, Mock exams, and Auto-check. Keyword search and an explicit Apply button are not added to this sketch; avoid increasing v0.1.0 scope without a need. The native notes record the proposed behavior, not implementation. Reference: archived QConcursos filter builder and subject selector in `docs/references/2026-11-25-qconcursos-archive-evidence.md`. Combine filter frame edges into a single native stroke per field without changing its footprint to stay within the Open Artifact element limit.
 
@@ -115,3 +115,5 @@ The user approved publishing the annotated workspace. The overall Sketch stage r
 **Consistent hand-drawn ink — 2026-11-26:** The native preset previously left small and curved strokes unmodified. The project launcher now applies a deterministic, size-adaptive visual ink pass to native SVG stroke paths in Sketch boards, including small icons, chevrons, radios, toggles, frames, lines and placeholders. Preserve semantic geometry, colors, endpoints, closed loops, native hit paths, source element data and note editability. Vary stroke weight subtly between strokes and use low-frequency correlated drift, not periodic jitter or double outlines. Notes inherit the same Excalifont typography. The pass is viewer-only: native exports outside the project launcher retain original geometry; do not claim export parity. Browser verification checks representative small icons and rendered stroke coverage in both themes. No new application features are implied.
 
 The final ink refinement preserves corner definition for narrow rectangular controls by increasing sampling density near their short dimension and keeping native corner samples. The redundant [Correct] text is represented by a native checkmark; the existing correct-answer feedback remains legible. Reference-only associated-passage examples are marked as such, not confirmed expandable behavior.
+
+**Header refinement — 2026-11-26:** Remove the redundant visible `Questions` subtitle from the primary competition header at the user's request. Retain the competition-title placeholder, Mock exams, filter controls, and Questions as the conceptual view name in documentation.
