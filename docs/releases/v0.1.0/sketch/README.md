@@ -22,7 +22,7 @@ Per project conventions, this sketch uses intentionally loose, procedurally curv
   1. `[>_] DATAPREV · 2026 · Anal…` (Active practiced competition card, featuring a software terminal window `[> _]` icon reflecting IT / Systems development).
   2. `[💼] PPSA · 2025 · Analista…` (Second saved competition card, retaining the corporate executive briefcase `[💼]` icon reflecting the state enterprise).
 - **Account & Bottom Utility Controls:** Anchored along the **bottom of the sidebar** (referencing modern app shells such as the reference in `docs/references/assets/sidebar/2026-11-26-sidebar-footer-controls-reference.png`):
-  - **Avatar / Profile icon & Menu Popover:** Compact silhouette button. Clicking opens an elevated popover menu with links to `Performance`, `Mock exams`, and `Missed (Errei)`, fulfilling decisions `V010-02` and `V010-07`.
+  - **Avatar / Profile icon & Menu Popover:** Compact silhouette button. Clicking opens an elevated popover menu with a single link to `Performance`, fulfilling decision `V010-02`. Mock exams are reached from the Questions header (V010-07); missed questions belong to Status filters and Performance (V010-05).
   - **Settings:** Dedicated gear shortcut in the footer, between the account and theme controls. Settings is available only from this footer shortcut; no duplicate account-menu entry. Footer icon centers follow a regular 36-board-unit pitch: profile, Settings, theme and status. Share remains independently right-aligned. The reference's Pro badge is intentionally excluded.
   - **Theme Toggle (Moon icon):** Dark / Light mode toggle switch.
   - **Status Indicator (6-Dash Segmented Circle):** System sync / status indicator matching the reference dashed circle.
@@ -32,7 +32,7 @@ Per project conventions, this sketch uses intentionally loose, procedurally curv
 ### 2. Header & Action Area
 - **Breadcrumb & Title:** Heading indicating the active competition and current view ("Questions").
 - **View Controls:** List view (default) vs. single-question focus mode; per-page count selector.
-- **Mock Exam Entry:** Button to initiate a mock exam session from within the questions environment.
+- **Mock Exam Entry:** A compact `Mock exams` button at the right of the competition header, within Questions.
 
 ### 3. Filter Bar & Auto-Check
 - Positioned immediately beneath the Questions title.
