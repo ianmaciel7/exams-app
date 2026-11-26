@@ -1,1 +1,8 @@
-{"type":"text","x":118,"y":1076,"text":"Performance","size":"body","color":"#88aaff"}
+{
+  "type": "text",
+  "x": 118,
+  "y": 978,
+  "text": "Performance",
+  "size": "body",
+  "color": "#88aaff"
+}

@@ -16,12 +16,12 @@ Per project conventions, this sketch uses intentionally loose, procedurally curv
   - **Search Button (`[🔍]`):** Dedicated icon button placed immediately adjacent to the collapse toggle to open quick search / command palette (`Cmd+K` / `Ctrl+K`).
   - **Collapsible Toggle (`[◨]`):** Dedicated sidebar toggle button to collapse the sidebar into the 70px icon rail.
 - **States Explored:**
-  - **Expanded Sidebar (Default):** Full 255px panel showing logo, active competition selector with clean dropdown caret (`Dataprev 2026 ▾`), primary navigation items with hand-drawn vector icons (`Home`, `Questions`, `Mock exams`, and `Missed (Errei)`), and bottom utility row with account avatar.
-  - **Collapsed Sidebar (Icon Rail):** 70px compact rail displayed adjacent to the main screen, presenting essential icon anchors (`Sidebar Toggle` toggle, `Search` icon, active exam, questions, mock exams, and account avatar) with hover tooltips for label discovery.
-- **Competition Context:** Minimal top selector displaying the active competition name directly (`Dataprev 2026 ▾`) without verbose redundant labels (`Active Exam`, `TI — Software`, or `Change exam`).
-- **Primary Destinations:** `Home`, `Questions`, `Mock exams`, and `Missed (Errei)`. In strict alignment with decision `V010-02`, `Performance` is accessed via the bottom avatar popover menu rather than occupying a top-level item in the main navigation list.
+  - **Expanded Sidebar (Default):** Full 255px panel showing logo, active competition selector with briefcase icon (`[💼] DATAPREV – 2026 – Analista de TI... ▾`), strictly two primary navigation items with hand-drawn vector icons (`Home` and `Questions`), and bottom utility row with account avatar.
+  - **Collapsed Sidebar (Icon Rail):** 70px compact rail displayed adjacent to the main screen, presenting essential icon anchors (`[◨]` toggle, `[🔍]` search, `[💼]` active exam, `[?]` questions, and `(•)` account avatar) with hover tooltips for label discovery.
+- **Competition Context:** Minimal top selector displaying the active competition with briefcase icon (`[💼] DATAPREV – 2026 – Analista de TI... ▾`) referencing the contest selection evidence in `media_1795694922212_e9a48fc3.png`.
+- **Primary Destinations (Strictly Two Items in Sidebar):** In accordance with user approval, the primary sidebar navigation list is streamlined to only **`Home`** and **`Questions`**. Study review and simulation entry points are consolidated into the bottom Avatar Popover menu.
 - **Account & Bottom Utility Controls:** Anchored along the **bottom of the sidebar** (referencing modern app shells such as the reference in `docs/references/assets/sidebar/2026-11-26-sidebar-footer-controls-reference.png`):
-  - **Avatar / Profile icon & Menu Popover:** Compact silhouette button. Clicking opens an elevated popover menu with links to `Performance` and `Settings`, fulfilling decision `V010-02`.
+  - **Avatar / Profile icon & Menu Popover:** Compact silhouette button. Clicking opens an elevated popover menu with links to `Performance`, `Mock exams`, `Missed (Errei)`, and `Settings`, fulfilling decisions `V010-02` and `V010-07`.
   - **Settings (Gear icon):** Shortcut to application preferences and configuration.
   - **Theme Toggle (Moon icon):** Dark / Light mode toggle switch.
   - **Status Indicator (6-Dash Segmented Circle):** System sync / status indicator matching the reference dashed circle.
