@@ -16,11 +16,11 @@ Per project conventions, this sketch uses intentionally loose, procedurally curv
   - **Search Button (`[🔍]`):** Dedicated icon button placed immediately adjacent to the collapse toggle to open quick search / command palette (`Cmd+K` / `Ctrl+K`).
   - **Collapsible Toggle (`[◨]`):** Dedicated sidebar toggle button to collapse the sidebar into the 70px icon rail.
 - **States Explored:**
-  - **Expanded Sidebar (Default):** Full 255px panel showing logo, `[🔍]` search and `[◨]` toggle buttons, and strictly the two active competition items as the sidebar body, with the bottom utility row.
-  - **Collapsed Sidebar (Icon Rail):** 70px compact rail displayed adjacent to the main screen, presenting essential icon anchors (`[◨]` toggle, `[🔍]` search, `[💼]` competition 1, `[💼]` competition 2, and `(•)` account avatar) with hover tooltips for label discovery.
-- **Competition-Centric Sidebar (Only Two Items in Sidebar):** In strict accordance with the user's design direction ("na sidebar só deveria ter [os dois itens] tire navigation home,question"), conventional menu items (`Navigation`, `Home`, `Questions`) are completely eliminated from the sidebar. Instead, the sidebar serves exclusively as a workspace switcher displaying the learner's active competitions (referencing `media_1795695257629_b7dd719c.png`):
-  1. `[💼] DATAPREV – 2026 – Analista...` (Active practiced competition card).
-  2. `[💼] PPSA – 2025 – Analista...` (Second saved competition card).
+  - **Expanded Sidebar (Default):** Full 255px panel showing logo, `[🔍]` search and `[◨]` toggle buttons, and strictly the two active competition items as the sidebar body, with distinct icons per institution, and the bottom utility row.
+  - **Collapsed Sidebar (Icon Rail):** 70px compact rail displayed adjacent to the main screen, presenting essential icon anchors (`[◨]` toggle, `[🔍]` search, `[>_]` DATAPREV terminal icon, `[💼]` PPSA briefcase icon, and `(•)` account avatar) with hover tooltips for label discovery.
+- **Competition-Centric Sidebar (Distinct Institution Icons):** In strict accordance with the user's design direction ("na sidebar só deveria ter [os dois itens] tire navigation home,question" and "deixe icone dataprev diferente do pssa"), conventional menu items (`Navigation`, `Home`, `Questions`) are completely eliminated from the sidebar. Instead, the sidebar serves exclusively as a workspace switcher displaying the learner's active competitions with institution-tailored semantic iconography:
+  1. `[>_] DATAPREV – 2026 – TI...` (Active practiced competition card, featuring a software terminal window `[> _]` icon reflecting IT / Systems development).
+  2. `[💼] PPSA – 2025 – TI...` (Second saved competition card, retaining the corporate executive briefcase `[💼]` icon reflecting the state enterprise).
 - **Account & Bottom Utility Controls:** Anchored along the **bottom of the sidebar** (referencing modern app shells such as the reference in `docs/references/assets/sidebar/2026-11-26-sidebar-footer-controls-reference.png`):
   - **Avatar / Profile icon & Menu Popover:** Compact silhouette button. Clicking opens an elevated popover menu with links to `Performance`, `Mock exams`, `Missed (Errei)`, and `Settings`, fulfilling decisions `V010-02` and `V010-07`.
   - **Settings (Gear icon):** Shortcut to application preferences and configuration.

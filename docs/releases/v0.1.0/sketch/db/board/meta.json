@@ -743,16 +743,18 @@
     "pop_err_x2",
     "pop_err_text",
     "comp1_box",
-    "comp1_icon_body",
-    "comp1_icon_handle",
     "comp1_text",
     "comp2_box",
     "comp2_icon_body",
     "comp2_icon_handle",
     "comp2_text",
-    "ic_c_comp1_body",
-    "ic_c_comp1_handle",
     "ic_c_comp2_body",
-    "ic_c_comp2_handle"
+    "ic_c_comp2_handle",
+    "comp1_icon_box",
+    "comp1_icon_prompt",
+    "comp1_icon_cursor",
+    "ic_c_comp1_box",
+    "ic_c_comp1_prompt",
+    "ic_c_comp1_cursor"
   ]
 }
