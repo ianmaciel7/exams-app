@@ -50,7 +50,6 @@ Per project conventions, this sketch uses intentionally loose, procedurally curv
     - Inline Feedback (on answered question): `Correct answer`.
   - **Card Divider:** Clean horizontal divider separating the action area from question learning resources.
   - **Resource Tabs Strip (Approved for v0.1.0):**
-    - `Commented key` (Gabarito Comentado: official and teacher solution explanation).
     - `Statistics` (Estatisticas: attempt accuracy and alternative selection distribution).
     - *Deferred features:* Community comments, video lesson catalog references, notebook management, personal notes editor, error reporting, and redundant floating tool docks (`Focus`, `Timer`, `Aa`, `Strike`) were evaluated and explicitly pruned. Focus mode is natively provided by collapsing the sidebar, strike action is positioned directly on choices, and timer belongs to the timed mock exam overlay.
 
@@ -70,7 +69,7 @@ To provide comprehensive design clarity and visual order across the wide canvas 
 4. **SECTION 4 · Content Variants & Real Exam Formats (`x: 3570..4660`):**
    - 16 real competition formats: 5 options (FGV), 4 options (Selecon), Certo/Errado (Cebraspe), long passage, code snippet, data table, and missing metadata degradation.
 5. **SECTION 5 · Resource Tabs & Drawers (`x: 4690..5800`):**
-   - Full expanded drawer specifications for the approved `Commented key` and `Statistics` tabs, with unified bounding frames and internal section dividers.
+   - Expanded drawer specification for the retained `Statistics` disclosure, with unified bounding frames and internal section dividers.
 6. **SECTION 6 · Actions, Alerts & Behavioral Rules (`x: 5840..7020`):**
    - Trigger-consequence map, system feedback alerts, micro-interaction states, and verified interaction rules.
 
@@ -92,3 +91,5 @@ The Questions workspace uses distinct visual signs for component roles: a select
 
 
 Competition switcher refinement: compact single-line rows with 32-unit height and 6-unit gaps, aligned 16-unit semantic icons, and a subtle rounded selection outline spanning the active row. No extra dividers or metadata lines. The label uses a static ellipsis in this editable sketch; runtime truncation/fade and full title on focus or hover are future behavior, not implemented. Full competition context is shown in the main heading. Reference: Capacities and Readwise archived captures plus shadcn sidebar demos.
+
+**Scope correction — 2026-11-26:** Commented key / answer explanations (Gabarito Comentado) are excluded from v0.1.0. Only Statistics remains in the question resource strip. Ordinary answer verification and correct-answer feedback are unchanged.
