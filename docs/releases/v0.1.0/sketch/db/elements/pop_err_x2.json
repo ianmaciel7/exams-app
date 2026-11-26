@@ -1,13 +1,1 @@
-{
-  "type": "stroke",
-  "x": 99,
-  "y": 1052,
-  "points": [
-    10,
-    0,
-    0,
-    10
-  ],
-  "width": 1.5,
-  "color": "#ff7070"
-}
+{"type":"stroke","x":99,"y":1052,"points":[10,0,0,10],"width":2.2,"color":"#A12B20"}
