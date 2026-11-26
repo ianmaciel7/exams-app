@@ -23,7 +23,7 @@ Per project conventions, this sketch uses intentionally loose, procedurally curv
   2. `[💼] PPSA · 2025 · Analista…` (Second saved competition card, retaining the corporate executive briefcase `[💼]` icon reflecting the state enterprise).
 - **Account & Bottom Utility Controls:** Anchored along the **bottom of the sidebar** (referencing modern app shells such as the reference in `docs/references/assets/sidebar/2026-11-26-sidebar-footer-controls-reference.png`):
   - **Avatar / Profile icon & Menu Popover:** Compact silhouette button. Clicking opens an elevated popover menu with links to `Performance`, `Mock exams`, `Missed (Errei)`, and `Settings`, fulfilling decisions `V010-02` and `V010-07`.
-  - **Settings:** Available only in the account popover; no duplicate gear shortcut in the footer.
+  - **Settings:** Dedicated gear shortcut in the footer, between the account and theme controls. The existing account menu entry remains unchanged pending a separate decision.
   - **Theme Toggle (Moon icon):** Dark / Light mode toggle switch.
   - **Status Indicator (6-Dash Segmented Circle):** System sync / status indicator matching the reference dashed circle.
   - **Exit / Share Action (Curved Arrow icon):** Right-aligned curved forward/exit action icon without a door frame, directly matching the reference screenshot.
