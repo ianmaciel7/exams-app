@@ -1,0 +1,1 @@
+{"type":"text","x":3615,"y":1560,"text":"  const stream = fs.createReadStream(\"dump.bin\", { highWaterMark: 64 * 1024 });","size":"body","color":"#d0d0d0"}

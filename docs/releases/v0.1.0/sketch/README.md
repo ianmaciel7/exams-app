@@ -18,14 +18,13 @@ Per project conventions, this sketch uses intentionally loose, procedurally curv
   - **Collapsed Sidebar (Icon Rail):** 70px compact rail displayed adjacent to the main screen, presenting essential icon anchors (`[◨]` toggle, `[☷]` active exam, `[?]` questions, `[✎]` mock exams, and `(•)` account avatar) with hover tooltips for label discovery.
 - **Competition Context:** Top selector displaying the active competition (concurso).
 - **Primary Destinations:** Home, Questions, and Mock exams, aligned with user flows and information architecture baselines.
-- **Account & Bottom Utility Controls:** Anchored along the **bottom of the sidebar** (referencing modern app shells such as the reference uploaded in `docs/references/assets/sidebar/2026-11-26-sidebar-footer-controls-reference.png`):
+- **Account & Bottom Utility Controls:** Anchored along the **bottom of the sidebar** (referencing modern app shells such as the reference in `docs/references/assets/sidebar/2026-11-26-sidebar-footer-controls-reference.png`):
   - **Avatar / Profile icon:** Compact silhouette linking to user profile and Performance popover.
-  - **Plan Pill Badge (`Pro`):** Plan indicator / subscription tier pill.
   - **Settings (Gear icon):** Shortcut to application preferences and configuration.
   - **Theme Toggle (Moon icon):** Dark / Light mode toggle switch.
   - **Status Indicator (Dashed circle):** System status / focus session tracker.
   - **Exit / Logout (Door with Arrow icon):** Session exit control positioned on the right edge.
-  - Aligns with historical sidebar prototypes documented in [Performance and account menu research](../../../references/2026-11-25-performance-and-account-menu-research.md).
+  - Per product decision, subscription plan badges (e.g. Pro) are omitted from the interface. Aligns with historical sidebar prototypes documented in [Performance and account menu research](../../../references/2026-11-25-performance-and-account-menu-research.md).
 
 ### 2. Header & Action Area
 - **Breadcrumb & Title:** Heading indicating the active competition and current view ("Questions").
