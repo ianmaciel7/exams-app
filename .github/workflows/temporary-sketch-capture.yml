@@ -1,0 +1,74 @@
+name: Validate marker sketch preview
+on:
+  push:
+    branches: [capture/sketch-controls-20261126]
+permissions:
+  contents: read
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check board integrity and preset
+        run: |
+          node --test scripts/marker-sketch.test.mjs
+          node scripts/check-boards.mjs
+          node --test scripts/check-boards.test.mjs
+      - name: Download official Open Artifact release
+        run: |
+          curl -fsSL https://github.com/JimLiu/open-artifact/releases/download/v0.16.3/open-artifact-plugins.zip -o /tmp/open-artifact.zip
+          unzip -q /tmp/open-artifact.zip -d /tmp/open-artifact
+      - name: Open original boards
+        run: |
+          cli=$(find /tmp/open-artifact -path '*/whiteboard/scripts/cli.mjs' | grep '/codex/' | head -1)
+          if [ -z "$cli" ]; then cli=$(find /tmp/open-artifact -path '*/whiteboard/scripts/cli.mjs' | head -1); fi
+          test -n "$cli"
+          export OPEN_ARTIFACT_WHITEBOARD_CLI="$cli"
+          node scripts/open-boards.mjs | tee /tmp/board-urls
+          grep '^sketch:' /tmp/board-urls | cut -d' ' -f2- > /tmp/sketch-url
+      - name: Capture both native color schemes
+        run: |
+          npm install --prefix /tmp/sketch-browser playwright
+          /tmp/sketch-browser/node_modules/.bin/playwright install chromium
+          mkdir -p /tmp/capture
+          cat > /tmp/sketch-browser/capture.cjs <<'JS'
+          const {chromium}=require('playwright');
+          const fs=require('fs');
+          (async()=>{
+            const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
+            for(const theme of ['light','dark']){
+              const page=await browser.newPage({viewport:{width:1920,height:1080},deviceScaleFactor:1,colorScheme:theme});
+              page.on('pageerror',e=>console.log('PAGE ERROR',e.message));
+              await page.goto(fs.readFileSync('/tmp/sketch-url','utf8').trim(),{waitUntil:'domcontentloaded'});
+              await page.evaluate(theme=>document.documentElement.dataset.theme=theme,theme);
+              await page.waitForTimeout(4500);
+              await page.evaluate(()=>document.fonts.ready);
+              const status=await page.evaluate(()=>({theme:document.documentElement.dataset.theme,marker:document.documentElement.hasAttribute('data-exam-marker-sketch'),font:document.fonts.check('16px ExamMarker'),title:document.title}));
+              console.log(status);
+              if(!status.marker||!status.font||status.theme!==theme)throw new Error('Marker or theme did not load');
+              await page.screenshot({path:'/tmp/capture/overview-'+theme+'.png'});
+              await page.mouse.move(650,850);
+              await page.mouse.wheel(-696,-103);
+              await page.waitForTimeout(400);
+              await page.mouse.move(960,540);
+              await page.keyboard.down('Control');
+              for(let i=0;i<5;i++){await page.mouse.wheel(0,-30);await page.waitForTimeout(120);}
+              await page.keyboard.up('Control');
+              await page.waitForTimeout(900);
+              await page.screenshot({path:'/tmp/capture/first-'+theme+'.png',clip:{x:405,y:75,width:1110,height:930}});
+              await page.close();
+            }
+            await browser.close();
+          })().catch(e=>{console.error(e);process.exit(1)});
+          JS
+          node /tmp/sketch-browser/capture.cjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sketch-component-affordances
+          path: /tmp/capture/*.png
+          retention-days: 2
+          if-no-files-found: error

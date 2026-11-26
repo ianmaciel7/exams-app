@@ -85,3 +85,7 @@ Native editable strokes use semantic ink colors with light/dark adaptation, weig
 Run `node scripts/marker-sketch.mjs` for a dry run, or `node scripts/marker-sketch.mjs docs/releases/v0.1.0/sketch --write` to apply the preset to native text and strokes. Run `node --test scripts/marker-sketch.test.mjs` to check contrast and geometry. Visual review in both color schemes is required; the sketch remains in progress. This is a structural UI sketch, not a functional prototype or pressure-sensitive handwriting engine.
 
 References: [Excalidraw](https://github.com/excalidraw/excalidraw), [Open Artifact theme](https://github.com/JimLiu/open-artifact/blob/v0.16.3/packages/whiteboard-core/src/theme.ts), [WCAG contrast](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html).
+
+## Component affordance refinement (2026-11-26)
+
+The Questions workspace uses distinct visual signs for component roles: a selected rail for navigation, a grouped and anchored account popover, native chevrons at the trailing edge of selectors, a segmented List/One control, native radio outlines and selection marks, bounded Answer buttons, separate verification feedback, underlined links, and resource disclosure labels in a distinct footer strip. The layout and question content are unchanged; these are static interaction cues, not working application controls. Keep color supplementary to form and state. The board remains in progress and requires user review.
