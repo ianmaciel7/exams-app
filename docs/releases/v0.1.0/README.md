@@ -8,8 +8,7 @@ This index locates the current planning artifacts. A documented baseline is not 
 | [Information Architecture](information-architecture/) | Destinations, organization and navigation | Baseline documented | Usability validation pending |
 | [Screen Inventory](screen-inventory/) | Screens, surfaces and states | Baseline documented | Usability validation pending |
 | [User Flows](user-flows/) | Study paths and decision branches | Baseline documented | Usability validation pending |
-| [Sketch](sketch/) | Preliminary interface composition | In progress | User review pending |
-| [Question Component Study](components/question/) | Preserved, unvalidated component and interaction examples | In progress | User review pending |
+| [Sketch](sketch/) | Unified interface composition and component states | In progress | User review pending |
 
 Low-, mid- and high-fidelity wireframes, mockups and interactive prototypes have not started. Choose the fidelity needed to answer the question; optionality is separate from progress. Runnable prototypes belong in `prototypes/`.
 

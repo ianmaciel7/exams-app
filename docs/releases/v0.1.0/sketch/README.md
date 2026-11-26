@@ -47,27 +47,35 @@ Per project conventions, this sketch uses intentionally loose, procedurally curv
     - Inline Feedback (on answered question): `Correct answer`.
     - Right: `[ Report error ]` / `Reportar Erro` action.
   - **Card Divider:** Clean horizontal divider separating the action area from question learning resources.
-  - **Resource Tabs Strip:**
-    - `Commented key` (Gabarito Comentado: official and teacher solutions)
-    - `Lessons (3)` (Aulas: video lesson reference with badge count)
-    - `Comments` (Comentarios: community discussion)
-    - `Statistics` (Estatisticas: attempt accuracy and alternative selection distribution)
-    - `Notebooks` (Cadernos: save to notebook)
-    - `Notes` (Anotacoes: personal candidate notes)
+  - **Resource Tabs Strip (Approved for v0.1.0):**
+    - `Commented key` (Gabarito Comentado: official and teacher solution explanation).
+    - `Statistics` (Estatisticas: attempt accuracy and alternative selection distribution).
+    - *Deferred features:* Community comments, video lesson catalog references, notebook management, personal notes editor, and error reporting were evaluated and explicitly excluded from the v0.1.0 personal study scope.
 
 ### 5. Floating Question Tools Dock
 - Located on the right edge of the question workspace, inspired by QConcursos focus and study tools:
-  - `[Focus]` Focus Mode (Modo Foco toggle)
-  - `[Timer]` Timer / Stopwatch (Relogio)
-  - `[Aa]` Font size adjustment
-  - `[Strike]` Strike-through tool (Riscador de alternativas)
-  - `[Books]` Notebooks shortcut (Cadernos)
-  - `[Notes]` Annotation and drawing tool (Anotacoes)
+  - `[Focus]` Focus Mode (Modo Foco toggle).
+  - `[Timer]` Timer / Stopwatch (Relogio).
+  - `[Aa]` Font size adjustment.
+  - `[Strike]` Strike-through tool (Riscador de alternativas).
 
-## Related study
+## Question — States & Variants Exploration
 
-The detailed, unvalidated question component and interaction exploration is preserved in the [Question Component Study](../components/question/). Its examples are proposals or historical references unless independently approved in the [release decision record](../product.md).
+To provide comprehensive design clarity for the atomic `Question` component before advancing to wireframes, all states and variants are unified within this single board, positioned cleanly to the right of the main questions screen (spanning `x: 1680` to `x: 7000`).
+
+The exploration is organized across 9 structural groups:
+1. **Question Anatomy (Baseline & Labels):** Labeled structural breakdown of header, provenance metadata, breadcrumbs, statement, options, action controls, divider, and the 2 approved tabs (`Commented key` and `Statistics`).
+2. **Interactive Elements Taxonomy:** Systematic representation of distinct UI control types.
+3. **Answer States Matrix (14 States):** Discrete cards illustrating Default, Selected option, Disabled/Enabled answer buttons, Loading spinner, Correct answer, Incorrect answer (with error in red and key in green), Previously answered attempt, Struck/Restored alternatives, Annulled question alert, and Outdated question warning.
+4. **Content Variants (16 Variants):** 4 alternatives, 5 alternatives, True/False format, short/long statements, code snippets, math formulas, tables, and graceful metadata degradation.
+5. **Expanded Resource Tabs Drawers:** Complete visual drawer content for the 2 approved footer tabs:
+   - **Commented Key:** Teacher written resolution and video solution reference.
+   - **Statistics:** Percentage accuracy, option distribution bars, and personal attempt stats.
+6. **Question Actions & Trigger-Consequence Map:** Behavioral table mapping triggers to exact mutations and rollback procedures (excluding deferred reporting/social actions).
+7. **Feedback Messages & System Alerts:** Visual styling and behavior of inline banners.
+8. **Component Micro-Interaction States:** Atomic button and radio states under user pointer and keyboard interactions.
+9. **Interaction Rules & Behavioral Matrix:** 10 explicit product interaction rules codifying tab drawer mutual exclusivity, list independence, attempt immutability post-verification, history preservation upon retry, and auto-check vs. manual verify modes.
 
 ## Evolution
 
-The earlier Questions sketch was consolidated into one active stage board. Its detailed study elements were moved to a separate component study without changing their IDs or content; see [migration mapping](../components/question-migration.json).
+The Questions sketch is consolidated into a single active stage board, uniting screen-level composition and component-level states without fragmented sub-boards or duplicate data.

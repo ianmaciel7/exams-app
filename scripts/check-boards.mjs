@@ -28,7 +28,7 @@ export function checkBoard(root) {
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
-  const boards = ['docs/boards/overview', 'docs/boards/project-hub', 'docs/boards/release-stages', ...['information-architecture', 'screen-inventory', 'user-flows', 'sketch', 'components/question'].map((name) => `docs/releases/v0.1.0/${name}`)];
+  const boards = ['docs/boards/overview', 'docs/boards/project-hub', 'docs/boards/release-stages', ...['information-architecture', 'screen-inventory', 'user-flows', 'sketch'].map((name) => `docs/releases/v0.1.0/${name}`)];
   let failed = false;
   for (const board of boards) {
     const errors = checkBoard(board);
