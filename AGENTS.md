@@ -38,7 +38,7 @@ All project whiteboards are powered by the Open Artifact Whiteboard runtime, per
     - Usage: Loose paper-sketch polylines, arrows, borders, underline emphasis, dividers, and hand-drawn UI vector icons.
   - **Containers, Frames & Macro-Sections:**
     - Constructed using paired horizontal and vertical strokes (`_frame_t`, `_frame_b`, `_frame_l`, `_frame_r`).
-    - Every major logical area must be enclosed in a dedicated macro-section container with a top banner containing:
+    - Use macro-section frames and concise banners only when they help the owning stage communicate its purpose. A simple Sketch does not require multiple macro-sections, formal banners or specification panels. When a banner is useful, it may contain:
       1. Section tag (e.g. `SECTION 1 · APPLICATION SHELL`, size: `small`, accent color).
       2. Section title (e.g. `Application Workspace & Navigation`, size: `title`).
       3. Section subtitle / description (size: `body`, muted gray).
@@ -61,8 +61,8 @@ All project whiteboards are powered by the Open Artifact Whiteboard runtime, per
     - Directed polylines connecting steps in user flows or separating structural card regions.
 
 - **Layout, Baselines & Quality Gates:**
-  - **Unified Macro-Baselines:** When displaying multiple sections side-by-side, ensure all section header banners share the exact same top baseline (e.g. `y: -130`).
-  - **Padding & Breathing Room:** Maintain 20-30px internal margins inside cards and frames to prevent text or strokes from intersecting boundaries.
+  - **Macro-baselines:** Align comparable section headers when multiple sections are actually needed. Do not impose production-level precision or extra section containers on exploratory Sketches.
+  - **Padding & breathing room:** Leave enough visual clearance to prevent clipping and collisions. Exact production dimensions belong to later fidelity stages; the Sketch uses approximate spacing.
   - **Visual Verification Gate:** Always verify whiteboard changes with a browser subagent at both full-board overview (e.g. 16% zoom) and close-up detail (200% zoom) to guarantee zero clipped text, zero overlapping borders, and crisp visual hierarchy before committing.
 
 ## Wireframes, prototypes, and versions
@@ -160,5 +160,7 @@ Treat the following as this project's activity and artifact ownership contract, 
 
 - Store research, historical captures, detailed example question formats, component anatomy/taxonomy, exhaustive state matrices, metric definitions, trigger/event/transition rules and exploratory technical contracts as clearly labeled supporting references or scoped interaction specifications. Place approved requirements in the decision register or the owning specification; link instead of duplicating. Interaction/component specifications, design-system documentation, accessibility review and usability testing can support multiple stages as needed. Production implementation and QA are separate from these design artifacts.
 - Do not dump every reference into the active board. In Sketch, keep a screen or small set of thumbnails and short notes that directly answer the exploration question. Use abstract content and recognizable actions; retain only the essential state/overlay sketches that materially clarify the layout. Move out-of-stage material to a linked reference artifact (preserve original source and scope/status). Do not promote an exploratory reference into an approved requirement or mark a later stage as started just because reference material exists.
-- For each change, identify the owning stage and hypothesis, inspect the entire active board, remove or relocate non-owning content, preserve stable IDs and links where feasible, update the decision register and stage status, then verify board integrity and the relevant visual/interaction evidence. Review the full board, not just the edited crop. Do not create empty stage folders or force all fidelity levels when they add no value.
+- For each change, verify the `dev` branch at the start and end, identify the owning stage and hypothesis, inspect the entire active board, remove or relocate non-owning content, preserve stable IDs and links where feasible, update the decision register and stage status, then verify board integrity and the relevant visual/interaction evidence. Review the full board, not just the edited crop. Do not create empty stage folders or force all fidelity levels when they add no value.
 - Distinguish **Progress** (Not started, In progress, Baseline documented, Completed) from **Validation** (Pending, In progress, Passed, Not applicable). A static sketch or screenshot can establish appearance only; interaction, accessibility, official exam rules and usability need independent evidence. Explicitly record remaining uncertainty.
+
+- Before adding a Sketch section, ask whether the drawing directly tests the current composition or essential state. If not, keep it as linked supporting material or in the responsible stage; do not add headings, legends, frames, catalogs or annotations merely to satisfy a generic board template. Prefer the existing release reference board for historical component studies.
