@@ -6,30 +6,61 @@ import { fileURLToPath } from 'node:url';
 
 const projectRoot = fileURLToPath(new URL('../', import.meta.url));
 
-// OPEN_ARTIFACT_WHITEBOARD_CLI can point to another installation of the CLI.
+// Discover available Open Artifact whiteboard CLIs across platforms (Gemini, Codex, Claude)
 function findCli() {
   const override = process.env.OPEN_ARTIFACT_WHITEBOARD_CLI;
   if (override) {
     if (!existsSync(override)) throw new Error(`Whiteboard CLI not found: ${override}`);
-    return override;
+    return { path: override, platform: 'Custom override' };
   }
+
+  const discovered = [];
+
+  // 1. Google Gemini CLI / Antigravity plugin
   const geminiCli = join(homedir(), '.gemini', 'config', 'plugins', 'open-artifact', 'skills', 'open-artifact', 'vendor', 'artifact-types', 'whiteboard', 'scripts', 'cli.mjs');
-  if (existsSync(geminiCli)) return geminiCli;
-  const cache = join(homedir(), '.codex', 'plugins', 'cache', 'created-by-me-remote', 'open-artifact');
-  if (!existsSync(cache)) throw new Error('Open Artifact is not installed; set OPEN_ARTIFACT_WHITEBOARD_CLI to its whiteboard CLI.');
-  const versions = readdirSync(cache, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory() && /^\d+\.\d+\.\d+$/.test(entry.name))
-    .map((entry) => entry.name)
-    .sort((a, b) => {
-      const left = a.split('.').map(Number);
-      const right = b.split('.').map(Number);
-      return right[0] - left[0] || right[1] - left[1] || right[2] - left[2];
-    });
-  for (const version of versions) {
-    const cli = join(cache, version, 'skills', 'whiteboard', 'scripts', 'cli.mjs');
-    if (existsSync(cli)) return cli;
+  if (existsSync(geminiCli)) {
+    discovered.push({ path: geminiCli, platform: 'Gemini CLI / Antigravity' });
   }
-  throw new Error('Open Artifact whiteboard CLI not found; set OPEN_ARTIFACT_WHITEBOARD_CLI.');
+
+  // 2. OpenAI Codex cache / plugin
+  const codexCache = join(homedir(), '.codex', 'plugins', 'cache', 'created-by-me-remote', 'open-artifact');
+  if (existsSync(codexCache)) {
+    const versions = readdirSync(codexCache, { withFileTypes: true })
+      .filter((entry) => entry.isDirectory() && /^\d+\.\d+\.\d+$/.test(entry.name))
+      .map((entry) => entry.name)
+      .sort((a, b) => {
+        const left = a.split('.').map(Number);
+        const right = b.split('.').map(Number);
+        return right[0] - left[0] || right[1] - left[1] || right[2] - left[2];
+      });
+    for (const version of versions) {
+      const cli = join(codexCache, version, 'skills', 'whiteboard', 'scripts', 'cli.mjs');
+      if (existsSync(cli)) {
+        discovered.push({ path: cli, platform: `OpenAI Codex (v${version})` });
+        break;
+      }
+    }
+  }
+
+  // 3. Anthropic Claude Code plugin / skills cache
+  const claudePaths = [
+    join(homedir(), '.claude', 'plugins', 'open-artifact', 'skills', 'whiteboard', 'scripts', 'cli.mjs'),
+    join(homedir(), '.claude', 'plugins', 'cache', 'open-artifact', 'skills', 'whiteboard', 'scripts', 'cli.mjs'),
+    join(homedir(), '.claude', 'skills', 'whiteboard', 'scripts', 'cli.mjs'),
+    join(homedir(), '.claude', 'skills', 'open-artifact', 'vendor', 'artifact-types', 'whiteboard', 'scripts', 'cli.mjs'),
+  ];
+  for (const cPath of claudePaths) {
+    if (existsSync(cPath)) {
+      discovered.push({ path: cPath, platform: 'Anthropic Claude Code' });
+      break;
+    }
+  }
+
+  if (discovered.length === 0) {
+    throw new Error('Open Artifact is not installed in Gemini, Codex, or Claude; set OPEN_ARTIFACT_WHITEBOARD_CLI to its whiteboard CLI.');
+  }
+
+  return discovered[0];
 }
 
 function call(cli, args) {
@@ -75,8 +106,9 @@ function prepareWhiteboardAssets(cli) {
 }
 
 try {
-  const cli = findCli();
-  const linksScript = prepareWhiteboardAssets(cli);
+  const selectedCli = findCli();
+  console.log(`Using Open Artifact Whiteboard CLI from: ${selectedCli.platform} (${selectedCli.path})`);
+  const linksScript = prepareWhiteboardAssets(selectedCli.path);
   const boards = {
     overview: ['art_examappoverview', 'docs/boards/overview'],
     releases: ['art_examappreleasestages', 'docs/boards/release-stages'],
@@ -95,7 +127,7 @@ try {
   const routes = {};
   for (const [name, [id, path]] of Object.entries(boards)) {
     const root = join(projectRoot, path);
-    const opened = JSON.parse(call(cli, ['open', root, '--type', 'whiteboard', '--id', id, '--json']));
+    const opened = JSON.parse(call(selectedCli.path, ['open', root, '--type', 'whiteboard', '--id', id, '--json']));
     if (opened.id !== id) throw new Error(`Open Artifact did not register the expected ID for ${root}`);
     urls[name] = opened.url;
     routes[`/a/${id}`] = new URL(opened.url).pathname;
