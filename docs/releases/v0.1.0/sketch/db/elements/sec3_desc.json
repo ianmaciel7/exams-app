@@ -1,7 +1,7 @@
 {
   "type": "text",
   "x": 2635,
-  "y": 55,
+  "y": -45,
   "text": "14 lifecycle states from initial view to checking, feedback, retry, and alternative elimination",
   "size": "body",
   "color": "#999999"
