@@ -16,10 +16,11 @@ Per project conventions, this sketch uses intentionally loose, procedurally curv
   - **Search Button (`[🔍]`):** Dedicated icon button placed immediately adjacent to the collapse toggle to open quick search / command palette (`Cmd+K` / `Ctrl+K`).
   - **Collapsible Toggle (`[◨]`):** Dedicated sidebar toggle button to collapse the sidebar into the 70px icon rail.
 - **States Explored:**
-  - **Expanded Sidebar (Default):** Full 255px panel showing logo, active competition selector with briefcase icon (`[💼] DATAPREV – 2026 – Analista de TI... ▾`), strictly two primary navigation items with hand-drawn vector icons (`Home` and `Questions`), and bottom utility row with account avatar.
-  - **Collapsed Sidebar (Icon Rail):** 70px compact rail displayed adjacent to the main screen, presenting essential icon anchors (`[◨]` toggle, `[🔍]` search, `[💼]` active exam, `[?]` questions, and `(•)` account avatar) with hover tooltips for label discovery.
-- **Competition Context:** Minimal top selector displaying the active competition with briefcase icon (`[💼] DATAPREV – 2026 – Analista de TI... ▾`) referencing the contest selection evidence in `media_1795694922212_e9a48fc3.png`.
-- **Primary Destinations (Strictly Two Items in Sidebar):** In accordance with user approval, the primary sidebar navigation list is streamlined to only **`Home`** and **`Questions`**. Study review and simulation entry points are consolidated into the bottom Avatar Popover menu.
+  - **Expanded Sidebar (Default):** Full 255px panel showing logo, `[🔍]` search and `[◨]` toggle buttons, and strictly the two active competition items as the sidebar body, with the bottom utility row.
+  - **Collapsed Sidebar (Icon Rail):** 70px compact rail displayed adjacent to the main screen, presenting essential icon anchors (`[◨]` toggle, `[🔍]` search, `[💼]` competition 1, `[💼]` competition 2, and `(•)` account avatar) with hover tooltips for label discovery.
+- **Competition-Centric Sidebar (Only Two Items in Sidebar):** In strict accordance with the user's design direction ("na sidebar só deveria ter [os dois itens] tire navigation home,question"), conventional menu items (`Navigation`, `Home`, `Questions`) are completely eliminated from the sidebar. Instead, the sidebar serves exclusively as a workspace switcher displaying the learner's active competitions (referencing `media_1795695257629_b7dd719c.png`):
+  1. `[💼] DATAPREV – 2026 – Analista...` (Active practiced competition card).
+  2. `[💼] PPSA – 2025 – Analista...` (Second saved competition card).
 - **Account & Bottom Utility Controls:** Anchored along the **bottom of the sidebar** (referencing modern app shells such as the reference in `docs/references/assets/sidebar/2026-11-26-sidebar-footer-controls-reference.png`):
   - **Avatar / Profile icon & Menu Popover:** Compact silhouette button. Clicking opens an elevated popover menu with links to `Performance`, `Mock exams`, `Missed (Errei)`, and `Settings`, fulfilling decisions `V010-02` and `V010-07`.
   - **Settings (Gear icon):** Shortcut to application preferences and configuration.
