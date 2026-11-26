@@ -29,7 +29,7 @@ function seed(id) {
   for(const c of id) v=Math.imul(v^c.charCodeAt(0),16777619);
   return (v>>>0)/4294967296;
 }
-const round = n=>Math.round(n*100)/100;
+const round = n=>Math.round(n*100)/100 || 0;
 function linePoints(x0,y0,x1,y1,id) {
   const dx=x1-x0,dy=y1-y0,len=Math.hypot(dx,dy);
   if(len<1) return [x0,y0,x1,y1];
