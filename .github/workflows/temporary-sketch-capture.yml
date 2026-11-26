@@ -36,19 +36,21 @@ jobs:
           const fs=require('fs');
           (async()=>{
             const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
-            const page=await browser.newPage({viewport:{width:1920,height:1080},deviceScaleFactor:1});
+            const page=await browser.newPage({viewport:{width:1920,height:1080},deviceScaleFactor:1,colorScheme:'dark'});
             page.on('pageerror',e=>console.log('PAGE ERROR',e.message));
             await page.goto(fs.readFileSync('/tmp/sketch-url','utf8').trim(),{waitUntil:'domcontentloaded'});
+            await page.evaluate(()=>document.documentElement.dataset.theme='dark');
             await page.waitForTimeout(6000);
+            console.log('theme',await page.evaluate(()=>({pinned:document.documentElement.dataset.theme,dark:matchMedia('(prefers-color-scheme: dark)').matches})));
             console.log('title',await page.title());
             console.log((await page.locator('body').innerText()).slice(0,1000));
-            await page.screenshot({path:'/tmp/capture/sketch.png'});
+            await page.screenshot({path:'/tmp/capture/sketch-dark.png'});
             await browser.close();
           })().catch(e=>{console.error(e);process.exit(1)});
           JS
           node /tmp/sketch-browser/capture.cjs
       - uses: actions/upload-artifact@v4
         with:
-          name: sketch-v010
+          name: sketch-v010-dark
           path: /tmp/capture/sketch.png
           retention-days: 2
