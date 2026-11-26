@@ -1,8 +1,1 @@
-{
-  "type": "text",
-  "x": 50,
-  "y": -175,
-  "text": "UI Sketch & Specification Board (v0.1.0) \u00b7 6 Structured Sections \u00b7 Open Artifact Whiteboard",
-  "size": "large",
-  "color": "#888888"
-}
+{"type":"text","x":50,"y":-175,"text":"UI Sketch & Specification Board (v0.1.0) · 6 Structured Sections · Open Artifact Whiteboard","size":"large","color":"#545454"}

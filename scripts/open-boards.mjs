@@ -3,6 +3,7 @@ import { homedir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { markerSketchCss } from './marker-sketch-style.mjs';
 
 const projectRoot = fileURLToPath(new URL('../', import.meta.url));
 
@@ -71,7 +72,7 @@ function call(cli, args) {
 }
 
 // Keep the title fix in the project rather than modifying a shared plugin install.
-function prepareWhiteboardAssets(cli) {
+async function prepareWhiteboardAssets(cli) {
   const candidates = [
     resolve(dirname(cli), '../../open-artifact/vendor/type-server'),
     resolve(dirname(cli), '../../../type-server'),
@@ -86,13 +87,17 @@ function prepareWhiteboardAssets(cli) {
   cpSync(join(source, 'support.js'), join(assets, 'support.js'));
   const index = join(assets, 'editors', 'whiteboard', 'index.html');
   const html = readFileSync(index, 'utf8');
-  const script = `<script id="exam-app-board-title">
+  const markerCss = await markerSketchCss(cache);
+  const script = `<style id="exam-marker-sketch-css">${markerCss}</style><script id="exam-app-board-title">
     async function syncExamAppBoardTitle() {
       try {
         const response = await fetch('./_api/db/get?path=board%2Fmeta', { cache: 'no-store' });
         if (!response.ok) return;
         const result = await response.json();
-        if (typeof result.data?.title === 'string' && result.data.title.trim()) document.title = result.data.title.trim();
+        if (typeof result.data?.title === 'string' && result.data.title.trim()) {
+          document.title = result.data.title.trim();
+          document.documentElement.toggleAttribute('data-exam-marker-sketch', /^Sketch\\s/.test(document.title));
+        }
       } catch { /* Preserve the fallback title until the board is available. */ }
     }
     syncExamAppBoardTitle();
@@ -108,7 +113,7 @@ function prepareWhiteboardAssets(cli) {
 try {
   const selectedCli = findCli();
   console.log(`Using Open Artifact Whiteboard CLI from: ${selectedCli.platform} (${selectedCli.path})`);
-  const linksScript = prepareWhiteboardAssets(selectedCli.path);
+  const linksScript = await prepareWhiteboardAssets(selectedCli.path);
   const boards = {
     overview: ['art_examappoverview', 'docs/boards/overview'],
     releases: ['art_examappreleasestages', 'docs/boards/release-stages'],

@@ -77,3 +77,11 @@ To provide comprehensive design clarity and visual order across the wide canvas 
 ## Evolution
 
 The Questions sketch is consolidated into a single active stage board, uniting screen-level composition and component-level states without fragmented sub-boards or duplicate data.
+
+## Marker sketch preset (2026-11-26)
+
+Native editable strokes use semantic ink colors with light/dark adaptation, weight tiers and bounded non-periodic gesture variation. Sparse rectangular paths are sampled along each edge to prevent the viewer smoothing corners into ovals. The launcher applies Excalifont (Latin subset, SIL OFL 1.1; pinned upstream revision) only to Sketch boards; it caches the font in the ignored launcher directory, with a system-font fallback when offline. Other boards retain their original typography. No product requirements or question text are removed.
+
+Run `node scripts/marker-sketch.mjs` for a dry run, or `node scripts/marker-sketch.mjs docs/releases/v0.1.0/sketch --write` to apply the preset to native text and strokes. Run `node --test scripts/marker-sketch.test.mjs` to check contrast and geometry. Visual review in both color schemes is required; the sketch remains in progress. This is a structural UI sketch, not a functional prototype or pressure-sensitive handwriting engine.
+
+References: [Excalidraw](https://github.com/excalidraw/excalidraw), [Open Artifact theme](https://github.com/JimLiu/open-artifact/blob/v0.16.3/packages/whiteboard-core/src/theme.ts), [WCAG contrast](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html).

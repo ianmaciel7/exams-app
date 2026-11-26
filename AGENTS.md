@@ -34,7 +34,7 @@ All project whiteboards are powered by the Open Artifact Whiteboard runtime, per
     - Multi-line & Word Wrapping: Set `width` (integer pixel span) to enable paragraph wrapping for annotations, card descriptions, and callout sticky notes.
     - Usage: Structural headings, section titles, metadata chips, note callouts, code blocks, and data labels.
   - **Hand-drawn Vector Linework & Pen Tool (`type: "stroke"`):**
-    - Properties: `x`, `y`, `points` (flat coordinate array `[x0, y0, x1, y1, ...]` relative to `(x, y)`), `width` (stroke thickness from 1.0 to 2.5), `color` (hex string).
+    - Properties: `x`, `y`, `points` (flat coordinate array `[x0, y0, x1, y1, ...]` relative to `(x, y)`), `width` (native stroke thickness from 1.0 to 40; use the reusable marker-sketch preset (typically 1.8–3.4) for Sketch boards), `color` (hex string).
     - Usage: Loose paper-sketch polylines, arrows, borders, underline emphasis, dividers, and hand-drawn UI vector icons.
   - **Containers, Frames & Macro-Sections:**
     - Constructed using paired horizontal and vertical strokes (`_frame_t`, `_frame_b`, `_frame_l`, `_frame_r`).
