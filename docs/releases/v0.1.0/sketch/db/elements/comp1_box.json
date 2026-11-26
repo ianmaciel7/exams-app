@@ -1,1 +1,1 @@
-{"type":"stroke","x":89,"y":126,"points":[0,0,0.12,6.4,0.24,12.8,0.36,19.2,0.48,25.6,0.6,32],"width":5,"color":"#194F9B"}
+{"type":"shape","kind":"rounded","x":89,"y":127,"w":228,"h":32,"color":"blue","hollow":true,"stroke":"#194F9B","text":""}
