@@ -55,6 +55,8 @@ Before creating or changing any project whiteboard, read [whiteboard guidelines]
 ### Orchestration model and mandatory delegation
 - The coordinator/primary agent is strictly an orchestrator. It must preserve its context for planning, integration, and user communication rather than exhausting it on operational chores.
 - **Prohibition of coordinator monopolization:** The coordinator MUST NOT execute heavy operational work directly in the coordinator session. Specifically, the coordinator must not perform multi-file code modifications, write or execute scripts for data manipulation or board mutations, perform deep repository or archive explorations, or execute batch refactoring. All operational implementation, exploratory code/archive research, and board modifications MUST be delegated to specialized worker subagents via platform-native delegation (`invoke_subagent`).
+- **Mandatory parallel decomposition and fan-out:** Whenever a task spans multiple independent domains, screens, modules, files, research avenues, or deliverables (e.g., editing multiple screens, updating documentation alongside implementation, concurrent architectural studies, or testing separate component slices), the coordinator MUST decompose the objective and dispatch multiple specialized worker subagents concurrently in parallel.
+- **Prohibition of single-worker serial bottlenecking:** Confining execution to a single worker dispatched serially across multiple independent tasks or workstreams is strictly forbidden. Serial bottlenecking exhausts turns, introduces unnecessary latency, and undermines multi-agent capabilities. All independent slices of work must run in parallel subagents simultaneously.
 - **Strict separation of implementation and verification:** The coordinator and the worker agent MUST NEVER be the sole verifiers of their own work. Every implementation task MUST have an independent evaluator/verifier subagent validate the results (running test suites, integrity checks, diff inspections, and verifying alignment with requirements) before the coordinator accepts the deliverable. Self-certification and unverified completion claims are strictly forbidden.
 - Use native platform capabilities rather than reinventing existing multi-agent primitives.
 - Structure agent roles dynamically across five levels:
@@ -67,9 +69,9 @@ Before creating or changing any project whiteboard, read [whiteboard guidelines]
 ### Architectural patterns
 Select dynamically the simplest pattern adequate for the problem while strictly respecting the delegation mandate:
 - **Single Agent:** Restricted strictly to trivial, single-step questions (e.g., answering a factual question from existing context without code edits or board mutations). Any multi-step task, file editing, script execution, or board change requires orchestrator-worker delegation.
-- **Orchestrator-Workers:** Default pattern for all non-trivial tasks. The coordinator decomposes work and delegates to worker subagents, followed by an evaluator subagent.
-- **Parallelization:** Independent concurrent tasks dispatched across parallel worker subagents.
-- **Prompt Chaining:** Sequential dependent stages where the output of one worker feeds the contract of the next.
+- **Orchestrator-Workers:** Default pattern for all non-trivial tasks. The coordinator decomposes work and delegates to concurrent worker subagents, followed by an evaluator subagent.
+- **Parallel Fan-Out (Mandatory):** Independent concurrent tasks dispatched across parallel worker subagents. Whenever a task spans multiple files, screens, architectural areas, or artifacts, parallel dispatch is required.
+- **Prompt Chaining:** Sequential dependent stages strictly reserved for situations where the output of one worker directly gates or feeds the contract of the next; never use prompt chaining for independent work that can run concurrently.
 - **Routing:** Directing tasks to domain specialists (e.g., UI/UX specialist, historical archive research).
 - **Agent Teams / Swarm:** Distributed collaboration on complex interconnected challenges.
 - **Evaluator-Optimizer:** Iterative refinement against explicit quality gates, pairing a worker with an independent verifier.
@@ -98,7 +100,7 @@ Every delegated activity must specify:
 ### Context management and isolation
 - Reuse verified findings while their sources are unchanged. Retrieve the smallest relevant source section; read each applicable skill's required instructions, then open only references needed for the task.
 - Process large logs, board JSON and search results locally; return concise findings with source paths and enough evidence for verification. Request focused browser state or screenshots; avoid full accessibility trees for large canvases when not needed.
-- Delegate independent work only when its quality, speed or isolation benefits outweigh extra context and coordination. Give each worker only the context it needs; avoid duplicating the same investigation. Respect platform and user instructions governing delegation and model choice.
+- Fan out independent work across parallel subagents to maximize throughput and isolation. Give each worker only the context it needs; avoid duplicating the same investigation. Respect platform and user instructions governing delegation and model choice.
 - Batch independent reads and checks when safe. Rerun validation when changed inputs, failures, or uncertainty justify it; choose coverage and independent verification proportionate to risk and the applicable quality gates.
 - Use Git worktrees when concurrent edits would conflict. Do not force worktrees for read-only or isolated work.
 - Treat context compaction and prompt caching as host-managed. Do not claim cache hits or savings without measurements, and do not use arbitrary token caps that compromise required work.

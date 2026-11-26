@@ -1,0 +1,7 @@
+{
+  "type": "note",
+  "x": 5400,
+  "y": 1260,
+  "text": "Performance & Analytics Exploration (v0.1.0)\n\n• High-level summary KPI metrics: overall accuracy, volume, completed mock exams, average solving pace.\n• Breakdown by subject with visual progress bars.\n• Distinct separation of ordinary practice accuracy vs. timed mock exam performance under time pressure.\n• Weak topic identification providing clear direction for focused revision.\n• Comprehensive audit log of past study sessions and full mock simulations with direct review action.",
+  "color": "yellow"
+}
