@@ -1,1 +1,8 @@
-{"type":"text","x":1530,"y":25,"text":"Sidebar State: Collapsed (Icon Rail)","size":"body","color":"#ffeb3b"}
+{
+  "type": "text",
+  "x": 1515,
+  "y": 145,
+  "text": "Rail State (70px)",
+  "size": "body",
+  "color": "#ffeb3b"
+}

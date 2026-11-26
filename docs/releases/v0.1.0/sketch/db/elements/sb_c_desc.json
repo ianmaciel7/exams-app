@@ -1,1 +1,9 @@
-{"type":"text","x":1620,"y":80,"text":"Click toggle to expand rail into full sidebar. Tooltips reveal destination labels on hover.","size":"body","color":"#a0a0a0","width":280}
+{
+  "type": "text",
+  "x": 1515,
+  "y": 1205,
+  "text": "Click toggle [\u25e8] to expand rail.",
+  "size": "small",
+  "color": "#a0a0a0",
+  "width": 115
+}
