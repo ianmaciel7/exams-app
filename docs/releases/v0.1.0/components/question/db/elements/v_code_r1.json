@@ -1,1 +1,1 @@
-{"type":"text","x":3585,"y":1560,"text":"  const stream = fs.createReadStream(\"dump.bin\", { highWaterMark: 64 * 1024 });","size":"body","color":"#d0d0d0"}
+{"type":"text","x":1995,"y":1560,"text":"  const stream = fs.createReadStream(\"dump.bin\", { highWaterMark: 64 * 1024 });","size":"body","color":"#d0d0d0"}
