@@ -3,7 +3,7 @@
 ## Language and writing style
 
 - Write project-authored content in English, including file and directory names, documentation, board content, and code comments. Preserve imported references and source evidence in their original language when appropriate.
-- Prohibit emojis across all project deliverables, documentation, board artifacts, UI sketches, wireframes, code, and commit messages. Never insert decorative or conversational emojis.
+- Prohibit emojis and pseudo-emoji Unicode symbols across all project deliverables, documentation, board artifacts, UI sketches, wireframes, code, and commit messages. Never insert decorative or conversational emojis. Never substitute drawn UI icons with text characters, unicode glyphs, or bracketed symbols (such as `[◨]`, `[☷]`, `[✎]`, `[📊]`, `[📁]`). All interface icons in whiteboards, sketches, and mockups must be explicitly constructed as hand-drawn vector primitives (`stroke`, `path`, or semantic geometry) using the whiteboard's native drawing capabilities.
 - Prohibit AI slop, conversational filler, sycophancy, hollow buzzwords, puffery, and boilerplate pleasantries. Keep all writing direct, concise, factual, and strictly grounded in empirical evidence.
 
 ## Boards and project memory
