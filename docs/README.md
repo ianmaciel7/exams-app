@@ -26,3 +26,7 @@ Create directories for additional stages when their artifacts exist. Keep runnab
 ## Current release and Sketch review
 
 Use the [release baseline](releases/v0.1.0/product.md#current-release-baseline) as the current decision source. Historical references and dated discovery entries are not current requirements. The project-local launcher applies consistent hand-drawn ink only to Sketch boards; original native geometry and external exports remain unchanged. Inspect both themes and native notes; never treat screenshots as proof of interactions. Latest verified capture: [run 45884414167](https://github.com/ianmaciel7/exams-app/actions/runs/45884414167), experimental commit `87f5f5c` (no redundant Questions subtitle).
+
+## Stage ownership
+
+Follow the [stage responsibilities and fidelity boundaries](../AGENTS.md#stage-responsibilities-and-fidelity-boundaries). Detailed exploratory question anatomy, content variants and interaction studies live in the [v0.1.0 reference board](releases/v0.1.0/references/question-component-study/) rather than in the active Sketch. The launcher registers it separately and the Project Hub links to it. References do not advance release stages.

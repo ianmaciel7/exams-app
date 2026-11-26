@@ -1,121 +1,32 @@
 # Sketch — v0.1.0
 
-This document describes the design decisions, layout, and visual evidence behind the desktop questions-page sketch for Exam App v0.1.0, located in the editable [sketch whiteboard](./).
+## Purpose and status
 
-## Scope & Purpose
-The questions sketch represents the primary workspace of the product, translating product discovery decisions and information architecture into a structural, preliminary visual sketch.
+Explore the primary desktop Questions workspace for one selected competition: composition, hierarchy, navigation and the few visual states necessary to discuss the layout. This is an editable low-fidelity Open Artifact sketch, not a wireframe, component contract or working prototype. Progress: In progress. Native Light/Dark capture and board integrity passed; user review, usability and functional validation remain pending.
 
-**Scope status:** This board is a static exploration, not a specification of implemented behavior. The user-approved decisions are recorded in [the release product history](../product.md): competition-scoped practice, filters beneath the active competition heading, an auto-check/manual-verify choice, scrolling through multiple questions by default with quantity and single-question options, mock exams within Questions, and direct access to Performance in the sidebar above the footer. The detailed component variants, tools, states and interaction rules shown below are reference examples or proposals unless separately approved in that history. Their presence does not add them to v0.1.0.
+Source of truth: [release decisions](../product.md#current-release-baseline), [stage responsibilities](../../../../AGENTS.md#stage-responsibilities-and-fidelity-boundaries), [IA](../information-architecture/), [screen inventory](../screen-inventory/) and [user flows](../user-flows/).
 
-Per project conventions, this sketch uses intentionally loose, procedurally curved linework (inspired by rough UI sketching and paper prototyping techniques) with editable text blocks, allowing rapid inspection before moving to higher-fidelity wireframes.
+## Active visual studies
 
-## Interface Regions & Decisions
+- Main desktop workspace: competition switcher (expanded sidebar), compact collapsed rail, competition heading placeholder, Mock exams, filters and Auto-check, results and List/One controls, question cards with abstract content and visible answer feedback. No redundant Questions subtitle.
+- Two main question cards illustrate unanswered and correct-answer states. An additional small incorrect-answer study shows the essential visual distinction; detailed retry, checking and strike semantics remain open.
+- One compact Statistics-expanded sketch explores inline expansion. The graph and data marks are placeholders, not approved metrics or a specification.
+- Native editable sticky notes outside the interface record intent and uncertainty. There is no Notes feature implied by these annotations.
 
-### 1. Sidebar (Left Navigation)
-- **Header Controls:** Anchored at the top right of the sidebar header (referenced directly from modern app shells such as ChatGPT, documented in `docs/references/assets/sidebar/2026-11-26-chatgpt-sidebar-collapse-button.png`):
-  - **Search button:** Simplified native search icon adjacent to the collapse control. Exact command-palette behavior and shortcuts are not yet approved.
-  - **Collapse toggle:** Simplified native control to collapse the sidebar to the compact icon rail.
-- **States Explored:**
-  - **Expanded Sidebar (Default):** Approximately 230px in the Sketch; logo, search, collapse, two example competition rows, direct Performance and footer utility controls.
-  - **Collapsed Sidebar (Icon Rail):** Approximately 70px; search, expand, abstract competition icons, Performance and avatar placeholder. Tooltip behavior remains a proposal.
-- **Competition-centric sidebar:** No conventional Navigation, Home or Questions menu items in this workspace. Two sample competition rows use abstract square-cross icons and variable-length content strokes; a selected outline identifies the active row. Historical institution-specific icon and title examples remain reference material. The functional destination Home remains in the IA baseline, not in the sidebar.
-- **Account & Bottom Utility Controls:** Anchored along the **bottom of the sidebar** (referencing modern app shells such as the reference in `docs/references/assets/sidebar/2026-11-26-sidebar-footer-controls-reference.png`):
-  - **Performance navigation:** Single unboxed icon-and-label row immediately above the footer; no account popover. Collapsed rail retains a Performance icon. The existing avatar glyph is retained as a placeholder; no separate profile destination is introduced. Mock exams are reached from the Questions header (V010-07); missed questions belong to Status filters and Performance (V010-05).
-  - **Settings:** Dedicated gear shortcut in the footer, between the account and theme controls. Settings is available only from this footer shortcut; no duplicate account-menu entry. Footer icon centers follow a regular 36-board-unit pitch: profile, Settings, theme and status. Share remains independently right-aligned. The reference's Pro badge is intentionally excluded.
-  - **Theme Toggle (Moon icon):** Dark / Light mode toggle switch.
-  - **Status Indicator (6-Dash Segmented Circle):** Dashed-circle placeholder; exact status meaning remains open.
-  - **Exit / Share Action (Curved Arrow icon):** Right-aligned share/action placeholder; precise behavior remains open.
-  - Per product decision, subscription plan badges (e.g. Pro) are omitted from the interface. Aligns with historical sidebar prototypes documented in [Performance and account menu research](../../../references/2026-11-25-performance-and-account-menu-research.md).
+## Visual and scope constraints
 
-### 2. Header & Action Area
-- **Breadcrumb & Title:** Heading indicating the active competition; omit the redundant "Questions" subtitle.
-- **View Controls:** List view (default) vs. single-question focus mode; per-page count selector.
-- **Mock Exam Entry:** A compact `Mock exams` button at the right of the competition header, within Questions.
+Use abstract strokes for illustrative content and metadata values; link affordances remain blue and underlined, including year. Keep functional labels and essential state cues recognizable. Abstract competition icons; functional icons retain simple semantic geometry. Keep the same hand-drawn ink grammar across small and large strokes, using the project-local launcher and Excalifont. No final design tokens, production measurements or decorative polish.
 
-### 3. Filter Bar & Auto-Check
-- Positioned beneath the competition heading.
-- **Filters:** Dropdowns for Subject, Topic, Status (including Missed/Errei), and More. Active chips, Clear filters, result count and page-size placeholders illustrate proposed filter behavior.
-- **Auto-Check Toggle:** Positioned as an inline toggle switch beside the filter selectors, letting the learner toggle between instant verification and manual "Verify" checking.
+Performance is direct navigation above the footer; Settings appears once in the footer. No account popover. Mock exams remain within Questions; Missed belongs to Status and Performance review. Ordinary practice is competition-scoped. Statistics is the only retained resource disclosure; no separate Associated text or Commented key control. Required supporting content remains inline. Filter chips, Clear filters, result count and automatic application/dependent Topic are proposals; link destinations, metrics and runtime behavior require validation. Do not infer approved features from placeholders.
 
-### 4. Question Cards & Provenance
-- Inspired by the QConcursos structure recovered from the Exams Archive (documented in [QConcursos archive evidence](../../../references/2026-11-25-qconcursos-archive-evidence.md)):
-  - **Header:** Question number (`01`, `02`), question ID link and subject/topic link breadcrumbs, abstracted as blue paired strokes in the primary Sketch.
-  - **Source Provenance:** Explicit metadata displaying Year · Board (Banca) · Organization (Órgão) · Exam (Prova). Missing fields are never fabricated.
-  - **Statement:** Main question text, including required supporting content inline. The primary workspace no longer shows a separate Associated text control.
-  - **Options:** Vertical lettered choices represented with radio controls. Question 1 illustrates a proposed answered state; the static sketch has no interactive controls.
-  - **Footer Action Row:**
-    - Left: `[ Answer ]` / `[ Responder ]` action button.
-    - Inline Feedback (on answered question): `Correct answer`.
-  - **Card Divider:** Clean horizontal divider separating the action area from question learning resources.
-  - **Resource Tabs Strip (Approved for v0.1.0):**
-    - `Statistics` (inline disclosure; candidate metrics include attempt accuracy and alternative selection distribution).
-    - *Deferred features:* Community comments, video lesson catalog references, notebook management, personal notes editor, error reporting, and redundant floating tool docks (`Focus`, `Timer`, `Aa`, `Strike`) were evaluated and explicitly pruned. Focus mode is natively provided by collapsing the sidebar, strike actions on choices remain exploratory, and timer belongs to the timed mock exam overlay.
+## Supporting references — not active Sketch content
 
-## Structured Board Architecture (6 Macro-Sections)
+The former detailed anatomy/taxonomy, answer-state matrix, exam-format examples, Statistics specification, and actions/alerts/behavior maps are preserved as native editable elements in the [question component study reference board](../references/question-component-study/). They are historical exploratory material, not active stage deliverables or approved requirements. Later stages may consult them as needed; no later stage is advanced by this relocation.
 
-To provide comprehensive design clarity and visual order across the wide canvas (`x: 50` to `x: 7020`), the entire whiteboard is organized into 6 clearly demarcated macro-sections, each bounded with dedicated section frames, header badges, titles, and functional descriptions:
+## Verification
 
-1. **SECTION 1 · Application Workspace & Navigation (`x: 50..1650`):**
-   - **1.A Primary Questions Workspace:** Expanded sidebar with search and collapse controls, active competition heading placeholder, filter bar with auto-check and active-filter proposals, question cards, and native design notes outside the interface. No floating focus dock.
-   - **1.B Collapsed Sidebar Rail:** Compact 70px icon rail with toggle, search anchor, competition selector, navigation icons, and avatar.
-2. **SECTION 2 · Question Anatomy & Interactive Taxonomy (`x: 1680..2580`):**
-   - Structural breakdown of question header, provenance, breadcrumbs, statement, options, actions, and tabs.
-   - Comprehensive interactive taxonomy classifying static text, links, buttons, radio controls, badges, disclosures, and tooltips.
-   - Legend and status convention pill mapping Confirmed, Reference, and Proposed scopes.
-3. **SECTION 3 · Answer & Verification States Matrix (`x: 2610..3540`):**
-   - 14 discrete lifecycle states from initial view and option selection to checking, feedback, retry, and alternative elimination.
-4. **SECTION 4 · Content Variants & Real Exam Formats (`x: 3570..4660`):**
-   - 16 real competition formats: 5 options (FGV), 4 options (Selecon), Certo/Errado (Cebraspe), long passage, code snippet, data table, and missing metadata degradation.
-5. **SECTION 5 · Resource Tabs & Drawers (`x: 4690..5800`):**
-   - Expanded drawer specification for the retained `Statistics` disclosure, with unified bounding frames and internal section dividers.
-6. **SECTION 6 · Actions, Alerts & Behavioral Rules (`x: 5840..7020`):**
-   - Trigger-consequence map, system feedback alerts, micro-interaction states, and proposed interaction rules.
+Open via `node scripts/open-boards.mjs`. Use `node scripts/check-boards.mjs` and `node --test scripts/check-boards.test.mjs scripts/marker-sketch.test.mjs scripts/marker-sketch-ink.test.mjs`. Inspect actual browser captures of the complete active board in Light and Dark. The project-local ink pass preserves native data and hit geometry; external native exports do not include that viewer-only styling. Respect Open Artifact v0.16.3's 800-element limit. The revised board contains 235 elements (201 retained from the former workspace, including 4 updated titles/labels, plus 34 lightweight study elements).
 
-## Evolution
+Historical source: [pre-reorganization board and documentation at 2fee2dd](https://github.com/ianmaciel7/exams-app/tree/2fee2dd2cae8ef1ef36814d26f16347ab3904eef/docs/releases/v0.1.0/sketch).
 
-The Questions sketch is consolidated into a single active stage board, uniting screen-level composition and component-level states without fragmented sub-boards or duplicate data.
-
-## Marker sketch preset (2026-11-26)
-
-Native editable strokes use semantic ink colors with light/dark adaptation, weight tiers and bounded non-periodic gesture variation. Sparse rectangular paths are sampled along each edge to prevent the viewer smoothing corners into ovals. The launcher applies Excalifont (Latin subset, SIL OFL 1.1; pinned upstream revision) only to Sketch boards; it caches the font in the ignored launcher directory, with a system-font fallback when offline. Other boards retain their original typography. No product requirements or question text are removed.
-
-Run `node scripts/marker-sketch.mjs` for a dry run, or `node scripts/marker-sketch.mjs docs/releases/v0.1.0/sketch --write` to apply the preset to native text and strokes. Run `node --test scripts/marker-sketch.test.mjs scripts/marker-sketch-ink.test.mjs scripts/check-boards.test.mjs` to check contrast, geometry and board integrity. Visual review in both color schemes is required; the sketch remains in progress. This is a structural UI sketch, not a functional prototype or pressure-sensitive handwriting engine.
-
-References: [Excalidraw](https://github.com/excalidraw/excalidraw), [Open Artifact theme](https://github.com/JimLiu/open-artifact/blob/v0.16.3/packages/whiteboard-core/src/theme.ts), [WCAG contrast](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html).
-
-## Component affordance refinement (2026-11-26)
-
-The Questions workspace uses distinct visual signs for component roles: a selected rail for navigation, a direct Performance navigation row, native chevrons at the trailing edge of selectors, a segmented List/One control, native radio outlines and selection marks, bounded Answer buttons, separate verification feedback, underlined links, and resource disclosure labels in a distinct footer strip. The layout and question content are unchanged; these are static interaction cues, not working application controls. Keep color supplementary to form and state. The board remains in progress and requires user review.
-
-
-Competition switcher refinement: compact single-line rows with 32-unit height and 6-unit gaps, aligned 16-unit semantic icons, and a subtle rounded selection outline spanning the active row. No extra dividers or metadata lines. Earlier iterations used a static ellipsis; the current primary workspace uses content strokes instead. Full names remain in historical references. Runtime truncation/fade and full title on focus or hover are proposals. Reference: Capacities and Readwise archived captures plus shadcn sidebar demos.
-
-**Scope correction — 2026-11-26:** Commented key / answer explanations (Gabarito Comentado) are excluded from v0.1.0. Only Statistics remains in the question resource strip. Ordinary answer verification and correct-answer feedback are unchanged.
-
-
-**Question link semantics — 2026-11-26:** Archived [QConcursos initial state](../../../references/assets/qconcursos/qconcursos_live_question_initial_state.png) and [answered state](../../../references/assets/qconcursos/qconcursos_live_question_answered_feedback.png) inform the distinction between neutral provenance labels and emphasized values. The reference visibly distinguishes board, organization and exam values; exact click destinations were not verified live. In this sketch, question ID, subject, topic, year, board, organization and exam are drawn separately in semantic blue with underlines. Metadata labels and sequence remain neutral; Statistics remains a disclosure control, not a navigation link; the separate associated-text control was later removed from the primary workspace. Proposed implementation: ID opens question detail, subject/topic/year/board/org filter the current competition context, exam opens its provenance view without silently mixing competitions. Do not fabricate unavailable targets; verify keyboard/focus, contrast and accessible names. Static drawings do not implement routes. Fixture competition mismatch remains a known separate issue.
-
-**Year link correction — 2026-11-26:** The user explicitly requires the year value (e.g. 2026) to be a link as well. Keep the label neutral; proposed destination is the year-filtered list within the selected competition. No functional navigation is implemented at Sketch stage.
-
-
-**Low-fidelity content refinement:** In the primary Questions workspace, long statements and answer-choice prose are represented by variable-length strokes, keeping A–D, radios, correct/struck states, feedback, filters, titles, provenance links and disclosure labels readable. Detailed reference boards remain available for content-format and state analysis; placeholder marks are not actual question content. Do not infer implementation or copy changes from placeholder geometry.
-
-**Annotated Sketch — 2026-11-26:** Six numbered annotations beneath the workspace explain direct Performance navigation, single Settings shortcut, proposed link destinations, placeholder content, answer verification and inline Statistics. The original text-only annotation experiment is superseded by six native editable sticky notes (`type: note`), identified by component name. Open Artifact v0.16.3 enforces MAX_BOARD_ELEMENTS=800; preserve all existing workspace and reference elements. Annotations are documentation, not app UI. Preserve visual hierarchy and avoid crossing content or repeating every obvious label. No new scope or behavior implemented.
-
-The user approved publishing the annotated workspace. The overall Sketch stage remains in progress; review of layout does not validate navigation, accessibility, or task usability. The board must remain within the native 800-element limit; group related notes or create a separate linked board before expanding it. The integrity checker rejects oversized boards.
-
-**Lower-fidelity visual grammar — 2026-11-26:** The primary workspace uses variable-length strokes for competition row names, competition heading and example metadata values, with abstract square-cross competition icons in both sidebar variants. Blue paired strokes preserve the link affordance, including year; field labels, action labels, selection indicators and essential functional icons remain recognizable. Full example content and icon references are preserved in Git history and detailed reference sections. Six native yellow sticky notes outside the interface explain the design, not app features. Do not substitute free text for requested native notes. No change to functional scope or destinations.
-
-**Filter bar refinement — 2026-11-26:** The primary workspace now illustrates two active selections using removable chips and a Clear filters action, a result-count placeholder, and an abstract page-size value. The displayed example has an active subject, so Topic is enabled. Proposed interaction: Topic is disabled without Subject; clear dependent Topic when Subject changes or is removed; filters apply on change within the selected competition; Clear filters resets all question filters (not Auto-check or view preferences); result count updates and page returns to the first page. Keep active-filter chips visible only when applicable. Preserve Sort, List/One, Mock exams, and Auto-check. Keyword search and an explicit Apply button are not added to this sketch; avoid increasing v0.1.0 scope without a need. The native notes record the proposed behavior, not implementation. Reference: archived QConcursos filter builder and subject selector in `docs/references/2026-11-25-qconcursos-archive-evidence.md`. Combine filter frame edges into a single native stroke per field without changing its footprint to stay within the Open Artifact element limit.
-
-**2026-11-26 — Associated text control removal:** Remove the separate `+ Associated text` label/control from the primary Questions workspace at the user's request. Preserve statement strokes and required supporting content; the detailed associated-passage reference variant is retained as historical evidence, not an approved expandable control. No other filter, answer, or resource control changes.
-
-**Consistent hand-drawn ink — 2026-11-26:** The native preset previously left small and curved strokes unmodified. The project launcher now applies a deterministic, size-adaptive visual ink pass to native SVG stroke paths in Sketch boards, including small icons, chevrons, radios, toggles, frames, lines and placeholders. Preserve semantic geometry, colors, endpoints, closed loops, native hit paths, source element data and note editability. Vary stroke weight subtly between strokes and use low-frequency correlated drift, not periodic jitter or double outlines. Notes inherit the same Excalifont typography. The pass is viewer-only: native exports outside the project launcher retain original geometry; do not claim export parity. Browser verification checks representative small icons and rendered stroke coverage in both themes. No new application features are implied.
-
-The final ink refinement preserves corner definition for narrow rectangular controls by increasing sampling density near their short dimension and keeping native corner samples. The redundant [Correct] text is represented by a native checkmark; the existing correct-answer feedback remains legible. Reference-only associated-passage examples are marked as such, not confirmed expandable behavior.
-
-**Header refinement — 2026-11-26:** Remove the redundant visible `Questions` subtitle from the primary competition header at the user's request. Retain the competition-title placeholder, Mock exams, filter controls, and Questions as the conceptual view name in documentation.
-
-## Current review status
-
-The current workspace (794 native elements) omits the Questions subtitle. Native Light/Dark capture passed in [run 45884414167](https://github.com/ianmaciel7/exams-app/actions/runs/45884414167). Detailed reference sections are not approval of every control. Review in progress; implementation, usability and accessibility validation remain pending.
+Native capture and automated checks passed in [run 45887312298](https://github.com/ianmaciel7/exams-app/actions/runs/45887312298) at experimental commit `52f3b95`. Both themes were visually inspected; this is not a user-validation claim.
