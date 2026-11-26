@@ -18,5 +18,5 @@ export async function markerSketchCss(cache){
     }
     source='@font-face{font-family:ExamMarker;src:url(data:font/woff2;base64,'+readFileSync(font).toString('base64')+') format("woff2");font-display:swap;}';
   }catch(e){console.warn('Marker sketch font unavailable; using fallback: '+e.message);}
-  return source+'\nhtml[data-exam-marker-sketch] .wb-text,html[data-exam-marker-sketch] .wb-text *{font-family:ExamMarker,"Comic Sans MS",system-ui,sans-serif!important;letter-spacing:-0.25px;}';
+  return source+'\nhtml[data-exam-marker-sketch] .wb-text,html[data-exam-marker-sketch] .wb-text *,html[data-exam-marker-sketch] .wb-note-paper,html[data-exam-marker-sketch] .wb-note-paper *{font-family:ExamMarker,"Comic Sans MS",system-ui,sans-serif!important;letter-spacing:-0.25px;}';
 }

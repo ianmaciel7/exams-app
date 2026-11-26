@@ -87,6 +87,7 @@ async function prepareWhiteboardAssets(cli) {
   cpSync(join(source, 'support.js'), join(assets, 'support.js'));
   const index = join(assets, 'editors', 'whiteboard', 'index.html');
   const html = readFileSync(index, 'utf8');
+  cpSync(join(projectRoot, 'scripts', 'marker-sketch-ink.mjs'), join(assets, 'editors', 'whiteboard', 'exam-marker-sketch-ink.mjs'));
   const markerCss = await markerSketchCss(cache);
   const script = `<style id="exam-marker-sketch-css">${markerCss}</style><script id="exam-app-board-title">
     async function syncExamAppBoardTitle() {
@@ -104,7 +105,7 @@ async function prepareWhiteboardAssets(cli) {
     setInterval(syncExamAppBoardTitle, 5000);
   </script>`;
   if (!html.includes('</head>')) throw new Error('Whiteboard editor has no head element');
-  writeFileSync(index, html.replace('</head>', `${script}\n    <script src="./exam-app-board-links.js"></script>\n  </head>`));
+  writeFileSync(index, html.replace('</head>', `${script}\n    <script src="./exam-app-board-links.js"></script>\n    <script type="module" src="./exam-marker-sketch-ink.mjs"></script>\n  </head>`));
   process.env.OPEN_ARTIFACT_ASSETS = assets;
   process.env.OPEN_ARTIFACT_TYPE_SERVER_HOME = join(cache, 'server');
   return join(assets, 'editors', 'whiteboard', 'exam-app-board-links.js');

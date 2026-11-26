@@ -29,7 +29,7 @@ All project whiteboards are powered by the Open Artifact Whiteboard runtime, per
   - `db/elements/<element-id>.json`: One atomic JSON file per element, ensuring fine-grained Git tracking, conflict-free concurrent editing, and easy programmatic manipulation.
 
 - **Available Native Tools & Elements:**
-  - **Text & Sticky Notes (`type: "text"`):**
+  - **Text (`type: "text"`) and native sticky notes (`type: "note"`):**
     - Properties: `x`, `y`, `text`, `size` (`small`, `body`, `large`, `title`), `color` (hex string).
     - Multi-line & Word Wrapping: Set `width` (integer pixel span) to enable paragraph wrapping for annotations, card descriptions, and callout sticky notes.
     - Usage: Structural headings, section titles, metadata chips, note callouts, code blocks, and data labels.
@@ -129,3 +129,9 @@ Every delegated activity must specify:
 ### Independent validation and quality gates
 - Separate implementation from verification. Employ automated test suites, accessibility checks, visual inspections, and independent agent reviews before signing off on deliverables.
 - Record findings, decisions, and evidence in project whiteboards (`docs/boards/`, `docs/releases/`) and documentation.
+
+### Sketch ink consistency
+
+- Use the shared project-local `scripts/marker-sketch-ink.mjs` viewer pass when opening Sketch boards with `scripts/open-boards.mjs`. Treat all measurable native stroke paths consistently, including small icons and curved controls. Preserve topology, corner definition, endpoints, closed loops, semantic colors, hit paths and native editable geometry. Avoid periodic jitter and heavy double outlines. Native exports outside the launcher keep original geometry.
+- Keep illustrative content abstract; retain recognizable essential controls and states. Use native `note` elements for design notes outside the interface, not free text posing as sticky notes. Keep the board at or below 800 elements for Open Artifact v0.16.3.
+- Validate `node --test scripts/marker-sketch.test.mjs scripts/marker-sketch-ink.test.mjs scripts/check-boards.test.mjs` and `node scripts/check-boards.mjs`, then inspect real browser captures in Light and Dark. Confirm stroke coverage and small-icon styling, not just font availability. Report unvalidated behavior and export limits.
