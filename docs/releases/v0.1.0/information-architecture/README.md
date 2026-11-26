@@ -16,16 +16,16 @@ The [release stages board](../../../boards/release-stages/) tracks these outputs
 ## Destinations and navigation
 
 - **Home:** the entry page, separate from Performance. Show a compact progress summary and a way to choose a competition. If no progress exists, offer the competition selection path.
-- **Questions:** choosing a competition opens its questions. Ordinary practice stays within that competition; filters, including subject, topic and missed questions, appear on the same page. Each question shows the source fields available in the data.
+- **Questions:** selecting a competition card directly in the sidebar opens its questions workspace. Ordinary practice stays within that competition; filters, including subject, topic and missed questions, appear on the same page. Each question shows the source fields available in the data.
 - **Performance:** accessed through the avatar menu at the bottom of the sidebar. Show accuracy and strengths and weaknesses by competition, subject and topic. The design baseline links a weak topic to filtered practice in the relevant competition. A direct link to the missed-question filter is exploratory.
-- **Mock exams:** a function within Questions, using the same question-page structure. Provide entry to a new mock, previous mocks, and their results and progress. A competition-specific mock uses that competition's rules once verified. A mixed mock can draw from multiple competitions and is identified as mixed, not as an official exam. The detailed presentation of configuration, history and results remains for screen inventory and flows.
+- **Mock exams:** accessible via the sidebar Avatar Menu or directly within Questions, using the same question-page structure. Provide entry to a new mock, previous mocks, and their results and progress. A competition-specific mock uses that competition's rules once verified. A mixed mock can draw from multiple competitions and is identified as mixed, not as an official exam. The detailed presentation of configuration, history and results remains for screen inventory and flows.
 
 ## Organization, labels and findability
 
-- **Organization:** Home, Questions and Performance are the three base destinations. Mock exams is a nested area within Questions and uses the same structure.
+- **Organization:** Home, Questions and Performance are the three base destinations. Mock exams is an assessment overlay within Questions and directly accessible via the Avatar Menu. The sidebar is structured around the user's active competition cards.
 - **Labels:** These English names are the release's accepted working labels. The relationship and terminology of a competition and a particular exam or edition still need clarification against source materials.
 - **Content relationships:** Questions have source provenance and may be classified by subject and topic. Subjects or topics can recur across competitions; this is a findability observation, not a strict hierarchy or approved data model. Ordinary practice remains within one selected competition; mixing competitions is limited to mock exams.
-- **Navigation:** The avatar menu offers Performance; choosing a competition opens Questions; Questions offers access to Mock exams. Other cross-links are described below as path checks.
+- **Navigation:** The sidebar lists active competitions; clicking a competition opens its questions workspace; the Avatar Menu at the bottom offers Performance, Mock exams, Missed (Errei), and Settings. Other cross-links are described below as path checks.
 - **Findability:** Subject, topic and missed-question filters are on Questions. Missed means the latest checked attempt was incorrect; a later correct attempt removes the question from this filter without erasing history. A mixed mock can optionally narrow its scope by subject or topic. Free-text search is not an agreed v0.1.0 requirement. The actual filter labels and availability depend on the source data.
 
 ### Working terminology

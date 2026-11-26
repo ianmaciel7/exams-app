@@ -13,8 +13,9 @@ The personal study entry point, separate from the full Performance area.
   - *Recorded activity:* compact progress summary and competition selection. Summary metrics remain open.
   - *No competitions available:* candidate empty state.
 - **Key regions:**
-  - Sidebar with a bottom avatar menu linking to Performance.
-  - Primary content: compact metrics snapshot and competition selector.
+  - Sidebar serving as a focused competition switcher listing the learner's active competitions as cards (`DATAPREV` with terminal icon and `PPSA` with briefcase icon), header search `[🔍]` and collapse toggle `[◨]`, and bottom avatar menu.
+  - Avatar Popover menu linking to `Performance`, `Mock exams`, `Missed (Errei)`, and `Settings`.
+  - Primary content: compact metrics snapshot and competition cards.
 
 ### 2. Questions
 The primary workspace for answering questions within the selected competition.

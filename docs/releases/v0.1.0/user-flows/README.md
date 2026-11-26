@@ -13,7 +13,7 @@ Home → select a competition → Questions in that competition → optionally f
 
 ### 02. Missed Questions Review
 
-Questions in the selected competition → apply the missed-question filter → answer an item whose latest evaluated attempt was incorrect.
+Entry via sidebar Avatar Menu (`Missed (Errei)`) or directly in Questions under the selected competition → apply the missed-question filter → answer an item whose latest evaluated attempt was incorrect.
 
 - Incorrect → the item remains eligible for the filter.
 - Correct → the item stops qualifying for the filter. The timing of the visible list refresh remains open.
@@ -26,7 +26,7 @@ Bottom sidebar avatar → avatar menu → Performance → choose a weak topic �
 
 ### 04. Taking a Competition-Specific Mock Exam
 
-Questions → Mock exams → choose the competition-specific scope and original or chosen question count → start a timed session in the Questions structure. Apply verified exam-specific rules. Leave answers blank or revisit and change answers as the verified rules allow.
+Entry via sidebar Avatar Menu (`Mock exams`) or directly in Questions (`Mock exam` action button) → choose the competition-specific scope and original or chosen question count → start a timed session in the Questions structure. Apply verified exam-specific rules. Leave answers blank or revisit and change answers as the verified rules allow.
 
 - Manual finish → submit recorded answers → show results and answer review.
 - Timeout → automatically submit recorded answers → show results and answer review.

@@ -20,6 +20,51 @@
 - Preserve each board's content and native format. Do not replace a visual board with a Markdown document.
 - For UI sketches, use `especialista-ui-ux:sketch-de-interface` when available; for wireframes, use the relevant UI/UX plugin skill. Distinguish sketch, low-, mid-, and high-fidelity wireframes, mockups, and interactive prototypes. For editable Open Artifact sketches, also follow the whiteboard skill.
 
+### Open Artifact Whiteboard Tools & Architecture
+
+All project whiteboards are powered by the Open Artifact Whiteboard runtime, persisted as granular files under `<board-dir>/db/`:
+- **Data Persistence Architecture:**
+  - `db/board/meta.json`: Core metadata (`id`, `title`, and `order`: an array of element IDs establishing strict layer order and render z-index).
+  - `db/board/inks.json`: Palette definitions and custom stroke/fill swatches.
+  - `db/elements/<element-id>.json`: One atomic JSON file per element, ensuring fine-grained Git tracking, conflict-free concurrent editing, and easy programmatic manipulation.
+
+- **Available Native Tools & Elements:**
+  - **Text & Sticky Notes (`type: "text"`):**
+    - Properties: `x`, `y`, `text`, `size` (`small`, `body`, `large`, `title`), `color` (hex string).
+    - Multi-line & Word Wrapping: Set `width` (integer pixel span) to enable paragraph wrapping for annotations, card descriptions, and callout sticky notes.
+    - Usage: Structural headings, section titles, metadata chips, note callouts, code blocks, and data labels.
+  - **Hand-drawn Vector Linework & Pen Tool (`type: "stroke"`):**
+    - Properties: `x`, `y`, `points` (flat coordinate array `[x0, y0, x1, y1, ...]` relative to `(x, y)`), `width` (stroke thickness from 1.0 to 2.5), `color` (hex string).
+    - Usage: Loose paper-sketch polylines, arrows, borders, underline emphasis, dividers, and hand-drawn UI vector icons.
+  - **Containers, Frames & Macro-Sections:**
+    - Constructed using paired horizontal and vertical strokes (`_frame_t`, `_frame_b`, `_frame_l`, `_frame_r`).
+    - Every major logical area must be enclosed in a dedicated macro-section container with a top banner containing:
+      1. Section tag (e.g. `SECTION 1 · APPLICATION SHELL`, size: `small`, accent color).
+      2. Section title (e.g. `Application Workspace & Navigation`, size: `title`).
+      3. Section subtitle / description (size: `body`, muted gray).
+      4. Header divider stroke separating banner from content.
+  - **Hand-Drawn UI Vector Iconography:**
+    - Never substitute drawn UI icons with emojis or unicode text symbols.
+    - Construct all icons as vector stroke primitives:
+      - Terminals: `[> _]` (window outline + prompt chevron + cursor).
+      - Briefcases: `[💼]` (rounded rectangular body + upper handle).
+      - Home: `[☖]` (slanted roof lines + body rectangle).
+      - Questions: `[?]` (circle outline + question mark arc + dot).
+      - Settings: `[⚙]` (gear outline with central circular hole).
+      - Theme: `[🌙]` (crescent moon curve).
+      - Status: Segmented dashed circle (6 discrete diagonal arc strokes).
+      - Share / Exit: Curved forward arrow with arched tail.
+  - **Popover Menus & Elevated Cards:**
+    - Enclosing card frame with directional pointer triangle pointing to the triggering anchor (e.g. user avatar).
+    - Elevated internal items separated by divider strokes, with icon + text alignment and generous padding.
+  - **Connectors, Dividers & Flow Arrows:**
+    - Directed polylines connecting steps in user flows or separating structural card regions.
+
+- **Layout, Baselines & Quality Gates:**
+  - **Unified Macro-Baselines:** When displaying multiple sections side-by-side, ensure all section header banners share the exact same top baseline (e.g. `y: -130`).
+  - **Padding & Breathing Room:** Maintain 20-30px internal margins inside cards and frames to prevent text or strokes from intersecting boundaries.
+  - **Visual Verification Gate:** Always verify whiteboard changes with a browser subagent at both full-board overview (e.g. 16% zoom) and close-up detail (200% zoom) to guarantee zero clipped text, zero overlapping borders, and crisp visual hierarchy before committing.
+
 ## Wireframes, prototypes, and versions
 
 - Store release-specific sketches and wireframes under `docs/releases/<version>/`, grouped by stage or topic. Keep reusable, cross-release material separate from release-specific artifacts.
