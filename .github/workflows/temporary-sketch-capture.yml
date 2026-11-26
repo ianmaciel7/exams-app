@@ -15,7 +15,7 @@ jobs:
           node-version: '22'
       - name: Check board integrity and preset
         run: |
-          node --test scripts/marker-sketch.test.mjs
+          node --test scripts/marker-sketch.test.mjs scripts/marker-sketch-ink.test.mjs
           node scripts/check-boards.mjs
           node --test scripts/check-boards.test.mjs
       - name: Download official Open Artifact release
@@ -47,6 +47,10 @@ jobs:
               await page.evaluate(theme=>document.documentElement.dataset.theme=theme,theme);
               await page.waitForTimeout(4500);
               await page.evaluate(()=>document.fonts.ready);
+              await page.waitForFunction(()=>document.querySelectorAll('.wb-stroke-ink[data-exam-sketch-ink]').length>0);
+              const ink=await page.evaluate(()=>({all:document.querySelectorAll('.wb-stroke-ink').length,styled:document.querySelectorAll('.wb-stroke-ink[data-exam-sketch-ink]').length,icons:['ic_search_lens','ic_toggle_exp_box','ic_c_search_lens','ic_c_toggle_box'].map(id=>{const el=document.querySelector('svg[data-wb-id="'+id+'"]');return {id,styled:el?.querySelector('.wb-stroke-ink')?.hasAttribute('data-exam-sketch-ink'),different:el?.querySelector('.wb-stroke-ink')?.getAttribute('d')!==el?.querySelector('.wb-hit')?.getAttribute('d')};})}));
+              console.log('Sketch ink coverage',JSON.stringify(ink));
+              if(ink.styled<ink.all*0.90||ink.icons.some(i=>!i.styled||!i.different))throw new Error('Incomplete sketch ink coverage');
               const status=await page.evaluate(()=>({theme:document.documentElement.dataset.theme,marker:document.documentElement.hasAttribute('data-exam-marker-sketch'),font:document.fonts.check('16px ExamMarker'),title:document.title}));
               console.log(status);
               if(!status.marker||!status.font||status.theme!==theme)throw new Error('Marker or theme did not load');
