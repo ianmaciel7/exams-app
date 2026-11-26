@@ -18,6 +18,23 @@ jobs:
           curl -fsSL https://github.com/JimLiu/open-artifact/releases/download/v0.16.3/open-artifact-plugins.zip -o /tmp/open-artifact.zip
           unzip -q /tmp/open-artifact.zip -d /tmp/open-artifact
           find /tmp/open-artifact -path '*/whiteboard/scripts/cli.mjs'
+      - name: Apply experimental marker stroke preset to checkout
+        run: |
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          const dir='docs/releases/v0.1.0/sketch/db/elements';
+          let count=0;
+          for(const file of fs.readdirSync(dir)){
+            const path=dir+'/'+file, e=JSON.parse(fs.readFileSync(path,'utf8'));
+            if(e.type!=='stroke'||e.x>1600||e.x<0||e.y<0) continue;
+            const pts=e.points, span=Math.max(Math.max(...pts.filter((_,i)=>i%2===0))-Math.min(...pts.filter((_,i)=>i%2===0)),Math.max(...pts.filter((_,i)=>i%2===1))-Math.min(...pts.filter((_,i)=>i%2===1)));
+            const detail=/strike|_div|_cursor|_prompt/.test(file);
+            e.width=detail?Math.max(1.65,Math.min(2.4,e.width*1.4)):span>300?3.6:span>65?3.0:2.3;
+            fs.writeFileSync(path,JSON.stringify(e)+'\n');count++;
+          }
+          console.log('Native strokes restyled:',count);
+          JS
+          curl -fsSL https://raw.githubusercontent.com/excalidraw/excalidraw/master/packages/excalidraw/fonts/Excalifont/Excalifont-Regular-a88b72a24fb54c9f94e3b5fdaa7481c9.woff2 -o /tmp/excalifont.woff2
       - name: Open original boards
         run: |
           cli=$(find /tmp/open-artifact -path '*/whiteboard/scripts/cli.mjs' | grep '/codex/' | head -1)
@@ -40,6 +57,8 @@ jobs:
             page.on('pageerror',e=>console.log('PAGE ERROR',e.message));
             await page.goto(fs.readFileSync('/tmp/sketch-url','utf8').trim(),{waitUntil:'domcontentloaded'});
             await page.evaluate(()=>document.documentElement.dataset.theme='dark');
+            await page.addStyleTag({content:'@font-face{font-family:Excalifont;src:url(data:font/woff2;base64,'+fs.readFileSync('/tmp/excalifont.woff2').toString('base64')+') format("woff2")} .wb-text,.wb-text *{font-family:Excalifont,system-ui,sans-serif!important;letter-spacing:-0.25px}'});
+            await page.evaluate(()=>document.fonts.ready);
             await page.waitForTimeout(6000);
             console.log('theme',await page.evaluate(()=>({pinned:document.documentElement.dataset.theme,dark:matchMedia('(prefers-color-scheme: dark)').matches})));
             console.log('title',await page.title());
@@ -53,15 +72,15 @@ jobs:
             for(let i=0;i<5;i++){await page.mouse.wheel(0,-30);await page.waitForTimeout(120);}
             await page.keyboard.up('Control');
             await page.waitForTimeout(900);
-            await page.screenshot({path:'/tmp/capture/first-screen-full.png'});
-            await page.screenshot({path:'/tmp/capture/first-screen.png',clip:{x:405,y:75,width:1110,height:930}});
+            await page.screenshot({path:'/tmp/capture/marker-first-full.png'});
+            await page.screenshot({path:'/tmp/capture/marker-first.png',clip:{x:405,y:75,width:1110,height:930}});
             await browser.close();
           })().catch(e=>{console.error(e);process.exit(1)});
           JS
           node /tmp/sketch-browser/capture.cjs
       - uses: actions/upload-artifact@v4
         with:
-          name: sketch-v010-first-screen
+          name: sketch-v010-marker-preview
           path: /tmp/capture/*.png
           retention-days: 2
           if-no-files-found: error
