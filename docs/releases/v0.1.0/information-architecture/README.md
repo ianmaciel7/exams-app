@@ -1,4 +1,4 @@
-# Information architecture — v0.1.0
+# Information Architecture — v0.1.0
 
 This is the initial architecture baseline, not a user-validated final design. The whiteboard separates destinations, navigation, area content, and decisions and research into distinct regions. Destinations sit at the same visual level without asserting unconfirmed hierarchy; navigation arrows appear separately. Home is the entry point, not an assumed parent of every destination.
 
@@ -11,18 +11,18 @@ Information architecture is broader than a sitemap. The area descriptions and na
 - **User flows:** the separate [user flows board](../user-flows/) is a working draft of key task paths; the navigation overview here remains high-level.
 - **Research and decisions:** retain release decisions in [product.md](../product.md) and source material in [docs/references](../../../references/). The board holds concise findings and references, not duplicate full records.
 
-The [release stages board](../../../boards/release-stages/) tracks the status of these outputs. Both new artifacts need review and usability validation.
+The [release stages board](../../../boards/release-stages/) tracks these outputs. The [release decision register](../product.md#current-release-baseline) distinguishes recorded approvals from design baselines. Home's summary and competition selector, the weak-topic link, and detailed mixed-mock setup are design baselines. Navigation has been reviewed against the map. Usability validation remains pending.
 
 ## Destinations and navigation
 
 - **Home:** the entry page, separate from Performance. Show a compact progress summary and a way to choose a competition. If no progress exists, offer the competition selection path.
 - **Questions:** choosing a competition opens its questions. Ordinary practice stays within that competition; filters, including subject, topic and missed questions, appear on the same page. Each question shows the source fields available in the data.
-- **Performance:** accessed through the avatar menu at the bottom of the sidebar. Show accuracy and strengths and weaknesses by competition, subject and topic. Link a weak topic or missed questions to filtered practice in the relevant competition.
+- **Performance:** accessed through the avatar menu at the bottom of the sidebar. Show accuracy and strengths and weaknesses by competition, subject and topic. The design baseline links a weak topic to filtered practice in the relevant competition. A direct link to the missed-question filter is exploratory.
 - **Mock exams:** a function within Questions, using the same question-page structure. Provide entry to a new mock, previous mocks, and their results and progress. A competition-specific mock uses that competition's rules once verified. A mixed mock can draw from multiple competitions and is identified as mixed, not as an official exam. The detailed presentation of configuration, history and results remains for screen inventory and flows.
 
 ## Organization, labels and findability
 
-- **Organization:** Home, Questions, Mock exams and Performance are working destinations or areas. They are shown together for orientation, not to assert that each is a child of Home.
+- **Organization:** Home, Questions and Performance are the three base destinations. Mock exams is a nested area within Questions and uses the same structure.
 - **Labels:** These English names are the release's accepted working labels. The relationship and terminology of a competition and a particular exam or edition still need clarification against source materials.
 - **Content relationships:** Questions have source provenance and may be classified by subject and topic. Subjects or topics can recur across competitions; this is a findability observation, not a strict hierarchy or approved data model. Ordinary practice remains within one selected competition; mixing competitions is limited to mock exams.
 - **Navigation:** The avatar menu offers Performance; choosing a competition opens Questions; Questions offers access to Mock exams. Other cross-links are described below as path checks.
@@ -40,7 +40,7 @@ These are working distinctions for the interface, not an approved domain or data
 
 ## Mixed mock configuration
 
-For the initial design, offer a choice between a competition-specific mock and a mixed mock. A mixed mock lets the user choose two or more competitions and optionally narrow the questions by subject or topic; show the selected scope before starting. Questions retain their individual provenance. The exact selection controls, question count, ordering, scoring and timing are later interaction and rules decisions, not assumptions about an official exam.
+The design baseline offers competition-specific and mixed mocks. A mixed mock lets the user choose two or more competitions and optionally narrow the questions by subject or topic. Questions retain their individual provenance. The recorded decisions cover original or chosen question counts and timed sessions. The selection controls, mixed-mock composition, ordering, scoring and timer configuration remain open.
 
 ## Metrics and source evidence
 
@@ -50,9 +50,9 @@ The release record links the official Dataprev booklet and records its observed 
 
 ## Path checks
 
-- Home → select a competition → Questions → filter missed questions.
-- Avatar → Performance → weak topic → Questions scoped to its competition and topic.
-- Questions → Mock exams → select a specific or mixed scope → start, or open previous results.
+- [Flows 01–02](../user-flows/#primary-study-flows) cover Home → select a competition → Questions → filter missed questions.
+- [Flow 03](../user-flows/#03-weak-topic-practice-from-performance) covers Avatar → Performance → weak topic → Questions scoped to its competition and topic.
+- [Flows 04–06](../user-flows/#04-taking-a-competition-specific-mock-exam) cover Questions → Mock exams → start a competition-specific or mixed mock, or open previous results.
 
 These paths have been checked against the map, not tested with an interactive prototype. The screen inventory, user flows and prototype should validate missing states, detailed interactions and discoverability. For this personal first release, walk through these tasks with the owner and test them in the prototype. A small tree test can be used if finding a destination remains uncertain; formal card sorting is optional and should not be treated as a prerequisite.
 

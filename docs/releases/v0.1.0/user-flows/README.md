@@ -1,75 +1,47 @@
 # User Flows — v0.1.0
 
-This document specifies the core task paths, transitions, and user journeys for Exam App v0.1.0, accompanying the editable [user flows whiteboard](./).
+This document accompanies the editable [user flows whiteboard](./). The [release decision register](../product.md#current-release-baseline) records approvals and design baselines. The paths below await a prototype walkthrough and usability validation.
 
 ## Primary Study Flows
 
-### 1. Ordinary Question Practice
-The core loop for day-to-day studying within a single competition:
-```
-Home 
-  ──> Select Competition 
-  ──> Questions Page (List View)
-  ──> [Optional] Apply Subject / Topic Filter
-  ──> [Optional] Set Auto-Check Toggle (On / Off)
-  ──> Select Option for Question
-        ├── Auto-check ON  ──> Immediate correctness feedback
-        └── Auto-check OFF ──> Click "Verify" ──> Feedback displayed
-```
+### 01. Ordinary Question Practice
 
-### 2. Missed Questions Review ("Errei")
-Practicing questions previously answered incorrectly:
-```
-Questions Page (or link from Performance)
-  ──> Toggle "Errei" (Missed Questions) Filter
-  ──> View questions where latest checked attempt was incorrect
-  ──> Select and answer question
-        ├── If answered INCORRECTLY ──> Remains in "Errei" filter, attempt logged
-        └── If answered CORRECTLY   ──> Removed from "Errei" filter on reload, 
-                                        all attempts preserved in history & metrics
-```
+Home → select a competition → Questions in that competition → optionally filter or change the auto-check setting → choose an answer.
 
-### 3. Weak-Topic Practice from Performance
-Targeted remediation from the analytics dashboard:
-```
-Sidebar Bottom Avatar 
-  ──> Open Avatar Menu 
-  ──> Select "Performance"
-  ──> Review accuracy breakdown by Subject and Topic
-  ──> Identify weak area (low accuracy / high mistake count)
-  ──> Click weak topic link
-  ──> Navigates directly to Questions Page, pre-filtered to selected Competition & Topic
-```
+- Auto-check on → evaluate the selected answer immediately → show correctness.
+- Auto-check off → select Verify → evaluate the answer and show correctness.
 
-### 4. Taking a Mock Exam
-Simulating examination conditions:
-```
-Questions Page 
-  ──> Click "Mock Exam" action
-  ──> Configure session:
-        ├── Competition-specific (follows exam rules) OR Mixed (2+ competitions)
-        ├── Select question count (default official or custom)
-        └── Set timer (or use default official duration)
-  ──> Start timed session:
-        ├── Timer starts counting down
-        ├── Answer, skip, or change options at will
-        ├── If interrupted (navigating away / closing):
-        │     └── Timer automatically pauses, saved with remaining time
-  ──> Finish the session:
-        ├── User clicks "Finish Mock Exam" ──> Submit recorded answers
-        └── Time expires ──> Automatically submit answers recorded so far
-  ──> Results & Review screen (correct, incorrect, score, full review)
-```
+### 02. Missed Questions Review
 
-### 5. Resuming an Interrupted Mock
-```
-Home or Questions Page
-  ──> Prompt / banner: "You have an unfinished mock exam in progress"
-  ──> Click "Resume Mock Exam"
-  ──> Returns to session: timer resumes from remaining time, previous answers intact
-```
+Questions in the selected competition → apply the missed-question filter → answer an item whose latest evaluated attempt was incorrect.
+
+- Incorrect → the item remains eligible for the filter.
+- Correct → the item stops qualifying for the filter. The timing of the visible list refresh remains open.
+
+Both attempts stay in the history and count toward practice accuracy.
+
+### 03. Weak-Topic Practice from Performance
+
+Bottom sidebar avatar → avatar menu → Performance → choose a weak topic → Questions filtered to the topic and scoped to its competition. The weak-topic link is a design baseline.
+
+### 04. Taking a Competition-Specific Mock Exam
+
+Questions → Mock exams → choose the competition-specific scope and original or chosen question count → start a timed session in the Questions structure. Apply verified exam-specific rules. Leave answers blank or revisit and change answers as the verified rules allow.
+
+- Manual finish → submit recorded answers → show results and answer review.
+- Timeout → automatically submit recorded answers → show results and answer review.
+- Leave before completion → pause the timer → resume with the remaining time and recorded answers. The resume entry, interruption boundaries and restoration after reload or closure remain open.
+
+### 05. Viewing Previous Mock Results
+
+Questions → Mock exams → history → select an earlier mock → view results and progress. The history entry, empty state and presentation require review.
+
+### 06. Taking a Mixed Mock Exam
+
+Questions → Mock exams → choose mixed scope → select two or more competitions and a question count → optionally narrow by subject or topic → start a timed session identified as mixed. Use the same manual finish, timeout and interruption branches as [flow 04](#04-taking-a-competition-specific-mock-exam). Mixed setup is a design baseline. Composition, ordering, handling of insufficient questions and scoring remain open.
 
 ## Decisions & Verification Notes
-- **Attempt tracking:** Every attempt is persistently logged. A subsequent correct answer clears a question from the active missed-question list, but never erases prior mistakes from historical accuracy calculations.
-- **Timer policy:** Explicitly confirmed that mock exam timers pause upon leaving and resume upon return. Timeouts automatically submit.
-- **Navigation scope:** Ordinary question practice is strictly scoped to one competition at a time. Multi-competition combination is restricted exclusively to mixed mock exams.
+
+- Check that both evaluation modes update practice metrics and preserve attempts, and that a later correct attempt removes the question from the missed filter after refresh.
+- Check that ordinary practice stays within one competition and that mock correctness appears only after completion.
+- Verify official scoring, answer keys and navigation restrictions against each source. QConcursos behavior after a later correct attempt remains unverified. [QConcursos filter documentation](https://suporte.qconcursos.com/pt-BR/articles/12118570-como-usar-os-filtros-de-questoes)

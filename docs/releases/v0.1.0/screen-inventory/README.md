@@ -2,17 +2,18 @@
 
 This document defines the working screen inventory and key component states for Exam App v0.1.0, accompanying the editable [screen inventory whiteboard](./).
 
-It builds directly on the [Information Architecture](../information-architecture/) baseline and [Product Discovery](../product.md) decisions.
+It builds on the [Information Architecture](../information-architecture/) baseline and [release decision register](../product.md#current-release-baseline). Candidate states are design hypotheses for review. Implementation and usability validation remain pending.
 
 ## Base Screens
 
 ### 1. Home
 The personal study entry point, separate from the full Performance area.
 - **States:**
-  - *No recorded activity:* welcome summary, call to action to select a competition and start practicing.
-  - *Active study activity:* compact progress summary (recent accuracy, total attempts), quick shortcut to resume last competition or practice missed questions.
+  - *No recorded activity:* offer competition selection.
+  - *Recorded activity:* compact progress summary and competition selection. Summary metrics remain open.
+  - *No competitions available:* candidate empty state.
 - **Key regions:**
-  - Sidebar with active competition indicator and bottom avatar.
+  - Sidebar with a bottom avatar menu linking to Performance.
   - Primary content: compact metrics snapshot and competition selector.
 
 ### 2. Questions
@@ -22,7 +23,9 @@ The primary workspace for answering questions within the selected competition.
   - *Focus view:* single question at a time.
   - *Filtered view:* filtered by subject, topic, or missed questions ("Errei").
   - *Unanswered / active selection:* question statement, lettered options, and action controls (e.g., Verify when auto-check is off).
-  - *Answered / feedback state:* immediate correctness indicator, feedback, and explanation (in practice mode).
+  - *Evaluated answer:* show correctness after automatic checking or manual Verify.
+  - *No matching questions:* candidate empty state for an active filter.
+  - *Available source details:* show exam, year, examining board and organization where available.
 - **Controls & Filters:**
   - Positioned immediately below the Questions heading.
   - Subject and topic selectors.
@@ -33,19 +36,20 @@ The primary workspace for answering questions within the selected competition.
 #### Mock exam states within Questions
 Mock exams are hosted inside Questions, utilizing the same core question card structure.
 - **States:**
-  - *Configuration modal/panel:* choice between competition-specific and mixed scope, question count selector (defaulting to official exam count if known), timer duration setting.
-  - *Active timed session:* timer header (pauses when leaving, resumes on return), navigation grid/selector, blank option support, ability to change answers before submission.
-  - *Results & Review:* shown only upon completion or time expiration; detailed breakdown of correct/incorrect answers, score, and answer key review.
-  - *Interrupted session:* paused state with option to resume remaining time or abandon.
+  - *Setup:* competition-specific or mixed scope and original or chosen question count. The mixed baseline starts with two or more competitions. Setup controls and timer defaults remain open.
+  - *Active timed session:* leave questions blank. Revisit and change answers subject to verified exam-specific restrictions. Correctness is withheld until completion.
+  - *Results & Review:* review recorded answers and correctness after manual finish or automatic submission at timeout. Scoring depends on verified rules.
+  - *Interrupted session:* pause when leaving and resume with remaining time. The resume entry and interruption boundaries remain open.
+  - *Previous mocks:* design baseline for opening earlier results. The history presentation and empty state require review.
 
 ### 3. Performance
-The dedicated analytics and progress area, accessed exclusively via the bottom avatar menu in the sidebar.
+The dedicated analytics and progress area, reached through the bottom avatar menu in the sidebar.
 - **States:**
   - *Empty / small sample:* cautious presentation noting insufficient attempts.
   - *Detailed analytics:* overall accuracy (correct attempts / total recorded attempts), breakdown by competition, subject, and topic, with distinct metrics for ordinary practice vs. mock exams.
-  - *Drill-down action:* clicking a weak topic or missed questions directly navigates to filtered practice in Questions.
+  - *Weak-topic link:* the design baseline opens filtered Questions in the relevant competition.
 
 ## Open Questions & Review Items
 - Exact pagination and loading behavior for long question lists; the default scrollable multiple-question view, quantity selector, and one-question option are already decided.
 - Exact scoring rules for official competitions vs. mixed mock exams.
-- Persistence schema for interrupted sessions across browser restarts.
+- Filter refresh after evaluation, mock setup and history presentation, and restoration after reload or closure.

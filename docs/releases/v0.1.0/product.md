@@ -2,6 +2,45 @@
 
 This record preserves the thinking for this release as it was captured on 2026-11-24. It is a working discovery record, not evidence that the release is implemented. `PRODUCT.md` describes the evolving product; this file preserves release-specific context even if that description later changes.
 
+## Current release baseline
+
+v0.1.0 focuses on the product owner's study workflow: practice questions, run mock exams, and track progress. The register below consolidates the dated history as of 2026-11-26. **Recorded approval** identifies an explicit user request, acceptance, or correction reported in that history. The original messages were unavailable for independent verification in this review. **Design baseline** identifies a direction documented for design and walkthroughs. **Proposed** requires separate user confirmation. Implementation and usability validation are pending. See [issue #1, work package 1](https://github.com/ianmaciel7/exams-app/issues/1) and the [shared terminology](../../../GLOSSARY.md).
+
+| ID | Status | Decision | Dated source and supersession | Affected artifacts |
+| --- | --- | --- | --- | --- |
+| V010-01 | Recorded approval | Practice uses one selected competition. Mixing multiple competitions is allowed only in mock exams, which are identified as mixed. | 2026-11-25, Competition scope. Supersedes combined practice, its cross-competition filters, and single-competition-only mocks. | IA, Screen Inventory, User Flows |
+| V010-02 | Recorded approval | Home is the entry point and Performance is a distinct destination. The bottom-sidebar avatar opens a menu linking to Performance. The personal prototype has no separate profile page. | 2026-11-25, IA follow-up, IA review corrections, and Sidebar account and auto-check. Supersedes Performance on startup and the top avatar. | IA, Screen Inventory, Sketch |
+| V010-03 | Design baseline | Home contains a compact progress summary and competition selection. Selecting a competition opens Questions. Weak-topic links lead to practice for the relevant topic. | 2026-11-24, Navigation direction, and 2026-11-25, IA baseline and IA artifact review. | IA, Screen Inventory, User Flows |
+| V010-04 | Recorded approval | Practice offers automatic checking or manual Verify. Filters are below Questions and the auto-check toggle is nearby. The default scrollable list offers quantity and single-question controls. | 2026-11-25, Answer checking, Questions sketch feedback, and Sidebar account and auto-check. Resolves control and placement questions in earlier entries. | Screen Inventory, User Flows, Sketch |
+| V010-05 | Recorded approval | The missed filter uses the latest evaluated attempt. A later correct attempt removes the question from the filter, and earlier attempts remain in history and metrics. Accuracy counts all recorded attempts, shows correct and total counts, and distinguishes practice from mock exams. | 2026-11-25, Missed-question filter and IA review corrections. Resolves the calculation and filter semantics. | Screen Inventory, User Flows, Performance |
+| V010-06 | Recorded approval | Show exam, year, examining board, and organization when available. Leave unavailable metadata absent. | 2026-11-25, IA review corrections, accepting the available fields proposed in IA proposal for user review. | Screen Inventory, Sketch |
+| V010-07 | Recorded approval | Mock exams live within Questions and use the same question structure. Support original or chosen counts, a timer, blank answers, revisiting and changing answers subject to verified exam-specific restrictions, and end-of-mock results and answer review. | 2026-11-25, Mock exam placement, Answer checking, and Mock exam flow. Resolves the mock entry and separate-structure questions. | IA, Screen Inventory, User Flows |
+| V010-08 | Recorded approval | Pause the timer when leaving a mock and resume with the remaining time. At timeout, submit recorded answers automatically. | 2026-11-25, Time limit and Timer on interruption. Supersedes the earlier ambiguity about pausing. | Screen Inventory, User Flows |
+| V010-09 | Design baseline | Mixed-mock setup selects at least two competitions, with optional subject or topic narrowing. A competition-specific mock follows verified official rules for the chosen exam. | 2026-11-25, IA baseline, Competition scope, and Official exam source. | IA, Screen Inventory, User Flows |
+| V010-10 | Design baseline | Use simple HTML and file-based question data for the prototype. Next.js, Firebase administration and any future Capacities-inspired object structure are outside this release baseline. | 2026-11-24, Initial direction. | Prototype, root product context |
+
+### Question component proposals
+
+The 2026-11-25 **Question Component States and Interaction Rules** history entry called the following behaviors confirmed. Issue #1 and the audited [Sketch scope note](https://github.com/ianmaciel7/exams-app/blob/3377f011516b85fda24512b14b3e6ddaaa186531/docs/releases/v0.1.0/sketch/README.md) identify them as exploratory without separate approval evidence. This 2026-11-26 reconciliation supersedes that entry's approval wording for these behaviors. V010-05 still governs preservation of attempts for metrics and history, and V010-06 still governs source fields.
+
+| ID | Status | Sketch behavior requiring confirmation |
+| --- | --- | --- |
+| V010-11 | Proposed | Make footer drawers mutually exclusive within each question. |
+| V010-12 | Proposed | Keep other question cards open when a drawer opens. |
+| V010-13 | Proposed | Make a verified attempt immutable through the question component. |
+| V010-14 | Proposed | Define how the retry control creates another attempt and presents earlier attempts. |
+| V010-15 | Proposed | Require restoring a struck option before selecting it. |
+
+Reference captures document historical appearances. Resource drawers, strike controls, comments, notes, reporting, lessons, notebooks and offline behavior remain outside committed scope pending approval.
+
+### Open questions and acceptance checks
+
+- **Source data and official rules.** Review the available files, establish ingestion and missing-field handling, and verify official answer keys, scoring, amendments and navigation restrictions for each supported exam. Mixed-mock composition, ordering, insufficient-question handling and scoring remain open.
+- **Detailed interactions.** Establish the behavior for filter refresh after evaluation, mock setup and history presentation, interruption boundaries, and state restoration after reload or closure. The data store and migration strategy remain open.
+- **Navigation and practice.** Walk through Home, select a competition, and verify that all ordinary practice items belong to it. Reach Performance through the bottom avatar, return to practice from a weak topic, and verify both auto-check and manual Verify.
+- **Attempts and provenance.** Evaluate an incorrect answer followed by a correct one. Verify the missed-filter result after refresh, two retained attempts, and one correct attempt out of two in practice metrics. Check that mock metrics are distinct and that a fixture with missing metadata shows only available provenance.
+- **Mock exams.** Verify competition-specific and mixed setup from Questions. Exercise blank answers, an interrupted session with remaining time, and timeout with recorded answers. Verify that correctness is withheld until completion and that restrictions apply only when supported by exam rules.
+
 ## Initial direction
 
 - **User:** the product owner, studying for a public-service competitive examination.

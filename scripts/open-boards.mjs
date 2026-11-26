@@ -2,6 +2,9 @@ import { cpSync, existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync
 import { homedir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
+
+const projectRoot = fileURLToPath(new URL('../', import.meta.url));
 
 // OPEN_ARTIFACT_WHITEBOARD_CLI can point to another installation of the CLI.
 function findCli() {
@@ -44,7 +47,7 @@ function prepareWhiteboardAssets(cli) {
   ];
   const source = candidates.find((path) => existsSync(join(path, 'editors', 'whiteboard', 'index.html')));
   if (!source) throw new Error(`Could not locate whiteboard assets for ${cli}`);
-  const cache = resolve('node_modules/.cache/exam-app-open-artifact');
+  const cache = join(projectRoot, 'node_modules', '.cache', 'exam-app-open-artifact');
   const assets = join(cache, 'assets');
   mkdirSync(join(assets, 'editors'), { recursive: true });
   cpSync(join(source, 'editors', 'whiteboard'), join(assets, 'editors', 'whiteboard'), { recursive: true, force: true });
@@ -65,45 +68,58 @@ function prepareWhiteboardAssets(cli) {
     setInterval(syncExamAppBoardTitle, 5000);
   </script>`;
   if (!html.includes('</head>')) throw new Error('Whiteboard editor has no head element');
-  writeFileSync(index, html.replace('</head>', `${script}\n  </head>`));
+  writeFileSync(index, html.replace('</head>', `${script}\n    <script src="./exam-app-board-links.js"></script>\n  </head>`));
   process.env.OPEN_ARTIFACT_ASSETS = assets;
   process.env.OPEN_ARTIFACT_TYPE_SERVER_HOME = join(cache, 'server');
+  return join(assets, 'editors', 'whiteboard', 'exam-app-board-links.js');
 }
 
 try {
   const cli = findCli();
-  prepareWhiteboardAssets(cli);
+  const linksScript = prepareWhiteboardAssets(cli);
   const boards = {
-    overview: 'docs/boards/overview',
-    releases: 'docs/boards/release-stages',
-    hub: 'docs/boards/project-hub',
-    architecture: 'docs/releases/v0.1.0/information-architecture',
-    screens: 'docs/releases/v0.1.0/screen-inventory',
-    flows: 'docs/releases/v0.1.0/user-flows',
-    sketch: 'docs/releases/v0.1.0/sketch',
+    overview: ['art_examappoverview', 'docs/boards/overview'],
+    releases: ['art_examappreleasestages', 'docs/boards/release-stages'],
+    hub: ['art_examappprojecthub', 'docs/boards/project-hub'],
+    architecture: ['art_examappinformationarchitecturev010', 'docs/releases/v0.1.0/information-architecture'],
+    screens: ['art_examappscreeninventoryv010', 'docs/releases/v0.1.0/screen-inventory'],
+    flows: ['art_examappuserflowsv010', 'docs/releases/v0.1.0/user-flows'],
+    sketch: ['art_examappsketchv010', 'docs/releases/v0.1.0/sketch'],
+    components: ['art_examappquestioncomponentsv010', 'docs/releases/v0.1.0/components/question'],
   };
-  const urls = {};
-  for (const [name, path] of Object.entries(boards)) {
-    const root = resolve(path);
+  for (const [, path] of Object.values(boards)) {
+    const root = join(projectRoot, path);
     if (!existsSync(join(root, 'db', 'board', 'meta.json'))) throw new Error(`Board not found: ${root}`);
-    urls[name] = JSON.parse(call(cli, ['open', root, '--type', 'whiteboard', '--json'])).url;
   }
-  const updateLinks = (root, links) => call(cli, [
-    'write-db', resolve(root),
-    JSON.stringify(links.map(([id, href]) => ({ op: 'update', path: `elements/${id}`, data: { href } }))),
-  ]);
-  updateLinks(boards.hub, [
-    ['e5', urls.overview],
-    ['e7', urls.releases],
-    ['e11', urls.architecture],
-    ['e12', urls.screens],
-    ['e13', urls.flows],
-    ['e14', urls.sketch],
-  ]);
-  updateLinks(boards.releases, [['e24', urls.architecture], ['e25', urls.screens], ['e26', urls.flows], ['e27', urls.sketch]]);
+  const urls = {};
+  const routes = {};
+  for (const [name, [id, path]] of Object.entries(boards)) {
+    const root = join(projectRoot, path);
+    const opened = JSON.parse(call(cli, ['open', root, '--type', 'whiteboard', '--id', id, '--json']));
+    if (opened.id !== id) throw new Error(`Open Artifact did not register the expected ID for ${root}`);
+    urls[name] = opened.url;
+    routes[`/a/${id}`] = new URL(opened.url).pathname;
+  }
+
+  // Native links open /a/<id> through the shell. The standalone server serves board
+  // URLs directly, so translate those routes in the local viewer before opening.
+  writeFileSync(linksScript, `(() => {
+    const routes = ${JSON.stringify(routes)};
+    const open = window.open;
+    window.open = function (url, ...options) {
+      if (typeof url === 'string' && url && URL.canParse(url, location.href)) {
+        const destination = new URL(url, location.href);
+        if (destination.origin === location.origin && Object.hasOwn(routes, destination.pathname)) {
+          destination.pathname = routes[destination.pathname];
+          url = destination.href;
+        }
+      }
+      return open.call(this, url, ...options);
+    };
+  })();\n`);
   console.log('\nExam App boards are ready:');
   for (const [name, url] of Object.entries(urls)) console.log(`${name}: ${url}`);
-  console.log('\nOpen the hub URL in your browser. Links are local and may change after a server restart.');
+  console.log('\nOpen the hub URL in your browser. Run this launcher again after the local server stops.');
 } catch (error) {
   console.error(`Could not open the boards: ${error.message}`);
   process.exitCode = 1;
