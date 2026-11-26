@@ -9,38 +9,42 @@ It builds on the [Information Architecture](../information-architecture/) baseli
 ### 1. Home
 The personal study entry point, separate from the full Performance area.
 - **States:**
-  - *No recorded activity:* offer competition selection.
-  - *Recorded activity:* compact progress summary and competition selection. Summary metrics remain open.
+  - *No recorded activity:* offer competition selection cards.
+  - *Recorded activity:* compact progress summary and competition selection cards. Summary metrics remain open.
   - *No competitions available:* candidate empty state.
 - **Key regions:**
-  - Collapsible competition switcher with abstract content icons in the Sketch, recognizable search and collapse controls, and a compact footer.
-  - Performance directly above the footer and one Settings gear in the footer. Mock exams are entered within Questions.
-  - Primary content: compact metrics snapshot and competition cards.
+  - Unified competition switcher sidebar across all screens: header with Exam App title, search button, and collapse toggle; body strictly containing competition items DATAPREV and PPSA with distinct semantic icons; zero sidebar navigation lists (no Home, Questions, or Performance list items) and no unapproved footer controls.
+  - Primary content: compact metrics snapshot and competition cards to start practice. Mock exams are entered within Questions.
 
-### 2. Questions
-The primary workspace for answering questions within the selected competition.
+### 2. Questions Workspace
+The primary workspace for answering questions within the active selected competition, framed by the unified competition-centric sidebar.
 - **States:**
   - *Unanswered / active selection:* question statement and lettered options.
-  - *Evaluated answer:* show correctness after evaluation.
+  - *Evaluated answer:* immediate correctness feedback after answer evaluation.
   - *Available source details:* show exam, year, examining board and organization where available.
 - **Header:**
-  - Active competition heading.
+  - Active competition heading (without redundant Questions subtitle).
   - Mock exam entry button: opens mock exam configuration.
 
-#### Mock exam states within Questions
-Mock exams are hosted inside Questions, utilizing the same core question card structure.
+### 2.B. Questions with Collapsed Sidebar
+Workspace maximization rail (icon rail) expanding reading viewport width.
+- **Header:** search button and rail expansion toggle.
+- **Body:** compact competition switcher anchors for DATAPREV and PPSA.
+
+### 3. Mock Exams
+Assessment flow hosted inside Questions, utilizing the same core question card structure.
 - **States:**
-  - *Setup:* competition-specific or mixed scope and original or chosen question count. The mixed baseline starts with two or more competitions. Setup controls and timer defaults remain open.
-  - *Active timed session:* leave questions blank. Revisit and change answers subject to verified exam-specific restrictions. Correctness is withheld until completion.
+  - *Setup modal:* launched from Questions header action. Competition-specific or mixed scope and original or chosen question count. The mixed baseline starts with two or more competitions. Setup controls and timer defaults remain open.
+  - *Timed session:* distraction-free focus shell. Leave questions blank. Revisit and change answers subject to verified exam-specific restrictions. Correctness is withheld until completion.
   - *Results & Review:* review recorded answers and correctness after manual finish or automatic submission at timeout. Scoring depends on verified rules.
   - *Interrupted session:* pause when leaving and resume with remaining time. The resume entry and interruption boundaries remain open.
   - *Previous mocks:* design baseline for opening earlier results. The history presentation and empty state require review.
 
-### 3. Performance
-The dedicated analytics and progress area, reached directly above the sidebar footer.
+### 4. Performance & Analytics
+The dedicated analytics and progress view, framed by the unified competition-centric sidebar.
 - **States:**
   - *Empty / small sample:* cautious presentation noting insufficient attempts.
-  - *Detailed analytics:* overall accuracy (correct attempts / total recorded attempts), breakdown by competition, subject, and topic, with distinct metrics for ordinary practice vs. mock exams.
+  - *Detailed analytics:* overall accuracy (correct attempts / total recorded attempts), breakdown by competition, subject, and topic, with distinct metrics for ordinary practice vs. mock exams. Filtered weak-topic practice is an unprioritized idea outside v0.1.0.
 
 ## Open Questions & Review Items
 - Practice evaluation trigger and loading behavior.

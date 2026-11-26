@@ -6,7 +6,7 @@ This document accompanies the editable [user flows whiteboard](./). The [release
 
 ### 01. Ordinary Question Practice
 
-Home → select a competition → Questions in that competition → choose an answer → see correctness after evaluation. The evaluation trigger remains open.
+Home or sidebar competition switcher → select a competition → Questions in that competition → choose an answer → see immediate correctness feedback after answer evaluation. The evaluation trigger remains open.
 
 
 ### 02. Missed Questions Review (unprioritized idea)
@@ -17,7 +17,7 @@ The earlier flow used a Status filter or a Performance review link to find quest
 
 ### 03. Weak-Topic Practice from Performance (unprioritized idea)
 
-Performance retains its direct sidebar entry and topic metrics. The earlier link to filtered Questions is outside v0.1.0.
+Performance retains its topic metrics as a conceptual view. The sidebar remains strictly a competition switcher across all application screens. The earlier link to filtered Questions is outside v0.1.0.
 
 ### 04. Taking a Competition-Specific Mock Exam
 

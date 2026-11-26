@@ -15,17 +15,17 @@ The [release stages board](../../../boards/release-stages/) tracks these outputs
 
 ## Destinations and navigation
 
-- **Home:** the entry page, separate from Performance. Show a compact progress summary and a way to choose a competition. If no progress exists, offer the competition selection path.
-- **Questions:** selecting a competition in the sidebar opens its questions workspace. Ordinary practice stays within that competition. Each question shows its available source fields.
-- **Performance:** accessed directly above the sidebar footer. Show accuracy and strengths and weaknesses by competition, subject and topic. Filtered weak-topic practice and missed-question review links are unprioritized ideas.
+- **Home:** the entry page, separate from Performance. Show a compact progress summary and a way to choose a competition. If no progress exists, offer the competition selection path. Framed by the unified competition-centric sidebar.
+- **Questions:** selecting a competition in the sidebar opens its questions workspace. Ordinary practice stays within that competition. Each question shows its available source fields. Framed by the unified competition-centric sidebar.
+- **Performance:** dedicated analytics and progress view, separate from Questions. Show accuracy and strengths and weaknesses by competition, subject and topic. Filtered weak-topic practice and missed-question review links are unprioritized ideas. Framed by the unified competition-centric sidebar.
 - **Mock exams:** accessible directly within Questions, using the same question-page structure. Provide entry to a new mock, previous mocks, and their results and progress. A competition-specific mock uses that competition's rules once verified. A mixed mock can draw from multiple competitions and is identified as mixed, not as an official exam. The detailed presentation of configuration, history and results remains for screen inventory and flows.
 
 ## Organization, labels and findability
 
-- **Organization:** Home, Questions and Performance are the three base destinations. Mock exams is an assessment overlay within Questions, reached through its header action. The sidebar is structured around the user's active competition cards.
+- **Organization:** Home, Questions and Performance are the three base conceptual destinations. Mock exams is an assessment overlay within Questions, reached through its header action. The sidebar is unified across all screens strictly as a competition switcher, listing active competition cards.
 - **Labels:** These English names are the release's accepted working labels. The relationship and terminology of a competition and a particular exam or edition still need clarification against source materials.
 - **Content relationships:** Questions have source provenance and may be classified by subject and topic. Subjects or topics can recur across competitions; this is a findability observation, not a strict hierarchy or approved data model. Ordinary practice remains within one selected competition; mixing competitions is limited to mock exams.
-- **Navigation:** the sidebar lists active competitions and opens Questions for the selected competition. Performance is accessible above the footer and Settings uses one footer gear. Enter Mock exams from Questions.
+- **Navigation:** The sidebar is strictly a competition switcher across all application screens: header with Exam App, search button, and collapse toggle; body containing competition switcher cards (DATAPREV, PPSA). There are zero sidebar navigation lists (no Home, Questions, or Performance list items in the sidebar) and no unapproved footer controls. Home, Questions, and Performance represent conceptual views. Selecting a competition in the sidebar switches the active competition context. Enter Mock exams from Questions.
 - **Findability:** competition selection provides entry to Questions. The mixed mock configuration may narrow its scope by subject or topic as a design baseline.
 
 ### Working terminology
@@ -51,7 +51,7 @@ The release record links the official Dataprev booklet and records its observed 
 ## Path checks
 
 - [Flow 01](../user-flows/#01-ordinary-question-practice) covers Home → select a competition → Questions → answer.
-- The sidebar opens Performance directly to view accuracy and topic metrics.
+- Performance provides access to view accuracy and topic metrics.
 - [Flows 04–06](../user-flows/#04-taking-a-competition-specific-mock-exam) cover Questions → Mock exams → start a competition-specific or mixed mock, or open previous results.
 
 These paths have been checked against the map, not tested with an interactive prototype. The screen inventory, user flows and prototype should validate missing states, detailed interactions and discoverability. For this personal first release, walk through these tasks with the owner and test them in the prototype. A small tree test can be used if finding a destination remains uncertain; formal card sorting is optional and should not be treated as a prerequisite.
@@ -67,4 +67,4 @@ These paths have been checked against the map, not tested with an interactive pr
 
 ## Current workspace refinements
 
-The competition heading omits a redundant Questions subtitle. The collapsed rail preserves access to competitions and Performance. Question metadata uses link affordances when fields are present. Exact navigation targets remain open. The Questions toolbar (filters, Auto-check, sorting, result count, questions per page, and List/One) and per-question Statistics are unprioritized ideas with no release assignment. See the [release decision register](../product/product.md#current-release-baseline).
+The competition heading omits a redundant Questions subtitle. The collapsed rail strictly contains the App logo, collapse toggle, and active competition items (DATAPREV, PPSA), with zero sidebar navigation lists or footer controls per V010-20. Question metadata uses link affordances when fields are present. Exact navigation targets remain open. The Questions toolbar (filters, Auto-check, sorting, result count, questions per page, and List/One) and per-question Statistics are unprioritized ideas with no release assignment. See the [release decision register](../product/product.md#current-release-baseline).
