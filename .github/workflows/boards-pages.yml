@@ -11,7 +11,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
         with:
@@ -39,6 +39,10 @@ jobs:
           cp docs/portal/index.html _site/index.html
           touch _site/.nojekyll
           NODE_PATH=/tmp/board-browser/node_modules node scripts/capture-board-portal.cjs
+      - name: Build and validate optional native Playground
+        continue-on-error: true
+        timeout-minutes: 15
+        run: NODE_PATH=/tmp/board-browser/node_modules node scripts/build-native-playground.cjs
       - name: Upload downloadable portal
         uses: actions/upload-artifact@v4
         with:
