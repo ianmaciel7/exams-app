@@ -31,4 +31,4 @@ The eight states remain: unanswered, end-of-list pagination, selected before sub
 
 English labels are now consistent across all eight variants. A separate initial unselected state may be needed depending on the [initial-selection decision](../product/README.md#open-product-decisions); do not silently assume a default. Revisiting evaluated answers is also unresolved. No additional variant is approved by this inventory update.
 
-Question anatomy: title, statement, alternatives, left-aligned action/result row, then a separator between complete questions. No separator between the last option and Answer. The final question is followed by a single pagination boundary. See [Sketch](../sketch/README.md#question-grouping-and-action-placement--2026-11-27).
+Question anatomy: title, statement, alternatives, left-aligned action/result row, then whitespace between complete questions. No separator above or below Answer or result. Whitespace also separates the final question from pagination. See [Sketch](../sketch/README.md#question-grouping-and-action-placement--2026-11-27).
