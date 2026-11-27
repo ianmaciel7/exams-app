@@ -2,7 +2,7 @@ import {readFileSync,writeFileSync} from 'node:fs';
 import {resolve} from 'node:path';
 import {pathToFileURL} from 'node:url';
 const source='docs/releases/v0.1.0/current-state.json';
-function outputs(s){
+export function outputs(s){
  const base="docs/releases/v0.1.0/",out={};
  const txt=(root,id,text)=>out[root+"/db/elements/"+id+".json"]={text};
  const tbl=(root,id,heads,rows)=>out[root+"/db/elements/"+id+".json"]={rows:Object.fromEntries([heads,...rows].map((r,i)=>["r"+i,{at:i,...Object.fromEntries(r.map((v,k)=>["c"+k,v]))}]))};
@@ -22,7 +22,7 @@ function outputs(s){
  txt(rel,"release_v010_status",s.stageNote);
  txt(hub,"summary",`${s.release} · Mid-Fidelity in progress · ${s.variantCount} variants`);
  txt(hub,"scope",s.hubScope);
- txt(hub,"pending","**Pending review**\nOwner visual approval of Mid-Fidelity and capture review of new revisions. Ordering, empty sidebar, phone drawer, navigation data/recovery, uncertain submission outcomes and localization remain open. Later stages not started.");
+ txt(hub,"pending","**Pending review**\nOwner visual approval of Mid-Fidelity and capture review of new revisions. "+s.pendingDecisions.map(x=>x[0]).join("; ")+". Later stages not started.");
  for(const [i,x] of s.stages.filter(x=>x.board).entries()){
   txt(hub,"stage_status_"+i,x.status);
   for(const [root,id] of [[hub,"stage_"+i],[rel,"stage_link_"+i]])out[root+"/db/elements/"+id+".json"]={title:x.name,href:"open-artifact://artifact/"+x.artifactId};

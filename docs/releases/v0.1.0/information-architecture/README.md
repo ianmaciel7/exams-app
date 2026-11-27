@@ -1,6 +1,6 @@
 # Information Architecture — v0.1.0
 
-Current stage: Mid-Fidelity Wireframe — in progress; 21 variants; native capture and owner visual review pending.
+Current stage: Mid-Fidelity Wireframe — in progress; 21 variants; owner visual approval pending.
 
 One workspace, not 21 destinations. Left sidebar locates competitions; main region contains the vertically scrolling list. First available item selected automatically on entry. Ghost collapse/expand is available across desktop and narrow states, independent of question lifecycle; the collapsed expand icon is hidden at pointer rest and revealed on hover/focus. Collapse preserves selection, page, scroll context and answers. Changing competition or page discards responses.
 

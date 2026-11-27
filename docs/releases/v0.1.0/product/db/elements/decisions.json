@@ -45,7 +45,7 @@
     },
     "r6": {
       "at": 6,
-      "c0": "Failure",
+      "c0": "Submission failure",
       "c1": "Keep choice; retry Answer; prevent duplicates"
     },
     "r7": {
@@ -57,6 +57,16 @@
       "at": 8,
       "c0": "Collapse",
       "c1": "Preserve selection, page, scroll and answers"
+    },
+    "r9": {
+      "at": 9,
+      "c0": "Question load failure",
+      "c1": "Manual Retry reloads selected list"
+    },
+    "r10": {
+      "at": 10,
+      "c0": "Feedback",
+      "c1": "Correct option and user's wrong choice identified"
     }
   },
   "head": true,

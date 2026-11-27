@@ -56,7 +56,7 @@
     "r8": {
       "at": 8,
       "c0": "Page/competition change",
-      "c1": "Discard prior answers; load target"
+      "c1": "Discard prior answers; reset page scroll on page change"
     },
     "r9": {
       "at": 9,

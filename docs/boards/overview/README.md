@@ -30,4 +30,4 @@
 
 Exact original boards, documentation, sketch geometry and earlier decisions remain in the archive. Superseded alternatives are not current requirements. The active release is v0.1.0; the seven populated release-specific boards cover Product, Information Architecture, Screen Inventory, User Flows, Sketch, Low-Fidelity and Mid-Fidelity. Only the selected competition/question workspace is in scope; other ideas remain candidates. See [v0.1.0](../../releases/v0.1.0/README.md).
 
-Current stage: Mid-Fidelity Wireframe — in progress; 21 variants; native capture and owner visual review pending.
+Current stage: Mid-Fidelity Wireframe — in progress; 21 variants; owner visual approval pending.

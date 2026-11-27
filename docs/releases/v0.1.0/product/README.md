@@ -1,6 +1,6 @@
 # Product — v0.1.0
 
-Current stage: Mid-Fidelity Wireframe — in progress; 21 variants; native capture and owner visual review pending.
+Current stage: Mid-Fidelity Wireframe — in progress; 21 variants; owner visual approval pending.
 
 ## Current release baseline
 

@@ -21,6 +21,8 @@ jobs:
           node-version: '22'
       - name: Check board integrity
         run: node scripts/check-boards.mjs
+      - name: Test release projections
+        run: node --test scripts/sync-release-state.test.mjs
       - name: Download official Open Artifact release
         run: |
           curl -fsSL https://github.com/JimLiu/open-artifact/releases/download/v0.16.3/open-artifact-plugins.zip -o /tmp/open-artifact.zip

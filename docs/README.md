@@ -12,7 +12,7 @@ Follow [AGENTS.md](../AGENTS.md) and [whiteboard guidelines](boards/whiteboard-g
 
 ## Current release
 
-Current stage: Mid-Fidelity Wireframe — in progress; 21 variants; native capture and owner visual review pending.
+Current stage: Mid-Fidelity Wireframe — in progress; 21 variants; owner visual approval pending.
 
 ## Capture evidence
 

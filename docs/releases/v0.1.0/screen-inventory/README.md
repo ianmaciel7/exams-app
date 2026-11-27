@@ -1,6 +1,6 @@
 # Screen Inventory — v0.1.0
 
-Current stage: Mid-Fidelity Wireframe — in progress; 21 variants; native capture and owner visual review pending.
+Current stage: Mid-Fidelity Wireframe — in progress; 21 variants; owner visual approval pending.
 
 One workspace, not separate destinations. Main region contains a scrolling question list, left-aligned Answer/result, and end-of-list pagination. The Ghost control is available across states; collapsed desktop pointer-rest hides its icon. External component specimens are not additional variants.
 

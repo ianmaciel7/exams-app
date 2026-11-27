@@ -26,6 +26,8 @@ export function checkReleaseConsistency(){
   if(path==='docs/boards/overview'&&links.some(e=>e.y+linkH+24>0))errors.push('Ideas Board navigation intrudes into header');
  }
  const state=json(join(release,'current-state.json'));
+ for(const p of ['PRODUCT.md',join(release,'README.md'),join(release,'product/README.md'),join(release,'screen-inventory/README.md'),join(release,'user-flows/README.md')])if(!read(p).includes(state.approved))errors.push('Approved product decisions drift: '+p);
+ for(const p of ['PRODUCT.md','DESIGN.md',join(release,'README.md'),join(release,'product/README.md'),join(release,'screen-inventory/README.md'),join(release,'user-flows/README.md')])if(!read(p).includes(state.open))errors.push('Open product decisions drift: '+p);
  const meta=json(join(release,'mid-fidelity-wireframe/db/board/meta.json'));
  const count=meta.order.filter(id=>id.endsWith('_note')).length;
  if(state.inventory.map(x=>x.id).join('|')!==components.states.join('|'))errors.push('Canonical inventory order drift');

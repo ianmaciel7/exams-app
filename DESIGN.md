@@ -2,7 +2,7 @@
 
 ## Overview
 
-Current stage: Mid-Fidelity Wireframe — in progress; 21 variants; native capture and owner visual review pending.
+Current stage: Mid-Fidelity Wireframe — in progress; 21 variants; owner visual approval pending.
 
 Operate mode: question content is primary; navigation supports the task. The current reference is [Mid-Fidelity](docs/releases/v0.1.0/mid-fidelity-wireframe/README.md), not the historical Sketch. No production visual identity, typography, palette or design tokens are established.
 
@@ -40,4 +40,4 @@ Use one external, continuous 2-unit neutral focus outline with a 3-unit clear se
 
 Answer and Retry use a stable 112 × 34 canvas footprint. Default #333333, hover #262626, pressed #191919, disabled #f4f4f4, pending #eeeeee. The four-state comparison is shown against the same light surface as the workspace; disabled and pending remain in their corresponding workspace variants. These neutral values are not final tokens. Avoid bounce, scaling, decorative shadows, ripple, geometry changes, and animation-dependent feedback. The collapsed hover and keyboard focus specimens are separate: hover reveals the icon with subtle surface feedback; keyboard focus reveals the icon with a single clear outline. Touch retains an accessible visible alternative.
 
-References: [W3C Focus Visible](https://www.w3.org/WAI/WCAG22/Understanding/focus-visible), [Focus Appearance](https://www.w3.org/WAI/WCAG22/Understanding/focus-appearance), [Non-text Contrast](https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast), [Atlassian focus ring](https://atlassian.design/components/focus-ring/usage), [Archive design foundations](https://github.com/ianmaciel7/exams-app-archive/blob/05a3ebd9dfae12f0346cb9f8e34181b8a4614288/docs/references/ui-ux-research-sources/design-foundations-and-state-transitions-2026-11-25.md). Baseline native capture `670a2d1` demonstrated the previous bulky nested outline. Revised native captures pending. All 21 workspace variants remain.
+References: [W3C Focus Visible](https://www.w3.org/WAI/WCAG22/Understanding/focus-visible), [Focus Appearance](https://www.w3.org/WAI/WCAG22/Understanding/focus-appearance), [Non-text Contrast](https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast), [Atlassian focus ring](https://atlassian.design/components/focus-ring/usage), [Archive design foundations](https://github.com/ianmaciel7/exams-app-archive/blob/05a3ebd9dfae12f0346cb9f8e34181b8a4614288/docs/references/ui-ux-research-sources/design-foundations-and-state-transitions-2026-11-25.md). Historical review: native capture `670a2d1` demonstrated the previous bulky nested outline. Subsequent captures were generated; current capture provenance and review status are recorded in current-state.json. All 21 workspace variants remain.
