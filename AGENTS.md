@@ -196,3 +196,5 @@ Use a single clear focus indicator where the surrounding surface permits suffici
 ## Planning boards must remain populated
 
 The Project Hub, Ideas Board, Release Stages, Product, Information Architecture, Screen Inventory and User Flows are active navigation and planning artifacts, not empty placeholders or title-only summaries. Keep native links, current scope, stage statuses and structured content synchronized with current-state.json and the release documents. Preserve the approved historical Sketch and Low-Fidelity boards. Validate actual captures of all registered boards, not only the current wireframe states; CI must reject incomplete planning boards. Do not invent later-stage work to fill a blank board.
+
+For planning boards, measure native element dimensions before arranging links, captions, notes and headings. Follow the planning-board spacing rules in `docs/boards/whiteboard-guidelines.md`; structural consistency rejects crowded link cards and Project Hub captions. Verify visible spacing in actual captures rather than relying solely on element counts.

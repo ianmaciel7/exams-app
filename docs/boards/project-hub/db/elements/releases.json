@@ -1,7 +1,7 @@
 {
   "type": "link",
   "x": 0,
-  "y": 350,
+  "y": 370,
   "title": "Release Stages",
   "href": "open-artifact://artifact/art_examappreleasestages",
   "kind": "whiteboard"

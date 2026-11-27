@@ -56,3 +56,7 @@ Arrange distinct screens/destinations vertically, one row per screen. Arrange st
 ## Sketch review and evidence
 
 Use the UI/UX Specialist and Impeccable to refine hierarchy, density, and legibility without importing unapproved production features. Keep notes concise and outside application frames, with native comment threads on related external annotations when direct pins obscure controls. Preserve the original review target and open decision. Capture full boards and individual states in Light/Dark from the native runtime; label SHA and any crop. Static images do not prove interactions. Review companion documentation before publishing changes.
+
+## Planning-board spacing
+
+Measure actual native renderer bounds before placing adjacent elements. In the current Open Artifact renderer link cards occupy approximately 320 × 56 canvas units. Use at least 24 units between link cards and 12 units between a card and its supporting caption; the Project Hub uses a 112-unit row cadence. Keep board navigation in its own region outside headings and descriptions. Use the content's actual height for native notes, with enough breathing room and no clipping. These are project-specific board layout values, not application UI tokens. Check both themes and capture views before claiming visual approval.
