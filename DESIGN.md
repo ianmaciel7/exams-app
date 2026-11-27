@@ -30,7 +30,7 @@ The [responsive navigation decision](docs/releases/v0.1.0/product/README.md#resp
 
 ## Action controls and collapsed sidebar reveal — 2026-11-27
 
-A Ghost sidebar trigger is available across workspace states. On desktop, the collapse and expand icons remain visible at pointer rest with no button background (Ghost). Hover adds subtle surface feedback and keyboard focus adds a visible outline without moving the layout. Activation, not hover, expands the sidebar. Keep the same visible accessible trigger on touch/no-hover devices. Collapse/expand preserves current page, selection, scroll context and answers.
+A Ghost sidebar trigger is available across workspace states. The collapsed rail shows a provisional Exam App mark at rest. On hover-capable desktop, reveal the expand action on hover or keyboard focus while keeping its target fixed. Reserve the expanded header for the future Exam App logo. Final identity remains pending. Keep the control visible on touch and no-hover devices. The phone drawer open and close controls occupy the same position. Provide a localized accessible action name and expose expanded state. Use a desktop hover and focus tooltip as supplementary help. Hover adds subtle surface feedback and keyboard focus adds a visible outline without moving the layout. Explicit activation opens or closes navigation. Collapse/expand preserves current page, selection, scroll context and answers.
 
 Use one restrained neutral action-button family: 112 × 34 canvas units for Answer/Retry, unchanged dimensions during submission, a subtle disabled surface, distinct enabled/hover/pressed tones, and a single external keyboard focus outline. No scale/bounce, layout shift, decorative shadow or ripple. Hover and press are separate from submission state. The four-state button strip and separate collapsed hover/focus specimens are component studies outside the artboard, not additional screens. Actual activation, keyboard, touch and motion remain for prototype verification.
 
@@ -46,7 +46,7 @@ References: [W3C Focus Visible](https://www.w3.org/WAI/WCAG22/Understanding/focu
 
 ## Current responsive component studies
 
-Desktop labels use one-line ellipsis with full-label discovery by hover/focus; phone drawer labels wrap. The drawer overlays the same question workspace. Phone component studies cover first/middle/last pagination, identical English/pt-BR workspace geometry, and feedback below wrapped alternatives. The Ghost trigger is visible at rest on all input devices. These are static design specimens, not additional workspace variants or functional validation.
+Desktop labels use one-line ellipsis with full-label discovery by hover/focus; phone drawer labels wrap. The drawer overlays the same question workspace. Phone component studies cover first/middle/last pagination, identical English/pt-BR workspace geometry, and feedback below wrapped alternatives. The collapsed rail shows a provisional app mark at rest and reveals the expand action on desktop hover or keyboard focus. The trigger stays visible on touch and no-hover devices. These are static design specimens, not additional workspace variants or functional validation.
 
 The [active wireframe](docs/releases/v0.1.0/high-fidelity-wireframe/README.md) owns the detailed geometry and review history; [current state](docs/releases/v0.1.0/current-state.json) records capture provenance. High-Fidelity visual approval remains pending.
 
@@ -55,5 +55,7 @@ The [active wireframe](docs/releases/v0.1.0/high-fidelity-wireframe/README.md) o
 The selected layout stays consistent across stages. Approved Mid-Fidelity geometry remains historical and provisional. High-Fidelity studies near-final structural dimensions, overflow and critical responsive states; proposed dimensions are not yet approved. Visual tokens belong to Mockup and operable behavior to Prototype. Follow the evidence-based progression gate in [AGENTS.md](AGENTS.md). Preserve snapshots and keep component studies linked to the owning design question.
 
 ## High-Fidelity entry — 2026-11-27
+
+The [proposed Exam App identity study](designs/exam-app-identity/project/README.md) explores a provisional app mark and logo. Owner review is pending. The Mockup stage has not started.
 
 The owner approved Mid-Fidelity. Earlier canvas dimensions above describe that historical baseline, not final constraints. The new structural specimens test a 272-unit sidebar, 64 rail, 40 desktop inset, 20 phone inset, 740 content maximum and 304 phone drawer, with 44-unit target intent. These are proposed structural dimensions, not brand tokens; review at representative widths, refine action and feedback anatomy, and verify native captures before approval. See the active stage record.

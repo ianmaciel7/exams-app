@@ -1,0 +1,16 @@
+{
+  "v": 3,
+  "layout": "files",
+  "createdOnFiles": {"v":1,"at":"2026-11-27T00:00:00Z"},
+  "title": "Exam App",
+  "namespace": "ExamApp",
+  "libraries": [],
+  "sections": {},
+  "groups": ["Logos"],
+  "assetGroups": {
+    "Logos": {"name":"Logos","tile":"l","order":["exam-app-lockup.svg","exam-app-lockup-dark.svg","exam-app-mark.svg","exam-app-mark-dark.svg"],"files":{}}
+  },
+  "blobs": {},
+  "docs": {"readme":"project/README.md","sections":[]},
+  "lastChange": {"by":"Codex","at":"2026-11-27T00:00:00Z","via":"Codex","note":"Added integrated horizontal logos for light and dark surfaces"}
+}

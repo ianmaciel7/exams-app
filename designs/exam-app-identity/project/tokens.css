@@ -1,0 +1,73 @@
+/* Exam App — generated from tokens.json */
+:root, [data-theme="light"] {
+  --ground: #fafbf8; /* Main reading surface. */
+  --ink: #192823; /* Primary text on ground. */
+  --muted: #4d6158; /* Secondary text on ground. */
+  --brand: #155b55; /* Mark and primary actions. */
+  --on-brand: #ffffff; /* Text and symbol on brand. */
+  --tint: #dbede2; /* Selected surfaces with an explicit selection cue. */
+  --focus: #155b55; /* Separated keyboard focus outline on ground. */
+  --correct: #286044; /* Correct label on ground. */
+  --incorrect: #9a3731; /* Incorrect label on ground. */
+}
+[data-theme="dark"] {
+  --ground: #141e1b;
+  --ink: #f4f8f4;
+  --muted: #b6c9bf;
+  --brand: #8cd7ba;
+  --on-brand: #102c26;
+  --tint: #304d40;
+  --focus: #8cd7ba;
+  --correct: #a0deb4;
+  --incorrect: #fdb1a4;
+}
+:root {
+  --space-1: 4px; /* Focus separation and inline gaps. */
+  --space-2: 8px; /* Gap between related controls and labels. */
+  --space-4: 16px; /* Control and compact surface padding. */
+  --space-8: 32px; /* Space between question groups. */
+  --radius-none: 0px; /* Flush workspace boundary. */
+  --radius-control: 6px; /* Control and brand tile corners. */
+  --radius-group: 12px; /* Contained samples and overlay surfaces. */
+  --font-sans: system-ui, sans-serif;
+  --text-display: 750 72px/0.95 var(--font-sans);
+  --text-heading: 700 28px/36px var(--font-sans);
+  --text-question: 600 20px/30px var(--font-sans);
+  --text-body: 400 16px/25px var(--font-sans);
+  --text-label: 600 14px/20px var(--font-sans);
+}
+.display {
+  font-family: var(--font-sans);
+  font-size: 72px;
+  line-height: 0.95;
+  font-weight: 750;
+  letter-spacing: 0;
+}
+.heading {
+  font-family: var(--font-sans);
+  font-size: 28px;
+  line-height: 36px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+.question {
+  font-family: var(--font-sans);
+  font-size: 20px;
+  line-height: 30px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+.body {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 25px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.label {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  letter-spacing: 0;
+}

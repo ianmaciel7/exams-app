@@ -1,0 +1,31 @@
+<!-- @dsCard height=288 -->
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Exam App</title>
+<style>
+body{margin:0;background:var(--ground);color:var(--ink);font-family:system-ui,sans-serif}
+main{width:960px;height:288px;position:relative;overflow:hidden}
+h1{position:absolute;left:32px;bottom:56px;margin:0;font-size:72px;line-height:.95;letter-spacing:-.055em;font-weight:750}
+p{position:absolute;left:36px;bottom:26px;margin:0;color:var(--muted);font-size:14px}
+svg{position:absolute;right:0;top:0}
+.brand{fill:var(--brand)}.ink{fill:var(--ink)}.tint{fill:var(--tint)}
+rect{rx:var(--radius-none)}.rule{fill:none;stroke:var(--on-brand);stroke-width:2}
+</style>
+<main>
+<h1>Exam App</h1>
+<p>Practice questions in focus.</p>
+<!--
+Blocks use brand 256x224, ink 160x96, tint 160x160.
+Arrangement offsets the wide block above a vertical ink and tint stack.
+The open-page mark informs the stepped rules in on-brand.
+Geometry follows multiples of space-8 with radius-none at the seams.
+-->
+<svg width="448" height="288" viewBox="0 0 448 288" aria-hidden="true">
+  <rect class="brand" x="32" y="0" width="256" height="224"/>
+  <rect class="ink" x="288" y="32" width="160" height="96"/>
+  <rect class="tint" x="288" y="128" width="160" height="160"/>
+  <path class="rule" d="M72 64h144M72 96h144M72 128h112v32h32M72 160h80"/>
+</svg>
+</main>
+</html>

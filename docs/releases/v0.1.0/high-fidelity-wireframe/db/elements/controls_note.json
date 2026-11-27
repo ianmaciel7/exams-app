@@ -5,5 +5,5 @@
   "w": 1520,
   "h": 90,
   "color": "yellow",
-  "text": "44-unit action footprint proposal; one visible external focus ring; Ghost remains visible without background at rest. No animation or functional state is implemented."
+  "text": "Keep a stable target and a visible focus ring. On the collapsed desktop rail, hover and focus reveal the glyph and supplemental action tooltip. Keep the glyph visible on no-hover devices. Verify localized action names, expanded state, and explicit activation in the prototype."
 }

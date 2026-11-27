@@ -1,0 +1,13 @@
+{
+  "type": "shape",
+  "kind": "rect",
+  "x": 3026,
+  "y": 96,
+  "w": 20,
+  "h": 20,
+  "color": "#b2b2b2",
+  "text": "",
+  "hollow": true,
+  "stroke": "#585858",
+  "solid": true
+}

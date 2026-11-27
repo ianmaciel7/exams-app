@@ -51,7 +51,7 @@
     "r7": {
       "at": 7,
       "c0": "Sidebar",
-      "c1": "Ghost trigger always visible; hover/focus feedback"
+      "c1": "Collapsed desktop glyph reveals on hover/focus; touch and no-hover controls stay visible"
     },
     "r8": {
       "at": 8,
