@@ -1,8 +1,10 @@
 {
-  "type": "text",
+  "type": "note",
   "x": 10296,
-  "y": 815,
-  "text": "Estado da mesma tela · sem nova rota",
-  "size": "body",
-  "color": "ink"
+  "y": 880,
+  "w": 540,
+  "h": 180,
+  "text": "**Load failure**\nExplain that the list could not be loaded. Whether to provide retry, automatic recovery or preserved content is an open decision.",
+  "color": "peach",
+  "tilt": 0
 }

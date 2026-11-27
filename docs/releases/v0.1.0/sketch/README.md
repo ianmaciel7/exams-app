@@ -26,3 +26,7 @@ Arrange distinct screens/destinations vertically, one row per screen. Arrange st
 ## Question-list states (2026-11-26)
 
 The eight artboards are variants of the same screen: top of the list (unanswered), end of the list, selected answer before evaluation, correct answer, incorrect answer, loading, empty list and load failure. In the correct state the chosen answer is marked correct. In the incorrect state the chosen answer and the correct answer are distinguishable by both text and color. Other questions remain unchanged. The selected-before-evaluation variant is conditional on a future decision about when evaluation occurs. Loading, empty and failure variants are proposed completeness states, pending visual review. No submit button, automatic evaluation trigger, retry behavior, explanations, scores or persistence is specified. The mock text and colors are illustrative.
+
+## Native design annotations
+
+Each of the eight screen states has a native sticky note directly beneath the artboard. Notes explain behavior, intended feedback, and open decisions; they are annotations rather than interface content. Color distinguishes navigation, open decisions, success, incorrect response, neutral information and load failure. The notes do not approve unresolved behavior or replace review comments. Threaded reviewer comments remain separate from board annotations.

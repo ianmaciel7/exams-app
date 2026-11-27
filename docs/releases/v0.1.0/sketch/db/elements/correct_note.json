@@ -1,8 +1,10 @@
 {
-  "type": "text",
+  "type": "note",
   "x": 4456,
-  "y": 815,
-  "text": "Feedback de acerto · mesma lista",
-  "size": "body",
-  "color": "ink"
+  "y": 880,
+  "w": 540,
+  "h": 180,
+  "text": "**Correct answer**\nShow positive feedback and identify the correct selected option. Other questions retain their existing state. Feedback timing remains open.",
+  "color": "green",
+  "tilt": 0
 }

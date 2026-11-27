@@ -1,8 +1,10 @@
 {
-  "type": "text",
+  "type": "note",
   "x": 76,
-  "y": 815,
-  "text": "Clique no item → lista correspondente",
-  "size": "body",
-  "color": "ink"
+  "y": 880,
+  "w": 540,
+  "h": 180,
+  "text": "**Navigation and unanswered state**\nSelect a sidebar entry to open its questions. No answer is marked initially. Scroll the list without changing destinations.",
+  "color": "blue",
+  "tilt": 0
 }

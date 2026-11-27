@@ -1,8 +1,10 @@
 {
-  "type": "text",
-  "x": 1792,
-  "y": 815,
-  "text": "Footer with pagination · visible after scrolling to the end",
-  "size": "body",
-  "color": "ink"
+  "type": "note",
+  "x": 1536,
+  "y": 880,
+  "w": 540,
+  "h": 180,
+  "text": "**End of the list**\nPagination appears after the last question, not as a fixed footer. Page size and scroll restoration remain open.",
+  "color": "blue",
+  "tilt": 0
 }

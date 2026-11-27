@@ -1,8 +1,10 @@
 {
-  "type": "text",
+  "type": "note",
   "x": 2996,
-  "y": 815,
-  "text": "Antes da correção · momento de avaliação a definir",
-  "size": "body",
-  "color": "ink"
+  "y": 880,
+  "w": 540,
+  "h": 180,
+  "text": "**Selection before evaluation**\nA selected option is distinct from a correct answer. The evaluation trigger is not yet defined; this state is conditional.",
+  "color": "yellow",
+  "tilt": 0
 }

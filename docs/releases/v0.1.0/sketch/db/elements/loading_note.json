@@ -1,8 +1,10 @@
 {
-  "type": "text",
+  "type": "note",
   "x": 7376,
-  "y": 815,
-  "text": "Estado da mesma tela · sem nova rota",
-  "size": "body",
-  "color": "ink"
+  "y": 880,
+  "w": 540,
+  "h": 180,
+  "text": "**Loading**\nKeep the sidebar context while questions are loading. The placeholder treatment is illustrative, not final design.",
+  "color": "yellow",
+  "tilt": 0
 }

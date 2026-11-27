@@ -1,8 +1,10 @@
 {
-  "type": "text",
+  "type": "note",
   "x": 5916,
-  "y": 815,
-  "text": "Feedback de erro · indica a resposta correta",
-  "size": "body",
-  "color": "ink"
+  "y": 880,
+  "w": 540,
+  "h": 180,
+  "text": "**Incorrect answer**\nDistinguish the chosen incorrect option from the correct option using explicit labels as well as color. Do not rely on color alone.",
+  "color": "pink",
+  "tilt": 0
 }
