@@ -38,3 +38,9 @@ Navigation: a single compact list of competition entries, with no redundant sect
 - Don't treat the sketch's geometry, colors or examples as a final production system.
 
 Impeccable context: PRODUCT.md owns product facts. This file owns provisional visual direction. No machine-readable production palette, component library or sidecar has been generated because the app design system is not yet implemented. Do not invent them from the board renderer.
+
+## Approved interaction behavior
+
+The owner approved explicit answer submission: select an option, then activate Answer to evaluate it. An incorrect response marks the selected option and reveals the correct one. Page changes reset the question list to the top. A load failure offers a manual Retry action. These are release decisions, not verified implementation.
+
+Use a per-question Answer control before evaluation and a Retry control in the failure state; exact visual geometry is pending. The owner approved neutral square-with-X icon placeholders for the sidebar, replacing current list glyphs in the next visual revision. Do not treat this as final iconography.

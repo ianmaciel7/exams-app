@@ -16,6 +16,8 @@
 
 - **Mandatory anchored review comments:** For sketches, wireframes, and other visual boards, use native sticky notes for explanatory context and native open comment threads anchored to the relevant element for material unresolved decisions, questions, or review findings. Review existing threads before creating duplicates. Keep threads open until the product owner confirms the decision; then synchronize the owning artifacts and resolve the thread. Do not simulate threads with text or notes. If the runtime or host cannot create or validate native comments, report that limitation explicitly rather than claiming success. Do not create decorative comments when no meaningful review question exists.
 
+- **Evidence-first clarification:** Before asking the owner a question, review the current reduced release scope and previously recorded decisions, including historical ExamTopics and QConcursos research in Exams Archive when relevant. Reuse supported decisions; distinguish observed behavior from recommendations. Ask only material unresolved questions affecting the current work, not out-of-scope future features. If evidence is inaccessible, disclose the gap rather than inventing a finding.
+
 ## Cross-file dependency and cascade synchronization
 
 - **Mandatory interrelated file identification:** Whenever any file (documentation, design artifact, planning board, data model, component, test, or code) is created, modified, or deleted, the agent must proactively identify all related, downstream, upstream, and referenced files that share that domain, concept, or dependency.

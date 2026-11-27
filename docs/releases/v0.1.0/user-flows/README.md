@@ -1,6 +1,6 @@
 # User Flows — v0.1.0
 
-Select a competition in the sidebar → show that competition's questions → scroll vertically through the list. Select another competition → show its questions. Answer feedback states are requested; submission mechanism and evaluation trigger are not specified.
+Select a competition in the sidebar → show that competition's questions → scroll vertically through the list. Select another competition → show its questions. The owner approved explicit answer submission: select an option, then activate Answer to evaluate it. An incorrect response marks the selected option and reveals the correct one. Page changes reset the question list to the top. A load failure offers a manual Retry action. These are release decisions, not verified implementation.
 
 ## Competition label
 
@@ -8,10 +8,10 @@ Competition items concatenate competition name, year and position/exam title in 
 
 ## Pagination
 
-The question list is paginated. Scroll vertically within a page; at the end of the list, use pagination controls to navigate between pages of the selected competition. The sketch shows illustrative numbered pages with Previous/Next; page size, total pages, ordering, and scroll restoration on page change remain open.
+The question list is paginated. Scroll vertically within a page; at the end of the list, use pagination controls to navigate between pages of the selected competition. The sketch shows illustrative numbered pages with Previous/Next; page size, total pages and ordering remain open. Page changes reset the list to the top.
 
 Progress: in progress; user review pending.
 
 ## State transitions under review
 
-Select entry → loading (proposal) → list, empty or load failure (proposed variants). Unanswered → select option → correct or incorrect feedback; intermediate selected state depends on evaluation timing. Page navigation remains in the selected entry. Correct-answer reveal after an error, retry and page-change scroll restoration remain open. No implementation or new routes are implied.
+Select entry → loading (proposal) → list, empty or load failure (proposed variants). Unanswered → select option → selected → activate Answer → correct or incorrect feedback. An incorrect answer reveals the correct option. Page navigation stays within the selected entry and resets scroll to the top. Load failure → manual Retry → loading → list, empty or failure. No implementation or new routes are implied.

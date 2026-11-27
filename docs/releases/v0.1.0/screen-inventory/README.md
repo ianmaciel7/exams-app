@@ -16,13 +16,15 @@ Other destinations and controls are not selected. Progress: in progress; user re
 | --- | --- |
 | Unanswered / list start | Baseline sketch |
 | List end / pagination | Baseline sketch |
-| Selected before evaluation | Conditional proposal |
+| Selected before submission | Required; explicit Answer control pending visual review |
 | Correct answer | Requested; sketch pending validation |
-| Incorrect answer | Requested; reveal policy open |
+| Incorrect answer | Required; selected error and correct answer shown |
 | Loading | Proposal |
 | Empty list | Proposal |
-| Load failure | Proposal; retry open |
+| Load failure | Required manual Retry action; visual review pending |
 
 The current Sketch uses a compact one-line sidebar list with generic question-list glyphs, institution/year/position labels, ellipsis and subtle active text/indicator. No redundant section heading or additional menu. Exact visual treatment remains exploratory.
 
 Both sidebar entries share one neutral question-list icon in the current Sketch; this is a visual refinement, not a new interaction.
+
+The eight states remain: unanswered, end-of-list pagination, selected before submission, correct, incorrect, loading, empty, and load failure. The selected-before-submission state is required. The Answer and Retry controls still need visual reconciliation in the static board; behavior and accessibility are not yet tested.

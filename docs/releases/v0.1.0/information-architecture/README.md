@@ -1,6 +1,6 @@
 # Information Architecture — v0.1.0
 
-A single workspace has a competition navigation sidebar and a main question-list region. Selecting a competition loads its corresponding list. The active competition is identifiable. Questions appear vertically in the main region; the user can scroll. Routing, initial selection and scroll restoration remain open.
+A single workspace has a competition navigation sidebar and a main question-list region. Selecting a competition loads its corresponding list. The active competition is identifiable. Questions appear vertically in the main region; the user can scroll. Routing and initial selection remain open; page changes reset scroll to the top.
 
 ## Competition label
 
@@ -8,7 +8,7 @@ Competition items concatenate competition name, year and position/exam title in 
 
 ## Pagination
 
-The question list is paginated. Scroll vertically within a page; at the end of the list, use pagination controls to navigate between pages of the selected competition. The sketch shows illustrative numbered pages with Previous/Next; page size, total pages, ordering, and scroll restoration on page change remain open.
+The question list is paginated. Scroll vertically within a page; at the end of the list, use pagination controls to navigate between pages of the selected competition. The sketch shows illustrative numbered pages with Previous/Next; page size, total pages and ordering remain open. Page changes reset the list to the top.
 
 Progress: in progress; user review pending.
 
@@ -16,6 +16,6 @@ Progress: in progress; user review pending.
 
 The current Sketch uses a compact one-line sidebar list with generic question-list glyphs, institution/year/position labels, ellipsis and subtle active text/indicator. No redundant section heading or additional menu. Exact visual treatment remains exploratory.
 
-The Sketch depicts eight variants of one screen: unanswered at list start, list end with pagination, selected before evaluation, correct answer, incorrect answer, loading, empty list and load failure. The owner requested correct/incorrect feedback; the evaluation trigger, revealing the correct option after an error, page-change scroll restoration and retry policy remain open. Other proposed variants are pending review. No separate routes or working behavior are established.
+The Sketch depicts eight variants of one screen: unanswered at list start, list end with pagination, selected before evaluation, correct answer, incorrect answer, loading, empty list and load failure. The owner approved explicit answer submission: select an option, then activate Answer to evaluate it. An incorrect response marks the selected option and reveals the correct one. Page changes reset the question list to the top. A load failure offers a manual Retry action. These are release decisions, not verified implementation. Other proposed variants remain pending visual review. No separate routes or working behavior are established.
 
 Both sidebar entries share one neutral question-list icon in the current Sketch; this is a visual refinement, not a new interaction.

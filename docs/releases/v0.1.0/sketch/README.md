@@ -8,7 +8,7 @@ Competition items concatenate competition name, year and position/exam title in 
 
 ## Pagination
 
-The question list is paginated. Scroll vertically within a page; at the end of the list, use pagination controls to navigate between pages of the selected competition. The sketch shows illustrative numbered pages with Previous/Next; page size, total pages, ordering, and scroll restoration on page change remain open.
+The question list is paginated. Scroll vertically within a page; at the end of the list, use pagination controls to navigate between pages of the selected competition. The sketch shows illustrative numbered pages with Previous/Next; page size, total pages and ordering remain open. Page changes reset the list to the top.
 
 Progress: in progress; user visual review pending.
 
@@ -25,19 +25,19 @@ Arrange distinct screens/destinations vertically, one row per screen. Arrange st
 
 ## Question-list states (2026-11-26)
 
-The eight artboards are variants of the same screen: top of the list (unanswered), end of the list, selected answer before evaluation, correct answer, incorrect answer, loading, empty list and load failure. In the correct state the chosen answer is marked correct. In the incorrect state the chosen answer and the correct answer are distinguishable by both text and color. Other questions remain unchanged. The selected-before-evaluation variant is conditional on a future decision about when evaluation occurs. Loading, empty and failure variants are proposed completeness states, pending visual review. No submit button, automatic evaluation trigger, retry behavior, explanations, scores or persistence is specified. The mock text and colors are illustrative.
+The eight artboards are variants of the same screen: top of the list (unanswered), end of the list, selected answer before evaluation, correct answer, incorrect answer, loading, empty list and load failure. In the correct state the chosen answer is marked correct. In the incorrect state the chosen answer and the correct answer are distinguishable by both text and color. Other questions remain unchanged. The selected-before-evaluation variant is required: the user selects an option and activates Answer. Loading and empty variants remain pending visual review. A load failure offers a manual Retry action. The Answer and Retry controls need visual reconciliation; explanations, scores and persistence are not specified. The mock text and colors are illustrative.
 
 ## Native design annotations
 
 Each of the eight screen states has a native sticky note directly beneath the artboard. Notes explain behavior, intended feedback, and open decisions; they are annotations rather than interface content. Color distinguishes navigation, open decisions, success, incorrect response, neutral information and load failure. The notes do not approve unresolved behavior or replace review comments. Threaded reviewer comments remain separate from board annotations.
 
-## Open review threads
+## Review threads
 
-Four native review threads are anchored to answer selection, incorrect-answer feedback, pagination and load failure recovery in `comments.json`. All are open questions awaiting the product owner's decision. Notes remain explanatory; threads are the place for discussion and resolution. Static Pages screenshots cannot substitute for interactive thread review.
+Four native review threads are anchored to answer selection, incorrect-answer feedback, pagination and load failure recovery in `comments.json`. The four decision threads are resolved by the owner's approval; visual validation remains pending. Notes remain explanatory; threads are the place for discussion and resolution. Static Pages screenshots cannot substitute for interactive thread review.
 
 ## Visual review refinement
 
-The eight states retain their existing scope. Sidebar entries use compact spacing, body-size labels and a single selection indicator instead of a surrounding outline. Native sticky notes are concise. Open comment threads retain their identities and review targets; their visible anchors move to the corresponding external notes to avoid covering controls. The capture pipeline additionally produces individual state screenshots in both themes using the native camera, with full-board screenshots preserved. No new application behavior is approved.
+The eight states retain their existing scope. Sidebar entries use compact spacing, body-size labels and a single selection indicator instead of a surrounding outline. Native sticky notes are concise. Review comment threads retain their identities and review targets; their visible anchors move to the corresponding external notes to avoid covering controls. The capture pipeline additionally produces individual state screenshots in both themes using the native camera, with full-board screenshots preserved. The approved answer and retry behaviors are recorded below; this is not implementation.
 
 ## Sidebar refinement
 
@@ -49,8 +49,16 @@ Operate-mode layout: the question content is primary and the navigation supports
 
 ## Documentation synchronization
 
-The 36-unit row spacing and one-unit active marker supersede the earlier 38-unit sidebar study. See [provisional DESIGN.md](../../../../DESIGN.md), [Product](../product/README.md), [Information Architecture](../information-architecture/README.md), [Screen Inventory](../screen-inventory/README.md) and [User Flows](../user-flows/README.md). The four review threads remain open. Source geometry is updated; new visual validation remains separate.
+The 36-unit row spacing and one-unit active marker supersede the earlier 38-unit sidebar study. See [provisional DESIGN.md](../../../../DESIGN.md), [Product](../product/README.md), [Information Architecture](../information-architecture/README.md), [Screen Inventory](../screen-inventory/README.md) and [User Flows](../user-flows/README.md). The four decision threads are resolved; visual validation remains pending. Source geometry is updated; new visual validation remains separate.
 
 ## Generic navigation icon refinement
 
 The owner requested a more generic icon shared by both entries. Replace document silhouettes with identical neutral list glyphs made of native strokes across all eight variants. Selection remains indicated by text emphasis and the existing thin marker. No change to navigation behavior, labels or state coverage.
+
+## Approved interaction decisions — 2026-11-26
+
+The owner approved explicit answer submission: select an option, then activate Answer to evaluate it. An incorrect response marks the selected option and reveals the correct one. Page changes reset the question list to the top. A load failure offers a manual Retry action. These are release decisions, not verified implementation.
+
+The eight states remain: unanswered, end-of-list pagination, selected before submission, correct, incorrect, loading, empty, and load failure. The selected-before-submission state is required. The Answer and Retry controls still need visual reconciliation in the static board; behavior and accessibility are not yet tested.
+
+The owner also approved a neutral square-with-X icon placeholder for each sidebar entry. The current board still uses list glyphs; the icon replacement and captures are pending, not claimed as applied.

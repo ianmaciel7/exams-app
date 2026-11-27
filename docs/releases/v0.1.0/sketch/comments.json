@@ -11,9 +11,9 @@
         ],
         "reviewTarget": "selected_q1_r1"
       },
-      "status": "open",
+      "status": "resolved",
       "createdAt": "2026-11-27T01:24:02.095Z",
-      "updatedAt": "2026-11-27T01:24:02.095Z",
+      "updatedAt": "2026-11-27T01:54:54.746Z",
       "messages": [
         {
           "id": "m_0000000001",
@@ -23,6 +23,15 @@
           },
           "text": "Should evaluation happen immediately when an option is selected, or only after an explicit confirmation? This determines whether the selected-before-evaluation state is needed.",
           "at": "2026-11-27T01:24:02.095Z"
+        },
+        {
+          "id": "m_20261126_decision_1",
+          "author": {
+            "kind": "agent",
+            "name": "agent"
+          },
+          "text": "Owner approved explicit Answer submission after option selection. Decision recorded in the release Product README. Visual validation remains separate.",
+          "at": "2026-11-27T01:54:54.746Z"
         }
       ],
       "detail": "Review target: selected_q1_r1. Pin moved to the related design annotation to avoid obscuring the interface."
@@ -37,9 +46,9 @@
         ],
         "reviewTarget": "wrong_q1_correct"
       },
-      "status": "open",
+      "status": "resolved",
       "createdAt": "2026-11-27T01:24:02.095Z",
-      "updatedAt": "2026-11-27T01:24:02.095Z",
+      "updatedAt": "2026-11-27T01:54:54.748Z",
       "messages": [
         {
           "id": "m_0000000002",
@@ -49,6 +58,15 @@
           },
           "text": "When the selected answer is incorrect, should the correct option also be revealed? The sketch depicts this as a proposal, not an approved decision.",
           "at": "2026-11-27T01:24:02.095Z"
+        },
+        {
+          "id": "m_20261126_decision_2",
+          "author": {
+            "kind": "agent",
+            "name": "agent"
+          },
+          "text": "Owner approved marking the incorrect choice and revealing the correct option. Decision recorded in the release Product README. Visual validation remains separate.",
+          "at": "2026-11-27T01:54:54.748Z"
         }
       ],
       "detail": "Review target: wrong_q1_correct. Pin moved to the related design annotation to avoid obscuring the interface."
@@ -63,9 +81,9 @@
         ],
         "reviewTarget": "pagination_next"
       },
-      "status": "open",
+      "status": "resolved",
       "createdAt": "2026-11-27T01:24:02.095Z",
-      "updatedAt": "2026-11-27T01:24:02.095Z",
+      "updatedAt": "2026-11-27T01:54:54.748Z",
       "messages": [
         {
           "id": "m_0000000003",
@@ -75,6 +93,15 @@
           },
           "text": "When navigating to another page, should the question list return to the top or preserve a previous scroll position?",
           "at": "2026-11-27T01:24:02.095Z"
+        },
+        {
+          "id": "m_20261126_decision_3",
+          "author": {
+            "kind": "agent",
+            "name": "agent"
+          },
+          "text": "Owner approved returning to the top of the question list when changing pages. Decision recorded in the release Product README. Visual validation remains separate.",
+          "at": "2026-11-27T01:54:54.748Z"
         }
       ],
       "detail": "Review target: pagination_next. Pin moved to the related design annotation to avoid obscuring the interface."
@@ -89,9 +116,9 @@
         ],
         "reviewTarget": "failure_status"
       },
-      "status": "open",
+      "status": "resolved",
       "createdAt": "2026-11-27T01:24:02.095Z",
-      "updatedAt": "2026-11-27T01:24:02.095Z",
+      "updatedAt": "2026-11-27T01:54:54.748Z",
       "messages": [
         {
           "id": "m_0000000004",
@@ -101,6 +128,15 @@
           },
           "text": "Should the error state offer a retry action? Decide whether retry is manual or automatic and whether previous content remains available.",
           "at": "2026-11-27T01:24:02.095Z"
+        },
+        {
+          "id": "m_20261126_decision_4",
+          "author": {
+            "kind": "agent",
+            "name": "agent"
+          },
+          "text": "Owner approved a visible manual Retry action after load failure. Automatic retry and cached-content policy remain unspecified. Decision recorded in the release Product README. Visual validation remains separate.",
+          "at": "2026-11-27T01:54:54.748Z"
         }
       ],
       "detail": "Review target: failure_status. Pin moved to the related design annotation to avoid obscuring the interface."
