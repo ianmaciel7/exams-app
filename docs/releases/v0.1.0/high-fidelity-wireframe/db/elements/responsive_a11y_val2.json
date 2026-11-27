@@ -2,7 +2,7 @@
   "type": "text",
   "x": 3370,
   "y": 3960,
-  "text": "Text describes correct, wrong, locked, loading and uncertain outcomes; preserve choice during Retry.",
+  "text": "Preserve the answer choice during Retry. Choosing a competition closes the drawer and announces the change.",
   "size": "small",
   "color": "#262626",
   "wrap": 1130

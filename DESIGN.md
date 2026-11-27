@@ -20,7 +20,9 @@ Neutral grayscale structural study; semantic result labels do not rely on color 
 
 `scripts/mid-fidelity-components.cjs` manages common header, navigation rows, Ghost trigger, pagination, answer feedback, long-content geometry and proposed studies. Run `node scripts/sync-mid-fidelity.mjs --write`, then `node scripts/check-boards.mjs`. Review actual rendered optical alignment, wrapping, contrast and state parity before stage closure. Functional focus, accessible names, target sizes and responsive behavior require a later prototype.
 
-The six owner decisions are resolved. Exact responsive breakpoint, competition-list data source, safe-retry implementation and locale selection/default behavior require technical design and prototype validation. Exam-content translation is not implied. The navigation loading treatment remains a visual study. High-Fidelity structural and visual review, runtime, usability and accessibility validation remain pending.
+The six owner decisions are resolved. Exact responsive breakpoint, competition-list data source, safe-retry implementation and locale detection/English fallback verification require technical design and prototype validation. Exam-content translation is not implied. The navigation loading treatment remains a visual study. High-Fidelity structural and visual review, runtime, usability and accessibility validation remain pending.
+
+The [responsive navigation decision](docs/releases/v0.1.0/product/README.md#responsive-navigation-decision) specifies the modal drawer and its focus and dismissal behavior. Prototype testing starts at 1024 CSS px.
 
 ## History and evidence
 

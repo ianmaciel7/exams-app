@@ -28,13 +28,13 @@
     "assessment": "Reviewed all 21 Mid-Fidelity states in both board themes (42 captures). The closed-phone artboard in Dark has missing right-hand tiles; Light renders the matching area. Other inspected states preserve the intended visual structure. Capture regression blocks progression; new evidence and owner visual approval required."
   },
   "status": "Current stage: High-Fidelity Wireframe — in progress; structural specification and visual review pending.",
-  "approved": "Automatically select the first available competition on entry. Browse ten questions per page; pagination follows the last question and resets scroll to the top. Select one option and explicitly submit with Answer. Correct and incorrect feedback identifies the correct choice and, when wrong, the user's choice. A confirmed answer is read-only on the current page. Changing page or competition, or closing the application, discards responses. On submission failure keep the choice and allow another submission; prevent duplicates while pending. Retry reloads a failed question list. A Ghost sidebar trigger is available across workspace states. On desktop, the collapse and expand icons remain visible at pointer rest with no button background (Ghost). Hover adds subtle surface feedback and keyboard focus adds a visible outline without moving the layout. Activation, not hover, expands the sidebar. Keep the same visible accessible trigger on touch/no-hover devices. Collapse/expand preserves current page, selection, scroll context and answers. Questions follow original exam order. If no competitions are available, show an empty-state message without an action button. On phones, navigation opens as a drawer over the question content rather than shifting it. If competition-list loading fails, show an error and manual Retry. If an answer outcome cannot be confirmed, retain the selected option and permit a safe retry without duplicate evaluation. Support the application interface in Brazilian Portuguese and English.",
-  "open": "The six owner decisions are resolved. Exact responsive breakpoint, competition-list data source, safe-retry implementation and locale selection/default behavior require technical design and prototype validation. Exam-content translation is not implied. The navigation loading treatment remains a visual study. High-Fidelity structural and visual review, runtime, usability and accessibility validation remain pending.",
+  "approved": "Automatically select the first available competition on entry. Browse ten questions per page; when there is more than one page, pagination follows the last question and resets scroll to the top. Select one option and explicitly submit with Answer. Correct and incorrect feedback identifies the correct choice and, when wrong, the user's choice. A confirmed answer is read-only on the current page. Changing page or competition, or closing the application, discards responses. Hide pagination when the list fits on one page. Show a nonmodal warning near page and competition navigation only when selected or evaluated answers would be discarded. On submission failure keep the choice and allow another submission; prevent duplicates while pending. Retry reloads a failed question list. A Ghost sidebar trigger is available across workspace states. On desktop, the collapse and expand icons remain visible at pointer rest with no button background (Ghost). Hover adds subtle surface feedback and keyboard focus adds a visible outline without moving the layout. Activation, not hover, expands the sidebar. Keep the same visible accessible trigger on touch/no-hover devices. Collapse/expand preserves current page, selection, scroll context and answers. Questions follow original exam order. If no competitions are available, show an empty-state message without an action button. On phones, navigation opens as a drawer over the question content rather than shifting it. If competition-list loading fails, show an error and manual Retry. If an answer outcome cannot be confirmed, retain the selected option and permit a safe retry without duplicate evaluation. Support the application interface in Brazilian Portuguese and English.",
+  "open": "The six owner decisions are resolved. Exact responsive breakpoint, competition-list data source, safe-retry implementation and locale detection/English fallback verification require technical design and prototype validation. Exam-content translation is not implied. The navigation loading treatment remains a visual study. High-Fidelity structural and visual review, runtime, usability and accessibility validation remain pending.",
   "notes": {
-    "product": "**Current product decisions — v0.1.0**\nAutomatically select the first available competition on entry. Browse ten questions per page; pagination follows the last question and resets scroll to the top. Select one option and explicitly submit with Answer. Correct and incorrect feedback identifies the correct choice and, when wrong, the user's choice. A confirmed answer is read-only on the current page. Changing page or competition, or closing the application, discards responses. On submission failure keep the choice and allow another submission; prevent duplicates while pending. Retry reloads a failed question list. A Ghost sidebar trigger is available across workspace states. On desktop, the collapse and expand icons remain visible at pointer rest with no button background (Ghost). Hover adds subtle surface feedback and keyboard focus adds a visible outline without moving the layout. Activation, not hover, expands the sidebar. Keep the same visible accessible trigger on touch/no-hover devices. Collapse/expand preserves current page, selection, scroll context and answers. Questions follow original exam order. If no competitions are available, show an empty-state message without an action button. On phones, navigation opens as a drawer over the question content rather than shifting it. If competition-list loading fails, show an error and manual Retry. If an answer outcome cannot be confirmed, retain the selected option and permit a safe retry without duplicate evaluation. Support the application interface in Brazilian Portuguese and English.\n\n**Technical validation**\nThe six owner decisions are resolved. Exact responsive breakpoint, competition-list data source, safe-retry implementation and locale selection/default behavior require technical design and prototype validation. Exam-content translation is not implied. The navigation loading treatment remains a visual study. High-Fidelity structural and visual review, runtime, usability and accessibility validation remain pending.",
-    "information-architecture": "**Current workspace — v0.1.0**\nOne destination: competition sidebar and scrolling question list. Original exam order; 10 questions/page. First available competition selected automatically. Name · Year · Position/exam; desktop ellipsis and tooltip; phone labels wrap. Desktop Ghost trigger visible at rest; hover/focus feedback; phones use an overlay drawer. Empty competition list shows a message only; navigation failure offers manual Retry. Interface: pt-BR and en. No additional routes. Exact breakpoint, data source and locale controls require technical validation.",
-    "screen-inventory": "**Current inventory — 21 variants**\nCore: unanswered, list end, selected, correct, incorrect, question loading, empty list, load failure, submitting, submission failure/uncertainty, middle/last page, long content, empty competitions and navigation failure.\nStudies: narrow expanded/collapsed, hover, keyboard focus, phone closed/open overlay, navigation loading. Component studies: no-hover rail, localized phone, footer boundaries, tooltip and long-option feedback. Six owner decisions resolved. Mid-Fidelity approved; High-Fidelity selects representative scenarios; component specimens are not separate workspace variants.",
-    "user-flows": "**Current flows — v0.1.0**\nEntry -> first available item -> questions in original exam order; empty competitions -> message only; list failure -> manual Retry.\nSelect -> Answer -> pending -> confirmed and locked OR not confirmed (retain selection; safe retry without duplicate evaluation).\nPage/competition change -> discard answers; page scroll resets. Exit -> discard. Desktop collapsed trigger stays visible; hover/focus adds feedback; phone opens overlay drawer; dismissal preserves context. The Ghost trigger stays visible on all input devices. Preserve context on collapse/expand. Portuguese and English interface. Technical validation remains."
+    "product": "**Current product decisions — v0.1.0**\nAutomatically select the first available competition on entry. Browse ten questions per page; when there is more than one page, pagination follows the last question and resets scroll to the top. Select one option and explicitly submit with Answer. Correct and incorrect feedback identifies the correct choice and, when wrong, the user's choice. A confirmed answer is read-only on the current page. Changing page or competition, or closing the application, discards responses. Hide pagination when the list fits on one page. Show a nonmodal warning near page and competition navigation only when selected or evaluated answers would be discarded. On submission failure keep the choice and allow another submission; prevent duplicates while pending. Retry reloads a failed question list. A Ghost sidebar trigger is available across workspace states. On desktop, the collapse and expand icons remain visible at pointer rest with no button background (Ghost). Hover adds subtle surface feedback and keyboard focus adds a visible outline without moving the layout. Activation, not hover, expands the sidebar. Keep the same visible accessible trigger on touch/no-hover devices. Collapse/expand preserves current page, selection, scroll context and answers. Questions follow original exam order. If no competitions are available, show an empty-state message without an action button. On phones, navigation opens as a drawer over the question content rather than shifting it. If competition-list loading fails, show an error and manual Retry. If an answer outcome cannot be confirmed, retain the selected option and permit a safe retry without duplicate evaluation. Support the application interface in Brazilian Portuguese and English.\n\n**Technical validation**\nThe six owner decisions are resolved. Exact responsive breakpoint, competition-list data source, safe-retry implementation and locale detection/English fallback verification require technical design and prototype validation. Exam-content translation is not implied. The navigation loading treatment remains a visual study. High-Fidelity structural and visual review, runtime, usability and accessibility validation remain pending.",
+    "information-architecture": "**Current workspace — v0.1.0**\nOne destination: competition sidebar and scrolling question list. Original exam order; 10 questions/page. First available competition selected automatically. Name · Year · Position/exam; desktop ellipsis and tooltip; phone labels wrap. Desktop Ghost trigger visible at rest; hover/focus feedback; phones use an overlay drawer. Empty competition list shows a message only; navigation failure offers manual Retry. Interface: Brazilian Portuguese and English. Use the device language when supported and fall back to English otherwise. No additional routes. Verify the final breakpoint, data source and locale detection in the prototype.\n\nHide pagination when the list fits on one page. Show a nonmodal warning near page and competition navigation only when selected or evaluated answers would be discarded.",
+    "screen-inventory": "**Current inventory — 21 variants**\nCore: unanswered, list end, selected, correct, incorrect, question loading, empty list, load failure, submitting, submission failure/uncertainty, middle/last page, long content, empty competitions and navigation failure.\nStudies: narrow expanded/collapsed, hover, keyboard focus, phone closed/open overlay, navigation loading. Component studies: no-hover rail, localized phone, footer boundaries, tooltip and long-option feedback. Six owner decisions resolved. Mid-Fidelity approved; High-Fidelity selects representative scenarios; component specimens are not separate workspace variants.\n\nHide pagination when the list fits on one page. Show a nonmodal warning near page and competition navigation only when selected or evaluated answers would be discarded.",
+    "user-flows": "**Current flows — v0.1.0**\nEntry -> first available item -> questions in original exam order; empty competitions -> message only; list failure -> manual Retry.\nSelect -> Answer -> pending -> confirmed and locked OR not confirmed (retain selection; safe retry without duplicate evaluation).\nPage/competition change -> discard answers; page scroll resets. Exit -> discard. Desktop collapsed trigger stays visible; hover/focus adds feedback; phone opens overlay drawer; dismissal preserves context. The Ghost trigger stays visible on all input devices. Preserve context on collapse/expand. Portuguese and English interface. Technical validation remains.\n\nHide pagination when the list fits on one page. Show a nonmodal warning near page and competition navigation only when selected or evaluated answers would be discarded."
   },
   "stageNote": "**v0.1.0 — In progress**\nProduct, Information Architecture, Screen Inventory and User Flows: synchronized; six owner decisions resolved. Technical validation remains.\nSketch: complete for progression (94072ce; 8 variants).\nLow-Fidelity Wireframe: complete for progression (e70dbaf; 9 variants).\nMid-Fidelity Wireframe: complete for progression (21 variants; owner approved 2026-11-27).\nHigh-Fidelity Wireframe: in progress (4 representative structural specimens); review pending.\nMockup, Interactive Prototype and Usability Testing: not started.\nSource: docs/releases/v0.1.0/current-state.json",
   "stages": [
@@ -198,7 +198,7 @@
     ],
     [
       "Pagination",
-      "10 questions per page; reset scroll"
+      "10 questions per page. Show pagination only when there is more than one page. Reset scroll on page change."
     ],
     [
       "Answer",
@@ -206,7 +206,7 @@
     ],
     [
       "Navigation",
-      "Discard answers on page/competition change"
+      "Show a nonmodal warning near the relevant navigation before changing page or competition when selected or evaluated answers would be lost. The change discards those answers."
     ],
     [
       "Session",
@@ -226,7 +226,7 @@
     ],
     [
       "Question load failure",
-      "Manual Retry reloads selected list"
+      "Show an error notice and a manual Retry button that reloads the selected question list"
     ],
     [
       "Feedback",
@@ -254,7 +254,7 @@
     ],
     [
       "Interface languages",
-      "Brazilian Portuguese and English"
+      "Brazilian Portuguese or English according to the device language, with English fallback"
     ]
   ],
   "flows": [
@@ -268,7 +268,7 @@
     ],
     [
       "Load fails",
-      "Manual Retry reloads questions"
+      "Show an error notice and a manual Retry button that reloads the selected question list"
     ],
     [
       "Select option",
@@ -288,7 +288,7 @@
     ],
     [
       "Page/competition change",
-      "Discard prior answers; reset page scroll on page change"
+      "When selected or evaluated answers would be lost, show a nonmodal warning near the relevant navigation before the change. Discard prior answers after changing page or competition and reset scroll on page change."
     ],
     [
       "Close application",
@@ -337,11 +337,14 @@
     "assessment": "Owner identified crowded planning-board elements; layout corrections made in 165f554."
   },
   "pendingDecisions": [],
+  "competitionEntryDecision": "On entry, select the first competition in the order presented by the available list. The release does not require sorting by date or name. The list source and its underlying order remain pending technical design.",
+  "drawerDecision": "When the available width cannot accommodate the expanded sidebar and readable questions side by side, navigation opens as a modal overlay. Give the drawer an accessible name; move keyboard focus inside on open and contain it while open. Escape and a visible close control dismiss it and return focus to the trigger. Selecting a competition closes the drawer, restores focus to the trigger and announces the selected competition. Dismissing without selecting preserves the current question context.",
+  "drawerValidation": "Start prototype testing at 1024 CSS px. Determine the final breakpoint by testing available width, zoom and long labels. Verify keyboard focus and screen reader announcements in the working prototype.",
   "hubScope": "One competition-question workspace. First available competition selected automatically. Ten questions per page. Explicit Answer, locked evaluation, retry and temporary responses. Ghost navigation; collapsed icon visible at rest; hover/focus feedback. Original exam order; phone overlay drawer; empty message and list Retry; safe answer retry; Portuguese and English interface.",
   "technicalValidation": [
     [
-      "Responsive breakpoint and drawer focus",
-      "Technical design / prototype"
+      "Responsive breakpoint and drawer accessibility",
+      "Prototype validation. 1024 CSS px is the initial test threshold."
     ],
     [
       "Competition data source and original exam ordering",
@@ -352,7 +355,7 @@
       "Technical design / prototype"
     ],
     [
-      "Locale selection and default",
+      "Device locale detection and English fallback",
       "Technical design / prototype"
     ],
     [
@@ -361,6 +364,14 @@
     ]
   ],
   "decisionHistory": [
+    {
+      "date": "2026-11-27",
+      "source": "Owner approval after the Exam Archive review",
+      "decisions": [
+        ["Single-page pagination", "Hide pagination when the question list fits on one page."],
+        ["Answer-loss warning", "Show a nonmodal warning near page and competition navigation only when selected or evaluated answers would be discarded. Confirm in the prototype that learners can predict the loss before navigating."]
+      ]
+    },
     {
       "date": "2026-11-27",
       "source": "Owner response to six explicit product questions",
@@ -408,6 +419,16 @@
         [
           "Mid-Fidelity progression",
           "Approved 21 variants; begin High-Fidelity Wireframe. No new product behavior or visual identity approved."
+        ]
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "source": "Owner approval in the release documentation review",
+      "decisions": [
+        [
+          "Interface locale",
+          "Use the device language when the interface supports it (Brazilian Portuguese or English). Otherwise use English."
         ]
       ]
     }

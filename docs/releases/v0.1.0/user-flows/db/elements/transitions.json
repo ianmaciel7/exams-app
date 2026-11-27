@@ -31,7 +31,7 @@
     "r3": {
       "at": 3,
       "c0": "Load fails",
-      "c1": "Manual Retry reloads questions"
+      "c1": "Show an error notice and a manual Retry button that reloads the selected question list"
     },
     "r4": {
       "at": 4,
@@ -56,7 +56,7 @@
     "r8": {
       "at": 8,
       "c0": "Page/competition change",
-      "c1": "Discard prior answers; reset page scroll on page change"
+      "c1": "When selected or evaluated answers would be lost, show a nonmodal warning near the relevant navigation before the change. Discard prior answers after changing page or competition and reset scroll on page change."
     },
     "r9": {
       "at": 9,

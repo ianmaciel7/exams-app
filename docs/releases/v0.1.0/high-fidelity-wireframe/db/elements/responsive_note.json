@@ -5,5 +5,5 @@
   "w": 1390,
   "h": 90,
   "color": "yellow",
-  "text": "Ranges are reversible proposals. Test actual resizing, keyboard, screen reader, zoom and focus in interactive prototype. Static dimensions do not prove WCAG conformance."
+  "text": "Ranges are wireframe proposals. Start testing at 1024 CSS px and let content fit determine the breakpoint. Test resize, keyboard, screen reader, zoom and focus in the prototype. Static specimens do not establish accessibility conformance."
 }

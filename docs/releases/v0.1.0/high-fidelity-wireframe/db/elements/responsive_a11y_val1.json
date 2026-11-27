@@ -2,7 +2,7 @@
   "type": "text",
   "x": 3370,
   "y": 3903,
-  "text": "Visible ring; move focus into drawer, Escape closes, restore trigger focus; avoid obscured focus.",
+  "text": "Move visible focus into the drawer and keep it inside. Escape or visible Close restores focus to the trigger.",
   "size": "small",
   "color": "#262626",
   "wrap": 1130

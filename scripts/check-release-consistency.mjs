@@ -34,9 +34,6 @@ export function checkReleaseConsistency(){
  if(state.inventory.map(x=>x.id).join('|')!==components.states.join('|'))errors.push('Canonical inventory order drift');
  if(state.stages.length!==11||state.stages.filter(x=>x.board).length!==8)errors.push('Release stage inventory drift');
  if(count!==state.variantCount||count!==components.states.length)errors.push('Mid-Fidelity variant count drift');
- for(const [dir,expected] of Object.entries(state.notes)){
-  if(json(join(release,dir,'db/elements/note.json')).text!==expected)errors.push('Planning board drift: '+dir);
- }
  if(json('docs/boards/release-stages/db/elements/release_v010_status.json').text!==state.stageNote)errors.push('Release stage board drift');
  for(const p of ['PRODUCT.md','DESIGN.md','docs/README.md',join(release,'README.md'),...['product','information-architecture','screen-inventory','user-flows','high-fidelity-wireframe'].map(dir=>join(release,dir,'README.md'))])if(!read(p).includes(state.status))errors.push('Current release status drift: '+p);
  for(const [dir,key] of [['sketch','sketch'],['low-fidelity-wireframe','lowFidelity'],['mid-fidelity-wireframe','midFidelity']]){

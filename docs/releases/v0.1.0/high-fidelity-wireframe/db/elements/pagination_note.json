@@ -1,9 +1,9 @@
 {
   "type": "note",
-  "x": 850,
-  "y": 1670,
-  "w": 440,
-  "h": 210,
+  "x": 450,
+  "y": 2020,
+  "w": 840,
+  "h": 115,
   "color": "yellow",
-  "text": "Pagination follows the final question; ten per page in original exam order. Final page may be shorter. Boundary controls disabled and page change resets scroll. Illustrative continuation is not a count of actual questions."
+  "text": "Pagination follows the final question; ten per page in original exam order. Hide pagination for a single page. On multiple pages, disable unavailable boundary controls and reset scroll on page change. Show the inline warning near available navigation only when selected or evaluated answers would be cleared. Check whether people notice and understand it in the prototype."
 }

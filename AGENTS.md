@@ -119,7 +119,8 @@ Every delegated activity must specify:
 ### Context management and isolation
 - Reuse verified findings while their sources are unchanged. Retrieve the smallest relevant source section; read each applicable skill's required instructions, then open only references needed for the task.
 - Process large logs, board JSON and search results locally; return concise findings with source paths and enough evidence for verification. Request focused browser state or screenshots; avoid full accessibility trees for large canvases when not needed.
-- Fan out independent work across parallel subagents to maximize throughput and isolation. Give each worker only the context it needs; avoid duplicating the same investigation. Respect platform and user instructions governing delegation and model choice.
+- Fan out independent work as required. Give each worker its task contract and only the relevant evidence when supported. Use a full conversation fork when the task depends on it. Group related work to avoid duplicate investigations and respect platform and user instructions governing delegation and model choice.
+- Batch independent checks and run the required independent verification on consolidated changes. Repeat checks when inputs change, a check fails, or a coverage gap remains. Report meaningful findings, decisions, blockers, or completed results while meeting required update intervals.
 - Batch independent reads and checks when safe. Rerun validation when changed inputs, failures, or uncertainty justify it; choose coverage and independent verification proportionate to risk and the applicable quality gates.
 - Use Git worktrees when concurrent edits would conflict. Do not force worktrees for read-only or isolated work.
 - Treat context compaction and prompt caching as host-managed. Do not claim cache hits or savings without measurements, and do not use arbitrary token caps that compromise required work.

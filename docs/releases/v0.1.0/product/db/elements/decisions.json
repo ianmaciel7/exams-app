@@ -26,7 +26,7 @@
     "r2": {
       "at": 2,
       "c0": "Pagination",
-      "c1": "10 questions per page; reset scroll"
+      "c1": "10 questions per page. Show pagination only when there is more than one page. Reset scroll on page change."
     },
     "r3": {
       "at": 3,
@@ -36,7 +36,7 @@
     "r4": {
       "at": 4,
       "c0": "Navigation",
-      "c1": "Discard answers on page/competition change"
+      "c1": "Show a nonmodal warning near the relevant navigation before changing page or competition when selected or evaluated answers would be lost. The change discards those answers."
     },
     "r5": {
       "at": 5,
@@ -61,7 +61,7 @@
     "r9": {
       "at": 9,
       "c0": "Question load failure",
-      "c1": "Manual Retry reloads selected list"
+      "c1": "Show an error notice and a manual Retry button that reloads the selected question list"
     },
     "r10": {
       "at": 10,
@@ -96,7 +96,7 @@
     "r16": {
       "at": 16,
       "c0": "Interface languages",
-      "c1": "Brazilian Portuguese and English"
+      "c1": "Brazilian Portuguese or English according to the device language, with English fallback"
     }
   },
   "head": true,
