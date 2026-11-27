@@ -3,7 +3,7 @@
   "x": 0,
   "y": 65,
   "w": 420,
-  "h": 180,
+  "h": 235,
   "color": "yellow",
-  "text": "Sidebar: competition items\nMain region: selected competition's question list\nSelecting another competition changes the list."
+  "text": "Sidebar: competition items\nMain region: selected competition's question list\nSelecting another competition changes the list.\nLabel: competition · year · position/exam; truncate with ellipsis."
 }

@@ -3,7 +3,7 @@
   "x": 0,
   "y": 65,
   "w": 420,
-  "h": 180,
+  "h": 235,
   "color": "yellow",
-  "text": "One screen: sidebar + question list\nActive competition and stacked question items\nVertical scrolling"
+  "text": "One screen: sidebar + question list\nActive competition and stacked question items\nVertical scrolling\nLabel: competition · year · position/exam; truncate with ellipsis."
 }

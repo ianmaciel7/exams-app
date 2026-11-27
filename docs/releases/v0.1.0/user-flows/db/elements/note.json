@@ -3,7 +3,7 @@
   "x": 0,
   "y": 65,
   "w": 420,
-  "h": 180,
+  "h": 235,
   "color": "yellow",
-  "text": "Select competition → display its question list → scroll through questions\nSelect another competition → display its list"
+  "text": "Select competition → display its question list → scroll through questions\nSelect another competition → display its list\nLabel: competition · year · position/exam; truncate with ellipsis."
 }
