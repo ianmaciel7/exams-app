@@ -799,6 +799,8 @@
     "focus_button_spec_3",
     "focus_button_spec_focus_ring",
     "collapsed_reveal_focus_caption",
-    "collapsed_reveal_focus_sample"
+    "collapsed_reveal_focus_sample",
+    "mobile_drawer_open",
+    "mobile_drawer_caption"
   ]
 }

@@ -5,5 +5,5 @@
   "w": 640,
   "h": 120,
   "color": "yellow",
-  "text": "Proposed empty-sidebar treatment. No default selection is possible; no creation action is assumed."
+  "text": "Approved: when no competitions exist, show an empty-state message without a button. No default selection or question request is possible."
 }

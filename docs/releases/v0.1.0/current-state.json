@@ -21,15 +21,15 @@
     "assessment": "Mid-Fidelity focus treatment reviewed; owner requested correction. Not an approval."
   },
   "status": "Current stage: Mid-Fidelity Wireframe — in progress; 21 variants; owner visual approval pending.",
-  "approved": "Automatically select the first available competition on entry. Browse ten questions per page; pagination follows the last question and resets scroll to the top. Select one option and explicitly submit with Answer. Correct and incorrect feedback identifies the correct choice and, when wrong, the user's choice. A confirmed answer is read-only on the current page. Changing page or competition, or closing the application, discards responses. On submission failure keep the choice and allow another submission; prevent duplicates while pending. Retry reloads a failed question list. A Ghost sidebar trigger is available across workspace states. On desktop, the collapse icon remains visible while expanded; when collapsed, the expand icon is hidden at pointer rest and revealed on rail/header hover or keyboard focus, without moving the layout. Activation, not hover, expands the sidebar. A visible accessible alternative is required on touch/no-hover devices. Collapse/expand preserves current page, selection, scroll context and answers.",
-  "open": "Question ordering, empty-sidebar presentation, exact responsive breakpoint and phone drawer treatment (including its open state), navigation-list data source and recovery, ambiguous submission outcomes, and production localization remain open. The phone layout, sidebar loading and sidebar failure are proposals. No runtime, usability or accessibility conformance is claimed.",
+  "approved": "Automatically select the first available competition on entry. Browse ten questions per page; pagination follows the last question and resets scroll to the top. Select one option and explicitly submit with Answer. Correct and incorrect feedback identifies the correct choice and, when wrong, the user's choice. A confirmed answer is read-only on the current page. Changing page or competition, or closing the application, discards responses. On submission failure keep the choice and allow another submission; prevent duplicates while pending. Retry reloads a failed question list. A Ghost sidebar trigger is available across workspace states. On desktop, the collapse icon remains visible while expanded; when collapsed, the expand icon is hidden at pointer rest and revealed on rail/header hover or keyboard focus, without moving the layout. Activation, not hover, expands the sidebar. A visible accessible alternative is required on touch/no-hover devices. Collapse/expand preserves current page, selection, scroll context and answers. Questions follow original exam order. If no competitions are available, show an empty-state message without an action button. On phones, navigation opens as a drawer over the question content rather than shifting it. If competition-list loading fails, show an error and manual Retry. If an answer outcome cannot be confirmed, retain the selected option and permit a safe retry without duplicate evaluation. Support the application interface in Brazilian Portuguese and English.",
+  "open": "The six owner decisions are resolved. Exact responsive breakpoint, competition-list data source, safe-retry implementation and locale selection/default behavior require technical design and prototype validation. Exam-content translation is not implied. The navigation loading treatment remains a visual study. Native visual review, runtime, usability and accessibility validation remain pending.",
   "notes": {
-    "product": "**Current product decisions — v0.1.0**\nAutomatically select the first available competition on entry. Browse ten questions per page; pagination follows the last question and resets scroll to the top. Select one option and explicitly submit with Answer. Correct and incorrect feedback identifies the correct choice and, when wrong, the user's choice. A confirmed answer is read-only on the current page. Changing page or competition, or closing the application, discards responses. On submission failure keep the choice and allow another submission; prevent duplicates while pending. Retry reloads a failed question list. A Ghost sidebar trigger is available across workspace states. On desktop, the collapse icon remains visible while expanded; when collapsed, the expand icon is hidden at pointer rest and revealed on rail/header hover or keyboard focus, without moving the layout. Activation, not hover, expands the sidebar. A visible accessible alternative is required on touch/no-hover devices. Collapse/expand preserves current page, selection, scroll context and answers.\n\n**Open**\nQuestion ordering, empty-sidebar presentation, exact responsive breakpoint and phone drawer treatment (including its open state), navigation-list data source and recovery, ambiguous submission outcomes, and production localization remain open. The phone layout, sidebar loading and sidebar failure are proposals. No runtime, usability or accessibility conformance is claimed.",
-    "information-architecture": "**Current workspace — v0.1.0**\nOne destination: left competition sidebar, right scrolling question list. First available competition selected by default. Label: Name · Year · Position/exam; full label discoverable. Ghost trigger: visible expanded; collapsed expand icon revealed on hover/focus, with touch fallback. Activation changes layout; hover alone does not. Collapse preserves page and answers. Ten questions per page, footer pagination. Phone and navigation loading/failure are proposals. No additional routes. Exact breakpoint, drawer, ordering and data recovery remain open.",
-    "screen-inventory": "**Current inventory — 21 variants**\nCore: unanswered, list end, selected, correct, incorrect, question loading, empty questions, load failure, submitting, submission failure, middle/last page, long content.\nStudies: expanded/collapsed narrow workspace, hover, keyboard focus, empty sidebar, phone, sidebar loading/failure.\nGhost trigger available in every variant; hidden at collapsed pointer rest and revealed on hover/focus. External component specimens distinguish default, hover, pressed and single-outline focus; collapsed hover and keyboard focus are separate. The three latest studies and empty sidebar remain proposals. Native visual review pending.",
-    "user-flows": "**Current flows — v0.1.0**\nEntry -> first available item -> question loading -> list / empty / failure.\nSelect -> Answer -> pending -> confirmed and locked OR failure (choice retained; Answer enabled).\nPage or competition change -> discard current answers -> load target; page scroll resets. Exit -> discard answers. Collapsed pointer hover/focus -> reveal expand control; activate -> expand; preserve current context. Touch/no-hover requires visible alternative. Ten questions per page. Question-list Retry is distinct from proposed navigation-list Retry. Phone drawer, uncertain outcomes and keyboard/touch behavior remain open."
+    "product": "**Current product decisions — v0.1.0**\nAutomatically select the first available competition on entry. Browse ten questions per page; pagination follows the last question and resets scroll to the top. Select one option and explicitly submit with Answer. Correct and incorrect feedback identifies the correct choice and, when wrong, the user's choice. A confirmed answer is read-only on the current page. Changing page or competition, or closing the application, discards responses. On submission failure keep the choice and allow another submission; prevent duplicates while pending. Retry reloads a failed question list. A Ghost sidebar trigger is available across workspace states. On desktop, the collapse icon remains visible while expanded; when collapsed, the expand icon is hidden at pointer rest and revealed on rail/header hover or keyboard focus, without moving the layout. Activation, not hover, expands the sidebar. A visible accessible alternative is required on touch/no-hover devices. Collapse/expand preserves current page, selection, scroll context and answers. Questions follow original exam order. If no competitions are available, show an empty-state message without an action button. On phones, navigation opens as a drawer over the question content rather than shifting it. If competition-list loading fails, show an error and manual Retry. If an answer outcome cannot be confirmed, retain the selected option and permit a safe retry without duplicate evaluation. Support the application interface in Brazilian Portuguese and English.\n\n**Technical validation**\nThe six owner decisions are resolved. Exact responsive breakpoint, competition-list data source, safe-retry implementation and locale selection/default behavior require technical design and prototype validation. Exam-content translation is not implied. The navigation loading treatment remains a visual study. Native visual review, runtime, usability and accessibility validation remain pending.",
+    "information-architecture": "**Current workspace — v0.1.0**\nOne destination: competition sidebar and scrolling question list. Original exam order; 10 questions/page. First available competition selected automatically. Name · Year · Position/exam; full label discoverable. Desktop Ghost reveal on hover/focus; phones use an overlay drawer. Empty competition list shows a message only; navigation failure offers manual Retry. Interface: pt-BR and en. No additional routes. Exact breakpoint, data source and locale controls require technical validation.",
+    "screen-inventory": "**Current inventory — 21 variants**\nCore: unanswered, list end, selected, correct, incorrect, question loading, empty list, load failure, submitting, submission failure/uncertainty, middle/last page, long content, empty competitions and navigation failure.\nStudies: narrow expanded/collapsed, hover, keyboard focus, phone closed + open overlay specimen, navigation loading. Six owner decisions resolved. Native visual review pending; component specimens are not separate workspace variants.",
+    "user-flows": "**Current flows — v0.1.0**\nEntry -> first available item -> questions in original exam order; empty competitions -> message only; list failure -> manual Retry.\nSelect -> Answer -> pending -> confirmed and locked OR not confirmed (retain selection; safe retry without duplicate evaluation).\nPage/competition change -> discard answers; page scroll resets. Exit -> discard. Desktop hover/focus reveals collapsed trigger; phone opens overlay drawer. Preserve context on collapse/expand. Portuguese and English interface. Technical validation remains."
   },
-  "stageNote": "**v0.1.0 — In progress**\nProduct, Information Architecture, Screen Inventory and User Flows: synchronized; open decisions remain.\nSketch: complete for progression (94072ce; 8 variants).\nLow-Fidelity Wireframe: complete for progression (e70dbaf; 9 variants).\nMid-Fidelity Wireframe: in progress (21 variants); owner visual review pending.\nHigh-Fidelity, Mockup, Interactive Prototype and Usability Testing: not started.\nSource: docs/releases/v0.1.0/current-state.json",
+  "stageNote": "**v0.1.0 — In progress**\nProduct, Information Architecture, Screen Inventory and User Flows: synchronized; six owner decisions resolved. Technical validation remains.\nSketch: complete for progression (94072ce; 8 variants).\nLow-Fidelity Wireframe: complete for progression (e70dbaf; 9 variants).\nMid-Fidelity Wireframe: in progress (21 variants); owner visual review pending.\nHigh-Fidelity, Mockup, Interactive Prototype and Usability Testing: not started.\nSource: docs/releases/v0.1.0/current-state.json",
   "stages": [
     {
       "name": "Product",
@@ -153,7 +153,7 @@
     },
     {
       "id": "no-items",
-      "category": "Proposal — empty sidebar"
+      "category": "Core — empty competition list"
     },
     {
       "id": "collapsed",
@@ -173,15 +173,15 @@
     },
     {
       "id": "mobile",
-      "category": "Proposal — phone, closed drawer"
+      "category": "Responsive study — closed and open overlay drawer"
     },
     {
       "id": "sidebar-loading",
-      "category": "Proposal — navigation loading"
+      "category": "Navigation lifecycle — loading study"
     },
     {
       "id": "sidebar-failure",
-      "category": "Proposal — navigation failure"
+      "category": "Navigation lifecycle — error and manual Retry"
     }
   ],
   "decisions": [
@@ -224,6 +224,30 @@
     [
       "Feedback",
       "Correct option and user's wrong choice identified"
+    ],
+    [
+      "Question ordering",
+      "Original exam order"
+    ],
+    [
+      "Empty competition list",
+      "Message only; no action button"
+    ],
+    [
+      "Phone sidebar",
+      "Overlay drawer"
+    ],
+    [
+      "Competition list failure",
+      "Error and manual Retry"
+    ],
+    [
+      "Unknown submission outcome",
+      "Retain choice and permit safe retry"
+    ],
+    [
+      "Interface languages",
+      "Brazilian Portuguese and English"
     ]
   ],
   "flows": [
@@ -270,6 +294,22 @@
     [
       "Collapsed hover / focus",
       "Reveal icon; explicit activation opens"
+    ],
+    [
+      "No competitions",
+      "Show empty message; no action or selection"
+    ],
+    [
+      "Competition list fails",
+      "Show error; manual Retry reloads list"
+    ],
+    [
+      "Phone navigation opens",
+      "Overlay drawer; preserve question context"
+    ],
+    [
+      "Submission outcome uncertain",
+      "Retain option; safe retry without duplicate evaluation"
     ]
   ],
   "lastSuccessfulCapture": {
@@ -289,31 +329,60 @@
     "run": 46005686904,
     "assessment": "Owner identified crowded planning-board elements; layout corrections made in 165f554."
   },
-  "pendingDecisions": [
+  "pendingDecisions": [],
+  "hubScope": "One competition-question workspace. First available competition selected automatically. Ten questions per page. Explicit Answer, locked evaluation, retry and temporary responses. Ghost navigation; collapsed desktop reveal on hover/focus. Original exam order; phone overlay drawer; empty message and list Retry; safe answer retry; Portuguese and English interface.",
+  "technicalValidation": [
     [
-      "Question ordering",
-      "Open"
+      "Responsive breakpoint and drawer focus",
+      "Technical design / prototype"
     ],
     [
-      "Empty sidebar presentation",
-      "Proposal"
+      "Competition data source and original exam ordering",
+      "Technical design"
     ],
     [
-      "Phone drawer and breakpoint",
-      "Proposal"
+      "Safe retry and ambiguous outcomes",
+      "Technical design / prototype"
     ],
     [
-      "Competition-list data source and recovery",
-      "Proposal"
+      "Locale selection and default",
+      "Technical design / prototype"
     ],
     [
-      "Ambiguous submission outcome",
-      "Open"
-    ],
-    [
-      "Production localization",
-      "Open"
+      "Visual, keyboard, touch and accessibility verification",
+      "Review / prototype"
     ]
   ],
-  "hubScope": "One competition-question workspace. First available competition selected automatically. Ten questions per page. Explicit Answer, locked evaluation, retry and temporary responses. Ghost navigation; collapsed desktop reveal on hover/focus."
+  "decisionHistory": [
+    {
+      "date": "2026-11-27",
+      "source": "Owner response to six explicit product questions",
+      "decisions": [
+        [
+          "Question ordering",
+          "Original exam order"
+        ],
+        [
+          "Empty competition list",
+          "Message only; no action button"
+        ],
+        [
+          "Phone sidebar",
+          "Overlay drawer"
+        ],
+        [
+          "Competition list failure",
+          "Error and manual Retry"
+        ],
+        [
+          "Unknown submission outcome",
+          "Retain choice and permit safe retry"
+        ],
+        [
+          "Interface languages",
+          "Brazilian Portuguese and English"
+        ]
+      ]
+    }
+  ]
 }

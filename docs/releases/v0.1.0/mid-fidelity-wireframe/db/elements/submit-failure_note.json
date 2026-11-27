@@ -5,5 +5,5 @@
   "w": 640,
   "h": 120,
   "color": "yellow",
-  "text": "Retain the option and allow another Answer submission after failure. This is not retrying an evaluated answer."
+  "text": "Approved: retain the selected option after a failed or uncertain outcome; enable safe retry without duplicate evaluation. Reconcile the original operation before treating it as confirmed; technical validation pending."
 }

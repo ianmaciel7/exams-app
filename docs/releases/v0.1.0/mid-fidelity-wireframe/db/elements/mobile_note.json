@@ -5,5 +5,5 @@
   "w": 640,
   "h": 120,
   "color": "yellow",
-  "text": "Phone study only: full-width question content, visible Ghost navigation trigger and current competition context. Proposed drawer interaction and breakpoint require approval; no runtime responsiveness is claimed."
+  "text": "Approved phone overlay drawer: compare closed workspace and open drawer specimen; background stays in place, current answers and scroll are preserved. Prototype must validate dismissal, focus restoration, touch and exact breakpoint. The vector specimen is static."
 }

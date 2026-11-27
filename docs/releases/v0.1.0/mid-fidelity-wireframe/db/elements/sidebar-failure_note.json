@@ -5,5 +5,5 @@
   "w": 640,
   "h": 120,
   "color": "yellow",
-  "text": "Proposal if loading competitions can fail: Retry reloads navigation, not a question list. No selection exists until navigation loads. Data source and recovery policy remain open."
+  "text": "Approved: competition-list failure shows error and manual Retry. Retry reloads navigation, not questions. No selection until navigation loads. Data source and runtime recovery require technical validation."
 }
