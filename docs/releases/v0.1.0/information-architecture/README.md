@@ -19,3 +19,7 @@ The current Sketch uses a compact one-line sidebar list with neutral square-with
 The Sketch depicts eight variants of one screen: unanswered at list start, list end with pagination, selected before evaluation, correct answer, incorrect answer, loading, empty list and load failure. The owner approved explicit answer submission: select an option, then activate Answer to evaluate it. An incorrect response marks the selected option and reveals the correct one. Page changes reset the question list to the top. A load failure offers a manual Retry action. These are release decisions, not verified implementation. Other proposed variants remain pending visual review. No separate routes or working behavior are established.
 
 Both sidebar entries share one neutral square-with-X icon placeholder in the current Sketch; this is a visual refinement, not a new interaction.
+
+## Copy and navigation boundaries
+
+Current Sketch labels are in English; official institution names remain unchanged. Initial selection and whether prior answers remain visible on revisiting an entry are open in the [Product decision register](../product/README.md#open-product-decisions). The native Sketch is not a routing specification.

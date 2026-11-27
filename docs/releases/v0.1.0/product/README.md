@@ -25,3 +25,12 @@ The owner approved explicit answer submission: select an option, then activate A
 Evidence: [archived QConcursos interface study](../../../references/2026-11-25-qconcursos-archive-evidence.md) establishes an explicit answer action and feedback. The [historical archive inventory](https://github.com/ianmaciel7/exams-app-archive/blob/main/inventory/exams-app-branch-files.json) identifies ExamTopics and QConcursos flow and interaction records; original bytes for the ExamTopics flow, pagination and retry were not recovered. Scroll reset and manual retry are owner-approved recommendations, not independently verified benchmark behavior.
 
 No filters, simulations, scoring, explanations, persistence, or other features are added by these decisions. Page size and automatic retry/cache policy are unspecified.
+
+## Open product decisions
+
+- Initial entry: automatically select the first available competition or require the user to choose one. This affects whether an initial unselected state is needed.
+- Answer lifecycle: whether evaluated choices remain visible when changing page or competition and returning; whether a submitted answer can be changed or retried. Persistence across sessions is not selected.
+- Page size and question ordering: not selected; defer exact values until needed for the release.
+- Loading and empty-state appearance remain pending visual review. Mobile navigation, responsive collapse and production localization are not approved requirements.
+
+The four prior interaction decisions are resolved and must not be asked again. English is approved for the project-authored Sketch copy; this does not establish a production localization policy. Proper competition names are unchanged.

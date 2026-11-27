@@ -61,8 +61,12 @@ The owner approved explicit answer submission: select an option, then activate A
 
 The eight states remain: unanswered, end-of-list pagination, selected before submission, correct, incorrect, loading, empty, and load failure. The selected-before-submission state is required. The Answer and Retry controls still need visual reconciliation in the static board; behavior and accessibility are not yet tested.
 
-The owner also approved a neutral square-with-X icon placeholder for each sidebar entry. The board source now uses identical square-with-X placeholders in all eight variants; new captures and visual validation remain pending.
+The owner also approved a neutral square-with-X icon placeholder for each sidebar entry. The board source now uses identical square-with-X placeholders in all eight variants; captures exist, but owner visual approval remains pending.
 
 ## English copy consistency — 2026-11-27
 
 All eight sketch variants now use English project-authored UI labels, state captions, pagination and feedback, in accordance with AGENTS.md. DATAPREV and PPSA remain proper names; the illustrative job-title placeholders are translated. Geometry, state coverage, sticky notes and review threads are unchanged. Visual validation of the updated text remains pending.
+
+## Capture and review gate — 2026-11-27
+
+[CI run 45981578592](https://github.com/ianmaciel7/exams-app/actions/runs/45981578592) for `0c5df27` passed board integrity and generated the downloadable light/dark captures; deployment failed separately. The dark overview contact sheet confirms English labels and preserved annotations. Owner visual validation and control placement remain pending: Answer and Retry are not drawn. See the [open product decisions](../product/README.md#open-product-decisions). The current eight variants remain unchanged; no new behavior is approved.

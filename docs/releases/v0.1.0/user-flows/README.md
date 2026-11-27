@@ -15,3 +15,7 @@ Progress: in progress; user review pending.
 ## State transitions under review
 
 Select entry → loading (proposal) → list, empty or load failure (proposed variants). Unanswered → select option → selected → activate Answer → correct or incorrect feedback. An incorrect answer reveals the correct option. Page navigation stays within the selected entry and resets scroll to the top. Load failure → manual Retry → loading → list, empty or failure. No implementation or new routes are implied.
+
+## Open transitions
+
+Initial entry before selecting a competition and revisiting previously evaluated questions after page or competition changes are unresolved; see [Product decision register](../product/README.md#open-product-decisions). Do not assume answer persistence or allow a submitted answer to change without approval. Current UI labels are in English, including Answer and Retry; these controls are approved but not yet drawn in the Sketch.

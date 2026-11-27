@@ -10,7 +10,7 @@ Keep neutral ink and restrained semantic accents for selection, correct and inco
 
 ## Typography
 
-Use the same legible sketch lettering throughout. The workspace label is modest; question content is primary. Use one-line readable navigation labels and truncate overflow while preserving the full accessible name in the eventual implementation. Production typography is undecided.
+Use the same legible sketch lettering throughout. The workspace label is modest; question content is primary. Use one-line readable navigation labels and truncate overflow while preserving the full accessible name in the eventual implementation. All current sketch interface labels and annotations use English; retain proper names such as DATAPREV and PPSA. Production typography and localization are undecided.
 
 ## Layout
 
@@ -43,4 +43,4 @@ Impeccable context: PRODUCT.md owns product facts. This file owns provisional vi
 
 The owner approved explicit answer submission: select an option, then activate Answer to evaluate it. An incorrect response marks the selected option and reveals the correct one. Page changes reset the question list to the top. A load failure offers a manual Retry action. These are release decisions, not verified implementation.
 
-Use a per-question Answer control before evaluation and a Retry control in the failure state; exact visual geometry is pending. The owner approved neutral square-with-X icon placeholders for the sidebar, replacing the previous list glyphs in all eight sketch variants. Do not treat this as final iconography.
+Use a per-question Answer control before evaluation and a Retry control in the failure state; both controls are missing from the current static drawings and must be depicted; exact visual geometry is pending. The owner approved neutral square-with-X icon placeholders for the sidebar, replacing the previous list glyphs in all eight sketch variants. Do not treat this as final iconography.

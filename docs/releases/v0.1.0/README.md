@@ -20,6 +20,10 @@ The Sketch depicts eight variants of one screen: unanswered at list start, list 
 
 The current Sketch uses a compact one-line sidebar list with neutral square-with-X icon placeholders, institution/year/position labels, ellipsis and subtle active text/indicator. No redundant section heading or additional menu. Exact visual treatment remains exploratory.
 
-[Review threads](sketch/comments.json) and [provisional visual direction](../../../DESIGN.md). All stages remain in progress, validation pending; static sketches are not implementation. Latest source before this documentation sync: `9a2e566`.
+[Review threads](sketch/comments.json) and [provisional visual direction](../../../DESIGN.md). All stages remain in progress, validation pending; static sketches are not implementation. Latest visually inspected English-copy source: [`0c5df27`](https://github.com/ianmaciel7/exams-app/commit/0c5df27b67de7cb3d59ac8945adc0e07bf0ec050). All four decision threads are resolved; visual approval remains pending.
 
 Both sidebar entries share one neutral square-with-X icon placeholder in the current Sketch; this is a visual refinement, not a new interaction.
+
+## Review gate — 2026-11-27
+
+The English-copy revision preserves the eight state variants and native annotations. Board integrity and capture generation passed in [CI run 45981578592](https://github.com/ianmaciel7/exams-app/actions/runs/45981578592); the separate deployment job failed. The Answer and Retry actions are approved but not drawn in the current Sketch. See the [Product decision register](product/README.md#open-product-decisions) for unresolved decisions. Do not advance fidelity stages until the essential controls and visual review are reconciled.
