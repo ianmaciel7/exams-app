@@ -4,7 +4,7 @@
   "y": 880,
   "w": 540,
   "h": 140,
-  "text": "**Load failure**\nExplain the failure. Retry policy is open.",
+  "text": "**Load failure**\nExplain the failure and offer a manual Retry action.",
   "color": "peach",
   "tilt": 0
 }

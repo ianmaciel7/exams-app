@@ -4,7 +4,7 @@
   "y": 880,
   "w": 540,
   "h": 140,
-  "text": "**Pagination**\nAt the end of the list. Scroll restoration is open.",
+  "text": "**Pagination**\nAt the end of the list. Changing pages returns to the top.",
   "color": "blue",
   "tilt": 0
 }
