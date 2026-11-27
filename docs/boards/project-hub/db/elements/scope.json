@@ -2,7 +2,7 @@
   "type": "text",
   "x": 940,
   "y": 220,
-  "text": "One competition-question workspace. First available competition selected automatically. Ten questions per page. Explicit Answer, locked evaluation, retry and temporary responses. Ghost navigation; collapsed desktop reveal on hover/focus.",
+  "text": "One competition-question workspace. First available competition selected automatically. Ten questions per page. Explicit Answer, locked evaluation, retry and temporary responses. Ghost navigation; collapsed desktop reveal on hover/focus. Original exam order; phone overlay drawer; empty message and list Retry; safe answer retry; Portuguese and English interface.",
   "size": "body",
   "color": "ink",
   "wrap": 480

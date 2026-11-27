@@ -3,7 +3,7 @@
   "x": 900,
   "y": 150,
   "w": 550,
-  "h": 330,
+  "h": 390,
   "color": "yellow",
-  "text": "**Current flows — v0.1.0**\nEntry -> first available item -> question loading -> list / empty / failure.\nSelect -> Answer -> pending -> confirmed and locked OR failure (choice retained; Answer enabled).\nPage or competition change -> discard current answers -> load target; page scroll resets. Exit -> discard answers. Collapsed pointer hover/focus -> reveal expand control; activate -> expand; preserve current context. Touch/no-hover requires visible alternative. Ten questions per page. Question-list Retry is distinct from proposed navigation-list Retry. Phone drawer, uncertain outcomes and keyboard/touch behavior remain open."
+  "text": "**Current flows — v0.1.0**\nEntry -> first available item -> questions in original exam order; empty competitions -> message only; list failure -> manual Retry.\nSelect -> Answer -> pending -> confirmed and locked OR not confirmed (retain selection; safe retry without duplicate evaluation).\nPage/competition change -> discard answers; page scroll resets. Exit -> discard. Desktop hover/focus reveals collapsed trigger; phone opens overlay drawer. Preserve context on collapse/expand. Portuguese and English interface. Technical validation remains."
 }

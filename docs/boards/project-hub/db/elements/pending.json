@@ -1,9 +1,9 @@
 {
   "type": "note",
   "x": 940,
-  "y": 440,
+  "y": 510,
   "w": 480,
-  "h": 280,
+  "h": 190,
   "color": "yellow",
-  "text": "**Pending review**\nOwner visual approval of Mid-Fidelity and capture review of new revisions. Question ordering; Empty sidebar presentation; Phone drawer and breakpoint; Competition-list data source and recovery; Ambiguous submission outcome; Production localization. Later stages not started."
+  "text": "**Pending review**\nOwner visual approval of Mid-Fidelity and capture review of new revisions. Six owner decisions resolved; technical validation remains. Later stages not started."
 }

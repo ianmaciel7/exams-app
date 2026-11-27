@@ -3,7 +3,7 @@
   "x": 960,
   "y": 150,
   "w": 560,
-  "h": 300,
+  "h": 350,
   "color": "yellow",
-  "text": "**v0.1.0 — In progress**\nProduct, Information Architecture, Screen Inventory and User Flows: synchronized; open decisions remain.\nSketch: complete for progression (94072ce; 8 variants).\nLow-Fidelity Wireframe: complete for progression (e70dbaf; 9 variants).\nMid-Fidelity Wireframe: in progress (21 variants); owner visual review pending.\nHigh-Fidelity, Mockup, Interactive Prototype and Usability Testing: not started.\nSource: docs/releases/v0.1.0/current-state.json"
+  "text": "**v0.1.0 — In progress**\nProduct, Information Architecture, Screen Inventory and User Flows: synchronized; six owner decisions resolved. Technical validation remains.\nSketch: complete for progression (94072ce; 8 variants).\nLow-Fidelity Wireframe: complete for progression (e70dbaf; 9 variants).\nMid-Fidelity Wireframe: in progress (21 variants); owner visual review pending.\nHigh-Fidelity, Mockup, Interactive Prototype and Usability Testing: not started.\nSource: docs/releases/v0.1.0/current-state.json"
 }

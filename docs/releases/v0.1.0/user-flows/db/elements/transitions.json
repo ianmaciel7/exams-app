@@ -72,6 +72,26 @@
       "at": 11,
       "c0": "Collapsed hover / focus",
       "c1": "Reveal icon; explicit activation opens"
+    },
+    "r12": {
+      "at": 12,
+      "c0": "No competitions",
+      "c1": "Show empty message; no action or selection"
+    },
+    "r13": {
+      "at": 13,
+      "c0": "Competition list fails",
+      "c1": "Show error; manual Retry reloads list"
+    },
+    "r14": {
+      "at": 14,
+      "c0": "Phone navigation opens",
+      "c1": "Overlay drawer; preserve question context"
+    },
+    "r15": {
+      "at": 15,
+      "c0": "Submission outcome uncertain",
+      "c1": "Retain option; safe retry without duplicate evaluation"
     }
   },
   "head": true,

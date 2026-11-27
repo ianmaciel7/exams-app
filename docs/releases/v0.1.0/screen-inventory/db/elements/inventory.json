@@ -105,7 +105,7 @@
       "at": 14,
       "c0": "14",
       "c1": "no-items",
-      "c2": "Proposal — empty sidebar"
+      "c2": "Core — empty competition list"
     },
     "r15": {
       "at": 15,
@@ -135,19 +135,19 @@
       "at": 19,
       "c0": "19",
       "c1": "mobile",
-      "c2": "Proposal — phone, closed drawer"
+      "c2": "Responsive study — closed and open overlay drawer"
     },
     "r20": {
       "at": 20,
       "c0": "20",
       "c1": "sidebar-loading",
-      "c2": "Proposal — navigation loading"
+      "c2": "Navigation lifecycle — loading study"
     },
     "r21": {
       "at": 21,
       "c0": "21",
       "c1": "sidebar-failure",
-      "c2": "Proposal — navigation failure"
+      "c2": "Navigation lifecycle — error and manual Retry"
     }
   },
   "head": true,

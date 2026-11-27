@@ -67,6 +67,36 @@
       "at": 10,
       "c0": "Feedback",
       "c1": "Correct option and user's wrong choice identified"
+    },
+    "r11": {
+      "at": 11,
+      "c0": "Question ordering",
+      "c1": "Original exam order"
+    },
+    "r12": {
+      "at": 12,
+      "c0": "Empty competition list",
+      "c1": "Message only; no action button"
+    },
+    "r13": {
+      "at": 13,
+      "c0": "Phone sidebar",
+      "c1": "Overlay drawer"
+    },
+    "r14": {
+      "at": 14,
+      "c0": "Competition list failure",
+      "c1": "Error and manual Retry"
+    },
+    "r15": {
+      "at": 15,
+      "c0": "Unknown submission outcome",
+      "c1": "Retain choice and permit safe retry"
+    },
+    "r16": {
+      "at": 16,
+      "c0": "Interface languages",
+      "c1": "Brazilian Portuguese and English"
     }
   },
   "head": true,

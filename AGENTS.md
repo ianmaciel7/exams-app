@@ -202,3 +202,7 @@ For planning boards, measure native element dimensions before arranging links, c
 ## Canonical release projections and capture provenance
 
 Update `docs/releases/v0.1.0/current-state.json` first; run `node scripts/sync-release-state.mjs --write` to project stages, inventory, decisions, flows, board notes, hub links and generated documents. Do not edit generated fields independently. `node scripts/check-boards.mjs` checks projection drift and actual variant IDs. Distinguish last successful capture (manifest SHA), last recorded visual review and owner approval. CI checks out the event SHA and verifies manifest provenance. Open decisions remain explicitly open until approved; historical records are immutable evidence. Do not infer review or approval from a successful build.
+
+## Owner decision gate
+
+Before closing each stage, audit the decision register. Ask only for unresolved product decisions whose alternatives materially affect behavior, with a recommended choice and trade-off. Do not ask for technical details that can be resolved from standards and evidence. Record owner answers in the canonical release state; remove resolved entries from pendingDecisions and retain technical validation separately. Synchronize native boards, generated documentation, and relevant studies before claiming completion. Do not treat owner decisions as visual approval or tested implementation.

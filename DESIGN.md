@@ -20,7 +20,7 @@ Neutral grayscale structural study; semantic result labels do not rely on color 
 
 `scripts/mid-fidelity-components.cjs` manages common header, navigation rows, Ghost trigger, pagination, answer feedback, long-content geometry and proposed studies. Run `node scripts/sync-mid-fidelity.mjs --write`, then `node scripts/check-boards.mjs`. Review actual rendered optical alignment, wrapping, contrast and state parity before stage closure. Functional focus, accessible names, target sizes and responsive behavior require a later prototype.
 
-Question ordering, empty-sidebar presentation, exact responsive breakpoint and phone drawer treatment (including its open state), navigation-list data source and recovery, ambiguous submission outcomes, and production localization remain open. The phone layout, sidebar loading and sidebar failure are proposals. No runtime, usability or accessibility conformance is claimed.
+The six owner decisions are resolved. Exact responsive breakpoint, competition-list data source, safe-retry implementation and locale selection/default behavior require technical design and prototype validation. Exam-content translation is not implied. The navigation loading treatment remains a visual study. Native visual review, runtime, usability and accessibility validation remain pending.
 
 ## History and evidence
 

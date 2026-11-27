@@ -8,7 +8,7 @@ Review representative content, component semantics, hierarchy, density and state
 
 ## Coverage
 
-Eight inherited states: list start, end/pagination, selected, correct, incorrect, loading, empty questions, load failure. The narrow workspace now demonstrates the approved collapsible sidebar (exact treatment proposed). Hover/focus remain visual studies. Submission pending and failure represent approved recovery behavior; empty sidebar remains a proposal. Add collapsed-sidebar, long-content, middle-page and last-page studies, then three proposed phone/navigation lifecycle studies: twenty-one total. The first available sidebar item is selected automatically on entry; selected row uses background and text emphasis, no left marker. No question dividers or extra destinations.
+Eight inherited states: list start, end/pagination, selected, correct, incorrect, loading, empty questions, load failure. The narrow workspace demonstrates the approved collapsible sidebar (exact breakpoint requires technical validation). Hover/focus remain visual studies. Submission pending and failure represent approved recovery behavior; empty sidebar is approved. Add collapsed-sidebar, long-content, middle-page and last-page studies, then three phone/navigation lifecycle studies: twenty-one total. The first available sidebar item is selected automatically on entry; selected row uses background and text emphasis, no left marker. No question dividers or extra destinations.
 
 ## Component and layout review
 
@@ -19,7 +19,7 @@ Eight inherited states: list start, end/pagination, selected, correct, incorrect
 
 ## Open decisions
 
-Question ordering, empty-sidebar treatment, exact responsive breakpoint and collapse mechanism, and ambiguous submission outcomes remain open. Answer lifecycle, page size and recovery are approved below. The displayed first item is always selected on workspace entry if available; this decision is resolved. See [product](../product/README.md#open-product-decisions).
+The six owner decisions are now resolved; see current-state.json for technical validation. Answer lifecycle, page size and recovery are approved below. The displayed first item is always selected on workspace entry if available; this decision is resolved. See [product](../product/README.md#open-product-decisions).
 
 Suggested native comment anchors: narrow_note and collapsed_note (responsive treatment), no-items_note (empty sidebar), submit-failure_note (ambiguous server outcomes). Native comment creation is unavailable in this connected workflow; do not fabricate threads. These are notes and proposed anchors only.
 
@@ -41,7 +41,7 @@ All fourteen original variants are retained; four studies added. Native sticky n
 
 Owner requested refinements after reviewing `8d5ff69`. Use a 282-unit short-question cadence, 28-unit short-option rows, historical 120-by-36-unit action controls, and a 32-unit gap after the action. These are exploratory canvas units, not production tokens. Show the next question naturally instead of a fixed blank region. Expanded and collapsed variants preserve question content and scroll context. Use a bounded reading column, content-dependent multiline rows and hanging option labels. Place feedback near the corresponding option and visibly distinguish locked answers. Match loading geometry to loaded content. End-of-page studies depict preceding content and the final two questions, with centered pagination in flow and a 32-unit bottom margin. Ten questions per complete page; the 47-question dataset is illustrative. Use a slim neutral scrollbar and no question dividers.
 
-All eighteen variants and native notes remain. No new behavior is approved. Exact collapse treatment, breakpoint, empty sidebar, ordering and ambiguous submission recovery remain open. Native capture inspection and functional validation are pending.
+All eighteen variants and native notes remain. No new behavior is approved. Exact breakpoint and implementation of the approved recovery and drawer remain technical validation items. Native capture inspection and functional validation are pending.
 
 ## Sidebar toggle — ghost treatment
 
@@ -65,7 +65,7 @@ The previous eighteen variants are preserved and three studies are added. Shared
 
 Align sidebar icons and text to a shared optical row center; align the Ghost trigger and workspace title to the header axis. Use a 36-unit row, 42-unit cadence, 16-unit icons and an 8-unit icon-to-label gap as provisional canvas geometry. Keep the selected background without a left indicator, preserve the flush internal seam, and distinguish selected from hover. Center the entire pagination group in the main region with equal page slots and explicit gaps between chevrons and labels; keep disabled boundary controls visually distinct. Align option feedback with the associated option; keep result and lock text consistently positioned. Preserve the 28-unit single-line choice cadence, line-dependent height, hanging labels, and 32-unit gap between question groups. These are board-specific measurements, not universal UI rules or final design tokens.
 
-All 21 variants remain. The state categories are explicit in [Screen Inventory](../screen-inventory/README.md); keep the horizontal arrangement of variants of one screen, not separate routes. The shared source now includes header/title, selection/hover surfaces, icons and labels, pagination, answer feedback and long-content layout. The alignment review at `45e695c` is historical; consult the current-state record for the latest reviewed capture. Question ordering, empty-sidebar presentation, exact responsive breakpoint and phone drawer treatment (including its open state), navigation-list data source and recovery, ambiguous submission outcomes, and production localization remain open. The phone layout, sidebar loading and sidebar failure are proposals. No runtime, usability or accessibility conformance is claimed.
+All 21 variants remain. The state categories are explicit in [Screen Inventory](../screen-inventory/README.md); keep the horizontal arrangement of variants of one screen, not separate routes. The shared source now includes header/title, selection/hover surfaces, icons and labels, pagination, answer feedback and long-content layout. The alignment review at `45e695c` is historical; consult the current-state record for the latest reviewed capture. The six owner decisions are resolved. Exact responsive breakpoint, competition-list data source, safe-retry implementation and locale selection/default behavior require technical design and prototype validation. Exam-content translation is not implied. The navigation loading treatment remains a visual study. Native visual review, runtime, usability and accessibility validation remain pending.
 
 The canonical [current state](../current-state.json) and planning boards were synchronized. Prior stage boards are preserved as historical snapshots.
 
@@ -84,3 +84,16 @@ Use one external, continuous 2-unit neutral focus outline with a 3-unit clear se
 Answer and Retry use a stable 112 × 34 canvas footprint. Default #333333, hover #262626, pressed #191919, disabled #f4f4f4, pending #eeeeee. The four-state comparison is shown against the same light surface as the workspace; disabled and pending remain in their corresponding workspace variants. These neutral values are not final tokens. Avoid bounce, scaling, decorative shadows, ripple, geometry changes, and animation-dependent feedback. The collapsed hover and keyboard focus specimens are separate: hover reveals the icon with subtle surface feedback; keyboard focus reveals the icon with a single clear outline. Touch retains an accessible visible alternative.
 
 References: [W3C Focus Visible](https://www.w3.org/WAI/WCAG22/Understanding/focus-visible), [Focus Appearance](https://www.w3.org/WAI/WCAG22/Understanding/focus-appearance), [Non-text Contrast](https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast), [Atlassian focus ring](https://atlassian.design/components/focus-ring/usage), [Archive design foundations](https://github.com/ianmaciel7/exams-app-archive/blob/05a3ebd9dfae12f0346cb9f8e34181b8a4614288/docs/references/ui-ux-research-sources/design-foundations-and-state-transitions-2026-11-25.md). Historical review: native capture `670a2d1` demonstrated the previous bulky nested outline. Subsequent captures were generated; current capture provenance and review status are recorded in current-state.json. All 21 workspace variants remain.
+
+## Owner decisions — 2026-11-27
+
+| Topic | Approved decision |
+| --- | --- |
+| Question ordering | Original exam order |
+| Empty competition list | Message only; no action button |
+| Phone sidebar | Overlay drawer |
+| Competition list failure | Error and manual Retry |
+| Unknown submission outcome | Retain choice and permit safe retry |
+| Interface languages | Brazilian Portuguese and English |
+
+The mobile variant includes a static open-drawer companion specimen. It is not an additional workspace variant; 21 variants remain. The vector specimen is editable as an asset, not as independently editable native shapes. Technical validation and visual review remain pending.

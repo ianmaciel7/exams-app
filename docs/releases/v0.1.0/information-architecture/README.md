@@ -19,3 +19,16 @@ Historical [Sketch](../sketch/README.md) and [Low-Fidelity](../low-fidelity-wire
 A Ghost sidebar trigger is available across workspace states. On desktop, the collapse icon remains visible while expanded; when collapsed, the expand icon is hidden at pointer rest and revealed on rail/header hover or keyboard focus, without moving the layout. Activation, not hover, expands the sidebar. A visible accessible alternative is required on touch/no-hover devices. Collapse/expand preserves current page, selection, scroll context and answers.
 
 External component studies clarify default, hover and pressed actions and the collapsed hover/focus trigger without increasing the 21 workspace variants. No automatic hover expansion or runtime interaction is implied.
+
+## Approved product decisions — 2026-11-27
+
+| Topic | Approved decision |
+| --- | --- |
+| Question ordering | Original exam order |
+| Empty competition list | Message only; no action button |
+| Phone sidebar | Overlay drawer |
+| Competition list failure | Error and manual Retry |
+| Unknown submission outcome | Retain choice and permit safe retry |
+| Interface languages | Brazilian Portuguese and English |
+
+The six owner decisions are resolved. Exact responsive breakpoint, competition-list data source, safe-retry implementation and locale selection/default behavior require technical design and prototype validation. Exam-content translation is not implied. The navigation loading treatment remains a visual study. Native visual review, runtime, usability and accessibility validation remain pending.
