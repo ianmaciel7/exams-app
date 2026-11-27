@@ -1,10 +1,10 @@
 {
   "type": "shape",
   "kind": "rounded",
-  "x": 5614,
+  "x": 5616,
   "y": 100,
   "w": 8,
-  "h": 190,
-  "color": "#aaaaaa",
+  "h": 144,
+  "color": "#999999",
   "text": ""
 }

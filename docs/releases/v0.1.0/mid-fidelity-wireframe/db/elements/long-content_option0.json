@@ -1,9 +1,9 @@
 {
   "type": "text",
-  "x": 22278,
-  "y": 262,
-  "text": "A. Repeat the request without checking the previous outcome.",
+  "x": 22300,
+  "y": 260,
+  "text": "Repeat the request without checking the previous outcome.",
   "size": "body",
   "color": "#262626",
-  "wrap": 700
+  "wrap": 692
 }

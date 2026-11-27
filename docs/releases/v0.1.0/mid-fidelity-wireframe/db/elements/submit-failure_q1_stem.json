@@ -1,9 +1,9 @@
 {
   "type": "text",
   "x": 17872,
-  "y": 446,
+  "y": 424,
   "text": "Which SQL clause filters rows before grouping?",
   "size": "body",
   "color": "#262626",
-  "wrap": 850
+  "wrap": 740
 }

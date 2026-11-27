@@ -5,5 +5,5 @@
   "w": 640,
   "h": 120,
   "color": "yellow",
-  "text": "Ten questions per page (unless fewer remain). Changing page clears selections and evaluated answers; scroll returns to the top."
+  "text": "Ten questions per page. The visible tail of the preceding question continues above. Pagination follows the final question; changing page clears responses and scrolls to the top."
 }

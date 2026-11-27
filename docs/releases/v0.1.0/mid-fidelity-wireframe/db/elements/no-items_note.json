@@ -5,5 +5,5 @@
   "w": 640,
   "h": 120,
   "color": "yellow",
-  "text": "Proposed empty-sidebar treatment. No default selection possible; no new creation action assumed."
+  "text": "Proposed empty-sidebar treatment. No default selection is possible; no creation action is assumed."
 }

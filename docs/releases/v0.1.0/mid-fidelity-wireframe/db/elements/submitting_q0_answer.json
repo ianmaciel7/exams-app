@@ -2,11 +2,11 @@
   "type": "shape",
   "kind": "rounded",
   "x": 16412,
-  "y": 334,
-  "w": 104,
+  "y": 324,
+  "w": 120,
   "h": 36,
-  "color": "#e4e4e4",
+  "color": "#e6e6e6",
   "text": "Submitting…",
   "size": "small",
-  "ink": "#666666"
+  "ink": "#626262"
 }

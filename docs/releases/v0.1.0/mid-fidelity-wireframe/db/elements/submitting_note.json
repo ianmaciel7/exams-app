@@ -5,5 +5,5 @@
   "w": 640,
   "h": 120,
   "color": "yellow",
-  "text": "Keep the selected option; disable duplicate submission while pending. Successful evaluation locks the answer."
+  "text": "Retain the option and prevent duplicate submissions while pending. The action width stays fixed."
 }

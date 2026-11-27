@@ -1,10 +1,10 @@
 {
   "type": "text",
   "x": 9307,
-  "y": 393,
+  "y": 420,
   "text": "The selected competition has no questions.",
   "size": "body",
-  "color": "#666666",
+  "color": "#626262",
   "wrap": 480,
   "textAlign": "center"
 }

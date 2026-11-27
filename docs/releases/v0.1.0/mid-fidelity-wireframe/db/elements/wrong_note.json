@@ -5,5 +5,5 @@
   "w": 640,
   "h": 120,
   "color": "yellow",
-  "text": "Show the selected incorrect answer and correct answer. Both remain read-only until the page or competition changes."
+  "text": "Chosen wrong option and correct option are identified; answer is locked on this page. Leaving page/competition discards responses."
 }

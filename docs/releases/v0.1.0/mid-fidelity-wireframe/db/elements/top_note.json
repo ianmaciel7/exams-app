@@ -5,5 +5,5 @@
   "w": 640,
   "h": 120,
   "color": "yellow",
-  "text": "First item selected on entry. Answers are temporary and scoped to the currently displayed page. Illustrative questions."
+  "text": "First item selected on entry. Answers are temporary and scoped to the current page. The next question begins below; scrolling reveals the rest. Illustrative content."
 }

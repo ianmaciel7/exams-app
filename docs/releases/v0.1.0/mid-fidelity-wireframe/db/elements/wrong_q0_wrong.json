@@ -1,8 +1,8 @@
 {
   "type": "text",
-  "x": 6350,
-  "y": 238,
+  "x": 6304,
+  "y": 232,
   "text": "Your answer",
   "size": "small",
-  "color": "#454545"
+  "color": "#262626"
 }

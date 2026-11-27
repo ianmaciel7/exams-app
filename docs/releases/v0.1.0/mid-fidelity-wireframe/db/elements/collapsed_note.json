@@ -5,5 +5,5 @@
   "w": 640,
   "h": 120,
   "color": "yellow",
-  "text": "Collapsed rail is a proposed visual treatment of the approved collapsible sidebar. Reopen without clearing the current page; full item labels must be discoverable."
+  "text": "Collapsed rail is a proposed treatment. Same questions, scroll position and selection as expanded view. Full labels must be discoverable; toggle does not clear answers."
 }

@@ -1,9 +1,8 @@
 {
   "type": "text",
   "x": 19060,
-  "y": 153,
-  "text": "No competitions available",
+  "y": 151,
+  "text": "No items",
   "size": "small",
-  "color": "#666666",
-  "wrap": 216
+  "color": "#626262"
 }

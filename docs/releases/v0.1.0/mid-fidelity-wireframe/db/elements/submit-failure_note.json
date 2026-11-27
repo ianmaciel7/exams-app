@@ -5,5 +5,5 @@
   "w": 640,
   "h": 120,
   "color": "yellow",
-  "text": "Keep the option and allow a new submission via Answer after failure. This is not a retry of an evaluated answer."
+  "text": "Retain the option and allow another Answer submission after failure. This is not retrying an evaluated answer."
 }

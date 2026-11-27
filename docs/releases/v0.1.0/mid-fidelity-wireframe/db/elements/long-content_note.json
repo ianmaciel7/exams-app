@@ -5,5 +5,5 @@
   "w": 640,
   "h": 120,
   "color": "yellow",
-  "text": "Stress test: multiline stem and options, aligned radios, no overlap and sufficient spacing. Illustrative content, not an exam source."
+  "text": "Long content wraps to a separate text column after each option letter. Row height follows content, not a fixed uniform height. Example only."
 }

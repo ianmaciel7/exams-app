@@ -5,5 +5,5 @@
   "w": 640,
   "h": 120,
   "color": "yellow",
-  "text": "Retry reloads the selected competition's question list."
+  "text": "Retry reloads the selected competition's questions."
 }

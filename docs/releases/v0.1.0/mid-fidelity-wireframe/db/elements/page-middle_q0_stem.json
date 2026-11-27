@@ -1,0 +1,9 @@
+{
+  "type": "text",
+  "x": 23712,
+  "y": 185,
+  "text": "Which protocol provides encrypted transport for HTTPS?",
+  "size": "body",
+  "color": "#262626",
+  "wrap": 740
+}
