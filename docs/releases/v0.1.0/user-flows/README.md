@@ -29,3 +29,5 @@ The [Low-Fidelity Wireframe](../low-fidelity-wireframe/README.md) inherits appro
 ## Approved Mid-Fidelity transitions
 
 Unanswered -> select -> Answer -> pending -> evaluated (read-only) or submission failure (choice retained; Answer enabled again). Page/competition change -> discard current-page responses -> load target -> unanswered. Close application -> discard temporary session responses. Collapse/expand sidebar -> same competition and page, responses unchanged. Navigate ten questions per page; Previous disabled at first page, Next disabled at last page. Exact cancellation/late-response and ambiguous-outcome recovery require validation; do not restore stale answers.
+
+The rhythm refinement affects visual representation only. Questions flow naturally; pagination follows the final question. Sidebar collapse preserves content and scroll context. Confirmed-answer lock and submission recovery remain as approved. Functional testing is pending.
