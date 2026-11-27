@@ -29,9 +29,22 @@ const urls = Object.fromEntries(fs.readFileSync('/tmp/board-urls','utf8').split(
           await page.goto(urls[id],{waitUntil:'domcontentloaded'});
           await page.evaluate(theme=>document.documentElement.dataset.theme=theme,theme);
           await page.waitForTimeout(3000);
-          await page.waitForFunction(n=>document.querySelectorAll('[data-wb-id]').length===n,expected);
+          // A stroke/arrow can expose its ID on multiple DOM nodes.
+          // Require the exact set of persisted element IDs, not the number of nodes.
+          const expectedIds=meta.order;
+          try {
+            await page.waitForFunction(ids=>{
+              const layer=document.querySelector('.wb-elements');
+              if(!layer) return false;
+              const rendered=new Set([...layer.querySelectorAll('[data-wb-id]')].map(el=>el.getAttribute('data-wb-id')));
+              return rendered.size===ids.length && ids.every(id=>rendered.has(id));
+            },expectedIds,{timeout:30000});
+          } catch(error) {
+            const rendered=await page.evaluate(()=>[...new Set([...document.querySelectorAll('.wb-elements [data-wb-id]')].map(el=>el.getAttribute('data-wb-id')))]);
+            throw Error(id+' '+theme+' render mismatch: '+JSON.stringify({expected:expectedIds.length,rendered:rendered.length,missing:expectedIds.filter(id=>!rendered.includes(id)),unexpected:rendered.filter(id=>!expectedIds.includes(id)),errors}),{cause:error});
+          }
           await page.evaluate(()=>document.fonts.ready);
-          const status=await page.evaluate(()=>({title:document.title,theme:document.documentElement.dataset.theme,count:document.querySelectorAll('[data-wb-id]').length}));
+          const status=await page.evaluate(()=>({title:document.title,theme:document.documentElement.dataset.theme,count:new Set([...document.querySelectorAll('.wb-elements [data-wb-id]')].map(el=>el.getAttribute('data-wb-id'))).size}));
           if(status.theme!==theme||status.count!==expected||errors.length) throw Error(id+' '+theme+': '+JSON.stringify({status,errors}));
           const path='boards/'+id+'-'+theme+'.png';
           await page.screenshot({path:'_site/'+path});
