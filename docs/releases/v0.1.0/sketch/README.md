@@ -38,3 +38,7 @@ Four native review threads are anchored to answer selection, incorrect-answer fe
 ## Visual review refinement
 
 The eight states retain their existing scope. Sidebar entries use compact spacing, body-size labels and a single selection indicator instead of a surrounding outline. Native sticky notes are concise. Open comment threads retain their identities and review targets; their visible anchors move to the corresponding external notes to avoid covering controls. The capture pipeline additionally produces individual state screenshots in both themes using the native camera, with full-board screenshots preserved. No new application behavior is approved.
+
+## Sidebar refinement
+
+The navigation remains a simple two-entry list, with a slightly wider label column, consistent 38-unit row spacing, editable document glyphs and a short active marker. The sidebar divider is intentionally lighter than the outer frame. The Capacities workspace reference informs density and alignment only; no additional navigation or behavior is imported. Labels remain single-line and truncated; exact content, responsive collapse, hover, focus and keyboard behavior are not specified by this static sketch.
