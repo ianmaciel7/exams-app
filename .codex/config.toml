@@ -1,7 +1,2 @@
 [agents]
 default_subagent_model = "gpt-6.2-sol"
-
-# Project-local stdio fallback. Disable if the official plugin is active.
-[mcp_servers.exam-open-artifact]
-command = "node"
-args = ["scripts/open-artifact-mcp.mjs", "codex"]

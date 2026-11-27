@@ -4,7 +4,8 @@ const path = require('node:path');
 const os = require('node:os');
 const { execFileSync, spawn } = require('node:child_process');
 const { chromium } = require('playwright');
-const upstreamCommit = '0f6079853c8b0d2f4e9bddf5465ddbda722ce5a9'; // v0.17.0
+const pin = require('./open-artifact-pin.json');
+const upstreamCommit = pin.commit;
 const root = process.cwd();
 const site = path.join(root, '_site');
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'exam-playground-'));
@@ -119,7 +120,7 @@ async function verify(out) {
 }
 (async()=>{
   try {
-    run('git',['clone','--depth','1','--branch','v0.17.0','https://github.com/JimLiu/open-artifact.git',upstream]);
+    run('git',['clone','--depth','1','--branch','v'+pin.version,'https://github.com/JimLiu/open-artifact.git',upstream]);
     if(execFileSync('git',['rev-parse','HEAD'],{cwd:upstream,encoding:'utf8'}).trim()!==upstreamCommit)throw Error('Unexpected upstream release commit');
     // Copy only the committed snapshot; never publish local runtime state or private comments.
     for(const b of seeds){

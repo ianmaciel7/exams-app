@@ -4,6 +4,7 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { markerSketchCss } from './marker-sketch-style.mjs';
 import { assertNode, resolveRuntime } from './open-artifact-runtime.mjs';
+import { BOARDS } from './board-catalog.mjs';
 
 const projectRoot = fileURLToPath(new URL('../', import.meta.url));
 
@@ -65,19 +66,7 @@ try {
   const selectedCli = findCli();
   console.log(`Using Open Artifact Whiteboard CLI from: ${selectedCli.platform} (${selectedCli.path})`);
   const linksScript = await prepareWhiteboardAssets(selectedCli.path);
-  const boards = {
-    overview: ['art_examappoverview', 'docs/boards/overview'],
-    releases: ['art_examappreleasestages', 'docs/boards/release-stages'],
-    hub: ['art_examappprojecthub', 'docs/boards/project-hub'],
-    product: ['art_examappproductv010', 'docs/releases/v0.1.0/product'],
-    architecture: ['art_examappinformationarchitecturev010', 'docs/releases/v0.1.0/information-architecture'],
-    screens: ['art_examappscreeninventoryv010', 'docs/releases/v0.1.0/screen-inventory'],
-    flows: ['art_examappuserflowsv010', 'docs/releases/v0.1.0/user-flows'],
-    sketch: ['art_examappsketchv010', 'docs/releases/v0.1.0/sketch'],
-    lowfidelity: ['art_examapplowfidelityv010', 'docs/releases/v0.1.0/low-fidelity-wireframe'],
-    midfidelity: ['art_examappmidfidelityv010', 'docs/releases/v0.1.0/mid-fidelity-wireframe'],
-    highfidelity: ['art_examapphighfidelityv010', 'docs/releases/v0.1.0/high-fidelity-wireframe'],
-  };
+  const boards = BOARDS;
   for (const [, path] of Object.values(boards)) {
     const root = join(projectRoot, path);
     if (!existsSync(join(root, 'db', 'board', 'meta.json'))) throw new Error(`Board not found: ${root}`);

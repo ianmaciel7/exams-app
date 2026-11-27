@@ -4,6 +4,7 @@ import { mkdtempSync,mkdirSync,writeFileSync,rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join,dirname } from 'node:path';
 import { assertNode,inspectSkill,resolveRuntime,VERSION,TYPES,projectEnv,ROOT } from './open-artifact-runtime.mjs';
+import { catalog } from './board-catalog.mjs';
 test('enforces upstream Node minimum',()=>{assert.throws(()=>assertNode('22.16.0'));assert.doesNotThrow(()=>assertNode('22.18.0'));assert.doesNotThrow(()=>assertNode('24.0.0'));});
 test('version and all nine types required; override cannot bypass validation',()=>{
  const root=mkdtempSync(join(tmpdir(),'exam-oa-'));
@@ -20,3 +21,6 @@ test('version and all nine types required; override cannot bypass validation',()
  }finally{rmSync(root,{recursive:true,force:true});}
 });
 test('project fallback isolates daemon home and requires confinement',()=>{const env=projectEnv({OPEN_ARTIFACT_HOME:'other',OPEN_ARTIFACT_WORKSPACE_FOLDERS_ONLY:'0'});assert.equal(env.OPEN_ARTIFACT_WORKSPACE_FOLDERS_ONLY,'1');assert.ok(env.OPEN_ARTIFACT_HOME.startsWith(ROOT));});
+
+test('catalog has eleven unique native board roots and preview IDs',()=>{const rows=catalog();assert.equal(rows.length,11);assert.equal(new Set(rows.map(x=>x.folder)).size,11);assert.equal(new Set(rows.map(x=>x.previewId)).size,11);});
+test('fallback strips inherited remote and runtime settings',()=>{const env=projectEnv({OPEN_ARTIFACT_REMOTE:'example',OPEN_ARTIFACT_REMOTE_TOKEN:'secret',OPEN_ARTIFACT_BUILTIN_TYPES:'wrong',PATH:'test'});assert.equal(env.OPEN_ARTIFACT_REMOTE,undefined);assert.equal(env.OPEN_ARTIFACT_REMOTE_TOKEN,undefined);assert.equal(env.OPEN_ARTIFACT_BUILTIN_TYPES,undefined);assert.equal(env.PATH,'test');});

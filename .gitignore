@@ -24,3 +24,7 @@ Thumbs.db
 
 # Verified local Open Artifact distribution and private daemon state
 .open-artifact-runtime/
+
+# Native daemon assigns machine-local identity; preserve portable preview IDs separately.
+docs/boards/*/.artifact.json
+docs/releases/*/*/.artifact.json

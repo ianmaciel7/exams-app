@@ -1,0 +1,16 @@
+{
+  "version": "0.17.0",
+  "commit": "0f6079853c8b0d2f4e9bddf5465ddbda722ce5a9",
+  "sha256": "161e146bfd38207e4b1a4f3a515f049f87c4424fba551d439763943a2ed40a3d",
+  "types": [
+    "data",
+    "design",
+    "design-system",
+    "docs",
+    "motion",
+    "page",
+    "sheets",
+    "slides",
+    "whiteboard"
+  ]
+}

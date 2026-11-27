@@ -1,0 +1,31 @@
+name: Open Artifact agent access
+on:
+  push:
+    branches: [dev]
+    paths:
+      - 'scripts/open-artifact-*'
+      - 'scripts/board-catalog.mjs'
+      - '.agents/**'
+      - '.codex/**'
+      - '.claude/**'
+      - '.github/workflows/agent-access.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  mcp:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test scripts/open-artifact-runtime.test.mjs
+      - run: node scripts/open-artifact-runtime.mjs install
+      - run: node scripts/open-artifact-library.mjs catalog
+      - run: node scripts/open-artifact-mcp.integration.mjs

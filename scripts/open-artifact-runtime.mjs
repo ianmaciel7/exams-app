@@ -7,13 +7,12 @@ import { Readable, Transform } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
 
 export const ROOT = fileURLToPath(new URL('../', import.meta.url));
-export const VERSION = '0.17.0';
-export const COMMIT = '0f6079853c8b0d2f4e9bddf5465ddbda722ce5a9';
-export const SHA256 = '161e146bfd38207e4b1a4f3a515f049f87c4424fba551d439763943a2ed40a3d';
+const pin = JSON.parse(readFileSync(join(ROOT,'scripts','open-artifact-pin.json'),'utf8'));
+export const {version:VERSION,commit:COMMIT,sha256:SHA256}=pin;
 export const RELEASE_URL = 'https://github.com/JimLiu/open-artifact/releases/download/v'+VERSION+'/open-artifact-plugins.zip';
 export const CACHE = join(ROOT, '.open-artifact-runtime');
 export const INSTALL = join(CACHE, 'v'+VERSION);
-export const TYPES = ['data','design','design-system','docs','motion','page','sheets','slides','whiteboard'];
+export const TYPES = Object.freeze(pin.types);
 export function assertNode(version = process.versions.node) {
   const [major, minor] = version.split('.').map(Number);
   if (major < 22 || (major === 22 && minor < 18)) throw Error('Open Artifact requires Node.js >=22.18; found '+version);
@@ -77,7 +76,8 @@ export async function install() {
   } finally { rmSync(temp,{recursive:true,force:true}); }
 }
 export function projectEnv(env=process.env) {
-  return {...env,OPEN_ARTIFACT_HOME:join(CACHE,'home'),OPEN_ARTIFACT_WORKSPACE_FOLDERS_ONLY:'1'};
+  const clean=Object.fromEntries(Object.entries(env).filter(([key])=>!key.startsWith('OPEN_ARTIFACT_')));
+  return {...clean,OPEN_ARTIFACT_HOME:join(CACHE,'home'),OPEN_ARTIFACT_WORKSPACE_FOLDERS_ONLY:'1',OPEN_ARTIFACT_TYPE_SERVER_HOME:join(CACHE,'servers')};
 }
 if (process.argv[1] && resolve(process.argv[1])===fileURLToPath(import.meta.url)) {
   try {

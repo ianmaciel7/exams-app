@@ -35,4 +35,4 @@ Observations are evaluated with `node evals/compare-adaptive-routing.mjs <observ
 
 ## Artifact tool availability
 
-Follow [agent access](agent-access.md) for pinned installation, official host plugins, the project stdio fallback, and session-specific verification. Agent profiles and instructions do not establish MCP access; use bounded direct work when delegation is unavailable and distinguish independent review from automated checks.
+Follow [agent access](agent-access.md) for pinned installation, official host plugins (primary), the opt-in isolated stdio fallback, canonical board catalog, and session-specific verification. Do not enable the primary and fallback concurrently. Agent profiles and instructions do not establish MCP access; use bounded direct work when delegation is unavailable and distinguish independent review from automated checks.

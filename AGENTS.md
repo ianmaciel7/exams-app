@@ -41,7 +41,7 @@
 
 ### Open Artifact whiteboards and token-efficient execution
 
-Before creating or changing any project whiteboard, read [agent access](docs/agent-access.md), [whiteboard guidelines](docs/boards/whiteboard-guidelines.md), and the applicable official whiteboard skill. Verify the pinned runtime and actual session tools; follow the shared `.agents/skills/exam-open-artifact/SKILL.md` contract. Those requirements apply to project-wide and release-specific boards.
+Before creating or changing any project whiteboard, read [agent access](docs/agent-access.md), [whiteboard guidelines](docs/boards/whiteboard-guidelines.md), and the applicable official whiteboard skill. Verify the pinned runtime and actual session tools; prefer the official plugin and its native hooks. Never activate a duplicate MCP fallback in a session. Use the read-only board catalog and library status to locate canonical roots; only the owner may register or assign library records. Follow the shared `.agents/skills/exam-open-artifact/SKILL.md` contract. Those requirements apply to project-wide and release-specific boards.
 
 - **Token efficiency and native Open Artifact APIs:**
   - Never dump, iterate, or re-read hundreds of atomic JSON files (`db/elements/*.json`) into conversation transcripts or terminal logs.
