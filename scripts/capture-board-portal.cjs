@@ -11,12 +11,13 @@ const boards = [
   ['flows','User Flows','docs/releases/v0.1.0/user-flows'],
   ['sketch','Sketch','docs/releases/v0.1.0/sketch'],
   ['lowfidelity','Low-Fidelity Wireframe','docs/releases/v0.1.0/low-fidelity-wireframe'],
+  ['midfidelity','Mid-Fidelity Wireframe','docs/releases/v0.1.0/mid-fidelity-wireframe'],
 ];
 const urls = Object.fromEntries(fs.readFileSync('/tmp/board-urls','utf8').split(/\r?\n/).map(line=>line.match(/^(\w+): (http\S+)$/)).filter(Boolean).map(m=>[m[1],m[2]]));
 
 const sketchStates=['top','end','selected','correct','wrong','loading','empty','failure'];
 async function captureSketchStates(page,theme,board){
-  const states=board.id==='lowfidelity'?[...sketchStates,'narrow']:sketchStates;
+  const states=board.id==='midfidelity'?[...sketchStates,'narrow','hover','focus','submitting','submit-failure','no-items']:board.id==='lowfidelity'?[...sketchStates,'narrow']:sketchStates;
   board.states ||= states.map(id=>({id,images:{}}));
   const surface=page.locator('.wb-surface');
   const box=await surface.boundingBox();
@@ -95,7 +96,7 @@ async function captureSketchStates(page,theme,board){
           const path='boards/'+id+'-'+theme+'.png';
           await page.screenshot({path:'_site/'+path});
           board.images[theme]=path;
-          if(id==='sketch'||id==='lowfidelity') await captureSketchStates(page,theme,board);
+          if(id==='sketch'||id==='lowfidelity'||id==='midfidelity') await captureSketchStates(page,theme,board);
           console.log(id,theme,expected);
         } finally { await page.close(); }
       }

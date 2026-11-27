@@ -1,0 +1,10 @@
+{
+  "type": "text",
+  "x": 19527,
+  "y": 393,
+  "text": "There are no items to select in the sidebar.",
+  "size": "body",
+  "color": "#666666",
+  "wrap": 480,
+  "textAlign": "center"
+}

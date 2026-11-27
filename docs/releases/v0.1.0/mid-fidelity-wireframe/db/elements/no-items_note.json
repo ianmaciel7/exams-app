@@ -1,0 +1,13 @@
+{
+  "type": "shape",
+  "kind": "rounded",
+  "x": 19036,
+  "y": 875,
+  "w": 640,
+  "h": 116,
+  "color": "yellow",
+  "text": "Proposal for zero available competitions. No default selection is possible; no new creation action is assumed.",
+  "size": "body",
+  "textAlign": "left",
+  "by": "agent"
+}

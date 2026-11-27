@@ -23,3 +23,5 @@ Revisiting previously evaluated questions after page or competition changes is u
 The approved Answer action is depicted after the alternatives, on the left, without a divider above or below it; whitespace separates complete questions and pagination. The result occupies the same action region; option-level feedback remains attached to its option. This placement does not alter the approved transitions.
 
 The [Low-Fidelity Wireframe](../low-fidelity-wireframe/README.md) inherits approved transitions. Initial selection is approved: enter → select first available sidebar item → load → list, empty questions or failure. Revisiting evaluated answers remains open; the narrow proposal approves no new transition.
+
+[Mid-Fidelity Wireframe](../mid-fidelity-wireframe/README.md) illustrates the approved entry/answer/list-retry flows and proposes submission pending and local submission failure. Whether to retry a submission and preserve or change an evaluated answer remains open. Empty sidebar is a proposed state, not a new flow. Keyboard and responsive behavior remain untested.

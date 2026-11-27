@@ -1,0 +1,13 @@
+{
+  "type": "shape",
+  "kind": "rounded",
+  "x": 56,
+  "y": 875,
+  "w": 640,
+  "h": 116,
+  "color": "yellow",
+  "text": "The first item is selected by default. Questions and choices are illustrative, not official exam content.",
+  "size": "body",
+  "textAlign": "left",
+  "by": "agent"
+}

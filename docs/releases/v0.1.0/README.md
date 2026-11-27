@@ -12,8 +12,9 @@ The question list is paginated. Scroll vertically within a page; at the end of t
 | [Screen Inventory](screen-inventory/README.md) | In progress | Pending |
 | [User Flows](user-flows/README.md) | In progress | Pending |
 | [Sketch](sketch/README.md) | Complete | Owner approved progression |
-| [Low-Fidelity Wireframe](low-fidelity-wireframe/README.md) | In progress | Pending |
-| Mid-, high-fidelity wireframes, mockup, interactive prototype | Not started | Pending |
+| [Low-Fidelity Wireframe](low-fidelity-wireframe/README.md) | Complete | Owner approved progression; nine captures reviewed |
+| [Mid-Fidelity Wireframe](mid-fidelity-wireframe/README.md) | In progress | Pending |
+| High-fidelity wireframe, mockup, interactive prototype | Not started | Pending |
 
 ## Current state review
 
@@ -42,3 +43,7 @@ The owner approved advancing from Sketch at `94072ce`. Preserve its native board
 The owner rejected the first Low-Fidelity visual treatment (`d133d40`). The [Greybox correction](low-fidelity-wireframe/README.md#greybox-correction--2026-11-27) replaces smoothed freehand outlines with native shapes and filled neutral regions while preserving coverage and open decisions. The stage remains in progress until native visual inspection and owner review.
 
 Initial selection decision (2026-11-27): automatically select the first available sidebar item on every workspace entry and load its questions; reuse the existing loading state. The unselected-entry proposal is superseded and removed from the current Low-Fidelity board. An empty sidebar remains an unspecified edge case. The historical Sketch is preserved.
+
+## Mid-Fidelity transition — 2026-11-27
+
+Owner approved progression from Low-Fidelity at `e70dbaf`. Nine native variants were visually checked in both board themes from [capture run 45988678206](https://github.com/ianmaciel7/exams-app/actions/runs/45988678206); artifact generation succeeded independently of deployment. Preserve the historical boards. The [Mid-Fidelity Wireframe](mid-fidelity-wireframe/README.md) adds illustrative text, more explicit component treatments, hover/focus studies, and proposed submission-pending, submission-failure and empty-sidebar states. The narrow workspace remains proposed. No additional behavior or higher fidelity is approved. Native Mid-Fidelity capture and owner review remain pending.

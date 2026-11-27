@@ -38,3 +38,5 @@ The visual-rhythm refinement keeps the same eight states. Question groups use he
 Pagination remains inside the end-of-list state; its labels and chevrons share an optical alignment, page slots have uniform spacing, and the whole group is centered in the main region. No navigation behavior changes.
 
 The approved Sketch is preserved. The [Low-Fidelity Wireframe](../low-fidelity-wireframe/README.md) inherits eight variants and adds one clearly labeled structural study (narrower viewport). The initial unselected proposal was removed after the owner approved automatic first-item selection; the existing loading variant covers entry. The narrow study is not an additional approved destination.
+
+[Mid-Fidelity Wireframe](../mid-fidelity-wireframe/README.md) contains the eight inherited variants, the narrow study, hover/focus visual studies and three proposed variants: submission pending, submission failure and empty sidebar. Fourteen representations of one workspace, not fourteen destinations. None of the new proposals establish runtime behavior.

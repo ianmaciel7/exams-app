@@ -1,0 +1,13 @@
+{
+  "type": "shape",
+  "kind": "rounded",
+  "x": 5896,
+  "y": 875,
+  "w": 640,
+  "h": 116,
+  "color": "yellow",
+  "text": "Keep the chosen wrong option identifiable and reveal the correct option. Persistence remains open.",
+  "size": "body",
+  "textAlign": "left",
+  "by": "agent"
+}

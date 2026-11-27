@@ -5,5 +5,5 @@
   "w": 420,
   "h": 300,
   "color": "yellow",
-  "text": "One workspace: compact sidebar + question list.\nSelection changes the list; no redundant heading.\nOn entry, automatically select the first available sidebar item.\nEight inherited states; narrower workspace remains a proposal.\nRouting and responsive behavior remain open."
+  "text": "One workspace: compact sidebar + question list.\nSelection changes the list; no redundant heading.\nOn entry, automatically select the first available sidebar item.\nEight inherited states; narrower workspace remains a proposal.\nRouting and responsive behavior remain open.\nMid-Fidelity review: same workspace and automatic first-item selection. Narrow and empty-sidebar treatments are proposals."
 }

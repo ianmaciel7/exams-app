@@ -25,3 +25,5 @@ Both sidebar entries share one neutral square-with-X icon placeholder in the cur
 Current Sketch labels are in English; official institution names remain unchanged. Whether prior answers remain visible on revisiting an entry is open in the [Product decision register](../product/README.md#open-product-decisions). The native Sketch is not a routing specification.
 
 The [Low-Fidelity Wireframe](../low-fidelity-wireframe/README.md) explores the same workspace, including a proposed narrower composition. The initial unselected proposal is superseded by automatic first-item selection; responsive navigation and routing remain open.
+
+The [Mid-Fidelity Wireframe](../mid-fidelity-wireframe/README.md) retains the same two-region workspace and the first available item default. The narrow and empty-sidebar compositions are proposals; no route or destination is added.

@@ -1,6 +1,6 @@
 # Low-Fidelity Wireframe — v0.1.0
 
-Status: in progress; structural review pending. Owner approved moving on from the [Sketch](../sketch/README.md) at [94072ce](https://github.com/ianmaciel7/exams-app/commit/94072ce2af79ceac651dbc121822f8fc1ae39aa4). The historical Sketch board remains unchanged.
+Status: complete for progression; owner approved moving to Mid-Fidelity. Owner approved moving on from the [Sketch](../sketch/README.md) at [94072ce](https://github.com/ianmaciel7/exams-app/commit/94072ce2af79ceac651dbc121822f8fc1ae39aa4). The historical Sketch board remains unchanged.
 
 ## Purpose
 
@@ -35,3 +35,7 @@ Owner requested removal of the left vertical marker from selected sidebar items 
 ## Initial selection — approved
 
 The first available item in the sidebar's displayed order is selected on every entry to the workspace. The previous unselected-entry proposal is removed rather than duplicated as another loading screen; the existing loading state now explicitly covers entry. Nine variants remain (eight inherited states and the narrow proposal), all showing a selected item. No-item sidebar handling is unspecified. Remaining open decisions are unchanged. Native capture review is pending.
+
+## Stage closure — 2026-11-27
+
+The owner approved progression from `e70dbaf`; the nine individual native captures from CI run 45988678206 were visually reviewed in both themes. The previous Low-Fidelity board is preserved. Further component details and the remaining proposals belong to [Mid-Fidelity Wireframe](../mid-fidelity-wireframe/README.md). This is not functional validation or approval of pending behavior.

@@ -39,3 +39,7 @@ Low-Fidelity Wireframe has started with the owner-approved Sketch as baseline. T
 ## Approved initial selection — 2026-11-27
 
 On every workspace entry, automatically select the first item in the sidebar's displayed order, if available, and load its questions. Do not require an extra selection click or restore a different item as the default. The existing loading, success, empty-question and failure variants cover the question request. No sidebar items means no possible selection; its treatment is not yet specified. This does not decide sorting, answer persistence or re-submission.
+
+## Mid-Fidelity review
+
+The [Mid-Fidelity Wireframe](../mid-fidelity-wireframe/README.md) illustrates hover/focus and proposes submission pending, submission failure, and empty sidebar treatments. These are review candidates, not product decisions. Initial selection is resolved; answer lifecycle, page size/order, responsive navigation, submission recovery and empty-sidebar behavior remain open. Example question content is illustrative, not official exam data.

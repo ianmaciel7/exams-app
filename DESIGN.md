@@ -60,3 +60,7 @@ Low-fidelity correction: do not reuse the Sketch stroke renderer for rectangular
 Low-Fidelity sidebar selection: use the neutral row background and emphasized label alone, without a left vertical indicator. The historical Sketch retains its earlier selection treatment. This is a structural visual decision, not a tested accessibility state.
 
 On workspace entry, the first available sidebar item is selected automatically; the existing selected background and emphasized label are visible while its questions load. No left indicator or unselected-entry screen is required. The historical Sketch remains unchanged.
+
+## Mid-Fidelity direction
+
+The owner approved progression from Low-Fidelity. The [Mid-Fidelity Wireframe](docs/releases/v0.1.0/mid-fidelity-wireframe/README.md) replaces question placeholders with illustrative content, clarifies control states and uses a neutral, regular editable geometry. Preserve default first-item selection, no left selection marker, whitespace instead of question dividers, aligned actions and pagination. The narrower workspace, hover/focus treatments, submission states and empty sidebar remain studies or proposals. No final palette, design tokens or functional interactions are established.

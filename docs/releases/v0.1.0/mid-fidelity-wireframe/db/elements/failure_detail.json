@@ -1,0 +1,10 @@
+{
+  "type": "text",
+  "x": 10767,
+  "y": 393,
+  "text": "The question list could not be loaded.",
+  "size": "body",
+  "color": "#666666",
+  "wrap": 480,
+  "textAlign": "center"
+}
