@@ -3,7 +3,7 @@
   "x": 0,
   "y": 65,
   "w": 420,
-  "h": 300,
+  "h": 360,
   "color": "yellow",
-  "text": "Entry selects first available item. Select -> Answer -> pending -> evaluated and locked OR failure with choice retained and retry. Page/competition change and session exit discard answers. Sidebar toggle preserves context. Ten questions per page."
+  "text": "Entry selects first available item. Select -> Answer -> pending -> evaluated and locked OR failure with choice retained and retry. Page/competition change and session exit discard answers. Sidebar toggle preserves context. Ten questions per page.\nCollapse/expand is available across workspace states and preserves current-page answers. Proposed navigation loading/failure precedes first-item selection; separate from question loading and retry. Phone drawer interaction remains proposed."
 }

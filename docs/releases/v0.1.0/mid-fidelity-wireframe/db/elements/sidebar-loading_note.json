@@ -1,0 +1,9 @@
+{
+  "type": "note",
+  "x": 27796,
+  "y": 875,
+  "w": 640,
+  "h": 120,
+  "color": "yellow",
+  "text": "Proposal if the competition list is fetched asynchronously: show navigation skeletons, then automatically select the first available item. Do not start question loading before a valid selection."
+}

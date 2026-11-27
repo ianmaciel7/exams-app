@@ -63,3 +63,7 @@ Owner identified uneven option spacing in the rendered long-content study. Use t
 ## Sidebar contrast regression correction
 
 Native captures of `a070819` revealed that the full SVG sidebar prevented automatic text-backdrop contrast detection in the dark board theme. Open Artifact v0.16.3 `backdrop.ts` recognizes filled rectangles and notes, not ordinary SVG fills. Restore the native filled sidebar for labels and use a narrow vector seam only along the inner edge, outside the text column, to square the inner corners. Keep the ghost toggle as one fixed-color vector icon. All interactive radio outlines now use a fixed neutral dark stroke and a lighter fixed stroke for locked/pending states, preserving the selected dot and textual feedback. This is a renderer-specific structural treatment, not a final theme or functional accessibility test. Review captures in both board themes before stage closure; the previous captures are rejected for low contrast.
+
+## Shared shell consistency review — 2026-11-27
+
+The owner approved consistent Ghost navigation triggers in all workspace states, including desktop. The [Mid-Fidelity board](mid-fidelity-wireframe/README.md#shared-shell-consistency-review--2026-11-27) now includes twenty-one variants: the previous eighteen and proposed phone, sidebar loading and sidebar failure studies. Common navigation controls and pagination chevrons have a shared source and a drift check. Earlier stages remain intact. Native capture and owner visual review are pending; the mobile drawer and data-loading proposals remain undecided.

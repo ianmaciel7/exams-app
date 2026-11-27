@@ -1,0 +1,10 @@
+{
+  "type": "text",
+  "x": 29747,
+  "y": 393,
+  "text": "Retry from the sidebar.",
+  "size": "body",
+  "color": "#626262",
+  "wrap": 480,
+  "textAlign": "center"
+}

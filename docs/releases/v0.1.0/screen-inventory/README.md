@@ -44,3 +44,7 @@ The approved Sketch is preserved. The [Low-Fidelity Wireframe](../low-fidelity-w
 Evaluated states remain read-only until the page or competition changes. Submission failure preserves the choice and enables Answer; pending prevents repeated submission. The approved page size is ten. The first, middle and last pagination studies cover boundary disabled states. The final page may contain fewer questions.
 
 Mid-Fidelity rhythm refinement retains all eighteen variants. Short-question and loading states include the next partial question; expanded/collapsed views show equivalent content. End/middle/last pages depict pagination in flow. Long options use hanging labels; evaluated answers explicitly indicate a locked state. See the [Mid-Fidelity record](../mid-fidelity-wireframe/README.md#visual-rhythm-and-content-flow-refinement--2026-11-27).
+
+## Shared shell consistency review
+
+The twenty-one Mid-Fidelity representations include the previous eighteen plus proposed phone layout, sidebar loading and sidebar load failure. Every variant has a Ghost navigation trigger; navigation icons are distinguishable and pagination boundaries use consistent chevrons. The three studies are not additional approved destinations. An open mobile drawer and real keyboard/touch interaction remain unverified.

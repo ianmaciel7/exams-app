@@ -1,0 +1,10 @@
+{
+  "type": "text",
+  "x": 28287,
+  "y": 365,
+  "text": "Loading competitions…",
+  "size": "large",
+  "color": "ink",
+  "wrap": 480,
+  "textAlign": "center"
+}

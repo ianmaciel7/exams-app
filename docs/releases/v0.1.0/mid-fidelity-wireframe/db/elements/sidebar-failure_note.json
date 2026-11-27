@@ -1,0 +1,9 @@
+{
+  "type": "note",
+  "x": 29256,
+  "y": 875,
+  "w": 640,
+  "h": 120,
+  "color": "yellow",
+  "text": "Proposal if loading competitions can fail: Retry reloads navigation, not a question list. No selection exists until navigation loads. Data source and recovery policy remain open."
+}

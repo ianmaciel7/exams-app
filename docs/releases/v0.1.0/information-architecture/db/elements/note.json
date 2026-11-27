@@ -3,7 +3,7 @@
   "x": 0,
   "y": 65,
   "w": 420,
-  "h": 300,
+  "h": 360,
   "color": "yellow",
-  "text": "Automatically select first available item. Small-screen sidebar collapsible; toggle retains current page and answers. Ten questions per page. Changing page/competition clears answers. Exact collapse treatment, breakpoint and empty sidebar open."
+  "text": "Automatically select first available item. Small-screen sidebar collapsible; toggle retains current page and answers. Ten questions per page. Changing page/competition clears answers. Exact collapse treatment, breakpoint and empty sidebar open.\nOne workspace with a shared Ghost navigation trigger. Expanded/collapsed views retain the same context. Phone layout and navigation loading/failure are proposals, not new destinations."
 }

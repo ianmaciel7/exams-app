@@ -29,3 +29,5 @@ The [Low-Fidelity Wireframe](../low-fidelity-wireframe/README.md) explores the s
 The [Mid-Fidelity Wireframe](../mid-fidelity-wireframe/README.md) retains the same two-region workspace and the first available item default. The narrow expanded/collapsed treatments and empty-sidebar composition remain visual proposals; no route or destination is added.
 
 The owner approved a collapsible sidebar on small screens and ten questions per page. Collapsing or expanding does not change the selected competition or page. Changing competition or page discards responses. A collapsed rail is a design study; breakpoint and mobile details remain open.
+
+The sidebar trigger is now approved for all desktop workspace states and narrow layouts. It is a shell control, not a question-list control. The phone layout and navigation loading/failure compositions are explicitly proposed studies; no new route, data architecture or exact breakpoint is selected.

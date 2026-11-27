@@ -1,6 +1,7 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { checkMidFidelityComponents } from './sync-mid-fidelity.mjs';
 
 // Open Artifact v0.16.3: whiteboard-core/src/schema.ts (MAX_BOARD_ELEMENTS).
 export const MAX_BOARD_ELEMENTS = 800;
@@ -36,6 +37,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1]
   let failed = false;
   for (const board of boards) {
     const errors = checkBoard(board);
+    if (board.endsWith('/mid-fidelity-wireframe') && errors.length === 0) errors.push(...checkMidFidelityComponents());
     console.log(`${board}: ${errors.length ? errors.join('; ') : 'OK'}`);
     failed ||= errors.length > 0;
   }
