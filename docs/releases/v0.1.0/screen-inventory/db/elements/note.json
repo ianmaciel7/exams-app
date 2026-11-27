@@ -5,5 +5,5 @@
   "w": 420,
   "h": 300,
   "color": "yellow",
-  "text": "One screen; eight inherited variants.\nUnanswered; pagination; selected before Answer; correct; incorrect; loading; empty; load failure.\nAutomatic first-item selection on entry uses existing loading.\nLow-fidelity study: narrow workspace (proposal).\nNo extra destinations approved.\nMid-Fidelity: eight inherited variants, narrow study, hover/focus studies, and proposed submission pending, submission failure and empty sidebar."
+  "text": "Mid-Fidelity: eighteen representations. Submission recovery, collapsed-sidebar requirement and ten-question pagination approved. Expanded/collapsed, long content and first/middle/last pagination studies; empty sidebar remains proposed."
 }

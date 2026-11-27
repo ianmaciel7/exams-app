@@ -1,13 +1,9 @@
 {
-  "type": "shape",
-  "kind": "rounded",
+  "type": "note",
   "x": 5896,
   "y": 875,
   "w": 640,
-  "h": 116,
+  "h": 120,
   "color": "yellow",
-  "text": "Keep the chosen wrong option identifiable and reveal the correct option. Persistence remains open.",
-  "size": "body",
-  "textAlign": "left",
-  "by": "agent"
+  "text": "Show the selected incorrect answer and correct answer. Both remain read-only until the page or competition changes."
 }

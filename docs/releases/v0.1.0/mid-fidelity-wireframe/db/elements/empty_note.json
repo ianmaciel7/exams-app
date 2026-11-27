@@ -1,13 +1,9 @@
 {
-  "type": "shape",
-  "kind": "rounded",
+  "type": "note",
   "x": 8816,
   "y": 875,
   "w": 640,
-  "h": 116,
+  "h": 120,
   "color": "yellow",
-  "text": "The selected item has no questions. This differs from an empty sidebar.",
-  "size": "body",
-  "textAlign": "left",
-  "by": "agent"
+  "text": "The selected competition contains no questions. Distinct from an empty sidebar."
 }

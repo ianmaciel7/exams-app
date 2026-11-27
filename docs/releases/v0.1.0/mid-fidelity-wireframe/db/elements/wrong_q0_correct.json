@@ -1,11 +1,8 @@
 {
-  "type": "shape",
-  "kind": "rounded",
-  "x": 6938,
-  "y": 205,
-  "w": 108,
-  "h": 26,
-  "color": "#eeeeee",
+  "type": "text",
+  "x": 6350,
+  "y": 208,
   "text": "Correct",
-  "size": "small"
+  "size": "small",
+  "color": "#454545"
 }

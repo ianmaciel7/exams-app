@@ -1,13 +1,9 @@
 {
-  "type": "shape",
-  "kind": "rounded",
+  "type": "note",
   "x": 17576,
   "y": 875,
   "w": 640,
-  "h": 116,
+  "h": 120,
   "color": "yellow",
-  "text": "Proposal: preserve selection, show a local submission error and allow retry via Answer. Retry semantics require approval.",
-  "size": "body",
-  "textAlign": "left",
-  "by": "agent"
+  "text": "Keep the option and allow a new submission via Answer after failure. This is not a retry of an evaluated answer."
 }

@@ -1,13 +1,9 @@
 {
-  "type": "shape",
-  "kind": "rounded",
+  "type": "note",
   "x": 10276,
   "y": 875,
   "w": 640,
-  "h": 116,
+  "h": 120,
   "color": "yellow",
-  "text": "Keep the selected competition. Retry reloads its question list.",
-  "size": "body",
-  "textAlign": "left",
-  "by": "agent"
+  "text": "Retry reloads the selected competition's question list."
 }

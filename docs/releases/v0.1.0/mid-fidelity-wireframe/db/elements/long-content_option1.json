@@ -1,0 +1,9 @@
+{
+  "type": "text",
+  "x": 22278,
+  "y": 318,
+  "text": "B. Attach a unique operation identifier and ensure that retries with the same identifier do not create another record.",
+  "size": "body",
+  "color": "#262626",
+  "wrap": 700
+}

@@ -1,13 +1,9 @@
 {
-  "type": "shape",
-  "kind": "rounded",
+  "type": "note",
   "x": 19036,
   "y": 875,
   "w": 640,
-  "h": 116,
+  "h": 120,
   "color": "yellow",
-  "text": "Proposal for zero available competitions. No default selection is possible; no new creation action is assumed.",
-  "size": "body",
-  "textAlign": "left",
-  "by": "agent"
+  "text": "Proposed empty-sidebar treatment. No default selection possible; no new creation action assumed."
 }

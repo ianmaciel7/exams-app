@@ -1,13 +1,9 @@
 {
-  "type": "shape",
-  "kind": "rounded",
+  "type": "note",
   "x": 13196,
   "y": 875,
   "w": 640,
-  "h": 116,
+  "h": 120,
   "color": "yellow",
-  "text": "Hover on an inactive item is a transient visual cue; the selected first item remains unchanged.",
-  "size": "body",
-  "textAlign": "left",
-  "by": "agent"
+  "text": "Hover is transient and visually lighter than the selected row. No selection change without activation."
 }

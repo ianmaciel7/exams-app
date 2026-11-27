@@ -1,13 +1,9 @@
 {
-  "type": "shape",
-  "kind": "rounded",
+  "type": "note",
   "x": 2976,
   "y": 875,
   "w": 640,
-  "h": 116,
+  "h": 120,
   "color": "yellow",
-  "text": "The selected option enables Answer. Selection does not evaluate the question.",
-  "size": "body",
-  "textAlign": "left",
-  "by": "agent"
+  "text": "Select an option, then Answer. Choice remains editable before successful evaluation."
 }

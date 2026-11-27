@@ -10,7 +10,7 @@ Competition items concatenate competition name, year and position/exam title in 
 
 ## Pagination
 
-The question list is paginated. Scroll vertically within a page; at the end of the list, use pagination controls to navigate between pages of the selected competition. The sketch shows illustrative numbered pages with Previous/Next; page size, total pages and ordering remain open. Page changes reset the list to the top.
+The question list is paginated. Scroll vertically within a page; at the end of the list, use pagination controls to navigate between pages of the selected competition. The sketch shows illustrative numbered pages with Previous/Next; page size is ten; total pages and ordering depend on the dataset and remain unspecified. Page changes reset the list to the top.
 
 Progress: in progress; user review pending.
 
@@ -24,22 +24,27 @@ The owner approved explicit answer submission: select an option, then activate A
 
 Evidence: [archived QConcursos interface study](../../../references/2026-11-25-qconcursos-archive-evidence.md) establishes an explicit answer action and feedback. The [historical archive inventory](https://github.com/ianmaciel7/exams-app-archive/blob/main/inventory/exams-app-branch-files.json) identifies ExamTopics and QConcursos flow and interaction records; original bytes for the ExamTopics flow, pagination and retry were not recovered. Scroll reset and manual retry are owner-approved recommendations, not independently verified benchmark behavior.
 
-No filters, simulations, scoring, explanations, persistence, or other features are added by these decisions. Page size and automatic retry/cache policy are unspecified.
+No filters, simulations, scoring, explanations, persistence, or other features are added by these decisions. Automatic retry/cache policy is unspecified.
 
 ## Open product decisions
 
-- Answer lifecycle: whether evaluated choices remain visible when changing page or competition and returning; whether a submitted answer can be changed or retried. Persistence across sessions is not selected.
-- Page size and question ordering: not selected; defer exact values until needed for the release.
-- Loading and empty-state appearance remain pending visual review. Mobile navigation, responsive collapse and production localization are not approved requirements.
+- Question ordering and exact responsive breakpoint remain open.
+- Loading and empty-state appearance remain pending visual review. The sidebar must be collapsible on small screens; its precise mechanism/breakpoint and production localization remain open.
 
-The five approved interaction decisions are resolved and must not be asked again. English is approved for the project-authored Sketch copy; this does not establish a production localization policy. Proper competition names are unchanged.
+The eleven approved interaction decisions are resolved and must not be asked again. English is approved for the project-authored Sketch copy; this does not establish a production localization policy. Proper competition names are unchanged.
 
-Low-Fidelity Wireframe has started with the owner-approved Sketch as baseline. The narrow workspace remains a proposal. Initial selection has been resolved; other open decisions remain unresolved; see [structural review](../low-fidelity-wireframe/README.md#review-questions).
+Low-Fidelity Wireframe has started with the owner-approved Sketch as baseline. The narrow workspace remains a proposal. Initial selection and the subsequent Mid-Fidelity decisions have been resolved; see the decision record below; see [structural review](../low-fidelity-wireframe/README.md#review-questions).
 
 ## Approved initial selection — 2026-11-27
 
-On every workspace entry, automatically select the first item in the sidebar's displayed order, if available, and load its questions. Do not require an extra selection click or restore a different item as the default. The existing loading, success, empty-question and failure variants cover the question request. No sidebar items means no possible selection; its treatment is not yet specified. This does not decide sorting, answer persistence or re-submission.
+On every workspace entry, automatically select the first item in the sidebar's displayed order, if available, and load its questions. Do not require an extra selection click or restore a different item as the default. The existing loading, success, empty-question and failure variants cover the question request. No sidebar items means no possible selection; its treatment is not yet specified. This does not decide sorting; answer lifecycle is resolved below.
 
 ## Mid-Fidelity review
 
-The [Mid-Fidelity Wireframe](../mid-fidelity-wireframe/README.md) illustrates hover/focus and proposes submission pending, submission failure, and empty sidebar treatments. These are review candidates, not product decisions. Initial selection is resolved; answer lifecycle, page size/order, responsive navigation, submission recovery and empty-sidebar behavior remain open. Example question content is illustrative, not official exam data.
+The [Mid-Fidelity Wireframe](../mid-fidelity-wireframe/README.md) illustrates hover/focus and proposes submission pending, submission failure, and empty sidebar treatments. The owner subsequently approved answer lifecycle, submission recovery, collapsible navigation and page size; empty-sidebar treatment, ordering and exact responsive mechanism remain open. Example question content is illustrative, not official exam data.
+
+## Approved Mid-Fidelity decisions — 2026-11-27
+
+On page or competition change, discard all answer selections and evaluated results from the previous page; revisiting starts unanswered. On the current page, a successfully evaluated answer is read-only. No answer persistence across application sessions. On submission failure, retain the selected option and allow another Answer submission; prevent duplicate submissions while pending. A failed request is not a confirmed answer. The sidebar is collapsible on small screens. Show ten questions per page, or fewer when the final page contains fewer questions.
+
+Do not re-ask these six decisions. A same-page sidebar toggle does not discard answers; a genuine page or competition change does. Late responses must not restore discarded answers after navigation; duplicate prevention and ambiguous server outcomes require prototype/implementation validation. Empty sidebar remains an unapproved proposal. No page-size chooser is approved.

@@ -1,13 +1,9 @@
 {
-  "type": "shape",
-  "kind": "rounded",
+  "type": "note",
   "x": 1516,
   "y": 875,
   "w": 640,
-  "h": 116,
+  "h": 120,
   "color": "yellow",
-  "text": "Illustrative numbering only. Pagination follows the last question; navigation resets scroll to the top.",
-  "size": "body",
-  "textAlign": "left",
-  "by": "agent"
+  "text": "Ten questions per page (unless fewer remain). Changing page clears selections and evaluated answers; scroll returns to the top."
 }

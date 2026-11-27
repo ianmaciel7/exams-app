@@ -1,13 +1,9 @@
 {
-  "type": "shape",
-  "kind": "rounded",
+  "type": "note",
   "x": 11900,
   "y": 875,
   "w": 640,
-  "h": 116,
+  "h": 120,
   "color": "yellow",
-  "text": "Proposed narrower two-region workspace; not a mobile navigation decision. Full labels must remain discoverable.",
-  "size": "body",
-  "textAlign": "left",
-  "by": "agent"
+  "text": "Collapsible sidebar on smaller screens approved. Expanded treatment shown; exact breakpoint remains undecided."
 }

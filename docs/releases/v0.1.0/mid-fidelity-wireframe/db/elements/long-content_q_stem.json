@@ -1,0 +1,9 @@
+{
+  "type": "text",
+  "x": 22252,
+  "y": 140,
+  "text": "A development team is reviewing an application that sends requests to a remote service. A request may fail after the server has completed the operation.\n\nWhich approach best prevents a repeated request from creating a duplicate record?",
+  "size": "body",
+  "color": "#262626",
+  "wrap": 740
+}

@@ -1,13 +1,9 @@
 {
-  "type": "shape",
-  "kind": "rounded",
+  "type": "note",
   "x": 7356,
   "y": 875,
   "w": 640,
-  "h": 116,
+  "h": 120,
   "color": "yellow",
-  "text": "Automatically select the first available sidebar item on entry. Keep the question layout stable while loading.",
-  "size": "body",
-  "textAlign": "left",
-  "by": "agent"
+  "text": "First available competition selected automatically. Loading keeps the layout stable."
 }

@@ -17,3 +17,9 @@ Start with the [Ideas Board](docs/boards/overview/README.md). [Immutable previou
 See the [release records](docs/releases/v0.1.0/README.md), [current Sketch](docs/releases/v0.1.0/sketch/README.md) and [provisional visual direction](DESIGN.md). Historical ideas are not approved requirements.
 
 Approved initial selection: on every entry to the workspace, automatically select the first item in the sidebar's displayed order and load its questions. No manual selection step is required. If no items exist, no selection is possible; the empty-sidebar treatment remains unspecified. This is a product decision, not verified implementation.
+
+## Approved Mid-Fidelity decisions — 2026-11-27
+
+On page or competition change, discard all answer selections and evaluated results from the previous page; revisiting starts unanswered. On the current page, a successfully evaluated answer is read-only. No answer persistence across application sessions. On submission failure, retain the selected option and allow another Answer submission; prevent duplicate submissions while pending. A failed request is not a confirmed answer. The sidebar is collapsible on small screens. Show ten questions per page, or fewer when the final page contains fewer questions.
+
+These are owner-approved product requirements, not implemented behavior. Question ordering, exact responsive breakpoint, empty-sidebar treatment and recovery details for uncertain server outcomes remain open.

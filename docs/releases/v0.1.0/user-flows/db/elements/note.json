@@ -5,5 +5,5 @@
   "w": 420,
   "h": 300,
   "color": "yellow",
-  "text": "Enter → automatically select first available item → load list → scroll → page navigation (reset to top).\nSelect option → Answer → correct or incorrect feedback; reveal correct option.\nFailure → manual Retry.\nOpen: answer lifecycle.\nMid-Fidelity: entry and answer flow retained; submission pending/failure are proposals. Answer lifecycle remains open."
+  "text": "Entry selects first available item. Select -> Answer -> pending -> evaluated and locked OR failure with choice retained and retry. Page/competition change and session exit discard answers. Sidebar toggle preserves context. Ten questions per page."
 }

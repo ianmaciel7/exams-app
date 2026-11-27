@@ -1,13 +1,9 @@
 {
-  "type": "shape",
-  "kind": "rounded",
+  "type": "note",
   "x": 14656,
   "y": 875,
   "w": 640,
-  "h": 116,
+  "h": 120,
   "color": "yellow",
-  "text": "Proposed visible keyboard focus on Answer; keyboard behavior requires prototype testing.",
-  "size": "body",
-  "textAlign": "left",
-  "by": "agent"
+  "text": "Visible keyboard focus is distinct from selected and hover states. Functional keyboard testing is pending."
 }

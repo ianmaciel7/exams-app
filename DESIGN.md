@@ -64,3 +64,9 @@ On workspace entry, the first available sidebar item is selected automatically; 
 ## Mid-Fidelity direction
 
 The owner approved progression from Low-Fidelity. The [Mid-Fidelity Wireframe](docs/releases/v0.1.0/mid-fidelity-wireframe/README.md) replaces question placeholders with illustrative content, clarifies control states and uses a neutral, regular editable geometry. Preserve default first-item selection, no left selection marker, whitespace instead of question dividers, aligned actions and pagination. The narrower workspace, hover/focus treatments, submission states and empty sidebar remain studies or proposals. No final palette, design tokens or functional interactions are established.
+
+## Mid-Fidelity decision review
+
+On page or competition change, discard all answer selections and evaluated results from the previous page; revisiting starts unanswered. On the current page, a successfully evaluated answer is read-only. No answer persistence across application sessions. On submission failure, retain the selected option and allow another Answer submission; prevent duplicate submissions while pending. A failed request is not a confirmed answer. The sidebar is collapsible on small screens. Show ten questions per page, or fewer when the final page contains fewer questions.
+
+Keep the selected row background without a left marker, distinguish inactive hover and keyboard focus, attach option feedback near its associated text, keep Answer width stable while pending, and preserve the scroll/selection context when toggling the sidebar. The collapsed icon rail is an exploratory treatment, not an approved mobile breakpoint. Long-content and first/middle/last pagination studies are illustrative. Use native sticky notes outside the artboards.

@@ -8,7 +8,7 @@ Competition items concatenate competition name, year and position/exam title in 
 
 ## Pagination
 
-The question list is paginated. Scroll vertically within a page; at the end of the list, use pagination controls to navigate between pages of the selected competition. The sketch shows illustrative numbered pages with Previous/Next; page size, total pages and ordering remain open. Page changes reset the list to the top.
+The question list is paginated. Scroll vertically within a page; at the end of the list, use pagination controls to navigate between pages of the selected competition. The sketch shows illustrative numbered pages with Previous/Next; page size is ten; total pages and ordering remain dataset-dependent or unspecified. Page changes reset the list to the top.
 
 Progress: in progress; user review pending.
 
@@ -18,10 +18,14 @@ Select entry → loading (proposal) → list, empty or load failure (proposed va
 
 ## Open transitions
 
-Revisiting previously evaluated questions after page or competition changes is unresolved; see [Product decision register](../product/README.md#open-product-decisions). Do not assume answer persistence or allow a submitted answer to change without approval. Current UI labels are in English, including Answer and Retry; these controls are approved and drawn in the Sketch; runtime behavior is not tested.
+Revisiting previously evaluated questions after page or competition changes starts unanswered. Confirmed answers cannot change on the current page; answers do not persist across sessions. See [Product decisions](../product/README.md#approved-mid-fidelity-decisions--2026-11-27). Current UI labels are in English, including Answer and Retry; these controls are approved and drawn in the Sketch; runtime behavior is not tested.
 
 The approved Answer action is depicted after the alternatives, on the left, without a divider above or below it; whitespace separates complete questions and pagination. The result occupies the same action region; option-level feedback remains attached to its option. This placement does not alter the approved transitions.
 
-The [Low-Fidelity Wireframe](../low-fidelity-wireframe/README.md) inherits approved transitions. Initial selection is approved: enter → select first available sidebar item → load → list, empty questions or failure. Revisiting evaluated answers remains open; the narrow proposal approves no new transition.
+The [Low-Fidelity Wireframe](../low-fidelity-wireframe/README.md) inherits approved transitions. Initial selection is approved: enter → select first available sidebar item → load → list, empty questions or failure. The historical Low-Fidelity narrow proposal approved no new transition; later Mid-Fidelity decisions are recorded below.
 
-[Mid-Fidelity Wireframe](../mid-fidelity-wireframe/README.md) illustrates the approved entry/answer/list-retry flows and proposes submission pending and local submission failure. Whether to retry a submission and preserve or change an evaluated answer remains open. Empty sidebar is a proposed state, not a new flow. Keyboard and responsive behavior remain untested.
+[Mid-Fidelity Wireframe](../mid-fidelity-wireframe/README.md) illustrates the approved entry/answer/list-retry flows and shows submission pending and local submission failure; the owner approved retry after failure and locking evaluated answers until navigation. Empty sidebar is a proposed state, not a new flow. Keyboard and responsive behavior remain untested.
+
+## Approved Mid-Fidelity transitions
+
+Unanswered -> select -> Answer -> pending -> evaluated (read-only) or submission failure (choice retained; Answer enabled again). Page/competition change -> discard current-page responses -> load target -> unanswered. Close application -> discard temporary session responses. Collapse/expand sidebar -> same competition and page, responses unchanged. Navigate ten questions per page; Previous disabled at first page, Next disabled at last page. Exact cancellation/late-response and ambiguous-outcome recovery require validation; do not restore stale answers.

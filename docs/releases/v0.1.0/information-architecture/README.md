@@ -8,7 +8,7 @@ Competition items concatenate competition name, year and position/exam title in 
 
 ## Pagination
 
-The question list is paginated. Scroll vertically within a page; at the end of the list, use pagination controls to navigate between pages of the selected competition. The sketch shows illustrative numbered pages with Previous/Next; page size, total pages and ordering remain open. Page changes reset the list to the top.
+The question list is paginated. Scroll vertically within a page; at the end of the list, use pagination controls to navigate between pages of the selected competition. The sketch shows illustrative numbered pages with Previous/Next; page size is ten; total pages and ordering remain dataset-dependent or unspecified. Page changes reset the list to the top.
 
 Progress: in progress; user review pending.
 
@@ -22,8 +22,10 @@ Both sidebar entries share one neutral square-with-X icon placeholder in the cur
 
 ## Copy and navigation boundaries
 
-Current Sketch labels are in English; official institution names remain unchanged. Whether prior answers remain visible on revisiting an entry is open in the [Product decision register](../product/README.md#open-product-decisions). The native Sketch is not a routing specification.
+Current Sketch labels are in English; official institution names remain unchanged. Prior answers are discarded when changing page or entry, as recorded in the [Product decision register](../product/README.md#open-product-decisions). The native Sketch is not a routing specification.
 
-The [Low-Fidelity Wireframe](../low-fidelity-wireframe/README.md) explores the same workspace, including a proposed narrower composition. The initial unselected proposal is superseded by automatic first-item selection; responsive navigation and routing remain open.
+The [Low-Fidelity Wireframe](../low-fidelity-wireframe/README.md) explores the same workspace, including a proposed narrower composition. The initial unselected proposal is superseded by automatic first-item selection; collapsible navigation is approved for small screens; exact mechanism and routing remain open.
 
-The [Mid-Fidelity Wireframe](../mid-fidelity-wireframe/README.md) retains the same two-region workspace and the first available item default. The narrow and empty-sidebar compositions are proposals; no route or destination is added.
+The [Mid-Fidelity Wireframe](../mid-fidelity-wireframe/README.md) retains the same two-region workspace and the first available item default. The narrow expanded/collapsed treatments and empty-sidebar composition remain visual proposals; no route or destination is added.
+
+The owner approved a collapsible sidebar on small screens and ten questions per page. Collapsing or expanding does not change the selected competition or page. Changing competition or page discards responses. A collapsed rail is a design study; breakpoint and mobile details remain open.

@@ -47,3 +47,9 @@ Initial selection decision (2026-11-27): automatically select the first availabl
 ## Mid-Fidelity transition — 2026-11-27
 
 Owner approved progression from Low-Fidelity at `e70dbaf`. Nine native variants were visually checked in both board themes from [capture run 45988678206](https://github.com/ianmaciel7/exams-app/actions/runs/45988678206); artifact generation succeeded independently of deployment. Preserve the historical boards. The [Mid-Fidelity Wireframe](mid-fidelity-wireframe/README.md) adds illustrative text, more explicit component treatments, hover/focus studies, and proposed submission-pending, submission-failure and empty-sidebar states. The narrow workspace remains proposed. No additional behavior or higher fidelity is approved. Native Mid-Fidelity capture and owner review remain pending.
+
+## Approved Mid-Fidelity decisions — 2026-11-27
+
+On page or competition change, discard all answer selections and evaluated results from the previous page; revisiting starts unanswered. On the current page, a successfully evaluated answer is read-only. No answer persistence across application sessions. On submission failure, retain the selected option and allow another Answer submission; prevent duplicate submissions while pending. A failed request is not a confirmed answer. The sidebar is collapsible on small screens. Show ten questions per page, or fewer when the final page contains fewer questions.
+
+Mid-Fidelity now covers eighteen variants, including expanded/collapsed sidebar, multiline question content and first/middle/last pagination. The earlier wireframes are historical. Ordering, exact responsive treatment, empty-sidebar policy and ambiguous submission outcomes remain open. Native visual review pending.

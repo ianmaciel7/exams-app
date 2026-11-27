@@ -5,5 +5,5 @@
   "w": 420,
   "h": 300,
   "color": "yellow",
-  "text": "Study questions from a selected competition.\nSidebar selection; vertical list; pagination at list end.\nApproved: explicit Answer, reveal correct choice on error, manual Retry, reset scroll on page change.\nApproved: automatically select the first available sidebar item on entry.\nOpen: answer lifecycle, page size/order.\nMid-Fidelity review in progress. Submission pending, submission failure and empty sidebar are proposed; answer lifecycle remains open."
+  "text": "Approved: discard answers on page/competition change and session exit; lock evaluated answers on current page; retain choice and retry after submission failure. Small-screen sidebar collapsible. Ten questions per page. Open: question ordering, empty sidebar, exact responsive treatment, uncertain submission outcomes."
 }
