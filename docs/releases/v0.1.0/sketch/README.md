@@ -42,3 +42,7 @@ The eight states retain their existing scope. Sidebar entries use compact spacin
 ## Sidebar refinement
 
 The navigation remains a simple two-entry list, with a slightly wider label column, consistent 38-unit row spacing, editable document glyphs and a short active marker. The sidebar divider is intentionally lighter than the outer frame. The Capacities workspace reference informs density and alignment only; no additional navigation or behavior is imported. Labels remain single-line and truncated; exact content, responsive collapse, hover, focus and keyboard behavior are not specified by this static sketch.
+
+## Specialist and Impeccable refinement
+
+Operate-mode layout: the question content is primary and the navigation supports it. Reduce the workspace label to a body-size heading, use a one-unit selection indicator and text emphasis, and keep a compact two-entry list with simple, individually drawn document icon segments. Preserve the selected entry, label content and all eight screen states. This is an exploratory sketch, not an approved production style or a functional accessibility test. Hover, focus, long labels and responsive navigation remain review items; no new routes or controls are added.
