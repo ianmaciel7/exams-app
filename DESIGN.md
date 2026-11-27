@@ -74,3 +74,7 @@ Keep the selected row background without a left marker, distinguish inactive hov
 ## Mid-Fidelity rhythm refinement — 2026-11-27
 
 Use a 282-unit short-question cadence, 28-unit short-option rows, 120-by-36-unit action controls, and a 32-unit gap after the action. These are exploratory canvas units, not production tokens. Show the next question naturally instead of a fixed blank region. Expanded and collapsed variants preserve question content and scroll context. Use a bounded reading column, content-dependent multiline rows and hanging option labels. Place feedback near the corresponding option and visibly distinguish locked answers. Match loading geometry to loaded content. End-of-page studies depict preceding content and the final two questions, with centered pagination in flow and a 32-unit bottom margin. Ten questions per complete page; the 47-question dataset is illustrative. Use a slim neutral scrollbar and no question dividers.
+
+## Sidebar toggle — ghost treatment
+
+The owner requested a ghost icon button for the sidebar toggle. In both expanded and collapsed Mid-Fidelity variants, render only the neutral panel icon by default, without a filled background or button outline. Keep the 28-unit illustrative control footprint and icon center unchanged. Hover may use a subtle neutral surface; keyboard focus must retain a visible focus indicator. Actual target size, hover, focus and accessible expand/collapse semantics require implementation validation. No behavior changes; historical stages remain intact.
