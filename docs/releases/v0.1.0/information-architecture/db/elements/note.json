@@ -5,5 +5,5 @@
   "w": 420,
   "h": 300,
   "color": "yellow",
-  "text": "One workspace: compact sidebar + question list.\nSelection changes the list; no redundant heading.\nSame screen variants: list start/end, selected, correct, incorrect, loading, empty, failure.\nRouting and initial selection remain open."
+  "text": "One workspace: compact sidebar + question list.\nSelection changes the list; no redundant heading.\nEight inherited states; initial unselected and narrower workspace are low-fidelity proposals only.\nRouting, initial selection and responsive behavior remain open."
 }

@@ -1,0 +1,9 @@
+{
+  "type": "note",
+  "x": 10276,
+  "y": 875,
+  "w": 560,
+  "h": 120,
+  "color": "yellow",
+  "text": "Explain failure; allow manual Retry."
+}

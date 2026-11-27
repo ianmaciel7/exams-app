@@ -34,3 +34,5 @@ No filters, simulations, scoring, explanations, persistence, or other features a
 - Loading and empty-state appearance remain pending visual review. Mobile navigation, responsive collapse and production localization are not approved requirements.
 
 The four prior interaction decisions are resolved and must not be asked again. English is approved for the project-authored Sketch copy; this does not establish a production localization policy. Proper competition names are unchanged.
+
+Low-Fidelity Wireframe has started with the owner-approved Sketch as baseline. The initial unselected and narrow workspace variants are proposals only. Existing open decisions remain unresolved; see [structural review](../low-fidelity-wireframe/README.md#review-questions).

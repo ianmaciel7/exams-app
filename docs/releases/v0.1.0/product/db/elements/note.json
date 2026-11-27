@@ -5,5 +5,5 @@
   "w": 420,
   "h": 300,
   "color": "yellow",
-  "text": "Study questions from a selected competition.\nSidebar selection; vertical list; pagination at list end.\nRequested: correct and incorrect feedback.\nOpen: evaluation timing, reveal policy, retry, scroll restoration.\nOther features are candidates, not requirements."
+  "text": "Study questions from a selected competition.\nSidebar selection; vertical list; pagination at list end.\nApproved: explicit Answer, reveal correct choice on error, manual Retry, reset scroll on page change.\nOpen: initial selection, answer lifecycle, page size/order.\nLow-fidelity structural review in progress."
 }

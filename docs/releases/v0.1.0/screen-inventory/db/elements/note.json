@@ -5,5 +5,5 @@
   "w": 420,
   "h": 300,
   "color": "yellow",
-  "text": "One screen, eight visual variants.\nUnanswered; pagination; selected (conditional); correct; incorrect; loading; empty; load failure.\nSidebar: one-line icon + label, active cue.\nOther destinations not selected; review pending."
+  "text": "One screen; eight inherited variants.\nUnanswered; pagination; selected before Answer; correct; incorrect; loading; empty; load failure.\nLow-fidelity studies: initial unselected and narrow workspace (proposals).\nNo extra destinations approved."
 }

@@ -11,8 +11,9 @@ The question list is paginated. Scroll vertically within a page; at the end of t
 | [Information Architecture](information-architecture/README.md) | In progress | Pending |
 | [Screen Inventory](screen-inventory/README.md) | In progress | Pending |
 | [User Flows](user-flows/README.md) | In progress | Pending |
-| [Sketch](sketch/README.md) | In progress | Pending |
-| Low-, mid-, high-fidelity wireframes, mockup, interactive prototype | Not started | Pending |
+| [Sketch](sketch/README.md) | Complete | Owner approved progression |
+| [Low-Fidelity Wireframe](low-fidelity-wireframe/README.md) | In progress | Pending |
+| Mid-, high-fidelity wireframes, mockup, interactive prototype | Not started | Pending |
 
 ## Current state review
 
@@ -20,7 +21,7 @@ The Sketch depicts eight variants of one screen: unanswered at list start, list 
 
 The current Sketch uses a compact one-line sidebar list with neutral square-with-X icon placeholders, institution/year/position labels, ellipsis and subtle active text/indicator. No redundant section heading or additional menu. Exact visual treatment remains exploratory.
 
-[Review threads](sketch/comments.json) and [provisional visual direction](../../../DESIGN.md). All stages remain in progress, validation pending; static sketches are not implementation. Latest visually inspected English-copy source: [`0c5df27`](https://github.com/ianmaciel7/exams-app/commit/0c5df27b67de7cb3d59ac8945adc0e07bf0ec050). All four decision threads are resolved; visual approval remains pending.
+[Review threads](sketch/comments.json) and [provisional visual direction](../../../DESIGN.md). Prior planning decisions remain in progress; Sketch progression is owner-approved; static sketches are not implementation. Latest visually inspected English-copy source: [`0c5df27`](https://github.com/ianmaciel7/exams-app/commit/0c5df27b67de7cb3d59ac8945adc0e07bf0ec050). All four decision threads are resolved; visual approval remains pending.
 
 Both sidebar entries share one neutral square-with-X icon placeholder in the current Sketch; this is a visual refinement, not a new interaction.
 
@@ -33,3 +34,7 @@ The owner-approved action placement is synchronized in the [Sketch](sketch/READM
 The 2026-11-27 [visual rhythm review](sketch/README.md#visual-rhythm-review--2026-11-27) refines question grouping, heading alignment, option feedback, pagination and loading geometry without expanding release scope. New native captures and owner visual approval remain pending.
 
 The pagination alignment refinement groups Previous/Next with their chevrons, equalizes page-slot spacing and centers the group in the question region; see the [Sketch](sketch/README.md#pagination-alignment-refinement--2026-11-27). Native capture review remains pending.
+
+## Stage transition — 2026-11-27
+
+The owner approved advancing from Sketch at `94072ce`. Preserve its native board and capture history. [Low-Fidelity Wireframe](low-fidelity-wireframe/README.md) begins structural review with the eight inherited states plus two explicitly proposed variants (initial unselected entry and narrower workspace). Initial selection, answer lifecycle and responsive direction remain open. No higher fidelity stage or implementation is approved.

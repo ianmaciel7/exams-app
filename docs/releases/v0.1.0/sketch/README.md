@@ -10,7 +10,7 @@ Competition items concatenate competition name, year and position/exam title in 
 
 The question list is paginated. Scroll vertically within a page; at the end of the list, use pagination controls to navigate between pages of the selected competition. The sketch shows illustrative numbered pages with Previous/Next; page size, total pages and ordering remain open. Page changes reset the list to the top.
 
-Progress: in progress; user visual review pending.
+Progress: complete; owner approved progression to Low-Fidelity Wireframe.
 
 ## Screen and variant layout convention
 
@@ -88,3 +88,7 @@ Review of native captures from `1987636` identified weak separation by proximity
 ## Pagination alignment refinement — 2026-11-27
 
 Align Previous and Next chevrons to the optical center of the page controls, group each chevron with its label, and keep page-number slot centers 48 canvas units apart. The full control group spans approximately x=2074–2420, centered at x=2247 within the main region (x=1780–2715). Preserve the disabled Previous control, active page 1, existing scroll behavior and absence of dividers. These are sketch coordinates, not production spacing tokens. Native capture review remains pending.
+
+## Stage closure — 2026-11-27
+
+Owner approved progression from the Sketch at `94072ce`. This board is preserved as historical evidence, including its native notes and resolved review threads. Structural refinements now belong to [Low-Fidelity Wireframe](../low-fidelity-wireframe/README.md). This approval does not settle open product decisions or validate runtime behavior.

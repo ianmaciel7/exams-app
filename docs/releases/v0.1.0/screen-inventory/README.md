@@ -36,3 +36,5 @@ Question anatomy: title, statement, alternatives, left-aligned action/result row
 The visual-rhythm refinement keeps the same eight states. Question groups use heading emphasis and whitespace; the selected, correct and incorrect states preserve the same structure. The loading drawing mirrors two complete question groups and a partial third with abstract placeholders. This does not establish loading behavior or pagination size.
 
 Pagination remains inside the end-of-list state; its labels and chevrons share an optical alignment, page slots have uniform spacing, and the whole group is centered in the main region. No navigation behavior changes.
+
+The approved Sketch is preserved. The [Low-Fidelity Wireframe](../low-fidelity-wireframe/README.md) inherits eight variants and adds two clearly labeled structural studies (initial unselected, narrower viewport). The studies are proposals, not additional approved states or destinations.

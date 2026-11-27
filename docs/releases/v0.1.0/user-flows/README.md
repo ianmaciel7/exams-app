@@ -21,3 +21,5 @@ Select entry → loading (proposal) → list, empty or load failure (proposed va
 Initial entry before selecting a competition and revisiting previously evaluated questions after page or competition changes are unresolved; see [Product decision register](../product/README.md#open-product-decisions). Do not assume answer persistence or allow a submitted answer to change without approval. Current UI labels are in English, including Answer and Retry; these controls are approved and drawn in the Sketch; runtime behavior is not tested.
 
 The approved Answer action is depicted after the alternatives, on the left, without a divider above or below it; whitespace separates complete questions and pagination. The result occupies the same action region; option-level feedback remains attached to its option. This placement does not alter the approved transitions.
+
+The [Low-Fidelity Wireframe](../low-fidelity-wireframe/README.md) inherits approved transitions. Initial selection and revisiting evaluated answers remain open; no transition is approved by the proposed variants.

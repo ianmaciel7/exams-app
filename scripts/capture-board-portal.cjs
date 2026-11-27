@@ -10,12 +10,14 @@ const boards = [
   ['screens','Screen Inventory','docs/releases/v0.1.0/screen-inventory'],
   ['flows','User Flows','docs/releases/v0.1.0/user-flows'],
   ['sketch','Sketch','docs/releases/v0.1.0/sketch'],
+  ['lowfidelity','Low-Fidelity Wireframe','docs/releases/v0.1.0/low-fidelity-wireframe'],
 ];
 const urls = Object.fromEntries(fs.readFileSync('/tmp/board-urls','utf8').split(/\r?\n/).map(line=>line.match(/^(\w+): (http\S+)$/)).filter(Boolean).map(m=>[m[1],m[2]]));
 
 const sketchStates=['top','end','selected','correct','wrong','loading','empty','failure'];
 async function captureSketchStates(page,theme,board){
-  board.states ||= sketchStates.map(id=>({id,images:{}}));
+  const states=board.id==='lowfidelity'?[...sketchStates,'initial','narrow']:sketchStates;
+  board.states ||= states.map(id=>({id,images:{}}));
   const surface=page.locator('.wb-surface');
   const box=await surface.boundingBox();
   if(!box) throw Error('Sketch canvas unavailable');
@@ -23,7 +25,7 @@ async function captureSketchStates(page,theme,board){
     const m=new DOMMatrixReadOnly(getComputedStyle(el).transform);
     return {scale:m.a,x:m.e,y:m.f};
   });
-  for(let i=0;i<sketchStates.length;i++){
+  for(let i=0;i<states.length;i++){
     const cx=655+i*1460,cy=515;
     // Use the native wheel camera rather than scaling a crop of the overview.
     // Dispatch wheel gestures directly on the native surface. A physical
@@ -48,11 +50,11 @@ async function captureSketchStates(page,theme,board){
       await wheel(dx,dy);
     }
     const c=await camera();
-    if(Math.abs(c.scale-desired)>0.08||Math.abs(c.x+cx*c.scale-box.width/2)>25||Math.abs(c.y+cy*c.scale-box.height/2)>25)throw Error('Native camera did not frame '+sketchStates[i]+': '+JSON.stringify(c));
-    const path='boards/sketch-'+sketchStates[i]+'-'+theme+'.png';
+    if(Math.abs(c.scale-desired)>0.08||Math.abs(c.x+cx*c.scale-box.width/2)>25||Math.abs(c.y+cy*c.scale-box.height/2)>25)throw Error('Native camera did not frame '+states[i]+': '+JSON.stringify(c));
+    const path='boards/'+board.id+'-'+states[i]+'-'+theme+'.png';
     await page.screenshot({path:'_site/'+path});
     board.states[i].images[theme]=path;
-    console.log('Sketch state',sketchStates[i],theme,c.scale);
+    console.log('Sketch state',states[i],theme,c.scale);
   }
 }
 
@@ -93,7 +95,7 @@ async function captureSketchStates(page,theme,board){
           const path='boards/'+id+'-'+theme+'.png';
           await page.screenshot({path:'_site/'+path});
           board.images[theme]=path;
-          if(id==='sketch') await captureSketchStates(page,theme,board);
+          if(id==='sketch'||id==='lowfidelity') await captureSketchStates(page,theme,board);
           console.log(id,theme,expected);
         } finally { await page.close(); }
       }

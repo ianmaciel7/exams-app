@@ -50,3 +50,7 @@ The Sketch depicts Answer in a dedicated left-aligned action row below all alter
 ## Sketch rhythm review — 2026-11-27
 
 Use consistent left alignment for question headings, statements, radio controls and action rows. A modest heading emphasis and a larger gap after each action distinguish question groups without borders. Align the workspace label to the first question heading in the top view; keep sidebar rows compact and retain the selected marker and single-line ellipsis. Place option-specific result text nearer the relevant alternative, with a common feedback column. Center pagination within the main region, align the labels and chevrons to a shared optical center, keep each chevron close to its corresponding label, and space page-number slots uniformly. The loading sketch mirrors the full-question cadence and partial third question, including abstract action placeholders. These are exploratory canvas choices, not production spacing tokens. The empty and failure message groups retain their existing alignment and Retry placement.
+
+## Stage transition
+
+The owner approved advancing from Sketch (`94072ce`). The [Low-Fidelity Wireframe](docs/releases/v0.1.0/low-fidelity-wireframe/README.md) uses neutral, regular outline geometry and representative labels for structural review. Existing Sketch choices remain the baseline; final typography, color, tokens and responsive behavior remain undecided.

@@ -5,5 +5,5 @@
   "w": 420,
   "h": 300,
   "color": "yellow",
-  "text": "Select entry → load list → scroll → page navigation.\nSelect answer → correctness feedback; timing open.\nProposed loading, empty and error variants.\nReveal, retry and page scroll restoration remain open."
+  "text": "Select entry → load list → scroll → page navigation (reset to top).\nSelect option → Answer → correct or incorrect feedback; reveal correct option.\nFailure → manual Retry.\nOpen: initial selection and answer lifecycle.\nLow-fidelity review in progress."
 }

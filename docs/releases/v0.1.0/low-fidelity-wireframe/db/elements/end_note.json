@@ -1,0 +1,9 @@
+{
+  "type": "note",
+  "x": 1516,
+  "y": 875,
+  "w": 560,
+  "h": 120,
+  "color": "yellow",
+  "text": "Pagination follows the last question. Page changes return to the top."
+}
