@@ -1,0 +1,65 @@
+name: Exam App boards — GitHub Pages
+on:
+  push:
+    branches: [dev]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: exam-app-boards-pages
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: dev
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check board integrity
+        run: node scripts/check-boards.mjs
+      - name: Download official Open Artifact release
+        run: |
+          curl -fsSL https://github.com/JimLiu/open-artifact/releases/download/v0.16.3/open-artifact-plugins.zip -o /tmp/open-artifact.zip
+          unzip -q /tmp/open-artifact.zip -d /tmp/open-artifact
+      - name: Open native boards
+        run: |
+          cli=$(find /tmp/open-artifact -path '*/whiteboard/scripts/cli.mjs' | grep '/codex/' | head -1)
+          if [ -z "$cli" ]; then cli=$(find /tmp/open-artifact -path '*/whiteboard/scripts/cli.mjs' | head -1); fi
+          test -n "$cli"
+          OPEN_ARTIFACT_WHITEBOARD_CLI="$cli" node scripts/open-boards.mjs | tee /tmp/board-urls
+      - name: Capture and assemble portal
+        run: |
+          npm install --prefix /tmp/board-browser playwright
+          /tmp/board-browser/node_modules/.bin/playwright install chromium
+          mkdir -p _site/boards
+          cp docs/portal/index.html _site/index.html
+          touch _site/.nojekyll
+          NODE_PATH=/tmp/board-browser/node_modules node scripts/capture-board-portal.cjs
+      - name: Upload downloadable portal
+        uses: actions/upload-artifact@v4
+        with:
+          name: exam-app-board-portal
+          path: _site/
+          retention-days: 7
+          if-no-files-found: error
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+      contents: read
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/configure-pages@v5
+      - id: deployment
+        uses: actions/deploy-pages@v4
