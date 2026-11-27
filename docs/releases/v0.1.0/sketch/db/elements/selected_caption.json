@@ -1,8 +1,1 @@
-{
-  "type": "text",
-  "x": 2975,
-  "y": 10,
-  "text": "03 · Alternativa selecionada",
-  "size": "large",
-  "color": "ink"
-}
+{"type":"text","x":2975,"y":10,"text":"03 · Answer selected","size":"large","color":"ink"}

@@ -1,8 +1,1 @@
-{
-  "type": "text",
-  "x": 10275,
-  "y": 10,
-  "text": "08 · Falha ao carregar",
-  "size": "large",
-  "color": "ink"
-}
+{"type":"text","x":10275,"y":10,"text":"08 · Load failure","size":"large","color":"ink"}

@@ -1,8 +1,1 @@
-{
-  "type": "text",
-  "x": 5305,
-  "y": 100,
-  "text": "✓ Você acertou",
-  "size": "body",
-  "color": "#22945f"
-}
+{"type":"text","x":5305,"y":100,"text":"✓ You got it right","size":"body","color":"#22945f"}

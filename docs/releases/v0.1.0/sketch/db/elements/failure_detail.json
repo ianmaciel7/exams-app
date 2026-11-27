@@ -1,8 +1,1 @@
-{
-  "type": "text",
-  "x": 10830,
-  "y": 395,
-  "text": "A lista não pôde ser exibida.",
-  "size": "body",
-  "color": "ink"
-}
+{"type":"text","x":10830,"y":395,"text":"The list could not be displayed.","size":"body","color":"ink"}

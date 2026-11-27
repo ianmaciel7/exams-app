@@ -1,8 +1,1 @@
-{
-  "type": "text",
-  "x": 10830,
-  "y": 355,
-  "text": "Não foi possível carregar as questões",
-  "size": "large",
-  "color": "#d34b50"
-}
+{"type":"text","x":10830,"y":355,"text":"Could not load questions","size":"large","color":"#d34b50"}

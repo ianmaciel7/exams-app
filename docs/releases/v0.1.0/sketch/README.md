@@ -62,3 +62,7 @@ The owner approved explicit answer submission: select an option, then activate A
 The eight states remain: unanswered, end-of-list pagination, selected before submission, correct, incorrect, loading, empty, and load failure. The selected-before-submission state is required. The Answer and Retry controls still need visual reconciliation in the static board; behavior and accessibility are not yet tested.
 
 The owner also approved a neutral square-with-X icon placeholder for each sidebar entry. The board source now uses identical square-with-X placeholders in all eight variants; new captures and visual validation remain pending.
+
+## English copy consistency — 2026-11-27
+
+All eight sketch variants now use English project-authored UI labels, state captions, pagination and feedback, in accordance with AGENTS.md. DATAPREV and PPSA remain proper names; the illustrative job-title placeholders are translated. Geometry, state coverage, sticky notes and review threads are unchanged. Visual validation of the updated text remains pending.

@@ -1,8 +1,1 @@
-{
-  "type": "text",
-  "x": 5895,
-  "y": 10,
-  "text": "05 · Resposta incorreta",
-  "size": "large",
-  "color": "ink"
-}
+{"type":"text","x":5895,"y":10,"text":"05 · Incorrect answer","size":"large","color":"ink"}
