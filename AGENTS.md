@@ -49,6 +49,14 @@ Before creating or changing any project whiteboard, read [whiteboard guidelines]
 
 ## Wireframes, prototypes, and versions
 
+### Decision-driven sketch fidelity
+
+- For composition-only UI sketches, communicate regions, masses, approximate proportions, and reading order; replace nonessential headings, repeated question titles, navigation labels, and secondary copy with strokes. Use simple, consistent drawn icons and meaningful control geometry. Retain a short label only if the hypothesis would otherwise be ambiguous; prefer external anchored notes for region explanations. Do not ban meaningful words universally.
+- Introduce semantic labels, representative content and state/flow constraints in structural wireframes; reserve final typography, styling and tokens for mockups and interaction validation for prototypes. Low visual fidelity must not imply low functional clarity. Never use a generated mockup when the user requests a direct sketch.
+- Consult the [shared UX contract](https://github.com/ianmaciel7/exams-app-archive/blob/main/docs/references/shared-ux-knowledge/README.md); distinguish historical evidence from current implementation. Verify stage responsibilities and normal-size legibility before claiming completion.
+
+
+
 - Store release-specific sketches and wireframes under `docs/releases/<version>/`, grouped by stage or topic. Keep reusable, cross-release material separate from release-specific artifacts.
 - Reserve `prototypes/<prototype-name>/` for actual prototypes, including interactive prototypes used to validate experiences.
 - When versions need to remain accessible side by side for comparison, use subdirectories such as `v1/` and `v2/`; record their purpose and main differences on the relevant board.
