@@ -157,3 +157,7 @@ Treat the following as this project's activity and artifact ownership contract, 
 - Distinguish **Progress** (Not started, In progress, Baseline documented, Completed) from **Validation** (Pending, In progress, Passed, Not applicable). A static sketch or screenshot can establish appearance only; interaction, accessibility, official exam rules and usability need independent evidence. Explicitly record remaining uncertainty.
 
 - Before adding a Sketch section, ask whether the drawing directly tests the current composition or essential state. If not, keep it as linked supporting material or in the responsible stage; do not add headings, legends, frames, catalogs or annotations merely to satisfy a generic board template. Prefer the existing release reference board for historical component studies.
+
+## Screen and variant layout convention
+
+Arrange distinct screens/destinations vertically, one row per screen. Arrange states, scroll positions, responsive variants and alternative versions of the same screen horizontally within its row. Align the top of comparable artboards and leave clear spacing; do not imply a separate route just because a state has its own artboard. A page's pagination footer at the end of scroll is a horizontal variant of that same page, not a separate destination. Apply this convention to future UI sketch and wireframe boards unless the product owner specifies otherwise.
