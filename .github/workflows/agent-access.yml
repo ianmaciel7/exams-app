@@ -29,3 +29,4 @@ jobs:
       - run: node scripts/open-artifact-runtime.mjs install
       - run: node scripts/open-artifact-library.mjs catalog
       - run: node scripts/open-artifact-mcp.integration.mjs
+      - run: node scripts/open-artifact-library.integration.mjs
