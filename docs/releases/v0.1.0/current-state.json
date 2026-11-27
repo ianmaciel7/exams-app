@@ -434,13 +434,13 @@
       "phone-open"
     ],
     "status": "in progress",
-    "review": "Restored approved compact question anatomy, inline evaluation labels and complete alternatives. Native capture review and owner approval pending.",
+    "review": "Prior 348f8bf overview captures reviewed in both themes; redlines, anatomy and responsive specification added. New native capture review and owner approval pending.",
     "inventoryReference": "21 approved Mid-Fidelity variants",
     "nextQuestion": "Mockup: which visual identity, typography, semantic colors and theme treatment should be applied to the resolved structure?",
     "coverageGate": {
       "version": 1,
       "baselineCommit": "ec20139c96062542fc7eabb7424333b4fec6412f",
-      "reviewedCommit": "2cc13ec7f7d20efd8e97af56c77423d84d93553e",
+      "reviewedCommit": "348f8bffcfdf63706d9eec5b136b701b971dfec6",
       "status": "blocked",
       "visualReview": "pending",
       "obligations": [
@@ -458,7 +458,7 @@
             "narrow_q_answer"
           ],
           "status": "represented",
-          "reviewEvidence": "Native source coverage; new compact question anatomy requires capture review."
+          "reviewEvidence": "Mapped to editable native source; latest rendered visual review pending."
         },
         {
           "id": "pagination",
@@ -472,7 +472,7 @@
             "mobile_footer2_next"
           ],
           "status": "represented",
-          "reviewEvidence": "Native source coverage; new compact question anatomy requires capture review."
+          "reviewEvidence": "Mapped to editable native source; latest rendered visual review pending."
         },
         {
           "id": "correct",
@@ -484,7 +484,7 @@
             "feedback_correct_locked"
           ],
           "status": "represented",
-          "reviewEvidence": "Native source coverage; new compact question anatomy requires capture review."
+          "reviewEvidence": "Mapped to editable native source; latest rendered visual review pending."
         },
         {
           "id": "wrong",
@@ -498,7 +498,7 @@
             "desktop_q_radio2_dot"
           ],
           "status": "represented",
-          "reviewEvidence": "Native source coverage; new compact question anatomy requires capture review."
+          "reviewEvidence": "Mapped to editable native source; latest rendered visual review pending."
         },
         {
           "id": "selected",
@@ -509,7 +509,7 @@
             "collapsed_q_radio1_dot"
           ],
           "status": "represented",
-          "reviewEvidence": "Native source coverage; new compact question anatomy requires capture review."
+          "reviewEvidence": "Mapped to editable native source; latest rendered visual review pending."
         },
         {
           "id": "question-loading",
@@ -520,7 +520,7 @@
             "question_loading_sk_button0"
           ],
           "status": "represented",
-          "reviewEvidence": "Native source coverage; new compact question anatomy requires capture review."
+          "reviewEvidence": "Mapped to editable native source; latest rendered visual review pending."
         },
         {
           "id": "question-empty",
@@ -530,7 +530,7 @@
             "question_empty_status"
           ],
           "status": "represented",
-          "reviewEvidence": "Native source coverage; new compact question anatomy requires capture review."
+          "reviewEvidence": "Mapped to editable native source; latest rendered visual review pending."
         },
         {
           "id": "question-failure",
@@ -541,7 +541,7 @@
             "question_failure_retry"
           ],
           "status": "represented",
-          "reviewEvidence": "Native source coverage; new compact question anatomy requires capture review."
+          "reviewEvidence": "Mapped to editable native source; latest rendered visual review pending."
         },
         {
           "id": "submission-pending",
@@ -552,7 +552,7 @@
             "feedback_pending_radio1_dot"
           ],
           "status": "represented",
-          "reviewEvidence": "Native source coverage; new compact question anatomy requires capture review."
+          "reviewEvidence": "Mapped to editable native source; latest rendered visual review pending."
         },
         {
           "id": "submission-recovery",
@@ -564,7 +564,7 @@
             "feedback_recovery_radio1_dot"
           ],
           "status": "represented",
-          "reviewEvidence": "Native source coverage; new compact question anatomy requires capture review."
+          "reviewEvidence": "Mapped to editable native source; latest rendered visual review pending."
         },
         {
           "id": "navigation-empty",
@@ -575,7 +575,7 @@
             "navigation_empty_status"
           ],
           "status": "represented",
-          "reviewEvidence": "Native source coverage; new compact question anatomy requires capture review."
+          "reviewEvidence": "Mapped to editable native source; latest rendered visual review pending."
         },
         {
           "id": "navigation-loading",
@@ -586,7 +586,7 @@
             "navigation_loading_status"
           ],
           "status": "represented",
-          "reviewEvidence": "Native source coverage; new compact question anatomy requires capture review."
+          "reviewEvidence": "Mapped to editable native source; latest rendered visual review pending."
         },
         {
           "id": "navigation-failure",
@@ -598,7 +598,7 @@
             "navigation_failure_status"
           ],
           "status": "represented",
-          "reviewEvidence": "Native source coverage; new compact question anatomy requires capture review."
+          "reviewEvidence": "Mapped to editable native source; latest rendered visual review pending."
         },
         {
           "id": "navigation-expanded",
@@ -609,7 +609,7 @@
             "desktop_nav_sel"
           ],
           "status": "represented",
-          "reviewEvidence": "Native source coverage; new compact question anatomy requires capture review."
+          "reviewEvidence": "Mapped to editable native source; latest rendered visual review pending."
         },
         {
           "id": "navigation-collapsed",
@@ -622,7 +622,7 @@
             "rail_toggle3"
           ],
           "status": "represented",
-          "reviewEvidence": "Native source coverage; new compact question anatomy requires capture review."
+          "reviewEvidence": "Mapped to editable native source; latest rendered visual review pending."
         },
         {
           "id": "control-states",
@@ -637,7 +637,7 @@
             "retry_focus_ring"
           ],
           "status": "represented",
-          "reviewEvidence": "Native source coverage; new compact question anatomy requires capture review."
+          "reviewEvidence": "Mapped to editable native source; latest rendered visual review pending."
         },
         {
           "id": "full-label",
@@ -648,7 +648,7 @@
             "drawer_nav_label0"
           ],
           "status": "represented",
-          "reviewEvidence": "Native source coverage; new compact question anatomy requires capture review."
+          "reviewEvidence": "Mapped to editable native source; latest rendered visual review pending."
         },
         {
           "id": "long-content",
@@ -661,7 +661,7 @@
             "long_locked"
           ],
           "status": "represented",
-          "reviewEvidence": "Native source coverage; new compact question anatomy requires capture review."
+          "reviewEvidence": "Mapped to editable native source; latest rendered visual review pending."
         },
         {
           "id": "phone-closed",
@@ -673,7 +673,7 @@
             "continuation_q_answer"
           ],
           "status": "represented",
-          "reviewEvidence": "Native source coverage; new compact question anatomy requires capture review."
+          "reviewEvidence": "Mapped to editable native source; latest rendered visual review pending."
         },
         {
           "id": "phone-open",
@@ -686,7 +686,7 @@
             "drawer_nav_label0"
           ],
           "status": "represented",
-          "reviewEvidence": "Native source coverage; new compact question anatomy requires capture review."
+          "reviewEvidence": "Mapped to editable native source; latest rendered visual review pending."
         },
         {
           "id": "localized",
@@ -698,7 +698,7 @@
             "phone320_q_title"
           ],
           "status": "represented",
-          "reviewEvidence": "Native source coverage; new compact question anatomy requires capture review."
+          "reviewEvidence": "Mapped to editable native source; latest rendered visual review pending."
         },
         {
           "id": "responsive",
@@ -712,7 +712,7 @@
             "desktop_frame"
           ],
           "status": "represented",
-          "reviewEvidence": "Native source coverage; new compact question anatomy requires capture review."
+          "reviewEvidence": "Mapped to editable native source; latest rendered visual review pending."
         }
       ]
     },
@@ -725,7 +725,124 @@
       "navigation",
       "feedback",
       "controls",
-      "long"
-    ]
+      "long",
+      "redlines",
+      "anatomy",
+      "responsive"
+    ],
+    "structuralSpec": {
+      "desktop": {
+        "sidebar": 272,
+        "rail": 64,
+        "inset": 40,
+        "maxContent": 740,
+        "optionPitch": 32
+      },
+      "compact": {
+        "min": 768,
+        "sidebar": 240,
+        "inset": 24
+      },
+      "phone": {
+        "max": 767,
+        "inset": 20,
+        "optionPitch": 44,
+        "drawerMax": 304,
+        "drawerRemainder": 56
+      },
+      "control": {
+        "radio": 18,
+        "actionWidth": 112,
+        "actionHeight": 44,
+        "focusOffset": 5
+      },
+      "type": {
+        "question": "16/24 semibold",
+        "stem": "16/24 regular",
+        "option": "16/24 regular",
+        "feedback": "14/20 regular",
+        "navigation": "14/20 medium",
+        "button": "14/20 medium"
+      },
+      "spacing": {
+        "titleToStem": 30,
+        "questionGap": 24,
+        "optionIndent": 28,
+        "actionGap": 8
+      }
+    },
+    "specificationGate": {
+      "status": "represented-pending-review",
+      "visualReview": "pending",
+      "breakpoints": "proposed",
+      "implementationValidation": "prototype",
+      "criteria": [
+        {
+          "id": "dimensions",
+          "elements": [
+            "measure_viewport_label",
+            "measure_sidebar_label",
+            "measure_content_label",
+            "measure_inset_label",
+            "measure_button_h_label"
+          ]
+        },
+        {
+          "id": "type-hierarchy",
+          "elements": [
+            "anatomy_label_title",
+            "anatomy_label_stem",
+            "anatomy_label_option",
+            "anatomy_type_limit"
+          ]
+        },
+        {
+          "id": "spacing",
+          "elements": [
+            "measure_title_label",
+            "measure_pitch_label",
+            "anatomy_indent_label"
+          ]
+        },
+        {
+          "id": "component-anatomy",
+          "elements": [
+            "anatomy_label_radio",
+            "anatomy_label_status",
+            "anatomy_label_result",
+            "anatomy_action_w_label",
+            "anatomy_nav_row"
+          ]
+        },
+        {
+          "id": "responsive",
+          "elements": [
+            "responsive_range0",
+            "responsive_range1",
+            "responsive_range2",
+            "responsive_rule0",
+            "responsive_rule1",
+            "responsive_rule2"
+          ]
+        },
+        {
+          "id": "accessibility-intent",
+          "elements": [
+            "responsive_a11y_val0",
+            "responsive_a11y_val1",
+            "responsive_a11y_val2",
+            "responsive_a11y_val3",
+            "responsive_a11y_val4"
+          ]
+        },
+        {
+          "id": "stage-boundary",
+          "elements": [
+            "anatomy_type_limit",
+            "responsive_note"
+          ]
+        }
+      ]
+    }
   }
 }

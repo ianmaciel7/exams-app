@@ -1,0 +1,9 @@
+{
+  "type": "text",
+  "x": 3810,
+  "y": 3620,
+  "text": "Drawer overlay, closed at rest\n20 inset · drawer min(304, width − 56)\nPhone / preserve selection and scroll",
+  "size": "body",
+  "color": "#262626",
+  "wrap": 690
+}

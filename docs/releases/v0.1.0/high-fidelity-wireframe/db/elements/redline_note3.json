@@ -1,0 +1,9 @@
+{
+  "type": "text",
+  "x": 90,
+  "y": 4020,
+  "text": "At constrained widths reserve wrapping space; implementation measures actual text height.",
+  "size": "body",
+  "color": "#262626",
+  "wrap": 1250
+}

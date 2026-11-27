@@ -1,0 +1,9 @@
+{
+  "type": "text",
+  "x": 1616,
+  "y": 4080,
+  "text": "Type values are implementation targets; native board uses body/small presets. Font family and final tokens belong to Mockup.",
+  "size": "small",
+  "color": "#626262",
+  "wrap": 1360
+}

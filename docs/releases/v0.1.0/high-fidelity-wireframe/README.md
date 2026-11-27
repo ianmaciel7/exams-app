@@ -4,44 +4,59 @@ Current stage: High-Fidelity Wireframe — in progress; structural specification
 
 ## Entry and evidence
 
-Owner explicitly approved Mid-Fidelity on 2026-11-27. The immutable [reviewed capture baseline](https://github.com/ianmaciel7/exams-app/commit/ec20139c96062542fc7eabb7424333b4fec6412f) and [CI evidence](https://github.com/ianmaciel7/exams-app/actions/runs/46024835242) contain 21 variants in both board themes. Preserve all existing boards. [Current state](../current-state.json) is authoritative.
+Mid-Fidelity approved 2026-11-27. Immutable [baseline](https://github.com/ianmaciel7/exams-app/commit/ec20139c96062542fc7eabb7424333b4fec6412f) and [21-state evidence](https://github.com/ianmaciel7/exams-app/actions/runs/46024835242). [Current state](../current-state.json) is authoritative. No new behavior approved.
 
 ## Distinct stage question
 
 Can the approved workspace be specified with consistent near-final structural dimensions, readable content, overflow rules and critical responsive/feedback states without locking in brand styling?
 
-Approved invariants: one question workspace, original exam order, ten per page, explicit Answer, locked evaluation, safe retry retaining choice, first competition selected, Ghost navigation and phone overlay, English/pt-BR interface. No new behavior approved. The full 21-state inventory remains the source for lifecycle coverage.
+Approved invariants: one question workspace, original exam order, ten per page, explicit Answer, locked evaluation, safe retry retaining choice, first competition selected, Ghost navigation and phone overlay, English/pt-BR interface. Question content language stays in source language.
 
-## Representative native specimens
+## Native sections
 
-| ID | Purpose |
-| --- | --- |
-| desktop-evaluated | 1280 × 800; readable width, evaluated option and locked feedback |
-| desktop-collapsed | 1024 × 800; visible Ghost trigger and selected state |
-| phone-closed | 390 × 800; localized chrome, wrapping and target rhythm |
-| phone-open | 390 × 800; overlay drawer and preserved context intent |
+| Section | Evidence |
+|---|---|
+| 01 Desktop | 1280 × 900; expanded, evaluated wrong, two complete questions and visible beginning of third |
+| 02 Collapsed | 1024 × 900; selected and collapsed rail |
+| 03 Phone | 390 × 800 closed/open; 320 × 800 closed |
+| 04 Continuation | Scrolled phone and pagination boundaries |
+| 05 Lifecycle | Loading, empty, failure; competition empty |
+| 06 Navigation | Loading/failure and 768-width study |
+| 07 Feedback | Correct/locked, submitting, uncertain outcome |
+| 08 Controls | Default/hover/pressed/focus/disabled/pending; full label |
+| 09 Long content | Five options, hanging indent and feedback |
+| 10 Redlines | Viewport, sidebar, inset, cap, pitch, action measurements |
+| 11 Anatomy | Question, radio, button, nav, type and reading order |
+| 12 Responsive | Proposed ranges, overflow and accessibility intent |
 
-## Proposed structural specifications
+## Proposed structural specification
 
-- Desktop 272 sidebar, 64 rail, 40 content inset and maximum 740 content width. Narrow widths must reflow without horizontal scrolling; breakpoint not yet approved.
-- Phone 20 inset, drawer 304 (clamp on smaller screens), 48 option-row rhythm; 44-unit touch target intent. Radio glyph 18; the whole option row is the target in the future prototype. Sidebar and question controls keep stable placement. Long labels wrap on phone; desktop truncates with full-label discovery.
-- Use neutral grayscale as structural evidence, not final palette, typography, brand or semantic tokens. Answer/Retry control footprint and footer behavior need a focused component review. Keep correct and selected-wrong labels explicit.
-- Validate critical widths 320, 390, 768, 1024 and 1280, long text, pagination boundaries, focus intent, error/pending recovery, and both board themes. Capture proof and owner approval are pending. No implementation, functional or accessibility conformance is claimed.
+Canonical highFidelity.structuralSpec and generator record the values. Board units are proposals, not production CSS measurements.
 
-## Exit and next question
+| Property | Proposal |
+|---|---|
+| Desktop expanded / rail | 272 / 64 |
+| Desktop inset / cap | 40 / 740 |
+| Desktop option pitch | 32 |
+| Compact range | 768–1023; sidebar 240, inset 24 |
+| Phone range | ≤ 767; inset 20, option pitch 44 |
+| Drawer | min(304, viewport width − 56); overlay |
+| Radio glyph / indent | 18 / 28 |
+| Answer and Retry | 112 × 44; stable footprint |
+| Title-to-stem offset / question gap | 30 / 24 |
+| Type targets | Question 16/24 semibold; stem/options 16/24 regular; feedback 14/20 regular; navigation/button 14/20 medium |
+| Wrapping | Reserve two/three lines in constrained studies; actual measured content height in implementation |
 
-Review native captures at useful zoom for clipping, overlap, consistent spacing and component anatomy. Resolve structural ambiguities and record evidence, then obtain owner approval. Mockup: which visual identity, typography, semantic colors and theme treatment should be applied to the resolved structure?
+Native renderer uses body/small presets. Exact font family, final design tokens, semantic colors and identity are Mockup work. Breakpoints remain proposals. No new dividers between questions.
 
-## Inherited coverage audit — 2026-11-27
+## Accessibility intent
 
-The initial board at [2cc13ec](https://github.com/ianmaciel7/exams-app/commit/2cc13ec7f7d20efd8e97af56c77423d84d93553e) was published successfully but is incomplete. Owner identified missing detail. The canonical `highFidelity.coverageGate` ledger in [current-state.json](../current-state.json) records 22 obligations, including 17 gaps. Structural CI is not visual acceptance. Do not advance or request approval until the required gaps are resolved and real captures are reviewed. Retain approved Mid-Fidelity as baseline; use complete representative screens plus targeted component studies rather than duplicating all 21 artboards. See [AGENTS.md](../../../../AGENTS.md).
+Full option row selectable. Keyboard order, visible focus, accessible labels, target size and explicit state text. Move focus into drawer, Escape closes and restores trigger focus; preserve scroll/selection. No horizontal overflow at 320/390/768/1024/1280; grow long content, discover truncated desktop label, wrap phone labels. Prototype must test actual resize, zoom, keyboard, screen reader, contrast and safe retry. No WCAG conformance claimed.
 
-## Coverage repair — 2026-11-27
+## Review and gates
 
-The 22-obligation ledger now maps all requirements to native element IDs. The four representative workspace specimens are retained, with supporting sections for phone continuation/320 width, pagination boundaries, question and navigation lifecycle, narrow desktop, answer feedback, controls, tooltip and long content. Both desktop question examples are complete; mobile intentionally scrolls and has a separate continuation. The open drawer is derived from the same closed workspace content and dimmed before adding navigation. No new product behavior is approved.
+Initial 2cc13ec exposed 17 gaps; 9a140b9 restored 22 inherited obligations. 348f8bf restored compact anatomy, inline feedback and five-option long content; its [CI/deploy](https://github.com/ianmaciel7/exams-app/actions/runs/46029500276) passed. Both theme overviews of that revision were reviewed, not full-size acceptance. This revision adds three structural specification studies and removes outdated active dimensions.
 
-Structural dimensions are proposed: 44-unit Answer/Retry footprint (supersedes provisional 34-unit height for this study), 272 expanded / 64 collapsed, compact 240 sample at 768, 20 phone gutters and drawer clamped to leave 56 units of context. Final breakpoint and real reflow remain prototype work. The native board is generated from `scripts/high-fidelity-components.cjs`; run `node scripts/sync-high-fidelity.mjs --write`. CI checks generated parity and captures nine named sections in both board themes. Source coverage is not visual acceptance. The gate remains blocked until actual images are inspected and owner approval is recorded.
+Run `node scripts/sync-high-fidelity.mjs --write` after generator changes and `node scripts/check-boards.mjs` for parity and coverage. Keep coverage and specification gates blocked for closure until latest captures are inspected at useful zoom and owner approves. See [AGENTS.md](../../../../AGENTS.md).
 
-## Question anatomy correction — 2026-11-27
-
-Visual comparison with the approved Mid-Fidelity wrong-answer state (ec20139) identified excessive row spacing, full-width evaluated backgrounds and a stem/first-option collision in compact feedback specimens. Restore the original inline Correct / Your answer labels, selected PATCH in the wrong-answer specimen, muted non-evaluated alternatives and separated result/lock labels. Desktop option rhythm is 32, phone 44; action footprint remains 44. A conservative two/three-line stem reservation at constrained widths prevents the previously observed collision. Two complete desktop questions and a partial third indicate scrolling; the 768 specimen now includes all five options and its Answer control. The long-content specimen restores all five baseline alternatives with hanging indentation and separate evaluation labels. No new interaction is approved; visual review of both native capture themes remains required.
+Next question: Mockup: which visual identity, typography, semantic colors and theme treatment should be applied to the resolved structure?

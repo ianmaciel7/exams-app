@@ -1,0 +1,9 @@
+{
+  "type": "note",
+  "x": 3160,
+  "y": 4180,
+  "w": 1390,
+  "h": 90,
+  "color": "yellow",
+  "text": "Ranges are reversible proposals. Test actual resizing, keyboard, screen reader, zoom and focus in interactive prototype. Static dimensions do not prove WCAG conformance."
+}

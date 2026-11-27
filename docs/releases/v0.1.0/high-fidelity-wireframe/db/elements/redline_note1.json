@@ -1,0 +1,9 @@
+{
+  "type": "text",
+  "x": 90,
+  "y": 3920,
+  "text": "Horizontal: 272 sidebar + 40 inset; content capped at 740; remaining width flexible.",
+  "size": "body",
+  "color": "#262626",
+  "wrap": 1250
+}
