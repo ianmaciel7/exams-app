@@ -3,8 +3,8 @@
   "x": 5916,
   "y": 880,
   "w": 540,
-  "h": 180,
-  "text": "**Incorrect answer**\nDistinguish the chosen incorrect option from the correct option using explicit labels as well as color. Do not rely on color alone.",
+  "h": 140,
+  "text": "**Incorrect**\nDistinguish the selected and correct options. Reveal policy is open.",
   "color": "pink",
   "tilt": 0
 }

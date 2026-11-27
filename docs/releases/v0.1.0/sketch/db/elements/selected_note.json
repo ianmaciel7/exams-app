@@ -3,8 +3,8 @@
   "x": 2996,
   "y": 880,
   "w": 540,
-  "h": 180,
-  "text": "**Selection before evaluation**\nA selected option is distinct from a correct answer. The evaluation trigger is not yet defined; this state is conditional.",
+  "h": 140,
+  "text": "**Selected**\nEvaluation timing is open.",
   "color": "yellow",
   "tilt": 0
 }

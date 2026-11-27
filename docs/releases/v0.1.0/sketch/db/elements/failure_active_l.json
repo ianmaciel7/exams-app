@@ -1,13 +1,13 @@
 {
   "type": "stroke",
   "x": 10292,
-  "y": 239,
+  "y": 132,
   "points": [
     0,
     0,
     0,
-    -44
+    29
   ],
-  "width": 2.5,
-  "color": "#194f9b"
+  "width": 3,
+  "color": "#447dcc"
 }

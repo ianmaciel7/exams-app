@@ -34,3 +34,7 @@ Each of the eight screen states has a native sticky note directly beneath the ar
 ## Open review threads
 
 Four native review threads are anchored to answer selection, incorrect-answer feedback, pagination and load failure recovery in `comments.json`. All are open questions awaiting the product owner's decision. Notes remain explanatory; threads are the place for discussion and resolution. Static Pages screenshots cannot substitute for interactive thread review.
+
+## Visual review refinement
+
+The eight states retain their existing scope. Sidebar entries use compact spacing, body-size labels and a single selection indicator instead of a surrounding outline. Native sticky notes are concise. Open comment threads retain their identities and review targets; their visible anchors move to the corresponding external notes to avoid covering controls. The capture pipeline additionally produces individual state screenshots in both themes using the native camera, with full-board screenshots preserved. No new application behavior is approved.

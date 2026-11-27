@@ -3,8 +3,8 @@
   "x": 1536,
   "y": 880,
   "w": 540,
-  "h": 180,
-  "text": "**End of the list**\nPagination appears after the last question, not as a fixed footer. Page size and scroll restoration remain open.",
+  "h": 140,
+  "text": "**Pagination**\nAt the end of the list. Scroll restoration is open.",
   "color": "blue",
   "tilt": 0
 }

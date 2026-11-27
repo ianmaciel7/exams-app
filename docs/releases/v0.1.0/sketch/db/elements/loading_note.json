@@ -3,8 +3,8 @@
   "x": 7376,
   "y": 880,
   "w": 540,
-  "h": 180,
-  "text": "**Loading**\nKeep the sidebar context while questions are loading. The placeholder treatment is illustrative, not final design.",
+  "h": 140,
+  "text": "**Loading**\nKeep the selected entry visible.",
   "color": "yellow",
   "tilt": 0
 }

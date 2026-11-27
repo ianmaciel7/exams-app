@@ -3,8 +3,8 @@
   "x": 8836,
   "y": 880,
   "w": 540,
-  "h": 180,
-  "text": "**Empty list**\nExplain that the selected entry has no questions. No additional action or destination has been approved.",
+  "h": 140,
+  "text": "**Empty**\nExplain that no questions are available.",
   "color": "white",
   "tilt": 0
 }

@@ -3,12 +3,13 @@
   "threads": [
     {
       "id": "c_0000000001",
-      "anchor": "#wb-selected_q1_r1 > wx50005000:nth-of-type(1)",
+      "anchor": "#wb-selected_note > wx99990000:nth-of-type(1)",
       "label": "Answer selection",
       "location": {
         "ids": [
-          "selected_q1_r1"
-        ]
+          "selected_note"
+        ],
+        "reviewTarget": "selected_q1_r1"
       },
       "status": "open",
       "createdAt": "2026-11-27T01:24:02.095Z",
@@ -23,16 +24,18 @@
           "text": "Should evaluation happen immediately when an option is selected, or only after an explicit confirmation? This determines whether the selected-before-evaluation state is needed.",
           "at": "2026-11-27T01:24:02.095Z"
         }
-      ]
+      ],
+      "detail": "Review target: selected_q1_r1. Pin moved to the related design annotation to avoid obscuring the interface."
     },
     {
       "id": "c_0000000002",
-      "anchor": "#wb-wrong_q1_correct > wx50005000:nth-of-type(1)",
+      "anchor": "#wb-wrong_note > wx99990000:nth-of-type(1)",
       "label": "Incorrect answer feedback",
       "location": {
         "ids": [
-          "wrong_q1_correct"
-        ]
+          "wrong_note"
+        ],
+        "reviewTarget": "wrong_q1_correct"
       },
       "status": "open",
       "createdAt": "2026-11-27T01:24:02.095Z",
@@ -47,16 +50,18 @@
           "text": "When the selected answer is incorrect, should the correct option also be revealed? The sketch depicts this as a proposal, not an approved decision.",
           "at": "2026-11-27T01:24:02.095Z"
         }
-      ]
+      ],
+      "detail": "Review target: wrong_q1_correct. Pin moved to the related design annotation to avoid obscuring the interface."
     },
     {
       "id": "c_0000000003",
-      "anchor": "#wb-pagination_next > wx50005000:nth-of-type(1)",
+      "anchor": "#wb-bottom_note > wx99990000:nth-of-type(1)",
       "label": "Pagination",
       "location": {
         "ids": [
-          "pagination_next"
-        ]
+          "bottom_note"
+        ],
+        "reviewTarget": "pagination_next"
       },
       "status": "open",
       "createdAt": "2026-11-27T01:24:02.095Z",
@@ -71,16 +76,18 @@
           "text": "When navigating to another page, should the question list return to the top or preserve a previous scroll position?",
           "at": "2026-11-27T01:24:02.095Z"
         }
-      ]
+      ],
+      "detail": "Review target: pagination_next. Pin moved to the related design annotation to avoid obscuring the interface."
     },
     {
       "id": "c_0000000004",
-      "anchor": "#wb-failure_status > wx50005000:nth-of-type(1)",
+      "anchor": "#wb-failure_note > wx99990000:nth-of-type(1)",
       "label": "Load failure recovery",
       "location": {
         "ids": [
-          "failure_status"
-        ]
+          "failure_note"
+        ],
+        "reviewTarget": "failure_status"
       },
       "status": "open",
       "createdAt": "2026-11-27T01:24:02.095Z",
@@ -95,7 +102,8 @@
           "text": "Should the error state offer a retry action? Decide whether retry is manual or automatic and whether previous content remains available.",
           "at": "2026-11-27T01:24:02.095Z"
         }
-      ]
+      ],
+      "detail": "Review target: failure_status. Pin moved to the related design annotation to avoid obscuring the interface."
     }
   ]
 }

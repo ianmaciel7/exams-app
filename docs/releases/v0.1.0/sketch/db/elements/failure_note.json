@@ -3,8 +3,8 @@
   "x": 10296,
   "y": 880,
   "w": 540,
-  "h": 180,
-  "text": "**Load failure**\nExplain that the list could not be loaded. Whether to provide retry, automatic recovery or preserved content is an open decision.",
+  "h": 140,
+  "text": "**Load failure**\nExplain the failure. Retry policy is open.",
   "color": "peach",
   "tilt": 0
 }

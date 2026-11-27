@@ -1,8 +1,8 @@
 {
   "type": "text",
-  "x": 10302,
-  "y": 203,
+  "x": 10304,
+  "y": 136,
   "text": "DATAPREV · 2026 · Anal…",
-  "size": "small",
-  "color": "#194f9b"
+  "size": "body",
+  "color": "ink"
 }

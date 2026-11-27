@@ -3,8 +3,8 @@
   "x": 4456,
   "y": 880,
   "w": 540,
-  "h": 180,
-  "text": "**Correct answer**\nShow positive feedback and identify the correct selected option. Other questions retain their existing state. Feedback timing remains open.",
+  "h": 140,
+  "text": "**Correct**\nConfirm the selected answer. Other questions stay unchanged.",
   "color": "green",
   "tilt": 0
 }
