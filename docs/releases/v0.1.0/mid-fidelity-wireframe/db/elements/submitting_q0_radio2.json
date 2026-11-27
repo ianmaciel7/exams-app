@@ -8,5 +8,6 @@
   "color": "#ffffff",
   "text": "",
   "hollow": true,
-  "stroke": "#aaaaaa"
+  "stroke": "#888888",
+  "solid": true
 }
