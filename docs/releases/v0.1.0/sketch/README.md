@@ -30,3 +30,7 @@ The eight artboards are variants of the same screen: top of the list (unanswered
 ## Native design annotations
 
 Each of the eight screen states has a native sticky note directly beneath the artboard. Notes explain behavior, intended feedback, and open decisions; they are annotations rather than interface content. Color distinguishes navigation, open decisions, success, incorrect response, neutral information and load failure. The notes do not approve unresolved behavior or replace review comments. Threaded reviewer comments remain separate from board annotations.
+
+## Open review threads
+
+Four native review threads are anchored to answer selection, incorrect-answer feedback, pagination and load failure recovery in `comments.json`. All are open questions awaiting the product owner's decision. Notes remain explanatory; threads are the place for discussion and resolution. Static Pages screenshots cannot substitute for interactive thread review.
