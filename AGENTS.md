@@ -54,7 +54,7 @@ Before creating or changing any project whiteboard, read [whiteboard guidelines]
 - When versions need to remain accessible side by side for comparison, use subdirectories such as `v1/` and `v2/`; record their purpose and main differences on the relevant board.
 - For small changes that do not need to coexist, prefer Git history over duplicating directories.
 - Do not remove existing versions, evidence, or decisions without authorization.
-- Preserve release-specific product discovery and decisions in `docs/releases/<version>/product/product.md` (lowercase). Keep the root `PRODUCT.md` as evolving product context; append dated decisions and note superseded assumptions in the relevant release record instead of rewriting its history. Reference each stage's actual output and status on the release board, and mark proposed or missing artifacts clearly.
+- Preserve release-specific product discovery and decisions in `docs/releases/<version>/product/README.md`. Keep the root `PRODUCT.md` as evolving product context; append dated decisions and note superseded assumptions in the relevant release record instead of rewriting its history. Reference each stage's actual output and status on the release board, and mark proposed or missing artifacts clearly.
 - Keep each release's information architecture, screen inventory, user flows, sketches, wireframes, and mockups under `docs/releases/<version>/` in descriptively named stage folders. Create folders when an artifact exists, not as empty placeholders. Interactive application prototypes belong under `prototypes/` and should be referenced from the release record.
 
 ## Hierarchical multi-agent orchestration

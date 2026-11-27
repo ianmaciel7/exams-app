@@ -15,7 +15,7 @@ Every UX/UI activity has strict ownership boundaries. Select the smallest artifa
 
 | Activity / Stage | Owns / Expected Output | Does NOT Own / Prohibited |
 | :--- | :--- | :--- |
-| **01 Product discovery** | Problem definition, primary personas, goals, functional scope, constraints, explicit assumptions, empirical evidence, and success criteria. Release decision register (`docs/releases/<version>/product/product.md`). | Screen layout, detailed UI component design, production code, visual styling. |
+| **01 Product discovery** | Problem definition, primary personas, goals, functional scope, constraints, explicit assumptions, empirical evidence, and success criteria. Release decision register (`docs/releases/<version>/product/README.md`). | Screen layout, detailed UI component design, production code, visual styling. |
 | **02 Information architecture** | Primary destinations, content groupings, taxonomic hierarchy, official terminology, relationship models, and navigation findability maps. | Screen-by-screen layout, detailed action sequences, exhaustive state matrices. |
 | **03 Screen inventory** | Required screens, functional surfaces, modal/drawer overlays, key interface states, and coverage gap tracking linked to user flows. | Full wireframes, internal component architectures, final visual design, production implementation. |
 | **04 User flows** | Task progression paths, entry/exit points, decision branches, alternative paths, error/recovery branches, and user outcomes. | Pixel-level layout, component catalogs, design tokens, low-level event contracts. |
@@ -52,7 +52,7 @@ Use this mode when a user or agent asks:
 - "Is dark mode toggle approved in v0.1.0?"
 
 **Procedure:**
-1. Consult the Stage Responsibilities table above and the target release decision register (`docs/releases/<version>/product/product.md`).
+1. Consult the Stage Responsibilities table above and the target release decision register (`docs/releases/<version>/product/README.md`).
 2. Cite the exact stage contract. If prohibited (e.g., detailed tables or mockups in sketch), state clearly why it violates stage fidelity boundaries and recommend the appropriate stage (e.g., Stage 07 Mid-fidelity wireframe or Stage 09 Mockup).
 3. If checking release scope, verify approved decisions vs. unprioritized ideas.
 
