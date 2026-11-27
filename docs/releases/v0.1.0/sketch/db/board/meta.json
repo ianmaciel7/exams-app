@@ -74,6 +74,15 @@
     "scroll_arrow",
     "scroll_arrow_head",
     "scroll_label",
-    "click_note"
+    "click_note",
+    "pagination_context",
+    "pagination_separator",
+    "pagination_prev",
+    "pagination_one",
+    "pagination_active",
+    "pagination_two",
+    "pagination_three",
+    "pagination_more",
+    "pagination_next"
   ]
 }

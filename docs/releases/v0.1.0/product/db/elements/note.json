@@ -3,7 +3,7 @@
   "x": 0,
   "y": 65,
   "w": 420,
-  "h": 235,
+  "h": 300,
   "color": "yellow",
-  "text": "Study questions from a selected competition.\nSelect a competition in the sidebar and browse its questions in a vertically scrolling list.\nOther features are not selected.\nLabel: competition · year · position/exam; truncate with ellipsis."
+  "text": "Study questions from a selected competition.\nSelect a competition in the sidebar and browse its questions in a vertically scrolling list.\nOther features are not selected.\nLabel: competition · year · position/exam; truncate with ellipsis.\nPagination: scroll within a page; navigate between pages at list end."
 }

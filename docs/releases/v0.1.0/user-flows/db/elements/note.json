@@ -3,7 +3,7 @@
   "x": 0,
   "y": 65,
   "w": 420,
-  "h": 235,
+  "h": 300,
   "color": "yellow",
-  "text": "Select competition → display its question list → scroll through questions\nSelect another competition → display its list\nLabel: competition · year · position/exam; truncate with ellipsis."
+  "text": "Select competition → display its question list → scroll through questions\nSelect another competition → display its list\nLabel: competition · year · position/exam; truncate with ellipsis.\nPagination: scroll within a page; navigate between pages at list end."
 }

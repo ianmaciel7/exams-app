@@ -1,6 +1,9 @@
 # Release v0.1.0
 
-Current direction: sidebar competition selection and a vertically scrollable question list. Other capabilities remain unselected. Historical ideas remain in [Ideas Board](../../boards/overview/README.md).
+Current direction: sidebar competition selection and a vertically scrollable, paginated question list. Other capabilities remain unselected. Historical ideas remain in [Ideas Board](../../boards/overview/README.md).
+ 
+
+The question list is paginated. Scroll vertically within a page; at the end of the list, use pagination controls to navigate between pages of the selected competition. The sketch shows illustrative numbered pages with Previous/Next; page size, total pages, ordering, and scroll restoration on page change remain open.
 
 | Stage | Progress | Validation |
 | --- | --- | --- |
