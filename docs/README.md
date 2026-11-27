@@ -17,8 +17,8 @@ Follow [AGENTS.md](../AGENTS.md) and [whiteboard guidelines](boards/whiteboard-g
 
 ## Design context and capture status
 
-[PRODUCT.md](../PRODUCT.md) records product scope; [DESIGN.md](../DESIGN.md) records provisional visual direction. The approved Sketch has eight state variants, native notes and four resolved decision threads. The approved Low-Fidelity Wireframe contains nine variants. Mid-Fidelity has twenty-one representations, including three proposed phone/navigation lifecycle studies; six owner decisions resolve answer lifecycle, submission recovery, collapsible navigation and page size. Native capture and owner review pending. The CI produces overview and individual state captures in both themes. [Run 45981578592](https://github.com/ianmaciel7/exams-app/actions/runs/45981578592) for English-copy commit `0c5df27` passed board integrity, capture and artifact upload; the separate deployment job failed at configuration. Use the downloadable capture artifact, not a deployed portal. See [release record](releases/v0.1.0/README.md) for status.
+Current stage: Mid-Fidelity Wireframe — in progress; 21 variants; native capture and owner visual review pending.
 
-[Mid-Fidelity Wireframe](releases/v0.1.0/mid-fidelity-wireframe/README.md) is the active visual stage.
+[PRODUCT.md](../PRODUCT.md) records product scope; [DESIGN.md](../DESIGN.md) records provisional visual direction. Sketch (8) and Low-Fidelity (9) are complete for progression and preserved. [Current release state](releases/v0.1.0/current-state.json) is the status contract. CI run [46001664133](https://github.com/ianmaciel7/exams-app/actions/runs/46001664133) generated the last reviewed 21 variants at `45e695c`; alignment defects were identified. New native captures and owner review remain pending. Use downloadable artifacts, not GitHub Pages.
 
-Shared Mid-Fidelity controls are synchronized by `node scripts/sync-mid-fidelity.mjs --write`; the board integrity check also rejects shared component drift.
+Shared controls: `node scripts/sync-mid-fidelity.mjs --write`; validate with `node scripts/check-boards.mjs` (also checks current release consistency).

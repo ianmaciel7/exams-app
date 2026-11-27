@@ -37,7 +37,19 @@ put(id,"q0_locked",text(ox+main+192,333,"Answer locked","small","#626262"));
 }
 return out;
 }
-function shared(){return aligned({states,existing,layout,text,shape,vector,toggle,chevron});}
+function longContent({text,shape,layout}){
+const id="long-content",{ox,main}=layout(id),x=ox+main,out={};const put=(n,e)=>out[id+"_"+n]=e;
+const radio=y=>shape(x,y,16,16,"#ffffff","ellipse","",{hollow:true,stroke:"#555555",solid:true});
+const button=y=>shape(x,y,120,36,"#e6e6e6","rounded","Answer",{size:"small",ink:"#626262"});
+const opts=["Repeat the request without checking the previous outcome.","Attach a unique operation identifier and ensure that retries with the same identifier do not create another record.","Disable all retries, even when the original request has not reached the server.","Increase the network timeout without changing how duplicate requests are handled.","Create a new record for every submission and remove duplicates manually."];
+const ys=[242,270,322,350,378];
+for(let k=0;k<5;k++){put("radio"+k,radio(ys[k]));put("letter"+k,text(x+26,ys[k]-2,String.fromCharCode(65+k)+".","body","#262626"));put("option"+k,text(x+48,ys[k]-2,opts[k],"body","#262626",{wrap:692}));}
+put("answer",button(412));put("next_title",text(x,480,"**Question 2**","body","#262626"));put("next_stem",text(x,512,"Which SQL clause filters rows before grouping?","body","#262626",{wrap:740}));
+for(let k=0;k<5;k++){const y=548+k*28;put("next_radio"+k,radio(y));put("next_option"+k,text(x+26,y-2,String.fromCharCode(65+k)+". "+["ORDER BY","HAVING","WHERE","GROUP BY","LIMIT"][k],"body","#262626",{wrap:714}));}
+put("next_answer",button(694));put("third_title",text(x,762,"**Question 3**","body","#262626"));
+return out;
+}
+function shared(){return {...aligned({states,existing,layout,text,shape,vector,toggle,chevron}),...longContent({text,shape,layout})};}
 function studies(){
 const out={};const put=(id,n,e)=>out[id+"_"+n]=e;
 for(const id of states.slice(18)){

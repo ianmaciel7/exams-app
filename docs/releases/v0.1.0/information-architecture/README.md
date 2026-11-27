@@ -1,33 +1,15 @@
 # Information Architecture — v0.1.0
 
-A single workspace has a competition navigation sidebar and a main question-list region. Selecting a competition loads its corresponding list. The active competition is identifiable. Questions appear vertically in the main region; the user can scroll. The first available sidebar item is selected automatically on entry. Routing remains open; page changes reset scroll to the top.
+Current stage: Mid-Fidelity Wireframe — in progress; 21 variants; native capture and owner visual review pending.
 
-## Competition label
+One workspace, not 21 destinations. Left sidebar locates competitions; main region contains the vertically scrolling list. First available item selected automatically on entry. Ghost collapse/expand is available across desktop and narrow states, independent of question lifecycle. Collapse preserves selection, page, scroll context and answers. Changing competition or page discards responses.
 
-Competition items concatenate competition name, year and position/exam title in a single line, separated by middle dots (`Name · Year · Position/exam`). Truncate overflow with an ellipsis while preserving the full label for hover/focus discovery in the eventual implementation. The static sketch depicts truncation only. Examples follow the [historical commit 5c5402c](https://github.com/ianmaciel7/exams-app/commit/5c5402c1c6d93518b446b7f4309af3f1824d9e99); PPSA's full position title still requires confirmation.
+## Navigation and pagination
 
-## Pagination
+Competition label: `Name · Year · Position/exam`; one line with ellipsis and full name discoverable via focus, hover and touch. DATAPREV and PPSA examples are illustrative; PPSA's full position title requires confirmation. No redundant section heading or repeated competition heading in the main region. Ten questions per page; pagination follows the last question and page change resets scroll to top. Previous disabled on first page, Next disabled on last page. No page-size chooser or new route.
 
-The question list is paginated. Scroll vertically within a page; at the end of the list, use pagination controls to navigate between pages of the selected competition. The sketch shows illustrative numbered pages with Previous/Next; page size is ten; total pages and ordering remain dataset-dependent or unspecified. Page changes reset the list to the top.
+## Structural studies
 
-Progress: in progress; user review pending.
+Expanded and collapsed narrow views, phone layout, navigation loading/failure and empty sidebar are visual studies. Only the collapsible behavior is approved; exact rail/drawer treatment, breakpoint, navigation data source and recovery remain open. See [screen inventory](../screen-inventory/README.md), [flows](../user-flows/README.md) and [product](../product/README.md).
 
-## Workspace structure and variants
-
-The current Sketch uses a compact one-line sidebar list with neutral square-with-X icon placeholders, institution/year/position labels, ellipsis and subtle active text/indicator. No redundant section heading or additional menu. Exact visual treatment remains exploratory.
-
-The Sketch depicts eight variants of one screen: unanswered at list start, list end with pagination, selected before evaluation, correct answer, incorrect answer, loading, empty list and load failure. The owner approved explicit answer submission: select an option, then activate Answer to evaluate it. An incorrect response marks the selected option and reveals the correct one. Page changes reset the question list to the top. A load failure offers a manual Retry action. These are release decisions, not verified implementation. Other proposed variants remain pending visual review. No separate routes or working behavior are established.
-
-Both sidebar entries share one neutral square-with-X icon placeholder in the current Sketch; this is a visual refinement, not a new interaction.
-
-## Copy and navigation boundaries
-
-Current Sketch labels are in English; official institution names remain unchanged. Prior answers are discarded when changing page or entry, as recorded in the [Product decision register](../product/README.md#open-product-decisions). The native Sketch is not a routing specification.
-
-The [Low-Fidelity Wireframe](../low-fidelity-wireframe/README.md) explores the same workspace, including a proposed narrower composition. The initial unselected proposal is superseded by automatic first-item selection; collapsible navigation is approved for small screens; exact mechanism and routing remain open.
-
-The [Mid-Fidelity Wireframe](../mid-fidelity-wireframe/README.md) retains the same two-region workspace and the first available item default. The narrow expanded/collapsed treatments and empty-sidebar composition remain visual proposals; no route or destination is added.
-
-The owner approved a collapsible sidebar on small screens and ten questions per page. Collapsing or expanding does not change the selected competition or page. Changing competition or page discards responses. A collapsed rail is a design study; breakpoint and mobile details remain open.
-
-The sidebar trigger is now approved for all desktop workspace states and narrow layouts. It is a shell control, not a question-list control. The phone layout and navigation loading/failure compositions are explicitly proposed studies; no new route, data architecture or exact breakpoint is selected.
+Historical [Sketch](../sketch/README.md) and [Low-Fidelity](../low-fidelity-wireframe/README.md) remain approved snapshots. The [prior record](https://github.com/ianmaciel7/exams-app/blob/45e695cbdcb450c3851d603eee05aa8f62e066ac/docs/releases/v0.1.0/information-architecture/README.md) preserves earlier geometry and decisions.

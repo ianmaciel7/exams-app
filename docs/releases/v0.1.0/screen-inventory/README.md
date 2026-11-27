@@ -1,50 +1,37 @@
 # Screen Inventory — v0.1.0
 
-## Questions workspace
+Current stage: Mid-Fidelity Wireframe — in progress; 21 variants; native capture and owner visual review pending.
 
-- Sidebar: selectable competition items.
-- Main region: stacked question items directly, without a repeated competition heading, vertical scroll.
-- Sketch illustrates a selected DATAPREV item and PPSA as another example, question statements and alternatives as abstract marks.
+A single questions workspace: sidebar with competition items, main region with question title, statement, single-choice alternatives and left-aligned Answer/result, whitespace between groups, end-of-list pagination. No separate destinations. All variants show the Ghost trigger.
 
-- Pagination at the end of the question list (illustrative Previous/Next and numbered pages).
+| # | Native state ID | Review category |
+| --- | --- | --- |
+| 1 | `top` | Core — unanswered |
+| 2 | `end` | Core — first page footer |
+| 3 | `selected` | Core — before submission |
+| 4 | `correct` | Core — correct and locked |
+| 5 | `wrong` | Core — incorrect and locked |
+| 6 | `loading` | Question lifecycle — loading |
+| 7 | `empty` | Question lifecycle — empty list |
+| 8 | `failure` | Question lifecycle — Retry |
+| 9 | `narrow` | Responsive study — expanded |
+| 10 | `hover` | Interaction study — hover |
+| 11 | `focus` | Interaction study — focus |
+| 12 | `submitting` | Core — submission pending |
+| 13 | `submit-failure` | Core — submission recovery |
+| 14 | `no-items` | Proposal — empty sidebar |
+| 15 | `collapsed` | Responsive study — collapsed |
+| 16 | `long-content` | Content stress test |
+| 17 | `page-middle` | Pagination — middle |
+| 18 | `page-last` | Pagination — last |
+| 19 | `mobile` | Proposal — phone, closed drawer |
+| 20 | `sidebar-loading` | Proposal — navigation loading |
+| 21 | `sidebar-failure` | Proposal — navigation failure |
 
-Other destinations and controls are not selected. Progress: in progress; user review pending.
+## Boundaries
 
-## Screen state inventory
+Automatically select the first available competition on entry. Browse ten questions per page; pagination follows the last question and resets scroll to the top. Select one option and explicitly submit with Answer. Correct and incorrect feedback identifies the correct choice and, when wrong, the user's choice. A confirmed answer is read-only on the current page. Changing page or competition, or closing the application, discards responses. On submission failure keep the choice and allow another submission; prevent duplicates while pending. Retry reloads a failed question list. A Ghost sidebar trigger is present across workspace states, including desktop; collapse/expand preserves current page, selection, scroll context and answers.
 
-| State | Status |
-| --- | --- |
-| Unanswered / list start | Baseline sketch |
-| List end / pagination | Baseline sketch |
-| Selected before submission | Required; explicit Answer control drawn; visual review pending |
-| Correct answer | Requested; sketch pending validation |
-| Incorrect answer | Required; selected error and correct answer shown |
-| Loading | Proposal |
-| Empty list | Proposal |
-| Load failure | Required manual Retry action drawn; visual review pending |
+Question ordering, empty-sidebar presentation, exact responsive breakpoint and phone drawer treatment (including its open state), navigation-list data source and recovery, ambiguous submission outcomes, and production localization remain open. The phone layout, sidebar loading and sidebar failure are proposals. No runtime, usability or accessibility conformance is claimed.
 
-The current Sketch uses a compact one-line sidebar list with neutral square-with-X icon placeholders, institution/year/position labels, ellipsis and subtle active text/indicator. No redundant section heading or additional menu. Exact visual treatment remains exploratory.
-
-Both sidebar entries share one neutral square-with-X icon placeholder in the current Sketch; this is a visual refinement, not a new interaction.
-
-The eight states remain: unanswered, end-of-list pagination, selected before submission, correct, incorrect, loading, empty, and load failure. The selected-before-submission state is required. The Answer and Retry controls are drawn and await visual validation; behavior and accessibility are not yet tested.
-
-English labels are now consistent across all eight variants. The owner approved automatic first-item selection on entry; no separate unselected-entry state is needed when sidebar items exist. Revisiting starts unanswered after page or competition changes (approved in Mid-Fidelity). No additional variant is approved by this inventory update.
-
-Question anatomy: title, statement, alternatives, left-aligned action/result row, then whitespace between complete questions. No separator above or below Answer or result. Whitespace also separates the final question from pagination. See [Sketch](../sketch/README.md#question-grouping-and-action-placement--2026-11-27).
-
-The visual-rhythm refinement keeps the same eight states. Question groups use heading emphasis and whitespace; the selected, correct and incorrect states preserve the same structure. The loading drawing mirrors two complete question groups and a partial third with abstract placeholders. This historical sketch did not establish loading behavior or pagination size; Mid-Fidelity now specifies ten questions per page.
-
-Pagination remains inside the end-of-list state; its labels and chevrons share an optical alignment, page slots have uniform spacing, and the whole group is centered in the main region. No navigation behavior changes.
-
-The approved Sketch is preserved. The [Low-Fidelity Wireframe](../low-fidelity-wireframe/README.md) inherits eight variants and adds one clearly labeled structural study (narrower viewport). The initial unselected proposal was removed after the owner approved automatic first-item selection; the existing loading variant covers entry. The narrow study is not an additional approved destination.
-
-[Mid-Fidelity Wireframe](../mid-fidelity-wireframe/README.md) contains the eight inherited variants, the narrow study, hover/focus visual studies and three proposed variants: submission pending, submission failure and empty sidebar. The initial fourteen representations are now expanded to eighteen with collapsed-sidebar, long-content and middle/last pagination studies. Submission recovery and collapsible navigation are approved; empty sidebar and exact visual treatments remain proposals. None establish implemented runtime behavior.
-
-Evaluated states remain read-only until the page or competition changes. Submission failure preserves the choice and enables Answer; pending prevents repeated submission. The approved page size is ten. The first, middle and last pagination studies cover boundary disabled states. The final page may contain fewer questions.
-
-Mid-Fidelity rhythm refinement retains all eighteen variants. Short-question and loading states include the next partial question; expanded/collapsed views show equivalent content. End/middle/last pages depict pagination in flow. Long options use hanging labels; evaluated answers explicitly indicate a locked state. See the [Mid-Fidelity record](../mid-fidelity-wireframe/README.md#visual-rhythm-and-content-flow-refinement--2026-11-27).
-
-## Shared shell consistency review
-
-The twenty-one Mid-Fidelity representations include the previous eighteen plus proposed phone layout, sidebar loading and sidebar load failure. Every variant has a Ghost navigation trigger; navigation icons are distinguishable and pagination boundaries use consistent chevrons. The three studies are not additional approved destinations. An open mobile drawer and real keyboard/touch interaction remain unverified.
+[Mid-Fidelity board](../mid-fidelity-wireframe/README.md) · [Current state](../current-state.json) · [Historical inventory](https://github.com/ianmaciel7/exams-app/blob/45e695cbdcb450c3851d603eee05aa8f62e066ac/docs/releases/v0.1.0/screen-inventory/README.md). The earlier Sketch (8) and Low-Fidelity (9) are historical approved snapshots. The four proposal states do not constitute new approved routes or data architecture.

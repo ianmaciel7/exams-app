@@ -182,3 +182,9 @@ Arrange distinct screens/destinations vertically, one row per screen. Arrange st
 ## Shared wireframe component consistency
 
 For repeated workspace variants, define shared shell controls and geometry once and generate their native board elements from a common source. Verify common controls are present in every applicable state, regardless of data or answer lifecycle; exceptions must be documented. For Mid-Fidelity, use `node scripts/sync-mid-fidelity.mjs --write` to synchronize managed elements and `node scripts/check-boards.mjs` to reject drift. Preserve editable native output and review captures in both board themes. Extend the shared source incrementally to repeated component families rather than introducing production UI prematurely.
+
+## Current release contract and optical alignment gate
+
+For v0.1.0, keep `docs/releases/v0.1.0/current-state.json`, the nine active status summaries (root Product/Design, docs index, release record and five release-stage READMEs), the four planning-board notes and Release Stages synchronized. Historical Sketch and Low-Fidelity remain immutable design snapshots; label their old review status as historical. Run `node scripts/check-boards.mjs`, which checks the current release contract as well as native board integrity. Do not merely append a new note below a contradictory current status. Review the Ideas Board's current-scope caption and preserve unselected candidates.
+
+For shared components, align actual rendered icon and text optical centers, not just their bounding boxes. Check normal/selected/hover padding, header and Ghost trigger, multiline option alignment, feedback and pagination boundary states. The source of truth is the shared native-element generator where applicable; capture and visually inspect every affected variant in both board themes before declaring the alignment fixed. Structural checks do not establish visual or functional approval.

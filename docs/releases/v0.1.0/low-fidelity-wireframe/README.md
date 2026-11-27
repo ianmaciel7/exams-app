@@ -1,5 +1,7 @@
 # Low-Fidelity Wireframe — v0.1.0
 
+**Historical approved snapshot:** complete for progression at `e70dbaf` (9 variants). Earlier open questions and pending capture references below are retained as revision history; the current status and approved decisions are in [release state](../current-state.json) and [Mid-Fidelity](../mid-fidelity-wireframe/README.md). Native board remains unchanged.
+
 Status: complete for progression; owner approved moving to Mid-Fidelity. Owner approved moving on from the [Sketch](../sketch/README.md) at [94072ce](https://github.com/ianmaciel7/exams-app/commit/94072ce2af79ceac651dbc121822f8fc1ae39aa4). The historical Sketch board remains unchanged.
 
 ## Purpose

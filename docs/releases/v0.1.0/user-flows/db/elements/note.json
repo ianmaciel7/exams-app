@@ -2,8 +2,8 @@
   "type": "note",
   "x": 0,
   "y": 65,
-  "w": 420,
-  "h": 360,
+  "w": 540,
+  "h": 400,
   "color": "yellow",
-  "text": "Entry selects first available item. Select -> Answer -> pending -> evaluated and locked OR failure with choice retained and retry. Page/competition change and session exit discard answers. Sidebar toggle preserves context. Ten questions per page.\nCollapse/expand is available across workspace states and preserves current-page answers. Proposed navigation loading/failure precedes first-item selection; separate from question loading and retry. Phone drawer interaction remains proposed."
+  "text": "**Current flows — v0.1.0**\nEntry -> first available item -> question loading -> list / empty / failure.\nSelect -> Answer -> pending -> confirmed and locked OR failure (choice retained; Answer enabled).\nPage or competition change -> discard current answers -> load target; page scroll resets. Exit -> discard answers. Collapse/expand -> preserve current context. Ten questions per page. Question-list Retry is distinct from proposed navigation-list Retry. Phone drawer, uncertain outcomes and keyboard/touch behavior remain open."
 }

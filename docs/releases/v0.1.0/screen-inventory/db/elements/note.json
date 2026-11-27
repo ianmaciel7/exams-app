@@ -2,8 +2,8 @@
   "type": "note",
   "x": 0,
   "y": 65,
-  "w": 420,
-  "h": 360,
+  "w": 540,
+  "h": 400,
   "color": "yellow",
-  "text": "Mid-Fidelity: eighteen representations. Submission recovery, collapsed-sidebar requirement and ten-question pagination approved. Expanded/collapsed, long content and first/middle/last pagination studies; empty sidebar remains proposed.\nMid-Fidelity: twenty-one representations, including three new proposed studies: phone layout, sidebar loading and sidebar failure. Ghost trigger appears throughout; native visual review pending."
+  "text": "**Current inventory — 21 variants**\nCore: unanswered, list end, selected, correct, incorrect, question loading, empty questions, load failure, submitting, submission failure, middle/last page, long content.\nStudies: expanded/collapsed narrow workspace, hover, keyboard focus, empty sidebar, phone, sidebar loading/failure.\nEvery variant has a Ghost trigger. The three latest studies and empty sidebar remain proposals. Native visual review pending."
 }

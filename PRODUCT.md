@@ -8,22 +8,18 @@ Exam App is an exam preparation project.
 
 ## Current release
 
-v0.1.0 — current direction: select a competition in the sidebar and browse its questions in a vertically scrollable, paginated list. The owner also requested correct and incorrect answer states. The owner approved explicit answer submission: select an option, then activate Answer to evaluate it. An incorrect response marks the selected option and reveals the correct one. Page changes reset the question list to the top. A load failure offers a manual Retry action. These are release decisions, not verified implementation. English is the language of project-authored Sketch copy and documentation; production localization is not yet decided. Other capabilities, platform, stack, target users and constraints remain undefined. Previous features and decisions are historical candidates, not requirements.
+Current stage: Mid-Fidelity Wireframe — in progress; 21 variants; native capture and owner visual review pending.
 
-Start with the [Ideas Board](docs/boards/overview/README.md). [Immutable previous planning snapshot](https://github.com/ianmaciel7/exams-app/tree/bbadef4ceab610f8696fcc10cbee5e400aba4900) · [Archive branch](https://github.com/ianmaciel7/exams-app/tree/archive/v0.1.0-before-reset-20261126).
+The reduced v0.1.0 scope is a single competition-question workspace. Automatically select the first available competition on entry. Browse ten questions per page; pagination follows the last question and resets scroll to the top. Select one option and explicitly submit with Answer. Correct and incorrect feedback identifies the correct choice and, when wrong, the user's choice. A confirmed answer is read-only on the current page. Changing page or competition, or closing the application, discards responses. On submission failure keep the choice and allow another submission; prevent duplicates while pending. Retry reloads a failed question list. A Ghost sidebar trigger is present across workspace states, including desktop; collapse/expand preserves current page, selection, scroll context and answers.
 
-## Evidence on hand
+Competition labels use `Name · Year · Position/exam`, with full names discoverable. Examples DATAPREV and PPSA are illustrative. English is the language of project-authored material; production localization is not decided. No filters, simulations, scoring, persistent answer history or other routes are approved.
 
-See the [release records](docs/releases/v0.1.0/README.md), [current Sketch](docs/releases/v0.1.0/sketch/README.md) and [provisional visual direction](DESIGN.md). Historical ideas are not approved requirements.
+## Open decisions
 
-Approved initial selection: on every entry to the workspace, automatically select the first item in the sidebar's displayed order and load its questions. No manual selection step is required. If no items exist, no selection is possible; the empty-sidebar treatment remains unspecified. This is a product decision, not verified implementation.
+Question ordering, empty-sidebar presentation, exact responsive breakpoint and phone drawer treatment (including its open state), navigation-list data source and recovery, ambiguous submission outcomes, and production localization remain open. The phone layout, sidebar loading and sidebar failure are proposals. No runtime, usability or accessibility conformance is claimed.
 
-## Approved Mid-Fidelity decisions — 2026-11-27
+## Sources
 
-On page or competition change, discard all answer selections and evaluated results from the previous page; revisiting starts unanswered. On the current page, a successfully evaluated answer is read-only. No answer persistence across application sessions. On submission failure, retain the selected option and allow another Answer submission; prevent duplicate submissions while pending. A failed request is not a confirmed answer. The sidebar is collapsible on small screens. Show ten questions per page, or fewer when the final page contains fewer questions.
+[Release record](docs/releases/v0.1.0/README.md) · [Product decision register](docs/releases/v0.1.0/product/README.md) · [Current state](docs/releases/v0.1.0/current-state.json) · [Active wireframe](docs/releases/v0.1.0/mid-fidelity-wireframe/README.md) · [Design direction](DESIGN.md) · [Ideas Board](docs/boards/overview/README.md).
 
-These are owner-approved product requirements, not implemented behavior. Question ordering, exact responsive breakpoint, empty-sidebar treatment and recovery details for uncertain server outcomes remain open.
-
-## Workspace navigation consistency — 2026-11-27
-
-Owner approved a consistent Ghost sidebar trigger throughout the workspace, including desktop, independent of question-list state. In the expanded shell it sits at the right of the sidebar header; in the collapsed rail it occupies the same header level. Distinguish the two navigation icons with neutral vector placeholders; full names must be available on focus/hover and touch. Preserve selected item and current page on collapse/expand. Use matching neutral pagination chevrons, with disabled boundaries visibly muted. The approved answer lifecycle and ten-question page size remain unchanged. Phone layout, navigation-list loading and navigation-list failure are three explicitly proposed studies, not approved network architecture or new destinations. The phone study depicts a closed navigation drawer with a visible trigger; the open drawer, breakpoint and touch/keyboard semantics require further review.
+Historical candidates and earlier planning are preserved in [the archive branch](https://github.com/ianmaciel7/exams-app/tree/archive/v0.1.0-before-reset-20261126) and [the preceding revision](https://github.com/ianmaciel7/exams-app/blob/45e695cbdcb450c3851d603eee05aa8f62e066ac/PRODUCT.md).

@@ -2,8 +2,8 @@
   "type": "note",
   "x": 0,
   "y": 65,
-  "w": 480,
-  "h": 380,
+  "w": 560,
+  "h": 400,
   "color": "yellow",
-  "text": "**v0.1.0 — In progress**\nProduct, Information Architecture, Screen Inventory and User Flows: review pending.\nSketch: complete; owner approved progression (94072ce).\nLow-Fidelity Wireframe: complete for progression; nine native variants reviewed (e70dbaf).\nMid-Fidelity Wireframe: in progress; twenty-one variants; answer lifecycle, recovery, collapsible sidebar and ten-question page size approved. Shared Ghost trigger, navigation icons and pagination controls synchronized. Three proposed phone/navigation lifecycle studies added. Native capture and visual review pending.\nLater fidelity stages: not started.\nSource: docs/releases/v0.1.0/README.md"
+  "text": "**v0.1.0 — In progress**\nProduct, Information Architecture, Screen Inventory and User Flows: synchronized; open decisions remain.\nSketch: complete for progression (94072ce; 8 variants).\nLow-Fidelity Wireframe: complete for progression (e70dbaf; 9 variants).\nMid-Fidelity Wireframe: in progress (21 variants); alignment refinement applied; native capture and owner visual review pending.\nHigh-Fidelity, Mockup, Interactive Prototype and Usability Testing: not started.\nSource: docs/releases/v0.1.0/README.md"
 }

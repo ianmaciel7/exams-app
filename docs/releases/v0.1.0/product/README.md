@@ -1,5 +1,7 @@
 # Product — v0.1.0
 
+Current stage: Mid-Fidelity Wireframe — in progress; 21 variants; native capture and owner visual review pending.
+
 ## Current release baseline
 
 User direction (2026-11-26): select a competition in the sidebar to open its questions; browse a vertical list inspired by ExamTopics. Goal: browse questions for the selected competition. Correct and incorrect feedback states are required. The owner approved explicit answer submission: select an option, then activate Answer to evaluate it. An incorrect response marks the selected option and reveals the correct one. Page changes reset the question list to the top. A load failure offers a manual Retry action. These are release decisions, not verified implementation. Filtering, data, loading strategy and scoring are not selected. Pagination is included. Sketch examples DATAPREV and PPSA are illustrative.
@@ -16,7 +18,7 @@ Progress: in progress; user review pending.
 
 ## State coverage and open decisions
 
-The Sketch depicts eight variants of one screen: unanswered at list start, list end with pagination, selected before evaluation, correct answer, incorrect answer, loading, empty list and load failure. The owner approved explicit answer submission: select an option, then activate Answer to evaluate it. An incorrect response marks the selected option and reveals the correct one. Page changes reset the question list to the top. A load failure offers a manual Retry action. These are release decisions, not verified implementation. Other proposed variants remain pending visual review. No separate routes or working behavior are established.
+The approved historical Sketch depicts eight variants of one screen: unanswered at list start, list end with pagination, selected before evaluation, correct answer, incorrect answer, loading, empty list and load failure. The owner approved explicit answer submission: select an option, then activate Answer to evaluate it. An incorrect response marks the selected option and reveals the correct one. Page changes reset the question list to the top. A load failure offers a manual Retry action. These are release decisions, not verified implementation. The active Mid-Fidelity contains 21 variants; capture review pending. No separate routes or working behavior are established.
 
 ## Approved interaction decisions — 2026-11-26
 
@@ -29,11 +31,11 @@ No filters, simulations, scoring, explanations, persistence, or other features a
 ## Open product decisions
 
 - Question ordering and exact responsive breakpoint remain open.
-- Loading and empty-state appearance remain pending visual review. The sidebar must be collapsible on small screens; its precise mechanism/breakpoint and production localization remain open.
+- Loading and empty-state appearance remain pending visual review. The sidebar is collapsible across workspace states, including desktop; its precise mechanism/breakpoint and production localization remain open.
 
-The eleven approved interaction decisions are resolved and must not be asked again. English is approved for the project-authored Sketch copy; this does not establish a production localization policy. Proper competition names are unchanged.
+The recorded approved interaction decisions are resolved and must not be asked again. English is approved for the project-authored Sketch copy; this does not establish a production localization policy. Proper competition names are unchanged.
 
-Low-Fidelity Wireframe has started with the owner-approved Sketch as baseline. The narrow workspace remains a proposal. Initial selection and the subsequent Mid-Fidelity decisions have been resolved; see the decision record below; see [structural review](../low-fidelity-wireframe/README.md#review-questions).
+Sketch and Low-Fidelity are complete for progression. Mid-Fidelity is active; see [current state](../current-state.json).
 
 ## Approved initial selection — 2026-11-27
 
@@ -45,7 +47,7 @@ The [Mid-Fidelity Wireframe](../mid-fidelity-wireframe/README.md) illustrates ho
 
 ## Approved Mid-Fidelity decisions — 2026-11-27
 
-On page or competition change, discard all answer selections and evaluated results from the previous page; revisiting starts unanswered. On the current page, a successfully evaluated answer is read-only. No answer persistence across application sessions. On submission failure, retain the selected option and allow another Answer submission; prevent duplicate submissions while pending. A failed request is not a confirmed answer. The sidebar is collapsible on small screens. Show ten questions per page, or fewer when the final page contains fewer questions.
+On page or competition change, discard all answer selections and evaluated results from the previous page; revisiting starts unanswered. On the current page, a successfully evaluated answer is read-only. No answer persistence across application sessions. On submission failure, retain the selected option and allow another Answer submission; prevent duplicate submissions while pending. A failed request is not a confirmed answer. The sidebar is collapsible, including desktop (confirmed in the subsequent navigation decision). Show ten questions per page, or fewer when the final page contains fewer questions.
 
 Do not re-ask these six decisions. A same-page sidebar toggle does not discard answers; a genuine page or competition change does. Late responses must not restore discarded answers after navigation; duplicate prevention and ambiguous server outcomes require prototype/implementation validation. Empty sidebar remains an unapproved proposal. No page-size chooser is approved.
 
@@ -54,3 +56,7 @@ Do not re-ask these six decisions. A same-page sidebar toggle does not discard a
 Owner approved a consistent Ghost sidebar trigger throughout the workspace, including desktop, independent of question-list state. In the expanded shell it sits at the right of the sidebar header; in the collapsed rail it occupies the same header level. Distinguish the two navigation icons with neutral vector placeholders; full names must be available on focus/hover and touch. Preserve selected item and current page on collapse/expand. Use matching neutral pagination chevrons, with disabled boundaries visibly muted. The approved answer lifecycle and ten-question page size remain unchanged. Phone layout, navigation-list loading and navigation-list failure are three explicitly proposed studies, not approved network architecture or new destinations. The phone study depicts a closed navigation drawer with a visible trigger; the open drawer, breakpoint and touch/keyboard semantics require further review.
 
 Exact mobile drawer behavior and asynchronous navigation recovery remain open. No new answer or persistence policy is introduced.
+
+## Current unresolved decisions
+
+Question ordering, empty-sidebar presentation, exact responsive breakpoint and phone drawer treatment (including its open state), navigation-list data source and recovery, ambiguous submission outcomes, and production localization remain open. The phone layout, sidebar loading and sidebar failure are proposals. No runtime, usability or accessibility conformance is claimed.

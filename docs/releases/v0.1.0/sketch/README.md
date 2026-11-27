@@ -1,5 +1,7 @@
 # Sketch — v0.1.0
 
+**Historical approved snapshot:** complete for progression at `94072ce` (8 variants). Statements below describe the Sketch-stage review, not current release decisions or pending gates. Current stage and requirements: [release state](../current-state.json) and [Mid-Fidelity](../mid-fidelity-wireframe/README.md). Native board and resolved threads remain unchanged.
+
 Eight side-by-side states of the same exploratory native Open Artifact screen: competition sidebar and vertically stacked questions, inspired by the list pattern the user described in ExamTopics. DATAPREV and PPSA are illustrative labels; abstract statements and alternatives are placeholders. The first two states show the top and end of the same page, with the same sidebar and pagination inside the main region footer. The sidebar lists entries directly without a “Concursos” section heading. The selected competition is identified only in the sidebar; no repeated competition heading or header divider in the main region. The partially visible questions and scrollbar communicate scroll position. This is not a second destination or a sticky-footer requirement. No filters, mock exams or other features are included. Answer feedback is now depicted as requested. The drawing is static, not a working interaction.
 
 ## Competition label

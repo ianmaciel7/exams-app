@@ -2,6 +2,7 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { checkMidFidelityComponents } from './sync-mid-fidelity.mjs';
+import { checkReleaseConsistency } from './check-release-consistency.mjs';
 
 // Open Artifact v0.16.3: whiteboard-core/src/schema.ts (MAX_BOARD_ELEMENTS).
 export const MAX_BOARD_ELEMENTS = 800;
@@ -41,5 +42,8 @@ if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1]
     console.log(`${board}: ${errors.length ? errors.join('; ') : 'OK'}`);
     failed ||= errors.length > 0;
   }
+  const releaseErrors=checkReleaseConsistency();
+  console.log('Release consistency: '+(releaseErrors.length?releaseErrors.join('; '):'OK'));
+  failed ||= releaseErrors.length>0;
   if (failed) process.exitCode = 1;
 }

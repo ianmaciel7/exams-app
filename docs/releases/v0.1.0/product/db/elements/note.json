@@ -2,8 +2,8 @@
   "type": "note",
   "x": 0,
   "y": 65,
-  "w": 420,
-  "h": 360,
+  "w": 540,
+  "h": 600,
   "color": "yellow",
-  "text": "Approved: discard answers on page/competition change and session exit; lock evaluated answers on current page; retain choice and retry after submission failure. Small-screen sidebar collapsible. Ten questions per page. Open: question ordering, empty sidebar, exact responsive treatment, uncertain submission outcomes.\nApproved: Ghost navigation trigger in all workspace states, including desktop. Sidebar collapse retains current page and answers. Phone layout and navigation loading/failure are proposed studies; exact breakpoint, drawer behavior and data recovery remain open."
+  "text": "**Current product decisions — v0.1.0**\nAutomatically select the first available competition on entry. Browse ten questions per page; pagination follows the last question and resets scroll to the top. Select one option and explicitly submit with Answer. Correct and incorrect feedback identifies the correct choice and, when wrong, the user's choice. A confirmed answer is read-only on the current page. Changing page or competition, or closing the application, discards responses. On submission failure keep the choice and allow another submission; prevent duplicates while pending. Retry reloads a failed question list. A Ghost sidebar trigger is present across workspace states, including desktop; collapse/expand preserves current page, selection, scroll context and answers.\n\n**Open**\nQuestion ordering, empty-sidebar presentation, exact responsive breakpoint and phone drawer treatment (including its open state), navigation-list data source and recovery, ambiguous submission outcomes, and production localization remain open. The phone layout, sidebar loading and sidebar failure are proposals. No runtime, usability or accessibility conformance is claimed."
 }

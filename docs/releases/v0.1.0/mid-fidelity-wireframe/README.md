@@ -1,6 +1,6 @@
 # Mid-Fidelity Wireframe — v0.1.0
 
-Status: in progress; native capture and owner review pending. Baseline: [Low-Fidelity Wireframe](../low-fidelity-wireframe/README.md) at [e70dbaf](https://github.com/ianmaciel7/exams-app/commit/e70dbafbebe942753c54a061adb35d3a61bb73f0). Preserve the historical Sketch and Low-Fidelity boards.
+Current stage: Mid-Fidelity Wireframe — in progress; 21 variants; native capture and owner visual review pending. Baseline: [Low-Fidelity Wireframe](../low-fidelity-wireframe/README.md) at [e70dbaf](https://github.com/ianmaciel7/exams-app/commit/e70dbafbebe942753c54a061adb35d3a61bb73f0). Preserve the historical Sketch and Low-Fidelity boards.
 
 ## Purpose
 
@@ -27,7 +27,11 @@ Suggested native comment anchors: narrow_note and collapsed_note (responsive tre
 
 Review real native captures for alignment, legibility, clipping, state distinction, stable layout and consistency with the approved baseline; settle material component and behavior decisions or explicitly defer them. No user testing, production implementation or higher fidelity approved yet.
 
-## Owner decisions and visual refinements — 2026-11-27
+## Historical revision log — 2026-11-27
+
+The entries below record the progression of earlier revisions. Counts, review statuses and superseded geometry in this log are historical; use the current summary and latest alignment section for active requirements.
+
+### Owner decisions and visual refinements — 2026-11-27
 
 On page or competition change, discard all answer selections and evaluated results from the previous page; revisiting starts unanswered. On the current page, a successfully evaluated answer is read-only. No answer persistence across application sessions. On submission failure, retain the selected option and allow another Answer submission; prevent duplicate submissions while pending. A failed request is not a confirmed answer. The sidebar is collapsible on small screens. Show ten questions per page, or fewer when the final page contains fewer questions.
 
@@ -56,3 +60,11 @@ Native captures of `a070819` revealed that the full SVG sidebar prevented automa
 Owner approved a consistent Ghost sidebar trigger throughout the workspace, including desktop, independent of question-list state. In the expanded shell it sits at the right of the sidebar header; in the collapsed rail it occupies the same header level. Distinguish the two navigation icons with neutral vector placeholders; full names must be available on focus/hover and touch. Preserve selected item and current page on collapse/expand. Use matching neutral pagination chevrons, with disabled boundaries visibly muted. The approved answer lifecycle and ten-question page size remain unchanged. Phone layout, navigation-list loading and navigation-list failure are three explicitly proposed studies, not approved network architecture or new destinations. The phone study depicts a closed navigation drawer with a visible trigger; the open drawer, breakpoint and touch/keyboard semantics require further review.
 
 The previous eighteen variants are preserved and three studies are added. Shared component source: `scripts/mid-fidelity-components.cjs`; synchronize managed elements with `node scripts/sync-mid-fidelity.mjs --write` and validate with `node scripts/check-boards.mjs`. The source manages shell triggers, navigation icons, pagination chevrons and proposed studies; remaining question groups stay native and editable. Fixed-color SVG icons avoid board-theme transformations. The exact responsive treatment, empty-sidebar policy, ordering and ambiguous submission recovery remain open. The latest native capture and owner visual review are pending. No runtime behavior or accessibility conformance is claimed.
+
+## Alignment and documentation reconciliation — 2026-11-27
+
+Align sidebar icons and text to a shared optical row center; align the Ghost trigger and workspace title to the header axis. Use a 36-unit row, 42-unit cadence, 16-unit icons and an 8-unit icon-to-label gap as provisional canvas geometry. Keep the selected background without a left indicator, preserve the flush internal seam, and distinguish selected from hover. Center the entire pagination group in the main region with equal page slots and explicit gaps between chevrons and labels; keep disabled boundary controls visually distinct. Align option feedback with the associated option; keep result and lock text consistently positioned. Preserve the 28-unit single-line choice cadence, line-dependent height, hanging labels, and 32-unit gap between question groups. These are board-specific measurements, not universal UI rules or final design tokens.
+
+All 21 variants remain. The state categories are explicit in [Screen Inventory](../screen-inventory/README.md); keep the horizontal arrangement of variants of one screen, not separate routes. The shared source now includes header/title, selection/hover surfaces, icons and labels, pagination, answer feedback and long-content layout. The latest inspected capture was `45e695c`; the new render has not yet been visually approved. Question ordering, empty-sidebar presentation, exact responsive breakpoint and phone drawer treatment (including its open state), navigation-list data source and recovery, ambiguous submission outcomes, and production localization remain open. The phone layout, sidebar loading and sidebar failure are proposals. No runtime, usability or accessibility conformance is claimed.
+
+The canonical [current state](../current-state.json) and planning boards were synchronized. Prior stage boards are preserved as historical snapshots.
