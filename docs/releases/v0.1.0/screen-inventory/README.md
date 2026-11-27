@@ -34,3 +34,5 @@ English labels are now consistent across all eight variants. A separate initial 
 Question anatomy: title, statement, alternatives, left-aligned action/result row, then whitespace between complete questions. No separator above or below Answer or result. Whitespace also separates the final question from pagination. See [Sketch](../sketch/README.md#question-grouping-and-action-placement--2026-11-27).
 
 The visual-rhythm refinement keeps the same eight states. Question groups use heading emphasis and whitespace; the selected, correct and incorrect states preserve the same structure. The loading drawing mirrors two complete question groups and a partial third with abstract placeholders. This does not establish loading behavior or pagination size.
+
+Pagination remains inside the end-of-list state; its labels and chevrons share an optical alignment, page slots have uniform spacing, and the whole group is centered in the main region. No navigation behavior changes.

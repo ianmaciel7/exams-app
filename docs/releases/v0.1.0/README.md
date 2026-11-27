@@ -31,3 +31,5 @@ The English-copy revision preserves the eight state variants and native annotati
 The owner-approved action placement is synchronized in the [Sketch](sketch/README.md#question-grouping-and-action-placement--2026-11-27): Answer below the alternatives on the left, no divider above or below the action, feedback in the same region, and whitespace between questions and pagination. Current native capture review remains pending.
 
 The 2026-11-27 [visual rhythm review](sketch/README.md#visual-rhythm-review--2026-11-27) refines question grouping, heading alignment, option feedback, pagination and loading geometry without expanding release scope. New native captures and owner visual approval remain pending.
+
+The pagination alignment refinement groups Previous/Next with their chevrons, equalizes page-slot spacing and centers the group in the question region; see the [Sketch](sketch/README.md#pagination-alignment-refinement--2026-11-27). Native capture review remains pending.
