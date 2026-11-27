@@ -5,5 +5,5 @@
   "w": 540,
   "h": 460,
   "color": "yellow",
-  "text": "**Current inventory — 21 variants**\nCore: unanswered, list end, selected, correct, incorrect, question loading, empty questions, load failure, submitting, submission failure, middle/last page, long content.\nStudies: expanded/collapsed narrow workspace, hover, keyboard focus, empty sidebar, phone, sidebar loading/failure.\nGhost trigger available in every variant; hidden at collapsed pointer rest and revealed on hover/focus. External component specimens document hover/pressed and reveal states. The three latest studies and empty sidebar remain proposals. Native visual review pending."
+  "text": "**Current inventory — 21 variants**\nCore: unanswered, list end, selected, correct, incorrect, question loading, empty questions, load failure, submitting, submission failure, middle/last page, long content.\nStudies: expanded/collapsed narrow workspace, hover, keyboard focus, empty sidebar, phone, sidebar loading/failure.\nGhost trigger available in every variant; hidden at collapsed pointer rest and revealed on hover/focus. External component specimens distinguish default, hover, pressed and single-outline focus; collapsed hover and keyboard focus are separate. The three latest studies and empty sidebar remain proposals. Native visual review pending."
 }

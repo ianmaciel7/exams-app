@@ -1,0 +1,12 @@
+{
+  "type": "shape",
+  "kind": "rounded",
+  "x": 15712,
+  "y": 909,
+  "w": 112,
+  "h": 34,
+  "color": "#333333",
+  "text": "Answer",
+  "size": "small",
+  "ink": "#ffffff"
+}

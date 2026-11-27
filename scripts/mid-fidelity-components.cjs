@@ -51,12 +51,13 @@ return out;
 }
 function actions({states,layout,shape,text,vector,toggle}){
 const out={};const put=(id,n,e)=>out[id+"_"+n]=e;
-const btn=(x,y,label="Answer",state="disabled")=>shape(x,y+1,112,34,({disabled:"#f0f0f0",pending:"#eeeeee",enabled:"#363636",hover:"#484848",pressed:"#252525",skeleton:"#dddddd"})[state],"rounded",label,{size:"small",ink:["enabled","hover","pressed"].includes(state)?"#ffffff":"#666666"});
+const focusRing=(x,y)=>vector(x-5,y-5,122,44,'<rect x="1" y="1" width="120" height="42" rx="9" fill="none" stroke="rgb(102,102,102)" stroke-width="2"/>');
+const btn=(x,y,label="Answer",state="disabled")=>shape(x,y+1,112,34,({disabled:"#f4f4f4",pending:"#eeeeee",enabled:"#333333",hover:"#262626",pressed:"#191919",skeleton:"#dddddd"})[state],"rounded",label,{size:"small",ink:["enabled","hover","pressed"].includes(state)?"#ffffff":"#666666"});
 for(const id of states.slice(0,18)){const {ox,main,center,l,w}=layout(id),x=ox+main;
 if(["top","selected","correct","wrong","narrow","hover","focus","submitting","submit-failure","collapsed"].includes(id)){
  if(!["correct","wrong"].includes(id))put(id,"q0_answer",btn(x,324,id==="submitting"?"Submitting…":"Answer",id==="submitting"?"pending":["selected","focus","submit-failure"].includes(id)?"enabled":"disabled"));
  put(id,"q1_answer",btn(x,606));
- if(id==="focus"){put(id,"q0_focus_outer",shape(x-3,322,118,40,"#555555","rounded"));put(id,"q0_focus_inner",shape(x-1,324,114,36,"#ffffff","rounded"));}
+ if(id==="focus"){put(id,"q0_focus_outer",focusRing(x,325));}
  if(id==="submit-failure")put(id,"q0_error",text(x+128,332,"Could not submit. Try again.","small","#262626"));
 }
 if(["end","page-middle","page-last"].includes(id)){put(id,"previous_question_tail",btn(x,85));put(id,"q0_answer",btn(x,367));put(id,"q1_answer",btn(x,649));}
@@ -67,15 +68,18 @@ if(id==="collapsed"){
  // Reserved transparent slot: hidden at desktop rest; the external hover specimen is visible.
  put(id,"toggle_panel",vector(ox+l+(w-16)/2,113,16,14,'<rect width="16" height="14" fill="none"/>'));
  put(id,"note",{type:"note",x:ox+l,y:875,w:640,h:120,color:"yellow",text:"Collapsed rail: hide the expand icon at pointer rest; reveal on rail/header hover or keyboard focus, with no layout shift. Activate explicitly to expand. On touch/no-hover, keep an accessible visible trigger. Preserve selected item, scroll and answers."});
- put(id,"reveal_caption",text(ox+885,875,"Hover / focus","small","ink"));
+ put(id,"reveal_caption",text(ox+885,875,"Hover","small","ink"));
  put(id,"reveal_surface",shape(ox+885,904,64,64,"#f0f0f0","rounded"));
  put(id,"reveal_hover",shape(ox+903,922,28,28,"#e4e4e4","rounded"));
  put(id,"reveal_icon",toggle(ox+909,929));
+ put(id,"reveal_focus_caption",text(ox+1005,875,"Keyboard focus","small","ink"));
+ put(id,"reveal_focus_sample",vector(ox+1005,904,64,64,'<rect width="64" height="64" rx="5" fill="rgb(240,240,240)"/><rect x="15" y="15" width="34" height="34" rx="6" fill="none" stroke="rgb(102,102,102)" stroke-width="2"/><rect x="25" y="26" width="14" height="12" rx="2" fill="none" stroke="rgb(85,85,85)" stroke-width="1.5"/><path d="M30 26 V38" stroke="rgb(85,85,85)" stroke-width="1.5"/>'));
 }
 if(id==="focus"){
- const start=ox+725;
- for(const [k,label,state] of [[0,"Default","enabled"],[1,"Hover","hover"],[2,"Pressed","pressed"]]){
- const px=start+k*132;put(id,"button_spec_"+k+"_label",text(px,875,label,"small","ink"));put(id,"button_spec_"+k,btn(px,906,"Answer",state));}
+ const start=ox+728;
+ put(id,"button_spec_surface",shape(start-12,865,532,102,"#ffffff","rect"));
+ for(const [k,label,state] of [[0,"Default","enabled"],[1,"Hover","hover"],[2,"Pressed","pressed"],[3,"Focus","enabled"]]){
+ const px=start+k*128;put(id,"button_spec_"+k+"_label",text(px,880,label,"small","ink"));put(id,"button_spec_"+k,btn(px,908,"Answer",state));if(k===3)put(id,"button_spec_focus_ring",focusRing(px,909));}
 }
 }
 put("mobile","q0_answer",btn(18*1460+476,508));

@@ -41,3 +41,5 @@ Question ordering, empty-sidebar presentation, exact responsive breakpoint and p
 A Ghost sidebar trigger is available across workspace states. On desktop, the collapse icon remains visible while expanded; when collapsed, the expand icon is hidden at pointer rest and revealed on rail/header hover or keyboard focus, without moving the layout. Activation, not hover, expands the sidebar. A visible accessible alternative is required on touch/no-hover devices. Collapse/expand preserves current page, selection, scroll context and answers.
 
 External component studies clarify default, hover and pressed actions and the collapsed hover/focus trigger without increasing the 21 workspace variants. No automatic hover expansion or runtime interaction is implied.
+
+The focus-visible refinement supersedes the nested focus geometry in `670a2d1`; external specimens distinguish hover, pressed and focus on a common surface. The 21 workspace variants remain unchanged in scope. Current native capture review is pending; see [DESIGN.md](https://github.com/ianmaciel7/exams-app/blob/dev/DESIGN.md) and the current-state record.

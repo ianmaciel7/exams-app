@@ -425,7 +425,6 @@
     "focus_q0_radio4",
     "focus_q0_option4",
     "focus_q0_focus_outer",
-    "focus_q0_focus_inner",
     "focus_q0_answer",
     "focus_q1_title",
     "focus_q1_stem",
@@ -785,6 +784,7 @@
     "sidebar-failure_status",
     "sidebar-failure_detail",
     "sidebar-failure_note",
+    "focus_button_spec_surface",
     "focus_button_spec_0_label",
     "focus_button_spec_0",
     "focus_button_spec_1_label",
@@ -794,6 +794,11 @@
     "collapsed_reveal_caption",
     "collapsed_reveal_surface",
     "collapsed_reveal_hover",
-    "collapsed_reveal_icon"
+    "collapsed_reveal_icon",
+    "focus_button_spec_3_label",
+    "focus_button_spec_3",
+    "focus_button_spec_focus_ring",
+    "collapsed_reveal_focus_caption",
+    "collapsed_reveal_focus_sample"
   ]
 }

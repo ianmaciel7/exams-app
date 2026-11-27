@@ -24,3 +24,5 @@ Current stage: Mid-Fidelity Wireframe — in progress; 21 variants; native captu
 Shared controls: `node scripts/sync-mid-fidelity.mjs --write`; validate with `node scripts/check-boards.mjs` (also checks current release consistency).
 
 Latest reviewed baseline: [`ea7a119`](https://github.com/ianmaciel7/exams-app/commit/ea7a1194a797e433dcf6fe880b5d99acbd916de6) ([capture run 46003854656](https://github.com/ianmaciel7/exams-app/actions/runs/46003854656)). The owner requested action-state and collapsed-trigger refinements; the current revision retains 21 variants plus external component specimens. New captures pending review.
+
+The focus-visible refinement supersedes the nested focus geometry in `670a2d1`; external specimens distinguish hover, pressed and focus on a common surface. The 21 workspace variants remain unchanged in scope. Current native capture review is pending; see [DESIGN.md](https://github.com/ianmaciel7/exams-app/blob/dev/DESIGN.md) and the current-state record.
