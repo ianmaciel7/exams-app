@@ -91,6 +91,18 @@ async function verify(out) {
           const store=window.__PLAYGROUND__?.store;
           return store?.listDocs('elements').length===ids.length && rendered.size===ids.length && ids.every(id=>rendered.has(id));
         },expected,{timeout:45000});
+        const back=page.getByRole('link',{name:'Back to artifacts',exact:true});
+        if(!await back.isVisible()||!await page.locator('[data-exam-preview-status]').isVisible())throw Error('Native preview header controls missing: '+b.id);
+        if(await page.locator('.pg-hint,[data-pg-lang],[data-pg-close]').count())throw Error('Legacy demo banner remains');
+        if(await back.getAttribute('href')!=='http://127.0.0.1:18765/exams-app/playground/')throw Error('Library return link mismatch: '+b.id);
+        if(b.id===seeds[seeds.length-1].id){
+          await page.setViewportSize({width:390,height:844});
+          if(!await back.isVisible()||!await page.locator('[data-exam-preview-status]').isVisible())throw Error('Mobile preview header missing');
+          await back.focus();
+          await page.keyboard.press('Enter');
+          await page.waitForURL('**/exams-app/playground/');
+          console.log('Native preview header verified: no demo banner; mobile keyboard return to library');
+        }
         if(errors.length)throw Error(b.id+': '+errors.join('; '));
         console.log('Native Playground verified:',b.id,expected.length,'elements');
       } finally {page.off('pageerror',onError);}
@@ -124,10 +136,22 @@ async function verify(out) {
     replace(provider,'status: async () => agent.status(),','status: async () => ({ available: false, busy: false }),');
     replace(provider,"agent.request(request.text);\n      return { status: 'delivered' };","throw new ArtifactError('invalid', 'No agent is connected in this static preview.');");
     replace(provider,"const thread = comments.markSent(threadId, options?.unasked === true);\n      const asked = [...thread.messages].reverse().find((m) => m.author.kind === 'person');\n      agent.request(asked?.text ?? '', threadId);\n      return thread;","throw new ArtifactError('invalid', 'No agent is connected in this static preview.');");
-    // Keep the native Shell/editor, but make the preview boundary explicit.
+    // Integrate preview navigation and its persistence warning into the native Shell top bar.
+    // Remove the demo website banner (including its unrelated language and dismiss controls).
     const demo=path.join(pg,'demo.html');
-    const html=read(demo).replace(/<span class="pg-text">[\s\S]*?<\/span>\s*<a data-pg-href=""/,'<span class="pg-text"><b>Exam App preview</b> — local temporary edits only; no connected agent or GitHub writes.</span><a data-pg-href=""').replace(/<a data-pg-href=""[^>]*>[\s\S]*?<\/a>/,'<a href="./">Boards</a>').replace(/<a data-pg-href="\.\.\/"[^>]*>[\s\S]*?<\/a>/,'<a href="../">Screenshot portal</a>');
-    write(demo,html);
+    write(demo,'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="playground-root" content="./"><title>Exam App artifact</title><script type="module" src="./src/shell-demo/main.tsx"></script></head><body><div id="root"></div></body></html>');
+    const topBar=path.join(upstream,'packages/shell/src/shell/components/TopBar.tsx');
+    replace(topBar,"import { PanelLeft, CloudAlert, History, LoaderCircle, Lock, MessageSquare, RotateCw, X } from 'lucide-react';","import { ArrowLeft, Info, PanelLeft, CloudAlert, History, LoaderCircle, Lock, MessageSquare, RotateCw, X } from 'lucide-react';");
+    replace(topBar,'<div className="flex min-w-0 flex-1 items-center gap-1.5">',[
+      '<div className="flex min-w-0 flex-1 items-center gap-1.5">',
+      '  <a data-exam-library-link="" href={new URL(document.querySelector(\'meta[name="playground-root"]\')?.getAttribute(\'content\') ?? \'./\', location.href).href} aria-label="Back to artifacts" title="Back to artifacts" className="inline-flex size-8 shrink-0 items-center justify-center rounded-md text-fg-muted hover:bg-hover hover:text-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-select"><ArrowLeft className="size-4" /></a>',
+    ].join('\n'));
+    replace(topBar,'        <SaveState />',[
+      '        <SaveState />',
+      '        <span data-exam-preview-status="" className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap text-xs text-fg-muted" title="Edits and comments are temporary. No agent is connected and changes are not saved to GitHub.">',
+      '          <Info className="size-3.5" aria-hidden="true" /><span>Temporary edits</span><span className="sr-only">. No connected agent or GitHub persistence.</span>',
+      '        </span>',
+    ].join('\n'));
     run('npm',['ci'],upstream);
     run('npm',['run','build'],upstream);
     run('npm',['ci'],pg);
