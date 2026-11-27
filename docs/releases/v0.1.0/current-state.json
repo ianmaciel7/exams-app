@@ -313,10 +313,10 @@
     ]
   ],
   "lastSuccessfulCapture": {
-    "commit": "d86973ddcabfb685d97dc855a87a0f3ff4c9c80c",
-    "run": 46019545548,
-    "artifactId": 15206983866,
-    "generatedAt": "2026-11-27T14:51:05.150Z",
+    "commit": "ec20139c96062542fc7eabb7424333b4fec6412f",
+    "run": 46024835242,
+    "artifactId": 15211487561,
+    "generatedAt": "2026-11-27T15:26:09.901Z",
     "boardCount": 10,
     "themes": [
       "dark",
@@ -395,5 +395,14 @@
       ]
     }
   ],
-  "responsiveStudies": "Desktop labels use one-line ellipsis with full-label discovery by hover/focus; phone drawer labels wrap. The drawer overlays the same question workspace. Phone component studies cover first/middle/last pagination, identical English/pt-BR workspace geometry, and feedback below wrapped alternatives. The Ghost trigger is visible at rest on all input devices. These are static design specimens, not additional workspace variants or functional validation."
+  "responsiveStudies": "Desktop labels use one-line ellipsis with full-label discovery by hover/focus; phone drawer labels wrap. The drawer overlays the same question workspace. Phone component studies cover first/middle/last pagination, identical English/pt-BR workspace geometry, and feedback below wrapped alternatives. The Ghost trigger is visible at rest on all input devices. These are static design specimens, not additional workspace variants or functional validation.",
+  "lastVerifiedMidFidelityReview": {
+    "commit": "ec20139c96062542fc7eabb7424333b4fec6412f",
+    "run": 46024835242,
+    "artifactId": 15211487561,
+    "variantCount": 21,
+    "captureCount": 42,
+    "result": "Capture defect resolved; reviewer recommends progression after owner visual approval. Both mobile themes inspected; all 42 state captures compared with the prior evidence at 640 × 360 using a maximum channel difference >30 and 0.05% changed-pixel threshold; only mobile Dark exceeded the threshold (1.87%). No functional or accessibility conformance claimed.",
+    "ownerApproved": false
+  }
 }
