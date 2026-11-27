@@ -1,4 +1,4 @@
-name: Exam App boards — GitHub Pages
+name: Exam App Playground — GitHub Pages
 on:
   push:
     branches: [dev]
@@ -33,26 +33,26 @@ jobs:
           if [ -z "$cli" ]; then cli=$(find /tmp/open-artifact -path '*/whiteboard/scripts/cli.mjs' | head -1); fi
           test -n "$cli"
           OPEN_ARTIFACT_WHITEBOARD_CLI="$cli" node scripts/open-boards.mjs | tee /tmp/board-urls
-      - name: Capture and assemble portal
+      - name: Capture board evidence and thumbnails
         run: |
           npm install --prefix /tmp/board-browser playwright
           /tmp/board-browser/node_modules/.bin/playwright install chromium
           mkdir -p _site/boards
-          cp docs/portal/index.html _site/index.html
           touch _site/.nojekyll
           NODE_PATH=/tmp/board-browser/node_modules node scripts/capture-board-portal.cjs
       - name: Verify capture provenance
         run: |
           node -e 'const m=require("./_site/manifest.json"); if(m.commit!==process.env.GITHUB_SHA || m.boards.length!==10 || m.boards.some(b=>!b.images.light||!b.images.dark)) throw Error("Capture manifest mismatch")'
-      - name: Build and validate optional native Playground
-        continue-on-error: true
+      - name: Build and validate native Playground
         timeout-minutes: 15
         run: NODE_PATH=/tmp/board-browser/node_modules node scripts/build-native-playground.cjs
-      - name: Upload downloadable portal
+      - name: Upload downloadable board evidence
         uses: actions/upload-artifact@v4
         with:
-          name: exam-app-board-portal
-          path: _site/
+          name: exam-app-board-evidence
+          path: |
+            _site/boards/
+            _site/manifest.json
           retention-days: 7
           if-no-files-found: error
       - uses: actions/upload-pages-artifact@v3

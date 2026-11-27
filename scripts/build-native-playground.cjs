@@ -1,4 +1,4 @@
-// Build the upstream static Playground alongside the stable screenshot portal.
+// Build the upstream static Playground as the only public interface.
 const fs = require('node:fs');
 const path = require('node:path');
 const os = require('node:os');
@@ -33,6 +33,7 @@ async function verify(out) {
   // Test the actual static build under the same repository subpath as GitHub Pages.
   const web = path.join(tmp,'web'); fs.mkdirSync(path.join(web,'exams-app'),{recursive:true});
   fs.symlinkSync(out,path.join(web,'exams-app','playground'),'dir');
+  fs.copyFileSync(path.join(root,'docs/portal/playground-entry.html'),path.join(web,'exams-app','index.html'));
   fs.symlinkSync(path.join(site,'boards'),path.join(web,'exams-app','boards'),'dir');
   const server = spawn('python3',['-m','http.server','18765','--bind','127.0.0.1','--directory',web],{stdio:'ignore'});
   let browser;
@@ -40,6 +41,12 @@ async function verify(out) {
     for(let i=0;i<50;i++){try{if((await fetch('http://127.0.0.1:18765/exams-app/playground/')).ok)break;}catch{} await new Promise(r=>setTimeout(r,200));}
     browser=await chromium.launch({headless:true,args:['--no-sandbox']});
     const page=await browser.newPage({viewport:{width:1600,height:1000}});
+    // The Pages deployment link must land on the one public library.
+    await page.goto('http://127.0.0.1:18765/exams-app/',{waitUntil:'domcontentloaded'});
+    await page.waitForURL('**/exams-app/playground/');
+    await page.locator('a.artifact').first().waitFor();
+    if(await page.getByRole('link',{name:'Screenshot portal',exact:true}).count())throw Error('Legacy portal link remains');
+    console.log('Pages root redirects to native Playground');
     // Verify the home itself before navigating to the native boards.
     for(const [width,height,colorScheme] of [[1440,900,'dark'],[390,844,'light']]){
       await page.setViewportSize({width,height});
@@ -171,11 +178,10 @@ async function verify(out) {
     const home=read(path.join(root,'docs/portal/playground-home.html')).replace('/* THEME_TOKENS */',tokens).replace('<!-- BOARD_SECTIONS -->',sections).replace('<!-- CURRENT_STAGE -->',current).replace('COMMIT_FULL',escape(manifest.commit)).replace('COMMIT_SHORT',escape(manifest.commit.slice(0,7)));
     write(path.join(out,'index.html'),home);
     await verify(out);
-    // Publish only after every board passes. The existing root and screenshots remain unchanged.
+    // Publish only after every board passes; preserve screenshot assets, not the old public viewer.
     const destination=path.join(site,'playground');
     fs.cpSync(out,destination,{recursive:true});
-    const index=path.join(site,'index.html');
-    replace(index,'<span class="muted">Boards · dev</span>','<span class="muted">Boards · dev</span><a href="playground/">Native board preview</a>');
+    fs.copyFileSync(path.join(root,'docs/portal/playground-entry.html'),path.join(site,'index.html'));
   } catch(error) {
     fs.rmSync(path.join(site,'playground'),{recursive:true,force:true});
     throw error;
