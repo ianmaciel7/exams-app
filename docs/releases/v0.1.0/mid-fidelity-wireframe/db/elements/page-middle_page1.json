@@ -1,10 +1,10 @@
 {
   "type": "text",
-  "x": 24095,
-  "y": 727,
+  "x": 24089,
+  "y": 726,
   "text": "2",
   "size": "small",
   "color": "ink",
-  "wrap": 34,
+  "wrap": 36,
   "textAlign": "center"
 }
