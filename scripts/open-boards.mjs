@@ -157,7 +157,7 @@ try {
   })();\n`);
   console.log('\nExam App boards are ready:');
   for (const [name, url] of Object.entries(urls)) console.log(`${name}: ${url}`);
-  console.log('\nOpen the hub URL in your browser. Run this launcher again after the local server stops.');
+  console.log('\nOpen the overview (Ideas Board) URL in your browser. Run this launcher again after the local server stops.');
 } catch (error) {
   console.error(`Could not open the boards: ${error.message}`);
   process.exitCode = 1;

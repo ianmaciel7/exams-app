@@ -1,0 +1,9 @@
+{
+  "type": "note",
+  "x": 0,
+  "y": 3340,
+  "w": 350,
+  "h": 200,
+  "color": "peach",
+  "text": "Context efficiency\nPreserve the earlier workflow idea: delegate by risk, retrieve relevant context, measure checks. Reference: docs/references/2026-11-26-context-efficiency-audit.md."
+}

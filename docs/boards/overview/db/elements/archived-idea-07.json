@@ -1,0 +1,9 @@
+{
+  "type": "note",
+  "x": 760,
+  "y": 2420,
+  "w": 350,
+  "h": 200,
+  "color": "blue",
+  "text": "Attempt history\nExplore immutable evaluated attempts, retries that create another attempt, and visibility of earlier attempts. V010-05/13/14."
+}

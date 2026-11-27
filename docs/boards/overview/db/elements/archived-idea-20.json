@@ -1,0 +1,9 @@
+{
+  "type": "note",
+  "x": 1140,
+  "y": 3110,
+  "w": 350,
+  "h": 200,
+  "color": "peach",
+  "text": "Ingestion and state restoration\nExplore reliable question/answer-key import, missing-field handling, persistence after reload and data migration. Validate actual source files."
+}

@@ -1,0 +1,9 @@
+{
+  "type": "note",
+  "x": 380,
+  "y": 2420,
+  "w": 350,
+  "h": 200,
+  "color": "blue",
+  "text": "Manual verification\nExplore explicit Verify, correctness feedback, Next and automatic checking as alternatives; decide evaluation trigger and loading behavior. V010-04/19."
+}

@@ -2,7 +2,7 @@
   "type": "text",
   "x": 0,
   "y": 125,
-  "text": "Colors identify categories, not priorities. Discuss each idea with anchored comments. Historical decisions and boards remain available in the release record.",
+  "text": "Colors identify categories, not priorities. Discuss candidates with anchored comments. Recovered ideas have no release assignment; exact originals are in the archived branch.",
   "size": "body",
   "color": "ink",
   "wrap": 1450

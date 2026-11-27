@@ -1,0 +1,9 @@
+{
+  "type": "note",
+  "x": 380,
+  "y": 2880,
+  "w": 350,
+  "h": 200,
+  "color": "green",
+  "text": "Interruption and timeout\nExplore pause/resume with recorded answers and remaining time, reload/closure boundaries, manual finish and automatic submission on timeout. V010-08."
+}
