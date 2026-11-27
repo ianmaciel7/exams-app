@@ -2,7 +2,8 @@
   "type": "text",
   "x": 26782,
   "y": 678,
-  "text": "A. ORDER BY",
+  "text": "A. ORDER BY — sorts rows after filtering and grouping.",
   "size": "body",
-  "color": "ink"
+  "color": "#262626",
+  "wrap": 324
 }

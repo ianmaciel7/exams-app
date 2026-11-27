@@ -98,6 +98,58 @@ if(id==="mobile"){
 const x=460,ww=390;t("caption",x,18,"19 · Phone · Drawer closed","large");s("frame",x,76,ww,709,colors.paper);t("app",x+44,100,"**Exam App**");put(id,"toggle_panel",toggle(ox+x+16,103));t("context",x+16,145,"DATAPREV · 2026 · Analyst…","small",colors.muted);t("q0_title",x+16,194,"**Question 1**");t("q0_stem",x+16,226,"Which HTTP method is defined as safe and idempotent?","body",colors.ink,{wrap:350});for(let k=0;k<5;k++){let y=298+k*40;s("q0_radio"+k,x+16,y,16,16,colors.paper,"ellipse","",{hollow:true,stroke:"#555555",solid:true});t("q0_option"+k,x+42,y-2,String.fromCharCode(65+k)+". "+["POST","GET","PATCH","CONNECT","None of the above"][k]);}put(id,"q0_answer",actions({states,layout,shape,text,vector,toggle})[id+"_q0_answer"]);t("q1_title",x+16,576,"**Question 2**");t("q1_stem",x+16,608,"Which SQL clause filters rows before grouping?","body",colors.ink,{wrap:350});for(let k=0;k<2;k++){let y=680+k*40;s("q1_radio"+k,x+16,y,16,16,colors.paper,"ellipse","",{hollow:true,stroke:"#555555",solid:true});t("q1_option"+k,x+42,y-2,["A. ORDER BY","B. HAVING"][k]);}note("Approved phone overlay drawer: compare closed workspace and open drawer specimen; background stays in place, current answers and scroll are preserved. Prototype must validate dismissal, focus restoration, touch and exact breakpoint. The vector specimen is static.",x);t("drawer_caption",900,18,"Phone · Drawer open","large");put(id,"drawer_open",vector(ox+900,76,390,709,"<rect x=\"0\" y=\"0\" width=\"390\" height=\"709\" rx=\"6\" fill=\"white\"/><g fill=\"#333\" font-family=\"Arial,sans-serif\"><text x=\"20\" y=\"38\" font-size=\"16\" font-weight=\"bold\">Exam App</text><text x=\"16\" y=\"80\" font-size=\"12\">DATAPREV · 2026 · Analyst…</text><text x=\"16\" y=\"125\" font-size=\"15\" font-weight=\"bold\">Question 1</text><text x=\"16\" y=\"153\" font-size=\"13\">Which HTTP method is defined</text><text x=\"16\" y=\"172\" font-size=\"13\">as safe and idempotent?</text><text x=\"32\" y=\"225\" font-size=\"13\">A. POST</text><text x=\"32\" y=\"265\" font-size=\"13\">B. GET</text></g><rect width=\"390\" height=\"709\" rx=\"6\" fill=\"#000\" opacity=\".28\"/><rect width=\"288\" height=\"709\" rx=\"5\" fill=\"#f0f0f0\"/><g fill=\"#333\" font-family=\"Arial,sans-serif\"><text x=\"24\" y=\"44\" font-size=\"16\" font-weight=\"bold\">Exam App</text><rect x=\"12\" y=\"70\" width=\"264\" height=\"36\" rx=\"5\" fill=\"#d8d8d8\"/><text x=\"49\" y=\"93\" font-size=\"13\" font-weight=\"bold\">DATAPREV · 2026 · Anal…</text><text x=\"49\" y=\"135\" font-size=\"13\">PPSA · 2025 · Analyst…</text></g><g fill=\"none\" stroke=\"#555\" stroke-width=\"1.5\" stroke-linecap=\"round\"><rect x=\"250\" y=\"29\" width=\"15\" height=\"13\" rx=\"2\"/><path d=\"M255 29V42\"/><rect x=\"24\" y=\"81\" width=\"14\" height=\"14\" rx=\"2\"/><path d=\"M28 86H34M28 90H34\"/><rect x=\"24\" y=\"123\" width=\"14\" height=\"14\" rx=\"2\"/><path d=\"M28 127H34M28 131H34\"/></g>"));continue;}
 const loading=id==="sidebar-loading";t("caption",l,18,loading?"20 · Sidebar loading (study)":"21 · Sidebar load failure","large");s("frame",l,76,r-l,709,colors.paper);s("sidebar",l,76,w,709,colors.sidebar);put(id,"sidebar_seam",vector(ox+l+w-14,76,14,709,'<rect width="14" height="709" fill="rgb(240,240,240)"/>'));t("app",l+24,110,"**Exam App**");put(id,"toggle_panel",toggle(ox+l+w-36,113));if(loading){for(let k=0;k<2;k++){s("sk_icon"+k,l+24,153+k*42,16,16,colors.skeleton,"rounded");s("sk_label"+k,l+48,157+k*42,160,10,colors.skeleton)}t("status",center-240,365,"Loading competitions…","large","ink",{wrap:480,textAlign:"center"});note("Navigation loading study: show skeletons if loading is asynchronous, then select the first available item. Do not start question loading before valid selection. Data source remains a technical decision.");}else{t("error",l+24,151,"Could not load competitions.","small",colors.ink,{wrap:216});put(id,"retry",actions({states,layout,shape,text,vector,toggle})[id+"_retry"]);t("status",center-240,350,"Could not load competitions","large","ink",{wrap:480,textAlign:"center"});t("detail",center-240,393,"Retry from the sidebar.","body",colors.muted,{wrap:480,textAlign:"center"});note("Approved: competition-list failure shows error and manual Retry. Retry reloads navigation, not questions. No selection until navigation loads. Data source and runtime recovery require technical validation.");}}
 return out;}
-return {states,existing,layout,shared,studies};
+function reviewSpecimens(){
+ const out={};
+ const put=(id,e)=>{out[id]=e;};
+ const x=18*1460, cx=14*1460;
+ // Consolidate repeated loading-only geometry; retain each original skeleton row.
+ for(let n=0;n<3;n++){
+  const widths=[178,133,215,163,237];
+  const count=n===2?1:5;
+  let body="";
+  for(let k=0;k<count;k++){const y=k*28;body+=`<circle cx="8" cy="${y+8}" r="8" fill="rgb(221,221,221)"/><rect x="26" y="${y+3}" width="${widths[k]}" height="10" rx="2" fill="rgb(221,221,221)"/>`;}
+  put("loading_sk_group"+n,vector(7652,178+n*282,264,(count-1)*28+16,body));
+ }
+ // Full-height collapsed rail specimens: the hidden rest state is unchanged.
+ const rail=`<rect width="64" height="709" rx="5" fill="rgb(240,240,240)"/><rect x="12" y="66" width="40" height="36" rx="5" fill="rgb(216,216,216)"/><g fill="none" stroke="rgb(85,85,85)" stroke-width="1.4" stroke-linecap="round"><rect x="25" y="77" width="13" height="13" rx="2"/><path d="M28 81H35M28 85H35"/><rect x="25" y="119" width="13" height="13" rx="2"/><path d="M28 123H35M28 127H33"/></g>`;
+ put("collapsed_reveal_caption",text(cx+1122,18,"Hover","small"));
+ put("collapsed_reveal_surface",vector(cx+1122,76,64,709,rail));
+ put("collapsed_reveal_hover",shape(cx+1140,106,28,28,"#e4e4e4","rounded"));
+ put("collapsed_reveal_icon",toggle(cx+1146,113));
+ put("collapsed_reveal_focus_caption",text(cx+1240,18,"Keyboard focus","small"));
+ put("collapsed_reveal_focus_sample",vector(cx+1240,76,64,709,rail+`<rect x="15" y="27" width="34" height="34" rx="6" fill="none" stroke="rgb(102,102,102)" stroke-width="2"/><rect x="25" y="38" width="14" height="12" rx="2" fill="none" stroke="rgb(85,85,85)" stroke-width="1.5"/><path d="M30 38V50" stroke="rgb(85,85,85)" stroke-width="1.5"/>`));
+ put("collapsed_note",{type:"note",x:cx+220,y:875,w:640,h:120,color:"yellow",text:"Desktop rail at rest hides the expand icon. Full-height hover and keyboard-focus specimens show the same slot and navigation items, without layout shift. Activate explicitly to expand; no automatic peek. Touch/no-hover requires a visible accessible control."});
+ // Native editable overlay; do not rely on a single large SVG containing text.
+ const d=x+900;
+ put("mobile_drawer_open",shape(d,76,390,709,"#bdbdbd"));
+ put("mobile_drawer_underlay",text(d+294,226,"safe and","small","#555555",{wrap:88}));
+ put("mobile_drawer_panel",shape(d,76,288,709,"#f0f0f0"));
+ put("mobile_drawer_title",text(d+24,110,"**Exam App**"));
+ put("mobile_drawer_toggle",toggle(d+252,113));
+ put("mobile_drawer_selection",shape(d+12,142,264,36,"#d8d8d8","rounded"));
+ put("mobile_drawer_icon0",icon(d+24,152,0));
+ put("mobile_drawer_label0",text(d+48,150,"**DATAPREV** · 2026 · Anal…","small","#262626"));
+ put("mobile_drawer_icon1",icon(d+24,194,1));
+ put("mobile_drawer_label1",text(d+48,192,"PPSA · 2025 · Analyst…","small","#262626"));
+ put("mobile_note",{type:"note",x:x+460,y:875,w:640,h:120,color:"yellow",text:"Approved overlay drawer: compare closed phone and native open specimen. The dimmed question workspace stays behind the drawer; selection and scroll are preserved. Left-side component studies cover footer pagination, full competition label and interface copy in both languages. Prototype validates focus, dismissal, touch and breakpoint."});
+ // Stress-test a longer answer in the existing phone state without inventing a destination.
+ put("mobile_q1_option0",text(x+502,678,"A. ORDER BY — sorts rows after filtering and grouping.","body","#262626",{wrap:324}));
+ put("mobile_q1_radio1",shape(x+476,748,16,16,colors.paper,"ellipse","",{hollow:true,stroke:"#555555",solid:true}));
+ put("mobile_q1_option1",text(x+502,746,"B. HAVING","body","#262626",{wrap:324}));
+ // Component studies, not new workspace variants or approved locale-selection UI.
+ const s=x+56;
+ put("mobile_pagination_caption",text(s,18,"Phone · End-of-page pagination","body"));
+ put("mobile_pagination_surface",shape(s,76,350,154,"#ffffff"));
+ put("mobile_pagination_answer",shape(s+16,94,112,34,"#f4f4f4","rounded","Answer",{size:"small",ink:"#666666"}));
+ put("mobile_pagination_previous",text(s+16,170,"Previous","small","#777777"));
+ put("mobile_pagination_pages",text(s+91,170,"**1**    2    3    4    5","small","#262626",{wrap:176,textAlign:"center"}));
+ put("mobile_pagination_next",text(s+287,170,"Next","small","#262626"));
+ put("mobile_full_label_caption",text(s,278,"Full label on hover / focus / touch","body"));
+ put("mobile_full_label_surface",shape(s,315,350,56,"#f0f0f0","rounded","DATAPREV · 2026 · Analyst (illustrative)",{size:"small",ink:"#262626"}));
+ put("mobile_locale_caption",text(s,420,"Interface copy · English / pt-BR","body"));
+ put("mobile_locale_copy",text(s,462,"English: Answer · Retry · Question 1\npt-BR: Responder · Tentar novamente · Questão 1","body","#262626",{wrap:350}));
+ return out;
+}
+return {states,existing,layout,shared,studies:()=>({...studies(),...reviewSpecimens()})};
 }
 module.exports=components();

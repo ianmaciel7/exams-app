@@ -5,5 +5,5 @@
   "w": 640,
   "h": 120,
   "color": "yellow",
-  "text": "Approved phone overlay drawer: compare closed workspace and open drawer specimen; background stays in place, current answers and scroll are preserved. Prototype must validate dismissal, focus restoration, touch and exact breakpoint. The vector specimen is static."
+  "text": "Approved overlay drawer: compare closed phone and native open specimen. The dimmed question workspace stays behind the drawer; selection and scroll are preserved. Left-side component studies cover footer pagination, full competition label and interface copy in both languages. Prototype validates focus, dismissal, touch and breakpoint."
 }

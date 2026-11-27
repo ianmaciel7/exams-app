@@ -5,5 +5,5 @@
   "w": 640,
   "h": 120,
   "color": "yellow",
-  "text": "Collapsed rail: hide the expand icon at pointer rest; reveal on rail/header hover or keyboard focus, with no layout shift. Activate explicitly to expand. On touch/no-hover, keep an accessible visible trigger. Preserve selected item, scroll and answers."
+  "text": "Desktop rail at rest hides the expand icon. Full-height hover and keyboard-focus specimens show the same slot and navigation items, without layout shift. Activate explicitly to expand; no automatic peek. Touch/no-hover requires a visible accessible control."
 }

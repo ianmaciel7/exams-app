@@ -96,4 +96,8 @@ References: [W3C Focus Visible](https://www.w3.org/WAI/WCAG22/Understanding/focu
 | Unknown submission outcome | Retain choice and permit safe retry |
 | Interface languages | Brazilian Portuguese and English |
 
-The mobile variant includes a static open-drawer companion specimen. It is not an additional workspace variant; 21 variants remain. The vector specimen is editable as an asset, not as independently editable native shapes. Technical validation and visual review remain pending.
+The mobile variant includes a native editable open-drawer companion specimen. It is not an additional workspace variant; 21 variants remain. Technical validation and visual review remain pending.
+
+## Responsive visual coverage correction — 2026-11-27
+
+Show the full collapsed rail at pointer rest, hover and keyboard focus; the latter two are full-height rail specimens, not just isolated controls. The mobile open drawer uses native editable shapes, text and small geometric icons instead of a single failed SVG image. Add end-of-page phone pagination, a long wrapped mobile choice, a full-label discovery specimen and representative English/pt-BR interface copy. The examples are illustrative; no new screen, locale-selection mechanism or breakpoint is approved. Consolidate repeated loading placeholders into small geometric vector groups to preserve the 800-element limit. Recheck native Light/Dark captures, icon visibility and absence of broken image placeholders before approval; runtime interactions remain for the prototype.
