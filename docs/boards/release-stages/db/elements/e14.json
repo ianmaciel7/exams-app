@@ -1,1 +1,9 @@
-{"type":"text","x":0,"y":830,"text":"Discovery and IA inform inventory and flows; these evolve together. Test early, revisit prior work and use optional outputs when needed.","size":"body","color":"ink","wrap":1500}
+{
+  "type": "text",
+  "x": 0,
+  "y": 830,
+  "text": "Previous artifacts are historical references. New scope must be explicitly selected before restarting discovery.",
+  "size": "body",
+  "color": "ink",
+  "wrap": 1500
+}

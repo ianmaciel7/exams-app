@@ -1,0 +1,13 @@
+{
+  "type": "shape",
+  "kind": "rounded",
+  "x": 758,
+  "y": 712,
+  "w": 214,
+  "h": 136,
+  "color": "blue",
+  "text": "**List and single view**\nExplore alternative browsing modes.",
+  "by": "agent",
+  "textAlign": "left",
+  "size": "body"
+}

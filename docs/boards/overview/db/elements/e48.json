@@ -1,0 +1,13 @@
+{
+  "type": "shape",
+  "kind": "rounded",
+  "x": 528,
+  "y": 1483,
+  "w": 214,
+  "h": 136,
+  "color": "pink",
+  "text": "**PDF reader**\nRead and annotate exam study documents.",
+  "by": "agent",
+  "textAlign": "left",
+  "size": "body"
+}

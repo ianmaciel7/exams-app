@@ -1,0 +1,13 @@
+{
+  "type": "shape",
+  "kind": "rounded",
+  "x": 758,
+  "y": 404,
+  "w": 214,
+  "h": 136,
+  "color": "blue",
+  "text": "**Auto-check**\nExplore automatic answer evaluation.",
+  "by": "agent",
+  "textAlign": "left",
+  "size": "body"
+}

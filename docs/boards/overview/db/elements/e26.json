@@ -1,0 +1,13 @@
+{
+  "type": "shape",
+  "kind": "rounded",
+  "x": 758,
+  "y": 558,
+  "w": 214,
+  "h": 136,
+  "color": "blue",
+  "text": "**Retry and strike options**\nExplore retries and eliminating alternatives.",
+  "by": "agent",
+  "textAlign": "left",
+  "size": "body"
+}

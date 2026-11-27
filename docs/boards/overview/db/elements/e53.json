@@ -1,0 +1,13 @@
+{
+  "type": "shape",
+  "kind": "rounded",
+  "x": 1038,
+  "y": 1329,
+  "w": 214,
+  "h": 136,
+  "color": "peach",
+  "text": "**Settings and themes**\nExplore preferences and light and dark modes.",
+  "by": "agent",
+  "textAlign": "left",
+  "size": "body"
+}

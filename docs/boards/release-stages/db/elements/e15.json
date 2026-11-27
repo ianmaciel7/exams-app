@@ -1,1 +1,9 @@
-{"type":"text","x":418,"y":220,"text":"Baseline updated\nDestinations & navigation\nValidation pending","size":"body","color":"ink","wrap":300}
+{
+  "type": "text",
+  "x": 418,
+  "y": 220,
+  "text": "Not started for new scope\nHistorical artifact retained",
+  "size": "body",
+  "color": "ink",
+  "wrap": 210
+}

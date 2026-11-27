@@ -1,0 +1,13 @@
+{
+  "type": "shape",
+  "kind": "rounded",
+  "x": 1038,
+  "y": 404,
+  "w": 214,
+  "h": 136,
+  "color": "green",
+  "text": "**Timer**\nTime a session and define timeout behavior.",
+  "by": "agent",
+  "textAlign": "left",
+  "size": "body"
+}

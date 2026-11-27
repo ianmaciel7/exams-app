@@ -1,0 +1,13 @@
+{
+  "type": "shape",
+  "kind": "rounded",
+  "x": 1268,
+  "y": 558,
+  "w": 214,
+  "h": 136,
+  "color": "green",
+  "text": "**History**\nReopen previous mock results.",
+  "by": "agent",
+  "textAlign": "left",
+  "size": "body"
+}

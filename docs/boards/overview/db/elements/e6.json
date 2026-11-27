@@ -1,1 +1,8 @@
-{"type":"text","x":0,"y":80,"text":"Capture ideas and track their progress.","size":"large","color":"ink"}
+{
+  "type": "text",
+  "x": 0,
+  "y": 2031,
+  "text": "Preserved prior work; no current release assignment.",
+  "size": "large",
+  "color": "ink"
+}

@@ -1,0 +1,13 @@
+{
+  "type": "shape",
+  "kind": "rounded",
+  "x": 1038,
+  "y": 1637,
+  "w": 214,
+  "h": 136,
+  "color": "peach",
+  "text": "**Data evolution**\nExplore storage choices and migration needs.",
+  "by": "agent",
+  "textAlign": "left",
+  "size": "body"
+}

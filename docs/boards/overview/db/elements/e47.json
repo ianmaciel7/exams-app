@@ -1,0 +1,13 @@
+{
+  "type": "shape",
+  "kind": "rounded",
+  "x": 758,
+  "y": 1329,
+  "w": 214,
+  "h": 136,
+  "color": "pink",
+  "text": "**Notebooks**\nOrganize selected questions and study content.",
+  "by": "agent",
+  "textAlign": "left",
+  "size": "body"
+}

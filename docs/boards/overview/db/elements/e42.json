@@ -1,0 +1,13 @@
+{
+  "type": "shape",
+  "kind": "rounded",
+  "x": 248,
+  "y": 1329,
+  "w": 214,
+  "h": 136,
+  "color": "purple",
+  "text": "**Subject and topic metrics**\nExplore strengths and weaknesses by study area.",
+  "by": "agent",
+  "textAlign": "left",
+  "size": "body"
+}

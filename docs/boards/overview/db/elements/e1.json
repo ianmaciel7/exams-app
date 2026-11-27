@@ -1,1 +1,9 @@
-{"type":"container","x":0,"y":180,"w":310,"h":580,"text":"Ideas","color":"white"}
+{
+  "type": "container",
+  "x": 0,
+  "y": 2131,
+  "w": 310,
+  "h": 580,
+  "text": "Ideas",
+  "color": "white"
+}

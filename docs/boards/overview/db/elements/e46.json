@@ -1,0 +1,13 @@
+{
+  "type": "shape",
+  "kind": "rounded",
+  "x": 528,
+  "y": 1329,
+  "w": 214,
+  "h": 136,
+  "color": "pink",
+  "text": "**Notes**\nCapture study notes linked to relevant material.",
+  "by": "agent",
+  "textAlign": "left",
+  "size": "body"
+}

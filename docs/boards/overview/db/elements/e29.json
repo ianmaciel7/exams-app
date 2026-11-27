@@ -1,0 +1,13 @@
+{
+  "type": "shape",
+  "kind": "rounded",
+  "x": 528,
+  "y": 866,
+  "w": 214,
+  "h": 136,
+  "color": "blue",
+  "text": "**Sorting and pagination**\nExplore ordering, result counts and page size.",
+  "by": "agent",
+  "textAlign": "left",
+  "size": "body"
+}

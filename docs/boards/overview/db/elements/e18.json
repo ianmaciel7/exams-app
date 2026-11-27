@@ -1,0 +1,13 @@
+{
+  "type": "shape",
+  "kind": "rounded",
+  "x": 248,
+  "y": 404,
+  "w": 214,
+  "h": 136,
+  "color": "yellow",
+  "text": "**Search**\nFind questions, competitions and study content.",
+  "by": "agent",
+  "textAlign": "left",
+  "size": "body"
+}

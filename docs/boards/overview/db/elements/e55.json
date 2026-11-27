@@ -1,0 +1,13 @@
+{
+  "type": "shape",
+  "kind": "rounded",
+  "x": 1038,
+  "y": 1483,
+  "w": 214,
+  "h": 136,
+  "color": "peach",
+  "text": "**Persistence**\nRetain attempts and study progress.",
+  "by": "agent",
+  "textAlign": "left",
+  "size": "body"
+}

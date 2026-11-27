@@ -1,0 +1,13 @@
+{
+  "type": "shape",
+  "kind": "rounded",
+  "x": 18,
+  "y": 558,
+  "w": 214,
+  "h": 136,
+  "color": "yellow",
+  "text": "**Tabs and split view**\nKeep multiple study contexts open.",
+  "by": "agent",
+  "textAlign": "left",
+  "size": "body"
+}

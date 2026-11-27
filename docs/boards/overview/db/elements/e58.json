@@ -1,0 +1,13 @@
+{
+  "type": "shape",
+  "kind": "rounded",
+  "x": 1268,
+  "y": 1637,
+  "w": 214,
+  "h": 136,
+  "color": "peach",
+  "text": "**Offline support**\nExplore study without a network connection.",
+  "by": "agent",
+  "textAlign": "left",
+  "size": "body"
+}

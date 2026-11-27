@@ -1,1 +1,8 @@
-{"type":"text","x":0,"y":75,"text":"Iterative activities · choose fidelity for the question","size":"large","color":"ink"}
+{
+  "type": "text",
+  "x": 0,
+  "y": 75,
+  "text": "Scope reset — all stages await new selection",
+  "size": "large",
+  "color": "ink"
+}

@@ -1,0 +1,13 @@
+{
+  "type": "shape",
+  "kind": "rounded",
+  "x": 248,
+  "y": 250,
+  "w": 214,
+  "h": 136,
+  "color": "yellow",
+  "text": "**Competition switcher**\nSelect DATAPREV, PPSA or another competition.",
+  "by": "agent",
+  "textAlign": "left",
+  "size": "body"
+}

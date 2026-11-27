@@ -1,0 +1,13 @@
+{
+  "type": "shape",
+  "kind": "rounded",
+  "x": 1038,
+  "y": 250,
+  "w": 214,
+  "h": 136,
+  "color": "green",
+  "text": "**Exam setup**\nChoose a competition and question count.",
+  "by": "agent",
+  "textAlign": "left",
+  "size": "body"
+}

@@ -1,0 +1,13 @@
+{
+  "type": "shape",
+  "kind": "rounded",
+  "x": 18,
+  "y": 1329,
+  "w": 214,
+  "h": 136,
+  "color": "purple",
+  "text": "**Accuracy**\nTrack correct and total recorded attempts.",
+  "by": "agent",
+  "textAlign": "left",
+  "size": "body"
+}

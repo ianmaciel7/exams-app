@@ -1,0 +1,13 @@
+{
+  "type": "shape",
+  "kind": "rounded",
+  "x": 1268,
+  "y": 1329,
+  "w": 214,
+  "h": 136,
+  "color": "peach",
+  "text": "**Profile**\nExplore personal and account controls.",
+  "by": "agent",
+  "textAlign": "left",
+  "size": "body"
+}

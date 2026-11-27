@@ -1,0 +1,13 @@
+{
+  "type": "shape",
+  "kind": "rounded",
+  "x": 248,
+  "y": 1483,
+  "w": 214,
+  "h": 136,
+  "color": "purple",
+  "text": "**Practice vs mock**\nDistinguish ordinary practice and mock results.",
+  "by": "agent",
+  "textAlign": "left",
+  "size": "body"
+}

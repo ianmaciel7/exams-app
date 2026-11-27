@@ -1,0 +1,13 @@
+{
+  "type": "shape",
+  "kind": "rounded",
+  "x": 1038,
+  "y": 558,
+  "w": 214,
+  "h": 136,
+  "color": "green",
+  "text": "**Results and review**\nReview answers and scoring after completion.",
+  "by": "agent",
+  "textAlign": "left",
+  "size": "body"
+}

@@ -1,0 +1,13 @@
+{
+  "type": "shape",
+  "kind": "rounded",
+  "x": 18,
+  "y": 404,
+  "w": 214,
+  "h": 136,
+  "color": "yellow",
+  "text": "**Collapsible sidebar**\nExpand or collapse the workspace sidebar.",
+  "by": "agent",
+  "textAlign": "left",
+  "size": "body"
+}

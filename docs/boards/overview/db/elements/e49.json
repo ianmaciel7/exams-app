@@ -1,0 +1,13 @@
+{
+  "type": "shape",
+  "kind": "rounded",
+  "x": 758,
+  "y": 1483,
+  "w": 214,
+  "h": 136,
+  "color": "pink",
+  "text": "**Knowledge graph**\nExplore relationships between study objects.",
+  "by": "agent",
+  "textAlign": "left",
+  "size": "body"
+}

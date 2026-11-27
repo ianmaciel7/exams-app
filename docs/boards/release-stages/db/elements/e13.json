@@ -1,1 +1,12 @@
-{"type":"shape","kind":"rounded","x":24,"y":215,"w":320,"h":70,"color":"yellow","text":"Baseline documented\nSee product/product.md","by":"agent","textAlign":"left"}
+{
+  "type": "shape",
+  "kind": "rounded",
+  "x": 24,
+  "y": 215,
+  "w": 320,
+  "h": 70,
+  "color": "yellow",
+  "text": "Not started for new scope\nReview the Ideas Board",
+  "by": "agent",
+  "textAlign": "left"
+}
