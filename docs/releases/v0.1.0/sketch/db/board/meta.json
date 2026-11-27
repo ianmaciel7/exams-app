@@ -16,8 +16,6 @@
     "active_competition_l",
     "dataprev",
     "ppsa",
-    "active_title",
-    "heading_divider",
     "q1_frame_t",
     "q1_frame_r",
     "q1_frame_b",
@@ -97,8 +95,6 @@
     "bottom_active_l",
     "bottom_dataprev",
     "bottom_ppsa",
-    "bottom_title",
-    "bottom_heading",
     "bottom_prev_l",
     "bottom_prev_r",
     "bottom_prev_b",
@@ -136,6 +132,16 @@
     "bottom_option4",
     "bottom_scroll_track",
     "bottom_scroll_thumb",
-    "bottom_note"
+    "bottom_note",
+    "q3_statement2",
+    "q3_radio_0",
+    "q3_letter_0",
+    "q3_option_0",
+    "bottom_extra_radio0",
+    "bottom_extra_letter0",
+    "bottom_extra_option0",
+    "bottom_extra_radio1",
+    "bottom_extra_letter1",
+    "bottom_extra_option1"
   ]
 }
