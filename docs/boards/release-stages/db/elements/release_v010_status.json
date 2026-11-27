@@ -5,5 +5,5 @@
   "w": 480,
   "h": 300,
   "color": "yellow",
-  "text": "**v0.1.0 — In progress**\nProduct, Information Architecture, Screen Inventory, User Flows and Sketch: in progress; validation pending.\nOne workspace; eight Sketch states; four resolved decision threads.\nEnglish copy; captures generated. Answer and Retry controls drawn; new captures and owner visual review pending.\nLater fidelity stages: not started.\nSource: docs/releases/v0.1.0/README.md"
+  "text": "**v0.1.0 — In progress**\nProduct, Information Architecture, Screen Inventory, User Flows and Sketch: in progress; validation pending.\nOne workspace; eight Sketch states; four resolved decision threads.\nEnglish copy; captures generated. Answer below choices on the left; no divider above it. Retry retained; new captures and owner visual review pending.\nLater fidelity stages: not started.\nSource: docs/releases/v0.1.0/README.md"
 }

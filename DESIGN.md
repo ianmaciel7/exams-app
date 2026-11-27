@@ -18,7 +18,7 @@ A two-region workspace: compact sidebar at left, vertically scrolling question l
 
 ## Elevation & Depth
 
-Prefer a flat, unobtrusive sketch hierarchy. Use light separators, not nested card borders or heavy selection outlines. No production elevation tokens established.
+Prefer a flat, unobtrusive sketch hierarchy. Use a single light separator between complete question blocks, never between the alternatives and their action row; avoid nested card borders or heavy selection outlines. No production elevation tokens established.
 
 ## Shapes
 
@@ -45,4 +45,4 @@ The owner approved explicit answer submission: select an option, then activate A
 
 Use a per-question Answer control before evaluation and a Retry control in the failure state; both controls are depicted with native outline strokes and short English labels; visual validation is pending. The owner approved neutral square-with-X icon placeholders for the sidebar, replacing the previous list glyphs in all eight sketch variants. Do not treat this as final iconography.
 
-The Sketch depicts Answer beside the final option of each fully visible unanswered question, muted before selection and emphasized after selection; evaluated questions show feedback instead. Retry appears below the load-failure explanation. This is a static visual proposal, not a tested interaction.
+The Sketch depicts Answer in a dedicated left-aligned action row below all alternatives of each fully visible unanswered question, muted before selection and emphasized after selection. No divider separates the alternatives from this action. Evaluated questions show the result in the same action region; option-specific feedback remains adjacent to the corresponding alternatives. A single light separator follows the complete question block. Retry appears below the load-failure explanation. This is a static visual proposal, not a tested interaction.
