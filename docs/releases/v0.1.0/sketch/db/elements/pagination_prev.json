@@ -1,8 +1,8 @@
 {
   "type": "text",
-  "x": 1900,
-  "y": 718,
-  "text": "‹ Anterior",
+  "x": 1908,
+  "y": 721,
+  "text": "Anterior",
   "size": "body",
-  "color": "ink"
+  "color": "#888888"
 }
