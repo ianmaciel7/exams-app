@@ -43,4 +43,6 @@ Impeccable context: PRODUCT.md owns product facts. This file owns provisional vi
 
 The owner approved explicit answer submission: select an option, then activate Answer to evaluate it. An incorrect response marks the selected option and reveals the correct one. Page changes reset the question list to the top. A load failure offers a manual Retry action. These are release decisions, not verified implementation.
 
-Use a per-question Answer control before evaluation and a Retry control in the failure state; both controls are missing from the current static drawings and must be depicted; exact visual geometry is pending. The owner approved neutral square-with-X icon placeholders for the sidebar, replacing the previous list glyphs in all eight sketch variants. Do not treat this as final iconography.
+Use a per-question Answer control before evaluation and a Retry control in the failure state; both controls are depicted with native outline strokes and short English labels; visual validation is pending. The owner approved neutral square-with-X icon placeholders for the sidebar, replacing the previous list glyphs in all eight sketch variants. Do not treat this as final iconography.
+
+The Sketch depicts Answer beside the final option of each fully visible unanswered question, muted before selection and emphasized after selection; evaluated questions show feedback instead. Retry appears below the load-failure explanation. This is a static visual proposal, not a tested interaction.

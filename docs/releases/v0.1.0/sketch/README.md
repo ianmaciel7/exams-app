@@ -25,7 +25,7 @@ Arrange distinct screens/destinations vertically, one row per screen. Arrange st
 
 ## Question-list states (2026-11-26)
 
-The eight artboards are variants of the same screen: top of the list (unanswered), end of the list, selected answer before evaluation, correct answer, incorrect answer, loading, empty list and load failure. In the correct state the chosen answer is marked correct. In the incorrect state the chosen answer and the correct answer are distinguishable by both text and color. Other questions remain unchanged. The selected-before-evaluation variant is required: the user selects an option and activates Answer. Loading and empty variants remain pending visual review. A load failure offers a manual Retry action. The Answer and Retry controls need visual reconciliation; explanations, scores and persistence are not specified. The mock text and colors are illustrative.
+The eight artboards are variants of the same screen: top of the list (unanswered), end of the list, selected answer before evaluation, correct answer, incorrect answer, loading, empty list and load failure. In the correct state the chosen answer is marked correct. In the incorrect state the chosen answer and the correct answer are distinguishable by both text and color. Other questions remain unchanged. The selected-before-evaluation variant is required: the user selects an option and activates Answer. Loading and empty variants remain pending visual review. A load failure offers a manual Retry action. The Answer and Retry controls are now drawn and await visual validation; explanations, scores and persistence are not specified. The mock text and colors are illustrative.
 
 ## Native design annotations
 
@@ -59,7 +59,7 @@ The owner requested a more generic icon shared by both entries. Replace the prio
 
 The owner approved explicit answer submission: select an option, then activate Answer to evaluate it. An incorrect response marks the selected option and reveals the correct one. Page changes reset the question list to the top. A load failure offers a manual Retry action. These are release decisions, not verified implementation.
 
-The eight states remain: unanswered, end-of-list pagination, selected before submission, correct, incorrect, loading, empty, and load failure. The selected-before-submission state is required. The Answer and Retry controls still need visual reconciliation in the static board; behavior and accessibility are not yet tested.
+The eight states remain: unanswered, end-of-list pagination, selected before submission, correct, incorrect, loading, empty, and load failure. The selected-before-submission state is required. The Answer and Retry controls are drawn in the static board and await visual validation; behavior and accessibility are not yet tested.
 
 The owner also approved a neutral square-with-X icon placeholder for each sidebar entry. The board source now uses identical square-with-X placeholders in all eight variants; captures exist, but owner visual approval remains pending.
 
@@ -69,4 +69,8 @@ All eight sketch variants now use English project-authored UI labels, state capt
 
 ## Capture and review gate — 2026-11-27
 
-[CI run 45981578592](https://github.com/ianmaciel7/exams-app/actions/runs/45981578592) for `0c5df27` passed board integrity and generated the downloadable light/dark captures; deployment failed separately. The dark overview contact sheet confirms English labels and preserved annotations. Owner visual validation and control placement remain pending: Answer and Retry are not drawn. See the [open product decisions](../product/README.md#open-product-decisions). The current eight variants remain unchanged; no new behavior is approved.
+[CI run 45981578592](https://github.com/ianmaciel7/exams-app/actions/runs/45981578592) for `0c5df27` passed board integrity and generated the downloadable light/dark captures; deployment failed separately. The dark overview contact sheet confirms English labels and preserved annotations. The cited capture predates the Answer and Retry control drawings. New captures and owner visual validation remain pending. See the [open product decisions](../product/README.md#open-product-decisions). The current eight variants remain unchanged; no new behavior is approved.
+
+## Explicit action controls — 2026-11-27
+
+Draw Answer beside the final alternative for fully visible unanswered questions, muted without a selection and emphasized after selection. Evaluated questions retain their feedback without an Answer control. Draw Retry beneath the load-failure explanation. Native editable outline strokes and text retain the existing hand-drawn style and eight variants. The placement and disabled appearance are provisional visual choices; no runtime behavior or additional product decision is implied. Capture and owner review remain pending.
