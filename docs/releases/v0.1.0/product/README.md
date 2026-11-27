@@ -1,6 +1,6 @@
 # Product — v0.1.0
 
-Current stage: Mid-Fidelity Wireframe — in progress; 21 variants; owner visual approval pending.
+Current stage: High-Fidelity Wireframe — in progress; structural specification and visual review pending.
 
 ## Current release baseline
 
@@ -45,7 +45,7 @@ No outstanding owner decisions in the current decision register.
 | Locale selection and default | Technical design / prototype |
 | Visual, keyboard, touch and accessibility verification | Review / prototype |
 
-The six owner decisions are resolved. Exact responsive breakpoint, competition-list data source, safe-retry implementation and locale selection/default behavior require technical design and prototype validation. Exam-content translation is not implied. The navigation loading treatment remains a visual study. Native visual review, runtime, usability and accessibility validation remain pending.
+The six owner decisions are resolved. Exact responsive breakpoint, competition-list data source, safe-retry implementation and locale selection/default behavior require technical design and prototype validation. Exam-content translation is not implied. The navigation loading treatment remains a visual study. High-Fidelity structural and visual review, runtime, usability and accessibility validation remain pending.
 
 Evidence: [QConcursos study](../../../references/2026-11-25-qconcursos-archive-evidence.md) and [historical archive inventory](https://github.com/ianmaciel7/exams-app-archive/blob/main/inventory/exams-app-branch-files.json). Original ExamTopics flow, pagination and retry bytes were not recovered. Scroll reset and manual retry are owner-approved decisions.
 

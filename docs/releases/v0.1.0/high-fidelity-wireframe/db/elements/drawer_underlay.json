@@ -1,0 +1,9 @@
+{
+  "type": "text",
+  "x": 3290,
+  "y": 320,
+  "text": "safe and idempotent?",
+  "size": "small",
+  "color": "#555555",
+  "wrap": 72
+}

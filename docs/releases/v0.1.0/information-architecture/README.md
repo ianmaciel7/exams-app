@@ -1,6 +1,6 @@
 # Information Architecture — v0.1.0
 
-Current stage: Mid-Fidelity Wireframe — in progress; 21 variants; owner visual approval pending.
+Current stage: High-Fidelity Wireframe — in progress; structural specification and visual review pending.
 
 One workspace, not 21 destinations. Left sidebar locates competitions; main region contains the vertically scrolling list. First available item selected automatically on entry. Ghost collapse/expand is available across desktop and narrow states, independent of question lifecycle; the collapsed expand icon remains visible without a background at pointer rest; hover/focus adds feedback. Collapse preserves selection, page, scroll context and answers. Changing competition or page discards responses.
 
@@ -31,4 +31,4 @@ External component studies clarify default, hover and pressed actions, the colla
 | Unknown submission outcome | Retain choice and permit safe retry |
 | Interface languages | Brazilian Portuguese and English |
 
-The six owner decisions are resolved. Exact responsive breakpoint, competition-list data source, safe-retry implementation and locale selection/default behavior require technical design and prototype validation. Exam-content translation is not implied. The navigation loading treatment remains a visual study. Native visual review, runtime, usability and accessibility validation remain pending.
+The six owner decisions are resolved. Exact responsive breakpoint, competition-list data source, safe-retry implementation and locale selection/default behavior require technical design and prototype validation. Exam-content translation is not implied. The navigation loading treatment remains a visual study. High-Fidelity structural and visual review, runtime, usability and accessibility validation remain pending.

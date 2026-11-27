@@ -4,7 +4,7 @@ Start with [Project Hub](boards/project-hub/README.md) or [Ideas Board](boards/o
 
 ## Open Artifact
 
-Run `node scripts/open-boards.mjs` (Node.js 22+ and Open Artifact CLI required). The launcher registers all ten populated native boards. Set `OPEN_ARTIFACT_WHITEBOARD_CLI` to override CLI discovery. Use downloadable native capture artifacts for review.
+Run `node scripts/open-boards.mjs` (Node.js 22+ and Open Artifact CLI required). The launcher registers all populated native boards. Set `OPEN_ARTIFACT_WHITEBOARD_CLI` to override CLI discovery. Use downloadable native capture artifacts for review.
 
 Run `node scripts/sync-release-state.mjs --write` to regenerate planning data and `node scripts/sync-mid-fidelity.mjs --write` to synchronize managed wireframe elements. Validate with `node scripts/check-boards.mjs` and `node --test scripts/check-boards.test.mjs scripts/marker-sketch.test.mjs scripts/marker-sketch-ink.test.mjs`. Structural checks are not visual or functional approval.
 
@@ -12,7 +12,7 @@ Follow [AGENTS.md](../AGENTS.md) and [whiteboard guidelines](boards/whiteboard-g
 
 ## Current release
 
-Current stage: Mid-Fidelity Wireframe — in progress; 21 variants; owner visual approval pending.
+Current stage: High-Fidelity Wireframe — in progress; structural specification and visual review pending.
 
 ## Capture evidence
 
@@ -22,7 +22,7 @@ Last recorded Mid-Fidelity review requiring changes: [d86973d](https://github.co
 
 Last recorded planning-board review requiring changes: [898d493](https://github.com/ianmaciel7/exams-app/commit/898d493e56bbaefb49095eb5a2648ae463043359) · [CI 46005686904](https://github.com/ianmaciel7/exams-app/actions/runs/46005686904) — Owner identified crowded planning-board elements; layout corrections made in 165f554.
 
-New revisions require their own capture; owner visual approval of Mid-Fidelity remains pending.
+New revisions require their own capture; Mid-Fidelity owner approval recorded on 2026-11-27; High-Fidelity review remains pending.
 
 [PRODUCT.md](../PRODUCT.md) · [DESIGN.md](../DESIGN.md) · [Canonical state](releases/v0.1.0/current-state.json)
 

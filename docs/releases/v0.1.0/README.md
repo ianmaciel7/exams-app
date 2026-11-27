@@ -1,6 +1,6 @@
 # Release v0.1.0
 
-Current stage: Mid-Fidelity Wireframe — in progress; 21 variants; owner visual approval pending.
+Current stage: High-Fidelity Wireframe — in progress; structural specification and visual review pending.
 
 ## Current scope and decisions
 
@@ -16,8 +16,8 @@ Automatically select the first available competition on entry. Browse ten questi
 | [User Flows](user-flows/README.md) | In progress · synchronized |
 | [Sketch](sketch/README.md) | Complete for progression · 8 variants |
 | [Low-Fidelity Wireframe](low-fidelity-wireframe/README.md) | Complete for progression · 9 variants |
-| [Mid-Fidelity Wireframe](mid-fidelity-wireframe/README.md) | In progress · 21 variants |
-| High-Fidelity Wireframe | Not started |
+| [Mid-Fidelity Wireframe](mid-fidelity-wireframe/README.md) | Complete for progression · 21 variants |
+| [High-Fidelity Wireframe](high-fidelity-wireframe/README.md) | In progress · 4 specimens |
 | Mockup | Not started |
 | Interactive Prototype | Not started |
 | Usability Testing | Not started |
@@ -36,7 +36,7 @@ No outstanding owner decisions in the current decision register.
 | Locale selection and default | Technical design / prototype |
 | Visual, keyboard, touch and accessibility verification | Review / prototype |
 
-The six owner decisions are resolved. Exact responsive breakpoint, competition-list data source, safe-retry implementation and locale selection/default behavior require technical design and prototype validation. Exam-content translation is not implied. The navigation loading treatment remains a visual study. Native visual review, runtime, usability and accessibility validation remain pending.
+The six owner decisions are resolved. Exact responsive breakpoint, competition-list data source, safe-retry implementation and locale selection/default behavior require technical design and prototype validation. Exam-content translation is not implied. The navigation loading treatment remains a visual study. High-Fidelity structural and visual review, runtime, usability and accessibility validation remain pending.
 
 ## Capture evidence
 
@@ -46,7 +46,7 @@ Last recorded Mid-Fidelity review requiring changes: [d86973d](https://github.co
 
 Last recorded planning-board review requiring changes: [898d493](https://github.com/ianmaciel7/exams-app/commit/898d493e56bbaefb49095eb5a2648ae463043359) · [CI 46005686904](https://github.com/ianmaciel7/exams-app/actions/runs/46005686904) — Owner identified crowded planning-board elements; layout corrections made in 165f554.
 
-New revisions require their own capture; owner visual approval of Mid-Fidelity remains pending.
+New revisions require their own capture; Mid-Fidelity owner approval recorded on 2026-11-27; High-Fidelity review remains pending.
 
 [Canonical release state](current-state.json) · [Ideas Board](../../boards/overview/README.md)
 

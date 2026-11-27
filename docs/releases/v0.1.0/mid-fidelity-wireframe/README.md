@@ -1,6 +1,6 @@
 # Mid-Fidelity Wireframe — v0.1.0
 
-Current stage: Mid-Fidelity Wireframe — in progress; 21 variants; owner visual approval pending. Baseline: [Low-Fidelity Wireframe](../low-fidelity-wireframe/README.md) at [e70dbaf](https://github.com/ianmaciel7/exams-app/commit/e70dbafbebe942753c54a061adb35d3a61bb73f0). Preserve the historical Sketch and Low-Fidelity boards.
+Historical approved snapshot: complete for progression on 2026-11-27 (21 variants). The owner explicitly approved the reviewed Mid-Fidelity baseline; the current stage is [High-Fidelity Wireframe](../high-fidelity-wireframe/README.md). Earlier review statements below are historical, not current blockers. Baseline: [Low-Fidelity Wireframe](../low-fidelity-wireframe/README.md) at [e70dbaf](https://github.com/ianmaciel7/exams-app/commit/e70dbafbebe942753c54a061adb35d3a61bb73f0). Preserve the historical Sketch and Low-Fidelity boards.
 
 ## Purpose
 
@@ -140,3 +140,7 @@ Stage question: are realistic content, density, state feedback, wrapping and cri
 ## Capture defect closure — 2026-11-27
 
 [Commit ec20139](https://github.com/ianmaciel7/exams-app/commit/ec20139c96062542fc7eabb7424333b4fec6412f) · [CI 46024835242](https://github.com/ianmaciel7/exams-app/actions/runs/46024835242) · evidence artifact 15211487561. Capture, provenance, native Playground and deployment steps passed. The manifest identifies the exact source commit and all 21 states in both board themes. Both native mobile captures were visually inspected: the closed phone is complete, the drawer and supporting specimens remain visible, and pixel (2890, 650) is white in both original 5120 × 2880 PNGs. A comparison of all 42 state images against the previously inspected capture set (downsampled to 640 × 360, maximum channel delta >30, flag threshold >0.05% of pixels) flagged only mobile Dark (1.87%), consistent with the repaired area. This comparison is a regression screen, not proof of pixel identity or interaction quality. No board geometry changed. The identified capture defect is closed. Reviewer recommends progression after owner visual approval; the stage remains in progress pending that approval. Functional, responsive implementation and accessibility testing remain later-stage work.
+
+## Owner approval and progression — 2026-11-27
+
+The owner explicitly approved Mid-Fidelity and authorized High-Fidelity. The reviewed native board geometry at [ec20139](https://github.com/ianmaciel7/exams-app/commit/ec20139c96062542fc7eabb7424333b4fec6412f) remains unchanged. The 21 variants and existing notes are preserved; their approved scope is inherited by the [High-Fidelity stage](../high-fidelity-wireframe/README.md). Approval is not functional or accessibility validation.

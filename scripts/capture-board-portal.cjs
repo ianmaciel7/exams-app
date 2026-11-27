@@ -13,6 +13,7 @@ const boards = [
   ['sketch','Sketch','docs/releases/v0.1.0/sketch'],
   ['lowfidelity','Low-Fidelity Wireframe','docs/releases/v0.1.0/low-fidelity-wireframe'],
   ['midfidelity','Mid-Fidelity Wireframe','docs/releases/v0.1.0/mid-fidelity-wireframe'],
+  ['highfidelity','High-Fidelity Wireframe','docs/releases/v0.1.0/high-fidelity-wireframe'],
 ];
 const urls = Object.fromEntries(fs.readFileSync('/tmp/board-urls','utf8').split(/\r?\n/).map(line=>line.match(/^(\w+): (http\S+)$/)).filter(Boolean).map(m=>[m[1],m[2]]));
 

@@ -1,0 +1,9 @@
+{
+  "type": "note",
+  "x": 1370,
+  "y": 1150,
+  "w": 1024,
+  "h": 205,
+  "color": "yellow",
+  "text": "**Gate:** native Light/Dark board captures must show all four specimens, no clipping/overlap, consistent geometry, visible selected/locked feedback, wrapped labels and clear hierarchy. Owner approval needed. Mockup owns final visual identity, palette and typography; prototype owns working interactions. No claim of accessibility compliance."
+}

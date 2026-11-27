@@ -20,7 +20,7 @@ export function checkReleaseConsistency(){
    if(Math.abs(a.x-b.x)<linkW+gap&&Math.abs(a.y-b.y)<linkH+gap)errors.push('Crowded link cards: '+path+' '+a.id+' / '+b.id);
   }
   if(path==='docs/boards/project-hub'){
-   for(let i=0;i<7;i++){const a=elements.find(e=>e.id==='stage_'+i),b=elements.find(e=>e.id==='stage_status_'+i);if(!a||!b||b.y<a.y+linkH+12||a.x!==b.x)errors.push('Crowded or misaligned stage caption: '+i);}
+   for(let i=0;i<8;i++){const a=elements.find(e=>e.id==='stage_'+i),b=elements.find(e=>e.id==='stage_status_'+i);if(!a||!b||b.y<a.y+linkH+12||a.x!==b.x)errors.push('Crowded or misaligned stage caption: '+i);}
    for(const id of ['ideas','releases']){const a=elements.find(e=>e.id===id),b=elements.find(e=>e.id===(id==='ideas'?'ideas_context':'release_context'));if(!a||!b||b.y<a.y+linkH+12)errors.push('Crowded project caption: '+id);}
   }
   if(path==='docs/boards/overview'&&links.some(e=>e.y+linkH+24>0))errors.push('Ideas Board navigation intrudes into header');
@@ -31,14 +31,14 @@ export function checkReleaseConsistency(){
  const meta=json(join(release,'mid-fidelity-wireframe/db/board/meta.json'));
  const count=meta.order.filter(id=>id.endsWith('_note')).length;
  if(state.inventory.map(x=>x.id).join('|')!==components.states.join('|'))errors.push('Canonical inventory order drift');
- if(state.stages.length!==11||state.stages.filter(x=>x.board).length!==7)errors.push('Release stage inventory drift');
+ if(state.stages.length!==11||state.stages.filter(x=>x.board).length!==8)errors.push('Release stage inventory drift');
  if(count!==state.variantCount||count!==components.states.length)errors.push('Mid-Fidelity variant count drift');
  for(const [dir,expected] of Object.entries(state.notes)){
   if(json(join(release,dir,'db/elements/note.json')).text!==expected)errors.push('Planning board drift: '+dir);
  }
  if(json('docs/boards/release-stages/db/elements/release_v010_status.json').text!==state.stageNote)errors.push('Release stage board drift');
- for(const p of ['PRODUCT.md','DESIGN.md','docs/README.md',join(release,'README.md'),...['product','information-architecture','screen-inventory','user-flows','mid-fidelity-wireframe'].map(dir=>join(release,dir,'README.md'))])if(!read(p).includes(state.status))errors.push('Current release status drift: '+p);
- for(const [dir,key] of [['sketch','sketch'],['low-fidelity-wireframe','lowFidelity']]){
+ for(const p of ['PRODUCT.md','DESIGN.md','docs/README.md',join(release,'README.md'),...['product','information-architecture','screen-inventory','user-flows','high-fidelity-wireframe'].map(dir=>join(release,dir,'README.md'))])if(!read(p).includes(state.status))errors.push('Current release status drift: '+p);
+ for(const [dir,key] of [['sketch','sketch'],['low-fidelity-wireframe','lowFidelity'],['mid-fidelity-wireframe','midFidelity']]){
   const m=json(join(release,dir,'db/board/meta.json'));
   if(m.order.filter(id=>id.endsWith('_note')).length!==state.previousStages[key].count)errors.push('Historical state count drift: '+dir);
  }

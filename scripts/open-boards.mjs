@@ -126,6 +126,7 @@ try {
     sketch: ['art_examappsketchv010', 'docs/releases/v0.1.0/sketch'],
     lowfidelity: ['art_examapplowfidelityv010', 'docs/releases/v0.1.0/low-fidelity-wireframe'],
     midfidelity: ['art_examappmidfidelityv010', 'docs/releases/v0.1.0/mid-fidelity-wireframe'],
+    highfidelity: ['art_examapphighfidelityv010', 'docs/releases/v0.1.0/high-fidelity-wireframe'],
   };
   for (const [, path] of Object.values(boards)) {
     const root = join(projectRoot, path);

@@ -2,9 +2,9 @@
 
 ## Overview
 
-Current stage: Mid-Fidelity Wireframe — in progress; 21 variants; owner visual approval pending.
+Current stage: High-Fidelity Wireframe — in progress; structural specification and visual review pending.
 
-Operate mode: question content is primary; navigation supports the task. The current reference is [Mid-Fidelity](docs/releases/v0.1.0/mid-fidelity-wireframe/README.md), not the historical Sketch. No production visual identity, typography, palette or design tokens are established.
+Operate mode: question content is primary; navigation supports the task. The active reference is [High-Fidelity](docs/releases/v0.1.0/high-fidelity-wireframe/README.md); the [approved Mid-Fidelity](docs/releases/v0.1.0/mid-fidelity-wireframe/README.md) is its preserved baseline. No production visual identity, typography, palette or design tokens are established.
 
 ## Layout and components
 
@@ -20,7 +20,7 @@ Neutral grayscale structural study; semantic result labels do not rely on color 
 
 `scripts/mid-fidelity-components.cjs` manages common header, navigation rows, Ghost trigger, pagination, answer feedback, long-content geometry and proposed studies. Run `node scripts/sync-mid-fidelity.mjs --write`, then `node scripts/check-boards.mjs`. Review actual rendered optical alignment, wrapping, contrast and state parity before stage closure. Functional focus, accessible names, target sizes and responsive behavior require a later prototype.
 
-The six owner decisions are resolved. Exact responsive breakpoint, competition-list data source, safe-retry implementation and locale selection/default behavior require technical design and prototype validation. Exam-content translation is not implied. The navigation loading treatment remains a visual study. Native visual review, runtime, usability and accessibility validation remain pending.
+The six owner decisions are resolved. Exact responsive breakpoint, competition-list data source, safe-retry implementation and locale selection/default behavior require technical design and prototype validation. Exam-content translation is not implied. The navigation loading treatment remains a visual study. High-Fidelity structural and visual review, runtime, usability and accessibility validation remain pending.
 
 ## History and evidence
 
@@ -46,8 +46,12 @@ References: [W3C Focus Visible](https://www.w3.org/WAI/WCAG22/Understanding/focu
 
 Desktop labels use one-line ellipsis with full-label discovery by hover/focus; phone drawer labels wrap. The drawer overlays the same question workspace. Phone component studies cover first/middle/last pagination, identical English/pt-BR workspace geometry, and feedback below wrapped alternatives. The Ghost trigger is visible at rest on all input devices. These are static design specimens, not additional workspace variants or functional validation.
 
-The [active wireframe](docs/releases/v0.1.0/mid-fidelity-wireframe/README.md) owns the detailed geometry and review history; [current state](docs/releases/v0.1.0/current-state.json) records capture provenance. Native visual approval remains pending.
+The [active wireframe](docs/releases/v0.1.0/high-fidelity-wireframe/README.md) owns the detailed geometry and review history; [current state](docs/releases/v0.1.0/current-state.json) records capture provenance. High-Fidelity visual approval remains pending.
 
 ## Fidelity boundary
 
-The selected layout stays consistent across stages. Current Mid-Fidelity geometry is provisional and exists to review realistic content, density, wrapping and responsive controls. Exact structural specifications belong to a separate High-Fidelity pass only if unresolved; visual tokens belong to Mockup and operable behavior to Prototype. Follow the evidence-based progression gate in [AGENTS.md](AGENTS.md). Preserve snapshots and keep component studies linked to the owning design question.
+The selected layout stays consistent across stages. Approved Mid-Fidelity geometry remains historical and provisional. High-Fidelity studies near-final structural dimensions, overflow and critical responsive states; proposed dimensions are not yet approved. Visual tokens belong to Mockup and operable behavior to Prototype. Follow the evidence-based progression gate in [AGENTS.md](AGENTS.md). Preserve snapshots and keep component studies linked to the owning design question.
+
+## High-Fidelity entry — 2026-11-27
+
+The owner approved Mid-Fidelity. Earlier canvas dimensions above describe that historical baseline, not final constraints. The new structural specimens test a 272-unit sidebar, 64 rail, 40 desktop inset, 20 phone inset, 740 content maximum and 304 phone drawer, with 44-unit target intent. These are proposed structural dimensions, not brand tokens; review at representative widths, refine action and feedback anatomy, and verify native captures before approval. See the active stage record.

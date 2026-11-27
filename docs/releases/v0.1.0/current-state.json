@@ -1,6 +1,6 @@
 {
   "release": "v0.1.0",
-  "stage": "Mid-Fidelity Wireframe",
+  "stage": "High-Fidelity Wireframe",
   "stageStatus": "in progress",
   "variantCount": 21,
   "previousStages": {
@@ -13,6 +13,13 @@
       "count": 9,
       "status": "complete for progression",
       "approvedAt": "e70dbaf"
+    },
+    "midFidelity": {
+      "count": 21,
+      "status": "complete for progression",
+      "approvedAt": "e778bac",
+      "reviewedCommit": "ec20139c96062542fc7eabb7424333b4fec6412f",
+      "ownerApprovalDate": "2026-11-27"
     }
   },
   "lastReviewedCapture": {
@@ -20,16 +27,16 @@
     "run": 46019545548,
     "assessment": "Reviewed all 21 Mid-Fidelity states in both board themes (42 captures). The closed-phone artboard in Dark has missing right-hand tiles; Light renders the matching area. Other inspected states preserve the intended visual structure. Capture regression blocks progression; new evidence and owner visual approval required."
   },
-  "status": "Current stage: Mid-Fidelity Wireframe — in progress; 21 variants; owner visual approval pending.",
+  "status": "Current stage: High-Fidelity Wireframe — in progress; structural specification and visual review pending.",
   "approved": "Automatically select the first available competition on entry. Browse ten questions per page; pagination follows the last question and resets scroll to the top. Select one option and explicitly submit with Answer. Correct and incorrect feedback identifies the correct choice and, when wrong, the user's choice. A confirmed answer is read-only on the current page. Changing page or competition, or closing the application, discards responses. On submission failure keep the choice and allow another submission; prevent duplicates while pending. Retry reloads a failed question list. A Ghost sidebar trigger is available across workspace states. On desktop, the collapse and expand icons remain visible at pointer rest with no button background (Ghost). Hover adds subtle surface feedback and keyboard focus adds a visible outline without moving the layout. Activation, not hover, expands the sidebar. Keep the same visible accessible trigger on touch/no-hover devices. Collapse/expand preserves current page, selection, scroll context and answers. Questions follow original exam order. If no competitions are available, show an empty-state message without an action button. On phones, navigation opens as a drawer over the question content rather than shifting it. If competition-list loading fails, show an error and manual Retry. If an answer outcome cannot be confirmed, retain the selected option and permit a safe retry without duplicate evaluation. Support the application interface in Brazilian Portuguese and English.",
-  "open": "The six owner decisions are resolved. Exact responsive breakpoint, competition-list data source, safe-retry implementation and locale selection/default behavior require technical design and prototype validation. Exam-content translation is not implied. The navigation loading treatment remains a visual study. Native visual review, runtime, usability and accessibility validation remain pending.",
+  "open": "The six owner decisions are resolved. Exact responsive breakpoint, competition-list data source, safe-retry implementation and locale selection/default behavior require technical design and prototype validation. Exam-content translation is not implied. The navigation loading treatment remains a visual study. High-Fidelity structural and visual review, runtime, usability and accessibility validation remain pending.",
   "notes": {
-    "product": "**Current product decisions — v0.1.0**\nAutomatically select the first available competition on entry. Browse ten questions per page; pagination follows the last question and resets scroll to the top. Select one option and explicitly submit with Answer. Correct and incorrect feedback identifies the correct choice and, when wrong, the user's choice. A confirmed answer is read-only on the current page. Changing page or competition, or closing the application, discards responses. On submission failure keep the choice and allow another submission; prevent duplicates while pending. Retry reloads a failed question list. A Ghost sidebar trigger is available across workspace states. On desktop, the collapse and expand icons remain visible at pointer rest with no button background (Ghost). Hover adds subtle surface feedback and keyboard focus adds a visible outline without moving the layout. Activation, not hover, expands the sidebar. Keep the same visible accessible trigger on touch/no-hover devices. Collapse/expand preserves current page, selection, scroll context and answers. Questions follow original exam order. If no competitions are available, show an empty-state message without an action button. On phones, navigation opens as a drawer over the question content rather than shifting it. If competition-list loading fails, show an error and manual Retry. If an answer outcome cannot be confirmed, retain the selected option and permit a safe retry without duplicate evaluation. Support the application interface in Brazilian Portuguese and English.\n\n**Technical validation**\nThe six owner decisions are resolved. Exact responsive breakpoint, competition-list data source, safe-retry implementation and locale selection/default behavior require technical design and prototype validation. Exam-content translation is not implied. The navigation loading treatment remains a visual study. Native visual review, runtime, usability and accessibility validation remain pending.",
+    "product": "**Current product decisions — v0.1.0**\nAutomatically select the first available competition on entry. Browse ten questions per page; pagination follows the last question and resets scroll to the top. Select one option and explicitly submit with Answer. Correct and incorrect feedback identifies the correct choice and, when wrong, the user's choice. A confirmed answer is read-only on the current page. Changing page or competition, or closing the application, discards responses. On submission failure keep the choice and allow another submission; prevent duplicates while pending. Retry reloads a failed question list. A Ghost sidebar trigger is available across workspace states. On desktop, the collapse and expand icons remain visible at pointer rest with no button background (Ghost). Hover adds subtle surface feedback and keyboard focus adds a visible outline without moving the layout. Activation, not hover, expands the sidebar. Keep the same visible accessible trigger on touch/no-hover devices. Collapse/expand preserves current page, selection, scroll context and answers. Questions follow original exam order. If no competitions are available, show an empty-state message without an action button. On phones, navigation opens as a drawer over the question content rather than shifting it. If competition-list loading fails, show an error and manual Retry. If an answer outcome cannot be confirmed, retain the selected option and permit a safe retry without duplicate evaluation. Support the application interface in Brazilian Portuguese and English.\n\n**Technical validation**\nThe six owner decisions are resolved. Exact responsive breakpoint, competition-list data source, safe-retry implementation and locale selection/default behavior require technical design and prototype validation. Exam-content translation is not implied. The navigation loading treatment remains a visual study. High-Fidelity structural and visual review, runtime, usability and accessibility validation remain pending.",
     "information-architecture": "**Current workspace — v0.1.0**\nOne destination: competition sidebar and scrolling question list. Original exam order; 10 questions/page. First available competition selected automatically. Name · Year · Position/exam; desktop ellipsis and tooltip; phone labels wrap. Desktop Ghost trigger visible at rest; hover/focus feedback; phones use an overlay drawer. Empty competition list shows a message only; navigation failure offers manual Retry. Interface: pt-BR and en. No additional routes. Exact breakpoint, data source and locale controls require technical validation.",
-    "screen-inventory": "**Current inventory — 21 variants**\nCore: unanswered, list end, selected, correct, incorrect, question loading, empty list, load failure, submitting, submission failure/uncertainty, middle/last page, long content, empty competitions and navigation failure.\nStudies: narrow expanded/collapsed, hover, keyboard focus, phone closed/open overlay, navigation loading. Component studies: no-hover rail, localized phone, footer boundaries, tooltip and long-option feedback. Six owner decisions resolved. Native visual review pending; component specimens are not separate workspace variants.",
+    "screen-inventory": "**Current inventory — 21 variants**\nCore: unanswered, list end, selected, correct, incorrect, question loading, empty list, load failure, submitting, submission failure/uncertainty, middle/last page, long content, empty competitions and navigation failure.\nStudies: narrow expanded/collapsed, hover, keyboard focus, phone closed/open overlay, navigation loading. Component studies: no-hover rail, localized phone, footer boundaries, tooltip and long-option feedback. Six owner decisions resolved. Mid-Fidelity approved; High-Fidelity selects representative scenarios; component specimens are not separate workspace variants.",
     "user-flows": "**Current flows — v0.1.0**\nEntry -> first available item -> questions in original exam order; empty competitions -> message only; list failure -> manual Retry.\nSelect -> Answer -> pending -> confirmed and locked OR not confirmed (retain selection; safe retry without duplicate evaluation).\nPage/competition change -> discard answers; page scroll resets. Exit -> discard. Desktop collapsed trigger stays visible; hover/focus adds feedback; phone opens overlay drawer; dismissal preserves context. The Ghost trigger stays visible on all input devices. Preserve context on collapse/expand. Portuguese and English interface. Technical validation remains."
   },
-  "stageNote": "**v0.1.0 — In progress**\nProduct, Information Architecture, Screen Inventory and User Flows: synchronized; six owner decisions resolved. Technical validation remains.\nSketch: complete for progression (94072ce; 8 variants).\nLow-Fidelity Wireframe: complete for progression (e70dbaf; 9 variants).\nMid-Fidelity Wireframe: in progress (21 variants); owner visual review pending.\nHigh-Fidelity, Mockup, Interactive Prototype and Usability Testing: not started.\nSource: docs/releases/v0.1.0/current-state.json",
+  "stageNote": "**v0.1.0 — In progress**\nProduct, Information Architecture, Screen Inventory and User Flows: synchronized; six owner decisions resolved. Technical validation remains.\nSketch: complete for progression (94072ce; 8 variants).\nLow-Fidelity Wireframe: complete for progression (e70dbaf; 9 variants).\nMid-Fidelity Wireframe: complete for progression (21 variants; owner approved 2026-11-27).\nHigh-Fidelity Wireframe: in progress (4 representative structural specimens); review pending.\nMockup, Interactive Prototype and Usability Testing: not started.\nSource: docs/releases/v0.1.0/current-state.json",
   "stages": [
     {
       "name": "Product",
@@ -69,15 +76,15 @@
     },
     {
       "name": "Mid-Fidelity Wireframe",
-      "status": "In progress · 21 variants",
+      "status": "Complete for progression · 21 variants",
       "board": "mid-fidelity-wireframe",
       "artifactId": "art_examappmidfidelityv010"
     },
     {
       "name": "High-Fidelity Wireframe",
-      "status": "Not started",
-      "board": null,
-      "artifactId": null
+      "status": "In progress · 4 specimens",
+      "board": "high-fidelity-wireframe",
+      "artifactId": "art_examapphighfidelityv010"
     },
     {
       "name": "Mockup",
@@ -393,6 +400,16 @@
           "Always show the expand icon without a background at rest; hover/focus adds feedback, activation expands. Supersedes the former hide-at-rest rule."
         ]
       ]
+    },
+    {
+      "date": "2026-11-27",
+      "source": "Explicit owner approval in conversation",
+      "decisions": [
+        [
+          "Mid-Fidelity progression",
+          "Approved 21 variants; begin High-Fidelity Wireframe. No new product behavior or visual identity approved."
+        ]
+      ]
     }
   ],
   "responsiveStudies": "Desktop labels use one-line ellipsis with full-label discovery by hover/focus; phone drawer labels wrap. The drawer overlays the same question workspace. Phone component studies cover first/middle/last pagination, identical English/pt-BR workspace geometry, and feedback below wrapped alternatives. The Ghost trigger is visible at rest on all input devices. These are static design specimens, not additional workspace variants or functional validation.",
@@ -403,6 +420,22 @@
     "variantCount": 21,
     "captureCount": 42,
     "result": "Capture defect resolved; reviewer recommends progression after owner visual approval. Both mobile themes inspected; all 42 state captures compared with the prior evidence at 640 × 360 using a maximum channel difference >30 and 0.05% changed-pixel threshold; only mobile Dark exceeded the threshold (1.87%). No functional or accessibility conformance claimed.",
-    "ownerApproved": false
+    "ownerApproved": true,
+    "ownerApprovalDate": "2026-11-27",
+    "ownerApprovalSource": "Explicit owner approval in conversation: Aprovo o Mid-Fidelity. Avance para High-Fidelity Wireframe."
+  },
+  "highFidelity": {
+    "question": "Can the approved workspace be specified with consistent near-final structural dimensions, readable content, overflow rules and critical responsive/feedback states without locking in brand styling?",
+    "baseline": "ec20139c96062542fc7eabb7424333b4fec6412f",
+    "representativeSpecimens": [
+      "desktop-evaluated",
+      "desktop-collapsed",
+      "phone-closed",
+      "phone-open"
+    ],
+    "status": "in progress",
+    "review": "pending native captures and owner review",
+    "inventoryReference": "21 approved Mid-Fidelity variants",
+    "nextQuestion": "Mockup: which visual identity, typography, semantic colors and theme treatment should be applied to the resolved structure?"
   }
 }

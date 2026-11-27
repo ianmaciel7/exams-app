@@ -1,6 +1,6 @@
 # User Flows — v0.1.0
 
-Current stage: Mid-Fidelity Wireframe — in progress; 21 variants; owner visual approval pending.
+Current stage: High-Fidelity Wireframe — in progress; structural specification and visual review pending.
 
 ## Approved transitions
 
@@ -26,7 +26,7 @@ Automatically select the first available competition on entry. Browse ten questi
 
 Late responses must not restore discarded answers. Exact cancellation and ambiguous server outcomes require prototype validation. Competition-list Retry is distinct from question-list Retry. Empty competitions and phone overlay drawer are approved; exact behavior requires prototype validation.
 
-The six owner decisions are resolved. Exact responsive breakpoint, competition-list data source, safe-retry implementation and locale selection/default behavior require technical design and prototype validation. Exam-content translation is not implied. The navigation loading treatment remains a visual study. Native visual review, runtime, usability and accessibility validation remain pending.
+The six owner decisions are resolved. Exact responsive breakpoint, competition-list data source, safe-retry implementation and locale selection/default behavior require technical design and prototype validation. Exam-content translation is not implied. The navigation loading treatment remains a visual study. High-Fidelity structural and visual review, runtime, usability and accessibility validation remain pending.
 
 [Current state](../current-state.json) · [Product decisions](../product/README.md#approved-mid-fidelity-decisions--2026-11-27)
 

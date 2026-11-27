@@ -5,5 +5,5 @@
   "w": 540,
   "h": 360,
   "color": "yellow",
-  "text": "**Current inventory — 21 variants**\nCore: unanswered, list end, selected, correct, incorrect, question loading, empty list, load failure, submitting, submission failure/uncertainty, middle/last page, long content, empty competitions and navigation failure.\nStudies: narrow expanded/collapsed, hover, keyboard focus, phone closed/open overlay, navigation loading. Component studies: no-hover rail, localized phone, footer boundaries, tooltip and long-option feedback. Six owner decisions resolved. Native visual review pending; component specimens are not separate workspace variants."
+  "text": "**Current inventory — 21 variants**\nCore: unanswered, list end, selected, correct, incorrect, question loading, empty list, load failure, submitting, submission failure/uncertainty, middle/last page, long content, empty competitions and navigation failure.\nStudies: narrow expanded/collapsed, hover, keyboard focus, phone closed/open overlay, navigation loading. Component studies: no-hover rail, localized phone, footer boundaries, tooltip and long-option feedback. Six owner decisions resolved. Mid-Fidelity approved; High-Fidelity selects representative scenarios; component specimens are not separate workspace variants."
 }

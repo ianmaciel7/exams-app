@@ -42,7 +42,7 @@ jobs:
           NODE_PATH=/tmp/board-browser/node_modules node scripts/capture-board-portal.cjs
       - name: Verify capture provenance
         run: |
-          node -e 'const m=require("./_site/manifest.json"); if(m.commit!==process.env.GITHUB_SHA || m.boards.length!==10 || m.boards.some(b=>!b.images.light||!b.images.dark)) throw Error("Capture manifest mismatch")'
+          node -e 'const m=require("./_site/manifest.json"); if(m.commit!==process.env.GITHUB_SHA || m.boards.length!==11 || m.boards.some(b=>!b.images.light||!b.images.dark)) throw Error("Capture manifest mismatch")'
       - name: Build and validate native Playground
         timeout-minutes: 15
         run: NODE_PATH=/tmp/board-browser/node_modules node scripts/build-native-playground.cjs
