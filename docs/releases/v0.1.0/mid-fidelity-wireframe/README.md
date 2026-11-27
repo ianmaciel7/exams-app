@@ -117,3 +117,22 @@ Owner corrected the previous hide-at-rest rule after reviewing the collapsed rai
 ## Fidelity boundary review — 2026-11-27
 
 The current stage must resolve representative content, density, component placement, wrapping and responsive structure rather than reproduce all earlier screens or preempt the High-Fidelity specification. The 21 existing variants remain the recorded inventory; companion component studies are supporting evidence. Review the question and evidence delta against the preserved Sketch and Low-Fidelity snapshots before stage closure. Record representative scenario, finding, remaining uncertainty and next-stage question. Do not treat precise board coordinates as final production tokens. No stage progression or board deletion is approved by this documentation update. See [AGENTS.md](../../../../AGENTS.md) and the [canonical shared progression gate](https://github.com/ianmaciel7/exams-app-archive/blob/main/docs/references/ui-ux-research-sources/ux-design-activities-2026-11-25.md).
+
+## Final visual audit — 2026-11-27
+
+Source: [CI 46019545548](https://github.com/ianmaciel7/exams-app/actions/runs/46019545548), [commit d86973d](https://github.com/ianmaciel7/exams-app/commit/d86973ddcabfb685d97dc855a87a0f3ff4c9c80c), board-evidence artifact 15206983866. Manifest matches the reviewed source; 21 native state IDs × two board themes (42 captures). The board themes are not final app light/dark themes.
+
+| Representative states | Observed visual result |
+| --- | --- |
+| top, end, selected, correct, wrong | Stable question rhythm, left-aligned actions, explicit evaluated choice labels; pagination after the last item. |
+| loading, empty, failure, submitting, submit-failure | Distinct status/feedback and recovery actions; selection retained in the uncertain-outcome specimen. |
+| narrow, hover, focus, collapsed | Visible Ghost control at rest, distinct hover/focus, consistent rail geometry. |
+| no-items, sidebar-loading, sidebar-failure | Empty and error/dependency states remain distinct; manual Retry only on failure. |
+| long-content, page-middle, page-last | Wrapped choice and pagination boundaries visually coherent. |
+| mobile | Light shows the closed phone; Dark has missing right-hand portions of that same white artboard. Drawer overlay and associated specimens are present. **Blocking capture defect.** |
+
+The missing area has the board background where white paper should be present. At original PNG coordinate (2890, 650), Dark RGB is (25,25,25) and Light is (255,255,255). The matching native closed-phone frame is a fixed white 390 × 709 rectangle; the observed failure is in rendered evidence, not a confirmed source geometry defect. Do not redesign the mobile screen to compensate for a capture defect.
+
+Mitigation: wait for the compositor after camera changes, inspect the expected white gutter in the actual captured mobile PNG, retry incomplete evidence, and fail the capture job if all attempts are incomplete. A CSS-pixel fallback remains a genuine native capture but must be logged. Fresh CI and visual inspection of both themes are required before progression. This targeted capture check is not a substitute for human visual review, accessibility testing or a functional prototype.
+
+Stage question: are realistic content, density, state feedback, wrapping and critical responsive structures coherent? The desktop state family is visually coherent in these captures, but mobile evidence is not complete. Preserve approved Sketch and Low-Fidelity, retain 21 variants, and keep the current stage in progress. After a clean capture, obtain owner visual approval. The next stage should refine production visual hierarchy, design tokens, spacing and responsive/accessibility detail; do not implement behavior or infer approval here.

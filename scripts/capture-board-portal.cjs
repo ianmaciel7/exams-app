@@ -17,6 +17,48 @@ const boards = [
 const urls = Object.fromEntries(fs.readFileSync('/tmp/board-urls','utf8').split(/\r?\n/).map(line=>line.match(/^(\w+): (http\S+)$/)).filter(Boolean).map(m=>[m[1],m[2]]));
 
 const sketchStates=['top','end','selected','correct','wrong','loading','empty','failure'];
+// Native wheel gestures can finish before the compositor has painted all tiles.
+// Keep the full-resolution screenshot, retry a missing paper region, and fail
+// rather than publish a known incomplete mobile state.
+async function captureSettled(page,path,mobileRect){
+  for(let attempt=0;attempt<(mobileRect?4:1);attempt++){
+    await page.waitForTimeout(200+attempt*250);
+    await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+    const png=await page.screenshot({scale:attempt===3?'css':'device'});
+    if(mobileRect){
+      const failures=await page.evaluate(async({encoded,rect})=>{
+        const img=new Image();
+        img.src='data:image/png;base64,'+encoded;
+        await img.decode();
+        const canvas=document.createElement('canvas');
+        canvas.width=img.naturalWidth; canvas.height=img.naturalHeight;
+        const ctx=canvas.getContext('2d',{willReadFrequently:true});
+        ctx.drawImage(img,0,0);
+        const sx=canvas.width/window.innerWidth,sy=canvas.height/window.innerHeight;
+        // Fixed white paper: sample inside the right gutter, not text or borders.
+        // This specifically catches the missing Dark tile observed in CI 46019545548.
+        return [.15,.30,.45,.60,.75,.88].flatMap(f=>{
+          const x=Math.round((rect.x+rect.w*.95)*sx);
+          const y=Math.round((rect.y+rect.h*f)*sy);
+          if(x<3||y<3||x+3>=canvas.width||y+3>=canvas.height)return [{f,reason:'outside screenshot'}];
+          const d=ctx.getImageData(x-3,y-3,7,7).data;
+          let paper=0;
+          for(let i=0;i<d.length;i+=4)if(d[i]>=235&&d[i+1]>=235&&d[i+2]>=235)paper++;
+          return paper>=40?[]:[{f,paper}];
+        });
+      },{encoded:png.toString('base64'),rect:mobileRect});
+      if(failures.length){
+        console.warn('Mobile paper capture incomplete',path,'attempt',attempt+1,JSON.stringify(failures));
+        continue;
+      }
+      if(attempt===3)console.warn('Mobile capture used CSS-pixel fallback',path);
+    }
+    fs.writeFileSync(path,png);
+    return;
+  }
+  throw Error('Mobile capture has missing paper tiles after retries: '+path);
+}
+
 async function captureSketchStates(page,theme,board){
   const states=board.id==='midfidelity'?midFidelity.states:board.id==='lowfidelity'?[...sketchStates,'narrow']:sketchStates;
   board.states ||= states.map(id=>({id,images:{}}));
@@ -55,7 +97,13 @@ async function captureSketchStates(page,theme,board){
     const c=await camera();
     if(Math.abs(c.scale-desired)>0.08||Math.abs(c.x+cx*c.scale-box.width/2)>25||Math.abs(c.y+cy*c.scale-box.height/2)>25)throw Error('Native camera did not frame '+states[i]+': '+JSON.stringify(c));
     const path='boards/'+board.id+'-'+states[i]+'-'+theme+'.png';
-    await page.screenshot({path:'_site/'+path});
+    let mobileRect;
+    if(mobileStudy){
+      const f=midFidelity.studies().mobile_frame;
+      if(!f)throw Error('Missing mobile frame geometry');
+      mobileRect={x:box.x+c.x+f.x*c.scale,y:box.y+c.y+f.y*c.scale,w:f.w*c.scale,h:f.h*c.scale};
+    }
+    await captureSettled(page,'_site/'+path,mobileRect);
     board.states[i].images[theme]=path;
     console.log('Sketch state',states[i],theme,c.scale);
   }

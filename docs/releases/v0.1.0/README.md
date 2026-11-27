@@ -40,9 +40,9 @@ The six owner decisions are resolved. Exact responsive breakpoint, competition-l
 
 ## Capture evidence
 
-Last verified successful capture: [07deedf](https://github.com/ianmaciel7/exams-app/commit/07deedfafc5e5110dafdf70073c21a91358ab1e0) · [CI 46012468323](https://github.com/ianmaciel7/exams-app/actions/runs/46012468323). Manifest verified: 10 native boards, both Light and Dark. This is evidence for that commit only, not visual approval of the current revision.
+Last verified successful capture: [d86973d](https://github.com/ianmaciel7/exams-app/commit/d86973ddcabfb685d97dc855a87a0f3ff4c9c80c) · [CI 46019545548](https://github.com/ianmaciel7/exams-app/actions/runs/46019545548). Manifest verified: 10 native boards, both Light and Dark. This is evidence for that commit only, not visual approval of the current revision.
 
-Last recorded Mid-Fidelity review requiring changes: [07deedf](https://github.com/ianmaciel7/exams-app/commit/07deedfafc5e5110dafdf70073c21a91358ab1e0) · [CI 46012468323](https://github.com/ianmaciel7/exams-app/actions/runs/46012468323) — Cross-state review found inconsistent mobile geometry, tooltip anatomy, drawer underlay, pagination boundaries and long-option feedback. Corrections in fe68a48 require fresh visual review; not an approval.
+Last recorded Mid-Fidelity review requiring changes: [d86973d](https://github.com/ianmaciel7/exams-app/commit/d86973ddcabfb685d97dc855a87a0f3ff4c9c80c) · [CI 46019545548](https://github.com/ianmaciel7/exams-app/actions/runs/46019545548) — Reviewed all 21 Mid-Fidelity states in both board themes (42 captures). The closed-phone artboard in Dark has missing right-hand tiles; Light renders the matching area. Other inspected states preserve the intended visual structure. Capture regression blocks progression; new evidence and owner visual approval required.
 
 Last recorded planning-board review requiring changes: [898d493](https://github.com/ianmaciel7/exams-app/commit/898d493e56bbaefb49095eb5a2648ae463043359) · [CI 46005686904](https://github.com/ianmaciel7/exams-app/actions/runs/46005686904) — Owner identified crowded planning-board elements; layout corrections made in 165f554.
 

@@ -16,9 +16,9 @@
     }
   },
   "lastReviewedCapture": {
-    "commit": "07deedfafc5e5110dafdf70073c21a91358ab1e0",
-    "run": 46012468323,
-    "assessment": "Cross-state review found inconsistent mobile geometry, tooltip anatomy, drawer underlay, pagination boundaries and long-option feedback. Corrections in fe68a48 require fresh visual review; not an approval."
+    "commit": "d86973ddcabfb685d97dc855a87a0f3ff4c9c80c",
+    "run": 46019545548,
+    "assessment": "Reviewed all 21 Mid-Fidelity states in both board themes (42 captures). The closed-phone artboard in Dark has missing right-hand tiles; Light renders the matching area. Other inspected states preserve the intended visual structure. Capture regression blocks progression; new evidence and owner visual approval required."
   },
   "status": "Current stage: Mid-Fidelity Wireframe — in progress; 21 variants; owner visual approval pending.",
   "approved": "Automatically select the first available competition on entry. Browse ten questions per page; pagination follows the last question and resets scroll to the top. Select one option and explicitly submit with Answer. Correct and incorrect feedback identifies the correct choice and, when wrong, the user's choice. A confirmed answer is read-only on the current page. Changing page or competition, or closing the application, discards responses. On submission failure keep the choice and allow another submission; prevent duplicates while pending. Retry reloads a failed question list. A Ghost sidebar trigger is available across workspace states. On desktop, the collapse and expand icons remain visible at pointer rest with no button background (Ghost). Hover adds subtle surface feedback and keyboard focus adds a visible outline without moving the layout. Activation, not hover, expands the sidebar. Keep the same visible accessible trigger on touch/no-hover devices. Collapse/expand preserves current page, selection, scroll context and answers. Questions follow original exam order. If no competitions are available, show an empty-state message without an action button. On phones, navigation opens as a drawer over the question content rather than shifting it. If competition-list loading fails, show an error and manual Retry. If an answer outcome cannot be confirmed, retain the selected option and permit a safe retry without duplicate evaluation. Support the application interface in Brazilian Portuguese and English.",
@@ -313,10 +313,10 @@
     ]
   ],
   "lastSuccessfulCapture": {
-    "commit": "07deedfafc5e5110dafdf70073c21a91358ab1e0",
-    "run": 46012468323,
-    "artifactId": 15204044140,
-    "generatedAt": "2026-11-27T14:03:53.448Z",
+    "commit": "d86973ddcabfb685d97dc855a87a0f3ff4c9c80c",
+    "run": 46019545548,
+    "artifactId": 15206983866,
+    "generatedAt": "2026-11-27T14:51:05.150Z",
     "boardCount": 10,
     "themes": [
       "dark",
