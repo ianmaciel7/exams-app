@@ -18,7 +18,7 @@
   "lastReviewedCapture": {
     "commit": "670a2d17120e344e9f7ccc8632d7c780d00da41c",
     "run": 46004860284,
-    "assessment": "Focus specimen reviewed in the native capture; nested filled shapes produced a bulky outline. Owner requested correction."
+    "assessment": "Mid-Fidelity focus treatment reviewed; owner requested correction. Not an approval."
   },
   "status": "Current stage: Mid-Fidelity Wireframe — in progress; 21 variants; native capture and owner visual review pending.",
   "approved": "Automatically select the first available competition on entry. Browse ten questions per page; pagination follows the last question and resets scroll to the top. Select one option and explicitly submit with Answer. Correct and incorrect feedback identifies the correct choice and, when wrong, the user's choice. A confirmed answer is read-only on the current page. Changing page or competition, or closing the application, discards responses. On submission failure keep the choice and allow another submission; prevent duplicates while pending. Retry reloads a failed question list. A Ghost sidebar trigger is available across workspace states. On desktop, the collapse icon remains visible while expanded; when collapsed, the expand icon is hidden at pointer rest and revealed on rail/header hover or keyboard focus, without moving the layout. Activation, not hover, expands the sidebar. A visible accessible alternative is required on touch/no-hover devices. Collapse/expand preserves current page, selection, scroll context and answers.",
@@ -29,5 +29,291 @@
     "screen-inventory": "**Current inventory — 21 variants**\nCore: unanswered, list end, selected, correct, incorrect, question loading, empty questions, load failure, submitting, submission failure, middle/last page, long content.\nStudies: expanded/collapsed narrow workspace, hover, keyboard focus, empty sidebar, phone, sidebar loading/failure.\nGhost trigger available in every variant; hidden at collapsed pointer rest and revealed on hover/focus. External component specimens distinguish default, hover, pressed and single-outline focus; collapsed hover and keyboard focus are separate. The three latest studies and empty sidebar remain proposals. Native visual review pending.",
     "user-flows": "**Current flows — v0.1.0**\nEntry -> first available item -> question loading -> list / empty / failure.\nSelect -> Answer -> pending -> confirmed and locked OR failure (choice retained; Answer enabled).\nPage or competition change -> discard current answers -> load target; page scroll resets. Exit -> discard answers. Collapsed pointer hover/focus -> reveal expand control; activate -> expand; preserve current context. Touch/no-hover requires visible alternative. Ten questions per page. Question-list Retry is distinct from proposed navigation-list Retry. Phone drawer, uncertain outcomes and keyboard/touch behavior remain open."
   },
-  "stageNote": "**v0.1.0 — In progress**\nProduct, Information Architecture, Screen Inventory and User Flows: synchronized; open decisions remain.\nSketch: complete for progression (94072ce; 8 variants).\nLow-Fidelity Wireframe: complete for progression (e70dbaf; 9 variants).\nMid-Fidelity Wireframe: in progress (21 variants); alignment, action-state and focus refinement applied; native capture and owner visual review pending.\nHigh-Fidelity, Mockup, Interactive Prototype and Usability Testing: not started.\nSource: docs/releases/v0.1.0/README.md"
+  "stageNote": "**v0.1.0 — In progress**\nProduct, Information Architecture, Screen Inventory and User Flows: synchronized; open decisions remain.\nSketch: complete for progression (94072ce; 8 variants).\nLow-Fidelity Wireframe: complete for progression (e70dbaf; 9 variants).\nMid-Fidelity Wireframe: in progress (21 variants); owner visual review pending.\nHigh-Fidelity, Mockup, Interactive Prototype and Usability Testing: not started.\nSource: docs/releases/v0.1.0/current-state.json",
+  "stages": [
+    {
+      "name": "Product",
+      "status": "In progress · synchronized",
+      "board": "product",
+      "artifactId": "art_examappproductv010"
+    },
+    {
+      "name": "Information Architecture",
+      "status": "In progress · synchronized",
+      "board": "information-architecture",
+      "artifactId": "art_examappinformationarchitecturev010"
+    },
+    {
+      "name": "Screen Inventory",
+      "status": "In progress · 21 variants",
+      "board": "screen-inventory",
+      "artifactId": "art_examappscreeninventoryv010"
+    },
+    {
+      "name": "User Flows",
+      "status": "In progress · synchronized",
+      "board": "user-flows",
+      "artifactId": "art_examappuserflowsv010"
+    },
+    {
+      "name": "Sketch",
+      "status": "Complete for progression · 8 variants",
+      "board": "sketch",
+      "artifactId": "art_examappsketchv010"
+    },
+    {
+      "name": "Low-Fidelity Wireframe",
+      "status": "Complete for progression · 9 variants",
+      "board": "low-fidelity-wireframe",
+      "artifactId": "art_examapplowfidelityv010"
+    },
+    {
+      "name": "Mid-Fidelity Wireframe",
+      "status": "In progress · 21 variants",
+      "board": "mid-fidelity-wireframe",
+      "artifactId": "art_examappmidfidelityv010"
+    },
+    {
+      "name": "High-Fidelity Wireframe",
+      "status": "Not started",
+      "board": null,
+      "artifactId": null
+    },
+    {
+      "name": "Mockup",
+      "status": "Not started",
+      "board": null,
+      "artifactId": null
+    },
+    {
+      "name": "Interactive Prototype",
+      "status": "Not started",
+      "board": null,
+      "artifactId": null
+    },
+    {
+      "name": "Usability Testing",
+      "status": "Not started",
+      "board": null,
+      "artifactId": null
+    }
+  ],
+  "inventory": [
+    {
+      "id": "top",
+      "category": "Core — unanswered"
+    },
+    {
+      "id": "end",
+      "category": "Core — first page footer"
+    },
+    {
+      "id": "selected",
+      "category": "Core — before submission"
+    },
+    {
+      "id": "correct",
+      "category": "Core — correct and locked"
+    },
+    {
+      "id": "wrong",
+      "category": "Core — incorrect and locked"
+    },
+    {
+      "id": "loading",
+      "category": "Question lifecycle — loading"
+    },
+    {
+      "id": "empty",
+      "category": "Question lifecycle — empty list"
+    },
+    {
+      "id": "failure",
+      "category": "Question lifecycle — Retry"
+    },
+    {
+      "id": "narrow",
+      "category": "Responsive study — expanded"
+    },
+    {
+      "id": "hover",
+      "category": "Interaction study — hover"
+    },
+    {
+      "id": "focus",
+      "category": "Interaction study — focus"
+    },
+    {
+      "id": "submitting",
+      "category": "Core — submission pending"
+    },
+    {
+      "id": "submit-failure",
+      "category": "Core — submission recovery"
+    },
+    {
+      "id": "no-items",
+      "category": "Proposal — empty sidebar"
+    },
+    {
+      "id": "collapsed",
+      "category": "Responsive study — collapsed"
+    },
+    {
+      "id": "long-content",
+      "category": "Content stress test"
+    },
+    {
+      "id": "page-middle",
+      "category": "Pagination — middle"
+    },
+    {
+      "id": "page-last",
+      "category": "Pagination — last"
+    },
+    {
+      "id": "mobile",
+      "category": "Proposal — phone, closed drawer"
+    },
+    {
+      "id": "sidebar-loading",
+      "category": "Proposal — navigation loading"
+    },
+    {
+      "id": "sidebar-failure",
+      "category": "Proposal — navigation failure"
+    }
+  ],
+  "decisions": [
+    [
+      "Entry",
+      "First available competition"
+    ],
+    [
+      "Pagination",
+      "10 questions per page; reset scroll"
+    ],
+    [
+      "Answer",
+      "Explicit confirmation; lock after evaluation"
+    ],
+    [
+      "Navigation",
+      "Discard answers on page/competition change"
+    ],
+    [
+      "Session",
+      "No persistence across sessions"
+    ],
+    [
+      "Submission failure",
+      "Keep choice; retry Answer; prevent duplicates"
+    ],
+    [
+      "Sidebar",
+      "Ghost trigger; hover/focus reveal collapsed"
+    ],
+    [
+      "Collapse",
+      "Preserve selection, page, scroll and answers"
+    ],
+    [
+      "Question load failure",
+      "Manual Retry reloads selected list"
+    ],
+    [
+      "Feedback",
+      "Correct option and user's wrong choice identified"
+    ]
+  ],
+  "flows": [
+    [
+      "Enter",
+      "Select first available competition → load"
+    ],
+    [
+      "Load succeeds",
+      "Questions or empty list"
+    ],
+    [
+      "Load fails",
+      "Manual Retry reloads questions"
+    ],
+    [
+      "Select option",
+      "Enable Answer"
+    ],
+    [
+      "Answer",
+      "Pending; prevent duplicate submission"
+    ],
+    [
+      "Evaluation succeeds",
+      "Correct/incorrect; lock answer"
+    ],
+    [
+      "Submission fails",
+      "Retain choice; enable Answer"
+    ],
+    [
+      "Page/competition change",
+      "Discard prior answers; reset page scroll on page change"
+    ],
+    [
+      "Close application",
+      "Discard session answers"
+    ],
+    [
+      "Collapse / expand",
+      "Preserve context and answers"
+    ],
+    [
+      "Collapsed hover / focus",
+      "Reveal icon; explicit activation opens"
+    ]
+  ],
+  "lastSuccessfulCapture": {
+    "commit": "165f554320d9077545296c0e252189bb5d0f22e6",
+    "run": 46006601771,
+    "artifactId": 15200629004,
+    "generatedAt": "2026-11-27T13:23:42.300Z",
+    "boardCount": 10,
+    "themes": [
+      "dark",
+      "light"
+    ],
+    "verifiedManifest": true
+  },
+  "lastReviewedPlanningCapture": {
+    "commit": "898d493e56bbaefb49095eb5a2648ae463043359",
+    "run": 46005686904,
+    "assessment": "Owner identified crowded planning-board elements; layout corrections made in 165f554."
+  },
+  "pendingDecisions": [
+    [
+      "Question ordering",
+      "Open"
+    ],
+    [
+      "Empty sidebar presentation",
+      "Proposal"
+    ],
+    [
+      "Phone drawer and breakpoint",
+      "Proposal"
+    ],
+    [
+      "Competition-list data source and recovery",
+      "Proposal"
+    ],
+    [
+      "Ambiguous submission outcome",
+      "Open"
+    ],
+    [
+      "Production localization",
+      "Open"
+    ]
+  ],
+  "hubScope": "One competition-question workspace. First available competition selected automatically. Ten questions per page. Explicit Answer, locked evaluation, retry and temporary responses. Ghost navigation; collapsed desktop reveal on hover/focus."
 }
