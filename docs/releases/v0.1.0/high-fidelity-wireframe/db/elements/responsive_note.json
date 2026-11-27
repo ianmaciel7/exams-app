@@ -1,9 +1,9 @@
 {
   "type": "note",
   "x": 3160,
-  "y": 4180,
+  "y": 4360,
   "w": 1390,
   "h": 90,
   "color": "yellow",
-  "text": "Ranges are wireframe proposals. Start testing at 1024 CSS px and let content fit determine the breakpoint. Test resize, keyboard, screen reader, zoom and focus in the prototype. Static specimens do not establish accessibility conformance."
+  "text": "Widths and breakpoints are wireframe proposals. Start prototype testing at 1024 CSS px and validate 768, zoom, keyboard, screen reader, inert backdrop and focus restoration in the prototype. Static specimens do not establish accessibility conformance."
 }

@@ -1,9 +1,9 @@
 {
   "type": "note",
   "x": 1640,
-  "y": 2856,
+  "y": 3116,
   "w": 1520,
   "h": 90,
   "color": "yellow",
-  "text": "Keep a stable target and a visible focus ring. On the collapsed desktop rail, hover and focus reveal the glyph and supplemental action tooltip. Keep the glyph visible on no-hover devices. Verify localized action names, expanded state, and explicit activation in the prototype."
+  "text": "Collapsed rail Rest shows ONLY the compact provisional Exam App mark on the shared header axis; hover/focus/pressed swap the expand glyph into the exact same 44 × 44 slot without layout shift. Touch/no-hover shows expand directly. Distinct comp0/comp1 cues distinguish competition shortcuts."
 }

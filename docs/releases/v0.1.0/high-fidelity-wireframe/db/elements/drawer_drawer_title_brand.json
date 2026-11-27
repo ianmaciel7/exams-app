@@ -1,13 +1,9 @@
 {
-  "type": "shape",
-  "kind": "rect",
+  "type": "image",
   "x": 3026,
   "y": 96,
   "w": 20,
   "h": 20,
-  "color": "#f1f1f1",
-  "text": "",
-  "hollow": true,
-  "stroke": "#777777",
-  "solid": true
+  "src": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2020%2020%22%3E%3Crect%20width%3D%2220%22%20height%3D%2220%22%20rx%3D%224%22%20fill%3D%22%23464646%22%2F%3E%3Cpath%20d%3D%22M5.5%205H14.5M5.5%205V15H14.5V11.8H10.1M8.3%208.4H14.5%22%20fill%3D%22none%22%20stroke%3D%22%23ffffff%22%20stroke-width%3D%221.6%22%20stroke-linecap%3D%22square%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E",
+  "by": "agent"
 }

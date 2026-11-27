@@ -1,8 +1,8 @@
 {
   "type": "text",
   "x": 3370,
-  "y": 3903,
-  "text": "Move visible focus into the drawer and keep it inside. Escape or visible Close restores focus to the trigger.",
+  "y": 4083,
+  "text": "Drawer moves visible focus inside, traps focus and makes background inert; Escape or Close restores focus to trigger.",
   "size": "small",
   "color": "#262626",
   "wrap": 1130

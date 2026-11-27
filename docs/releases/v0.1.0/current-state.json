@@ -469,8 +469,15 @@
       "phone-open"
     ],
     "status": "in progress",
-    "review": "Prior 348f8bf overview captures reviewed in both themes; redlines, anatomy and responsive specification added. New native capture review and owner approval pending.",
+    "review": "Native High-Fidelity generator updated (776 elements): flush square App Shell seams, same-center collapsed rail Logo-to-Icon swap, pagination/nav/option interaction studies, 320/390 EN/pt-BR parity, desktop nonmodal answer-loss warning, 5-option loading skeleton, and collision-free feedback wrapping (0 view-context overlap issues). Companion #10 design/motion studies and #15/#16/#18 specs added. New rendered Light/Dark capture review and owner visual approval remain pending.",
     "inventoryReference": "21 approved Mid-Fidelity variants",
+    "relatedArtifacts": {
+      "safeRetrySpec": "docs/releases/v0.1.0/high-fidelity-wireframe/safe-retry-spec.md",
+      "datasetAssessment": "docs/releases/v0.1.0/high-fidelity-wireframe/dataset-and-content-assessment.md",
+      "evidencePacket": "docs/releases/v0.1.0/high-fidelity-wireframe/evidence-packet.md",
+      "workspaceMockup": "designs/exam-app-workspace-mockup/",
+      "workspaceMotion": "designs/exam-app-workspace-motion/"
+    },
     "nextQuestion": "Mockup: which visual identity, typography, semantic colors and theme treatment should be applied to the resolved structure?",
     "coverageGate": {
       "version": 1,
@@ -504,7 +511,14 @@
             "pagination1_page3",
             "pagination2_next",
             "mobile_footer0_prev",
-            "mobile_footer2_next"
+            "mobile_footer2_next",
+            "pagination_state_rest",
+            "pagination_state_hover",
+            "pagination_state_pressed",
+            "pagination_state_focus_ring",
+            "pagination_state_current",
+            "pagination_state_disabled",
+            "pagination_single_end"
           ],
           "status": "represented",
           "reviewEvidence": "Mapped to editable native source; latest rendered visual review pending."
@@ -552,6 +566,7 @@
           "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
           "elementIds": [
             "question_loading_heading0",
+            "question_loading_s0",
             "question_loading_sk_button0"
           ],
           "status": "represented",
@@ -641,7 +656,9 @@
           "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
           "elementIds": [
             "desktop_sidebar",
-            "desktop_nav_sel"
+            "desktop_nav_sel",
+            "desktop_risk_warning",
+            "rail_exp_toggle"
           ],
           "status": "represented",
           "reviewEvidence": "Mapped to editable native source; latest rendered visual review pending."
@@ -652,9 +669,13 @@
           "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
           "elementIds": [
             "collapsed_sidebar",
+            "collapsed_brand",
+            "rail_brand0",
+            "rail_toggle1",
             "rail_toggle2",
-            "collapsed_nav_sel",
-            "rail_toggle3"
+            "rail_toggle3",
+            "rail_toggle4",
+            "collapsed_nav_sel"
           ],
           "status": "represented",
           "reviewEvidence": "Mapped to editable native source; latest rendered visual review pending."
@@ -669,7 +690,13 @@
             "control_focus_ring",
             "control_disabled",
             "control_pending",
-            "retry_focus_ring"
+            "retry_focus_ring",
+            "action_tip_bubble",
+            "nav_state_active_hover",
+            "nav_state_active_focus_ring",
+            "option_state_selected_hover_row",
+            "option_state_locked_row",
+            "option_state_pending_row"
           ],
           "status": "represented",
           "reviewEvidence": "Mapped to editable native source; latest rendered visual review pending."
@@ -693,7 +720,11 @@
             "long_option1",
             "long_feedback1",
             "long_feedback4",
-            "long_locked"
+            "long_locked",
+            "long320_o4",
+            "long320_f1",
+            "long320_f4",
+            "long320_locked"
           ],
           "status": "represented",
           "reviewEvidence": "Mapped to editable native source; latest rendered visual review pending."
@@ -730,6 +761,7 @@
           "elementIds": [
             "desktop_q_title",
             "phone_q_title",
+            "phone_en_q_title",
             "phone320_q_title"
           ],
           "status": "represented",
@@ -789,7 +821,14 @@
         "radio": 18,
         "actionWidth": 112,
         "actionHeight": 44,
-        "focusOffset": 5
+        "focusOffset": 5,
+        "railTarget": 44,
+        "railGlyph": 20
+      },
+      "surfaceRadius": {
+        "shell": 0,
+        "control": 6,
+        "overlay": 12
       },
       "type": {
         "question": "16/24 semibold",
@@ -846,7 +885,11 @@
             "anatomy_label_status",
             "anatomy_label_result",
             "anatomy_action_w_label",
-            "anatomy_nav_row"
+            "anatomy_nav_row",
+            "option_state_selected_hover_row",
+            "option_state_locked_row",
+            "option_state_pending_row",
+            "nav_state_active"
           ]
         },
         {

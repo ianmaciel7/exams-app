@@ -1,9 +1,9 @@
 {
   "type": "text",
-  "x": 150,
-  "y": 2465,
+  "x": 52,
+  "y": 2610,
   "text": "Correct",
   "size": "small",
   "color": "#262626",
-  "wrap": 312
+  "wrap": 410
 }

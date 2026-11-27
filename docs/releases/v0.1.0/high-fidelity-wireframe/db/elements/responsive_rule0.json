@@ -1,9 +1,9 @@
 {
   "type": "text",
   "x": 3810,
-  "y": 3320,
-  "text": "Expanded 272 or collapsed 64\n40 inset · max 740\nDesktop / keyboard and pointer",
+  "y": 3496,
+  "text": "Expanded 272 (content 672–740) or collapsed 64 (content 740)\n40 inset · main pane scrolls · zero horizontal overflow\nDesktop / keyboard and pointer; prototype testing starts at 1024 CSS px",
   "size": "body",
   "color": "#262626",
-  "wrap": 690
+  "wrap": 710
 }

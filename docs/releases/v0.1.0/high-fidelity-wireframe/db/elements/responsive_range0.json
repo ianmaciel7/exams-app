@@ -1,8 +1,8 @@
 {
   "type": "text",
   "x": 3190,
-  "y": 3300,
-  "text": "≥ 1024",
+  "y": 3480,
+  "text": "≥ 1024 (initial threshold)",
   "size": "large",
   "color": "#262626"
 }

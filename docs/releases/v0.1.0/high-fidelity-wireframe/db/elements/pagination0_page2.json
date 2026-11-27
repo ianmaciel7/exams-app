@@ -2,11 +2,13 @@
   "type": "shape",
   "kind": "rounded",
   "x": 794,
-  "y": 1287,
+  "y": 1284,
   "w": 44,
   "h": 44,
   "color": "#ffffff",
   "text": "2",
   "size": "small",
-  "ink": "#262626"
+  "ink": "#262626",
+  "stroke": "#cccccc",
+  "solid": true
 }

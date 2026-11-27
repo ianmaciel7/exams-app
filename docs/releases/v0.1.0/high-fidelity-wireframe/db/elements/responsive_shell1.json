@@ -1,13 +1,9 @@
 {
-  "type": "shape",
-  "kind": "rect",
+  "type": "image",
   "x": 3190,
-  "y": 3486,
+  "y": 3666,
   "w": 448,
   "h": 92,
-  "color": "#ffffff",
-  "text": "",
-  "hollow": true,
-  "stroke": "#777777",
-  "solid": true
+  "src": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20448%2092%22%3E%3Crect%20x%3D%220.5%22%20y%3D%220.5%22%20width%3D%22447%22%20height%3D%2291%22%20fill%3D%22%23ffffff%22%20stroke%3D%22%23777777%22%20stroke-width%3D%221%22%2F%3E%3C%2Fsvg%3E",
+  "by": "agent"
 }

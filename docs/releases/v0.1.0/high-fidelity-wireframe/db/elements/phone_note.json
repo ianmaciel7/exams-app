@@ -2,8 +2,8 @@
   "type": "note",
   "x": 2540,
   "y": 900,
-  "w": 1180,
+  "w": 1610,
   "h": 150,
   "color": "yellow",
-  "text": "Phone gutter 20; 44-unit option and action rhythm; drawer clamped at 304 or viewport minus 56. Q2 intentionally continues below the viewport: see the separate phone continuation. Underlay generated from the same complete visible content; no fabricated replacement. Locale chrome only."
+  "text": "Phone gutter 20; 44-unit option and action rhythm; drawer min(304, width − 56) with flush left edge and rounded inner edge. EN and pt-BR are compared at identical 390 width plus 320 minimum width. Open/close triggers occupy identical coordinates with distinct contextual glyphs."
 }

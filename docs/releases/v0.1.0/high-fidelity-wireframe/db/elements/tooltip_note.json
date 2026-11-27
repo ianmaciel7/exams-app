@@ -1,9 +1,9 @@
 {
   "type": "text",
-  "x": 2150,
-  "y": 2726,
-  "text": "Hover/focus reveals full label; phone wraps instead.",
-  "size": "body",
-  "color": "#262626",
-  "wrap": 920
+  "x": 2348,
+  "y": 2902,
+  "text": "Hover/focus reveals full label & supplementary action tooltip; phone wraps instead.",
+  "size": "small",
+  "color": "#626262",
+  "wrap": 780
 }

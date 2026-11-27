@@ -1,9 +1,9 @@
 {
   "type": "note",
   "x": 3280,
-  "y": 2958,
-  "w": 1020,
+  "y": 3098,
+  "w": 1380,
   "h": 100,
   "color": "yellow",
-  "text": "Restore all five approved alternatives. Hanging-indent text wraps under the answer text, with discrete feedback on its own line. Locked non-evaluated alternatives use subdued text, no full-width fills. Verify actual text bounds before approval."
+  "text": "All five approved alternatives with hanging indent and discrete below-option feedback. Both 1020 desktop and 320 phone widths prevent Correct / Your answer / Answer locked collisions with wrapped stems and options."
 }

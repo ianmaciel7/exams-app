@@ -1,9 +1,9 @@
 {
   "type": "note",
   "x": 450,
-  "y": 2020,
+  "y": 2100,
   "w": 840,
-  "h": 115,
+  "h": 130,
   "color": "yellow",
-  "text": "Pagination follows the final question; ten per page in original exam order. Hide pagination for a single page. On multiple pages, disable unavailable boundary controls and reset scroll on page change. Show the inline warning near available navigation only when selected or evaluated answers would be cleared. Check whether people notice and understand it in the prototype."
+  "text": "Ten questions per page in original exam order. Hide pagination for a single page. Disable unavailable boundary controls and reset scroll on page change. Show the inline warning near navigation only when answers would be discarded. Current page uses bold label + fill + border (not color alone)."
 }

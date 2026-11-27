@@ -1,0 +1,50 @@
+{
+  "v": 3,
+  "createdOnFiles": { "v": 1, "at": "2026-11-27T18:40:00Z" },
+  "title": "Exam App — Workspace Mockup (Provisional Exploration)",
+  "launch": { "view": "canvas" },
+  "pages": [],
+  "boards": {
+    "Main.dc.html": { "x": 0, "y": 120, "w": 1280, "h": 900, "title": "Desktop Expanded · Light", "expand": "fill", "is_interactive": true },
+    "Desktop-Collapsed-Light.dc.html": { "x": 1360, "y": 120, "w": 1024, "h": 900, "title": "Desktop Collapsed Rail · Light", "expand": "fill", "is_interactive": true },
+    "Mobile-Workspace-Light.dc.html": { "x": 2464, "y": 120, "w": 390, "h": 844, "title": "Mobile Closed · Light", "radius": 40, "is_interactive": true },
+    "Mobile-Drawer-Light.dc.html": { "x": 2934, "y": 120, "w": 390, "h": 844, "title": "Mobile Drawer Open · Light", "radius": 40, "is_interactive": true },
+    "Desktop-Expanded-Dark.dc.html": { "x": 0, "y": 1320, "w": 1280, "h": 900, "title": "Desktop Expanded · Dark", "expand": "fill", "is_interactive": true },
+    "Desktop-Collapsed-Dark.dc.html": { "x": 1360, "y": 1320, "w": 1024, "h": 900, "title": "Desktop Collapsed Rail · Dark", "expand": "fill", "is_interactive": true },
+    "Mobile-Workspace-Dark.dc.html": { "x": 2464, "y": 1320, "w": 390, "h": 844, "title": "Mobile Closed · Dark", "radius": 40, "is_interactive": true },
+    "Mobile-Drawer-Dark.dc.html": { "x": 2934, "y": 1320, "w": 390, "h": 844, "title": "Mobile Drawer Open · Dark", "radius": 40, "is_interactive": true },
+    "Collapsed-Rail-States.dc.html": { "x": 0, "y": 2520, "w": 1200, "h": 680, "title": "Rail Swap & Feedback Tokens · Light / Dark" }
+  },
+  "order": [
+    "Main.dc.html",
+    "Desktop-Collapsed-Light.dc.html",
+    "Mobile-Workspace-Light.dc.html",
+    "Mobile-Drawer-Light.dc.html",
+    "Desktop-Expanded-Dark.dc.html",
+    "Desktop-Collapsed-Dark.dc.html",
+    "Mobile-Workspace-Dark.dc.html",
+    "Mobile-Drawer-Dark.dc.html",
+    "Collapsed-Rail-States.dc.html"
+  ],
+  "notes": {
+    "t_light": { "kind": "title1", "x": 0, "y": -120, "text": "Light Theme · Provisional Workspace Exploration", "maxW": 3324 },
+    "t_dark": { "kind": "title1", "x": 0, "y": 1080, "text": "Dark Theme · Provisional Workspace Exploration", "maxW": 3324 },
+    "t_states": { "kind": "title1", "x": 0, "y": 2280, "text": "Collapsed Rail Swap & Answer Feedback · Provisional", "maxW": 1200 },
+    "n_provisional": {
+      "x": 1280,
+      "y": 2520,
+      "w": 460,
+      "text": "Provisional exploration (Issue #10) applying designs/exam-app-identity tokens to the v0.1.0 High-Fidelity structure. Pending owner identity approval and High-Fidelity Wireframe closure. Keyboard order, focus containment, screen reader announcements, and responsive breakpoints require Interactive Prototype verification.",
+      "color": "orange"
+    }
+  },
+  "designSystems": [
+    {
+      "title": "Exam App",
+      "namespace": "examapp",
+      "artifact": "designs/exam-app-identity",
+      "version": null,
+      "copiedAt": "2026-11-27T18:40:00Z"
+    }
+  ]
+}

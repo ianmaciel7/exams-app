@@ -1,8 +1,8 @@
 {
   "type": "text",
   "x": 3370,
-  "y": 4074,
-  "text": "pt-BR and en interface strings; question content stays in source language. Check long labels.",
+  "y": 4254,
+  "text": "pt-BR and en interface strings tested at identical widths; question content stays in source language.",
   "size": "small",
   "color": "#262626",
   "wrap": 1130

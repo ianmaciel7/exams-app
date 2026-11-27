@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Desktop Expanded · Light</title>
+  <script src="./support.js"></script>
+  <link rel="stylesheet" href="ds/examapp/tokens.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; font-family: var(--font-sans); }
+    button:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+  </style>
+</helmet>
+<div data-theme="light" style="display: flex; flex-wrap: wrap; min-height: 900px; width: 100%; box-sizing: border-box; background: var(--ground); color: var(--ink); font-family: var(--font-sans);">
+  <aside aria-label="Competitions" style="width: {{sidebarW}}; flex-shrink: 0; box-sizing: border-box; background: color-mix(in srgb, var(--ink) 4%, var(--ground)); border-radius: var(--radius-none); padding: 16px 12px; display: flex; flex-direction: column; gap: 16px;">
+    <div style="display: flex; align-items: center; justify-content: space-between; min-height: 44px; padding-left: 8px;">
+      <sc-if value="{{isExpanded}}" hint-placeholder-val="{{true}}">
+        <img src="/_blob/16f589d5ac13abfba5dc8fbb104e299f" alt="Exam App provisional logo" style="height: 28px; width: auto; display: block;">
+      </sc-if>
+      <button type="button" onClick="{{toggleSidebar}}" aria-label="{{toggleLabel}}" aria-expanded="{{isExpanded}}" style="width: 44px; height: 44px; border: 0; border-radius: var(--radius-control); background: transparent; color: var(--ink); display: flex; align-items: center; justify-content: center; cursor: pointer; margin: {{toggleMargin}};">
+        <sc-if value="{{isExpanded}}" hint-placeholder-val="{{true}}">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <rect x="2" y="3" width="16" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M7 3V17" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+        </sc-if>
+        <sc-if value="{{isCollapsed}}" hint-placeholder-val="{{false}}">
+          <img src="/_blob/e15def5a174f2eeab1f3485916ece5dc" alt="Exam App mark" style="width: 24px; height: 24px; display: block;">
+        </sc-if>
+      </button>
+    </div>
+
+    <nav aria-label="Competition list" style="display: flex; flex-direction: column; gap: 4px;">
+      <sc-for list="{{competitions}}" as="comp" hint-placeholder-count="2">
+        <button type="button" onClick="{{comp.pick}}" title="{{comp.title}}" aria-current="{{comp.ariaCurrent}}" style="width: 100%; min-height: 44px; border: 0; border-radius: var(--radius-control); padding: 10px 12px; background: {{comp.bg}}; color: var(--ink); display: flex; align-items: center; gap: 8px; cursor: pointer; text-align: left; font: var(--text-label);">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true" style="flex-shrink: 0; color: {{comp.iconColor}};">
+            <rect x="3" y="3" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M6 7H14M6 11H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <sc-if value="{{isExpanded}}" hint-placeholder-val="{{true}}">
+            <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0; font-weight: {{comp.weight}};">{{comp.label}}</span>
+          </sc-if>
+        </button>
+      </sc-for>
+    </nav>
+
+    <sc-if value="{{isExpanded}}" hint-placeholder-val="{{true}}">
+      <div style="margin-top: auto; padding: 12px; border-radius: var(--radius-control); background: color-mix(in srgb, var(--ink) 5%, var(--ground)); color: var(--muted); font-size: 12px; line-height: 17px;">
+        Provisional exploration · Pending owner identity and High-Fidelity approval
+      </div>
+    </sc-if>
+  </aside>
+
+  <main style="flex: 999 1 560px; min-width: 0; box-sizing: border-box; padding: 32px 40px 48px; display: flex; flex-direction: column; gap: 32px;">
+    <div style="max-width: 740px; width: 100%; display: flex; flex-direction: column; gap: 32px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+        <span style="font: var(--text-label); color: var(--muted);">DATAPREV · 2026 · Analyst · Page 1 of 5</span>
+        <span style="font-size: 12px; line-height: 16px; font-weight: 600; color: var(--brand); background: var(--tint); padding: 4px 10px; border-radius: var(--radius-control);">Provisional identity · Light</span>
+      </div>
+
+      <section aria-labelledby="q1-heading" style="display: flex; flex-direction: column; gap: 12px;">
+        <h2 id="q1-heading" style="margin: 0; font-size: 16px; line-height: 24px; font-weight: 600; color: var(--ink);">Question 1</h2>
+        <p style="margin: 0; font-size: 16px; line-height: 24px; color: var(--ink);">Which HTTP method is defined as safe and idempotent?</p>
+        <div role="radiogroup" aria-labelledby="q1-heading" style="display: flex; flex-direction: column; gap: 4px; margin-top: 4px;">
+          <sc-for list="{{q1Options}}" as="opt" hint-placeholder-count="5">
+            <button type="button" role="radio" aria-checked="{{opt.checked}}" onClick="{{opt.pick}}" style="width: 100%; min-height: 36px; border: 0; border-radius: var(--radius-control); padding: 6px 10px; background: {{opt.bg}}; color: {{opt.textColor}}; display: flex; align-items: flex-start; gap: 10px; text-align: left; cursor: pointer; font-size: 16px; line-height: 24px;">
+              <span aria-hidden="true" style="width: 18px; height: 18px; margin-top: 3px; border-radius: 999px; border: 2px solid {{opt.ringColor}}; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; background: var(--ground);">
+                <sc-if value="{{opt.checked}}" hint-placeholder-val="{{false}}">
+                  <span style="width: 8px; height: 8px; border-radius: 999px; background: {{opt.dotColor}};"></span>
+                </sc-if>
+              </span>
+              <span style="flex: 1; display: flex; flex-direction: column; gap: 2px;">
+                <span>{{opt.text}}</span>
+                <sc-if value="{{opt.hasCue}}" hint-placeholder-val="{{false}}">
+                  <span style="font-size: 14px; line-height: 20px; font-weight: 600; color: {{opt.cueColor}};">{{opt.cueText}}</span>
+                </sc-if>
+              </span>
+            </button>
+          </sc-for>
+        </div>
+
+        <div style="margin-top: 4px; display: flex; align-items: center; gap: 16px; min-height: 44px;">
+          <sc-if value="{{q1CanSubmit}}" hint-placeholder-val="{{false}}">
+            <button type="button" onClick="{{submitQ1}}" disabled="{{q1SubmitDisabled}}" style="width: 112px; height: 44px; border: 0; border-radius: var(--radius-control); background: {{q1BtnBg}}; color: {{q1BtnInk}}; font: var(--text-label); cursor: pointer;">Answer</button>
+          </sc-if>
+          <sc-if value="{{q1Evaluated}}" hint-placeholder-val="{{true}}">
+            <div style="display: flex; align-items: center; gap: 16px;">
+              <span style="font-size: 16px; line-height: 24px; font-weight: 600; color: {{q1ResultColor}};">{{q1ResultText}}</span>
+              <span style="font-size: 14px; line-height: 20px; color: var(--muted);">Answer locked</span>
+            </div>
+          </sc-if>
+        </div>
+      </section>
+
+      <section aria-labelledby="q2-heading" style="display: flex; flex-direction: column; gap: 12px;">
+        <h2 id="q2-heading" style="margin: 0; font-size: 16px; line-height: 24px; font-weight: 600; color: var(--ink);">Question 2</h2>
+        <p style="margin: 0; font-size: 16px; line-height: 24px; color: var(--ink);">Which SQL clause filters rows before grouping?</p>
+        <div role="radiogroup" aria-labelledby="q2-heading" style="display: flex; flex-direction: column; gap: 4px; margin-top: 4px;">
+          <sc-for list="{{q2Options}}" as="opt" hint-placeholder-count="5">
+            <button type="button" role="radio" aria-checked="{{opt.checked}}" onClick="{{opt.pick}}" style="width: 100%; min-height: 36px; border: 0; border-radius: var(--radius-control); padding: 6px 10px; background: {{opt.bg}}; color: var(--ink); display: flex; align-items: flex-start; gap: 10px; text-align: left; cursor: pointer; font-size: 16px; line-height: 24px;">
+              <span aria-hidden="true" style="width: 18px; height: 18px; margin-top: 3px; border-radius: 999px; border: 2px solid {{opt.ringColor}}; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; background: var(--ground);">
+                <sc-if value="{{opt.checked}}" hint-placeholder-val="{{false}}">
+                  <span style="width: 8px; height: 8px; border-radius: 999px; background: var(--brand);"></span>
+                </sc-if>
+              </span>
+              <span>{{opt.text}}</span>
+            </button>
+          </sc-for>
+        </div>
+        <div style="margin-top: 4px;">
+          <button type="button" disabled="{{q2Disabled}}" style="width: 112px; height: 44px; border: 0; border-radius: var(--radius-control); background: {{q2BtnBg}}; color: {{q2BtnInk}}; font: var(--text-label); cursor: pointer;">Answer</button>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"sidebar":{"editor":"enum","options":["expanded","collapsed"],"default":"expanded","label":"Sidebar state"},"$preview":{"width":1280,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      collapsed: null,
+      compId: 'dataprev',
+      q1Selected: 2,
+      q1Evaluated: true,
+      q2Selected: -1
+    };
+  }
+  renderVals() {
+    const isCollapsed = this.state.collapsed !== null
+      ? this.state.collapsed
+      : (this.props.sidebar ?? 'expanded') === 'collapsed';
+    const isExpanded = !isCollapsed;
+    const comps = [
+      { id: 'dataprev', label: 'DATAPREV · 2026 · Analyst (IT)', title: 'DATAPREV · 2026 · Analyst (IT)' },
+      { id: 'ppsa', label: 'PPSA · 2025 · Analyst (Systems)', title: 'PPSA · 2025 · Analyst (Systems)' }
+    ].map((c) => {
+      const active = this.state.compId === c.id;
+      return {
+        ...c,
+        bg: active ? 'var(--tint)' : 'transparent',
+        iconColor: active ? 'var(--brand)' : 'var(--muted)',
+        weight: active ? '600' : '400',
+        ariaCurrent: active ? 'page' : 'false',
+        pick: () => this.setState({ compId: c.id })
+      };
+    });
+
+    const q1Items = ['A. POST', 'B. GET', 'C. PATCH', 'D. CONNECT', 'E. None of the above'];
+    const q1Correct = 1;
+    const q1Eval = this.state.q1Evaluated;
+    const q1Sel = this.state.q1Selected;
+    const q1Options = q1Items.map((text, idx) => {
+      const checked = idx === q1Sel;
+      const isRight = q1Eval && idx === q1Correct;
+      const isWrong = q1Eval && checked && idx !== q1Correct;
+      const hasCue = isRight || isWrong;
+      return {
+        text,
+        checked,
+        hasCue,
+        cueText: isRight ? 'Correct' : (isWrong ? 'Your answer' : ''),
+        cueColor: isRight ? 'var(--correct)' : 'var(--incorrect)',
+        bg: checked ? 'var(--tint)' : 'transparent',
+        textColor: q1Eval && !hasCue ? 'var(--muted)' : 'var(--ink)',
+        ringColor: isWrong ? 'var(--incorrect)' : (checked ? 'var(--brand)' : 'var(--muted)'),
+        dotColor: isWrong ? 'var(--incorrect)' : 'var(--brand)',
+        pick: () => { if (!q1Eval) this.setState({ q1Selected: idx }); }
+      };
+    });
+
+    const q2Items = ['A. ORDER BY', 'B. HAVING', 'C. WHERE', 'D. GROUP BY', 'E. LIMIT'];
+    const q2Sel = this.state.q2Selected;
+    const q2Options = q2Items.map((text, idx) => {
+      const checked = idx === q2Sel;
+      return {
+        text,
+        checked,
+        bg: checked ? 'var(--tint)' : 'transparent',
+        ringColor: checked ? 'var(--brand)' : 'var(--muted)',
+        pick: () => this.setState({ q2Selected: idx })
+      };
+    });
+
+    const q1CanSubmit = !q1Eval;
+    const q1SubmitDisabled = q1Sel < 0;
+    const q1IsCorrect = q1Sel === q1Correct;
+
+    return {
+      sidebarW: isCollapsed ? '64px' : '272px',
+      isExpanded,
+      isCollapsed,
+      toggleLabel: isExpanded ? 'Collapse sidebar' : 'Expand sidebar',
+      toggleMargin: isCollapsed ? '0 auto' : '0',
+      toggleSidebar: () => this.setState({ collapsed: !isCollapsed }),
+      competitions: comps,
+      q1Options,
+      q1CanSubmit,
+      q1SubmitDisabled,
+      q1BtnBg: q1SubmitDisabled ? 'color-mix(in srgb, var(--ink) 8%, var(--ground))' : 'var(--brand)',
+      q1BtnInk: q1SubmitDisabled ? 'var(--muted)' : 'var(--on-brand)',
+      q1Evaluated: q1Eval,
+      q1ResultText: q1IsCorrect ? 'Correct answer' : 'Incorrect answer',
+      q1ResultColor: q1IsCorrect ? 'var(--correct)' : 'var(--incorrect)',
+      submitQ1: () => { if (q1Sel >= 0) this.setState({ q1Evaluated: true }); },
+      q2Options,
+      q2Disabled: q2Sel < 0,
+      q2BtnBg: q2Sel < 0 ? 'color-mix(in srgb, var(--ink) 8%, var(--ground))' : 'var(--brand)',
+      q2BtnInk: q2Sel < 0 ? 'var(--muted)' : 'var(--on-brand)'
+    };
+  }
+}
+</script>
+</body>
+</html>

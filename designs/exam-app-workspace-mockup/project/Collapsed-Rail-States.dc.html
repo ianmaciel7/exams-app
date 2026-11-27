@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Rail Swap &amp; Feedback Tokens</title>
+  <script src="./support.js"></script>
+  <link rel="stylesheet" href="ds/examapp/tokens.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; font-family: var(--font-sans); }
+  </style>
+</helmet>
+<div style="width: 1200px; min-height: 680px; box-sizing: border-box; padding: 32px; background: #ECEFEA; color: #192823; font-family: var(--font-sans); display: flex; flex-direction: column; gap: 24px;">
+  <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 16px;">
+    <h1 style="margin: 0; font-size: 22px; line-height: 28px; font-weight: 700;">Provisional Identity &amp; State Parity · Light vs Dark</h1>
+    <span style="font-size: 13px; line-height: 18px; color: #4D6158;">Pending owner identity review and High-Fidelity approval</span>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px;">
+    <section data-theme="light" style="background: var(--ground); color: var(--ink); border-radius: var(--radius-group); padding: 24px; display: flex; flex-direction: column; gap: 20px;">
+      <div style="display: flex; align-items: center; justify-content: space-between;">
+        <h2 style="margin: 0; font-size: 16px; line-height: 24px; font-weight: 600;">Light Theme · Rail Logo-to-Icon Swap</h2>
+        <img src="/_blob/16f589d5ac13abfba5dc8fbb104e299f" alt="Exam App lockup light" style="height: 24px; width: auto; display: block;">
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px;">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 12px 8px; background: color-mix(in srgb, var(--ink) 4%, var(--ground)); border-radius: var(--radius-control);">
+          <span style="font-size: 12px; line-height: 16px; font-weight: 600; color: var(--muted);">Rest</span>
+          <div style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;">
+            <img src="/_blob/e15def5a174f2eeab1f3485916ece5dc" alt="Exam App mark light" style="width: 24px; height: 24px; display: block;">
+          </div>
+          <span style="font-size: 11px; line-height: 15px; color: var(--muted); text-align: center;">Mark at center</span>
+        </div>
+
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 12px 8px; background: color-mix(in srgb, var(--ink) 4%, var(--ground)); border-radius: var(--radius-control);">
+          <span style="font-size: 12px; line-height: 16px; font-weight: 600; color: var(--muted);">Hover</span>
+          <div style="width: 44px; height: 44px; border-radius: var(--radius-control); background: color-mix(in srgb, var(--ink) 8%, var(--ground)); display: flex; align-items: center; justify-content: center;">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <rect x="2" y="3" width="16" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M7 3V17" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <span style="font-size: 11px; line-height: 15px; color: var(--muted); text-align: center;">Same-center swap</span>
+        </div>
+
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 12px 8px; background: color-mix(in srgb, var(--ink) 4%, var(--ground)); border-radius: var(--radius-control);">
+          <span style="font-size: 12px; line-height: 16px; font-weight: 600; color: var(--muted);">Focus</span>
+          <div style="width: 44px; height: 44px; border-radius: var(--radius-control); outline: 2px solid var(--focus); outline-offset: 3px; display: flex; align-items: center; justify-content: center;">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <rect x="2" y="3" width="16" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M7 3V17" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <span style="font-size: 11px; line-height: 15px; color: var(--muted); text-align: center;">2px focus ring</span>
+        </div>
+
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 12px 8px; background: color-mix(in srgb, var(--ink) 4%, var(--ground)); border-radius: var(--radius-control);">
+          <span style="font-size: 12px; line-height: 16px; font-weight: 600; color: var(--muted);">No-hover</span>
+          <div style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <rect x="2" y="3" width="16" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M7 3V17" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <span style="font-size: 11px; line-height: 15px; color: var(--muted); text-align: center;">Always visible</span>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 10px; border-top: 1px solid color-mix(in srgb, var(--ink) 12%, transparent); padding-top: 16px;">
+        <span style="font: var(--text-label); color: var(--muted);">Feedback &amp; action tokens (Light)</span>
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+          <span style="padding: 6px 12px; border-radius: var(--radius-control); background: var(--tint); color: var(--ink); font-size: 14px; font-weight: 600;">Selected</span>
+          <span style="padding: 6px 12px; border-radius: var(--radius-control); background: var(--brand); color: var(--on-brand); font-size: 14px; font-weight: 600;">Answer (112x44)</span>
+          <span style="font-size: 14px; font-weight: 600; color: var(--correct);">Correct</span>
+          <span style="font-size: 14px; font-weight: 600; color: var(--incorrect);">Your answer</span>
+          <span style="font-size: 14px; color: var(--muted);">Answer locked</span>
+        </div>
+        <div style="font-size: 13px; line-height: 18px; color: var(--ink);">
+          Safe retry cue: Answer not confirmed. Try again.
+        </div>
+      </div>
+    </section>
+
+    <section data-theme="dark" style="background: var(--ground); color: var(--ink); border-radius: var(--radius-group); padding: 24px; display: flex; flex-direction: column; gap: 20px;">
+      <div style="display: flex; align-items: center; justify-content: space-between;">
+        <h2 style="margin: 0; font-size: 16px; line-height: 24px; font-weight: 600;">Dark Theme · Rail Logo-to-Icon Swap</h2>
+        <img src="/_blob/ac5d3fd2b1a97d0e5b5e1280c256aee3" alt="Exam App lockup dark" style="height: 24px; width: auto; display: block;">
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px;">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 12px 8px; background: color-mix(in srgb, var(--ink) 5%, var(--ground)); border-radius: var(--radius-control);">
+          <span style="font-size: 12px; line-height: 16px; font-weight: 600; color: var(--muted);">Rest</span>
+          <div style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;">
+            <img src="/_blob/e20654b2b02dfc396cd4904e8161ae7c" alt="Exam App mark dark" style="width: 24px; height: 24px; display: block;">
+          </div>
+          <span style="font-size: 11px; line-height: 15px; color: var(--muted); text-align: center;">Mark at center</span>
+        </div>
+
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 12px 8px; background: color-mix(in srgb, var(--ink) 5%, var(--ground)); border-radius: var(--radius-control);">
+          <span style="font-size: 12px; line-height: 16px; font-weight: 600; color: var(--muted);">Hover</span>
+          <div style="width: 44px; height: 44px; border-radius: var(--radius-control); background: color-mix(in srgb, var(--ink) 10%, var(--ground)); display: flex; align-items: center; justify-content: center;">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <rect x="2" y="3" width="16" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M7 3V17" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <span style="font-size: 11px; line-height: 15px; color: var(--muted); text-align: center;">Same-center swap</span>
+        </div>
+
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 12px 8px; background: color-mix(in srgb, var(--ink) 5%, var(--ground)); border-radius: var(--radius-control);">
+          <span style="font-size: 12px; line-height: 16px; font-weight: 600; color: var(--muted);">Focus</span>
+          <div style="width: 44px; height: 44px; border-radius: var(--radius-control); outline: 2px solid var(--focus); outline-offset: 3px; display: flex; align-items: center; justify-content: center;">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <rect x="2" y="3" width="16" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M7 3V17" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <span style="font-size: 11px; line-height: 15px; color: var(--muted); text-align: center;">2px focus ring</span>
+        </div>
+
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 12px 8px; background: color-mix(in srgb, var(--ink) 5%, var(--ground)); border-radius: var(--radius-control);">
+          <span style="font-size: 12px; line-height: 16px; font-weight: 600; color: var(--muted);">No-hover</span>
+          <div style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <rect x="2" y="3" width="16" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M7 3V17" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <span style="font-size: 11px; line-height: 15px; color: var(--muted); text-align: center;">Always visible</span>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 10px; border-top: 1px solid color-mix(in srgb, var(--ink) 14%, transparent); padding-top: 16px;">
+        <span style="font: var(--text-label); color: var(--muted);">Feedback &amp; action tokens (Dark)</span>
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+          <span style="padding: 6px 12px; border-radius: var(--radius-control); background: var(--tint); color: var(--ink); font-size: 14px; font-weight: 600;">Selected</span>
+          <span style="padding: 6px 12px; border-radius: var(--radius-control); background: var(--brand); color: var(--on-brand); font-size: 14px; font-weight: 600;">Answer (112x44)</span>
+          <span style="font-size: 14px; font-weight: 600; color: var(--correct);">Correct</span>
+          <span style="font-size: 14px; font-weight: 600; color: var(--incorrect);">Your answer</span>
+          <span style="font-size: 14px; color: var(--muted);">Answer locked</span>
+        </div>
+        <div style="font-size: 13px; line-height: 18px; color: var(--ink);">
+          Safe retry cue: Answer not confirmed. Try again.
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1200,"height":680}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

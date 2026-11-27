@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Mobile Drawer Open · Dark</title>
+  <script src="./support.js"></script>
+  <link rel="stylesheet" href="ds/examapp/tokens.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; font-family: var(--font-sans); }
+    button:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+  </style>
+</helmet>
+<div data-theme="dark" style="width: 390px; height: 844px; box-sizing: border-box; background: var(--ground); color: var(--ink); font-family: var(--font-sans); position: relative; overflow: hidden;">
+  <div aria-hidden="true" style="display: flex; flex-direction: column;">
+    <header style="padding: 16px 20px 8px; display: flex; align-items: center; gap: 8px;">
+      <div style="width: 44px; height: 44px; margin-left: -10px; display: flex; align-items: center; justify-content: center;">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <rect x="2" y="3" width="16" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M7 3V17" stroke="currentColor" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <img src="/_blob/ac5d3fd2b1a97d0e5b5e1280c256aee3" alt="Exam App provisional logo" style="height: 26px; width: auto; display: block;">
+    </header>
+    <div style="padding: 4px 20px 16px; border-bottom: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);">
+      <span style="font: var(--text-label); color: var(--muted);">DATAPREV · 2026 · Analyst (IT)</span>
+    </div>
+    <div style="padding: 20px; display: flex; flex-direction: column; gap: 12px;">
+      <h2 style="margin: 0; font-size: 16px; line-height: 24px; font-weight: 600;">Question 1</h2>
+      <p style="margin: 0; font-size: 16px; line-height: 24px;">Which HTTP method is defined as safe and idempotent?</p>
+      <div style="padding: 10px 12px; border-radius: var(--radius-control); background: var(--tint); font-size: 16px; line-height: 24px;">B. GET</div>
+      <div style="padding: 10px 12px; font-size: 16px; line-height: 24px;">C. PATCH</div>
+    </div>
+  </div>
+
+  <sc-if value="{{drawerOpen}}" hint-placeholder-val="{{true}}">
+    <div style="position: absolute; inset: 0; background: rgba(0, 0, 0, 0.56); display: flex; z-index: 20;">
+      <aside role="dialog" aria-modal="true" aria-label="Competitions" style="width: 304px; height: 100%; box-sizing: border-box; background: var(--ground); border-right: 1px solid color-mix(in srgb, var(--ink) 14%, transparent); padding: 16px 12px; display: flex; flex-direction: column; gap: 16px;">
+        <div style="display: flex; align-items: center; gap: 8px; padding-left: 8px;">
+          <button type="button" onClick="{{closeDrawer}}" aria-label="Close navigation" style="width: 44px; height: 44px; margin-left: -10px; border: 0; border-radius: var(--radius-control); background: transparent; color: var(--ink); display: flex; align-items: center; justify-content: center; cursor: pointer;">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M5 5L15 15M15 5L5 15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <img src="/_blob/ac5d3fd2b1a97d0e5b5e1280c256aee3" alt="Exam App provisional logo" style="height: 26px; width: auto; display: block;">
+        </div>
+
+        <nav aria-label="Competition list" style="display: flex; flex-direction: column; gap: 8px;">
+          <sc-for list="{{competitions}}" as="comp" hint-placeholder-count="2">
+            <button type="button" onClick="{{comp.pick}}" aria-current="{{comp.ariaCurrent}}" style="width: 100%; min-height: 56px; border: 0; border-radius: var(--radius-control); padding: 12px; background: {{comp.bg}}; color: var(--ink); display: flex; align-items: flex-start; gap: 10px; text-align: left; cursor: pointer; font: var(--text-label); font-weight: {{comp.weight}};">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true" style="flex-shrink: 0; margin-top: 2px; color: {{comp.iconColor}};">
+                <rect x="3" y="3" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M6 7H14M6 11H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              <span style="white-space: pre-line;">{{comp.label}}</span>
+            </button>
+          </sc-for>
+        </nav>
+
+        <div role="status" style="padding: 12px; border-radius: var(--radius-control); background: color-mix(in srgb, var(--ink) 6%, var(--ground)); color: var(--ink); font-size: 13px; line-height: 18px;">
+          Changing competitions clears answers on this page.
+        </div>
+
+        <div style="margin-top: auto; padding: 10px 12px; font-size: 12px; line-height: 17px; color: var(--muted);">
+          Close button aligns at exact open-trigger coordinates. Labels wrap without hover reliance.
+        </div>
+      </aside>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { drawerOpen: true, compId: 'dataprev' };
+  }
+  renderVals() {
+    const competitions = [
+      { id: 'dataprev', label: 'DATAPREV · 2026\nAnalyst (Information Technology)' },
+      { id: 'ppsa', label: 'PPSA · 2025\nAnalyst (Systems Engineering)' }
+    ].map((c) => {
+      const active = this.state.compId === c.id;
+      return {
+        ...c,
+        bg: active ? 'var(--tint)' : 'transparent',
+        iconColor: active ? 'var(--brand)' : 'var(--muted)',
+        weight: active ? '600' : '400',
+        ariaCurrent: active ? 'page' : 'false',
+        pick: () => this.setState({ compId: c.id })
+      };
+    });
+    return {
+      drawerOpen: this.state.drawerOpen,
+      closeDrawer: () => this.setState({ drawerOpen: false }),
+      competitions
+    };
+  }
+}
+</script>
+</body>
+</html>

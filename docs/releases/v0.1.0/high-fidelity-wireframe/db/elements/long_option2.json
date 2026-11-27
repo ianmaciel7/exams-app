@@ -1,7 +1,7 @@
 {
   "type": "text",
   "x": 3356,
-  "y": 2547,
+  "y": 2667,
   "text": "Disable all retries, even when the original request has not reached the server.",
   "size": "body",
   "color": "#626262",

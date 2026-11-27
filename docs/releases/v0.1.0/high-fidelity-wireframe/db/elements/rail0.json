@@ -1,10 +1,9 @@
 {
-  "type": "shape",
-  "kind": "rect",
+  "type": "image",
   "x": 1640,
-  "y": 2584,
+  "y": 2704,
   "w": 64,
   "h": 248,
-  "color": "#f1f1f1",
-  "text": ""
+  "src": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%20248%22%3E%3Crect%20width%3D%2264%22%20height%3D%22248%22%20fill%3D%22%23f1f1f1%22%2F%3E%3C%2Fsvg%3E",
+  "by": "agent"
 }

@@ -5,5 +5,5 @@
   "w": 1024,
   "h": 90,
   "color": "yellow",
-  "text": "64-unit rail; stable Ghost target. Reveal the expand glyph on hover or keyboard focus, or keep it visible on no-hover devices. Explicit activation preserves current content and scroll."
+  "text": "64-unit square rail. Rest shows only the compact provisional Exam App mark on the shared header axis; hover/focus swaps the expand glyph into the exact same 44 × 44 slot (see Section 08). Touch/no-hover keeps the expand glyph visible."
 }

@@ -1,9 +1,9 @@
 {
   "type": "note",
-  "x": 3850,
-  "y": 1644,
-  "w": 480,
-  "h": 388,
+  "x": 3040,
+  "y": 2070,
+  "w": 1480,
+  "h": 120,
   "color": "yellow",
-  "text": "768 specimen uses the same question structure, including all five alternatives and disabled Answer. Reserve two lines for the stem at narrow widths. The actual breakpoint and runtime reflow remain prototype work."
+  "text": "768 compact specimen (240 sidebar + 24 inset + 480 content) remains a wireframe proposal aligned with the 1024 CSS px initial prototype test threshold. Desktop nonmodal answer-loss warning appears near competition navigation only when selected or evaluated answers would be discarded."
 }

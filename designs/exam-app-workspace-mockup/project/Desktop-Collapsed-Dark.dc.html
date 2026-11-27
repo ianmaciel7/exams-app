@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Desktop Collapsed Rail · Dark</title>
+  <script src="./support.js"></script>
+  <link rel="stylesheet" href="ds/examapp/tokens.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; font-family: var(--font-sans); }
+    button:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+  </style>
+</helmet>
+<div data-theme="dark" style="display: flex; flex-wrap: wrap; min-height: 900px; width: 100%; box-sizing: border-box; background: var(--ground); color: var(--ink); font-family: var(--font-sans);">
+  <aside aria-label="Collapsed navigation rail" style="width: 64px; flex-shrink: 0; box-sizing: border-box; background: color-mix(in srgb, var(--ink) 4%, var(--ground)); border-radius: var(--radius-none); padding: 16px 8px; display: flex; flex-direction: column; align-items: center; gap: 16px; position: relative;">
+    <div style="position: relative; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;">
+      <button type="button" onClick="{{cycleRailState}}" onMouseEnter="{{enterRail}}" onMouseLeave="{{leaveRail}}" aria-label="Expand sidebar" aria-expanded="false" style="width: 44px; height: 44px; border: 0; border-radius: var(--radius-control); background: {{railBtnBg}}; color: var(--ink); display: flex; align-items: center; justify-content: center; cursor: pointer; outline: {{railFocusOutline}}; outline-offset: 3px;">
+        <sc-if value="{{showMark}}" hint-placeholder-val="{{true}}">
+          <img src="/_blob/e20654b2b02dfc396cd4904e8161ae7c" alt="Exam App provisional mark" style="width: 24px; height: 24px; display: block;">
+        </sc-if>
+        <sc-if value="{{showGlyph}}" hint-placeholder-val="{{false}}">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <rect x="2" y="3" width="16" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M7 3V17" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+        </sc-if>
+      </button>
+      <sc-if value="{{showTooltip}}" hint-placeholder-val="{{false}}">
+        <div role="tooltip" style="position: absolute; left: 56px; top: 50%; transform: translateY(-50%); white-space: nowrap; background: var(--ink); color: var(--ground); padding: 6px 10px; border-radius: var(--radius-control); font-size: 13px; line-height: 18px; font-weight: 600; z-index: 10;">
+          Expand sidebar
+        </div>
+      </sc-if>
+    </div>
+
+    <nav aria-label="Competition rail" style="display: flex; flex-direction: column; gap: 6px; width: 100%; align-items: center;">
+      <sc-for list="{{competitions}}" as="comp" hint-placeholder-count="2">
+        <button type="button" onClick="{{comp.pick}}" aria-label="{{comp.label}}" title="{{comp.label}}" aria-current="{{comp.ariaCurrent}}" style="width: 48px; height: 44px; border: 0; border-radius: var(--radius-control); background: {{comp.bg}}; color: {{comp.iconColor}}; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <rect x="3" y="3" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M6 7H14M6 11H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </sc-for>
+    </nav>
+  </aside>
+
+  <main style="flex: 999 1 560px; min-width: 0; box-sizing: border-box; padding: 32px 40px 48px; display: flex; flex-direction: column; gap: 32px;">
+    <div style="max-width: 740px; width: 100%; display: flex; flex-direction: column; gap: 32px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+        <span style="font: var(--text-label); color: var(--muted);">DATAPREV · 2026 · Analyst · Collapsed rail (1024px)</span>
+        <span style="font-size: 12px; line-height: 16px; font-weight: 600; color: var(--ink); background: var(--tint); padding: 4px 10px; border-radius: var(--radius-control);">{{railBadge}}</span>
+      </div>
+
+      <section aria-labelledby="dc1-heading" style="display: flex; flex-direction: column; gap: 12px;">
+        <h2 id="dc1-heading" style="margin: 0; font-size: 16px; line-height: 24px; font-weight: 600; color: var(--ink);">Question 1</h2>
+        <p style="margin: 0; font-size: 16px; line-height: 24px; color: var(--ink);">Which HTTP method is defined as safe and idempotent?</p>
+        <div role="radiogroup" aria-labelledby="dc1-heading" style="display: flex; flex-direction: column; gap: 4px; margin-top: 4px;">
+          <sc-for list="{{q1Options}}" as="opt" hint-placeholder-count="5">
+            <button type="button" role="radio" aria-checked="{{opt.checked}}" onClick="{{opt.pick}}" style="width: 100%; min-height: 36px; border: 0; border-radius: var(--radius-control); padding: 6px 10px; background: {{opt.bg}}; color: var(--ink); display: flex; align-items: flex-start; gap: 10px; text-align: left; cursor: pointer; font-size: 16px; line-height: 24px;">
+              <span aria-hidden="true" style="width: 18px; height: 18px; margin-top: 3px; border-radius: 999px; border: 2px solid {{opt.ringColor}}; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; background: var(--ground);">
+                <sc-if value="{{opt.checked}}" hint-placeholder-val="{{false}}">
+                  <span style="width: 8px; height: 8px; border-radius: 999px; background: var(--brand);"></span>
+                </sc-if>
+              </span>
+              <span>{{opt.text}}</span>
+            </button>
+          </sc-for>
+        </div>
+        <div style="margin-top: 4px;">
+          <button type="button" disabled="{{q1Disabled}}" style="width: 112px; height: 44px; border: 0; border-radius: var(--radius-control); background: {{q1BtnBg}}; color: {{q1BtnInk}}; font: var(--text-label); cursor: pointer;">Answer</button>
+        </div>
+      </section>
+
+      <section aria-labelledby="dc2-heading" style="display: flex; flex-direction: column; gap: 12px;">
+        <h2 id="dc2-heading" style="margin: 0; font-size: 16px; line-height: 24px; font-weight: 600; color: var(--ink);">Question 2</h2>
+        <p style="margin: 0; font-size: 16px; line-height: 24px; color: var(--ink);">Which SQL clause filters rows before grouping?</p>
+        <div role="radiogroup" aria-labelledby="dc2-heading" style="display: flex; flex-direction: column; gap: 4px; margin-top: 4px;">
+          <sc-for list="{{q2Options}}" as="opt" hint-placeholder-count="5">
+            <button type="button" role="radio" aria-checked="{{opt.checked}}" onClick="{{opt.pick}}" style="width: 100%; min-height: 36px; border: 0; border-radius: var(--radius-control); padding: 6px 10px; background: {{opt.bg}}; color: var(--ink); display: flex; align-items: flex-start; gap: 10px; text-align: left; cursor: pointer; font-size: 16px; line-height: 24px;">
+              <span aria-hidden="true" style="width: 18px; height: 18px; margin-top: 3px; border-radius: 999px; border: 2px solid {{opt.ringColor}}; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; background: var(--ground);">
+                <sc-if value="{{opt.checked}}" hint-placeholder-val="{{false}}">
+                  <span style="width: 8px; height: 8px; border-radius: 999px; background: var(--brand);"></span>
+                </sc-if>
+              </span>
+              <span>{{opt.text}}</span>
+            </button>
+          </sc-for>
+        </div>
+        <div style="margin-top: 4px;">
+          <button type="button" disabled="{{q2Disabled}}" style="width: 112px; height: 44px; border: 0; border-radius: var(--radius-control); background: {{q2BtnBg}}; color: {{q2BtnInk}}; font: var(--text-label); cursor: pointer;">Answer</button>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"railTrigger":{"editor":"enum","options":["rest","hover","focus","touch"],"default":"rest","label":"Rail trigger state"},"$preview":{"width":1024,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      railMode: null,
+      hovered: false,
+      compId: 'dataprev',
+      q1Selected: 1,
+      q2Selected: -1
+    };
+  }
+  renderVals() {
+    const mode = this.state.hovered
+      ? 'hover'
+      : (this.state.railMode ?? (this.props.railTrigger ?? 'rest'));
+    const showMark = mode === 'rest';
+    const showGlyph = !showMark;
+    const showTooltip = mode === 'hover' || mode === 'focus';
+    const railBtnBg = mode === 'hover'
+      ? 'color-mix(in srgb, var(--ink) 10%, var(--ground))'
+      : 'transparent';
+    const railFocusOutline = mode === 'focus' ? '2px solid var(--focus)' : 'none';
+    const badgeMap = {
+      rest: 'Rail rest: provisional mark · Dark',
+      hover: 'Rail hover: same-center swap',
+      focus: 'Rail focus: separated outline',
+      touch: 'Touch / no-hover: glyph visible'
+    };
+
+    const comps = [
+      { id: 'dataprev', label: 'DATAPREV · 2026 · Analyst (IT)' },
+      { id: 'ppsa', label: 'PPSA · 2025 · Analyst (Systems)' }
+    ].map((c) => {
+      const active = this.state.compId === c.id;
+      return {
+        ...c,
+        bg: active ? 'var(--tint)' : 'transparent',
+        iconColor: active ? 'var(--brand)' : 'var(--muted)',
+        ariaCurrent: active ? 'page' : 'false',
+        pick: () => this.setState({ compId: c.id })
+      };
+    });
+
+    const q1Options = ['A. POST', 'B. GET', 'C. PATCH', 'D. CONNECT', 'E. None of the above'].map((text, idx) => {
+      const checked = idx === this.state.q1Selected;
+      return {
+        text,
+        checked,
+        bg: checked ? 'var(--tint)' : 'transparent',
+        ringColor: checked ? 'var(--brand)' : 'var(--muted)',
+        pick: () => this.setState({ q1Selected: idx })
+      };
+    });
+
+    const q2Options = ['A. ORDER BY', 'B. HAVING', 'C. WHERE', 'D. GROUP BY', 'E. LIMIT'].map((text, idx) => {
+      const checked = idx === this.state.q2Selected;
+      return {
+        text,
+        checked,
+        bg: checked ? 'var(--tint)' : 'transparent',
+        ringColor: checked ? 'var(--brand)' : 'var(--muted)',
+        pick: () => this.setState({ q2Selected: idx })
+      };
+    });
+
+    const order = ['rest', 'hover', 'focus', 'touch'];
+    const nextMode = order[(order.indexOf(mode) + 1) % order.length];
+
+    return {
+      showMark,
+      showGlyph,
+      showTooltip,
+      railBtnBg,
+      railFocusOutline,
+      railBadge: badgeMap[mode],
+      cycleRailState: () => this.setState({ railMode: nextMode, hovered: false }),
+      enterRail: () => this.setState({ hovered: true }),
+      leaveRail: () => this.setState({ hovered: false }),
+      competitions: comps,
+      q1Options,
+      q1Disabled: this.state.q1Selected < 0,
+      q1BtnBg: this.state.q1Selected < 0 ? 'color-mix(in srgb, var(--ink) 8%, var(--ground))' : 'var(--brand)',
+      q1BtnInk: this.state.q1Selected < 0 ? 'var(--muted)' : 'var(--on-brand)',
+      q2Options,
+      q2Disabled: this.state.q2Selected < 0,
+      q2BtnBg: this.state.q2Selected < 0 ? 'color-mix(in srgb, var(--ink) 8%, var(--ground))' : 'var(--brand)',
+      q2BtnInk: this.state.q2Selected < 0 ? 'var(--muted)' : 'var(--on-brand)'
+    };
+  }
+}
+</script>
+</body>
+</html>

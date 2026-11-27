@@ -1,8 +1,8 @@
 {
   "type": "text",
   "x": 1616,
-  "y": 4494,
-  "text": "Tap anywhere in the row to select. Submit separately with Answer.",
+  "y": 4792,
+  "text": "Tap anywhere in the row to select. Submit separately with Answer. Non-color cues distinguish selection, focus, lock and pending.",
   "size": "body",
   "color": "#262626",
   "wrap": 1388

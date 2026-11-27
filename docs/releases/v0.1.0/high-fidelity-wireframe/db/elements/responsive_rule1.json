@@ -1,9 +1,9 @@
 {
   "type": "text",
   "x": 3810,
-  "y": 3470,
-  "text": "Compact expanded 240 or collapsed 64\n24 inset · flexible content\nTablet / no-hover trigger remains visible",
+  "y": 3646,
+  "text": "Compact expanded 240 (content 480 at 768) or collapsed 64\n24 inset · flexible content · main pane scrolls\nTablet proposal / validate against 1024 threshold; no-hover trigger visible",
   "size": "body",
   "color": "#262626",
-  "wrap": 690
+  "wrap": 710
 }
