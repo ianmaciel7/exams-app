@@ -5,5 +5,5 @@
   "w": 640,
   "h": 120,
   "color": "yellow",
-  "text": "Long content wraps to a separate text column after each option letter. Row height follows content, not a fixed uniform height. Example only."
+  "text": "Long-content study: align continuation lines after the option letter; the actual rendered line count determines each row height. Single-line options use a 28-unit cadence; the two-line B option reserves one extra 24-unit line. Continue into the next question and retain 32 units between groups. Illustrative content."
 }

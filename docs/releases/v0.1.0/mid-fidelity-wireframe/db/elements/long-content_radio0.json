@@ -2,11 +2,12 @@
   "type": "shape",
   "kind": "ellipse",
   "x": 22252,
-  "y": 262,
+  "y": 238,
   "w": 16,
   "h": 16,
   "color": "#ffffff",
   "text": "",
   "hollow": true,
-  "stroke": "#777777"
+  "stroke": "#555555",
+  "solid": true
 }
