@@ -103,3 +103,17 @@ node scripts/check-boards.mjs
 ## Screen and variant layout convention
 
 Arrange distinct screens/destinations vertically, one row per screen. Arrange states, scroll positions, responsive variants and alternative versions of the same screen horizontally within its row. Align the top of comparable artboards and leave clear spacing; do not imply a separate route just because a state has its own artboard. A page's pagination footer at the end of scroll is a horizontal variant of that same page, not a separate destination. Apply this convention to future UI sketch and wireframe boards unless the product owner specifies otherwise.
+
+## Evidence-based fidelity progression gate
+
+Each design stage must answer a distinct unresolved question. Similar layouts are acceptable when they preserve approved composition; changing the rendering style, increasing pixel precision or multiplying variants alone does not demonstrate progress. Before starting or closing a stage, record its question, inherited decisions/invariants, new evidence or detail needed, smallest useful representative scenarios, review/test method, findings, limits and next question. Reference the preceding artifact rather than recreating its entire state matrix. Essential lifecycle coverage remains mandatory; the screen inventory and flows own the complete state coverage, and the visual stage selects the states needed to test its hypothesis. Component studies are supporting evidence, not additional routes or a reason to duplicate every screen. Preserve approved historical snapshots. Do not close a stage on structural CI success alone; visual approval and functional evidence remain separate.
+
+- Sketch: explore alternative compositions and approximate regions/essential controls; avoid precise measurements.
+- Low-Fidelity: test selected structure, hierarchy, navigation, grouping and representative structural states; abstract content where appropriate.
+- Mid-Fidelity: test realistic content, density, wrapping, controls and critical responsive states; use provisional geometry, not final tokens or exhaustive implementation specs.
+- High-Fidelity Wireframe: resolve remaining structural precision, dimensions, overflow and edge-case specifications; only undertake a separate pass if it answers a new structural question. Do not merge or skip a formal stage without owner approval.
+- Mockup: resolve final-intent visual appearance, typography, iconography, colors and component styles.
+- Interactive Prototype: test representative operable actions, transitions, recovery and accessibility behavior; document simulations and limits.
+- Usability Testing: record observed user-task evidence, findings and iterations. Test early whenever useful; the formal stage does not prohibit earlier testing.
+
+Source: [shared UX design activities and progression gate](https://github.com/ianmaciel7/exams-app-archive/blob/main/docs/references/ui-ux-research-sources/ux-design-activities-2026-11-25.md). This is a project convention, not a universal linear process.

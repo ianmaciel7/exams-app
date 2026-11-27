@@ -113,3 +113,7 @@ Use identical navigation icon geometry in collapsed, hover, focus and no-hover r
 ## Collapsed Ghost trigger correction — 2026-11-27
 
 Owner corrected the previous hide-at-rest rule after reviewing the collapsed rail. Keep the expand glyph visible at rest without a filled button surface, in the same position as hover, focus and no-hover specimens. Only feedback changes; explicit activation expands. This supersedes the earlier visibility rule and does not change workspace count, selection, scroll or answers. Inspect the new native capture before closing the stage.
+
+## Fidelity boundary review — 2026-11-27
+
+The current stage must resolve representative content, density, component placement, wrapping and responsive structure rather than reproduce all earlier screens or preempt the High-Fidelity specification. The 21 existing variants remain the recorded inventory; companion component studies are supporting evidence. Review the question and evidence delta against the preserved Sketch and Low-Fidelity snapshots before stage closure. Record representative scenario, finding, remaining uncertainty and next-stage question. Do not treat precise board coordinates as final production tokens. No stage progression or board deletion is approved by this documentation update. See [AGENTS.md](../../../../AGENTS.md) and the [canonical shared progression gate](https://github.com/ianmaciel7/exams-app-archive/blob/main/docs/references/ui-ux-research-sources/ux-design-activities-2026-11-25.md).

@@ -47,3 +47,7 @@ References: [W3C Focus Visible](https://www.w3.org/WAI/WCAG22/Understanding/focu
 Desktop labels use one-line ellipsis with full-label discovery by hover/focus; phone drawer labels wrap. The drawer overlays the same question workspace. Phone component studies cover first/middle/last pagination, identical English/pt-BR workspace geometry, and feedback below wrapped alternatives. The Ghost trigger is visible at rest on all input devices. These are static design specimens, not additional workspace variants or functional validation.
 
 The [active wireframe](docs/releases/v0.1.0/mid-fidelity-wireframe/README.md) owns the detailed geometry and review history; [current state](docs/releases/v0.1.0/current-state.json) records capture provenance. Native visual approval remains pending.
+
+## Fidelity boundary
+
+The selected layout stays consistent across stages. Current Mid-Fidelity geometry is provisional and exists to review realistic content, density, wrapping and responsive controls. Exact structural specifications belong to a separate High-Fidelity pass only if unresolved; visual tokens belong to Mockup and operable behavior to Prototype. Follow the evidence-based progression gate in [AGENTS.md](AGENTS.md). Preserve snapshots and keep component studies linked to the owning design question.

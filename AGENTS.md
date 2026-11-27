@@ -206,3 +206,17 @@ Update `docs/releases/v0.1.0/current-state.json` first; run `node scripts/sync-r
 ## Owner decision gate
 
 Before closing each stage, audit the decision register. Ask only for unresolved product decisions whose alternatives materially affect behavior, with a recommended choice and trade-off. Do not ask for technical details that can be resolved from standards and evidence. Record owner answers in the canonical release state; remove resolved entries from pendingDecisions and retain technical validation separately. Synchronize native boards, generated documentation, and relevant studies before claiming completion. Do not treat owner decisions as visual approval or tested implementation.
+
+## Evidence-based fidelity progression gate
+
+Each design stage must answer a distinct unresolved question. Similar layouts are acceptable when they preserve approved composition; changing the rendering style, increasing pixel precision or multiplying variants alone does not demonstrate progress. Before starting or closing a stage, record its question, inherited decisions/invariants, new evidence or detail needed, smallest useful representative scenarios, review/test method, findings, limits and next question. Reference the preceding artifact rather than recreating its entire state matrix. Essential lifecycle coverage remains mandatory; the screen inventory and flows own the complete state coverage, and the visual stage selects the states needed to test its hypothesis. Component studies are supporting evidence, not additional routes or a reason to duplicate every screen. Preserve approved historical snapshots. Do not close a stage on structural CI success alone; visual approval and functional evidence remain separate.
+
+- Sketch: explore alternative compositions and approximate regions/essential controls; avoid precise measurements.
+- Low-Fidelity: test selected structure, hierarchy, navigation, grouping and representative structural states; abstract content where appropriate.
+- Mid-Fidelity: test realistic content, density, wrapping, controls and critical responsive states; use provisional geometry, not final tokens or exhaustive implementation specs.
+- High-Fidelity Wireframe: resolve remaining structural precision, dimensions, overflow and edge-case specifications; only undertake a separate pass if it answers a new structural question. Do not merge or skip a formal stage without owner approval.
+- Mockup: resolve final-intent visual appearance, typography, iconography, colors and component styles.
+- Interactive Prototype: test representative operable actions, transitions, recovery and accessibility behavior; document simulations and limits.
+- Usability Testing: record observed user-task evidence, findings and iterations. Test early whenever useful; the formal stage does not prohibit earlier testing.
+
+Source: [shared UX design activities and progression gate](https://github.com/ianmaciel7/exams-app-archive/blob/main/docs/references/ui-ux-research-sources/ux-design-activities-2026-11-25.md). This is a project convention, not a universal linear process.

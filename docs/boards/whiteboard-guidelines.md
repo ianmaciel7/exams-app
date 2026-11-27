@@ -60,3 +60,7 @@ Use the UI/UX Specialist and Impeccable to refine hierarchy, density, and legibi
 ## Planning-board spacing
 
 Measure actual native renderer bounds before placing adjacent elements. In the current Open Artifact renderer link cards occupy approximately 320 × 56 canvas units. Use at least 24 units between link cards and 12 units between a card and its supporting caption; the Project Hub uses a 112-unit row cadence. Keep board navigation in its own region outside headings and descriptions. Use the content's actual height for native notes, with enough breathing room and no clipping. These are project-specific board layout values, not application UI tokens. Check both themes and capture views before claiming visual approval.
+
+## Fidelity boundary and review evidence
+
+For each board record the stage-specific question, inherited decisions, new evidence, representative scenarios, review findings and exit criterion. Reuse composition, not entire state matrices by default. Separate supporting component studies from workspace variants; keep coverage in the inventory. Preserve approved historical snapshots and distinguish structural, visual and functional verification. See the evidence-based progression gate in [AGENTS.md](../../AGENTS.md).
