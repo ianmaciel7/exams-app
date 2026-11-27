@@ -31,3 +31,7 @@ Approved invariants: one question workspace, original exam order, ten per page, 
 ## Exit and next question
 
 Review native captures at useful zoom for clipping, overlap, consistent spacing and component anatomy. Resolve structural ambiguities and record evidence, then obtain owner approval. Mockup: which visual identity, typography, semantic colors and theme treatment should be applied to the resolved structure?
+
+## Inherited coverage audit — 2026-11-27
+
+The initial board at [2cc13ec](https://github.com/ianmaciel7/exams-app/commit/2cc13ec7f7d20efd8e97af56c77423d84d93553e) was published successfully but is incomplete. Owner identified missing detail. The canonical `highFidelity.coverageGate` ledger in [current-state.json](../current-state.json) records 22 obligations, including 17 gaps. Structural CI is not visual acceptance. Do not advance or request approval until the required gaps are resolved and real captures are reviewed. Retain approved Mid-Fidelity as baseline; use complete representative screens plus targeted component studies rather than duplicating all 21 artboards. See [AGENTS.md](../../../../AGENTS.md).

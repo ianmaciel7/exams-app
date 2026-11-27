@@ -434,8 +434,218 @@
       "phone-open"
     ],
     "status": "in progress",
-    "review": "pending native captures and owner review",
+    "review": "Initial published board visually reviewed; inherited coverage gaps recorded. Correct and recapture before owner approval.",
     "inventoryReference": "21 approved Mid-Fidelity variants",
-    "nextQuestion": "Mockup: which visual identity, typography, semantic colors and theme treatment should be applied to the resolved structure?"
+    "nextQuestion": "Mockup: which visual identity, typography, semantic colors and theme treatment should be applied to the resolved structure?",
+    "coverageGate": {
+      "version": 1,
+      "baselineCommit": "ec20139c96062542fc7eabb7424333b4fec6412f",
+      "reviewedCommit": "2cc13ec7f7d20efd8e97af56c77423d84d93553e",
+      "status": "blocked",
+      "visualReview": "pending",
+      "obligations": [
+        {
+          "id": "question-complete",
+          "requirement": "Complete question content, alternatives and action; intentional viewport clipping only",
+          "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
+          "elementIds": [
+            "desktop_q_title",
+            "desktop_q_next"
+          ],
+          "status": "missing",
+          "reviewEvidence": null
+        },
+        {
+          "id": "pagination",
+          "requirement": "First, middle, last page and boundary controls",
+          "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
+          "elementIds": [],
+          "status": "missing",
+          "reviewEvidence": null
+        },
+        {
+          "id": "correct",
+          "requirement": "Correct answer and lock",
+          "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
+          "elementIds": [],
+          "status": "missing",
+          "reviewEvidence": null
+        },
+        {
+          "id": "wrong",
+          "requirement": "Incorrect choice, correct choice and lock",
+          "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
+          "elementIds": [
+            "desktop_q_result",
+            "desktop_q_row0",
+            "desktop_q_row1"
+          ],
+          "status": "represented",
+          "reviewEvidence": "Initial High-Fidelity source/capture reviewed at 2cc13ec; visual review remains open."
+        },
+        {
+          "id": "selected",
+          "requirement": "Selected option and enabled Answer",
+          "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
+          "elementIds": [
+            "collapsed_q_answer",
+            "collapsed_q_radio1_dot"
+          ],
+          "status": "represented",
+          "reviewEvidence": "Initial High-Fidelity source/capture reviewed at 2cc13ec; visual review remains open."
+        },
+        {
+          "id": "question-loading",
+          "requirement": "Question list loading",
+          "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
+          "elementIds": [],
+          "status": "missing",
+          "reviewEvidence": null
+        },
+        {
+          "id": "question-empty",
+          "requirement": "Empty question list",
+          "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
+          "elementIds": [],
+          "status": "missing",
+          "reviewEvidence": null
+        },
+        {
+          "id": "question-failure",
+          "requirement": "Question list failure and Retry",
+          "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
+          "elementIds": [],
+          "status": "missing",
+          "reviewEvidence": null
+        },
+        {
+          "id": "submission-pending",
+          "requirement": "Pending submission, stable action footprint",
+          "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
+          "elementIds": [],
+          "status": "missing",
+          "reviewEvidence": null
+        },
+        {
+          "id": "submission-recovery",
+          "requirement": "Uncertain outcome, retained selection and safe retry",
+          "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
+          "elementIds": [],
+          "status": "missing",
+          "reviewEvidence": null
+        },
+        {
+          "id": "navigation-empty",
+          "requirement": "Empty competitions; message only",
+          "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
+          "elementIds": [],
+          "status": "missing",
+          "reviewEvidence": null
+        },
+        {
+          "id": "navigation-loading",
+          "requirement": "Navigation loading",
+          "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
+          "elementIds": [],
+          "status": "missing",
+          "reviewEvidence": null
+        },
+        {
+          "id": "navigation-failure",
+          "requirement": "Competition load failure and manual Retry",
+          "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
+          "elementIds": [],
+          "status": "missing",
+          "reviewEvidence": null
+        },
+        {
+          "id": "navigation-expanded",
+          "requirement": "Expanded sidebar and selection",
+          "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
+          "elementIds": [
+            "desktop_sidebar",
+            "desktop_nav_sel"
+          ],
+          "status": "represented",
+          "reviewEvidence": "Initial High-Fidelity source/capture reviewed at 2cc13ec; visual review remains open."
+        },
+        {
+          "id": "navigation-collapsed",
+          "requirement": "Visible Ghost trigger and selected rail",
+          "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
+          "elementIds": [
+            "collapsed_sidebar",
+            "collapsed_toggle",
+            "collapsed_nav_sel"
+          ],
+          "status": "represented",
+          "reviewEvidence": "Initial High-Fidelity source/capture reviewed at 2cc13ec; visual review remains open."
+        },
+        {
+          "id": "control-states",
+          "requirement": "Hover, focus, pressed and disabled",
+          "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
+          "elementIds": [],
+          "status": "missing",
+          "reviewEvidence": null
+        },
+        {
+          "id": "full-label",
+          "requirement": "Full label discovery and phone wrapping",
+          "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
+          "elementIds": [],
+          "status": "missing",
+          "reviewEvidence": null
+        },
+        {
+          "id": "long-content",
+          "requirement": "Wrapped long stem/option and feedback below text",
+          "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
+          "elementIds": [],
+          "status": "missing",
+          "reviewEvidence": null
+        },
+        {
+          "id": "phone-closed",
+          "requirement": "Phone closed workspace with complete scrollable content",
+          "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
+          "elementIds": [
+            "phone_frame"
+          ],
+          "status": "missing",
+          "reviewEvidence": null
+        },
+        {
+          "id": "phone-open",
+          "requirement": "Phone drawer with matching dimmed workspace underlay",
+          "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
+          "elementIds": [
+            "drawer_drawer",
+            "drawer_underlay"
+          ],
+          "status": "missing",
+          "reviewEvidence": null
+        },
+        {
+          "id": "localized",
+          "requirement": "EN and pt-BR representative chrome",
+          "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
+          "elementIds": [
+            "desktop_q_title",
+            "phone_q_title"
+          ],
+          "status": "represented",
+          "reviewEvidence": "Initial High-Fidelity source/capture reviewed at 2cc13ec; visual review remains open."
+        },
+        {
+          "id": "responsive",
+          "requirement": "320/390/768/1024/1280 structural widths and overflow review",
+          "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
+          "elementIds": [],
+          "status": "missing",
+          "reviewEvidence": null
+        }
+      ]
+    }
   }
 }

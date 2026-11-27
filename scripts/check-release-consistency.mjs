@@ -2,11 +2,12 @@ import {readFileSync} from 'node:fs';
 import {join} from 'node:path';
 import components from './mid-fidelity-components.cjs';
 import {syncReleaseState} from './sync-release-state.mjs';
+import {checkCurrentFidelityCoverage} from './check-fidelity-coverage.mjs';
 const release='docs/releases/v0.1.0';
 const read=p=>readFileSync(p,'utf8');
 const json=p=>JSON.parse(read(p));
 export function checkReleaseConsistency(){
- const errors=syncReleaseState();
+ const errors=[...syncReleaseState(),...checkCurrentFidelityCoverage()];
  const minimums={'docs/boards/project-hub':12,'docs/boards/release-stages':8,'docs/boards/overview':60,...Object.fromEntries(['product','information-architecture','screen-inventory','user-flows'].map(dir=>[join(release,dir),5]))};
  for(const [path,min] of Object.entries(minimums)){const meta=json(join(path,'db/board/meta.json'));if(meta.order.length<min)errors.push('Incomplete or blank planning board: '+path);}
  // Native link cards measure 320 × 56 canvas units in the current renderer.
