@@ -5,5 +5,5 @@
   "w": 640,
   "h": 120,
   "color": "yellow",
-  "text": "Collapsed rail is a proposed treatment. Same questions, scroll position and selection as expanded view. Full labels must be discoverable; toggle does not clear answers."
+  "text": "Collapsed rail: hide the expand icon at pointer rest; reveal on rail/header hover or keyboard focus, with no layout shift. Activate explicitly to expand. On touch/no-hover, keep an accessible visible trigger. Preserve selected item, scroll and answers."
 }

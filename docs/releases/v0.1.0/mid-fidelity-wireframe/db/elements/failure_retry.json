@@ -1,11 +1,11 @@
 {
   "type": "shape",
   "kind": "rounded",
-  "x": 10947,
-  "y": 436,
-  "w": 120,
-  "h": 36,
-  "color": "#424242",
+  "x": 10951,
+  "y": 437,
+  "w": 112,
+  "h": 34,
+  "color": "#363636",
   "text": "Retry",
   "size": "small",
   "ink": "#ffffff"

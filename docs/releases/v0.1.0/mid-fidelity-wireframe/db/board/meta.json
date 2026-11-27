@@ -784,6 +784,16 @@
     "sidebar-failure_retry",
     "sidebar-failure_status",
     "sidebar-failure_detail",
-    "sidebar-failure_note"
+    "sidebar-failure_note",
+    "focus_button_spec_0_label",
+    "focus_button_spec_0",
+    "focus_button_spec_1_label",
+    "focus_button_spec_1",
+    "focus_button_spec_2_label",
+    "focus_button_spec_2",
+    "collapsed_reveal_caption",
+    "collapsed_reveal_surface",
+    "collapsed_reveal_hover",
+    "collapsed_reveal_icon"
   ]
 }

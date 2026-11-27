@@ -3,7 +3,7 @@
   "x": 0,
   "y": 65,
   "w": 540,
-  "h": 400,
+  "h": 460,
   "color": "yellow",
-  "text": "**Current workspace — v0.1.0**\nOne destination: left competition sidebar, right scrolling question list. First available competition selected by default. Label: Name · Year · Position/exam; full label discoverable. Ghost trigger across all states; collapse preserves page and answers. Ten questions per page, footer pagination. Phone and navigation loading/failure are proposals. No additional routes. Exact breakpoint, drawer, ordering and data recovery remain open."
+  "text": "**Current workspace — v0.1.0**\nOne destination: left competition sidebar, right scrolling question list. First available competition selected by default. Label: Name · Year · Position/exam; full label discoverable. Ghost trigger: visible expanded; collapsed expand icon revealed on hover/focus, with touch fallback. Activation changes layout; hover alone does not. Collapse preserves page and answers. Ten questions per page, footer pagination. Phone and navigation loading/failure are proposals. No additional routes. Exact breakpoint, drawer, ordering and data recovery remain open."
 }

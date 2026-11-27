@@ -2,9 +2,11 @@
   "type": "shape",
   "kind": "rounded",
   "x": 7652,
-  "y": 606,
-  "w": 120,
-  "h": 36,
+  "y": 607,
+  "w": 112,
+  "h": 34,
   "color": "#dddddd",
-  "text": ""
+  "text": "",
+  "size": "small",
+  "ink": "#666666"
 }

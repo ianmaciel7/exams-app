@@ -49,7 +49,40 @@ for(let k=0;k<5;k++){const y=548+k*28;put("next_radio"+k,radio(y));put("next_opt
 put("next_answer",button(694));put("third_title",text(x,762,"**Question 3**","body","#262626"));
 return out;
 }
-function shared(){return {...aligned({states,existing,layout,text,shape,vector,toggle,chevron}),...longContent({text,shape,layout})};}
+function actions({states,layout,shape,text,vector,toggle}){
+const out={};const put=(id,n,e)=>out[id+"_"+n]=e;
+const btn=(x,y,label="Answer",state="disabled")=>shape(x,y+1,112,34,({disabled:"#f0f0f0",pending:"#eeeeee",enabled:"#363636",hover:"#484848",pressed:"#252525",skeleton:"#dddddd"})[state],"rounded",label,{size:"small",ink:["enabled","hover","pressed"].includes(state)?"#ffffff":"#666666"});
+for(const id of states.slice(0,18)){const {ox,main,center,l,w}=layout(id),x=ox+main;
+if(["top","selected","correct","wrong","narrow","hover","focus","submitting","submit-failure","collapsed"].includes(id)){
+ if(!["correct","wrong"].includes(id))put(id,"q0_answer",btn(x,324,id==="submitting"?"Submitting…":"Answer",id==="submitting"?"pending":["selected","focus","submit-failure"].includes(id)?"enabled":"disabled"));
+ put(id,"q1_answer",btn(x,606));
+ if(id==="focus"){put(id,"q0_focus_outer",shape(x-3,322,118,40,"#555555","rounded"));put(id,"q0_focus_inner",shape(x-1,324,114,36,"#ffffff","rounded"));}
+ if(id==="submit-failure")put(id,"q0_error",text(x+128,332,"Could not submit. Try again.","small","#262626"));
+}
+if(["end","page-middle","page-last"].includes(id)){put(id,"previous_question_tail",btn(x,85));put(id,"q0_answer",btn(x,367));put(id,"q1_answer",btn(x,649));}
+if(id==="long-content"){put(id,"answer",btn(x,412));put(id,"next_answer",btn(x,694));}
+if(id==="loading")for(let n=0;n<2;n++)put(id,"sk_action"+n,btn(x,324+n*282,"","skeleton"));
+if(id==="failure")put(id,"retry",btn(ox+center-56,436,"Retry","enabled"));
+if(id==="collapsed"){
+ // Reserved transparent slot: hidden at desktop rest; the external hover specimen is visible.
+ put(id,"toggle_panel",vector(ox+l+(w-16)/2,113,16,14,'<rect width="16" height="14" fill="none"/>'));
+ put(id,"note",{type:"note",x:ox+l,y:875,w:640,h:120,color:"yellow",text:"Collapsed rail: hide the expand icon at pointer rest; reveal on rail/header hover or keyboard focus, with no layout shift. Activate explicitly to expand. On touch/no-hover, keep an accessible visible trigger. Preserve selected item, scroll and answers."});
+ put(id,"reveal_caption",text(ox+885,875,"Hover / focus","small","ink"));
+ put(id,"reveal_surface",shape(ox+885,904,64,64,"#f0f0f0","rounded"));
+ put(id,"reveal_hover",shape(ox+903,922,28,28,"#e4e4e4","rounded"));
+ put(id,"reveal_icon",toggle(ox+909,929));
+}
+if(id==="focus"){
+ const start=ox+725;
+ for(const [k,label,state] of [[0,"Default","enabled"],[1,"Hover","hover"],[2,"Pressed","pressed"]]){
+ const px=start+k*132;put(id,"button_spec_"+k+"_label",text(px,875,label,"small","ink"));put(id,"button_spec_"+k,btn(px,906,"Answer",state));}
+}
+}
+put("mobile","q0_answer",btn(18*1460+476,508));
+put("sidebar-failure","retry",btn(20*1460+80,198,"Retry","enabled"));
+return out;
+}
+function shared(){return {...aligned({states,existing,layout,text,shape,vector,toggle,chevron}),...longContent({text,shape,layout}),...actions({states,layout,shape,text,vector,toggle})};}
 function studies(){
 const out={};const put=(id,n,e)=>out[id+"_"+n]=e;
 for(const id of states.slice(18)){
@@ -58,8 +91,8 @@ const t=(n,x,y,v,size="body",color="ink",more={})=>put(id,n,text(ox+x,y,v,size,c
 const s=(n,x,y,ww,h,color,kind="rect",label="",more={})=>put(id,n,shape(ox+x,y,ww,h,color,kind,label,more));
 const note=(v,x=56)=>put(id,"note",{type:"note",x:ox+x,y:875,w:640,h:120,color:"yellow",text:v});
 if(id==="mobile"){
-const x=460,ww=390;t("caption",x,18,"19 · Phone layout (proposal)","large");s("frame",x,76,ww,709,colors.paper);t("app",x+44,100,"**Exam App**");put(id,"toggle_panel",toggle(ox+x+16,103));t("context",x+16,145,"DATAPREV · 2026 · Analyst…","small",colors.muted);t("q0_title",x+16,194,"**Question 1**");t("q0_stem",x+16,226,"Which HTTP method is defined as safe and idempotent?","body",colors.ink,{wrap:350});for(let k=0;k<5;k++){let y=298+k*40;s("q0_radio"+k,x+16,y,16,16,colors.paper,"ellipse","",{hollow:true,stroke:"#555555",solid:true});t("q0_option"+k,x+42,y-2,String.fromCharCode(65+k)+". "+["POST","GET","PATCH","CONNECT","None of the above"][k]);}s("q0_answer",x+16,508,120,36,"#e6e6e6","rounded","Answer",{size:"small",ink:colors.muted});t("q1_title",x+16,576,"**Question 2**");t("q1_stem",x+16,608,"Which SQL clause filters rows before grouping?","body",colors.ink,{wrap:350});for(let k=0;k<2;k++){let y=680+k*40;s("q1_radio"+k,x+16,y,16,16,colors.paper,"ellipse","",{hollow:true,stroke:"#555555",solid:true});t("q1_option"+k,x+42,y-2,["A. ORDER BY","B. HAVING"][k]);}note("Phone study only: full-width question content, visible Ghost navigation trigger and current competition context. Proposed drawer interaction and breakpoint require approval; no runtime responsiveness is claimed.",x);continue;}
-const loading=id==="sidebar-loading";t("caption",l,18,loading?"20 · Sidebar loading (proposal)":"21 · Sidebar load failure (proposal)","large");s("frame",l,76,r-l,709,colors.paper);s("sidebar",l,76,w,709,colors.sidebar);put(id,"sidebar_seam",vector(ox+l+w-14,76,14,709,'<rect width="14" height="709" fill="rgb(240,240,240)"/>'));t("app",l+24,110,"**Exam App**");put(id,"toggle_panel",toggle(ox+l+w-36,113));if(loading){for(let k=0;k<2;k++){s("sk_icon"+k,l+24,153+k*42,16,16,colors.skeleton,"rounded");s("sk_label"+k,l+48,157+k*42,160,10,colors.skeleton)}t("status",center-240,365,"Loading competitions…","large","ink",{wrap:480,textAlign:"center"});note("Proposal if the competition list is fetched asynchronously: show navigation skeletons, then automatically select the first available item. Do not start question loading before a valid selection.");}else{t("error",l+24,151,"Could not load competitions.","small",colors.ink,{wrap:216});s("retry",l+24,198,120,36,"#424242","rounded","Retry",{size:"small",ink:"#ffffff"});t("status",center-240,350,"Could not load competitions","large","ink",{wrap:480,textAlign:"center"});t("detail",center-240,393,"Retry from the sidebar.","body",colors.muted,{wrap:480,textAlign:"center"});note("Proposal if loading competitions can fail: Retry reloads navigation, not a question list. No selection exists until navigation loads. Data source and recovery policy remain open.");}}
+const x=460,ww=390;t("caption",x,18,"19 · Phone layout (proposal)","large");s("frame",x,76,ww,709,colors.paper);t("app",x+44,100,"**Exam App**");put(id,"toggle_panel",toggle(ox+x+16,103));t("context",x+16,145,"DATAPREV · 2026 · Analyst…","small",colors.muted);t("q0_title",x+16,194,"**Question 1**");t("q0_stem",x+16,226,"Which HTTP method is defined as safe and idempotent?","body",colors.ink,{wrap:350});for(let k=0;k<5;k++){let y=298+k*40;s("q0_radio"+k,x+16,y,16,16,colors.paper,"ellipse","",{hollow:true,stroke:"#555555",solid:true});t("q0_option"+k,x+42,y-2,String.fromCharCode(65+k)+". "+["POST","GET","PATCH","CONNECT","None of the above"][k]);}put(id,"q0_answer",actions({states,layout,shape,text,vector,toggle})[id+"_q0_answer"]);t("q1_title",x+16,576,"**Question 2**");t("q1_stem",x+16,608,"Which SQL clause filters rows before grouping?","body",colors.ink,{wrap:350});for(let k=0;k<2;k++){let y=680+k*40;s("q1_radio"+k,x+16,y,16,16,colors.paper,"ellipse","",{hollow:true,stroke:"#555555",solid:true});t("q1_option"+k,x+42,y-2,["A. ORDER BY","B. HAVING"][k]);}note("Phone study only: full-width question content, visible Ghost navigation trigger and current competition context. Proposed drawer interaction and breakpoint require approval; no runtime responsiveness is claimed.",x);continue;}
+const loading=id==="sidebar-loading";t("caption",l,18,loading?"20 · Sidebar loading (proposal)":"21 · Sidebar load failure (proposal)","large");s("frame",l,76,r-l,709,colors.paper);s("sidebar",l,76,w,709,colors.sidebar);put(id,"sidebar_seam",vector(ox+l+w-14,76,14,709,'<rect width="14" height="709" fill="rgb(240,240,240)"/>'));t("app",l+24,110,"**Exam App**");put(id,"toggle_panel",toggle(ox+l+w-36,113));if(loading){for(let k=0;k<2;k++){s("sk_icon"+k,l+24,153+k*42,16,16,colors.skeleton,"rounded");s("sk_label"+k,l+48,157+k*42,160,10,colors.skeleton)}t("status",center-240,365,"Loading competitions…","large","ink",{wrap:480,textAlign:"center"});note("Proposal if the competition list is fetched asynchronously: show navigation skeletons, then automatically select the first available item. Do not start question loading before a valid selection.");}else{t("error",l+24,151,"Could not load competitions.","small",colors.ink,{wrap:216});put(id,"retry",actions({states,layout,shape,text,vector,toggle})[id+"_retry"]);t("status",center-240,350,"Could not load competitions","large","ink",{wrap:480,textAlign:"center"});t("detail",center-240,393,"Retry from the sidebar.","body",colors.muted,{wrap:480,textAlign:"center"});note("Proposal if loading competitions can fail: Retry reloads navigation, not a question list. No selection exists until navigation loads. Data source and recovery policy remain open.");}}
 return out;}
 return {states,existing,layout,shared,studies};
 }
