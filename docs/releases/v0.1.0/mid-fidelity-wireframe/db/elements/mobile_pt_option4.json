@@ -1,9 +1,8 @@
 {
   "type": "text",
-  "x": 26378,
-  "y": 646,
-  "text": "E. Nenhuma das anteriores",
+  "x": 26342,
+  "y": 456,
+  "text": "E. None of the above",
   "size": "body",
-  "color": "#262626",
-  "wrap": 292
+  "color": "ink"
 }

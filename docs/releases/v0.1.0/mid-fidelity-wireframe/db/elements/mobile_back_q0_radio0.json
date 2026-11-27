@@ -1,0 +1,13 @@
+{
+  "type": "shape",
+  "kind": "ellipse",
+  "x": 27196,
+  "y": 298,
+  "w": 16,
+  "h": 16,
+  "color": "#bdbdbd",
+  "text": "",
+  "hollow": true,
+  "stroke": "#3f3f3f",
+  "solid": true
+}

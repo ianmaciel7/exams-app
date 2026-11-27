@@ -206,6 +206,78 @@ function refined(){
  put("mobile_note",{type:"note",x:x+460,y:875,w:640,h:120,color:"yellow",text:"Mobile: the open drawer overlays the same question context with a dimmed background; labels wrap instead of relying on hover. Compact footer shows page and previous/next with 44-unit illustrative targets. Portuguese specimen checks translated layout; tooltip remains a desktop study. Prototype validates dismissal, focus restoration, actual touch targets, locale and breakpoint."});
  return out;
 }
-return {states,existing,layout,shared:()=>{const o=shared();for(const id of ["collapsed_reveal_hover","collapsed_reveal_icon","sidebar-loading_sk_label0","sidebar-loading_sk_icon1","sidebar-loading_sk_label1","top_scroll_thumb","end_scroll_thumb","selected_scroll_thumb","correct_scroll_thumb","wrong_scroll_thumb","loading_scroll_thumb","narrow_scroll_thumb","hover_scroll_thumb","focus_scroll_thumb","submitting_scroll_thumb","submit-failure_scroll_thumb","collapsed_scroll_thumb","long-content_scroll_thumb","page-middle_scroll_thumb","page-last_scroll_thumb"])delete o[id];return o;},studies:()=>{const o={...studies(),...reviewSpecimens(),...refined()};for(const id of ["collapsed_reveal_hover","collapsed_reveal_icon","sidebar-loading_sk_label0","sidebar-loading_sk_icon1","sidebar-loading_sk_label1","top_scroll_thumb","end_scroll_thumb","selected_scroll_thumb","correct_scroll_thumb","wrong_scroll_thumb","loading_scroll_thumb","narrow_scroll_thumb","hover_scroll_thumb","focus_scroll_thumb","submitting_scroll_thumb","submit-failure_scroll_thumb","collapsed_scroll_thumb","long-content_scroll_thumb","page-middle_scroll_thumb","page-last_scroll_thumb"])delete o[id];return o;}};
+function consistentSpecimens(base){
+ const out={};const put=(id,e)=>out[id]=e;
+ const x=18*1460,cx=14*1460,d=x+900,p=x+20, y=76;
+ const rgbHex=(c)=>{if(c==="ink")return "#262626";if(c==="muted")return "#626262";return c};
+ const dim=c=>{c=rgbHex(c);if(typeof c!=="string"||!/^#[0-9a-f]{6}$/i.test(c))return c;return "#"+[1,3,5].map(i=>Math.round(parseInt(c.slice(i,i+2),16)*.74).toString(16).padStart(2,"0")).join("")};
+ const copy=(e,dx,dy=0)=>({...e,x:e.x+dx,y:e.y+dy});
+ const svgBody=e=>decodeURIComponent(e.src.split(",").slice(1).join(",")).replace(/^<svg[^>]*>/,"").replace(/<\/svg>$/,"");
+ const nav=(k,xx,yy)=>copy(base["top_nav_icon"+k],xx-base["top_nav_icon"+k].x,yy-base["top_nav_icon"+k].y);
+ // Group only identical inactive second-question radio rings. Labels remain native and individually editable.
+ for(const id of ["top","end","selected","correct","wrong","narrow","hover","focus","submitting","submit-failure","collapsed","page-middle","page-last"]){
+  const {ox,main}=layout(id), yy=["end","page-middle","page-last"].includes(id)?503:460;
+  put(id+"_q1_radio0",vector(ox+main,yy,16,128,Array.from({length:5},(_,i)=>`<circle cx="8" cy="${8+i*28}" r="7" fill="none" stroke="rgb(85,85,85)" stroke-width="1.5"/>`).join("")));
+ }
+ // Generate the rail specimens from actual selected row/icon/toggle geometry.
+ const railIcon0=svgBody(base.collapsed_nav_icon0),railIcon1=svgBody(base.collapsed_nav_icon1),glyph=svgBody(toggle(0,0));
+ const rail=`<rect width="64" height="709" rx="5" fill="rgb(240,240,240)"/><rect x="12" y="66" width="40" height="36" rx="5" fill="rgb(216,216,216)"/><g transform="translate(24 76)">${railIcon0}</g><g transform="translate(24 118)">${railIcon1}</g>`;
+ const revealed=`<g transform="translate(24 37)">${glyph}</g>`;
+ put("collapsed_reveal_surface",vector(cx+1110,76,64,709,rail+`<rect x="18" y="30" width="28" height="28" rx="5" fill="rgb(228,228,228)"/>`+revealed));
+ put("collapsed_reveal_focus_sample",vector(cx+1212,76,64,709,rail+`<rect x="15" y="27" width="34" height="34" rx="6" fill="none" stroke="rgb(102,102,102)" stroke-width="2"/>`+revealed));
+ put("collapsed_nohover_sample",vector(cx+1314,76,64,709,rail+revealed));
+ // Identical English and Portuguese frame and geometry, translating interface chrome only.
+ const phoneIds=["frame","app","toggle_panel","context","q0_title","q0_stem",...Array.from({length:5},(_,k)=>["q0_radio"+k,"q0_option"+k]).flat(),"q0_answer","q1_title","q1_stem","q1_radio0","q1_option0","q1_radio1","q1_option1"];
+ const ptNames={frame:"locale_copy",app:"pt_title",toggle_panel:"pt_toggle",context:"pt_context",q0_title:"pt_question",q0_stem:"pt_stem",q0_answer:"pt_answer",q1_title:"pt_q1_title",q1_stem:"pt_q1_stem",q1_radio0:"pt_q1_radio0",q1_option0:"pt_q1_option0",q1_radio1:"pt_q1_radio1",q1_option1:"pt_q1_option1"};
+ for(let k=0;k<5;k++){ptNames["q0_option"+k]="pt_option"+k;ptNames["q0_radio"+k]="pt_radio"+k;}
+ const ptText={context:"DATAPREV · 2026 · Analyst…",q0_title:"**Questão 1**",q0_answer:"Responder",q1_title:"**Questão 2**"};
+ for(const key of phoneIds){const e=base["mobile_"+key];if(!e)throw Error("missing phone "+key);
+  const pt=copy(e,p-(x+460));if(ptText[key])pt.text=ptText[key];put("mobile_"+ptNames[key],pt);
+  if(key==="frame")continue;
+  // Draw the actual full workspace beneath the drawer, dimming native colors.
+  const back=copy(e,d-(x+460));for(const k of ["color","ink","stroke"]){if(back[k])back[k]=dim(back[k]);}if(back.type==="image")back.src=back.src.replace(/rgb%28(\d+)%2C(\d+)%2C(\d+)%29/g,(_,a,b,c)=>`rgb%28${Math.round(a*.74)}%2C${Math.round(b*.74)}%2C${Math.round(c*.74)}%29`);
+  put("mobile_back_"+key,back);
+ }
+ put("mobile_locale_caption",text(p,18,"Phone · Portuguese (pt-BR)","body"));
+ put("mobile_drawer_icon0",nav(0,d+24,160));
+ put("mobile_drawer_icon1",nav(1,d+24,220));
+ // Desktop item follows exactly the shared nav row anatomy, and uses a short single-line label.
+ const t=x+20, ty=887;
+ put("mobile_full_label_caption",text(t,848,"Desktop · Full-label tooltip","small"));
+ put("mobile_full_label_row",shape(t,ty,240,36,"#d8d8d8","rounded"));
+ put("mobile_full_label_icon",nav(0,t+12,ty+10));
+ put("mobile_full_label_text",text(t+36,ty+8,"**DATAPREV** · 2026 · Anal…","small","#262626"));
+ put("mobile_full_label_bubble",shape(t+248,ty-5,245,46,"#333333","rounded"));
+ put("mobile_full_label_bubble_text",text(t+260,ty+6,"DATAPREV · 2026 · Analyst","small","#ffffff"));
+ put("mobile_full_label_arrow",vector(t+240,ty+12,8,12,`<path d="M8 0L0 6L8 12Z" fill="rgb(51,51,51)"/>`));
+ // All footer states use a common 44-unit touch target and current-page indicator.
+ const pagination=(page,xx,yy,prefix)=>{
+  const control=(right,disabled,px)=>vector(px,yy,44,44,`<rect x=".5" y=".5" width="43" height="43" rx="5" fill="${disabled?"rgb(244,244,244)":"rgb(240,240,240)"}"/><path d="${right?"M19 15L26 22L19 29":"M25 15L18 22L25 29"}" fill="none" stroke="${disabled?"rgb(150,150,150)":"rgb(38,38,38)"}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`);
+  put(prefix+"_previous",control(false,page===1,xx+16));put(prefix+"_pages",text(xx+65,yy+13,`Page ${page} of 5`,"body","#262626",{wrap:220,textAlign:"center"}));put(prefix+"_next",control(true,page===5,xx+290));
+ };
+ const px=x+570;
+ put("mobile_pagination_caption",text(px,848,"Phone · End-of-page pagination","body"));
+ put("mobile_pagination_surface",shape(px,875,350,218,"#ffffff"));
+ put("mobile_pagination_answer",shape(px+16,887,112,34,"#f4f4f4","rounded","Answer",{size:"small",ink:"#666666"}));
+ pagination(1,px,930,"mobile_pagination");pagination(3,px,984,"mobile_middle");pagination(5,px,1038,"mobile_last");
+ // Compact evaluated option specimens: distinct choice labels below wrapped content, never overlaid.
+ const fx=x+980, fy=875;
+ put("mobile_feedback_caption",text(fx,848,"Phone · Long evaluated choices","body"));
+ put("mobile_feedback_surface",shape(fx,fy,350,218,"#ffffff"));
+ put("mobile_feedback_choices",text(fx+40,fy+12,"B. Attach a unique operation identifier and reuse it for retries.","body","#262626",{wrap:294}));
+ put("mobile_feedback_correct",text(fx+40,fy+64,"Correct","small","#262626"));
+ put("mobile_feedback_wrong_choice",text(fx+40,fy+94,"C. Create another record for every submission.","body","#262626",{wrap:294}));
+ put("mobile_feedback_wrong",text(fx+40,fy+142,"Your answer","small","#262626"));
+ put("mobile_feedback_radios",vector(fx+16,fy+16,16,96,`<circle cx="8" cy="8" r="7" fill="none" stroke="rgb(85,85,85)" stroke-width="1.5"/><circle cx="8" cy="88" r="7" fill="none" stroke="rgb(85,85,85)" stroke-width="1.5"/><circle cx="8" cy="88" r="4" fill="rgb(85,85,85)"/>`));
+ put("mobile_feedback_result",text(fx+16,fy+178,"**Incorrect answer** · Answer locked","small","#262626",{wrap:318}));
+ put("mobile_note",{type:"note",x:x+20,y:1180,w:1280,h:115,color:"yellow",text:"Identical phone geometry in English and Portuguese; translate interface labels, not exam content. Open drawer overlays the same workspace and retains selection/scroll. Desktop tooltip is anchored; mobile labels wrap. Footer studies cover first/middle/last pages. Evaluated long options place feedback below the text. Prototype: verify full-row selection, tap targets, focus, dismissal, retry and locale."});
+ // Error instruction in main area identifies dependency without duplicating error copy in sidebar.
+ put("sidebar-failure_status",text(layout("sidebar-failure").ox+layout("sidebar-failure").center-240,365,"Retry from the sidebar to continue.","body","#626262",{wrap:480,textAlign:"center"}));
+ put("no-items_status",text(layout("no-items").ox+layout("no-items").center-240,380,"No competitions available","large","ink",{wrap:480,textAlign:"center"}));
+ return out;
+}
+const prior=(()=>{return {states,existing,layout,shared:()=>{const o=shared();for(const id of ["collapsed_reveal_hover","collapsed_reveal_icon","sidebar-loading_sk_label0","sidebar-loading_sk_icon1","sidebar-loading_sk_label1","top_scroll_thumb","end_scroll_thumb","selected_scroll_thumb","correct_scroll_thumb","wrong_scroll_thumb","loading_scroll_thumb","narrow_scroll_thumb","hover_scroll_thumb","focus_scroll_thumb","submitting_scroll_thumb","submit-failure_scroll_thumb","collapsed_scroll_thumb","long-content_scroll_thumb","page-middle_scroll_thumb","page-last_scroll_thumb"])delete o[id];return o;},studies:()=>{const o={...studies(),...reviewSpecimens(),...refined()};for(const id of ["collapsed_reveal_hover","collapsed_reveal_icon","sidebar-loading_sk_label0","sidebar-loading_sk_icon1","sidebar-loading_sk_label1","top_scroll_thumb","end_scroll_thumb","selected_scroll_thumb","correct_scroll_thumb","wrong_scroll_thumb","loading_scroll_thumb","narrow_scroll_thumb","hover_scroll_thumb","focus_scroll_thumb","submitting_scroll_thumb","submit-failure_scroll_thumb","collapsed_scroll_thumb","long-content_scroll_thumb","page-middle_scroll_thumb","page-last_scroll_thumb"])delete o[id];return o;}};})();
+const omitted=new Set(["top_q1_radio1","top_q1_radio2","top_q1_radio3","top_q1_radio4","end_q1_radio1","end_q1_radio2","end_q1_radio3","end_q1_radio4","selected_q1_radio1","selected_q1_radio2","selected_q1_radio3","selected_q1_radio4","correct_q1_radio1","correct_q1_radio2","correct_q1_radio3","correct_q1_radio4","wrong_q1_radio1","wrong_q1_radio2","wrong_q1_radio3","wrong_q1_radio4","narrow_q1_radio1","narrow_q1_radio2","narrow_q1_radio3","narrow_q1_radio4","hover_q1_radio1","hover_q1_radio2","hover_q1_radio3","hover_q1_radio4","focus_q1_radio1","focus_q1_radio2","focus_q1_radio3","focus_q1_radio4","submitting_q1_radio1","submitting_q1_radio2","submitting_q1_radio3","submitting_q1_radio4","submit-failure_q1_radio1","submit-failure_q1_radio2","submit-failure_q1_radio3","submit-failure_q1_radio4","collapsed_q1_radio1","collapsed_q1_radio2","collapsed_q1_radio3","collapsed_q1_radio4","page-middle_q1_radio1","page-middle_q1_radio2","page-middle_q1_radio3","page-middle_q1_radio4","page-last_q1_radio1","page-last_q1_radio2","page-last_q1_radio3","page-last_q1_radio4","mobile_pt_radios","mobile_pt_next","mobile_drawer_underlay","mobile_drawer_underlay_q1","mobile_drawer_underlay_choice","mobile_full_label_surface","mobile_full_label_tip","mobile_full_label_pointer","sidebar-failure_detail","no-items_detail"]);
+return {...prior,shared:()=>Object.fromEntries(Object.entries(prior.shared()).filter(([id])=>!omitted.has(id))),studies:()=>{const base={...prior.shared(),...prior.studies()};const o={...prior.studies(),...consistentSpecimens(base)};for(const id of omitted)delete o[id];return o;}};
 }
 module.exports=components();

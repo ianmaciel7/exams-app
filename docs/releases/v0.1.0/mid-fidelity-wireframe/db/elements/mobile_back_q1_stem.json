@@ -1,0 +1,9 @@
+{
+  "type": "text",
+  "x": 27196,
+  "y": 608,
+  "text": "Which SQL clause filters rows before grouping?",
+  "size": "body",
+  "color": "#1c1c1c",
+  "wrap": 350
+}

@@ -28,7 +28,8 @@ async function captureSketchStates(page,theme,board){
     return {scale:m.a,x:m.e,y:m.f};
   });
   for(let i=0;i<states.length;i++){
-    const cx=655+i*1460,cy=515;
+    const mobileStudy=board.id==='midfidelity'&&states[i]==='mobile';
+    const cx=655+i*1460,cy=mobileStudy?655:515;
     // Use the native wheel camera rather than scaling a crop of the overview.
     // Dispatch wheel gestures directly on the native surface. A physical
     // mouse at the viewport center may land on a note/comment overlay.
@@ -40,7 +41,7 @@ async function captureSketchStates(page,theme,board){
       },{dx,dy,zoom});
       await page.waitForTimeout(50);
     };
-    const desired=Math.min((box.width-180)/1320,(box.height-160)/1100,1.1);
+    const desired=Math.min((box.width-180)/1320,(box.height-160)/(mobileStudy?1370:1100),1.1);
     for(let attempt=0;attempt<20;attempt++){
       const c=await camera();
       if(Math.abs(Math.log(desired/c.scale))<0.012) break;

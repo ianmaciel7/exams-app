@@ -1,9 +1,8 @@
 {
   "type": "text",
-  "x": 26378,
-  "y": 526,
+  "x": 26342,
+  "y": 336,
   "text": "B. GET",
   "size": "body",
-  "color": "#262626",
-  "wrap": 292
+  "color": "ink"
 }

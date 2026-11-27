@@ -1,10 +1,10 @@
 {
   "type": "text",
   "x": 29747,
-  "y": 350,
-  "text": "Could not load competitions",
-  "size": "large",
-  "color": "ink",
+  "y": 365,
+  "text": "Retry from the sidebar to continue.",
+  "size": "body",
+  "color": "#626262",
   "wrap": 480,
   "textAlign": "center"
 }

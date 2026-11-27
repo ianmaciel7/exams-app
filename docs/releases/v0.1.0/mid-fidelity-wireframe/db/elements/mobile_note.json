@@ -1,9 +1,9 @@
 {
   "type": "note",
-  "x": 26740,
-  "y": 875,
-  "w": 640,
-  "h": 120,
+  "x": 26300,
+  "y": 1180,
+  "w": 1280,
+  "h": 115,
   "color": "yellow",
-  "text": "Mobile: the open drawer overlays the same question context with a dimmed background; labels wrap instead of relying on hover. Compact footer shows page and previous/next with 44-unit illustrative targets. Portuguese specimen checks translated layout; tooltip remains a desktop study. Prototype validates dismissal, focus restoration, actual touch targets, locale and breakpoint."
+  "text": "Identical phone geometry in English and Portuguese; translate interface labels, not exam content. Open drawer overlays the same workspace and retains selection/scroll. Desktop tooltip is anchored; mobile labels wrap. Footer studies cover first/middle/last pages. Evaluated long options place feedback below the text. Prototype: verify full-row selection, tap targets, focus, dismissal, retry and locale."
 }
