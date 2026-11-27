@@ -50,3 +50,7 @@ Operate-mode layout: the question content is primary and the navigation supports
 ## Documentation synchronization
 
 The 36-unit row spacing and one-unit active marker supersede the earlier 38-unit sidebar study. See [provisional DESIGN.md](../../../../DESIGN.md), [Product](../product/README.md), [Information Architecture](../information-architecture/README.md), [Screen Inventory](../screen-inventory/README.md) and [User Flows](../user-flows/README.md). The four review threads remain open. Source geometry is updated; new visual validation remains separate.
+
+## Generic navigation icon refinement
+
+The owner requested a more generic icon shared by both entries. Replace document silhouettes with identical neutral list glyphs made of native strokes across all eight variants. Selection remains indicated by text emphasis and the existing thin marker. No change to navigation behavior, labels or state coverage.

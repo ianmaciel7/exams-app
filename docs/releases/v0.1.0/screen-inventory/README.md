@@ -23,4 +23,6 @@ Other destinations and controls are not selected. Progress: in progress; user re
 | Empty list | Proposal |
 | Load failure | Proposal; retry open |
 
-The current Sketch uses a compact one-line sidebar list with document glyphs, institution/year/position labels, ellipsis and subtle active text/indicator. No redundant section heading or additional menu. Exact visual treatment remains exploratory.
+The current Sketch uses a compact one-line sidebar list with generic question-list glyphs, institution/year/position labels, ellipsis and subtle active text/indicator. No redundant section heading or additional menu. Exact visual treatment remains exploratory.
+
+Both sidebar entries share one neutral question-list icon in the current Sketch; this is a visual refinement, not a new interaction.

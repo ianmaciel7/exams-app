@@ -22,11 +22,11 @@ Prefer a flat, unobtrusive sketch hierarchy. Use light separators, not nested ca
 
 ## Shapes
 
-Native editable hand-drawn strokes, restrained document icons, recognizable radio controls. Preserve the sketch's low fidelity and legibility.
+Native editable hand-drawn strokes, identical neutral question-list icons, recognizable radio controls. Preserve the sketch's low fidelity and legibility.
 
 ## Components
 
-Navigation: a single compact list of competition entries, with no redundant section heading. Selected entry uses text emphasis and a thin indicator. Question list: stacked question items, single-choice alternatives, semantic correct/incorrect feedback, end-of-list pagination. See the [screen inventory](docs/releases/v0.1.0/screen-inventory/README.md) and [flows](docs/releases/v0.1.0/user-flows/README.md) for the state coverage and open decisions. Hover, focus, responsive behavior and actual accessibility remain untested.
+Navigation: a single compact list of competition entries, with no redundant section heading. Both entries use the same neutral list glyph; selection uses text emphasis and a thin indicator. Question list: stacked question items, single-choice alternatives, semantic correct/incorrect feedback, end-of-list pagination. See the [screen inventory](docs/releases/v0.1.0/screen-inventory/README.md) and [flows](docs/releases/v0.1.0/user-flows/README.md) for the state coverage and open decisions. Hover, focus, responsive behavior and actual accessibility remain untested.
 
 ## Do's and Don'ts
 
