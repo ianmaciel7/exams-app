@@ -62,8 +62,13 @@ try{
   const read=await fetch(new URL('/api/open-artifact.artifact?id='+encodeURIComponent(b.nativeId),state.url),{headers:{Authorization:'Bearer '+state.token},redirect:'error'});
   assert.equal(read.status,200);
   const detail=await read.json();assert.equal(detail.id,b.nativeId);
+  const bootResponse=await fetch(new URL('/api/open-artifact.artifacts.boot?id='+encodeURIComponent(b.nativeId),state.url),{headers:{Authorization:'Bearer '+state.token},redirect:'error'});
+  assert.equal(bootResponse.status,200);const boot=await bootResponse.json();assert.ok(boot.pageUrl&&!boot.problem&&!boot.empty,JSON.stringify(boot.problem));
+  const shell=await fetch(new URL('/a/'+b.nativeId,state.url),{redirect:'error'});assert.equal(shell.status,200);
+  const meta=await fetch(new URL('_api/db/get?path=board%2Fmeta',boot.pageUrl),{redirect:'error'}).then(r=>r.json());
+  assert.deepEqual(meta.data.order,JSON.parse(readFileSync(join(workspace,b.path,'db','board','meta.json'),'utf8')).order);
  }
- console.log('Library: 11 existing boards, explicit approval guard, stable repeat registration, no duplicate records, unchanged content, owner remains null, 11 native routes verified.');
+ console.log('Library: 11 existing boards, explicit approval guard, stable repeat registration, no duplicate records, unchanged content, owner remains null, 11 native Shell boots and board orders verified.');
 }finally{
  spawnSync(process.execPath,[runtime.main,'daemon','stop'],{cwd:workspace,env,stdio:'ignore',timeout:15000});
  rmSync(scratch,{recursive:true,force:true,maxRetries:15,retryDelay:300});
