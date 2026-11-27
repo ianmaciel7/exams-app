@@ -1,8 +1,9 @@
 {
   "type": "text",
   "x": 27228,
-  "y": 150,
-  "text": "**DATAPREV** · 2026 · Anal…",
+  "y": 148,
+  "text": "**DATAPREV · 2026**\nAnalyst",
   "size": "small",
-  "color": "#262626"
+  "color": "#262626",
+  "wrap": 218
 }

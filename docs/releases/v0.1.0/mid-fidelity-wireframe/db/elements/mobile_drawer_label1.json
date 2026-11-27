@@ -1,8 +1,9 @@
 {
   "type": "text",
   "x": 27228,
-  "y": 192,
-  "text": "PPSA · 2025 · Analyst…",
+  "y": 207,
+  "text": "PPSA · 2025\nAnalyst",
   "size": "small",
-  "color": "#262626"
+  "color": "#262626",
+  "wrap": 218
 }

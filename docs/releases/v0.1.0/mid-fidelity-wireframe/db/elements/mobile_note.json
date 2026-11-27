@@ -5,5 +5,5 @@
   "w": 640,
   "h": 120,
   "color": "yellow",
-  "text": "Approved overlay drawer: compare closed phone and native open specimen. The dimmed question workspace stays behind the drawer; selection and scroll are preserved. Left-side component studies cover footer pagination, full competition label and interface copy in both languages. Prototype validates focus, dismissal, touch and breakpoint."
+  "text": "Mobile: the open drawer overlays the same question context with a dimmed background; labels wrap instead of relying on hover. Compact footer shows page and previous/next with 44-unit illustrative targets. Portuguese specimen checks translated layout; tooltip remains a desktop study. Prototype validates dismissal, focus restoration, actual touch targets, locale and breakpoint."
 }

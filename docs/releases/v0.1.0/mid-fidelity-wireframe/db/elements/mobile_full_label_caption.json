@@ -1,8 +1,8 @@
 {
   "type": "text",
   "x": 26336,
-  "y": 278,
-  "text": "Full label on hover / focus / touch",
-  "size": "body",
+  "y": 875,
+  "text": "Desktop · Full-label tooltip",
+  "size": "small",
   "color": "ink"
 }

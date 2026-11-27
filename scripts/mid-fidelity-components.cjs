@@ -150,6 +150,62 @@ function reviewSpecimens(){
  put("mobile_locale_copy",text(s,462,"English: Answer · Retry · Question 1\npt-BR: Responder · Tentar novamente · Questão 1","body","#262626",{wrap:350}));
  return out;
 }
-return {states,existing,layout,shared,studies:()=>({...studies(),...reviewSpecimens()})};
+function refined(){
+ const out={};const put=(id,e)=>out[id]=e;
+ const x=18*1460,cx=14*1460,d=x+900,s=x+56;
+ // Keep the exact existing scrollbar geometry in a single simple vector per state.
+ for(const id of ["top","end","selected","correct","wrong","loading","narrow","hover","focus","submitting","submit-failure","collapsed","long-content","page-middle","page-last"]){
+  const {ox,r}=layout(id),bottom=["end","page-middle","page-last"].includes(id);
+  put(id+"_scroll_track",vector(ox+r-18,100,8,660,`<rect width="8" height="660" rx="4" fill="rgb(241,241,241)"/><rect y="${bottom?516:0}" width="8" height="144" rx="4" fill="rgb(153,153,153)"/>`));
+ }
+ // Consolidate only repeated, non-semantic navigation skeleton geometry.
+ put("sidebar-loading_sk_icon0",vector(20*1460-1460+80,153,184,58,`<g fill="rgb(221,221,221)"><rect width="16" height="16" rx="3"/><rect x="24" y="4" width="160" height="10" rx="2"/><rect y="42" width="16" height="16" rx="3"/><rect x="24" y="46" width="160" height="10" rx="2"/></g>`));
+ // Same rail geometry and toggle slot, with a permanent visible trigger for no-hover.
+ const rail=`<rect width="64" height="709" rx="5" fill="rgb(240,240,240)"/><rect x="12" y="66" width="40" height="36" rx="5" fill="rgb(216,216,216)"/><g fill="none" stroke="rgb(85,85,85)" stroke-width="1.4" stroke-linecap="round"><rect x="25" y="77" width="13" height="13" rx="2"/><path d="M28 81H35M28 85H35"/><rect x="25" y="119" width="13" height="13" rx="2"/><path d="M28 123H35M28 127H33"/></g>`;
+ const glyph=`<g fill="none" stroke="rgb(85,85,85)" stroke-width="1.5"><rect x="25" y="38" width="14" height="12" rx="2"/><path d="M30 38V50"/></g>`;
+ put("collapsed_reveal_caption",text(cx+1110,18,"Hover","small"));
+ put("collapsed_reveal_surface",vector(cx+1110,76,64,709,rail+`<rect x="18" y="30" width="28" height="28" rx="5" fill="rgb(228,228,228)"/>`+glyph));
+ put("collapsed_reveal_focus_caption",text(cx+1212,18,"Focus","small"));
+ put("collapsed_reveal_focus_sample",vector(cx+1212,76,64,709,rail+`<rect x="15" y="27" width="34" height="34" rx="6" fill="none" stroke="rgb(102,102,102)" stroke-width="2"/>`+glyph));
+ put("collapsed_nohover_caption",text(cx+1314,18,"No hover","small"));
+ put("collapsed_nohover_sample",vector(cx+1314,76,64,709,rail+glyph));
+ put("collapsed_note",{type:"note",x:cx+220,y:875,w:640,h:120,color:"yellow",text:"Desktop rest hides the expand icon; hover and keyboard focus reveal it in the same slot. No-hover devices keep the trigger visible. Activate explicitly; no hover peek. Preserve selection, scroll and answers. Validate keyboard tab order, focus ring, target size and touch in the prototype."});
+ // A dimmed copy of the same phone's visible question text and positions.
+ put("mobile_drawer_open",shape(d,76,390,709,"#bdbdbd"));
+ put("mobile_drawer_underlay",text(d+16,226,"Which HTTP method is defined as safe and idempotent?","body","#4b4b4b",{wrap:350}));
+ put("mobile_drawer_underlay_q1",text(d+16,608,"Which SQL clause filters rows before grouping?","body","#4b4b4b",{wrap:350}));
+ put("mobile_drawer_underlay_choice",text(d+42,678,"A. ORDER BY — sorts rows after filtering and grouping.","body","#4b4b4b",{wrap:324}));
+ put("mobile_drawer_panel",shape(d,76,288,709,"#f0f0f0"));
+ put("mobile_drawer_selection",shape(d+12,142,264,52,"#d8d8d8","rounded"));
+ put("mobile_drawer_label0",text(d+48,148,"**DATAPREV · 2026**\nAnalyst","small","#262626",{wrap:218}));
+ put("mobile_drawer_icon0",icon(d+24,160,0));
+ put("mobile_drawer_label1",text(d+48,207,"PPSA · 2025\nAnalyst","small","#262626",{wrap:218}));
+ put("mobile_drawer_icon1",icon(d+24,220,1));
+ // Compact previous/current/next; boundary states remain on desktop and first page here.
+ put("mobile_pagination_previous",vector(s+16,151,44,44,`<rect x=".5" y=".5" width="43" height="43" rx="5" fill="rgb(244,244,244)"/><path d="M25 15L18 22L25 29" fill="none" stroke="rgb(150,150,150)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`));
+ put("mobile_pagination_pages",text(s+65,166,"Page 1 of 5","body","#262626",{wrap:220,textAlign:"center"}));
+ put("mobile_pagination_next",vector(s+290,151,44,44,`<rect x=".5" y=".5" width="43" height="43" rx="5" fill="rgb(240,240,240)"/><path d="M19 15L26 22L19 29" fill="none" stroke="rgb(38,38,38)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`));
+ // Anchor full-label discovery to a real truncated row, external to workspace.
+ put("mobile_full_label_caption",text(s,875,"Desktop · Full-label tooltip","small"));
+ put("mobile_full_label_surface",shape(s,903,150,36,"#f0f0f0","rounded","DATAPREV · 2026 · Anal…",{size:"small",ink:"#262626"}));
+ put("mobile_full_label_tip",shape(s+158,897,235,48,"#333333","rounded","DATAPREV · 2026 · Analyst",{size:"small",ink:"#ffffff"}));
+ put("mobile_full_label_pointer",vector(s+150,915,8,12,`<path d="M8 0L0 6L8 12Z" fill="rgb(51,51,51)"/>`));
+ // Native Portuguese phone workspace specimen, same example question and answer action.
+ const p=s, y=288;
+ put("mobile_locale_caption",text(p,y-28,"Phone · Portuguese (pt-BR)","body"));
+ put("mobile_locale_copy",shape(p,y,350,497,"#ffffff"));
+ put("mobile_pt_title",text(p+44,y+18,"**Exam App**"));
+ put("mobile_pt_toggle",toggle(p+16,y+21));
+ put("mobile_pt_context",text(p+16,y+54,"DATAPREV · 2026 · Analista","small","#626262",{wrap:318}));
+ put("mobile_pt_question",text(p+16,y+98,"**Questão 1**"));
+ put("mobile_pt_stem",text(p+16,y+128,"Qual método HTTP é definido como seguro e idempotente?","body","#262626",{wrap:318}));
+ put("mobile_pt_radios",vector(p+16,y+200,16,176,Array.from({length:5},(_,i)=>`<circle cx="8" cy="${8+i*40}" r="7" fill="none" stroke="rgb(85,85,85)" stroke-width="1.5"/>`).join("")));
+ ["A. POST","B. GET","C. PATCH","D. CONNECT","E. Nenhuma das anteriores"].forEach((v,i)=>put("mobile_pt_option"+i,text(p+42,y+198+i*40,v,"body","#262626",{wrap:292})));
+ put("mobile_pt_answer",shape(p+16,y+402,112,34,"#f4f4f4","rounded","Responder",{size:"small",ink:"#666666"}));
+ put("mobile_pt_next",text(p+16,y+460,"**Questão 2**"));
+ put("mobile_note",{type:"note",x:x+460,y:875,w:640,h:120,color:"yellow",text:"Mobile: the open drawer overlays the same question context with a dimmed background; labels wrap instead of relying on hover. Compact footer shows page and previous/next with 44-unit illustrative targets. Portuguese specimen checks translated layout; tooltip remains a desktop study. Prototype validates dismissal, focus restoration, actual touch targets, locale and breakpoint."});
+ return out;
+}
+return {states,existing,layout,shared:()=>{const o=shared();for(const id of ["collapsed_reveal_hover","collapsed_reveal_icon","sidebar-loading_sk_label0","sidebar-loading_sk_icon1","sidebar-loading_sk_label1","top_scroll_thumb","end_scroll_thumb","selected_scroll_thumb","correct_scroll_thumb","wrong_scroll_thumb","loading_scroll_thumb","narrow_scroll_thumb","hover_scroll_thumb","focus_scroll_thumb","submitting_scroll_thumb","submit-failure_scroll_thumb","collapsed_scroll_thumb","long-content_scroll_thumb","page-middle_scroll_thumb","page-last_scroll_thumb"])delete o[id];return o;},studies:()=>{const o={...studies(),...reviewSpecimens(),...refined()};for(const id of ["collapsed_reveal_hover","collapsed_reveal_icon","sidebar-loading_sk_label0","sidebar-loading_sk_icon1","sidebar-loading_sk_label1","top_scroll_thumb","end_scroll_thumb","selected_scroll_thumb","correct_scroll_thumb","wrong_scroll_thumb","loading_scroll_thumb","narrow_scroll_thumb","hover_scroll_thumb","focus_scroll_thumb","submitting_scroll_thumb","submit-failure_scroll_thumb","collapsed_scroll_thumb","long-content_scroll_thumb","page-middle_scroll_thumb","page-last_scroll_thumb"])delete o[id];return o;}};
 }
 module.exports=components();

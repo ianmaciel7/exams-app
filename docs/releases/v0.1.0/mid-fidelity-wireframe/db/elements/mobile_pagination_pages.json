@@ -1,10 +1,10 @@
 {
   "type": "text",
-  "x": 26427,
-  "y": 170,
-  "text": "**1**    2    3    4    5",
-  "size": "small",
+  "x": 26401,
+  "y": 166,
+  "text": "Page 1 of 5",
+  "size": "body",
   "color": "#262626",
-  "wrap": 176,
+  "wrap": 220,
   "textAlign": "center"
 }
