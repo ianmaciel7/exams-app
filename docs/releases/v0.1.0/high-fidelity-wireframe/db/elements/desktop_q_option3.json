@@ -1,9 +1,9 @@
 {
   "type": "text",
-  "x": 342,
-  "y": 265,
+  "x": 340,
+  "y": 241,
   "text": "D. CONNECT",
   "size": "body",
-  "color": "#262626",
-  "wrap": 706
+  "color": "#626262",
+  "wrap": 708
 }

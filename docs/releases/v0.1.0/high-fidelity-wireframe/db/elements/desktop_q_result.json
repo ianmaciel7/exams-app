@@ -1,8 +1,8 @@
 {
   "type": "text",
   "x": 312,
-  "y": 360,
-  "text": "**Incorrect answer** · Answer locked",
+  "y": 318,
+  "text": "**Incorrect answer**",
   "size": "body",
   "color": "#262626",
   "wrap": 740

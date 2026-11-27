@@ -1,9 +1,9 @@
 {
   "type": "text",
-  "x": 342,
-  "y": 305,
+  "x": 340,
+  "y": 273,
   "text": "E. None of the above",
   "size": "body",
-  "color": "#262626",
-  "wrap": 706
+  "color": "#626262",
+  "wrap": 708
 }

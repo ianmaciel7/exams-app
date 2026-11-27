@@ -1,9 +1,9 @@
 {
   "type": "text",
-  "x": 3334,
-  "y": 2617,
-  "text": "C. Create another record for every submission and remove duplicates manually.",
+  "x": 3356,
+  "y": 2547,
+  "text": "Disable all retries, even when the original request has not reached the server.",
   "size": "body",
-  "color": "#262626",
-  "wrap": 910
+  "color": "#626262",
+  "wrap": 900
 }

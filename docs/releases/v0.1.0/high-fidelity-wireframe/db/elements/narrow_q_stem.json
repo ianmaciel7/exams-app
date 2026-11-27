@@ -1,7 +1,7 @@
 {
   "type": "text",
   "x": 3304,
-  "y": 1710,
+  "y": 1698,
   "text": "Which HTTP method is defined as safe and idempotent?",
   "size": "body",
   "color": "#262626",

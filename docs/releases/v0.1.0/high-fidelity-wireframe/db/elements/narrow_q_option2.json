@@ -1,9 +1,9 @@
 {
   "type": "text",
-  "x": 3334,
-  "y": 1811,
-  "text": "B. GET",
+  "x": 3332,
+  "y": 1823,
+  "text": "C. PATCH",
   "size": "body",
   "color": "#262626",
-  "wrap": 440
+  "wrap": 444
 }

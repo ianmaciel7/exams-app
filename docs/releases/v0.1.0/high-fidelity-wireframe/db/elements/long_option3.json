@@ -1,0 +1,9 @@
+{
+  "type": "text",
+  "x": 3356,
+  "y": 2585,
+  "text": "Increase the network timeout without changing how duplicate requests are handled.",
+  "size": "body",
+  "color": "#626262",
+  "wrap": 900
+}

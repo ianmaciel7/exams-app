@@ -1,9 +1,9 @@
 {
   "type": "text",
-  "x": 3334,
-  "y": 2670,
+  "x": 3356,
+  "y": 2652,
   "text": "Your answer",
   "size": "small",
   "color": "#262626",
-  "wrap": 910
+  "wrap": 900
 }

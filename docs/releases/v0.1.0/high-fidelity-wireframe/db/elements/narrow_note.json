@@ -3,7 +3,7 @@
   "x": 3850,
   "y": 1644,
   "w": 480,
-  "h": 340,
+  "h": 388,
   "color": "yellow",
-  "text": "768 specimen shows wrapping with a compact 240 sidebar. The list scrolls and remaining options/action are below the viewport, not removed from the task. The desktop breakpoint and real reflow require prototype validation. Competition Retry is not question Retry."
+  "text": "768 specimen uses the same question structure, including all five alternatives and disabled Answer. Reserve two lines for the stem at narrow widths. The actual breakpoint and runtime reflow remain prototype work."
 }
