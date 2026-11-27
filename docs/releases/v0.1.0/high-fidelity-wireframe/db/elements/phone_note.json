@@ -1,9 +1,9 @@
 {
   "type": "note",
-  "x": 2490,
-  "y": 924,
-  "w": 390,
-  "h": 145,
+  "x": 2540,
+  "y": 900,
+  "w": 1180,
+  "h": 150,
   "color": "yellow",
-  "text": "390 × 800 representative viewport; 20 gutters; 350 content; 48 option-row rhythm. Translate interface chrome only. 44-unit target intent; validate 320 viewport and long labels later."
+  "text": "Phone gutter 20; 48 row rhythm; 44 action target; drawer clamped at 304 or viewport minus 56. Q2 intentionally continues below the viewport: see the separate phone continuation. Underlay generated from the same complete visible content; no fabricated replacement. Locale chrome only."
 }

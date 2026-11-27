@@ -1,9 +1,9 @@
 {
   "type": "note",
-  "x": 1370,
-  "y": 924,
+  "x": 1400,
+  "y": 968,
   "w": 1024,
-  "h": 100,
+  "h": 90,
   "color": "yellow",
-  "text": "Proposed structural specimen: 64 rail; always-visible Ghost trigger, 44-unit target intent; preserve selection and scroll. 40 main inset; content max 740. Narrow overflow and breakpoint remain prototype validation."
+  "text": "64-unit rail; visible Ghost trigger at rest. Explicit activation; current content and scroll preserved."
 }

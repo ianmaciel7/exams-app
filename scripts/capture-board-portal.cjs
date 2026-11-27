@@ -1,6 +1,7 @@
 const { chromium } = require('playwright');
 const fs = require('node:fs');
 const midFidelity = require('./mid-fidelity-components.cjs');
+const highFidelity = require('./high-fidelity-components.cjs');
 const { execFileSync } = require('node:child_process');
 const boards = [
   ['overview','Ideas Board','docs/boards/overview'],
@@ -61,7 +62,8 @@ async function captureSettled(page,path,mobileRect){
 }
 
 async function captureSketchStates(page,theme,board){
-  const states=board.id==='midfidelity'?midFidelity.states:board.id==='lowfidelity'?[...sketchStates,'narrow']:sketchStates;
+  const high=board.id==='highfidelity';
+  const states=high?highFidelity.groups.map(g=>g.id):board.id==='midfidelity'?midFidelity.states:board.id==='lowfidelity'?[...sketchStates,'narrow']:sketchStates;
   board.states ||= states.map(id=>({id,images:{}}));
   const surface=page.locator('.wb-surface');
   const box=await surface.boundingBox();
@@ -72,7 +74,8 @@ async function captureSketchStates(page,theme,board){
   });
   for(let i=0;i<states.length;i++){
     const mobileStudy=board.id==='midfidelity'&&states[i]==='mobile';
-    const cx=655+i*1460,cy=mobileStudy?655:515;
+    const section=high?highFidelity.groups[i]:null;
+    const cx=section?section.x+section.w/2:655+i*1460,cy=section?section.y+section.h/2:mobileStudy?655:515;
     // Use the native wheel camera rather than scaling a crop of the overview.
     // Dispatch wheel gestures directly on the native surface. A physical
     // mouse at the viewport center may land on a note/comment overlay.
@@ -84,7 +87,7 @@ async function captureSketchStates(page,theme,board){
       },{dx,dy,zoom});
       await page.waitForTimeout(50);
     };
-    const desired=Math.min((box.width-180)/1320,(box.height-160)/(mobileStudy?1370:1100),1.1);
+    const desired=Math.min((box.width-180)/(section?section.w:1320),(box.height-160)/(section?section.h:mobileStudy?1370:1100),1.1);
     for(let attempt=0;attempt<20;attempt++){
       const c=await camera();
       if(Math.abs(Math.log(desired/c.scale))<0.012) break;
@@ -147,7 +150,7 @@ async function captureSketchStates(page,theme,board){
           const path='boards/'+id+'-'+theme+'.png';
           await page.screenshot({path:'_site/'+path});
           board.images[theme]=path;
-          if(id==='sketch'||id==='lowfidelity'||id==='midfidelity') await captureSketchStates(page,theme,board);
+          if(id==='sketch'||id==='lowfidelity'||id==='midfidelity'||id==='highfidelity') await captureSketchStates(page,theme,board);
           console.log(id,theme,expected);
         } finally { await page.close(); }
       }

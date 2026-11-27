@@ -2,9 +2,9 @@
   "type": "shape",
   "kind": "rect",
   "x": 0,
-  "y": 100,
+  "y": 48,
   "w": 1280,
-  "h": 800,
+  "h": 900,
   "color": "#ffffff",
   "text": ""
 }

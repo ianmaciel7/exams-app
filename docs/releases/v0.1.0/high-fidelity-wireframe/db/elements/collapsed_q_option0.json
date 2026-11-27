@@ -1,9 +1,9 @@
 {
   "type": "text",
-  "x": 1506,
-  "y": 223,
+  "x": 1534,
+  "y": 145,
   "text": "A. POST",
   "size": "body",
   "color": "#262626",
-  "wrap": 704
+  "wrap": 706
 }

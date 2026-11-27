@@ -1,0 +1,9 @@
+{
+  "type": "note",
+  "x": 0,
+  "y": 2830,
+  "w": 1510,
+  "h": 110,
+  "color": "yellow",
+  "text": "Retain the selected option when outcome is not confirmed. Retry through Answer with identical footprint; prohibit duplicate evaluation while pending. Text labels identify correctness without color alone; no runtime claim."
+}

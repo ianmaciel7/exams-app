@@ -1,0 +1,9 @@
+{
+  "type": "note",
+  "x": 3280,
+  "y": 2840,
+  "w": 1020,
+  "h": 100,
+  "color": "yellow",
+  "text": "Wrapped text controls row height; feedback below the text, not overlaid. No final semantic color palette. Verify actual renderer text bounds and mobile reflow."
+}

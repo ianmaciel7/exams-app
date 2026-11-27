@@ -1,10 +1,10 @@
 {
   "type": "shape",
   "kind": "rect",
-  "x": 2980,
-  "y": 100,
+  "x": 2970,
+  "y": 76,
   "w": 390,
   "h": 800,
-  "color": "#ffffff",
+  "color": "#bdbdbd",
   "text": ""
 }

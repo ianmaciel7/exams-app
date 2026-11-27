@@ -434,7 +434,7 @@
       "phone-open"
     ],
     "status": "in progress",
-    "review": "Initial published board visually reviewed; inherited coverage gaps recorded. Correct and recapture before owner approval.",
+    "review": "All inherited obligations represented in native source; actual capture and owner approval pending.",
     "inventoryReference": "21 approved Mid-Fidelity variants",
     "nextQuestion": "Mockup: which visual identity, typography, semantic colors and theme treatment should be applied to the resolved structure?",
     "coverageGate": {
@@ -449,27 +449,39 @@
           "requirement": "Complete question content, alternatives and action; intentional viewport clipping only",
           "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
           "elementIds": [
-            "desktop_q_title",
-            "desktop_q_next"
+            "desktop_q2_option4",
+            "desktop_q2_answer",
+            "collapsed_q2_answer",
+            "continuation_q_option4",
+            "continuation_q_answer"
           ],
-          "status": "missing",
-          "reviewEvidence": null
+          "status": "represented",
+          "reviewEvidence": "Native source mapped to concrete element IDs; rendered capture and visual acceptance pending."
         },
         {
           "id": "pagination",
           "requirement": "First, middle, last page and boundary controls",
           "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
-          "elementIds": [],
-          "status": "missing",
-          "reviewEvidence": null
+          "elementIds": [
+            "pagination0_prev",
+            "pagination1_page3",
+            "pagination2_next",
+            "mobile_footer0_prev",
+            "mobile_footer2_next"
+          ],
+          "status": "represented",
+          "reviewEvidence": "Native source mapped to concrete element IDs; rendered capture and visual acceptance pending."
         },
         {
           "id": "correct",
           "requirement": "Correct answer and lock",
           "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
-          "elementIds": [],
-          "status": "missing",
-          "reviewEvidence": null
+          "elementIds": [
+            "feedback_correct_result",
+            "feedback_correct_option1"
+          ],
+          "status": "represented",
+          "reviewEvidence": "Native source mapped to concrete element IDs; rendered capture and visual acceptance pending."
         },
         {
           "id": "wrong",
@@ -481,7 +493,7 @@
             "desktop_q_row1"
           ],
           "status": "represented",
-          "reviewEvidence": "Initial High-Fidelity source/capture reviewed at 2cc13ec; visual review remains open."
+          "reviewEvidence": "Native source mapped to concrete element IDs; rendered capture and visual acceptance pending."
         },
         {
           "id": "selected",
@@ -492,71 +504,96 @@
             "collapsed_q_radio1_dot"
           ],
           "status": "represented",
-          "reviewEvidence": "Initial High-Fidelity source/capture reviewed at 2cc13ec; visual review remains open."
+          "reviewEvidence": "Native source mapped to concrete element IDs; rendered capture and visual acceptance pending."
         },
         {
           "id": "question-loading",
           "requirement": "Question list loading",
           "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
-          "elementIds": [],
-          "status": "missing",
-          "reviewEvidence": null
+          "elementIds": [
+            "question_loading_heading0",
+            "question_loading_sk_button0"
+          ],
+          "status": "represented",
+          "reviewEvidence": "Native source mapped to concrete element IDs; rendered capture and visual acceptance pending."
         },
         {
           "id": "question-empty",
           "requirement": "Empty question list",
           "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
-          "elementIds": [],
-          "status": "missing",
-          "reviewEvidence": null
+          "elementIds": [
+            "question_empty_status"
+          ],
+          "status": "represented",
+          "reviewEvidence": "Native source mapped to concrete element IDs; rendered capture and visual acceptance pending."
         },
         {
           "id": "question-failure",
           "requirement": "Question list failure and Retry",
           "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
-          "elementIds": [],
-          "status": "missing",
-          "reviewEvidence": null
+          "elementIds": [
+            "question_failure_status",
+            "question_failure_retry"
+          ],
+          "status": "represented",
+          "reviewEvidence": "Native source mapped to concrete element IDs; rendered capture and visual acceptance pending."
         },
         {
           "id": "submission-pending",
           "requirement": "Pending submission, stable action footprint",
           "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
-          "elementIds": [],
-          "status": "missing",
-          "reviewEvidence": null
+          "elementIds": [
+            "feedback_pending_answer",
+            "feedback_pending_radio1_dot"
+          ],
+          "status": "represented",
+          "reviewEvidence": "Native source mapped to concrete element IDs; rendered capture and visual acceptance pending."
         },
         {
           "id": "submission-recovery",
           "requirement": "Uncertain outcome, retained selection and safe retry",
           "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
-          "elementIds": [],
-          "status": "missing",
-          "reviewEvidence": null
+          "elementIds": [
+            "feedback_recovery_answer",
+            "feedback_recovery_error",
+            "feedback_recovery_radio1_dot"
+          ],
+          "status": "represented",
+          "reviewEvidence": "Native source mapped to concrete element IDs; rendered capture and visual acceptance pending."
         },
         {
           "id": "navigation-empty",
           "requirement": "Empty competitions; message only",
           "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
-          "elementIds": [],
-          "status": "missing",
-          "reviewEvidence": null
+          "elementIds": [
+            "navigation_empty_empty",
+            "navigation_empty_status"
+          ],
+          "status": "represented",
+          "reviewEvidence": "Native source mapped to concrete element IDs; rendered capture and visual acceptance pending."
         },
         {
           "id": "navigation-loading",
           "requirement": "Navigation loading",
           "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
-          "elementIds": [],
-          "status": "missing",
-          "reviewEvidence": null
+          "elementIds": [
+            "navigation_loading_sk_label0",
+            "navigation_loading_status"
+          ],
+          "status": "represented",
+          "reviewEvidence": "Native source mapped to concrete element IDs; rendered capture and visual acceptance pending."
         },
         {
           "id": "navigation-failure",
           "requirement": "Competition load failure and manual Retry",
           "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
-          "elementIds": [],
-          "status": "missing",
-          "reviewEvidence": null
+          "elementIds": [
+            "navigation_failure_retry",
+            "navigation_failure_error",
+            "navigation_failure_status"
+          ],
+          "status": "represented",
+          "reviewEvidence": "Native source mapped to concrete element IDs; rendered capture and visual acceptance pending."
         },
         {
           "id": "navigation-expanded",
@@ -567,7 +604,7 @@
             "desktop_nav_sel"
           ],
           "status": "represented",
-          "reviewEvidence": "Initial High-Fidelity source/capture reviewed at 2cc13ec; visual review remains open."
+          "reviewEvidence": "Native source mapped to concrete element IDs; rendered capture and visual acceptance pending."
         },
         {
           "id": "navigation-collapsed",
@@ -576,55 +613,74 @@
           "elementIds": [
             "collapsed_sidebar",
             "collapsed_toggle",
-            "collapsed_nav_sel"
+            "collapsed_nav_sel",
+            "rail_toggle3"
           ],
           "status": "represented",
-          "reviewEvidence": "Initial High-Fidelity source/capture reviewed at 2cc13ec; visual review remains open."
+          "reviewEvidence": "Native source mapped to concrete element IDs; rendered capture and visual acceptance pending."
         },
         {
           "id": "control-states",
           "requirement": "Hover, focus, pressed and disabled",
           "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
-          "elementIds": [],
-          "status": "missing",
-          "reviewEvidence": null
+          "elementIds": [
+            "control_hover",
+            "control_pressed",
+            "control_focus_ring",
+            "control_disabled",
+            "control_pending",
+            "retry_focus_ring"
+          ],
+          "status": "represented",
+          "reviewEvidence": "Native source mapped to concrete element IDs; rendered capture and visual acceptance pending."
         },
         {
           "id": "full-label",
           "requirement": "Full label discovery and phone wrapping",
           "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
-          "elementIds": [],
-          "status": "missing",
-          "reviewEvidence": null
+          "elementIds": [
+            "tooltip_full",
+            "drawer_nav_label0"
+          ],
+          "status": "represented",
+          "reviewEvidence": "Native source mapped to concrete element IDs; rendered capture and visual acceptance pending."
         },
         {
           "id": "long-content",
           "requirement": "Wrapped long stem/option and feedback below text",
           "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
-          "elementIds": [],
-          "status": "missing",
-          "reviewEvidence": null
+          "elementIds": [
+            "long_option1",
+            "long_feedback1",
+            "long_feedback2"
+          ],
+          "status": "represented",
+          "reviewEvidence": "Native source mapped to concrete element IDs; rendered capture and visual acceptance pending."
         },
         {
           "id": "phone-closed",
           "requirement": "Phone closed workspace with complete scrollable content",
           "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
           "elementIds": [
-            "phone_frame"
+            "phone_frame",
+            "phone_q_answer",
+            "continuation_q_answer"
           ],
-          "status": "missing",
-          "reviewEvidence": null
+          "status": "represented",
+          "reviewEvidence": "Native source mapped to concrete element IDs; rendered capture and visual acceptance pending."
         },
         {
           "id": "phone-open",
           "requirement": "Phone drawer with matching dimmed workspace underlay",
           "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
           "elementIds": [
+            "drawer_frame",
+            "drawer_q_option1",
             "drawer_drawer",
-            "drawer_underlay"
+            "drawer_nav_label0"
           ],
-          "status": "missing",
-          "reviewEvidence": null
+          "status": "represented",
+          "reviewEvidence": "Native source mapped to concrete element IDs; rendered capture and visual acceptance pending."
         },
         {
           "id": "localized",
@@ -632,20 +688,38 @@
           "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
           "elementIds": [
             "desktop_q_title",
-            "phone_q_title"
+            "phone_q_title",
+            "phone320_q_title"
           ],
           "status": "represented",
-          "reviewEvidence": "Initial High-Fidelity source/capture reviewed at 2cc13ec; visual review remains open."
+          "reviewEvidence": "Native source mapped to concrete element IDs; rendered capture and visual acceptance pending."
         },
         {
           "id": "responsive",
           "requirement": "320/390/768/1024/1280 structural widths and overflow review",
           "baseline": "Approved Mid-Fidelity inventory and decisions at ec20139",
-          "elementIds": [],
-          "status": "missing",
-          "reviewEvidence": null
+          "elementIds": [
+            "phone320_frame",
+            "phone_frame",
+            "narrow_frame",
+            "collapsed_frame",
+            "desktop_frame"
+          ],
+          "status": "represented",
+          "reviewEvidence": "Native source mapped to concrete element IDs; rendered capture and visual acceptance pending."
         }
       ]
-    }
+    },
+    "supportingStudies": [
+      "desktop",
+      "collapsed",
+      "phone",
+      "continuation",
+      "lifecycle",
+      "navigation",
+      "feedback",
+      "controls",
+      "long"
+    ]
   }
 }

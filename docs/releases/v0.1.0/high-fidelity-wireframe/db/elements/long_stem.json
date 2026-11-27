@@ -1,0 +1,9 @@
+{
+  "type": "text",
+  "x": 3304,
+  "y": 2348,
+  "text": "Which approach prevents duplicate records when the outcome of a previous request is unknown and the client needs to retry safely?",
+  "size": "body",
+  "color": "#262626",
+  "wrap": 970
+}
