@@ -5,5 +5,5 @@
   "w": 480,
   "h": 380,
   "color": "yellow",
-  "text": "**v0.1.0 — In progress**\nProduct, Information Architecture, Screen Inventory and User Flows: review pending.\nSketch: complete; owner approved progression (94072ce).\nLow-Fidelity Wireframe: complete for progression; nine native variants reviewed (e70dbaf).\nMid-Fidelity Wireframe: in progress; eighteen variants; answer lifecycle, recovery, collapsible sidebar and ten-question page size approved. Native capture and visual review pending.\nLater fidelity stages: not started.\nSource: docs/releases/v0.1.0/README.md"
+  "text": "**v0.1.0 — In progress**\nProduct, Information Architecture, Screen Inventory and User Flows: review pending.\nSketch: complete; owner approved progression (94072ce).\nLow-Fidelity Wireframe: complete for progression; nine native variants reviewed (e70dbaf).\nMid-Fidelity Wireframe: in progress; eighteen variants; answer lifecycle, recovery, collapsible sidebar and ten-question page size approved. Rhythm, content-flow and pagination refinements applied. Native capture and visual review pending.\nLater fidelity stages: not started.\nSource: docs/releases/v0.1.0/README.md"
 }
