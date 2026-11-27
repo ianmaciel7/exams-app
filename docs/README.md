@@ -1,10 +1,10 @@
 # Project documentation
 
-Start with [Ideas Board](boards/overview/README.md). All previous work is archived; the current v0.1.0 planning has been reset. [Immutable previous planning snapshot](https://github.com/ianmaciel7/exams-app/tree/bbadef4ceab610f8696fcc10cbee5e400aba4900) · [Archive branch](https://github.com/ianmaciel7/exams-app/tree/archive/v0.1.0-before-reset-20261126).
+Start with [Ideas Board](boards/overview/README.md). Previous work is archived; current v0.1.0 planning explores competition selection and a vertically scrolling question list. [Immutable previous planning snapshot](https://github.com/ianmaciel7/exams-app/tree/bbadef4ceab610f8696fcc10cbee5e400aba4900) · [Archive branch](https://github.com/ianmaciel7/exams-app/tree/archive/v0.1.0-before-reset-20261126).
 
 - [Project Hub](boards/project-hub/) — blank.
 - [Release Stages](boards/release-stages/) — blank.
-- [Release v0.1.0](releases/v0.1.0/README.md) — all stages not started; all five native stage boards blank.
+- [Release v0.1.0](releases/v0.1.0/README.md) — five stage boards in progress; other stages not started.
 - [References](references/) — supporting research, not approved scope.
 
 ## Open Artifact

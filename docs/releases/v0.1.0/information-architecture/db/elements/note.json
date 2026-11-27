@@ -1,0 +1,9 @@
+{
+  "type": "note",
+  "x": 0,
+  "y": 65,
+  "w": 420,
+  "h": 180,
+  "color": "yellow",
+  "text": "Sidebar: competition items\nMain region: selected competition's question list\nSelecting another competition changes the list."
+}

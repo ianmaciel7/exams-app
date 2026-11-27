@@ -1,18 +1,12 @@
 # Release v0.1.0
 
-**Status: not started.** Scope: none selected. All active design boards are intentionally blank; no prior approvals, progress or validation carry forward.
-
-[Ideas Board](../../boards/overview/README.md) is the candidate pool. [Immutable previous planning snapshot](https://github.com/ianmaciel7/exams-app/tree/bbadef4ceab610f8696fcc10cbee5e400aba4900) · [Archive branch](https://github.com/ianmaciel7/exams-app/tree/archive/v0.1.0-before-reset-20261126).
+Current direction: sidebar competition selection and a vertically scrollable question list. Other capabilities remain unselected. Historical ideas remain in [Ideas Board](../../boards/overview/README.md).
 
 | Stage | Progress | Validation |
 | --- | --- | --- |
-| Product discovery | Not started | Pending |
-| Information architecture | Not started | Pending |
-| Screen inventory | Not started | Pending |
-| User flows | Not started | Pending |
-| Sketch | Not started | Pending |
-| Low-fidelity wireframe | Not started | Pending |
-| Mid-fidelity wireframe | Not started | Pending |
-| High-fidelity wireframe | Not started | Pending |
-| Mockup | Not started | Pending |
-| Interactive prototype | Not started | Pending |
+| [Product](product/README.md) | In progress | Pending |
+| [Information Architecture](information-architecture/README.md) | In progress | Pending |
+| [Screen Inventory](screen-inventory/README.md) | In progress | Pending |
+| [User Flows](user-flows/README.md) | In progress | Pending |
+| [Sketch](sketch/README.md) | In progress | Pending |
+| Low-, mid-, high-fidelity wireframes, mockup, interactive prototype | Not started | Pending |
