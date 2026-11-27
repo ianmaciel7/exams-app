@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: dev
+          ref: ${{ github.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -39,6 +39,9 @@ jobs:
           cp docs/portal/index.html _site/index.html
           touch _site/.nojekyll
           NODE_PATH=/tmp/board-browser/node_modules node scripts/capture-board-portal.cjs
+      - name: Verify capture provenance
+        run: |
+          node -e 'const m=require("./_site/manifest.json"); if(m.commit!==process.env.GITHUB_SHA || m.boards.length!==10 || m.boards.some(b=>!b.images.light||!b.images.dark)) throw Error("Capture manifest mismatch")'
       - name: Build and validate optional native Playground
         continue-on-error: true
         timeout-minutes: 15

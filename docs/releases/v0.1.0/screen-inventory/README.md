@@ -2,7 +2,7 @@
 
 Current stage: Mid-Fidelity Wireframe — in progress; 21 variants; native capture and owner visual review pending.
 
-A single questions workspace: sidebar with competition items, main region with question title, statement, single-choice alternatives and left-aligned Answer/result, whitespace between groups, end-of-list pagination. No separate destinations. The Ghost trigger is available in every variant; collapsed pointer-rest hides its icon.
+One workspace, not separate destinations. Main region contains a scrolling question list, left-aligned Answer/result, and end-of-list pagination. The Ghost control is available across states; collapsed desktop pointer-rest hides its icon. External component specimens are not additional variants.
 
 | # | Native state ID | Review category |
 | --- | --- | --- |
@@ -34,12 +34,6 @@ Automatically select the first available competition on entry. Browse ten questi
 
 Question ordering, empty-sidebar presentation, exact responsive breakpoint and phone drawer treatment (including its open state), navigation-list data source and recovery, ambiguous submission outcomes, and production localization remain open. The phone layout, sidebar loading and sidebar failure are proposals. No runtime, usability or accessibility conformance is claimed.
 
-[Mid-Fidelity board](../mid-fidelity-wireframe/README.md) · [Current state](../current-state.json) · [Historical inventory](https://github.com/ianmaciel7/exams-app/blob/45e695cbdcb450c3851d603eee05aa8f62e066ac/docs/releases/v0.1.0/screen-inventory/README.md). The earlier Sketch (8) and Low-Fidelity (9) are historical approved snapshots. The four proposal states do not constitute new approved routes or data architecture.
+[Current state](../current-state.json) · [Mid-Fidelity](../mid-fidelity-wireframe/README.md)
 
-## Collapsed navigation and action states
-
-A Ghost sidebar trigger is available across workspace states. On desktop, the collapse icon remains visible while expanded; when collapsed, the expand icon is hidden at pointer rest and revealed on rail/header hover or keyboard focus, without moving the layout. Activation, not hover, expands the sidebar. A visible accessible alternative is required on touch/no-hover devices. Collapse/expand preserves current page, selection, scroll context and answers.
-
-External component studies clarify default, hover and pressed actions and the collapsed hover/focus trigger without increasing the 21 workspace variants. No automatic hover expansion or runtime interaction is implied.
-
-The focus-visible refinement supersedes the nested focus geometry in `670a2d1`; external specimens distinguish hover, pressed and focus on a common surface. The 21 workspace variants remain unchanged in scope. Current native capture review is pending; see [DESIGN.md](https://github.com/ianmaciel7/exams-app/blob/dev/DESIGN.md) and the current-state record.
+Historical decisions, source links and prior geometry are preserved in the [pre-reconciliation revision](https://github.com/ianmaciel7/exams-app/tree/165f554320d9077545296c0e252189bb5d0f22e6/docs/releases/v0.1.0). They are not current requirements.

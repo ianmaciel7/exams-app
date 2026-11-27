@@ -2,32 +2,28 @@
 
 Current stage: Mid-Fidelity Wireframe — in progress; 21 variants; native capture and owner visual review pending.
 
-## Approved Mid-Fidelity transitions
+## Approved transitions
 
-| Event | Next state / effect |
+| Event | Result |
 | --- | --- |
-| Enter workspace with available competitions | Select first displayed item automatically; load questions |
-| Question request completes | List or empty questions |
-| Question request fails | Show failure; manual Retry reloads selected list |
-| Select alternative | Answer enabled; choice editable until confirmed |
+| Enter | Select first available competition → load |
+| Load succeeds | Questions or empty list |
+| Load fails | Manual Retry reloads questions |
+| Select option | Enable Answer |
 | Answer | Pending; prevent duplicate submission |
-| Evaluation succeeds | Correct or incorrect feedback; confirmed choice locked on current page |
-| Submission fails | Retain choice; enable Answer again |
-| Change page | Discard prior page answers; load target; reset scroll to top |
-| Change competition | Discard previous responses; load target |
-| Close application | Discard temporary answers |
-| Collapse/expand sidebar | Preserve current competition, page, scroll context and responses |
+| Evaluation succeeds | Correct/incorrect; lock answer |
+| Submission fails | Retain choice; enable Answer |
+| Page/competition change | Discard prior answers; reset page scroll on page change |
+| Close application | Discard session answers |
+| Collapse / expand | Preserve context and answers |
+| Collapsed hover / focus | Reveal icon; explicit activation opens |
 
-Ten questions per full page; final page may contain fewer. Previous and Next unavailable at respective boundaries. Navigation-list loading/failure and empty sidebar are distinct proposals, not confirmed data flows. Phone drawer interaction remains proposed. Late responses must not restore discarded answers after navigation; ambiguous server outcomes and exact cancellation require validation.
+Automatically select the first available competition on entry. Browse ten questions per page; pagination follows the last question and resets scroll to the top. Select one option and explicitly submit with Answer. Correct and incorrect feedback identifies the correct choice and, when wrong, the user's choice. A confirmed answer is read-only on the current page. Changing page or competition, or closing the application, discards responses. On submission failure keep the choice and allow another submission; prevent duplicates while pending. Retry reloads a failed question list. A Ghost sidebar trigger is available across workspace states. On desktop, the collapse icon remains visible while expanded; when collapsed, the expand icon is hidden at pointer rest and revealed on rail/header hover or keyboard focus, without moving the layout. Activation, not hover, expands the sidebar. A visible accessible alternative is required on touch/no-hover devices. Collapse/expand preserves current page, selection, scroll context and answers.
 
-## Open transitions
+Late responses must not restore discarded answers. Exact cancellation and ambiguous server outcomes require prototype validation. Navigation-list loading/failure, empty sidebar and phone drawer interaction remain proposals, distinct from question-list Retry.
 
 Question ordering, empty-sidebar presentation, exact responsive breakpoint and phone drawer treatment (including its open state), navigation-list data source and recovery, ambiguous submission outcomes, and production localization remain open. The phone layout, sidebar loading and sidebar failure are proposals. No runtime, usability or accessibility conformance is claimed.
 
-[Product decisions](../product/README.md#approved-mid-fidelity-decisions--2026-11-27) · [Current state](../current-state.json) · [Screen inventory](../screen-inventory/README.md) · [Historical flow record](https://github.com/ianmaciel7/exams-app/blob/45e695cbdcb450c3851d603eee05aa8f62e066ac/docs/releases/v0.1.0/user-flows/README.md).
+[Current state](../current-state.json) · [Product decisions](../product/README.md#approved-mid-fidelity-decisions--2026-11-27)
 
-## Collapsed navigation and action states
-
-A Ghost sidebar trigger is available across workspace states. On desktop, the collapse icon remains visible while expanded; when collapsed, the expand icon is hidden at pointer rest and revealed on rail/header hover or keyboard focus, without moving the layout. Activation, not hover, expands the sidebar. A visible accessible alternative is required on touch/no-hover devices. Collapse/expand preserves current page, selection, scroll context and answers.
-
-External component studies clarify default, hover and pressed actions and the collapsed hover/focus trigger without increasing the 21 workspace variants. No automatic hover expansion or runtime interaction is implied.
+Historical decisions, source links and prior geometry are preserved in the [pre-reconciliation revision](https://github.com/ianmaciel7/exams-app/tree/165f554320d9077545296c0e252189bb5d0f22e6/docs/releases/v0.1.0). They are not current requirements.

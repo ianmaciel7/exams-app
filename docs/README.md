@@ -1,28 +1,29 @@
 # Project documentation
 
-Start with [Project Hub](boards/project-hub/README.md) or [Ideas Board](boards/overview/README.md). Previous work is archived; current v0.1.0 planning explores competition selection, a vertically scrolling paginated question list and answer feedback states. [Immutable previous planning snapshot](https://github.com/ianmaciel7/exams-app/tree/bbadef4ceab610f8696fcc10cbee5e400aba4900) · [Archive branch](https://github.com/ianmaciel7/exams-app/tree/archive/v0.1.0-before-reset-20261126).
-
-- [Project Hub](boards/project-hub/) — populated navigation hub, with native links to all seven release boards and the project boards.
-- [Release Stages](boards/release-stages/) — stage status summarized in the release record.
-- [Release v0.1.0](releases/v0.1.0/README.md) — Sketch and Low-Fidelity progression approved; Mid-Fidelity Wireframe in progress; later stages not started.
-- [References](references/) — supporting research, not approved scope.
+Start with [Project Hub](boards/project-hub/README.md) or [Ideas Board](boards/overview/README.md). [Release Stages](boards/release-stages/README.md) and [Release v0.1.0](releases/v0.1.0/README.md) summarize current progress. [References](references/) support research, not approved scope.
 
 ## Open Artifact
 
-Run `node scripts/open-boards.mjs` (Node.js 22+ and Open Artifact CLI required), then open the overview URL. The launcher registers all ten native boards; use the URLs it prints. Set `OPEN_ARTIFACT_WHITEBOARD_CLI` to override CLI discovery. All ten registered boards contain native elements; the planning boards summarize current approved decisions. Future stages are labeled not started, not represented as completed work.
+Run `node scripts/open-boards.mjs` (Node.js 22+ and Open Artifact CLI required). The launcher registers all ten populated native boards. Set `OPEN_ARTIFACT_WHITEBOARD_CLI` to override CLI discovery. Use downloadable native capture artifacts for review.
 
-Run `node scripts/check-boards.mjs` for structural checks and `node --test scripts/check-boards.test.mjs scripts/marker-sketch.test.mjs scripts/marker-sketch-ink.test.mjs` for tests. Native rendering and user review remain separate.
+Run `node scripts/sync-release-state.mjs --write` to regenerate planning data and `node scripts/sync-mid-fidelity.mjs --write` to synchronize managed wireframe elements. Validate with `node scripts/check-boards.mjs` and `node --test scripts/check-boards.test.mjs scripts/marker-sketch.test.mjs scripts/marker-sketch-ink.test.mjs`. Structural checks are not visual or functional approval.
 
 Follow [AGENTS.md](../AGENTS.md) and [whiteboard guidelines](boards/whiteboard-guidelines.md).
 
-## Design context and capture status
+## Current release
 
 Current stage: Mid-Fidelity Wireframe — in progress; 21 variants; native capture and owner visual review pending.
 
-[PRODUCT.md](../PRODUCT.md) records product scope; [DESIGN.md](../DESIGN.md) records provisional visual direction. Sketch (8) and Low-Fidelity (9) are complete for progression and preserved. [Current release state](releases/v0.1.0/current-state.json) is the status contract. CI run [46001664133](https://github.com/ianmaciel7/exams-app/actions/runs/46001664133) generated the last reviewed 21 variants at `45e695c`; alignment defects were identified. New native captures and owner review remain pending. Use downloadable artifacts, not GitHub Pages.
+## Capture evidence
 
-Shared controls: `node scripts/sync-mid-fidelity.mjs --write`; validate with `node scripts/check-boards.mjs` (also checks current release consistency).
+Last verified successful capture: [165f554](https://github.com/ianmaciel7/exams-app/commit/165f554320d9077545296c0e252189bb5d0f22e6) · [CI 46006601771](https://github.com/ianmaciel7/exams-app/actions/runs/46006601771). Manifest verified: 10 native boards, both Light and Dark. This is evidence for that commit only, not visual approval of the current revision.
 
-Latest reviewed baseline: [`ea7a119`](https://github.com/ianmaciel7/exams-app/commit/ea7a1194a797e433dcf6fe880b5d99acbd916de6) ([capture run 46003854656](https://github.com/ianmaciel7/exams-app/actions/runs/46003854656)). The owner requested action-state and collapsed-trigger refinements; the current revision retains 21 variants plus external component specimens. New captures pending review.
+Last recorded Mid-Fidelity review requiring changes: [670a2d1](https://github.com/ianmaciel7/exams-app/commit/670a2d17120e344e9f7ccc8632d7c780d00da41c) · [CI 46004860284](https://github.com/ianmaciel7/exams-app/actions/runs/46004860284) — Mid-Fidelity focus treatment reviewed; owner requested correction. Not an approval.
 
-The focus-visible refinement supersedes the nested focus geometry in `670a2d1`; external specimens distinguish hover, pressed and focus on a common surface. The 21 workspace variants remain unchanged in scope. Current native capture review is pending; see [DESIGN.md](https://github.com/ianmaciel7/exams-app/blob/dev/DESIGN.md) and the current-state record.
+Last recorded planning-board review requiring changes: [898d493](https://github.com/ianmaciel7/exams-app/commit/898d493e56bbaefb49095eb5a2648ae463043359) · [CI 46005686904](https://github.com/ianmaciel7/exams-app/actions/runs/46005686904) — Owner identified crowded planning-board elements; layout corrections made in 165f554.
+
+New revisions require their own capture; owner visual approval of Mid-Fidelity remains pending.
+
+[PRODUCT.md](../PRODUCT.md) · [DESIGN.md](../DESIGN.md) · [Canonical state](releases/v0.1.0/current-state.json)
+
+[Immutable previous planning snapshot](https://github.com/ianmaciel7/exams-app/tree/bbadef4ceab610f8696fcc10cbee5e400aba4900) · [Archive branch](https://github.com/ianmaciel7/exams-app/tree/archive/v0.1.0-before-reset-20261126).
