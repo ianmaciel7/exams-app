@@ -58,3 +58,5 @@ The owner approved advancing from Sketch (`94072ce`). The [Low-Fidelity Wirefram
 Low-fidelity correction: do not reuse the Sketch stroke renderer for rectangular UI frames or controls. Distinguish regions by grayscale surfaces, preserve whitespace between questions, and keep essential labels readable. Validate native shape geometry, clipping, control alignment and state consistency from rendered captures. The fixed grayscale artboard is a structural study, not a production theme.
 
 Low-Fidelity sidebar selection: use the neutral row background and emphasized label alone, without a left vertical indicator. The historical Sketch retains its earlier selection treatment. This is a structural visual decision, not a tested accessibility state.
+
+On workspace entry, the first available sidebar item is selected automatically; the existing selected background and emphasized label are visible while its questions load. No left indicator or unselected-entry screen is required. The historical Sketch remains unchanged.

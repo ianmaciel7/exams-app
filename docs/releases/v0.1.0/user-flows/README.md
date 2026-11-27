@@ -1,6 +1,6 @@
 # User Flows — v0.1.0
 
-Select a competition in the sidebar → show that competition's questions → scroll vertically through the list. Select another competition → show its questions. The owner approved explicit answer submission: select an option, then activate Answer to evaluate it. An incorrect response marks the selected option and reveals the correct one. Page changes reset the question list to the top. A load failure offers a manual Retry action. These are release decisions, not verified implementation.
+Enter workspace → automatically select first available sidebar item → load its questions → show that competition's questions → scroll vertically through the list. Select another competition → show its questions. The owner approved explicit answer submission: select an option, then activate Answer to evaluate it. An incorrect response marks the selected option and reveals the correct one. Page changes reset the question list to the top. A load failure offers a manual Retry action. These are release decisions, not verified implementation.
 
 ## Competition label
 
@@ -18,8 +18,8 @@ Select entry → loading (proposal) → list, empty or load failure (proposed va
 
 ## Open transitions
 
-Initial entry before selecting a competition and revisiting previously evaluated questions after page or competition changes are unresolved; see [Product decision register](../product/README.md#open-product-decisions). Do not assume answer persistence or allow a submitted answer to change without approval. Current UI labels are in English, including Answer and Retry; these controls are approved and drawn in the Sketch; runtime behavior is not tested.
+Revisiting previously evaluated questions after page or competition changes is unresolved; see [Product decision register](../product/README.md#open-product-decisions). Do not assume answer persistence or allow a submitted answer to change without approval. Current UI labels are in English, including Answer and Retry; these controls are approved and drawn in the Sketch; runtime behavior is not tested.
 
 The approved Answer action is depicted after the alternatives, on the left, without a divider above or below it; whitespace separates complete questions and pagination. The result occupies the same action region; option-level feedback remains attached to its option. This placement does not alter the approved transitions.
 
-The [Low-Fidelity Wireframe](../low-fidelity-wireframe/README.md) inherits approved transitions. Initial selection and revisiting evaluated answers remain open; no transition is approved by the proposed variants.
+The [Low-Fidelity Wireframe](../low-fidelity-wireframe/README.md) inherits approved transitions. Initial selection is approved: enter → select first available sidebar item → load → list, empty questions or failure. Revisiting evaluated answers remains open; the narrow proposal approves no new transition.

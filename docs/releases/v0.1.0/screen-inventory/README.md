@@ -29,7 +29,7 @@ Both sidebar entries share one neutral square-with-X icon placeholder in the cur
 
 The eight states remain: unanswered, end-of-list pagination, selected before submission, correct, incorrect, loading, empty, and load failure. The selected-before-submission state is required. The Answer and Retry controls are drawn and await visual validation; behavior and accessibility are not yet tested.
 
-English labels are now consistent across all eight variants. A separate initial unselected state may be needed depending on the [initial-selection decision](../product/README.md#open-product-decisions); do not silently assume a default. Revisiting evaluated answers is also unresolved. No additional variant is approved by this inventory update.
+English labels are now consistent across all eight variants. The owner approved automatic first-item selection on entry; no separate unselected-entry state is needed when sidebar items exist. Revisiting evaluated answers is also unresolved. No additional variant is approved by this inventory update.
 
 Question anatomy: title, statement, alternatives, left-aligned action/result row, then whitespace between complete questions. No separator above or below Answer or result. Whitespace also separates the final question from pagination. See [Sketch](../sketch/README.md#question-grouping-and-action-placement--2026-11-27).
 
@@ -37,4 +37,4 @@ The visual-rhythm refinement keeps the same eight states. Question groups use he
 
 Pagination remains inside the end-of-list state; its labels and chevrons share an optical alignment, page slots have uniform spacing, and the whole group is centered in the main region. No navigation behavior changes.
 
-The approved Sketch is preserved. The [Low-Fidelity Wireframe](../low-fidelity-wireframe/README.md) inherits eight variants and adds two clearly labeled structural studies (initial unselected, narrower viewport). The studies are proposals, not additional approved states or destinations.
+The approved Sketch is preserved. The [Low-Fidelity Wireframe](../low-fidelity-wireframe/README.md) inherits eight variants and adds one clearly labeled structural study (narrower viewport). The initial unselected proposal was removed after the owner approved automatic first-item selection; the existing loading variant covers entry. The narrow study is not an additional approved destination.

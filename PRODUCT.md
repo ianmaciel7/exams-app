@@ -15,3 +15,5 @@ Start with the [Ideas Board](docs/boards/overview/README.md). [Immutable previou
 ## Evidence on hand
 
 See the [release records](docs/releases/v0.1.0/README.md), [current Sketch](docs/releases/v0.1.0/sketch/README.md) and [provisional visual direction](DESIGN.md). Historical ideas are not approved requirements.
+
+Approved initial selection: on every entry to the workspace, automatically select the first item in the sidebar's displayed order and load its questions. No manual selection step is required. If no items exist, no selection is possible; the empty-sidebar treatment remains unspecified. This is a product decision, not verified implementation.

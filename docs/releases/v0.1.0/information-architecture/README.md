@@ -1,6 +1,6 @@
 # Information Architecture — v0.1.0
 
-A single workspace has a competition navigation sidebar and a main question-list region. Selecting a competition loads its corresponding list. The active competition is identifiable. Questions appear vertically in the main region; the user can scroll. Routing and initial selection remain open; page changes reset scroll to the top.
+A single workspace has a competition navigation sidebar and a main question-list region. Selecting a competition loads its corresponding list. The active competition is identifiable. Questions appear vertically in the main region; the user can scroll. The first available sidebar item is selected automatically on entry. Routing remains open; page changes reset scroll to the top.
 
 ## Competition label
 
@@ -22,6 +22,6 @@ Both sidebar entries share one neutral square-with-X icon placeholder in the cur
 
 ## Copy and navigation boundaries
 
-Current Sketch labels are in English; official institution names remain unchanged. Initial selection and whether prior answers remain visible on revisiting an entry are open in the [Product decision register](../product/README.md#open-product-decisions). The native Sketch is not a routing specification.
+Current Sketch labels are in English; official institution names remain unchanged. Whether prior answers remain visible on revisiting an entry is open in the [Product decision register](../product/README.md#open-product-decisions). The native Sketch is not a routing specification.
 
-The [Low-Fidelity Wireframe](../low-fidelity-wireframe/README.md) explores the same workspace, including proposed unselected entry and narrower composition. Neither introduces a route or approves default selection or responsive navigation.
+The [Low-Fidelity Wireframe](../low-fidelity-wireframe/README.md) explores the same workspace, including a proposed narrower composition. The initial unselected proposal is superseded by automatic first-item selection; responsive navigation and routing remain open.

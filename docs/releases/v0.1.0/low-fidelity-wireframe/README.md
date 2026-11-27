@@ -8,7 +8,7 @@ Validate the two-region workspace, question grouping, hierarchy, control placeme
 
 ## Coverage
 
-Eight inherited states: top, end, selected, correct, incorrect, loading, empty and failure. Two explicitly proposed variants: initial unselected entry and narrower two-region workspace. These do not approve default selection, responsive navigation or a mobile breakpoint. No extra feature or route is introduced.
+Eight inherited states: top, end, selected, correct, incorrect, loading, empty and failure. One explicitly proposed variant: narrower two-region workspace. The initial unselected proposal is superseded by approved automatic first-item selection; existing loading covers entry. Responsive navigation and mobile breakpoints remain undecided. No extra feature or route is introduced.
 
 - Keep a compact sidebar and a dominant scrollable question region. Show a neutral icon placeholder, single-line label and active cue.
 - Group heading, statement, choices and action/result; use whitespace, no question dividers. Answer remains unavailable before selection. Correct/incorrect result is textual, not dependent on color. Pagination at list end; Retry beneath failure copy.
@@ -16,9 +16,9 @@ Eight inherited states: top, end, selected, correct, incorrect, loading, empty a
 
 ## Review questions
 
-See [Product decision register](../product/README.md#open-product-decisions). Initial selection: automatic first item or explicit selection? Answer lifecycle: retain evaluated choices on page/entry revisit? Allow resubmission? Narrow viewport: evaluate the proposed split before choosing a responsive strategy. Page size and ordering remain deferred. Submission pending/error and keyboard/focus/accessible state semantics belong to later behavior validation; the static board cannot test them.
+See [Product decision register](../product/README.md#open-product-decisions). Answer lifecycle: retain evaluated choices on page/entry revisit? Allow resubmission? Narrow viewport: evaluate the proposed split before choosing a responsive strategy. Page size and ordering remain deferred. Submission pending/error and keyboard/focus/accessible state semantics belong to later behavior validation; the static board cannot test them.
 
-Proposed comment anchors: initial_note (initial selection), correct_note (answer lifecycle), narrow_note (responsive layout). Native comment creation is not available through the current connected workflow; these are proposed anchors, not fabricated comment threads. Existing Sketch threads remain intact.
+Proposed comment anchors: correct_note (answer lifecycle), narrow_note (responsive layout). Native comment creation is not available through the current connected workflow; these are proposed anchors, not fabricated comment threads. Existing Sketch threads remain intact.
 
 ## Exit criteria
 
@@ -30,4 +30,8 @@ The owner rejected the first Low-Fidelity rendering (`d133d40`) because freehand
 
 ## Sidebar selection refinement
 
-Owner requested removal of the left vertical marker from selected sidebar items in Low-Fidelity. Retain only the neutral selection background and emphasized label, consistently across all nine selected variants. The unselected proposal and page-number selection are unchanged. Preserve the approved historical Sketch. Native capture review remains pending.
+Owner requested removal of the left vertical marker from selected sidebar items in Low-Fidelity. Retain only the neutral selection background and emphasized label, consistently across all then-selected variants. Page-number selection is unchanged. Preserve the approved historical Sketch. Native capture review remains pending.
+
+## Initial selection — approved
+
+The first available item in the sidebar's displayed order is selected on every entry to the workspace. The previous unselected-entry proposal is removed rather than duplicated as another loading screen; the existing loading state now explicitly covers entry. Nine variants remain (eight inherited states and the narrow proposal), all showing a selected item. No-item sidebar handling is unspecified. Remaining open decisions are unchanged. Native capture review is pending.

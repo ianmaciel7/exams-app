@@ -5,5 +5,5 @@
   "w": 420,
   "h": 300,
   "color": "yellow",
-  "text": "One screen; eight inherited variants.\nUnanswered; pagination; selected before Answer; correct; incorrect; loading; empty; load failure.\nLow-fidelity studies: initial unselected and narrow workspace (proposals).\nNo extra destinations approved."
+  "text": "One screen; eight inherited variants.\nUnanswered; pagination; selected before Answer; correct; incorrect; loading; empty; load failure.\nAutomatic first-item selection on entry uses existing loading.\nLow-fidelity study: narrow workspace (proposal).\nNo extra destinations approved."
 }

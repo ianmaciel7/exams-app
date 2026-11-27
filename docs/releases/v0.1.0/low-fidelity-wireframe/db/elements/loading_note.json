@@ -5,5 +5,5 @@
   "w": 560,
   "h": 120,
   "color": "yellow",
-  "text": "Keep navigation stable; reserve question and action space."
+  "text": "On entry, automatically select the first available sidebar item and load its questions. Keep navigation stable; reserve question and action space."
 }

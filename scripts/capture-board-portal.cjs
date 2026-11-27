@@ -16,7 +16,7 @@ const urls = Object.fromEntries(fs.readFileSync('/tmp/board-urls','utf8').split(
 
 const sketchStates=['top','end','selected','correct','wrong','loading','empty','failure'];
 async function captureSketchStates(page,theme,board){
-  const states=board.id==='lowfidelity'?[...sketchStates,'initial','narrow']:sketchStates;
+  const states=board.id==='lowfidelity'?[...sketchStates,'narrow']:sketchStates;
   board.states ||= states.map(id=>({id,images:{}}));
   const surface=page.locator('.wb-surface');
   const box=await surface.boundingBox();

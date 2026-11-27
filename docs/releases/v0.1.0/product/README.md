@@ -28,11 +28,14 @@ No filters, simulations, scoring, explanations, persistence, or other features a
 
 ## Open product decisions
 
-- Initial entry: automatically select the first available competition or require the user to choose one. This affects whether an initial unselected state is needed.
 - Answer lifecycle: whether evaluated choices remain visible when changing page or competition and returning; whether a submitted answer can be changed or retried. Persistence across sessions is not selected.
 - Page size and question ordering: not selected; defer exact values until needed for the release.
 - Loading and empty-state appearance remain pending visual review. Mobile navigation, responsive collapse and production localization are not approved requirements.
 
-The four prior interaction decisions are resolved and must not be asked again. English is approved for the project-authored Sketch copy; this does not establish a production localization policy. Proper competition names are unchanged.
+The five approved interaction decisions are resolved and must not be asked again. English is approved for the project-authored Sketch copy; this does not establish a production localization policy. Proper competition names are unchanged.
 
-Low-Fidelity Wireframe has started with the owner-approved Sketch as baseline. The initial unselected and narrow workspace variants are proposals only. Existing open decisions remain unresolved; see [structural review](../low-fidelity-wireframe/README.md#review-questions).
+Low-Fidelity Wireframe has started with the owner-approved Sketch as baseline. The narrow workspace remains a proposal. Initial selection has been resolved; other open decisions remain unresolved; see [structural review](../low-fidelity-wireframe/README.md#review-questions).
+
+## Approved initial selection — 2026-11-27
+
+On every workspace entry, automatically select the first item in the sidebar's displayed order, if available, and load its questions. Do not require an extra selection click or restore a different item as the default. The existing loading, success, empty-question and failure variants cover the question request. No sidebar items means no possible selection; its treatment is not yet specified. This does not decide sorting, answer persistence or re-submission.
