@@ -2,6 +2,10 @@
 
 Terms used to describe studying for competitive examinations in Exam App.
 
+## Scope and language
+
+Current v0.1.0: sidebar selection, vertically scrolling paginated question list, requested correct/incorrect states. Other terms describe historical ideas unless explicitly selected in the release record. In particular Home, Performance, Statistics, mock exams, attempt persistence, accuracy and filters are not current requirements. Evaluation timing is unresolved.
+
 ## Language
 
 **Competition**:
@@ -32,7 +36,7 @@ The user's recorded performance over time, including attempt counts and accuracy
 Correct attempts divided by all recorded attempts in the selected context, presented with both counts (numerator and denominator). Ordinary practice and mock exams are tracked separately.
 
 **Missed question (Errei)**:
-A question whose latest evaluated attempt was incorrect. In v0.1.0, practice occurs within the questions workspace; dedicated missed-question filtering is an unprioritized idea outside release scope, while all attempts remain preserved in attempt history and accuracy metrics.
+A question whose latest evaluated attempt was incorrect. Historical candidate; dedicated missed-question filtering, attempt history and accuracy metrics are not selected for this release.
 
 **Home**:
 The entry page (Screen 1), providing a compact progress overview and competition selection cards to start practice.
@@ -41,13 +45,13 @@ The entry page (Screen 1), providing a compact progress overview and competition
 The dedicated metrics and progress view (Screen 4), accessed as a distinct conceptual view with accuracy metrics and topic breakdown rather than a sidebar list or footer rail per V010-20.
 
 **Statistics**:
-An unprioritized per-question metrics drawer outside the v0.1.0 release scope. Question resources such as inline accordions or drawers for question explanations (Gabarito Comentado) are also excluded from v0.1.0, where practice focuses on immediate correctness feedback.
+An unprioritized per-question metrics drawer outside the v0.1.0 release scope. Question resources such as inline accordions or drawers for question explanations (Gabarito Comentado) are also excluded from v0.1.0, where correction timing remains open.
 
 **Question palette**:
 A non-linear navigation matrix used during mock exam timed sessions to indicate question status (answered, current, unvisited, flagged) and navigate across questions.
 
 **Questions workspace**:
-The primary study interface within a selected competition, containing question cards and immediate answer feedback. Advanced filter bar controls and toolbars are unprioritized ideas outside v0.1.0.
+The primary study interface within a selected competition, containing a vertically scrolling question list and proposed correctness feedback states. Advanced filter bar controls and toolbars are unprioritized ideas outside v0.1.0.
 
 **Design annotation**:
 A native editable sticky note outside the application frame that explains design intent. It is not an application feature.

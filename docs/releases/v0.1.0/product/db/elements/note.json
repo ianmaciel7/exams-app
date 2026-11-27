@@ -5,5 +5,5 @@
   "w": 420,
   "h": 300,
   "color": "yellow",
-  "text": "Study questions from a selected competition.\nSelect a competition in the sidebar and browse its questions in a vertically scrolling list.\nOther features are not selected.\nLabel: competition · year · position/exam; truncate with ellipsis.\nPagination: scroll within a page; navigate between pages at list end."
+  "text": "Study questions from a selected competition.\nSidebar selection; vertical list; pagination at list end.\nRequested: correct and incorrect feedback.\nOpen: evaluation timing, reveal policy, retry, scroll restoration.\nOther features are candidates, not requirements."
 }

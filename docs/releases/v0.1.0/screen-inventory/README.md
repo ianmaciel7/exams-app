@@ -8,4 +8,19 @@
 
 - Pagination at the end of the question list (illustrative Previous/Next and numbered pages).
 
-Other states and controls are not specified. Progress: in progress; user review pending.
+Other destinations and controls are not selected. Progress: in progress; user review pending.
+
+## Screen state inventory
+
+| State | Status |
+| --- | --- |
+| Unanswered / list start | Baseline sketch |
+| List end / pagination | Baseline sketch |
+| Selected before evaluation | Conditional proposal |
+| Correct answer | Requested; sketch pending validation |
+| Incorrect answer | Requested; reveal policy open |
+| Loading | Proposal |
+| Empty list | Proposal |
+| Load failure | Proposal; retry open |
+
+The current Sketch uses a compact one-line sidebar list with document glyphs, institution/year/position labels, ellipsis and subtle active text/indicator. No redundant section heading or additional menu. Exact visual treatment remains exploratory.

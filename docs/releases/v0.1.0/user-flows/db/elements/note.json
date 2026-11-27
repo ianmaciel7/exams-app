@@ -5,5 +5,5 @@
   "w": 420,
   "h": 300,
   "color": "yellow",
-  "text": "Select competition → display its question list → scroll through questions\nSelect another competition → display its list\nLabel: competition · year · position/exam; truncate with ellipsis.\nPagination: scroll within a page; navigate between pages at list end."
+  "text": "Select entry → load list → scroll → page navigation.\nSelect answer → correctness feedback; timing open.\nProposed loading, empty and error variants.\nReveal, retry and page scroll restoration remain open."
 }

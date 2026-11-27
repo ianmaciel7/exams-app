@@ -5,5 +5,5 @@
   "w": 420,
   "h": 300,
   "color": "yellow",
-  "text": "One screen: sidebar + question list\nActive competition identified in sidebar; stacked questions without repeated title\nVertical scrolling\nLabel: competition · year · position/exam; truncate with ellipsis.\nPagination: scroll within a page; navigate between pages at list end."
+  "text": "One screen, eight visual variants.\nUnanswered; pagination; selected (conditional); correct; incorrect; loading; empty; load failure.\nSidebar: one-line icon + label, active cue.\nOther destinations not selected; review pending."
 }

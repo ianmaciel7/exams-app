@@ -1,6 +1,6 @@
 # Prompt and Agent Evaluation Harness (Evals) — Exam App
 
-This directory provides a 100% free, production-grade **Evaluation-Driven Development (EDD)** harness for prompts, agent behaviors, and domain rules in Exam App.
+This directory provides an **Evaluation-Driven Development (EDD)** harness for prompts, agent behaviors, and domain rules in Exam App.
 
 It supports two execution modes:
 1. **Native Zero-Dependency CLI Runner:** Instant, deterministic evaluations with zero setup or downloads.
@@ -77,3 +77,7 @@ To append a new test case, simply add an object to the relevant dataset under `e
 ```
 
 Then rerun `node evals/run-evals.mjs` to verify.
+
+## Scope boundary
+
+Historical domain test suites (mock exams, missed filters, scoring and attempt history) are retained for future evaluation; they do not establish v0.1.0 requirements. See [current release](../docs/releases/v0.1.0/README.md).

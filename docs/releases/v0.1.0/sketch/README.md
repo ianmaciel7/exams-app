@@ -46,3 +46,7 @@ The navigation remains a simple two-entry list, with a slightly wider label colu
 ## Specialist and Impeccable refinement
 
 Operate-mode layout: the question content is primary and the navigation supports it. Reduce the workspace label to a body-size heading, use a one-unit selection indicator and text emphasis, and keep a compact two-entry list with simple, individually drawn document icon segments. Preserve the selected entry, label content and all eight screen states. This is an exploratory sketch, not an approved production style or a functional accessibility test. Hover, focus, long labels and responsive navigation remain review items; no new routes or controls are added.
+
+## Documentation synchronization
+
+The 36-unit row spacing and one-unit active marker supersede the earlier 38-unit sidebar study. See [provisional DESIGN.md](../../../../DESIGN.md), [Product](../product/README.md), [Information Architecture](../information-architecture/README.md), [Screen Inventory](../screen-inventory/README.md) and [User Flows](../user-flows/README.md). The four review threads remain open. Source geometry is updated; new visual validation remains separate.

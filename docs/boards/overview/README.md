@@ -1,6 +1,6 @@
 # Ideas Board
 
-39 existing categorized ideas and 21 recovered historical ideas. All are candidates, with no release assignment or carried-forward approval. Color identifies category, not priority.
+39 existing categorized ideas and 21 recovered historical ideas. The ideas remain candidates unless explicitly selected in the current release record; historical approvals do not carry forward. Color identifies category, not priority.
 
 [Immutable previous planning snapshot](https://github.com/ianmaciel7/exams-app/tree/bbadef4ceab610f8696fcc10cbee5e400aba4900) · [Archive branch](https://github.com/ianmaciel7/exams-app/tree/archive/v0.1.0-before-reset-20261126)
 
@@ -28,4 +28,4 @@
 - `archived-idea-20` — **Ingestion and state restoration** (Platform): Explore reliable question/answer-key import, missing-field handling, persistence after reload and data migration. Validate actual source files.
 - `archived-idea-21` — **Context efficiency** (Platform): Preserve the earlier workflow idea: delegate by risk, retrieve relevant context, measure checks. Reference: docs/references/2026-11-26-context-efficiency-audit.md.
 
-Exact original boards, documentation, sketch geometry and earlier decisions remain in the archive. Superseded alternatives are not current requirements. The active release boards are intentionally blank.
+Exact original boards, documentation, sketch geometry and earlier decisions remain in the archive. Superseded alternatives are not current requirements. The active release boards were initially reset; the five active stages now contain the current direction and state review. See [v0.1.0](../../releases/v0.1.0/README.md).

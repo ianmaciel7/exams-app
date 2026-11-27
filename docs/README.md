@@ -1,9 +1,9 @@
 # Project documentation
 
-Start with [Ideas Board](boards/overview/README.md). Previous work is archived; current v0.1.0 planning explores competition selection and a vertically scrolling question list. [Immutable previous planning snapshot](https://github.com/ianmaciel7/exams-app/tree/bbadef4ceab610f8696fcc10cbee5e400aba4900) · [Archive branch](https://github.com/ianmaciel7/exams-app/tree/archive/v0.1.0-before-reset-20261126).
+Start with [Ideas Board](boards/overview/README.md). Previous work is archived; current v0.1.0 planning explores competition selection, a vertically scrolling paginated question list and answer feedback states. [Immutable previous planning snapshot](https://github.com/ianmaciel7/exams-app/tree/bbadef4ceab610f8696fcc10cbee5e400aba4900) · [Archive branch](https://github.com/ianmaciel7/exams-app/tree/archive/v0.1.0-before-reset-20261126).
 
 - [Project Hub](boards/project-hub/) — blank.
-- [Release Stages](boards/release-stages/) — blank.
+- [Release Stages](boards/release-stages/) — stage status summarized in the release record.
 - [Release v0.1.0](releases/v0.1.0/README.md) — five stage boards in progress; other stages not started.
 - [References](references/) — supporting research, not approved scope.
 
@@ -14,3 +14,7 @@ Run `node scripts/open-boards.mjs` (Node.js 22+ and Open Artifact CLI required),
 Run `node scripts/check-boards.mjs` for structural checks and `node --test scripts/check-boards.test.mjs scripts/marker-sketch.test.mjs scripts/marker-sketch-ink.test.mjs` for tests. Native rendering and user review remain separate.
 
 Follow [AGENTS.md](../AGENTS.md) and [whiteboard guidelines](boards/whiteboard-guidelines.md).
+
+## Design context and capture status
+
+[PRODUCT.md](../PRODUCT.md) records product scope; [DESIGN.md](../DESIGN.md) records provisional visual direction. The latest Sketch has eight state variants, native notes and four open review threads. The CI produces overview and individual state captures in both themes. Pages publication remains blocked by repository configuration (deploy log for run 45923436335); downloadable artifacts are separate from deployment. See [release record](releases/v0.1.0/README.md) for status.

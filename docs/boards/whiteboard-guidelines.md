@@ -52,3 +52,7 @@ All project whiteboards are powered by the Open Artifact Whiteboard runtime, per
 ## Screen and variant layout convention
 
 Arrange distinct screens/destinations vertically, one row per screen. Arrange states, scroll positions, responsive variants and alternative versions of the same screen horizontally within its row. Align the top of comparable artboards and leave clear spacing; do not imply a separate route just because a state has its own artboard. A page's pagination footer at the end of scroll is a horizontal variant of that same page, not a separate destination. Apply this convention to future UI sketch and wireframe boards unless the product owner specifies otherwise.
+
+## Sketch review and evidence
+
+Use the UI/UX Specialist and Impeccable to refine hierarchy, density, and legibility without importing unapproved production features. Keep notes concise and outside application frames, with native comment threads on related external annotations when direct pins obscure controls. Preserve the original review target and open decision. Capture full boards and individual states in Light/Dark from the native runtime; label SHA and any crop. Static images do not prove interactions. Review companion documentation before publishing changes.

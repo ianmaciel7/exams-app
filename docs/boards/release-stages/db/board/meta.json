@@ -1,5 +1,7 @@
 {
   "v": 1,
   "title": "Release stages",
-  "order": []
+  "order": [
+    "release_v010_status"
+  ]
 }

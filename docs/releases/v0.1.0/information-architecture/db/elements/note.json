@@ -5,5 +5,5 @@
   "w": 420,
   "h": 300,
   "color": "yellow",
-  "text": "Sidebar: competition items\nMain region: selected competition's question list\nSelecting another competition changes the list.\nLabel: competition · year · position/exam; truncate with ellipsis.\nPagination: scroll within a page; navigate between pages at list end."
+  "text": "One workspace: compact sidebar + question list.\nSelection changes the list; no redundant heading.\nSame screen variants: list start/end, selected, correct, incorrect, loading, empty, failure.\nRouting and initial selection remain open."
 }
