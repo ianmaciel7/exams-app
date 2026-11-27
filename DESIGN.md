@@ -22,11 +22,11 @@ Prefer a flat, unobtrusive sketch hierarchy. Use light separators, not nested ca
 
 ## Shapes
 
-Native editable hand-drawn strokes, identical neutral question-list icons, recognizable radio controls. Preserve the sketch's low fidelity and legibility.
+Native editable hand-drawn strokes, identical neutral square-with-X icon placeholders, recognizable radio controls. Preserve the sketch's low fidelity and legibility.
 
 ## Components
 
-Navigation: a single compact list of competition entries, with no redundant section heading. Both entries use the same neutral list glyph; selection uses text emphasis and a thin indicator. Question list: stacked question items, single-choice alternatives, semantic correct/incorrect feedback, end-of-list pagination. See the [screen inventory](docs/releases/v0.1.0/screen-inventory/README.md) and [flows](docs/releases/v0.1.0/user-flows/README.md) for the state coverage and open decisions. Hover, focus, responsive behavior and actual accessibility remain untested.
+Navigation: a single compact list of competition entries, with no redundant section heading. Both entries use the same neutral square-with-X icon placeholder; selection uses text emphasis and a thin indicator. Question list: stacked question items, single-choice alternatives, semantic correct/incorrect feedback, end-of-list pagination. See the [screen inventory](docs/releases/v0.1.0/screen-inventory/README.md) and [flows](docs/releases/v0.1.0/user-flows/README.md) for the state coverage and open decisions. Hover, focus, responsive behavior and actual accessibility remain untested.
 
 ## Do's and Don'ts
 
@@ -43,4 +43,4 @@ Impeccable context: PRODUCT.md owns product facts. This file owns provisional vi
 
 The owner approved explicit answer submission: select an option, then activate Answer to evaluate it. An incorrect response marks the selected option and reveals the correct one. Page changes reset the question list to the top. A load failure offers a manual Retry action. These are release decisions, not verified implementation.
 
-Use a per-question Answer control before evaluation and a Retry control in the failure state; exact visual geometry is pending. The owner approved neutral square-with-X icon placeholders for the sidebar, replacing current list glyphs in the next visual revision. Do not treat this as final iconography.
+Use a per-question Answer control before evaluation and a Retry control in the failure state; exact visual geometry is pending. The owner approved neutral square-with-X icon placeholders for the sidebar, replacing the previous list glyphs in all eight sketch variants. Do not treat this as final iconography.

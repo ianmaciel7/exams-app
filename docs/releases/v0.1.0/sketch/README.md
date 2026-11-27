@@ -41,11 +41,11 @@ The eight states retain their existing scope. Sidebar entries use compact spacin
 
 ## Sidebar refinement
 
-The navigation remains a simple two-entry list, with a slightly wider label column, consistent 38-unit row spacing, editable document glyphs and a short active marker. The sidebar divider is intentionally lighter than the outer frame. The Capacities workspace reference informs density and alignment only; no additional navigation or behavior is imported. Labels remain single-line and truncated; exact content, responsive collapse, hover, focus and keyboard behavior are not specified by this static sketch.
+The navigation remains a simple two-entry list, with a slightly wider label column, consistent 38-unit row spacing, editable icon placeholders and a short active marker. The sidebar divider is intentionally lighter than the outer frame. The Capacities workspace reference informs density and alignment only; no additional navigation or behavior is imported. Labels remain single-line and truncated; exact content, responsive collapse, hover, focus and keyboard behavior are not specified by this static sketch.
 
 ## Specialist and Impeccable refinement
 
-Operate-mode layout: the question content is primary and the navigation supports it. Reduce the workspace label to a body-size heading, use a one-unit selection indicator and text emphasis, and keep a compact two-entry list with simple, individually drawn document icon segments. Preserve the selected entry, label content and all eight screen states. This is an exploratory sketch, not an approved production style or a functional accessibility test. Hover, focus, long labels and responsive navigation remain review items; no new routes or controls are added.
+Operate-mode layout: the question content is primary and the navigation supports it. Reduce the workspace label to a body-size heading, use a one-unit selection indicator and text emphasis, and keep a compact two-entry list with simple, individually drawn icon placeholders. Preserve the selected entry, label content and all eight screen states. This is an exploratory sketch, not an approved production style or a functional accessibility test. Hover, focus, long labels and responsive navigation remain review items; no new routes or controls are added.
 
 ## Documentation synchronization
 
@@ -53,7 +53,7 @@ The 36-unit row spacing and one-unit active marker supersede the earlier 38-unit
 
 ## Generic navigation icon refinement
 
-The owner requested a more generic icon shared by both entries. Replace document silhouettes with identical neutral list glyphs made of native strokes across all eight variants. Selection remains indicated by text emphasis and the existing thin marker. No change to navigation behavior, labels or state coverage.
+The owner requested a more generic icon shared by both entries. Replace the prior list glyphs with identical neutral square-with-X icon placeholders made of six native strokes across all eight variants. The placeholder reserves the icon slot without selecting a logo, pictogram, initial, or final semantic icon. Final iconography belongs to a later visual-design stage. Selection remains indicated by text emphasis and the existing thin marker. No change to navigation behavior, labels or state coverage.
 
 ## Approved interaction decisions — 2026-11-26
 
@@ -61,4 +61,4 @@ The owner approved explicit answer submission: select an option, then activate A
 
 The eight states remain: unanswered, end-of-list pagination, selected before submission, correct, incorrect, loading, empty, and load failure. The selected-before-submission state is required. The Answer and Retry controls still need visual reconciliation in the static board; behavior and accessibility are not yet tested.
 
-The owner also approved a neutral square-with-X icon placeholder for each sidebar entry. The current board still uses list glyphs; the icon replacement and captures are pending, not claimed as applied.
+The owner also approved a neutral square-with-X icon placeholder for each sidebar entry. The board source now uses identical square-with-X placeholders in all eight variants; new captures and visual validation remain pending.
