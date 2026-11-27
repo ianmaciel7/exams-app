@@ -4,7 +4,7 @@ Status: in progress; structural review pending. Owner approved moving on from th
 
 ## Purpose
 
-Validate the two-region workspace, question grouping, hierarchy, control placement, pagination and representative layout variants. Native editable outline geometry and text use neutral ink; no final branding, color palette, typography, tokens or interaction implementation. The labels and abstract content are illustrative. All variants depict the same screen, horizontally arranged.
+Validate the two-region workspace, question grouping, hierarchy, control placement, pagination and representative layout variants. Native editable rectangular and elliptical shapes, greybox surfaces and content blocks establish the structural layout; no final branding, color palette, typography, tokens or interaction implementation. The labels and abstract content are illustrative. All variants depict the same screen, horizontally arranged.
 
 ## Coverage
 
@@ -23,3 +23,7 @@ Proposed comment anchors: initial_note (initial selection), correct_note (answer
 ## Exit criteria
 
 Review all inherited and proposed variants, verify hierarchy and control associations, confirm structural navigation and responsive direction, record decisions and verify native captures. Do not claim functional accessibility, usability testing or production implementation.
+
+## Greybox correction — 2026-11-27
+
+The owner rejected the first Low-Fidelity rendering (`d133d40`) because freehand smoothing deformed frames and controls and the result retained the Sketch appearance. Replace those outlines with regular native rectangular/elliptical shapes, use neutral filled surfaces for the sidebar and main region, filled blocks for abstract content, recognizable radio and action controls, a selected navigation background, and centered pagination. Keep the English labels, eight inherited states, two explicitly proposed studies and all ten existing native notes and anchors. Shorter illustrative sidebar labels are used in the narrow study. No question dividers, new routes, final branding or production tokens. The wireframe uses a fixed light grayscale artboard independent of the surrounding board theme; it does not establish a production theme. The geometry follows the Open Artifact v0.16.3 schema and the [Greybox guidance](https://github.com/ianmaciel7/exams-app-archive/blob/main/docs/references/ui-ux-research-sources/ux-design-activities-2026-11-25.md). Structural checks and actual native capture inspection are separate gates; owner review is pending. The original Sketch and its decision threads remain unchanged.

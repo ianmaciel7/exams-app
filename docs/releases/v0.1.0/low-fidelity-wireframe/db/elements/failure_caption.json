@@ -1,8 +1,8 @@
 {
   "type": "text",
   "x": 10276,
-  "y": 12,
+  "y": 18,
   "text": "08 · Load failure",
-  "size": "title",
+  "size": "large",
   "color": "ink"
 }

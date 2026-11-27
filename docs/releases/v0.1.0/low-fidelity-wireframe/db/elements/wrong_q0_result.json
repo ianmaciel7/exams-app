@@ -1,8 +1,8 @@
 {
   "type": "text",
   "x": 6192,
-  "y": 311,
-  "text": "Incorrect answer",
+  "y": 329,
+  "text": "**Incorrect answer**",
   "size": "body",
   "color": "ink"
 }

@@ -1,8 +1,10 @@
 {
   "type": "text",
-  "x": 12292,
-  "y": 395,
+  "x": 12227,
+  "y": 393,
   "text": "Choose an entry in the sidebar.",
   "size": "body",
-  "color": "ink"
+  "color": "ink",
+  "wrap": 480,
+  "textAlign": "center"
 }

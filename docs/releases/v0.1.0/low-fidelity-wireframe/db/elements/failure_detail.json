@@ -1,8 +1,10 @@
 {
   "type": "text",
-  "x": 10832,
-  "y": 395,
+  "x": 10767,
+  "y": 393,
   "text": "The list could not be displayed.",
   "size": "body",
-  "color": "ink"
+  "color": "ink",
+  "wrap": 480,
+  "textAlign": "center"
 }

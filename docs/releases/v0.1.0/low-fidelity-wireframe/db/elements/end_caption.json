@@ -1,8 +1,8 @@
 {
   "type": "text",
   "x": 1516,
-  "y": 12,
+  "y": 18,
   "text": "02 · End of question list",
-  "size": "title",
+  "size": "large",
   "color": "ink"
 }

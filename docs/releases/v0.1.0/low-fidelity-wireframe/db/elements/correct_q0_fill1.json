@@ -1,13 +1,10 @@
 {
-  "type": "stroke",
-  "x": 4740,
-  "y": 209,
-  "points": [
-    0,
-    0,
-    0.5,
-    0
-  ],
-  "width": 6,
-  "color": "ink"
+  "type": "shape",
+  "kind": "ellipse",
+  "x": 4736,
+  "y": 217,
+  "w": 8,
+  "h": 8,
+  "color": "#303030",
+  "text": ""
 }

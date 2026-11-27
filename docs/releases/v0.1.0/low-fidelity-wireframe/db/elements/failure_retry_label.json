@@ -1,8 +1,10 @@
 {
   "type": "text",
-  "x": 10853,
-  "y": 440,
+  "x": 10957,
+  "y": 443,
   "text": "Retry",
   "size": "small",
-  "color": "ink"
+  "color": "ink",
+  "wrap": 100,
+  "textAlign": "center"
 }

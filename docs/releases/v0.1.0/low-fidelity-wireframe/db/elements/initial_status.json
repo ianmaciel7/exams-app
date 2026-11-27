@@ -1,8 +1,10 @@
 {
   "type": "text",
-  "x": 12292,
-  "y": 355,
+  "x": 12227,
+  "y": 350,
   "text": "Select a competition",
   "size": "large",
-  "color": "ink"
+  "color": "ink",
+  "wrap": 480,
+  "textAlign": "center"
 }

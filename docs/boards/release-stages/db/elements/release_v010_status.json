@@ -5,5 +5,5 @@
   "w": 480,
   "h": 340,
   "color": "yellow",
-  "text": "**v0.1.0 — In progress**\nProduct, Information Architecture, Screen Inventory and User Flows: review pending.\nSketch: complete; owner approved progression (94072ce).\nLow-Fidelity Wireframe: in progress; eight inherited states + two proposed variants. Native capture and owner structural review pending.\nLater fidelity stages: not started.\nSource: docs/releases/v0.1.0/README.md"
+  "text": "**v0.1.0 — In progress**\nProduct, Information Architecture, Screen Inventory and User Flows: review pending.\nSketch: complete; owner approved progression (94072ce).\nLow-Fidelity Wireframe: in progress; eight inherited states + two proposed variants. Greybox correction applied; native capture and owner structural review pending.\nLater fidelity stages: not started.\nSource: docs/releases/v0.1.0/README.md"
 }

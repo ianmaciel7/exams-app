@@ -1,8 +1,10 @@
 {
   "type": "text",
-  "x": 10832,
-  "y": 355,
+  "x": 10767,
+  "y": 350,
   "text": "Could not load questions",
   "size": "large",
-  "color": "ink"
+  "color": "ink",
+  "wrap": 480,
+  "textAlign": "center"
 }

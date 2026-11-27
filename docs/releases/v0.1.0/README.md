@@ -38,3 +38,5 @@ The pagination alignment refinement groups Previous/Next with their chevrons, eq
 ## Stage transition — 2026-11-27
 
 The owner approved advancing from Sketch at `94072ce`. Preserve its native board and capture history. [Low-Fidelity Wireframe](low-fidelity-wireframe/README.md) begins structural review with the eight inherited states plus two explicitly proposed variants (initial unselected entry and narrower workspace). Initial selection, answer lifecycle and responsive direction remain open. No higher fidelity stage or implementation is approved.
+
+The owner rejected the first Low-Fidelity visual treatment (`d133d40`). The [Greybox correction](low-fidelity-wireframe/README.md#greybox-correction--2026-11-27) replaces smoothed freehand outlines with native shapes and filled neutral regions while preserving coverage and open decisions. The stage remains in progress until native visual inspection and owner review.

@@ -1,8 +1,10 @@
 {
   "type": "text",
-  "x": 9372,
-  "y": 395,
+  "x": 9307,
+  "y": 393,
   "text": "The selected item has no questions.",
   "size": "body",
-  "color": "ink"
+  "color": "ink",
+  "wrap": 480,
+  "textAlign": "center"
 }

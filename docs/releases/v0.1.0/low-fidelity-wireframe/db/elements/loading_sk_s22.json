@@ -1,13 +1,10 @@
 {
-  "type": "stroke",
+  "type": "shape",
+  "kind": "rect",
   "x": 7652,
-  "y": 735,
-  "points": [
-    0,
-    0,
-    631.96,
-    0
-  ],
-  "width": 5,
-  "color": "#858585"
+  "y": 726,
+  "w": 606,
+  "h": 9,
+  "color": "#d7d7d7",
+  "text": ""
 }

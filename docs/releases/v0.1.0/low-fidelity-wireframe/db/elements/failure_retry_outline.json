@@ -1,19 +1,10 @@
 {
-  "type": "stroke",
-  "x": 10832,
+  "type": "shape",
+  "kind": "rounded",
+  "x": 10957,
   "y": 435,
-  "points": [
-    0,
-    0,
-    96,
-    0,
-    96,
-    30,
-    0,
-    30,
-    0,
-    0
-  ],
-  "width": 1.5,
-  "color": "ink"
+  "w": 100,
+  "h": 36,
+  "color": "#b9b9b9",
+  "text": ""
 }

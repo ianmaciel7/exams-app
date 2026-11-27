@@ -1,8 +1,10 @@
 {
   "type": "text",
-  "x": 6213,
-  "y": 602,
+  "x": 6192,
+  "y": 610,
   "text": "Answer",
   "size": "small",
-  "color": "#858585"
+  "color": "#626262",
+  "wrap": 100,
+  "textAlign": "center"
 }

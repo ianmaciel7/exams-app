@@ -53,4 +53,6 @@ Use consistent left alignment for question headings, statements, radio controls 
 
 ## Stage transition
 
-The owner approved advancing from Sketch (`94072ce`). The [Low-Fidelity Wireframe](docs/releases/v0.1.0/low-fidelity-wireframe/README.md) uses neutral, regular outline geometry and representative labels for structural review. Existing Sketch choices remain the baseline; final typography, color, tokens and responsive behavior remain undecided.
+The owner approved advancing from Sketch (`94072ce`). The [Low-Fidelity Wireframe](docs/releases/v0.1.0/low-fidelity-wireframe/README.md) uses regular native shapes, neutral greybox surfaces, filled content placeholders and representative labels for structural review. Existing Sketch choices remain the baseline; final typography, color, tokens and responsive behavior remain undecided.
+
+Low-fidelity correction: do not reuse the Sketch stroke renderer for rectangular UI frames or controls. Distinguish regions by grayscale surfaces, preserve whitespace between questions, and keep essential labels readable. Validate native shape geometry, clipping, control alignment and state consistency from rendered captures. The fixed grayscale artboard is a structural study, not a production theme.
