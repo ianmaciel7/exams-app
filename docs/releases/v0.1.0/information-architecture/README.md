@@ -6,7 +6,7 @@ One workspace, not 21 destinations. Left sidebar locates competitions; main regi
 
 ## Navigation and pagination
 
-Competition label: `Name · Year · Position/exam`; one line with ellipsis and full name discoverable via focus, hover and touch. DATAPREV and PPSA examples are illustrative; PPSA's full position title requires confirmation. No redundant section heading or repeated competition heading in the main region. Ten questions per page; pagination follows the last question and page change resets scroll to top. Previous disabled on first page, Next disabled on last page. No page-size chooser or new route.
+Competition label: `Name · Year · Position/exam`; one line with ellipsis on desktop and full name discoverable via focus or hover; phone drawer labels wrap without relying on hover. DATAPREV and PPSA examples are illustrative; PPSA's full position title requires confirmation. No redundant section heading or repeated competition heading in the main region. Ten questions per page; pagination follows the last question and page change resets scroll to top. Previous disabled on first page, Next disabled on last page. The phone footer uses compact previous/current/next specimens for all three boundary positions. No page-size chooser or new route.
 
 ## Structural studies
 
@@ -18,7 +18,7 @@ Historical [Sketch](../sketch/README.md) and [Low-Fidelity](../low-fidelity-wire
 
 A Ghost sidebar trigger is available across workspace states. On desktop, the collapse icon remains visible while expanded; when collapsed, the expand icon is hidden at pointer rest and revealed on rail/header hover or keyboard focus, without moving the layout. Activation, not hover, expands the sidebar. A visible accessible alternative is required on touch/no-hover devices. Collapse/expand preserves current page, selection, scroll context and answers.
 
-External component studies clarify default, hover and pressed actions and the collapsed hover/focus trigger without increasing the 21 workspace variants. No automatic hover expansion or runtime interaction is implied.
+External component studies clarify default, hover and pressed actions, the collapsed hover/focus/no-hover trigger, localized phone geometry and wrapped-option feedback without increasing the 21 workspace variants. No automatic hover expansion or runtime interaction is implied.
 
 ## Approved product decisions — 2026-11-27
 

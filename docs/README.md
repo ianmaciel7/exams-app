@@ -16,9 +16,9 @@ Current stage: Mid-Fidelity Wireframe — in progress; 21 variants; owner visual
 
 ## Capture evidence
 
-Last verified successful capture: [165f554](https://github.com/ianmaciel7/exams-app/commit/165f554320d9077545296c0e252189bb5d0f22e6) · [CI 46006601771](https://github.com/ianmaciel7/exams-app/actions/runs/46006601771). Manifest verified: 10 native boards, both Light and Dark. This is evidence for that commit only, not visual approval of the current revision.
+Last verified successful capture: [07deedf](https://github.com/ianmaciel7/exams-app/commit/07deedfafc5e5110dafdf70073c21a91358ab1e0) · [CI 46012468323](https://github.com/ianmaciel7/exams-app/actions/runs/46012468323). Manifest verified: 10 native boards, both Light and Dark. This is evidence for that commit only, not visual approval of the current revision.
 
-Last recorded Mid-Fidelity review requiring changes: [670a2d1](https://github.com/ianmaciel7/exams-app/commit/670a2d17120e344e9f7ccc8632d7c780d00da41c) · [CI 46004860284](https://github.com/ianmaciel7/exams-app/actions/runs/46004860284) — Mid-Fidelity focus treatment reviewed; owner requested correction. Not an approval.
+Last recorded Mid-Fidelity review requiring changes: [07deedf](https://github.com/ianmaciel7/exams-app/commit/07deedfafc5e5110dafdf70073c21a91358ab1e0) · [CI 46012468323](https://github.com/ianmaciel7/exams-app/actions/runs/46012468323) — Cross-state review found inconsistent mobile geometry, tooltip anatomy, drawer underlay, pagination boundaries and long-option feedback. Corrections in fe68a48 require fresh visual review; not an approval.
 
 Last recorded planning-board review requiring changes: [898d493](https://github.com/ianmaciel7/exams-app/commit/898d493e56bbaefb49095eb5a2648ae463043359) · [CI 46005686904](https://github.com/ianmaciel7/exams-app/actions/runs/46005686904) — Owner identified crowded planning-board elements; layout corrections made in 165f554.
 

@@ -14,7 +14,7 @@ Keep grayscale native editable surfaces, whitespace instead of question dividers
 
 ## Colors and typography
 
-Neutral grayscale structural study; semantic result labels do not rely on color alone. Use readable representative content and a stable hierarchy. Truncation retains the full label for future keyboard/touch discovery. The fixed light artboard in the two board themes is not an approved app light/dark palette.
+Neutral grayscale structural study; semantic result labels do not rely on color alone. Use readable representative content and a stable hierarchy. Desktop truncation retains the full label for keyboard and hover discovery; phone drawer labels wrap without relying on hover. The fixed light artboard in the two board themes is not an approved app light/dark palette.
 
 ## Validation and shared source
 
@@ -41,3 +41,9 @@ Use one external, continuous 2-unit neutral focus outline with a 3-unit clear se
 Answer and Retry use a stable 112 × 34 canvas footprint. Default #333333, hover #262626, pressed #191919, disabled #f4f4f4, pending #eeeeee. The four-state comparison is shown against the same light surface as the workspace; disabled and pending remain in their corresponding workspace variants. These neutral values are not final tokens. Avoid bounce, scaling, decorative shadows, ripple, geometry changes, and animation-dependent feedback. The collapsed hover and keyboard focus specimens are separate: hover reveals the icon with subtle surface feedback; keyboard focus reveals the icon with a single clear outline. Touch retains an accessible visible alternative.
 
 References: [W3C Focus Visible](https://www.w3.org/WAI/WCAG22/Understanding/focus-visible), [Focus Appearance](https://www.w3.org/WAI/WCAG22/Understanding/focus-appearance), [Non-text Contrast](https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast), [Atlassian focus ring](https://atlassian.design/components/focus-ring/usage), [Archive design foundations](https://github.com/ianmaciel7/exams-app-archive/blob/05a3ebd9dfae12f0346cb9f8e34181b8a4614288/docs/references/ui-ux-research-sources/design-foundations-and-state-transitions-2026-11-25.md). Historical review: native capture `670a2d1` demonstrated the previous bulky nested outline. Subsequent captures were generated; current capture provenance and review status are recorded in current-state.json. All 21 workspace variants remain.
+
+## Current responsive component studies
+
+Desktop labels use one-line ellipsis with full-label discovery by hover/focus; phone drawer labels wrap. The drawer overlays the same question workspace. Phone component studies cover first/middle/last pagination, identical English/pt-BR workspace geometry, and feedback below wrapped alternatives. No-hover devices retain a visible trigger. These are static design specimens, not additional workspace variants or functional validation.
+
+The [active wireframe](docs/releases/v0.1.0/mid-fidelity-wireframe/README.md) owns the detailed geometry and review history; [current state](docs/releases/v0.1.0/current-state.json) records capture provenance. Native visual approval remains pending.

@@ -5,5 +5,5 @@
   "w": 540,
   "h": 390,
   "color": "yellow",
-  "text": "**Current workspace — v0.1.0**\nOne destination: competition sidebar and scrolling question list. Original exam order; 10 questions/page. First available competition selected automatically. Name · Year · Position/exam; full label discoverable. Desktop Ghost reveal on hover/focus; phones use an overlay drawer. Empty competition list shows a message only; navigation failure offers manual Retry. Interface: pt-BR and en. No additional routes. Exact breakpoint, data source and locale controls require technical validation."
+  "text": "**Current workspace — v0.1.0**\nOne destination: competition sidebar and scrolling question list. Original exam order; 10 questions/page. First available competition selected automatically. Name · Year · Position/exam; desktop ellipsis and tooltip; phone labels wrap. Desktop Ghost reveal on hover/focus; phones use an overlay drawer. Empty competition list shows a message only; navigation failure offers manual Retry. Interface: pt-BR and en. No additional routes. Exact breakpoint, data source and locale controls require technical validation."
 }

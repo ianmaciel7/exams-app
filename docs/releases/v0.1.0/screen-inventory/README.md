@@ -2,7 +2,7 @@
 
 Current stage: Mid-Fidelity Wireframe — in progress; 21 variants; owner visual approval pending.
 
-One workspace, not separate destinations. Main region contains a scrolling question list, left-aligned Answer/result, and end-of-list pagination. The Ghost control is available across states; collapsed desktop pointer-rest hides its icon. External component specimens are not additional variants.
+One workspace, not separate destinations. Main region contains a scrolling question list, left-aligned Answer/result, and end-of-list pagination. The Ghost control is available across states; collapsed desktop pointer-rest hides its icon. External component specimens are not additional variants. Desktop labels use one-line ellipsis with full-label discovery by hover/focus; phone drawer labels wrap. The drawer overlays the same question workspace. Phone component studies cover first/middle/last pagination, identical English/pt-BR workspace geometry, and feedback below wrapped alternatives. No-hover devices retain a visible trigger. These are static design specimens, not additional workspace variants or functional validation.
 
 | # | Native state ID | Review category |
 | --- | --- | --- |

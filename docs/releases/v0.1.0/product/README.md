@@ -29,7 +29,7 @@ Automatically select the first available competition on entry. Browse ten questi
 | Unknown submission outcome | Retain choice and permit safe retry |
 | Interface languages | Brazilian Portuguese and English |
 
-Competition labels: `Name · Year · Position/exam`; truncate with ellipsis while preserving full-name discovery by focus, hover and touch. PPSA's full position title still requires confirmation. English remains the project-authored design language; the application interface supports Brazilian Portuguese and English. The final page may contain fewer than ten questions; no page-size chooser. Late responses must not restore discarded answers.
+Competition labels: `Name · Year · Position/exam`; use one-line ellipsis on desktop with full-name discovery by hover/focus; wrap labels on phones without relying on hover. PPSA's full position title still requires confirmation. English remains the project-authored design language; the application interface supports Brazilian Portuguese and English. The final page may contain fewer than ten questions; no page-size chooser. Late responses must not restore discarded answers.
 
 ## Open decisions
 

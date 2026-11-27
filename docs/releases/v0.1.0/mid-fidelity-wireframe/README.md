@@ -19,7 +19,7 @@ Eight inherited states: list start, end/pagination, selected, correct, incorrect
 
 ## Open decisions
 
-The six owner decisions are now resolved; see current-state.json for technical validation. Answer lifecycle, page size and recovery are approved below. The displayed first item is always selected on workspace entry if available; this decision is resolved. See [product](../product/README.md#open-product-decisions).
+The six owner decisions are now resolved; see current-state.json for technical validation. Answer lifecycle, page size and recovery are approved below. The displayed first item is always selected on workspace entry if available; this decision is resolved. See [product](../product/README.md#open-decisions).
 
 Suggested native comment anchors: narrow_note and collapsed_note (responsive treatment), no-items_note (empty sidebar), submit-failure_note (ambiguous server outcomes). Native comment creation is unavailable in this connected workflow; do not fabricate threads. These are notes and proposed anchors only.
 

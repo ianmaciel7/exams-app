@@ -10,8 +10,9 @@ export function checkMidFidelityComponents(){
   if(!meta.order.includes(id)){errors.push('Missing shared element '+id);continue;}
   try{const actual=JSON.parse(readFileSync(join(root,'elements',id+'.json'),'utf8'));if(JSON.stringify(actual)!==JSON.stringify(element))errors.push('Shared component drift: '+id);}catch(e){errors.push(id+': '+e.message);}
  }
- const toggles=meta.order.filter(id=>id.endsWith('_toggle_panel'));
- if(toggles.length!==components.states.length)errors.push('Expected one toggle in every variant');
+ // Count primary workspace variants only; the dimmed drawer underlay is a companion specimen.
+ const requiredToggles=components.states.map(id=>id+'_toggle_panel');
+ for(const id of requiredToggles)if(meta.order.filter(x=>x===id).length!==1)errors.push('Expected one primary toggle: '+id);
  if(components.states.some(id=>!meta.order.includes(id+'_note')))errors.push('Missing state note');
  return errors;
 }
