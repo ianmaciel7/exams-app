@@ -26,26 +26,27 @@ async function captureSketchStates(page,theme,board){
   for(let i=0;i<sketchStates.length;i++){
     const cx=655+i*1460,cy=515;
     // Use the native wheel camera rather than scaling a crop of the overview.
-    const center=()=>({x:box.x+box.width/2,y:box.y+box.height/2});
-    const panTo=async()=>{
-      const c=await camera(),p=center();
-      await page.mouse.move(p.x,p.y);
-      await page.mouse.wheel(c.x+cx*c.scale-box.width/2,c.y+cy*c.scale-box.height/2);
-      await page.waitForTimeout(180);
+    // Dispatch wheel gestures directly on the native surface. A physical
+    // mouse at the viewport center may land on a note/comment overlay.
+    const wheel=async(dx,dy,zoom=false)=>{
+      await surface.evaluate((el,{dx,dy,zoom})=>{
+        const r=el.getBoundingClientRect();
+        el.dispatchEvent(new WheelEvent('wheel',{bubbles:true,cancelable:true,
+          clientX:r.left+r.width/2,clientY:r.top+r.height/2,deltaX:dx,deltaY:dy,deltaMode:0,ctrlKey:zoom}));
+      },{dx,dy,zoom});
+      await page.waitForTimeout(50);
     };
-    await panTo();
     const desired=Math.min((box.width-180)/1320,(box.height-160)/1100,1.1);
-    await page.keyboard.down('Control');
-    try{
-      for(let attempt=0;attempt<18;attempt++){
-        const c=await camera();
-        if(Math.abs(Math.log(desired/c.scale))<0.025) break;
-        const p=center();await page.mouse.move(p.x,p.y);
-        await page.mouse.wheel(0,-100*Math.log(desired/c.scale));
-        await page.waitForTimeout(100);
-      }
-    }finally{await page.keyboard.up('Control')}
-    await panTo();
+    for(let attempt=0;attempt<20;attempt++){
+      const c=await camera();
+      if(Math.abs(Math.log(desired/c.scale))<0.012) break;
+      await wheel(0,-100*Math.log(desired/c.scale),true);
+    }
+    for(let attempt=0;attempt<6;attempt++){
+      const c=await camera(),dx=c.x+cx*c.scale-box.width/2,dy=c.y+cy*c.scale-box.height/2;
+      if(Math.abs(dx)<3&&Math.abs(dy)<3) break;
+      await wheel(dx,dy);
+    }
     const c=await camera();
     if(Math.abs(c.scale-desired)>0.08||Math.abs(c.x+cx*c.scale-box.width/2)>25||Math.abs(c.y+cy*c.scale-box.height/2)>25)throw Error('Native camera did not frame '+sketchStates[i]+': '+JSON.stringify(c));
     const path='boards/sketch-'+sketchStates[i]+'-'+theme+'.png';
