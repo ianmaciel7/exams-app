@@ -71,7 +71,7 @@
     "r11": {
       "at": 11,
       "c0": "Collapsed hover / focus",
-      "c1": "Reveal icon; explicit activation opens"
+      "c1": "Visible icon; hover/focus feedback; explicit activation opens"
     },
     "r12": {
       "at": 12,

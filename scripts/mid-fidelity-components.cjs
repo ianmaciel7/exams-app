@@ -65,9 +65,9 @@ if(id==="long-content"){put(id,"answer",btn(x,412));put(id,"next_answer",btn(x,6
 if(id==="loading")for(let n=0;n<2;n++)put(id,"sk_action"+n,btn(x,324+n*282,"","skeleton"));
 if(id==="failure")put(id,"retry",btn(ox+center-56,436,"Retry","enabled"));
 if(id==="collapsed"){
- // Reserved transparent slot: hidden at desktop rest; the external hover specimen is visible.
- put(id,"toggle_panel",vector(ox+l+(w-16)/2,113,16,14,'<rect width="16" height="14" fill="none"/>'));
- put(id,"note",{type:"note",x:ox+l,y:875,w:640,h:120,color:"yellow",text:"Collapsed rail: hide the expand icon at pointer rest; reveal on rail/header hover or keyboard focus, with no layout shift. Activate explicitly to expand. On touch/no-hover, keep an accessible visible trigger. Preserve selected item, scroll and answers."});
+ // Visible Ghost trigger at rest; hover and focus change feedback, not visibility.
+ put(id,"toggle_panel",toggle(ox+l+(w-16)/2,113));
+ put(id,"note",{type:"note",x:ox+l,y:875,w:640,h:120,color:"yellow",text:"Collapsed rail: keep the expand icon visible without a button background; hover and keyboard focus add feedback without layout shift. Activate explicitly to expand. On touch/no-hover, keep an accessible visible trigger. Preserve selected item, scroll and answers."});
  put(id,"reveal_caption",text(ox+885,875,"Hover","small","ink"));
  put(id,"reveal_surface",shape(ox+885,904,64,64,"#f0f0f0","rounded"));
  put(id,"reveal_hover",shape(ox+903,922,28,28,"#e4e4e4","rounded"));
@@ -110,7 +110,7 @@ function reviewSpecimens(){
   for(let k=0;k<count;k++){const y=k*28;body+=`<circle cx="8" cy="${y+8}" r="8" fill="rgb(221,221,221)"/><rect x="26" y="${y+3}" width="${widths[k]}" height="10" rx="2" fill="rgb(221,221,221)"/>`;}
   put("loading_sk_group"+n,vector(7652,178+n*282,264,(count-1)*28+16,body));
  }
- // Full-height collapsed rail specimens: the hidden rest state is unchanged.
+ // Full-height collapsed rail specimens: the resting icon stays visible.
  const rail=`<rect width="64" height="709" rx="5" fill="rgb(240,240,240)"/><rect x="12" y="66" width="40" height="36" rx="5" fill="rgb(216,216,216)"/><g fill="none" stroke="rgb(85,85,85)" stroke-width="1.4" stroke-linecap="round"><rect x="25" y="77" width="13" height="13" rx="2"/><path d="M28 81H35M28 85H35"/><rect x="25" y="119" width="13" height="13" rx="2"/><path d="M28 123H35M28 127H33"/></g>`;
  put("collapsed_reveal_caption",text(cx+1122,18,"Hover","small"));
  put("collapsed_reveal_surface",vector(cx+1122,76,64,709,rail));
@@ -118,7 +118,7 @@ function reviewSpecimens(){
  put("collapsed_reveal_icon",toggle(cx+1146,113));
  put("collapsed_reveal_focus_caption",text(cx+1240,18,"Keyboard focus","small"));
  put("collapsed_reveal_focus_sample",vector(cx+1240,76,64,709,rail+`<rect x="15" y="27" width="34" height="34" rx="6" fill="none" stroke="rgb(102,102,102)" stroke-width="2"/><rect x="25" y="38" width="14" height="12" rx="2" fill="none" stroke="rgb(85,85,85)" stroke-width="1.5"/><path d="M30 38V50" stroke="rgb(85,85,85)" stroke-width="1.5"/>`));
- put("collapsed_note",{type:"note",x:cx+220,y:875,w:640,h:120,color:"yellow",text:"Desktop rail at rest hides the expand icon. Full-height hover and keyboard-focus specimens show the same slot and navigation items, without layout shift. Activate explicitly to expand; no automatic peek. Touch/no-hover requires a visible accessible control."});
+ put("collapsed_note",{type:"note",x:cx+220,y:875,w:640,h:120,color:"yellow",text:"Desktop rail at rest shows the expand icon without a background. Full-height hover and keyboard-focus specimens show the same slot and navigation items, without layout shift. Activate explicitly to expand; no automatic peek. Touch/no-hover requires a visible accessible control."});
  // Native editable overlay; do not rely on a single large SVG containing text.
  const d=x+900;
  put("mobile_drawer_open",shape(d,76,390,709,"#bdbdbd"));
@@ -169,7 +169,7 @@ function refined(){
  put("collapsed_reveal_focus_sample",vector(cx+1212,76,64,709,rail+`<rect x="15" y="27" width="34" height="34" rx="6" fill="none" stroke="rgb(102,102,102)" stroke-width="2"/>`+glyph));
  put("collapsed_nohover_caption",text(cx+1314,18,"No hover","small"));
  put("collapsed_nohover_sample",vector(cx+1314,76,64,709,rail+glyph));
- put("collapsed_note",{type:"note",x:cx+220,y:875,w:640,h:120,color:"yellow",text:"Desktop rest hides the expand icon; hover and keyboard focus reveal it in the same slot. No-hover devices keep the trigger visible. Activate explicitly; no hover peek. Preserve selection, scroll and answers. Validate keyboard tab order, focus ring, target size and touch in the prototype."});
+ put("collapsed_note",{type:"note",x:cx+220,y:875,w:640,h:120,color:"yellow",text:"Desktop rest shows the expand icon without a background; hover adds a subtle surface and keyboard focus adds an outline in the same slot. The icon remains visible on all input devices. Activate explicitly; no hover peek. Preserve selection, scroll and answers. Validate keyboard tab order, focus ring, target size and touch in the prototype."});
  // A dimmed copy of the same phone's visible question text and positions.
  put("mobile_drawer_open",shape(d,76,390,709,"#bdbdbd"));
  put("mobile_drawer_underlay",text(d+16,226,"Which HTTP method is defined as safe and idempotent?","body","#4b4b4b",{wrap:350}));

@@ -2,7 +2,7 @@
 
 Current stage: Mid-Fidelity Wireframe — in progress; 21 variants; owner visual approval pending.
 
-One workspace, not 21 destinations. Left sidebar locates competitions; main region contains the vertically scrolling list. First available item selected automatically on entry. Ghost collapse/expand is available across desktop and narrow states, independent of question lifecycle; the collapsed expand icon is hidden at pointer rest and revealed on hover/focus. Collapse preserves selection, page, scroll context and answers. Changing competition or page discards responses.
+One workspace, not 21 destinations. Left sidebar locates competitions; main region contains the vertically scrolling list. First available item selected automatically on entry. Ghost collapse/expand is available across desktop and narrow states, independent of question lifecycle; the collapsed expand icon remains visible without a background at pointer rest; hover/focus adds feedback. Collapse preserves selection, page, scroll context and answers. Changing competition or page discards responses.
 
 ## Navigation and pagination
 
@@ -16,7 +16,7 @@ Historical [Sketch](../sketch/README.md) and [Low-Fidelity](../low-fidelity-wire
 
 ## Collapsed navigation and action states
 
-A Ghost sidebar trigger is available across workspace states. On desktop, the collapse icon remains visible while expanded; when collapsed, the expand icon is hidden at pointer rest and revealed on rail/header hover or keyboard focus, without moving the layout. Activation, not hover, expands the sidebar. A visible accessible alternative is required on touch/no-hover devices. Collapse/expand preserves current page, selection, scroll context and answers.
+A Ghost sidebar trigger is available across workspace states. On desktop, the collapse and expand icons remain visible at pointer rest with no button background (Ghost). Hover adds subtle surface feedback and keyboard focus adds a visible outline without moving the layout. Activation, not hover, expands the sidebar. Keep the same visible accessible trigger on touch/no-hover devices. Collapse/expand preserves current page, selection, scroll context and answers.
 
 External component studies clarify default, hover and pressed actions, the collapsed hover/focus/no-hover trigger, localized phone geometry and wrapped-option feedback without increasing the 21 workspace variants. No automatic hover expansion or runtime interaction is implied.
 

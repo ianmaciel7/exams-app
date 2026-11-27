@@ -5,5 +5,5 @@
   "w": 550,
   "h": 390,
   "color": "yellow",
-  "text": "**Current flows — v0.1.0**\nEntry -> first available item -> questions in original exam order; empty competitions -> message only; list failure -> manual Retry.\nSelect -> Answer -> pending -> confirmed and locked OR not confirmed (retain selection; safe retry without duplicate evaluation).\nPage/competition change -> discard answers; page scroll resets. Exit -> discard. Desktop hover/focus reveals collapsed trigger; phone opens overlay drawer; dismissal preserves context. No-hover trigger stays visible. Preserve context on collapse/expand. Portuguese and English interface. Technical validation remains."
+  "text": "**Current flows — v0.1.0**\nEntry -> first available item -> questions in original exam order; empty competitions -> message only; list failure -> manual Retry.\nSelect -> Answer -> pending -> confirmed and locked OR not confirmed (retain selection; safe retry without duplicate evaluation).\nPage/competition change -> discard answers; page scroll resets. Exit -> discard. Desktop collapsed trigger stays visible; hover/focus adds feedback; phone opens overlay drawer; dismissal preserves context. The Ghost trigger stays visible on all input devices. Preserve context on collapse/expand. Portuguese and English interface. Technical validation remains."
 }

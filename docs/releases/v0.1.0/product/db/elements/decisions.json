@@ -51,7 +51,7 @@
     "r7": {
       "at": 7,
       "c0": "Sidebar",
-      "c1": "Ghost trigger; hover/focus reveal collapsed"
+      "c1": "Ghost trigger always visible; hover/focus feedback"
     },
     "r8": {
       "at": 8,

@@ -5,5 +5,5 @@
   "w": 640,
   "h": 120,
   "color": "yellow",
-  "text": "Desktop rest hides the expand icon; hover and keyboard focus reveal it in the same slot. No-hover devices keep the trigger visible. Activate explicitly; no hover peek. Preserve selection, scroll and answers. Validate keyboard tab order, focus ring, target size and touch in the prototype."
+  "text": "Desktop rest shows the expand icon without a background; hover adds a subtle surface and keyboard focus adds an outline in the same slot. The icon remains visible on all input devices. Activate explicitly; no hover peek. Preserve selection, scroll and answers. Validate keyboard tab order, focus ring, target size and touch in the prototype."
 }

@@ -13,6 +13,9 @@ export function checkMidFidelityComponents(){
  // Count primary workspace variants only; the dimmed drawer underlay is a companion specimen.
  const requiredToggles=components.states.map(id=>id+'_toggle_panel');
  for(const id of requiredToggles)if(meta.order.filter(x=>x===id).length!==1)errors.push('Expected one primary toggle: '+id);
+ // Reject a transparent placeholder in the primary collapsed rail.
+ const collapsed=expected.collapsed_toggle_panel;
+ if(!collapsed?.src||!decodeURIComponent(collapsed.src).includes('stroke='))errors.push('Collapsed Ghost trigger must have a visible glyph at rest');
  if(components.states.some(id=>!meta.order.includes(id+'_note')))errors.push('Missing state note');
  return errors;
 }
