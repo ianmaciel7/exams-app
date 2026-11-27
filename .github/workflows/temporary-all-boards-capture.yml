@@ -1,0 +1,76 @@
+name: Capture all Exam App boards
+on:
+  push:
+    branches: [capture/all-boards-20261126]
+permissions:
+  contents: read
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check board integrity
+        run: |
+          node scripts/check-boards.mjs
+          node --test scripts/check-boards.test.mjs scripts/marker-sketch.test.mjs scripts/marker-sketch-ink.test.mjs
+      - name: Download official Open Artifact release
+        run: |
+          curl -fsSL https://github.com/JimLiu/open-artifact/releases/download/v0.16.3/open-artifact-plugins.zip -o /tmp/open-artifact.zip
+          unzip -q /tmp/open-artifact.zip -d /tmp/open-artifact
+      - name: Open all native boards
+        run: |
+          cli=$(find /tmp/open-artifact -path '*/whiteboard/scripts/cli.mjs' | grep '/codex/' | head -1)
+          if [ -z "$cli" ]; then cli=$(find /tmp/open-artifact -path '*/whiteboard/scripts/cli.mjs' | head -1); fi
+          test -n "$cli"
+          export OPEN_ARTIFACT_WHITEBOARD_CLI="$cli"
+          node scripts/open-boards.mjs | tee /tmp/board-urls
+      - name: Capture eight boards in both themes
+        run: |
+          npm install --prefix /tmp/board-browser playwright
+          /tmp/board-browser/node_modules/.bin/playwright install chromium
+          mkdir -p /tmp/capture
+          cat > /tmp/board-browser/capture.cjs <<'JS'
+          const {chromium}=require('playwright');
+          const fs=require('fs');
+          const names=['overview','releases','hub','product','architecture','screens','flows','sketch'];
+          const urls=Object.fromEntries(fs.readFileSync('/tmp/board-urls','utf8').split(/\r?\n/).map(line=>line.match(/^(\w+): (http\S+)$/)).filter(Boolean).map(m=>[m[1],m[2]]));
+          (async()=>{
+            if(names.some(name=>!urls[name])) throw new Error('Missing native board URL');
+            const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
+            const manifest=[];
+            for(const name of names){
+              for(const theme of ['light','dark']){
+                const page=await browser.newPage({viewport:{width:2560,height:1440},deviceScaleFactor:1,colorScheme:theme});
+                const errors=[];
+                page.on('pageerror',e=>errors.push(e.message));
+                await page.goto(urls[name],{waitUntil:'domcontentloaded'});
+                await page.evaluate(theme=>document.documentElement.dataset.theme=theme,theme);
+                await page.waitForFunction(()=>document.querySelectorAll('[data-wb-id]').length>0);
+                await page.waitForTimeout(3000);
+                await page.evaluate(()=>document.fonts.ready);
+                const status=await page.evaluate(()=>({title:document.title,theme:document.documentElement.dataset.theme,elements:document.querySelectorAll('[data-wb-id]').length}));
+                if(status.theme!==theme||!status.elements)throw new Error('Native board not rendered: '+name);
+                const path='/tmp/capture/'+name+'-'+theme+'.png';
+                await page.screenshot({path});
+                manifest.push({name,theme,...status,errors,file:path.split('/').pop()});
+                console.log(JSON.stringify(manifest.at(-1)));
+                await page.close();
+              }
+            }
+            await browser.close();
+            fs.writeFileSync('/tmp/capture/manifest.json',JSON.stringify(manifest,null,2));
+            if(manifest.length!==16)throw new Error('Incomplete capture set');
+          })().catch(e=>{console.error(e);process.exit(1)});
+          JS
+          node /tmp/board-browser/capture.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: exam-app-native-boards
+          path: /tmp/capture/
+          retention-days: 7
+          if-no-files-found: error
