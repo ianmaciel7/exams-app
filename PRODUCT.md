@@ -1,10 +1,10 @@
 # Product
 
+<!-- impeccable:product-schema 1 -->
+
 ## Scope reset — 2026-11-26
 
 The product owner requested a fresh v0.1.0 release definition. **No feature is currently selected for the new scope.** Previous approvals, design baselines, and boards are preserved as historical evidence, not active release requirements. Review candidates in the [Ideas Board](https://github.com/ianmaciel7/exams-app/tree/dev/docs/boards/overview); only explicitly selected ideas enter the new release. Keep the version number v0.1.0. No prior implementation or validation status is transferred automatically.
-
-<!-- impeccable:product-schema 1 -->
 
 ## Platform
 

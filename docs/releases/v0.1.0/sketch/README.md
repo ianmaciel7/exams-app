@@ -1,5 +1,7 @@
 # Sketch — v0.1.0
 
+> **Historical baseline — scope reset 2026-11-26.** This artifact is preserved for reference. No feature or design in it is currently assigned to the new v0.1.0 scope. See the [release index](../README.md) and [Ideas Board](../../../boards/overview/).
+
 ## Purpose and status
 
 Explore the multi-screen desktop layouts and core workspace for Exam App v0.1.0: composition, hierarchy, unified competition-centric navigation, and the visual states necessary to validate the stage hypotheses. This is an editable low-fidelity Open Artifact sketch adhering to stage-appropriate abstraction, not a high-fidelity mockup or working prototype. Progress: In progress. User review, usability and functional validation remain pending.

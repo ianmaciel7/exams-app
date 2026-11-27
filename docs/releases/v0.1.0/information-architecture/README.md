@@ -1,5 +1,7 @@
 # Information Architecture — v0.1.0
 
+> **Historical baseline — scope reset 2026-11-26.** This artifact is preserved for reference. No feature or design in it is currently assigned to the new v0.1.0 scope. See the [release index](../README.md) and [Ideas Board](../../../boards/overview/).
+
 This is the initial architecture baseline, not a user-validated final design. The whiteboard separates destinations, navigation, area content, and decisions and research into distinct regions. Destinations sit at the same visual level without asserting unconfirmed hierarchy; navigation arrows appear separately. Home is the entry point, not an assumed parent of every destination.
 
 Information architecture is broader than a sitemap. The area descriptions and navigation paths below are a concise architecture overview, not a complete screen inventory or detailed user flows.

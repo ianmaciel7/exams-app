@@ -1,5 +1,7 @@
 # User Flows — v0.1.0
 
+> **Historical baseline — scope reset 2026-11-26.** This artifact is preserved for reference. No feature or design in it is currently assigned to the new v0.1.0 scope. See the [release index](../README.md) and [Ideas Board](../../../boards/overview/).
+
 This document accompanies the editable [user flows whiteboard](./). The [release decision register](../product/product.md#current-release-baseline) records approvals and design baselines. The paths below await a prototype walkthrough and usability validation.
 
 ## Primary Study Flows

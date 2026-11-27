@@ -6,7 +6,7 @@ The product owner requested a fresh v0.1.0 release definition. **No feature is c
 
 This index locates the current planning artifacts. A documented baseline is not a tested or implemented product. Activities can be revisited and do not form mandatory waterfall gates.
 
-| Artifact | Purpose and source of truth | Progress | Validation |
+| Historical artifact | Previous purpose and source | Historical progress | Historical validation |
 | --- | --- | --- | --- |
 | [Product](product/) | Discovery board; [release decisions and history](product/product.md) are the source of truth, with root `PRODUCT.md` for evolving context | Baseline documented | User validation pending |
 | [Information Architecture](information-architecture/) | Destinations, organization and navigation | Baseline documented | Usability validation pending |
@@ -20,7 +20,7 @@ Progress values: **Not started**, **In progress**, **Baseline documented**, and 
 
 Release board titles use `<Artifact Name> — v<release>`; directory names remain lowercase kebab-case. Artifact iterations use Git history unless versions must coexist. Historical wording and original references are preserved.
 
-The stage records use direct Performance navigation, a single Settings shortcut, and Mock exams within Questions. The Questions toolbar (filters, Auto-check, sorting, result count, questions per page, and List/One) and per-question Statistics are unprioritized ideas with no release assignment. The previous Sketch revision was visually captured. Native capture and usability validation remain pending for the current revision.
+The previous stage records contain historical navigation proposals, including superseded variants. None is assigned to the reset scope. The Questions toolbar (filters, Auto-check, sorting, result count, questions per page, and List/One) and per-question Statistics are unprioritized ideas with no release assignment. The previous Sketch revision was visually captured. Native capture and usability validation remain pending for the historical revision. All activities are not started for the newly reset scope.
 
 ## Stage boundaries and supporting material
 
