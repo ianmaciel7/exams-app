@@ -4,7 +4,7 @@ Start with [Project Hub](boards/project-hub/README.md) or [Ideas Board](boards/o
 
 ## Open Artifact
 
-Run `node scripts/open-boards.mjs` (Node.js 22+ and Open Artifact CLI required). The launcher registers all populated native boards. Set `OPEN_ARTIFACT_WHITEBOARD_CLI` to override CLI discovery. Use downloadable native capture artifacts for review.
+Follow [agent access and setup](agent-access.md). Run `node scripts/open-artifact-runtime.mjs install` (Node.js 22.18+), then `node scripts/open-boards.mjs`. The launcher opens all eleven native boards using the verified v0.17.0 distribution. Explicit runtime overrides must pass version and type checks. Use downloadable native capture artifacts for review; the static Playground is not a persistent agent host.
 
 Run `node scripts/sync-release-state.mjs --write` to regenerate planning data and `node scripts/sync-mid-fidelity.mjs --write` to synchronize managed wireframe elements. Validate with `node scripts/check-boards.mjs` and `node --test scripts/check-boards.test.mjs scripts/marker-sketch.test.mjs scripts/marker-sketch-ink.test.mjs`. Structural checks are not visual or functional approval.
 

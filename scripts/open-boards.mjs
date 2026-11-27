@@ -1,67 +1,17 @@
 import { cpSync, existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
-import { homedir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { markerSketchCss } from './marker-sketch-style.mjs';
+import { assertNode, resolveRuntime } from './open-artifact-runtime.mjs';
 
 const projectRoot = fileURLToPath(new URL('../', import.meta.url));
 
-// Discover available Open Artifact whiteboard CLIs across platforms (Gemini, Codex, Claude)
+// Use only the project-pinned runtime, never a stale global cache.
 function findCli() {
-  const override = process.env.OPEN_ARTIFACT_WHITEBOARD_CLI;
-  if (override) {
-    if (!existsSync(override)) throw new Error(`Whiteboard CLI not found: ${override}`);
-    return { path: override, platform: 'Custom override' };
-  }
-
-  const discovered = [];
-
-  // 1. Google Gemini CLI / Antigravity plugin
-  const geminiCli = join(homedir(), '.gemini', 'config', 'plugins', 'open-artifact', 'skills', 'open-artifact', 'vendor', 'artifact-types', 'whiteboard', 'scripts', 'cli.mjs');
-  if (existsSync(geminiCli)) {
-    discovered.push({ path: geminiCli, platform: 'Gemini CLI / Antigravity' });
-  }
-
-  // 2. OpenAI Codex cache / plugin
-  const codexCache = join(homedir(), '.codex', 'plugins', 'cache', 'created-by-me-remote', 'open-artifact');
-  if (existsSync(codexCache)) {
-    const versions = readdirSync(codexCache, { withFileTypes: true })
-      .filter((entry) => entry.isDirectory() && /^\d+\.\d+\.\d+$/.test(entry.name))
-      .map((entry) => entry.name)
-      .sort((a, b) => {
-        const left = a.split('.').map(Number);
-        const right = b.split('.').map(Number);
-        return right[0] - left[0] || right[1] - left[1] || right[2] - left[2];
-      });
-    for (const version of versions) {
-      const cli = join(codexCache, version, 'skills', 'whiteboard', 'scripts', 'cli.mjs');
-      if (existsSync(cli)) {
-        discovered.push({ path: cli, platform: `OpenAI Codex (v${version})` });
-        break;
-      }
-    }
-  }
-
-  // 3. Anthropic Claude Code plugin / skills cache
-  const claudePaths = [
-    join(homedir(), '.claude', 'plugins', 'open-artifact', 'skills', 'whiteboard', 'scripts', 'cli.mjs'),
-    join(homedir(), '.claude', 'plugins', 'cache', 'open-artifact', 'skills', 'whiteboard', 'scripts', 'cli.mjs'),
-    join(homedir(), '.claude', 'skills', 'whiteboard', 'scripts', 'cli.mjs'),
-    join(homedir(), '.claude', 'skills', 'open-artifact', 'vendor', 'artifact-types', 'whiteboard', 'scripts', 'cli.mjs'),
-  ];
-  for (const cPath of claudePaths) {
-    if (existsSync(cPath)) {
-      discovered.push({ path: cPath, platform: 'Anthropic Claude Code' });
-      break;
-    }
-  }
-
-  if (discovered.length === 0) {
-    throw new Error('Open Artifact is not installed in Gemini, Codex, or Claude; set OPEN_ARTIFACT_WHITEBOARD_CLI to its whiteboard CLI.');
-  }
-
-  return discovered[0];
+  assertNode();
+  const runtime=resolveRuntime();
+  return {path:runtime.whiteboard,platform:'Pinned Open Artifact v'+runtime.version};
 }
 
 function call(cli, args) {

@@ -32,3 +32,7 @@ Observations are evaluated with `node evals/compare-adaptive-routing.mjs <observ
 - https://code.claude.com/docs/en/advisor
 - https://antigravity.google/docs/subagents
 - https://antigravity.google/docs/rules/
+
+## Artifact tool availability
+
+Follow [agent access](agent-access.md) for pinned installation, official host plugins, the project stdio fallback, and session-specific verification. Agent profiles and instructions do not establish MCP access; use bounded direct work when delegation is unavailable and distinguish independent review from automated checks.

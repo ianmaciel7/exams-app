@@ -23,16 +23,14 @@ jobs:
         run: node scripts/check-boards.mjs
       - name: Test release projections
         run: node --test scripts/sync-release-state.test.mjs
-      - name: Download official Open Artifact release
-        run: |
-          curl -fsSL https://github.com/JimLiu/open-artifact/releases/download/v0.16.3/open-artifact-plugins.zip -o /tmp/open-artifact.zip
-          unzip -q /tmp/open-artifact.zip -d /tmp/open-artifact
+      - name: Test runtime resolver
+        run: node --test scripts/open-artifact-runtime.test.mjs
+      - name: Install verified Open Artifact v0.17.0
+        run: node scripts/open-artifact-runtime.mjs install
+      - name: Verify installed type registry
+        run: node scripts/open-artifact-runtime.mjs cli types list
       - name: Open native boards
-        run: |
-          cli=$(find /tmp/open-artifact -path '*/whiteboard/scripts/cli.mjs' | grep '/codex/' | head -1)
-          if [ -z "$cli" ]; then cli=$(find /tmp/open-artifact -path '*/whiteboard/scripts/cli.mjs' | head -1); fi
-          test -n "$cli"
-          OPEN_ARTIFACT_WHITEBOARD_CLI="$cli" node scripts/open-boards.mjs | tee /tmp/board-urls
+        run: node scripts/open-boards.mjs | tee /tmp/board-urls
       - name: Capture board evidence and thumbnails
         run: |
           npm install --prefix /tmp/board-browser playwright

@@ -21,3 +21,6 @@ Thumbs.db
 
 # Local tool state
 .serena/
+
+# Verified local Open Artifact distribution and private daemon state
+.open-artifact-runtime/

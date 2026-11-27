@@ -2,7 +2,7 @@ version = 1
 name = "Exam App"
 
 [setup]
-script = ""
+script = "node scripts/open-artifact-runtime.mjs install"
 
 [[actions]]
 name = "Run"

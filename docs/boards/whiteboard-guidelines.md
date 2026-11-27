@@ -2,6 +2,8 @@
 
 ### Open Artifact Whiteboard Tools & Architecture
 
+Follow [agent access](../agent-access.md) for the pinned v0.17.0 runtime, diagnostics, and the distinction between the native standalone viewer, persistent Shell and static Playground.
+
 All project whiteboards are powered by the Open Artifact Whiteboard runtime, persisted as granular files under `<board-dir>/db/`:
 - **Data Persistence Architecture:**
   - `db/board/meta.json`: Core metadata (`id`, `title`, and `order`: an array of element IDs establishing strict layer order and render z-index).

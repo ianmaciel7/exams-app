@@ -5,7 +5,7 @@ import { checkMidFidelityComponents } from './sync-mid-fidelity.mjs';
 import { syncHighFidelity } from './sync-high-fidelity.mjs';
 import { checkReleaseConsistency } from './check-release-consistency.mjs';
 
-// Open Artifact v0.16.3: whiteboard-core/src/schema.ts (MAX_BOARD_ELEMENTS).
+// Open Artifact v0.17.0: whiteboard-core/src/schema.ts (MAX_BOARD_ELEMENTS).
 export const MAX_BOARD_ELEMENTS = 800;
 
 export function checkBoard(root) {

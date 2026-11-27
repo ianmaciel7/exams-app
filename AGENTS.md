@@ -41,7 +41,7 @@
 
 ### Open Artifact whiteboards and token-efficient execution
 
-Before creating or changing any project whiteboard, read [whiteboard guidelines](docs/boards/whiteboard-guidelines.md) and the applicable whiteboard skill. Those requirements apply to project-wide and release-specific boards.
+Before creating or changing any project whiteboard, read [agent access](docs/agent-access.md), [whiteboard guidelines](docs/boards/whiteboard-guidelines.md), and the applicable official whiteboard skill. Verify the pinned runtime and actual session tools; follow the shared `.agents/skills/exam-open-artifact/SKILL.md` contract. Those requirements apply to project-wide and release-specific boards.
 
 - **Token efficiency and native Open Artifact APIs:**
   - Never dump, iterate, or re-read hundreds of atomic JSON files (`db/elements/*.json`) into conversation transcripts or terminal logs.
@@ -71,25 +71,25 @@ Before creating or changing any project whiteboard, read [whiteboard guidelines]
 
 ## Hierarchical multi-agent orchestration
 
-### Orchestration model and mandatory delegation
-- The coordinator/primary agent is strictly an orchestrator. It must preserve its context for planning, integration, and user communication rather than exhausting it on operational chores.
-- **Prohibition of coordinator monopolization:** The coordinator MUST NOT execute heavy operational work directly in the coordinator session. Specifically, the coordinator must not perform multi-file code modifications, write or execute scripts for data manipulation or board mutations, perform deep repository or archive explorations, or execute batch refactoring. All operational implementation, exploratory code/archive research, and board modifications MUST be delegated to specialized worker subagents via platform-native delegation (`invoke_subagent`).
-- **Mandatory parallel decomposition and fan-out:** Whenever a task spans multiple independent domains, screens, modules, files, research avenues, or deliverables (e.g., editing multiple screens, updating documentation alongside implementation, concurrent architectural studies, or testing separate component slices), the coordinator MUST decompose the objective and dispatch multiple specialized worker subagents concurrently in parallel.
-- **Prohibition of single-worker serial bottlenecking:** Confining execution to a single worker dispatched serially across multiple independent tasks or workstreams is strictly forbidden. Serial bottlenecking exhausts turns, introduces unnecessary latency, and undermines multi-agent capabilities. All independent slices of work must run in parallel subagents simultaneously.
-- **Strict separation of implementation and verification:** The coordinator and the worker agent MUST NEVER be the sole verifiers of their own work. Every implementation task MUST have an independent evaluator/verifier subagent validate the results (running test suites, integrity checks, diff inspections, and verifying alignment with requirements) before the coordinator accepts the deliverable. Self-certification and unverified completion claims are strictly forbidden.
+### Orchestration model and capability-aware delegation
+- The coordinator/primary agent is strictly an orchestrator. It must preserve its context for planning, integration, and user communication rather than exhausting it on operational chores when delegation is available.
+- **Capability-aware delegation:** Delegate substantial independent work to native subagents when available. When delegation is unavailable, perform bounded direct work with deterministic tools, disclose the limitation, and seek independent verification when supported. Never invent a subagent call or block routine read-only diagnostics solely because delegation is unavailable.
+- **Parallel decomposition:** Fan out genuinely independent work when native delegation is available; serialize dependent or overlapping writes. Avoid unnecessary parallelism for bounded tasks.
+- Avoid serial bottlenecks when safe parallel execution is possible; use the simplest adequate execution pattern.
+- **Independent verification:** Prefer an independent evaluator for material changes; always run deterministic checks and disclose if independent verification is unavailable. Do not claim unperformed review.
 - Use native platform capabilities rather than reinventing existing multi-agent primitives.
 - Structure agent roles dynamically across five levels:
-  1. **Orchestrator / Coordinator:** Primary agent responsible for understanding goals, retrieving high-level context, decomposing tasks, delegating via formal contracts, tracking progress, handling blockers, integrating results, and routing deliverables to independent verifiers. Never performs heavy operational execution or self-validation.
+  1. **Orchestrator / Coordinator:** Primary agent responsible for understanding goals, retrieving high-level context, decomposing tasks, delegating via formal contracts, tracking progress, handling blockers, integrating results, and routing deliverables to independent verifiers. Delegates heavy execution when supported; does not claim unperformed independent validation.
   2. **Worker Sessions / Threads:** Independent focused sessions executing defined work scopes.
   3. **Subagents:** Specialized on-demand agents for research, code exploration, implementation slices, or domain tools.
   4. **Agent Teams / Swarms:** Collaborative teams for problems requiring shared state and inter-agent communication.
   5. **Evaluators / Verifiers:** Independent validation agents responsible for review, automated tests, UI/UX audit, accessibility, and quality verification. Implementation agents must not be the sole validation source.
 
 ### Architectural patterns
-Select dynamically the simplest pattern adequate for the problem while strictly respecting the delegation mandate:
-- **Single Agent:** Restricted strictly to trivial, single-step questions (e.g., answering a factual question from existing context without code edits or board mutations). Any multi-step task, file editing, script execution, or board change requires orchestrator-worker delegation.
-- **Orchestrator-Workers:** Default pattern for all non-trivial tasks. The coordinator decomposes work and delegates to concurrent worker subagents, followed by an evaluator subagent.
-- **Parallel Fan-Out (Mandatory):** Independent concurrent tasks dispatched across parallel worker subagents. Whenever a task spans multiple files, screens, architectural areas, or artifacts, parallel dispatch is required.
+Select dynamically the simplest pattern adequate for the problem and the tools actually available:
+- **Single Agent:** Appropriate for bounded tasks or when native delegation is unavailable; report verification limits.
+- **Orchestrator-Workers:** Prefer for substantial independent work when supported.
+- **Parallel Fan-Out:** Use for safe independent slices when supported.
 - **Prompt Chaining:** Sequential dependent stages strictly reserved for situations where the output of one worker directly gates or feeds the contract of the next; never use prompt chaining for independent work that can run concurrently.
 - **Routing:** Directing tasks to domain specialists (e.g., UI/UX specialist, historical archive research).
 - **Agent Teams / Swarm:** Distributed collaboration on complex interconnected challenges.
@@ -132,13 +132,13 @@ Every delegated activity must specify:
 
 ### Independent validation and quality gates
 - Strictly separate implementation from verification. Employ automated test suites, accessibility checks, visual inspections, and independent evaluator subagents before signing off on deliverables.
-- Neither the implementing subagent nor the coordinator may sign off on work without independent verification. The coordinator must dispatch an evaluator/verifier subagent to run verification steps (such as `node scripts/check-boards.mjs`, test suites, and requirements compliance checks) and report findings.
+- Use an independent evaluator when available; always run relevant automated checks and explicitly distinguish them from independent review. If the host cannot delegate, report that limitation rather than blocking or falsely claiming a review.
 - Record findings, decisions, and evidence in project whiteboards (`docs/boards/`, `docs/releases/`) and documentation.
 
 ### Sketch ink consistency
 
 - Use the shared project-local `scripts/marker-sketch-ink.mjs` viewer pass when opening Sketch boards with `scripts/open-boards.mjs`. Treat all measurable native stroke paths consistently, including small icons and curved controls. Preserve topology, corner definition, endpoints, closed loops, semantic colors, hit paths and native editable geometry. Avoid periodic jitter and heavy double outlines. Native exports outside the launcher keep original geometry.
-- Keep illustrative content abstract; retain recognizable essential controls and states. Use native `note` elements for design notes outside the interface, not free text posing as sticky notes. Keep the board at or below 800 elements for Open Artifact v0.16.3.
+- Keep illustrative content abstract; retain recognizable essential controls and states. Use native `note` elements for design notes outside the interface, not free text posing as sticky notes. Keep the board at or below 800 elements for Open Artifact v0.17.0.
 - Validate `node --test scripts/marker-sketch.test.mjs scripts/marker-sketch-ink.test.mjs scripts/check-boards.test.mjs` and `node scripts/check-boards.mjs`, then inspect real browser captures in Light and Dark. Confirm stroke coverage and small-icon styling, not just font availability. Report unvalidated behavior and export limits.
 
 ### Current workspace documentation alignment
