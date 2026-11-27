@@ -1,0 +1,8 @@
+{
+  "type": "link",
+  "x": 1050,
+  "y": 20,
+  "title": "Project Hub",
+  "href": "open-artifact://artifact/art_examappprojecthub",
+  "kind": "whiteboard"
+}

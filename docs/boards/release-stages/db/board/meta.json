@@ -2,6 +2,17 @@
   "v": 1,
   "title": "Release stages",
   "order": [
-    "release_v010_status"
+    "release_v010_status",
+    "title",
+    "overview_link",
+    "stage_table",
+    "caption",
+    "stage_link_0",
+    "stage_link_1",
+    "stage_link_2",
+    "stage_link_3",
+    "stage_link_4",
+    "stage_link_5",
+    "stage_link_6"
   ]
 }

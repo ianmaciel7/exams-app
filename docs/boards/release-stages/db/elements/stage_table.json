@@ -1,0 +1,80 @@
+{
+  "type": "table",
+  "x": 0,
+  "y": 105,
+  "cols": {
+    "c0": {
+      "at": 0,
+      "w": 310
+    },
+    "c1": {
+      "at": 1,
+      "w": 560
+    }
+  },
+  "rows": {
+    "r0": {
+      "at": 0,
+      "c0": "Stage",
+      "c1": "Current status"
+    },
+    "r1": {
+      "at": 1,
+      "c0": "Product",
+      "c1": "In progress · synchronized"
+    },
+    "r2": {
+      "at": 2,
+      "c0": "Information Architecture",
+      "c1": "In progress · synchronized"
+    },
+    "r3": {
+      "at": 3,
+      "c0": "Screen Inventory",
+      "c1": "In progress · 21 variants"
+    },
+    "r4": {
+      "at": 4,
+      "c0": "User Flows",
+      "c1": "In progress · synchronized"
+    },
+    "r5": {
+      "at": 5,
+      "c0": "Sketch",
+      "c1": "Complete for progression · 8 variants"
+    },
+    "r6": {
+      "at": 6,
+      "c0": "Low-Fidelity Wireframe",
+      "c1": "Complete for progression · 9 variants"
+    },
+    "r7": {
+      "at": 7,
+      "c0": "Mid-Fidelity Wireframe",
+      "c1": "In progress · 21 variants"
+    },
+    "r8": {
+      "at": 8,
+      "c0": "High-Fidelity Wireframe",
+      "c1": "Not started"
+    },
+    "r9": {
+      "at": 9,
+      "c0": "Mockup",
+      "c1": "Not started"
+    },
+    "r10": {
+      "at": 10,
+      "c0": "Interactive Prototype",
+      "c1": "Not started"
+    },
+    "r11": {
+      "at": 11,
+      "c0": "Usability Testing",
+      "c1": "Not started"
+    }
+  },
+  "head": true,
+  "color": "white",
+  "size": "body"
+}

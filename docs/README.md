@@ -1,15 +1,15 @@
 # Project documentation
 
-Start with [Ideas Board](boards/overview/README.md). Previous work is archived; current v0.1.0 planning explores competition selection, a vertically scrolling paginated question list and answer feedback states. [Immutable previous planning snapshot](https://github.com/ianmaciel7/exams-app/tree/bbadef4ceab610f8696fcc10cbee5e400aba4900) · [Archive branch](https://github.com/ianmaciel7/exams-app/tree/archive/v0.1.0-before-reset-20261126).
+Start with [Project Hub](boards/project-hub/README.md) or [Ideas Board](boards/overview/README.md). Previous work is archived; current v0.1.0 planning explores competition selection, a vertically scrolling paginated question list and answer feedback states. [Immutable previous planning snapshot](https://github.com/ianmaciel7/exams-app/tree/bbadef4ceab610f8696fcc10cbee5e400aba4900) · [Archive branch](https://github.com/ianmaciel7/exams-app/tree/archive/v0.1.0-before-reset-20261126).
 
-- [Project Hub](boards/project-hub/) — blank.
+- [Project Hub](boards/project-hub/) — populated navigation hub, with native links to all seven release boards and the project boards.
 - [Release Stages](boards/release-stages/) — stage status summarized in the release record.
 - [Release v0.1.0](releases/v0.1.0/README.md) — Sketch and Low-Fidelity progression approved; Mid-Fidelity Wireframe in progress; later stages not started.
 - [References](references/) — supporting research, not approved scope.
 
 ## Open Artifact
 
-Run `node scripts/open-boards.mjs` (Node.js 22+ and Open Artifact CLI required), then open the overview URL. The launcher registers all ten native boards; use the URLs it prints. Set `OPEN_ARTIFACT_WHITEBOARD_CLI` to override CLI discovery. The blank boards retain their native directories and metadata for future work.
+Run `node scripts/open-boards.mjs` (Node.js 22+ and Open Artifact CLI required), then open the overview URL. The launcher registers all ten native boards; use the URLs it prints. Set `OPEN_ARTIFACT_WHITEBOARD_CLI` to override CLI discovery. All ten registered boards contain native elements; the planning boards summarize current approved decisions. Future stages are labeled not started, not represented as completed work.
 
 Run `node scripts/check-boards.mjs` for structural checks and `node --test scripts/check-boards.test.mjs scripts/marker-sketch.test.mjs scripts/marker-sketch-ink.test.mjs` for tests. Native rendering and user review remain separate.
 

@@ -3,6 +3,9 @@
   "title": "Screen Inventory — v0.1.0",
   "order": [
     "title",
-    "note"
+    "note",
+    "subtitle",
+    "next",
+    "inventory"
   ]
 }

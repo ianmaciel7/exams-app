@@ -1,0 +1,12 @@
+{
+  "type": "shape",
+  "kind": "rect",
+  "x": 25,
+  "y": 215,
+  "w": 245,
+  "h": 275,
+  "color": "#eeeeee",
+  "text": "**Competition sidebar**\n\nName · Year · Position/exam\nFirst item selected\nGhost expand/collapse",
+  "size": "body",
+  "textAlign": "left"
+}

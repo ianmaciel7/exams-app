@@ -1,0 +1,65 @@
+{
+  "type": "table",
+  "x": 0,
+  "y": 270,
+  "cols": {
+    "c0": {
+      "at": 0,
+      "w": 220
+    },
+    "c1": {
+      "at": 1,
+      "w": 470
+    }
+  },
+  "rows": {
+    "r0": {
+      "at": 0,
+      "c0": "Area",
+      "c1": "Approved decision"
+    },
+    "r1": {
+      "at": 1,
+      "c0": "Entry",
+      "c1": "First available competition"
+    },
+    "r2": {
+      "at": 2,
+      "c0": "Pagination",
+      "c1": "10 questions per page; reset scroll"
+    },
+    "r3": {
+      "at": 3,
+      "c0": "Answer",
+      "c1": "Explicit confirmation; lock after evaluation"
+    },
+    "r4": {
+      "at": 4,
+      "c0": "Navigation",
+      "c1": "Discard answers on page/competition change"
+    },
+    "r5": {
+      "at": 5,
+      "c0": "Session",
+      "c1": "No persistence across sessions"
+    },
+    "r6": {
+      "at": 6,
+      "c0": "Failure",
+      "c1": "Keep choice; retry Answer; prevent duplicates"
+    },
+    "r7": {
+      "at": 7,
+      "c0": "Sidebar",
+      "c1": "Ghost trigger; hover/focus reveal collapsed"
+    },
+    "r8": {
+      "at": 8,
+      "c0": "Collapse",
+      "c1": "Preserve selection, page, scroll and answers"
+    }
+  },
+  "head": true,
+  "color": "white",
+  "size": "body"
+}

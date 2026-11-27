@@ -2,7 +2,8 @@
   "type": "text",
   "x": 0,
   "y": 0,
-  "text": "Browse competition questions",
-  "size": "large",
-  "color": "ink"
+  "text": "User Flows — v0.1.0",
+  "size": "title",
+  "color": "ink",
+  "wrap": 1450
 }

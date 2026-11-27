@@ -1,0 +1,9 @@
+{
+  "type": "text",
+  "x": 0,
+  "y": 565,
+  "text": "**Navigation rules**\nPage or competition change discards answers. Collapse/expand preserves context. Full labels discoverable; collapsed expand icon hidden at pointer rest, revealed on hover/focus. Touch requires visible alternative.",
+  "size": "body",
+  "color": "ink",
+  "wrap": 800
+}

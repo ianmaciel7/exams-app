@@ -2,7 +2,8 @@
   "type": "text",
   "x": 0,
   "y": 0,
-  "text": "Product discovery",
-  "size": "large",
-  "color": "ink"
+  "text": "Product — v0.1.0",
+  "size": "title",
+  "color": "ink",
+  "wrap": 1450
 }

@@ -1,0 +1,156 @@
+{
+  "type": "table",
+  "x": 0,
+  "y": 150,
+  "cols": {
+    "c0": {
+      "at": 0,
+      "w": 64
+    },
+    "c1": {
+      "at": 1,
+      "w": 220
+    },
+    "c2": {
+      "at": 2,
+      "w": 560
+    }
+  },
+  "rows": {
+    "r0": {
+      "at": 0,
+      "c0": "#",
+      "c1": "State",
+      "c2": "Category"
+    },
+    "r1": {
+      "at": 1,
+      "c0": "1",
+      "c1": "top",
+      "c2": "Core — unanswered"
+    },
+    "r2": {
+      "at": 2,
+      "c0": "2",
+      "c1": "end",
+      "c2": "Core — first page footer"
+    },
+    "r3": {
+      "at": 3,
+      "c0": "3",
+      "c1": "selected",
+      "c2": "Core — before submission"
+    },
+    "r4": {
+      "at": 4,
+      "c0": "4",
+      "c1": "correct",
+      "c2": "Core — correct and locked"
+    },
+    "r5": {
+      "at": 5,
+      "c0": "5",
+      "c1": "wrong",
+      "c2": "Core — incorrect and locked"
+    },
+    "r6": {
+      "at": 6,
+      "c0": "6",
+      "c1": "loading",
+      "c2": "Question lifecycle — loading"
+    },
+    "r7": {
+      "at": 7,
+      "c0": "7",
+      "c1": "empty",
+      "c2": "Question lifecycle — empty list"
+    },
+    "r8": {
+      "at": 8,
+      "c0": "8",
+      "c1": "failure",
+      "c2": "Question lifecycle — Retry"
+    },
+    "r9": {
+      "at": 9,
+      "c0": "9",
+      "c1": "narrow",
+      "c2": "Responsive study — expanded"
+    },
+    "r10": {
+      "at": 10,
+      "c0": "10",
+      "c1": "hover",
+      "c2": "Interaction study — hover"
+    },
+    "r11": {
+      "at": 11,
+      "c0": "11",
+      "c1": "focus",
+      "c2": "Interaction study — focus"
+    },
+    "r12": {
+      "at": 12,
+      "c0": "12",
+      "c1": "submitting",
+      "c2": "Core — submission pending"
+    },
+    "r13": {
+      "at": 13,
+      "c0": "13",
+      "c1": "submit-failure",
+      "c2": "Core — submission recovery"
+    },
+    "r14": {
+      "at": 14,
+      "c0": "14",
+      "c1": "no-items",
+      "c2": "Proposal — empty sidebar"
+    },
+    "r15": {
+      "at": 15,
+      "c0": "15",
+      "c1": "collapsed",
+      "c2": "Responsive study — collapsed"
+    },
+    "r16": {
+      "at": 16,
+      "c0": "16",
+      "c1": "long-content",
+      "c2": "Content stress test"
+    },
+    "r17": {
+      "at": 17,
+      "c0": "17",
+      "c1": "page-middle",
+      "c2": "Pagination — middle"
+    },
+    "r18": {
+      "at": 18,
+      "c0": "18",
+      "c1": "page-last",
+      "c2": "Pagination — last"
+    },
+    "r19": {
+      "at": 19,
+      "c0": "19",
+      "c1": "mobile",
+      "c2": "Proposal — phone, closed drawer"
+    },
+    "r20": {
+      "at": 20,
+      "c0": "20",
+      "c1": "sidebar-loading",
+      "c2": "Proposal — navigation loading"
+    },
+    "r21": {
+      "at": 21,
+      "c0": "21",
+      "c1": "sidebar-failure",
+      "c2": "Proposal — navigation failure"
+    }
+  },
+  "head": true,
+  "color": "white",
+  "size": "body"
+}

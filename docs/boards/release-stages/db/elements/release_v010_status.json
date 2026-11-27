@@ -1,9 +1,9 @@
 {
   "type": "note",
-  "x": 0,
-  "y": 65,
+  "x": 940,
+  "y": 150,
   "w": 560,
-  "h": 400,
+  "h": 410,
   "color": "yellow",
   "text": "**v0.1.0 — In progress**\nProduct, Information Architecture, Screen Inventory and User Flows: synchronized; open decisions remain.\nSketch: complete for progression (94072ce; 8 variants).\nLow-Fidelity Wireframe: complete for progression (e70dbaf; 9 variants).\nMid-Fidelity Wireframe: in progress (21 variants); alignment, action-state and focus refinement applied; native capture and owner visual review pending.\nHigh-Fidelity, Mockup, Interactive Prototype and Usability Testing: not started.\nSource: docs/releases/v0.1.0/README.md"
 }

@@ -1,0 +1,80 @@
+{
+  "type": "table",
+  "x": 0,
+  "y": 150,
+  "cols": {
+    "c0": {
+      "at": 0,
+      "w": 260
+    },
+    "c1": {
+      "at": 1,
+      "w": 590
+    }
+  },
+  "rows": {
+    "r0": {
+      "at": 0,
+      "c0": "Event",
+      "c1": "Result"
+    },
+    "r1": {
+      "at": 1,
+      "c0": "Enter",
+      "c1": "Select first available competition → load"
+    },
+    "r2": {
+      "at": 2,
+      "c0": "Load succeeds",
+      "c1": "Questions or empty list"
+    },
+    "r3": {
+      "at": 3,
+      "c0": "Load fails",
+      "c1": "Manual Retry reloads questions"
+    },
+    "r4": {
+      "at": 4,
+      "c0": "Select option",
+      "c1": "Enable Answer"
+    },
+    "r5": {
+      "at": 5,
+      "c0": "Answer",
+      "c1": "Pending; prevent duplicate submission"
+    },
+    "r6": {
+      "at": 6,
+      "c0": "Evaluation succeeds",
+      "c1": "Correct/incorrect; lock answer"
+    },
+    "r7": {
+      "at": 7,
+      "c0": "Submission fails",
+      "c1": "Retain choice; enable Answer"
+    },
+    "r8": {
+      "at": 8,
+      "c0": "Page/competition change",
+      "c1": "Discard prior answers; load target"
+    },
+    "r9": {
+      "at": 9,
+      "c0": "Close application",
+      "c1": "Discard session answers"
+    },
+    "r10": {
+      "at": 10,
+      "c0": "Collapse / expand",
+      "c1": "Preserve context and answers"
+    },
+    "r11": {
+      "at": 11,
+      "c0": "Collapsed hover / focus",
+      "c1": "Reveal icon; explicit activation opens"
+    }
+  },
+  "head": true,
+  "color": "white",
+  "size": "body"
+}

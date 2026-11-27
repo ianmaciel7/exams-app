@@ -1,5 +1,32 @@
 {
   "v": 1,
   "title": "Exam App — project hub",
-  "order": []
+  "order": [
+    "title",
+    "summary",
+    "project_heading",
+    "ideas",
+    "ideas_context",
+    "releases",
+    "release_context",
+    "active_heading",
+    "context_heading",
+    "scope",
+    "pending",
+    "footer",
+    "stage_0",
+    "stage_status_0",
+    "stage_1",
+    "stage_status_1",
+    "stage_2",
+    "stage_status_2",
+    "stage_3",
+    "stage_status_3",
+    "stage_4",
+    "stage_status_4",
+    "stage_5",
+    "stage_status_5",
+    "stage_6",
+    "stage_status_6"
+  ]
 }

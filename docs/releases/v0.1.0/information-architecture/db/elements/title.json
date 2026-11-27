@@ -2,7 +2,8 @@
   "type": "text",
   "x": 0,
   "y": 0,
-  "text": "Navigation",
-  "size": "large",
-  "color": "ink"
+  "text": "Information Architecture — v0.1.0",
+  "size": "title",
+  "color": "ink",
+  "wrap": 1450
 }

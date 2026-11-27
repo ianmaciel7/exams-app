@@ -1,0 +1,8 @@
+{
+  "type": "link",
+  "x": 440,
+  "y": 400,
+  "title": "Screen Inventory",
+  "href": "open-artifact://artifact/art_examappscreeninventoryv010",
+  "kind": "whiteboard"
+}

@@ -1,0 +1,9 @@
+{
+  "type": "text",
+  "x": 440,
+  "y": 164,
+  "text": "Active release · v0.1.0",
+  "size": "large",
+  "color": "ink",
+  "wrap": 620
+}

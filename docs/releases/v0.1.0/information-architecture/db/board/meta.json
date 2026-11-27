@@ -3,6 +3,12 @@
   "title": "Information Architecture — v0.1.0",
   "order": [
     "title",
-    "note"
+    "note",
+    "subtitle",
+    "shell",
+    "sidebar",
+    "main",
+    "rules",
+    "next"
   ]
 }
