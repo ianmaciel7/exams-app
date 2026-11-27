@@ -17,6 +17,18 @@ const escape = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;',
 const replace = (p, before, after) => {const s=read(p); if(!s.includes(before)) throw Error('Upstream patch no longer matches: '+p); write(p,s.replace(before,after));};
 const manifest = JSON.parse(read(path.join(site,'manifest.json')));
 const seeds = manifest.boards.map(b => ({...b, seed: b.id==='overview'?'whiteboard':'exam-'+b.id}));
+const release = JSON.parse(execFileSync('git',['show',manifest.commit+':docs/releases/v0.1.0/current-state.json'],{cwd:root,encoding:'utf8'}));
+const projectBoards = seeds.filter(b=>b.dir.startsWith('docs/boards/'));
+const releaseBoards = release.stages.flatMap((stage,index)=>{
+  if(!stage.board)return [];
+  const b=seeds.find(b=>b.dir==='docs/releases/'+release.release+'/'+stage.board);
+  if(!b)throw Error('Missing release board: '+stage.board);
+  return [{...b,stageNumber:index+1,stageStatus:stage.status,current:stage.name===release.stage}];
+});
+const orderedBoards=[...projectBoards,...releaseBoards];
+if(orderedBoards.length!==seeds.length||new Set(orderedBoards.map(b=>b.id)).size!==seeds.length)throw Error('Library order does not cover the board manifest');
+const currentBoard=releaseBoards.find(b=>b.current);
+if(!currentBoard)throw Error('Current stage has no published board');
 async function verify(out) {
   // Test the actual static build under the same repository subpath as GitHub Pages.
   const web = path.join(tmp,'web'); fs.mkdirSync(path.join(web,'exams-app'),{recursive:true});
@@ -37,18 +49,29 @@ async function verify(out) {
       if(!response?.ok())throw Error('Native library failed to load');
       const cards=page.locator('a.artifact');
       if(await cards.count()!==seeds.length)throw Error('Native library card count mismatch');
-      for(let i=0;i<seeds.length;i++){
+      for(let i=0;i<orderedBoards.length;i++){
         const link=cards.nth(i);
-        if(await link.getAttribute('href')!=='demo.html?type='+seeds[i].seed)throw Error('Native library link mismatch: '+seeds[i].id);
+        if(await link.getAttribute('href')!=='demo.html?type='+orderedBoards[i].seed)throw Error('Native library link mismatch: '+orderedBoards[i].id);
         await link.locator('img').scrollIntoViewIfNeeded();
         await link.locator('img').evaluate(async img=>{await img.decode();if(!img.naturalWidth)throw Error('Thumbnail missing');});
       }
       if(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth))throw Error('Native library horizontal overflow at '+width);
+      if(await page.locator('a.artifact[data-current="true"]').count()!==1)throw Error('Current stage highlight missing');
+      if(await page.locator('.current-link').getAttribute('href')!=='demo.html?type='+currentBoard.seed)throw Error('Current stage link mismatch');
+      const stageNumbers=await page.locator('.stage-number').allTextContents();
+      if(stageNumbers.join(',')!==releaseBoards.map(b=>String(b.stageNumber).padStart(2,'0')).join(','))throw Error('Stage sequence mismatch');
+      await page.getByRole('button',{name:'List',exact:true}).click();
+      if(await page.locator('body').getAttribute('data-view')!=='list')throw Error('List view failed');
+      if(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth))throw Error('List view horizontal overflow at '+width);
+      await page.reload({waitUntil:'domcontentloaded'});
+      if(await page.locator('body').getAttribute('data-view')!=='list')throw Error('List view preference not restored');
+      await page.getByRole('button',{name:'Grid',exact:true}).click();
+      if(await page.locator('body').getAttribute('data-view')!=='grid')throw Error('Grid view failed');
       await page.locator('h1').scrollIntoViewIfNeeded();
       await cards.first().focus();
       if(!await cards.first().evaluate(el=>el.matches(':focus')))throw Error('Native library card is not focusable');
       await page.keyboard.press('Enter');
-      await page.waitForURL('**/demo.html?type='+seeds[0].seed);
+      await page.waitForURL('**/demo.html?type='+orderedBoards[0].seed);
       console.log('Native library verified:',width+'x'+height,colorScheme,seeds.length,'cards and thumbnails');
     }
     await page.setViewportSize({width:1600,height:1000});
@@ -117,10 +140,11 @@ async function verify(out) {
     if(tokenStart<0||tokenEnd<=tokenStart)throw Error('Native UI tokens not found');
     const tokens=nativeCss.slice(tokenStart,tokenEnd);
     const icon='<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.52 8.25A5 5 0 1 0 8.25 11.52"/><rect x="8.25" y="8.25" width="10" height="10" rx="2.25"/></svg>';
-    const card=b=>'<a class="artifact" href="demo.html?type='+escape(b.seed)+'"><picture class="thumbnail"><source media="(prefers-color-scheme: dark)" srcset="../'+escape(b.images.dark)+'"><img src="../'+escape(b.images.light)+'" alt="" loading="lazy" decoding="async"></picture><div class="details"><div class="name">'+escape(b.label)+'</div><div class="metadata"><span class="type">'+icon+'Whiteboard</span><span>'+b.elementCount+' elements</span></div></div></a>';
-    const section=(name,boards)=>'<section><div class="section-heading"><h2>'+escape(name)+'</h2><span class="count">'+boards.length+'</span></div><div class="grid">'+boards.map(card).join('')+'</div></section>';
-    const sections=section('Project boards',seeds.filter(b=>b.dir.startsWith('docs/boards/')))+section('Release artifacts',seeds.filter(b=>!b.dir.startsWith('docs/boards/')));
-    const home=read(path.join(root,'docs/portal/playground-home.html')).replace('/* THEME_TOKENS */',tokens).replace('<!-- BOARD_SECTIONS -->',sections).replace('COMMIT_FULL',escape(manifest.commit)).replace('COMMIT_SHORT',escape(manifest.commit.slice(0,7)));
+    const card=b=>'<a class="artifact" data-current="'+Boolean(b.current)+'" href="demo.html?type='+escape(b.seed)+'"><picture class="thumbnail"><source media="(prefers-color-scheme: dark)" srcset="../'+escape(b.images.dark)+'"><img src="../'+escape(b.images.light)+'" alt="" loading="lazy" decoding="async"></picture><div class="details"><div class="name-row">'+(b.stageNumber?'<span class="stage-number">'+String(b.stageNumber).padStart(2,'0')+'</span>':'')+'<span class="name">'+escape(b.label)+'</span></div>'+(b.stageStatus?'<div class="stage-status">'+escape(b.stageStatus)+'</div>':'')+'<div class="metadata"><span class="type">'+icon+'Whiteboard</span>'+(b.current?'<span class="current-marker">Current stage</span>':'<span>'+b.elementCount+' elements</span>')+'</div></div></a>';
+    const section=(name,boards)=>boards.length?'<section><div class="section-heading"><h2>'+escape(name)+'</h2><span class="count">'+boards.length+'</span></div><div class="grid">'+boards.map(card).join('')+'</div></section>':'';
+    const sections=section('Project boards',projectBoards)+section(release.release+' / Product and structure',releaseBoards.filter(b=>b.stageNumber<=4))+section(release.release+' / Interface design',releaseBoards.filter(b=>b.stageNumber>4));
+    const current='<a class="current-link" href="demo.html?type='+escape(currentBoard.seed)+'"><span class="current-label">Current stage · '+escape(release.release)+'</span><span class="current-name">'+escape(currentBoard.label)+'</span></a>';
+    const home=read(path.join(root,'docs/portal/playground-home.html')).replace('/* THEME_TOKENS */',tokens).replace('<!-- BOARD_SECTIONS -->',sections).replace('<!-- CURRENT_STAGE -->',current).replace('COMMIT_FULL',escape(manifest.commit)).replace('COMMIT_SHORT',escape(manifest.commit.slice(0,7)));
     write(path.join(out,'index.html'),home);
     await verify(out);
     // Publish only after every board passes. The existing root and screenshots remain unchanged.
