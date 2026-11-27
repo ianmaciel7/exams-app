@@ -21,12 +21,38 @@ async function verify(out) {
   // Test the actual static build under the same repository subpath as GitHub Pages.
   const web = path.join(tmp,'web'); fs.mkdirSync(path.join(web,'exams-app'),{recursive:true});
   fs.symlinkSync(out,path.join(web,'exams-app','playground'),'dir');
+  fs.symlinkSync(path.join(site,'boards'),path.join(web,'exams-app','boards'),'dir');
   const server = spawn('python3',['-m','http.server','18765','--bind','127.0.0.1','--directory',web],{stdio:'ignore'});
   let browser;
   try {
     for(let i=0;i<50;i++){try{if((await fetch('http://127.0.0.1:18765/exams-app/playground/')).ok)break;}catch{} await new Promise(r=>setTimeout(r,200));}
     browser=await chromium.launch({headless:true,args:['--no-sandbox']});
     const page=await browser.newPage({viewport:{width:1600,height:1000}});
+    // Verify the home itself before navigating to the native boards.
+    for(const [width,height,colorScheme] of [[1440,900,'dark'],[390,844,'light']]){
+      await page.setViewportSize({width,height});
+      await page.emulateMedia({colorScheme});
+      const homeUrl='http://127.0.0.1:18765/exams-app/playground/';
+      const response=await page.goto(homeUrl,{waitUntil:'domcontentloaded'});
+      if(!response?.ok())throw Error('Native library failed to load');
+      const cards=page.locator('a.artifact');
+      if(await cards.count()!==seeds.length)throw Error('Native library card count mismatch');
+      for(let i=0;i<seeds.length;i++){
+        const link=cards.nth(i);
+        if(await link.getAttribute('href')!=='demo.html?type='+seeds[i].seed)throw Error('Native library link mismatch: '+seeds[i].id);
+        await link.locator('img').scrollIntoViewIfNeeded();
+        await link.locator('img').evaluate(async img=>{await img.decode();if(!img.naturalWidth)throw Error('Thumbnail missing');});
+      }
+      if(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth))throw Error('Native library horizontal overflow at '+width);
+      await page.locator('h1').scrollIntoViewIfNeeded();
+      await cards.first().focus();
+      if(!await cards.first().evaluate(el=>el.matches(':focus')))throw Error('Native library card is not focusable');
+      await page.keyboard.press('Enter');
+      await page.waitForURL('**/demo.html?type='+seeds[0].seed);
+      console.log('Native library verified:',width+'x'+height,colorScheme,seeds.length,'cards and thumbnails');
+    }
+    await page.setViewportSize({width:1600,height:1000});
+    await page.emulateMedia({colorScheme:'dark'});
     for(const b of seeds){
       const errors=[];const onError=e=>errors.push(e.message);page.on('pageerror',onError);
       try {
@@ -84,7 +110,18 @@ async function verify(out) {
     run('npm',['ci'],pg);
     run('npm',['run','build'],pg);
     const out=path.join(pg,'dist');
-    write(path.join(out,'index.html'),'<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Exam App native board preview</title><style>body{color-scheme:dark;background:#141517;color:#f1f2f4;font:16px system-ui;max-width:850px;margin:40px auto;padding:0 20px}a{color:#a7c7ff}li{padding:8px 0}</style><h1>Exam App native board preview</h1><p>Open Artifact v0.17.0. Changes are temporary; no agent or shared persistence. The screenshot portal remains the stable view.</p><p><a href="../">Back to screenshot portal</a></p><p>Commit: '+escape(manifest.commit.slice(0,7))+'</p><ul>'+seeds.map(b=>'<li><a href="demo.html?type='+b.seed+'">'+escape(b.label)+'</a> ('+b.elementCount+' elements)</li>').join('')+'</ul></html>');
+    // Match the upstream native artifact library: responsive cards with real thumbnails and native color tokens.
+    const nativeCss=read(path.join(upstream,'packages/ui/src/styles.css'));
+    const tokenStart=nativeCss.indexOf('/* Light theme (default). */');
+    const tokenEnd=nativeCss.indexOf('@layer base {');
+    if(tokenStart<0||tokenEnd<=tokenStart)throw Error('Native UI tokens not found');
+    const tokens=nativeCss.slice(tokenStart,tokenEnd);
+    const icon='<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.52 8.25A5 5 0 1 0 8.25 11.52"/><rect x="8.25" y="8.25" width="10" height="10" rx="2.25"/></svg>';
+    const card=b=>'<a class="artifact" href="demo.html?type='+escape(b.seed)+'"><picture class="thumbnail"><source media="(prefers-color-scheme: dark)" srcset="../'+escape(b.images.dark)+'"><img src="../'+escape(b.images.light)+'" alt="" loading="lazy" decoding="async"></picture><div class="details"><div class="name">'+escape(b.label)+'</div><div class="metadata"><span class="type">'+icon+'Whiteboard</span><span>'+b.elementCount+' elements</span></div></div></a>';
+    const section=(name,boards)=>'<section><div class="section-heading"><h2>'+escape(name)+'</h2><span class="count">'+boards.length+'</span></div><div class="grid">'+boards.map(card).join('')+'</div></section>';
+    const sections=section('Project boards',seeds.filter(b=>b.dir.startsWith('docs/boards/')))+section('Release artifacts',seeds.filter(b=>!b.dir.startsWith('docs/boards/')));
+    const home=read(path.join(root,'docs/portal/playground-home.html')).replace('/* THEME_TOKENS */',tokens).replace('<!-- BOARD_SECTIONS -->',sections).replace('COMMIT_FULL',escape(manifest.commit)).replace('COMMIT_SHORT',escape(manifest.commit.slice(0,7)));
+    write(path.join(out,'index.html'),home);
     await verify(out);
     // Publish only after every board passes. The existing root and screenshots remain unchanged.
     const destination=path.join(site,'playground');
