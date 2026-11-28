@@ -58,13 +58,6 @@ jobs:
       - name: Build and validate native Playground
         timeout-minutes: 15
         run: NODE_PATH=/tmp/board-browser/node_modules node scripts/build-native-playground.cjs
-      - name: Upload rendered accessibility evidence
-        uses: actions/upload-artifact@v4
-        with:
-          name: rendered-workspace-color-audit
-          path: _site/qa/rendered-color-audit.json
-          if-no-files-found: error
-          retention-days: 14
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
@@ -99,3 +92,28 @@ jobs:
           npm install --prefix /tmp/board-browser playwright
           /tmp/board-browser/node_modules/.bin/playwright install chromium
           NODE_PATH=/tmp/board-browser/node_modules node scripts/verify-public-playground.cjs
+
+  verify-provisional-accessibility:
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Audit actual rendered provisional workspace
+        run: |
+          npm install --prefix /tmp/board-browser playwright
+          /tmp/board-browser/node_modules/.bin/playwright install chromium
+          NODE_PATH=/tmp/board-browser/node_modules node scripts/audit-rendered-workspace.cjs
+      - name: Upload rendered accessibility evidence, including failed measurements
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rendered-workspace-color-audit
+          path: _site/qa/rendered-color-audit.json
+          if-no-files-found: error
+          retention-days: 14

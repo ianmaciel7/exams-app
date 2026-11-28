@@ -4,7 +4,6 @@ const path = require('node:path');
 const os = require('node:os');
 const { execFileSync, spawn } = require('node:child_process');
 const { chromium } = require('playwright');
-const {auditWorkspace}=require('./audit-rendered-workspace.cjs');
 const pin = require('./open-artifact-pin.json');
 const upstreamCommit = pin.commit;
 const root = process.cwd();
@@ -187,7 +186,6 @@ async function verify(out) {
         if(!await page.getByRole('link',{name:'Back to artifacts',exact:true}).isVisible())throw Error('Study return link missing: '+study.id);
         if(errors.length)throw Error(study.id+': '+errors.join('; '));
         console.log('Native design study verified:',study.id,expected.length,'source entries and representative visible text');
-        if(study.id==='exam-app-workspace-mockup')await auditWorkspace(page,root,manifest.commit,site);
       }finally{page.off('pageerror',onError);}
     }
     await page.close();

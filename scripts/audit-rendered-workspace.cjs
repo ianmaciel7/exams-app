@@ -19,7 +19,15 @@ async function auditWorkspace(page,root,commit,site){
   const reports=[];
   for(const id of expected){
     const frame=editor.frameLocator('iframe[data-board='+JSON.stringify(id)+']');
-    const report=await frame.locator('[data-dc-root]').evaluate((root)=>{
+    // The board runtime can mount its template before project styles finish loading.
+    const boardRoot=frame.locator('[data-dc-root]');
+    const deadline=Date.now()+15000;
+    let ready=false;
+    while(!ready&&Date.now()<deadline){
+      ready=await boardRoot.evaluate(el=>[...el.querySelectorAll('[data-theme]')].some(t=>getComputedStyle(t).getPropertyValue('--ground').trim()&&t.textContent.trim().length>0));
+      if(!ready)await new Promise(r=>setTimeout(r,250));
+    }
+    const report=await boardRoot.evaluate((root)=>{
       // Preserve fractional sRGB values. Unsupported colors are reported, never guessed.
       const readColor=s=>{
         let m=/^color\(srgb\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)(?:\s*\/\s*([\d.]+))?\)$/i.exec(s);
@@ -32,7 +40,9 @@ async function auditWorkspace(page,root,commit,site){
       const over=(a,b)=>{const alpha=a[3]+b[3]*(1-a[3]);return alpha===0?[0,0,0,0]:[...a.slice(0,3).map((v,i)=>(v*a[3]+b[i]*b[3]*(1-a[3]))/alpha),alpha];};
       const lum=c=>c.slice(0,3).map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4).reduce((s,v,i)=>s+v*[.2126,.7152,.0722][i],0);
       const ratio=(a,b)=>(Math.max(lum(a),lum(b))+.05)/(Math.min(lum(a),lum(b))+.05);
-      const visible=el=>{for(let e=el;e;e=e.parentElement){const c=getComputedStyle(e);if(c.display==='none'||c.visibility==='hidden'||e.getAttribute('aria-hidden')==='true')return false;}return !!el.getClientRects().length;};
+      // Inspect actual rendered text ranges; React/DC can emit text inside display:contents.
+      const visible=el=>{for(let e=el;e;e=e.parentElement){const c=getComputedStyle(e);if(c.display==='none'||c.visibility==='hidden'||Number(c.opacity)===0)return false;}return true;};
+      const measurable=n=>{const r=document.createRange();r.selectNodeContents(n);return [...r.getClientRects()].some(x=>x.width>0&&x.height>0);};
       const surface=el=>{
         let bg=[0,0,0,0];
         for(let e=el;e;e=e.parentElement){
@@ -50,7 +60,7 @@ async function auditWorkspace(page,root,commit,site){
       };
       for(const el of root.querySelectorAll('*')){
         if(!visible(el)||el.closest('svg,script,style'))continue;
-        const label=[...el.childNodes].filter(n=>n.nodeType===3).map(n=>n.textContent.trim()).filter(Boolean).join(' ');
+        const label=[...el.childNodes].filter(n=>n.nodeType===3&&n.textContent.trim()&&measurable(n)).map(n=>n.textContent.trim()).join(' ');
         if(!label||!el.closest('[data-theme]'))continue;
         const c=getComputedStyle(el);
         const font=parseFloat(c.fontSize),weight=parseInt(c.fontWeight,10);
@@ -71,19 +81,37 @@ async function auditWorkspace(page,root,commit,site){
           push(indicators,'radio-dot',label,dot?readColor(getComputedStyle(dot).backgroundColor):null,surface(ring),3);
         }
       }
-      return {text,indicators,unsupported,states:{radioCount:root.querySelectorAll('[role="radio"]').length,checked:root.querySelectorAll('[role="radio"][aria-checked="true"]').length,lockedText:root.innerText.includes('Answer locked'),correctText:root.innerText.includes('Correct'),yourAnswerText:root.innerText.includes('Your answer'),currentNav:root.querySelectorAll('[aria-current="page"]').length,dialog:root.querySelectorAll('[role="dialog"][aria-modal="true"]').length}};
+      const themes=[...root.querySelectorAll('[data-theme]')].map(t=>({theme:t.getAttribute('data-theme'),ground:getComputedStyle(t).getPropertyValue('--ground').trim(),background:getComputedStyle(t).backgroundColor,rect:{width:t.getBoundingClientRect().width,height:t.getBoundingClientRect().height}}));
+      return {text,indicators,unsupported,diagnostics:{themes,rawTextLength:root.textContent.length,renderedTextLength:root.innerText.length,stylesheetCount:document.styleSheets.length},states:{radioCount:root.querySelectorAll('[role="radio"]').length,checked:root.querySelectorAll('[role="radio"][aria-checked="true"]').length,lockedText:root.innerText.includes('Answer locked'),correctText:root.innerText.includes('Correct'),yourAnswerText:root.innerText.includes('Your answer'),currentNav:root.querySelectorAll('[aria-current="page"]').length,dialog:root.querySelectorAll('[role="dialog"][aria-modal="true"]').length}};
     });
-    if(!report.text.length)throw Error('No auditable text in real artboard '+id);
+    if(!ready||!report.text.length)report.collectionError='No auditable styled text in '+id+'; see diagnostics and unsupported measurements';
+    console.log('Workspace audit artboard:',id,JSON.stringify({measured:report.text.length,unsupported:report.unsupported.length,diagnostics:report.diagnostics,error:report.collectionError}));
     reports.push({id,title:canvas.boards[id].title,width:canvas.boards[id].w,height:canvas.boards[id].h,...report});
   }
   const all=reports.flatMap(r=>[...r.text,...r.indicators]);
   const failures=all.filter(r=>!r.pass);
-  const evidence={commit,kind:'rendered-provisional-artboard-audit',artboards:reports,summary:{artboards:reports.length,measured:all.length,failures:failures.length,unsupported:reports.reduce((s,r)=>s+r.unsupported.length,0)},limitations:['Default rendered states only; no claim of keyboard, focus, touch, reflow, forced colors or screen reader conformance.','Text over unknown surfaces and disabled text are reported separately.','Artboard-level DOM geometry is not a production runtime or screenshot visibility guarantee.']};
+  const evidence={commit,kind:'rendered-provisional-artboard-audit',artboards:reports,summary:{artboards:reports.length,collectionErrors:reports.filter(r=>r.collectionError).length,measured:all.length,failures:failures.length,unsupported:reports.reduce((s,r)=>s+r.unsupported.length,0)},limitations:['Default rendered states only; no claim of keyboard, focus, touch, reflow, forced colors or screen reader conformance.','Text over unknown surfaces and disabled text are reported separately.','Artboard-level DOM geometry is not a production runtime or screenshot visibility guarantee.']};
   fs.mkdirSync(path.join(site,'qa'),{recursive:true});
   fs.writeFileSync(path.join(site,'qa','rendered-color-audit.json'),JSON.stringify(evidence,null,2));
   console.log('Rendered workspace audit:',JSON.stringify(evidence.summary));
   for(const board of reports)for(const finding of [...board.text,...board.indicators].filter(r=>!r.pass))console.warn('PROVISIONAL ACCESSIBILITY FINDING',board.id,JSON.stringify(finding));
-  // The exploration is explicitly unapproved and has a separate accessibility acceptance gate.
-  // Preserve the report even if it contains failures; do not describe a failed candidate as approved.
+  // Publication is independent; this job fails on missing evidence or measured violations.
+  if(evidence.summary.collectionErrors||evidence.summary.failures)throw Error('Provisional accessibility audit requires remediation: '+JSON.stringify(evidence.summary));
 }
 module.exports={auditWorkspace};
+
+if(require.main===module){
+ const {chromium}=require('playwright');
+ (async()=>{
+  const sha=process.env.GITHUB_SHA;if(!/^[0-9a-f]{40}$/.test(sha??''))throw Error('Expected GITHUB_SHA');
+  const base='https://ianmaciel7.github.io/exams-app/';
+  let current=false;
+  for(let i=0;i<24&&!current;i++){
+   try{const res=await fetch(base+'manifest.json?v='+sha,{cache:'no-store',signal:AbortSignal.timeout(10000)});current=res.ok&&(await res.json()).commit===sha;}catch{}
+   if(!current)await new Promise(r=>setTimeout(r,5000));
+  }
+  if(!current)throw Error('Expected deployed revision unavailable');
+  const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
+  try{const page=await browser.newPage({viewport:{width:1600,height:1000}});await page.goto(base+'playground/demo.html?type=study-exam-app-workspace-mockup&v='+sha,{waitUntil:'domcontentloaded'});await auditWorkspace(page,process.cwd(),sha,'_site');}finally{await browser.close();}
+ })().catch(e=>{console.error(e);process.exitCode=1;});
+}

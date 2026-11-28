@@ -57,3 +57,5 @@ Text styles are classes: `<h1 class="display">`.
 - `api/assets/Logos.md` — Logos
 - `api/README.md` — Exam App — agent reference
 <!-- /open-artifact:usage -->
+
+The rendered audit is a separate post-deployment CI job, not a prerequisite of serving the already-validated native library. The job verifies the exact deployed SHA, waits for project styles, measures text ranges (including display:contents), records per-artboard diagnostics, and uploads evidence even when measured contrast or collection fails. Failures remain visible as a failed accessibility job and block issue #22 acceptance; they do not suppress publication of existing explicitly provisional studies or the independent #20 library checks.
