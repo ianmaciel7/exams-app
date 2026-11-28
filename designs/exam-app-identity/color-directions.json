@@ -1,0 +1,90 @@
+{
+  "status": "exploratory-not-approved",
+  "scope": "Isolated color comparison on existing provisional native workspace. No geometry, logo, official token or stage change.",
+  "directions": [
+    {
+      "id": "mineral-blue",
+      "label": "Graphite / mineral blue",
+      "light": {
+        "ground": "#FAFAFA",
+        "ink": "#1C2024",
+        "muted": "#515C65",
+        "brand": "#25384A",
+        "accent": "#2255A4",
+        "on-brand": "#FFFFFF",
+        "tint": "#E1EAF8",
+        "correct": "#21613E",
+        "incorrect": "#A02E32",
+        "technical-error": "#80501B"
+      },
+      "dark": {
+        "ground": "#171A1E",
+        "ink": "#F1F3F5",
+        "muted": "#BCC5CE",
+        "brand": "#C8D7E9",
+        "accent": "#93B9FF",
+        "on-brand": "#14243D",
+        "tint": "#273952",
+        "correct": "#94D6AB",
+        "incorrect": "#FFB1AE",
+        "technical-error": "#F4C489"
+      }
+    },
+    {
+      "id": "monochrome",
+      "label": "Ink / monochrome",
+      "light": {
+        "ground": "#F9F9F7",
+        "ink": "#20211F",
+        "muted": "#595A54",
+        "brand": "#242522",
+        "accent": "#333530",
+        "on-brand": "#FFFFFF",
+        "tint": "#E5E7E1",
+        "correct": "#28613D",
+        "incorrect": "#A12D36",
+        "technical-error": "#785019"
+      },
+      "dark": {
+        "ground": "#191A18",
+        "ink": "#F3F3EF",
+        "muted": "#C3C4BC",
+        "brand": "#E3E4DD",
+        "accent": "#E3E4DD",
+        "on-brand": "#20211F",
+        "tint": "#343630",
+        "correct": "#A0D9AC",
+        "incorrect": "#FFB5BA",
+        "technical-error": "#EFC48A"
+      }
+    },
+    {
+      "id": "aubergine",
+      "label": "Paper / aubergine",
+      "light": {
+        "ground": "#FAF8F5",
+        "ink": "#282229",
+        "muted": "#615764",
+        "brand": "#4A304A",
+        "accent": "#75436F",
+        "on-brand": "#FFFFFF",
+        "tint": "#F1E4EF",
+        "correct": "#286343",
+        "incorrect": "#A23139",
+        "technical-error": "#81511F"
+      },
+      "dark": {
+        "ground": "#211C23",
+        "ink": "#F5F0F6",
+        "muted": "#CDBFCE",
+        "brand": "#E5C9DF",
+        "accent": "#E3AFE0",
+        "on-brand": "#302032",
+        "tint": "#443246",
+        "correct": "#9ED8B0",
+        "incorrect": "#FFB5B9",
+        "technical-error": "#F3C68D"
+      }
+    }
+  ]
+}

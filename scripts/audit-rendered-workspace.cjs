@@ -2,7 +2,7 @@
 // Results are evidence for provisional identity, not app WCAG conformance.
 const fs=require('node:fs');
 const path=require('node:path');
-async function auditWorkspace(page,root,commit,site){
+async function auditWorkspace(page,root,commit,site,candidate=null){
   const canvas=JSON.parse(fs.readFileSync(path.join(root,'designs/exam-app-workspace-mockup/project/canvas.json'),'utf8'));
   const expected=canvas.order.filter(id=>Object.hasOwn(canvas.boards,id));
   if(expected.length!==Object.keys(canvas.boards).length)throw Error('Workspace canvas inventory drift');
@@ -27,6 +27,17 @@ async function auditWorkspace(page,root,commit,site){
       ready=await boardRoot.evaluate(el=>[...el.querySelectorAll('[data-theme]')].some(t=>getComputedStyle(t).getPropertyValue('--ground').trim()&&t.textContent.trim().length>0));
       if(!ready)await new Promise(r=>setTimeout(r,250));
     }
+    if(candidate)await boardRoot.evaluate((root,candidate)=>{
+      // Isolated temporary study: only override the existing semantic CSS variables.
+      // Brand/logo asset is unchanged; current native component --brand drives interaction.
+      for(const el of root.querySelectorAll('[data-theme]')){
+        const v=candidate[el.getAttribute('data-theme')];
+        if(!v)throw Error('Unknown artboard theme');
+        for(const name of ['ground','ink','muted','on-brand','tint','correct','incorrect'])el.style.setProperty('--'+name,v[name]);
+        el.style.setProperty('--brand',v.accent);
+        el.style.setProperty('--focus',v.accent);
+      }
+    },candidate);
     const report=await boardRoot.evaluate((root)=>{
       // Preserve fractional sRGB values. Unsupported colors are reported, never guessed.
       const readColor=s=>{
@@ -93,11 +104,16 @@ async function auditWorkspace(page,root,commit,site){
   const failures=all.filter(r=>!r.pass);
   const evidence={commit,kind:'rendered-provisional-artboard-audit',artboards:reports,summary:{artboards:reports.length,collectionErrors:reports.filter(r=>r.collectionError).length,measured:all.length,failures:failures.length,unsupported:reports.reduce((s,r)=>s+r.unsupported.length,0)},limitations:['Default rendered states only; no claim of keyboard, focus, touch, reflow, forced colors or screen reader conformance.','Text over unknown surfaces and disabled text are reported separately.','Artboard-level DOM geometry is not a production runtime or screenshot visibility guarantee.']};
   fs.mkdirSync(path.join(site,'qa'),{recursive:true});
-  fs.writeFileSync(path.join(site,'qa','rendered-color-audit.json'),JSON.stringify(evidence,null,2));
+  if(candidate){
+    evidence.candidate=candidate.id;
+    evidence.limitations.push('Temporary CSS overlay; original brand/logo SVG and geometry unchanged; technical-error candidate not exercised by existing default artboards.');
+  }
+  fs.writeFileSync(path.join(site,'qa',candidate?'candidate-'+candidate.id+'.json':'rendered-color-audit.json'),JSON.stringify(evidence,null,2));
   console.log('Rendered workspace audit:',JSON.stringify(evidence.summary));
   for(const board of reports)for(const finding of [...board.text,...board.indicators].filter(r=>!r.pass))console.warn('PROVISIONAL ACCESSIBILITY FINDING',board.id,JSON.stringify(finding));
   // Publication is independent; this job fails on missing evidence or measured violations.
   if(evidence.summary.collectionErrors||evidence.summary.failures)throw Error('Provisional accessibility audit requires remediation: '+JSON.stringify(evidence.summary));
+  return evidence;
 }
 module.exports={auditWorkspace};
 

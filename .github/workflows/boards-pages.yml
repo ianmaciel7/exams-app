@@ -171,3 +171,26 @@ jobs:
           path: _site/qa/rendered-color-audit.json
           if-no-files-found: error
           retention-days: 14
+
+  compare-provisional-colors:
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: ./.github/actions/setup-board-browser
+      - name: Compare provisional directions on actual rendered artboards
+        run: NODE_PATH=/tmp/board-browser/node_modules node scripts/compare-color-directions.cjs
+      - name: Upload exploratory comparisons and measured evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: provisional-color-directions
+          path: _site/candidate-review/
+          retention-days: 14
+          if-no-files-found: error
