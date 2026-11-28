@@ -39,6 +39,14 @@ async function currentInventory(){
           const expected=meta.order.slice().sort();
           await iframe.locator('.wb-elements').waitFor();
           await iframe.locator('.wb-elements').evaluate((el,ids)=>{const actual=[...new Set([...el.querySelectorAll('[data-wb-id]')].map(e=>e.getAttribute('data-wb-id')))].sort();if(JSON.stringify(actual)!==JSON.stringify(ids))throw Error('Rendered IDs mismatch');},expected);
+          for(const link of board.nativeLinks??[]){
+            const anchor=iframe.locator('[data-wb-id="'+link.element+'"] a[data-wb-link]').first();
+            await anchor.waitFor({state:'attached'});
+            assert.equal(await anchor.getAttribute('data-wb-link'),link.href);
+            const target=new URL(await anchor.getAttribute('href'),base);
+            assert.equal(target.pathname,base.pathname+'playground/demo.html');
+            assert.equal(target.searchParams.get('type'),link.seed);
+          }
           if(board.id==='highfidelity'){
             await iframe.locator('[data-wb-id="desktop_q_stem"]').evaluate(el=>{const ink=getComputedStyle(el).getPropertyValue('--wb-ink').trim();if(!/^#[0-9a-f]{6}$/i.test(ink)||parseInt(ink.slice(1,3),16)>=100)throw Error('Dark fixed-paper text contrast not corrected: '+ink);});
           }

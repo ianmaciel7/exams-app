@@ -122,6 +122,16 @@ async function verify(out) {
           const store=window.__PLAYGROUND__?.store;
           return store?.listDocs('elements').length===ids.length && rendered.size===ids.length && ids.every(id=>rendered.has(id));
         },expected,{timeout:45000});
+        // Verify actual native anchor targets without rewriting source hrefs.
+        const frame=page.frameLocator('iframe[name="open-artifact-shell"]');
+        for(const link of b.nativeLinks){
+          const item=frame.locator('[data-wb-id="'+link.element+'"]');
+          const anchor=item.locator('a[data-wb-link]').first();
+          await anchor.waitFor({state:'attached'});
+          if(await anchor.getAttribute('data-wb-link')!==link.href)throw Error('Native source link changed: '+link.element);
+          const target=new URL(await anchor.getAttribute('href'),url);
+          if(target.pathname!=='/exams-app/playground/demo.html'||target.searchParams.get('type')!==link.seed)throw Error('Broken native artifact route: '+link.href+' => '+target.href);
+        }
         const back=page.getByRole('link',{name:'Back to artifacts',exact:true});
         if(!await back.isVisible()||!await page.locator('[data-exam-preview-status]').isVisible())throw Error('Native preview header controls missing: '+b.id);
         if(await page.locator('.pg-hint,[data-pg-lang],[data-pg-close]').count())throw Error('Legacy demo banner remains');
@@ -217,6 +227,34 @@ async function verify(out) {
       if(!study.filePaths.length)throw Error('No eligible files: '+study.id);
       write(path.join(demos,study.seed+'.demo.json'),JSON.stringify({id:study.seed,type:study.type,typeTitle:study.typeTitle,title:study.title+' (Provisional)',source:'exam-studies/'+study.id,agent:{name:'Unavailable',thinkMs:0,responses:[]}}));
     }
+    // Native artifact addresses stay unchanged in the committed source and seed.
+    // Resolve them in the pinned editor to the public library's actual subpath.
+    const {BOARDS}=await import('./board-catalog.mjs');
+    const artifactRoutes=Object.fromEntries(seeds.map(b=>{
+      const entry=BOARDS[b.id];if(!entry||entry[1]!==b.dir)throw Error('Board catalog mismatch: '+b.id);
+      return [entry[0],b.seed];
+    }));
+    publicationInventory.artifactRoutes=artifactRoutes;
+    for(const b of seeds){
+      const elementsDir=path.join(upstream,'exam-boards',b.id,'db/elements');
+      b.nativeLinks=[];
+      for(const file of fs.readdirSync(elementsDir).filter(f=>f.endsWith('.json'))){
+        const el=JSON.parse(read(path.join(elementsDir,file)));
+        if(typeof el.href!=='string'||!el.href.startsWith('open-artifact://artifact/'))continue;
+        const id=el.href.slice('open-artifact://artifact/'.length).split(/[/?#]/)[0];
+        if(!Object.hasOwn(artifactRoutes,id))throw Error('Unpublished native link: '+b.id+' / '+file+' / '+id);
+        b.nativeLinks.push({element:file.slice(0,-5),href:el.href,seed:artifactRoutes[id]});
+      }
+      publicationInventory.boards.find(x=>x.id===b.id).nativeLinks=b.nativeLinks;
+    }
+    const nativeLinks=path.join(upstream,'packages/whiteboard-editor/src/elements/links.ts');
+    replace(nativeLinks,'  return `${origin}/a/${encodeURIComponent(artifact)}`;',[
+      '  const routes: Record<string,string> = '+JSON.stringify(artifactRoutes)+';',
+      "  if (!Object.hasOwn(routes, artifact) || typeof location === 'undefined') return undefined;",
+      "  const url = new URL('../../demo.html', location.href);",
+      "  url.searchParams.set('type', routes[artifact]!);",
+      "  return url.href;",
+    ].join('\n'));
     // No scripted agent responses, even if a visitor attempts to send a request.
     const provider=path.join(pg,'src/provider/demo-provider.ts');
     replace(provider,'status: async () => agent.status(),','status: async () => ({ available: false, busy: false }),');

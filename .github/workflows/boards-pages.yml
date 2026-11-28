@@ -7,7 +7,8 @@ permissions:
   contents: read
 concurrency:
   group: exam-app-boards-pages
-  cancel-in-progress: true
+  # Finish in-flight evidence and deployment before starting the latest queued revision.
+  cancel-in-progress: false
 jobs:
   build:
     runs-on: ubuntu-latest
