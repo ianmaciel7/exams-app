@@ -26,6 +26,10 @@ Run `node scripts/check-identity-contrast.mjs` from the repository root. The aud
 
 Before approval, compare genuinely distinct identity alternatives in the same question-reading context; record the owner decision. Resolve missing roles and aliases in canonical tokens.json, regenerate CSS and API docs through the native design-system workflow, verify parity, review a versioned diff, and retain the previous revision for rollback. Do not introduce hard-coded component colors. Actual component screenshots, alpha compositing, keyboard, forced colors, assistive technology, touch, color-vision review and responsive runtime behavior remain untested. Mockup and Prototype acceptance remain gated by the corresponding stage and owner approval.
 
+### Candidate role and compositing contract — 2026-11-27
+
+The [machine-readable semantic color contract](../semantic-color-contract.json) separates identity, semantic roles, component aliases, and combined states without inventing approved values. Existing CSS remains unchanged. Unresolved values explicitly use pending-owner rather than silently introducing new colors. The CI audit checks exact CSS parity between the design-system and workspace study, 26 opaque threshold-bearing pairs plus 40 calculated sRGB mixed-surface pairs (4/5/6/8/10% ink on ground, both themes). All 40 mixed pairs pass the applicable provisional text/indicator threshold in the independent calculation. Overlay and low-contrast boundary ratios are informational, not evidence of compliance or failure without actual adjacent surface and component context. The contract documents exclusions, ownership, fallback restrictions, migration and runtime tests still required.
+
 <!-- open-artifact:usage (generated, do not edit) -->
 ## Consuming this system (generated — do not edit)
 

@@ -1,0 +1,180 @@
+{
+  "status": "provisional-not-approved",
+  "scope": "v0.1.0 identity exploration; no High-Fidelity or production token change",
+  "primitiveSource": "project/tokens.json (opaque sRGB values; reference/semantic values currently share storage)",
+  "roles": {
+    "surface.workspace": "ground",
+    "surface.navigation": "mix-4",
+    "surface.rail": "mix-4",
+    "surface.drawer": "ground",
+    "surface.notice.light": "mix-5",
+    "surface.notice.dark": "mix-6",
+    "surface.disabled": "mix-8",
+    "surface.hover": "pending-owner",
+    "surface.pressed": "pending-owner",
+    "surface.pending": "pending-owner",
+    "surface.tooltip": "pending-owner",
+    "surface.selected": "tint",
+    "text.primary": "ink",
+    "text.secondary": "muted",
+    "text.on-action": "on-brand",
+    "icon.default": "muted",
+    "icon.selected": "brand",
+    "brand.identity": "brand",
+    "action.primary": "brand",
+    "action.ghost": "ink",
+    "indicator.checked": "brand",
+    "indicator.focus": "focus",
+    "indicator.correct": "correct",
+    "indicator.incorrect": "incorrect",
+    "indicator.technical-error": "pending-owner",
+    "boundary.functional": "pending-owner",
+    "overlay.light": "ink-alpha-40-or-42",
+    "overlay.dark": "black-alpha-56"
+  },
+  "combinedStates": [
+    {
+      "state": "selected",
+      "surface": "tint",
+      "foreground": "ink",
+      "independentCue": "checked radio dot / active label or current-page semantics"
+    },
+    {
+      "state": "selected+focus",
+      "surface": "tint",
+      "foreground": "ink",
+      "independentCue": "checked cue plus separated focus outline"
+    },
+    {
+      "state": "selected+hover",
+      "surface": "pending-owner",
+      "foreground": "ink",
+      "independentCue": "preserve selected cue"
+    },
+    {
+      "state": "enabled primary",
+      "surface": "brand",
+      "foreground": "on-brand",
+      "independentCue": "explicit Answer or Retry label"
+    },
+    {
+      "state": "hover/pressed primary",
+      "surface": "pending-owner",
+      "foreground": "on-brand",
+      "independentCue": "no geometry shift"
+    },
+    {
+      "state": "disabled",
+      "surface": "mix-8",
+      "foreground": "muted",
+      "independentCue": "disabled semantics, stable dimensions"
+    },
+    {
+      "state": "pending",
+      "surface": "pending-owner",
+      "foreground": "pending-owner",
+      "independentCue": "Submitting and busy semantics"
+    },
+    {
+      "state": "correct",
+      "surface": "ground or tint",
+      "foreground": "correct",
+      "independentCue": "Correct text and evaluation marker"
+    },
+    {
+      "state": "incorrect",
+      "surface": "ground or tint",
+      "foreground": "incorrect",
+      "independentCue": "Your answer and Incorrect answer text"
+    },
+    {
+      "state": "locked",
+      "surface": "ground or tint",
+      "foreground": "muted",
+      "independentCue": "Answer locked; no re-evaluation"
+    },
+    {
+      "state": "technical error",
+      "surface": "pending-owner",
+      "foreground": "pending-owner",
+      "independentCue": "failure message and safe Retry retaining selection"
+    },
+    {
+      "state": "current page",
+      "surface": "tint",
+      "foreground": "ink",
+      "independentCue": "visible current-page indicator, weight, aria-current"
+    },
+    {
+      "state": "drawer",
+      "surface": "ground",
+      "foreground": "ink",
+      "independentCue": "modal name, close affordance, focus containment and restoration"
+    }
+  ],
+  "surfaceMixes": [
+    4,
+    5,
+    6,
+    8,
+    10
+  ],
+  "compositeInformational": [
+    {
+      "name": "drawer-border/ground",
+      "foreground": "ink",
+      "opacity": 0.14,
+      "background": "ground"
+    },
+    {
+      "name": "rail-divider/ground",
+      "foreground": "ink",
+      "opacity": 0.12,
+      "background": "ground"
+    },
+    {
+      "name": "header-border/ground",
+      "foreground": "ink",
+      "opacity": 0.1,
+      "background": "ground"
+    },
+    {
+      "name": "light-overlay-40/ground",
+      "theme": "light",
+      "foreground": "ink",
+      "opacity": 0.4,
+      "background": "ground"
+    },
+    {
+      "name": "light-overlay-42/ground",
+      "theme": "light",
+      "foreground": "ink",
+      "opacity": 0.42,
+      "background": "ground"
+    },
+    {
+      "name": "dark-overlay-56/ground",
+      "theme": "dark",
+      "foreground": "#000000",
+      "opacity": 0.56,
+      "background": "ground"
+    }
+  ],
+  "governance": {
+    "ownerApproval": "required",
+    "migration": "reviewed native design-system regeneration after owner choice; versioned diff and rollback",
+    "forbidden": [
+      "tint alone as required selection cue",
+      "unseparated focus ring on same-color brand fill",
+      "correctness color as technical failure",
+      "provisional identity in approved grayscale wireframes"
+    ],
+    "pending": [
+      "meaningfully different identity alternatives and owner choice",
+      "actual hover/pressed/tooltip/loading/technical-error role values",
+      "rendered contrast and required indicator adjacency",
+      "forced colors, keyboard, touch, screen reader announcements and safe retry",
+      "canonical native token aliases/generated CSS and API regeneration after approval"
+    ]
+  }
+}

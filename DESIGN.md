@@ -75,3 +75,7 @@ The selected layout stays consistent across stages. Approved Mid-Fidelity geomet
 The [proposed Exam App identity study](designs/exam-app-identity/project/README.md) explores a provisional app mark and logo. Owner review is pending. The Mockup stage has not started.
 
 The owner approved Mid-Fidelity. Earlier canvas dimensions above describe that historical baseline, not final constraints. The new structural specimens test a 272-unit sidebar, 64 rail, 40 desktop inset, 20 phone inset, 740 content maximum and 304 phone drawer, with 44-unit target intent. These are proposed structural dimensions, not brand tokens; review at representative widths, refine action and feedback anatomy, and verify native captures before approval. See the active stage record.
+
+## Provisional semantic color audit — 2026-11-27
+
+[Candidate semantic color contract](designs/exam-app-identity/semantic-color-contract.json) tracks reference values, roles, state combinations and unresolved aliases, without approving or changing the palette. `scripts/check-identity-contrast.mjs` checks canonical and mockup token CSS parity, opaque and sRGB mixed-surface ratios, and reports alpha-composited boundaries/backdrops separately. Do not infer app accessibility or visual identity approval from these calculations. The current grayscale High-Fidelity geometry and stage are unchanged. Issues #21/#22 remain open for approved identity, rendered validation and interactive acceptance.
