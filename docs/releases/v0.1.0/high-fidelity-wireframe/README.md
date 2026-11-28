@@ -84,3 +84,24 @@ Initial 2cc13ec exposed 17 gaps; 9a140b9 restored 22 inherited obligations. 348f
 Run `node scripts/sync-high-fidelity.mjs --write` after generator changes, `node scripts/sync-release-state.mjs --write` after `current-state.json` updates, and `node scripts/check-boards.mjs` + `node scripts/check-fidelity-coverage.mjs` for parity and coverage. Keep `coverageGate.status="blocked"` and `stageStatus="in progress"` until latest rendered Light/Dark captures are inspected at useful zoom and the owner approves. See [AGENTS.md](../../../../AGENTS.md).
 
 Next question: Mockup: which visual identity, typography, semantic colors and theme treatment should be applied to the resolved structure?
+
+## Rendered evidence review — 2026-11-27 (issue #17)
+
+Reviewed all twelve section captures in Light and Dark from [run 46081061787](https://github.com/ianmaciel7/exams-app/actions/runs/46081061787), source `d0b9f84`, 776 elements, viewport 2560 × 1440, device scale 2. Compared against `21da0f0`: no board or capture-generator changes between these revisions. This is a paired visual screening, not a pixel-level acceptance or owner approval. Each original PNG is 5120 × 2880.
+
+| Section | Light / Dark observed | Remaining review |
+| --- | --- | --- |
+| 01 Desktop | Wrong-answer labels, two full questions, Q3 start and flush seam visible | Dark-board text appears lighter on fixed white paper |
+| 02 Collapsed | Selected option, rail and answer visible | Dark-board text contrast |
+| 03 Phone | Four closed/open and locale/width specimens visible, including dark right-hand artboard | Text contrast and actual drawer behavior |
+| 04 Continuation | Pagination boundaries, single-page omission and answer-loss warning visible | Contrast and focus semantics |
+| 05 Lifecycle | Loading skeleton, empty and failure specimens visible | Dark-board text contrast |
+| 06 Navigation | Loading, Retry, compact and warning specimens visible | Dark-board text contrast |
+| 07 Feedback | Correct/locked, pending and safe-retry message visible | Readability, runtime retry |
+| 08 Controls | Rest/hover/focus/pressed/disabled/pending and tooltips visible | Optical alignment at native zoom |
+| 09 Long | Five options with below-option feedback in desktop and phone | Readability at 320 |
+| 10 Redlines | Dimension labels and thin red leaders visible | Exact bounds and legibility |
+| 11 Anatomy | Reading-order callouts and eight option states visible | Exact bounds and contrast |
+| 12 Responsive | Width ranges and accessibility intent visible | Prototype validation |
+
+Common capture defect: adjacent sections appear in all full-viewport section captures; a few neighboring headings intersect the viewer toolbar. The section capture pipeline now clips each native rendered region using shared group geometry and retains full-board captures separately. New evidence is required to verify that no target content is cropped. Dark board theme is not a dark app mockup; fixed white artboards with renderer-adjusted text require contrast review. No claim of visual approval or WCAG conformance. Keep the stage and coverage gate blocked until required review and owner approval.

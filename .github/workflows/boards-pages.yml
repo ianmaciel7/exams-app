@@ -45,9 +45,6 @@ jobs:
       - name: Verify capture provenance
         run: |
           node -e 'const m=require("./_site/manifest.json"); if(m.commit!==process.env.GITHUB_SHA || m.boards.length!==11 || m.boards.some(b=>!b.images.light||!b.images.dark)) throw Error("Capture manifest mismatch")'
-      - name: Build and validate native Playground
-        timeout-minutes: 15
-        run: NODE_PATH=/tmp/board-browser/node_modules node scripts/build-native-playground.cjs
       - name: Upload downloadable board evidence
         uses: actions/upload-artifact@v4
         with:
@@ -57,6 +54,9 @@ jobs:
             _site/manifest.json
           retention-days: 7
           if-no-files-found: error
+      - name: Build and validate native Playground
+        timeout-minutes: 15
+        run: NODE_PATH=/tmp/board-browser/node_modules node scripts/build-native-playground.cjs
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site

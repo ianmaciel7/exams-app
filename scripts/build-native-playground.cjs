@@ -149,11 +149,20 @@ async function verify(out) {
         const expected=Object.keys(generated.files).filter(p=>!p.startsWith('_blobs/')).sort();
         const committed=study.filePaths.filter(p=>!p.startsWith('_blobs/')).sort();
         if(JSON.stringify(expected)!==JSON.stringify(committed))throw Error('Study seed path coverage mismatch: '+study.id);
+        try {
         await page.waitForFunction(({id,type,expected})=>{
           const frame=document.querySelector('iframe[name="open-artifact-shell"]');
           const store=window.__PLAYGROUND__?.store;
-          return !!frame&&frame.src.includes('/editors/'+type+'/')&&store?.id==='demo-'+id&&!document.querySelector('[data-shell-loading]')&&expected.every(p=>store.entries.has(p));
+          return !!frame&&frame.src.includes('/editors/'+type+'/')&&store?.id==='demo-'+id&&!document.querySelector('[data-shell-loading]')&&expected.every(p=>store.entries.has(p.startsWith('db/')?p.replace(/\.json$/,''):p));
         },{id:study.seed,type:study.type,expected},{timeout:45000});
+        }catch(error){
+          const diagnostics=await page.evaluate(()=>({title:document.title,frame:document.querySelector('iframe[name="open-artifact-shell"]')?.src,loading:!!document.querySelector('[data-shell-loading]'),storeId:window.__PLAYGROUND__?.store?.id,keys:[...(window.__PLAYGROUND__?.store?.entries?.keys()??[])]}));
+          throw Error('Study load failed: '+study.id+' '+JSON.stringify({diagnostics,errors}),{cause:error});
+        }
+        // DB document keys omit the final storage .json extension, unlike project files.
+        const actual=await page.evaluate(()=>[...window.__PLAYGROUND__.store.entries.keys()].sort());
+        const expectedKeys=expected.map(p=>p.startsWith('db/')?p.replace(/\.json$/,''):p).sort();
+        if(JSON.stringify(actual)!==JSON.stringify(expectedKeys))throw Error('Study store key mismatch: '+study.id);
         for(const fragment of study.visibleText){
           const deadline=Date.now()+20000;let found=false;
           while(Date.now()<deadline&&!found){

@@ -107,7 +107,22 @@ async function captureSketchStates(page,theme,board){
       if(!f)throw Error('Missing mobile frame geometry');
       mobileRect={x:box.x+c.x+f.x*c.scale,y:box.y+c.y+f.y*c.scale,w:f.w*c.scale,h:f.h*c.scale};
     }
-    await captureSettled(page,'_site/'+path,mobileRect);
+    if(section){
+      // The native camera centers the section, but a full viewport also shows neighbors.
+      // Crop the actual rendered section at device resolution; retain full-board captures separately.
+      const pad=12;
+      const left=Math.floor(box.x+c.x+section.x*c.scale-pad);
+      const top=Math.floor(box.y+c.y+section.y*c.scale-pad);
+      const right=Math.ceil(box.x+c.x+(section.x+section.w)*c.scale+pad);
+      const bottom=Math.ceil(box.y+c.y+(section.y+section.h)*c.scale+pad);
+      const viewport=page.viewportSize();
+      if(left<0||top<0||right>viewport.width||bottom>viewport.height)throw Error('Section clip outside viewport: '+section.id);
+      await page.waitForTimeout(350);
+      await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+      await page.screenshot({path:'_site/'+path,clip:{x:left,y:top,width:right-left,height:bottom-top},scale:'device'});
+    }else{
+      await captureSettled(page,'_site/'+path,mobileRect);
+    }
     board.states[i].images[theme]=path;
     console.log('Sketch state',states[i],theme,c.scale);
   }
