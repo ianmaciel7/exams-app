@@ -62,9 +62,9 @@ async function captureSettled(page,path,mobileRect){
 }
 
 async function checkFixedPaper(page){
-  await page.waitForFunction(()=>{const el=document.querySelector('[data-wb-id="desktop_q_stem"]');if(!el)return false;const value=getComputedStyle(el).getPropertyValue('--wb-ink').trim();return /^#[0-9a-f]{6}$/i.test(value)&&parseInt(value.slice(1,3),16)<100;},{},{timeout:15000});
-  const ink=await page.locator('[data-wb-id="desktop_q_stem"]').evaluate(el=>getComputedStyle(el).getPropertyValue('--wb-ink').trim());
-  console.log('High-Fidelity fixed-paper ink',ink);
+  const ids=['desktop_q_stem','collapsed_q_stem','redline_q_stem'];
+  await page.waitForFunction(ids=>ids.every(id=>{const el=document.querySelector('[data-wb-id="'+id+'"]');if(!el)return false;const value=getComputedStyle(el).getPropertyValue('--wb-ink').trim();return /^#[0-9a-f]{6}$/i.test(value)&&parseInt(value.slice(1,3),16)<100;}),ids,{timeout:15000});
+  console.log('High-Fidelity fixed-paper ink',await page.evaluate(ids=>ids.map(id=>[id,getComputedStyle(document.querySelector('[data-wb-id="'+id+'"]')).getPropertyValue('--wb-ink').trim()]),ids));
 }
 async function captureSketchStates(page,theme,board){
   const high=board.id==='highfidelity';

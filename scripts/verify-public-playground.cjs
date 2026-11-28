@@ -48,7 +48,9 @@ async function currentInventory(){
             assert.equal(target.searchParams.get('type'),link.seed);
           }
           if(board.id==='highfidelity'){
-            await iframe.locator('[data-wb-id="desktop_q_stem"]').evaluate(el=>{const ink=getComputedStyle(el).getPropertyValue('--wb-ink').trim();if(!/^#[0-9a-f]{6}$/i.test(ink)||parseInt(ink.slice(1,3),16)>=100)throw Error('Dark fixed-paper text contrast not corrected: '+ink);});
+            for(const id of ['desktop_q_stem','collapsed_q_stem','redline_q_stem']){
+              await iframe.locator('[data-wb-id="'+id+'"]').evaluate(el=>{const ink=getComputedStyle(el).getPropertyValue('--wb-ink').trim();if(!/^#[0-9a-f]{6}$/i.test(ink)||parseInt(ink.slice(1,3),16)>=100)throw Error('Dark fixed-paper text contrast not corrected: '+el.getAttribute('data-wb-id')+' '+ink);});
+            }
           }
         }else{
           const expected=board.filePaths.filter(p=>!p.startsWith('_blobs/')).map(p=>p.startsWith('db/')?p.replace(/\.json$/,''):p).sort();

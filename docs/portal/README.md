@@ -21,3 +21,5 @@ A separate required post-deployment job checks the actual publicly served manife
 ## Native cross-artifact navigation
 
 The published library resolves native `open-artifact://artifact/<id>` addresses in the pinned whiteboard editor using the committed board catalog. The original artifact IDs and stored hrefs are preserved. The public URL is derived from the editor's repository subpath rather than the host-only `/a/<id>` route. Build and post-deploy checks compare source link addresses and rendered destination URLs. Unknown direct artifact references fail the build rather than silently publish broken links. In-flight Pages workflows finish before the latest queued revision starts.
+
+The fixed-paper compatibility pass also recognizes the exact transparent Redlines rectangle only when the entire text box is safely inside the stroke. It does not skip unknown or partially intersecting SVG content. The capture and live checks cover expanded, collapsed, and Redlines question stems.

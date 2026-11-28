@@ -21,11 +21,18 @@ export function solidPaper(source,parse){
     const child=svg.firstElementChild,box=(svg.getAttribute('viewBox')??'').trim().split(/[ ,]+/).map(Number);
     if(box.length!==4||box[0]!==0||box[1]!==0||!(box[2]>0&&box[3]>0))return null;
     if([...svg.attributes].some(a=>!['xmlns','viewBox','color','width','height'].includes(a.name)))return null;
+    // A single exact outline has transparent interior. Only ignore it when
+    // the entire text box sits safely inside its stroke; never infer arbitrary SVG opacity.
+    const w=box[2],h=box[3];
+    if(child.localName==='rect'&&child.getAttribute('fill')==='none'&&hex(child.getAttribute('stroke'))&&
+      [...child.attributes].every(a=>['fill','stroke','stroke-width','x','y','width','height'].includes(a.name))&&
+      Number(child.getAttribute('x'))===0.5&&Number(child.getAttribute('y'))===0.5&&
+      Number(child.getAttribute('width'))===w-1&&Number(child.getAttribute('height'))===h-1&&Number(child.getAttribute('stroke-width'))===1)
+      return {outline:true};
     const fill=hex(child.getAttribute('fill'));
     if(!fill||!/^#([0-9a-f]{2})\1\1$/i.test(fill))return null;
     const allowed=['fill','stroke','width','height','x','y','d','rx','ry'];
     if([...child.attributes].some(a=>!allowed.includes(a.name))||!['none',null].includes(child.getAttribute('stroke')))return null;
-    const w=box[2],h=box[3];
     if(child.localName==='rect'&&Number(child.getAttribute('x')??0)===0&&Number(child.getAttribute('y')??0)===0&&Number(child.getAttribute('width'))===w&&Number(child.getAttribute('height'))===h&&Number(child.getAttribute('rx')??0)===0&&Number(child.getAttribute('ry')??0)===0)return {fill,inset:0};
     // Exact project drawer path, with square left seam and two right 12-unit corners.
     if(child.localName==='path'&&child.getAttribute('d')===`M 0 0 L ${w-12} 0 A 12 12 0 0 1 ${w} 12 L ${w} ${h-12} A 12 12 0 0 1 ${w-12} ${h} L 0 ${h} Z`)return {fill,inset:12};
@@ -34,6 +41,7 @@ export function solidPaper(source,parse){
 }
 function bounds(el){return {x:el.offsetLeft,y:el.offsetTop,w:el.offsetWidth,h:el.offsetHeight};}
 function contains(a,b,inset=0){return b.x>=a.x-2&&b.y>=a.y+inset-2&&b.x+b.w<=a.x+a.w+2&&b.y+b.h<=a.y+a.h-inset+2;}
+export function insideOutline(a,b){return b.x>=a.x+4&&b.y>=a.y+4&&b.x+b.w<=a.x+a.w-4&&b.y+b.h<=a.y+a.h-4;}
 function overlaps(a,b){return Math.min(a.x+a.w,b.x+b.w)-Math.max(a.x,b.x)>4&&Math.min(a.y+a.h,b.y+b.h)-Math.max(a.y,b.y)>4;}
 export function install(root=document){
   const style=root.createElement('style');style.id='exam-fixed-paper-contrast';
@@ -58,7 +66,8 @@ export function install(root=document){
         if(!el.hasAttribute('data-wb-backdrop')&&b.w>0&&b.h>0){
           for(let i=seen.length-1;i>=0;i--){
             const item=seen[i];if(!overlaps(item.b,b))continue;
-            if(item.paper&&contains(item.b,b,item.paper.inset))corrected=safeInk(el.style.getPropertyValue('--wb-ink').trim(),item.paper.fill);
+            if(item.paper?.outline&&insideOutline(item.b,b))continue;
+            if(item.paper?.fill&&contains(item.b,b,item.paper.inset))corrected=safeInk(el.style.getPropertyValue('--wb-ink').trim(),item.paper.fill);
             // Do not guess through a later opaque item, an unknown image, or partially covered paper.
             break;
           }
