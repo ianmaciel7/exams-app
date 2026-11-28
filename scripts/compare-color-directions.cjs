@@ -20,7 +20,8 @@ const {directions,status}=require('../designs/exam-app-identity/color-directions
   const results=[];
   try{
     for(const candidate of directions){
-      const page=await browser.newPage({viewport:{width:1600,height:1000}});
+      // Capture native canvas at high device density rather than upscale a low-resolution PNG.
+      const page=await browser.newPage({viewport:{width:1600,height:1000},deviceScaleFactor:5});
       try{
         await page.goto(base+'playground/demo.html?type=study-exam-app-workspace-mockup&v='+sha,{waitUntil:'domcontentloaded'});
         const evidence=await auditWorkspace(page,process.cwd(),sha,out,candidate);
@@ -33,14 +34,18 @@ const {directions,status}=require('../designs/exam-app-identity/color-directions
           const bounds=await surface.boundingBox();
           if(!bounds||bounds.width<=0||bounds.height<=0)throw Error('No capture surface '+id);
           const file=candidate.id+'-'+id.replace('.dc.html','')+'.png';
-          const buffer=await surface.screenshot({path:path.join(out,file),timeout:15000,animations:'disabled'});
-          results.push({candidate:candidate.id,id,file,width:buffer.readUInt32BE(16),height:buffer.readUInt32BE(20),nativeBoardWidth:evidence.artboards.find(a=>a.id===id).width,nativeBoardHeight:evidence.artboards.find(a=>a.id===id).height});
+          await surface.evaluate(async el=>{await el.ownerDocument.fonts.ready;await Promise.all([...el.querySelectorAll('img')].map(img=>img.decode()));await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));});
+          const buffer=await surface.screenshot({path:path.join(out,file),timeout:15000,animations:'disabled',scale:'device'});
+          const board=evidence.artboards.find(a=>a.id===id);
+          const width=buffer.readUInt32BE(16),height=buffer.readUInt32BE(20);
+          if(width<board.width||height<board.height)throw Error('Candidate capture below native pixel dimensions '+id+': '+width+'x'+height);
+          results.push({candidate:candidate.id,id,file,width,height,nativeBoardWidth:board.width,nativeBoardHeight:board.height,canvasScale:bounds.width/board.width,deviceScaleFactor:5});
         }
       }finally{await page.close();}
     }
   }finally{
     await browser.close();
     fs.mkdirSync(out,{recursive:true});
-    fs.writeFileSync(path.join(out,'comparison-manifest.json'),JSON.stringify({commit:sha,status:'exploratory-not-approved',captures:results,limitations:['Temporary color overlays on native design, not full-system alternatives.','Original provisional logo unchanged; renderer canvas scale reported, not asserted to be native resolution.','No user approval, interaction or WCAG conformance claim.']},null,2));
+    fs.writeFileSync(path.join(out,'comparison-manifest.json'),JSON.stringify({commit:sha,status:'exploratory-not-approved',captures:results,limitations:['Temporary color overlays on native design, not full-system alternatives.','Original provisional logo unchanged; screenshots rendered at DPR 5, with native minimum pixel dimensions enforced; inspect optical quality before approval.','No user approval, interaction or WCAG conformance claim.']},null,2));
   }
 })().catch(e=>{console.error(e);process.exitCode=1;});

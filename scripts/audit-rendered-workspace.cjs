@@ -102,7 +102,8 @@ async function auditWorkspace(page,root,commit,site,candidate=null){
   }
   const all=reports.flatMap(r=>[...r.text,...r.indicators]);
   const failures=all.filter(r=>!r.pass);
-  const evidence={commit,kind:'rendered-provisional-artboard-audit',artboards:reports,summary:{artboards:reports.length,collectionErrors:reports.filter(r=>r.collectionError).length,measured:all.length,failures:failures.length,unsupported:reports.reduce((s,r)=>s+r.unsupported.length,0)},limitations:['Default rendered states only; no claim of keyboard, focus, touch, reflow, forced colors or screen reader conformance.','Text over unknown surfaces and disabled text are reported separately.','Artboard-level DOM geometry is not a production runtime or screenshot visibility guarantee.']};
+  const unmeasured=reports.flatMap(r=>r.unsupported.filter(x=>x.kind!=='disabled-text').map(x=>({board:r.id,...x})));
+  const evidence={commit,kind:'rendered-provisional-artboard-audit',artboards:reports,summary:{artboards:reports.length,collectionErrors:reports.filter(r=>r.collectionError).length,measured:all.length,failures:failures.length,unmeasuredRequired:unmeasured.length,unsupported:reports.reduce((s,r)=>s+r.unsupported.length,0)},limitations:['Default rendered states only; no claim of keyboard, focus, touch, reflow, forced colors or screen reader conformance.','Text over unknown surfaces and disabled text are reported separately.','Artboard-level DOM geometry is not a production runtime or screenshot visibility guarantee.']};
   fs.mkdirSync(path.join(site,'qa'),{recursive:true});
   if(candidate){
     evidence.candidate=candidate.id;
@@ -112,7 +113,8 @@ async function auditWorkspace(page,root,commit,site,candidate=null){
   console.log('Rendered workspace audit:',JSON.stringify(evidence.summary));
   for(const board of reports)for(const finding of [...board.text,...board.indicators].filter(r=>!r.pass))console.warn('PROVISIONAL ACCESSIBILITY FINDING',board.id,JSON.stringify(finding));
   // Publication is independent; this job fails on missing evidence or measured violations.
-  if(evidence.summary.collectionErrors||evidence.summary.failures)throw Error('Provisional accessibility audit requires remediation: '+JSON.stringify(evidence.summary));
+  for(const finding of unmeasured)console.warn('UNMEASURED REQUIRED CUE',JSON.stringify(finding));
+  if(evidence.summary.collectionErrors||evidence.summary.failures||unmeasured.length)throw Error('Provisional accessibility audit requires remediation: '+JSON.stringify(evidence.summary));
   return evidence;
 }
 module.exports={auditWorkspace};
