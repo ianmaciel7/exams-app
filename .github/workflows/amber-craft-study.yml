@@ -1,0 +1,30 @@
+name: Amber Craft study evidence
+on:
+  push:
+    branches: [dev]
+    paths:
+      - 'prototypes/amber-craft-study/**'
+      - '.github/workflows/amber-craft-study.yml'
+      - '.github/actions/setup-board-browser/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: ./.github/actions/setup-board-browser
+      - name: Reproduce reviewed study and verify representative interactions
+        run: NODE_PATH=/tmp/board-browser/node_modules node prototypes/amber-craft-study/capture.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: amber-craft-evidence
+          path: craft-evidence/
+          if-no-files-found: error
+          retention-days: 30

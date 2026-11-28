@@ -79,3 +79,7 @@ The owner approved Mid-Fidelity. Earlier canvas dimensions above describe that h
 ## Provisional semantic color audit — 2026-11-27
 
 [Candidate semantic color contract](designs/exam-app-identity/semantic-color-contract.json) tracks reference values, roles, state combinations and unresolved aliases, without approving or changing the palette. `scripts/check-identity-contrast.mjs` checks canonical and mockup token CSS parity, opaque and sRGB mixed-surface ratios, and reports alpha-composited boundaries/backdrops separately. Do not infer app accessibility or visual identity approval from these calculations. The current grayscale High-Fidelity geometry and stage are unchanged. Issues #21/#22 remain open for approved identity, rendered validation and interactive acceptance.
+
+## Amber Craft exploration — 2026-11-27
+
+The owner positively reviewed the neutral/amber visual study and requested that it be committed. See [study and validation scope](prototypes/amber-craft-study/README.md). This records a preferred exploratory direction, not final palette or Mockup acceptance. The active High-Fidelity wireframe, canonical tokens, earlier studies and stage gates remain unchanged. Issue #23 owns the remaining visual-system decision; #24 owns interactive accessibility.
