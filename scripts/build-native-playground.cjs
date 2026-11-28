@@ -265,9 +265,23 @@ async function verify(out) {
     const shellBoot=path.join(pg,'src/shell-demo/main.tsx');
     replace(shellBoot,"  const page = new URL(path, playgroundRoot()).href;",[
       "  const editorPage = new URL(path, playgroundRoot());",
+      "  if (type === 'design' && demo.store.id === 'demo-study-exam-app-workspace-mockup') editorPage.searchParams.set('exam-static-study','workspace-mockup');",
       "  if (type === 'design' && new URLSearchParams(location.search).get('qa-artboards') === 'all') editorPage.searchParams.set('open_artifact_live','all');",
       "  const page = editorPage.href;",
     ].join('\n'));
+    // The pinned design editor builds artboards using a project base URL. A memory
+    // provider does not serve that HTTP path or the type-server's /_blob/ endpoint.
+    // Bind the explicit public study to its exact committed static resources.
+    const designFrame=path.join(upstream,'packages/design-editor/src/lib/frame.ts');
+    replace(designFrame,
+      '  const base = `<base href="${escapeAttribute(new URL(dirOf(path), urls.project).toString())}">${options.canvas ? CANVAS_FRAME : \'\'}`;',
+      [
+        "  const staticStudy = new URLSearchParams(location.search).get('exam-static-study') === 'workspace-mockup';",
+        "  const staticRoot = new URL('../../study-assets/workspace-mockup/', location.href);",
+        "  const project = staticStudy ? new URL('project/', staticRoot).href : urls.project;",
+        "  if (staticStudy) source = source.replace(/\\bsrc=(['\"])[/]_blob[/]([0-9a-f]{32})\\1/g, (_, quote, id) => 'src='+quote+new URL('_blobs/'+id+'.svg', staticRoot).href+quote);",
+        '  const base = `<base href="${escapeAttribute(new URL(dirOf(path), project).toString())}">${options.canvas ? CANVAS_FRAME : \'\'}`;',
+      ].join('\n'));
     // Integrate preview navigation and its persistence warning into the native Shell top bar.
     // Remove the demo website banner (including its unrelated language and dismiss controls).
     const demo=path.join(pg,'demo.html');
@@ -289,6 +303,15 @@ async function verify(out) {
     run('npm',['ci'],pg);
     run('npm',['run','build'],pg);
     const out=path.join(pg,'dist');
+    const workspaceStudy=sourceStudies.find(s=>s.id==='exam-app-workspace-mockup');
+    const assetFiles=workspaceStudy.filePaths.filter(p=>p==='project/ds/examapp/tokens.css'||/^_blobs\/[a-f0-9]{32}\.svg$/.test(p));
+    if(!assetFiles.includes('project/ds/examapp/tokens.css')||assetFiles.filter(p=>p.startsWith('_blobs/')).length!==4)throw Error('Unclassified workspace resource inventory');
+    for(const file of assetFiles){
+      const dest=path.join(out,'study-assets/workspace-mockup',file);
+      fs.mkdirSync(path.dirname(dest),{recursive:true});
+      fs.copyFileSync(path.join(upstream,'exam-studies',workspaceStudy.id,file),dest);
+    }
+    workspaceStudy.staticAssets=assetFiles.map(p=>'study-assets/workspace-mockup/'+p);
     // Apply the same project-local native-view compatibility pass as the board launcher.
     const wb=path.join(out,'editors/whiteboard');
     fs.copyFileSync(path.join(root,'scripts/fixed-paper-contrast.mjs'),path.join(wb,'exam-fixed-paper-contrast.mjs'));

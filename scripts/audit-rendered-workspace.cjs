@@ -81,10 +81,11 @@ async function auditWorkspace(page,root,commit,site){
           push(indicators,'radio-dot',label,dot?readColor(getComputedStyle(dot).backgroundColor):null,surface(ring),3);
         }
       }
+      const assetErrors=[...root.querySelectorAll('img')].filter(img=>visible(img)&&(!img.complete||!img.naturalWidth)).map(img=>img.getAttribute('src'));
       const themes=[...root.querySelectorAll('[data-theme]')].map(t=>({theme:t.getAttribute('data-theme'),ground:getComputedStyle(t).getPropertyValue('--ground').trim(),background:getComputedStyle(t).backgroundColor,rect:{width:t.getBoundingClientRect().width,height:t.getBoundingClientRect().height}}));
-      return {text,indicators,unsupported,diagnostics:{themes,rawTextLength:root.textContent.length,renderedTextLength:root.innerText.length,stylesheetCount:document.styleSheets.length},states:{radioCount:root.querySelectorAll('[role="radio"]').length,checked:root.querySelectorAll('[role="radio"][aria-checked="true"]').length,lockedText:root.innerText.includes('Answer locked'),correctText:root.innerText.includes('Correct'),yourAnswerText:root.innerText.includes('Your answer'),currentNav:root.querySelectorAll('[aria-current="page"]').length,dialog:root.querySelectorAll('[role="dialog"][aria-modal="true"]').length}};
+      return {text,indicators,unsupported,diagnostics:{themes,assetErrors,rawTextLength:root.textContent.length,renderedTextLength:root.innerText.length,stylesheetCount:document.styleSheets.length},states:{radioCount:root.querySelectorAll('[role="radio"]').length,checked:root.querySelectorAll('[role="radio"][aria-checked="true"]').length,lockedText:root.innerText.includes('Answer locked'),correctText:root.innerText.includes('Correct'),yourAnswerText:root.innerText.includes('Your answer'),currentNav:root.querySelectorAll('[aria-current="page"]').length,dialog:root.querySelectorAll('[role="dialog"][aria-modal="true"]').length}};
     });
-    if(!ready||!report.text.length)report.collectionError='No auditable styled text in '+id+'; see diagnostics and unsupported measurements';
+    if(!ready||!report.text.length||report.diagnostics.assetErrors.length)report.collectionError='No auditable styled text in '+id+'; see diagnostics and unsupported measurements';
     console.log('Workspace audit artboard:',id,JSON.stringify({measured:report.text.length,unsupported:report.unsupported.length,diagnostics:report.diagnostics,error:report.collectionError}));
     reports.push({id,title:canvas.boards[id].title,width:canvas.boards[id].w,height:canvas.boards[id].h,...report});
   }
