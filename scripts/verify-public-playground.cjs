@@ -37,8 +37,15 @@ async function currentInventory(){
         if(board.type==='whiteboard'){
           const meta=JSON.parse(fs.readFileSync(board.path+'/db/board/meta.json','utf8'));
           const expected=meta.order.slice().sort();
-          await iframe.locator('.wb-elements').waitFor();
-          await iframe.locator('.wb-elements').evaluate((el,ids)=>{const actual=[...new Set([...el.querySelectorAll('[data-wb-id]')].map(e=>e.getAttribute('data-wb-id')))].sort();if(JSON.stringify(actual)!==JSON.stringify(ids))throw Error('Rendered IDs mismatch');},expected);
+          // The positioned element layer itself has no layout box; its children render
+          // inside the visible surface. Await exact ID coverage, not wrapper visibility.
+          await iframe.locator('.wb-surface').waitFor({state:'visible',timeout:45000});
+          await page.waitForFunction(ids=>{
+            const layer=document.querySelector('iframe[name="open-artifact-shell"]')?.contentDocument?.querySelector('.wb-elements');
+            if(!layer)return false;
+            const actual=[...new Set([...layer.querySelectorAll('[data-wb-id]')].map(e=>e.getAttribute('data-wb-id')))].sort();
+            return JSON.stringify(actual)===JSON.stringify(ids)&&window.__PLAYGROUND__?.store?.listDocs('elements').length===ids.length;
+          },expected,{timeout:45000});
           for(const link of board.nativeLinks??[]){
             const anchor=iframe.locator('[data-wb-id="'+link.element+'"] a[data-wb-link]').first();
             await anchor.waitFor({state:'attached'});
@@ -49,7 +56,13 @@ async function currentInventory(){
           }
           if(board.id==='highfidelity'){
             for(const id of ['desktop_q_stem','collapsed_q_stem','redline_q_stem']){
-              await iframe.locator('[data-wb-id="'+id+'"]').evaluate(el=>{const ink=getComputedStyle(el).getPropertyValue('--wb-ink').trim();if(!/^#[0-9a-f]{6}$/i.test(ink)||parseInt(ink.slice(1,3),16)>=100)throw Error('Dark fixed-paper text contrast not corrected: '+el.getAttribute('data-wb-id')+' '+ink);});
+              await page.waitForFunction(id=>{
+                const doc=document.querySelector('iframe[name="open-artifact-shell"]')?.contentDocument;
+                const el=doc?.querySelector('[data-wb-id="'+id+'"]');
+                if(!el)return false;
+                const ink=doc.defaultView.getComputedStyle(el).getPropertyValue('--wb-ink').trim();
+                return /^#[0-9a-f]{6}$/i.test(ink)&&parseInt(ink.slice(1,3),16)<100;
+              },id,{timeout:15000});
             }
           }
         }else{
