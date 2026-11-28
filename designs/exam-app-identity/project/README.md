@@ -30,6 +30,10 @@ Before approval, compare genuinely distinct identity alternatives in the same qu
 
 The [machine-readable semantic color contract](../semantic-color-contract.json) separates identity, semantic roles, component aliases, and combined states without inventing approved values. Existing CSS remains unchanged. Unresolved values explicitly use pending-owner rather than silently introducing new colors. The CI audit checks exact CSS parity between the design-system and workspace study, 26 opaque threshold-bearing pairs plus 40 calculated sRGB mixed-surface pairs (4/5/6/8/10% ink on ground, both themes). All 40 mixed pairs pass the applicable provisional text/indicator threshold in the independent calculation. Overlay and low-contrast boundary ratios are informational, not evidence of compliance or failure without actual adjacent surface and component context. The contract documents exclusions, ownership, fallback restrictions, migration and runtime tests still required.
 
+### Rendered-artboard audit
+
+The native Playground CI now opens the actual workspace design editor with upstream's opt-in live-artboard mode for QA only. It inventories all nine committed artboards, measures actual rendered text colors and radio indicators against composited ancestor surfaces in sRGB, records state/label evidence and explicitly lists unsupported measurements. The downloadable `rendered-workspace-color-audit` report is revision-specific. Threshold failures are recorded as provisional-identity findings rather than hidden or treated as approval. The exploration remains unapproved; keyboard, focus, touch, screen reader, forced-colors and runtime recovery remain separate gates. No palette or visual geometry is changed.
+
 <!-- open-artifact:usage (generated, do not edit) -->
 ## Consuming this system (generated — do not edit)
 

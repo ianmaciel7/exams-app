@@ -4,6 +4,7 @@ const path = require('node:path');
 const os = require('node:os');
 const { execFileSync, spawn } = require('node:child_process');
 const { chromium } = require('playwright');
+const {auditWorkspace}=require('./audit-rendered-workspace.cjs');
 const pin = require('./open-artifact-pin.json');
 const upstreamCommit = pin.commit;
 const root = process.cwd();
@@ -186,6 +187,7 @@ async function verify(out) {
         if(!await page.getByRole('link',{name:'Back to artifacts',exact:true}).isVisible())throw Error('Study return link missing: '+study.id);
         if(errors.length)throw Error(study.id+': '+errors.join('; '));
         console.log('Native design study verified:',study.id,expected.length,'source entries and representative visible text');
+        if(study.id==='exam-app-workspace-mockup')await auditWorkspace(page,root,manifest.commit,site);
       }finally{page.off('pageerror',onError);}
     }
     await page.close();
@@ -260,6 +262,13 @@ async function verify(out) {
     replace(provider,'status: async () => agent.status(),','status: async () => ({ available: false, busy: false }),');
     replace(provider,"agent.request(request.text);\n      return { status: 'delivered' };","throw new ArtifactError('invalid', 'No agent is connected in this static preview.');");
     replace(provider,"const thread = comments.markSent(threadId, options?.unasked === true);\n      const asked = [...thread.messages].reverse().find((m) => m.author.kind === 'person');\n      agent.request(asked?.text ?? '', threadId);\n      return thread;","throw new ArtifactError('invalid', 'No agent is connected in this static preview.');");
+    // Upstream supports live=all for design-editor benchmarking. Propagate it only on the explicit QA route.
+    const shellBoot=path.join(pg,'src/shell-demo/main.tsx');
+    replace(shellBoot,"  const page = new URL(path, playgroundRoot()).href;",[
+      "  const editorPage = new URL(path, playgroundRoot());",
+      "  if (type === 'design' && new URLSearchParams(location.search).get('qa-artboards') === 'all') editorPage.searchParams.set('open_artifact_live','all');",
+      "  const page = editorPage.href;",
+    ].join('\n'));
     // Integrate preview navigation and its persistence warning into the native Shell top bar.
     // Remove the demo website banner (including its unrelated language and dismiss controls).
     const demo=path.join(pg,'demo.html');
