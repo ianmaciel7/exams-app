@@ -135,14 +135,16 @@ async function captureSketchStates(page,theme,board){
 
 (async()=>{
   const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
-  const manifest={commit:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),generatedAt:new Date().toISOString(),boards:[]};
+  const themes=process.env.CAPTURE_THEME?[process.env.CAPTURE_THEME]:['dark','light'];
+  if(themes.some(t=>!['dark','light'].includes(t)))throw Error('Invalid capture theme');
+  const manifest={commit:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),generatedAt:new Date().toISOString(),captureThemes:themes,playwrightVersion:require('playwright/package.json').version,browserVersion:browser.version(),boards:[]};
   try {
     await Promise.all(boards.map(async ([id,label,dir],index)=>{
       if(!urls[id]) throw Error('Missing board URL: '+id);
       const meta=JSON.parse(fs.readFileSync(dir+'/db/board/meta.json','utf8'));
       const expected=meta.order.length;
       const board={id,label,dir,elementCount:expected,images:{}};
-      for(const theme of ['dark','light']){
+      for(const theme of themes){
         const page=await browser.newPage({viewport:{width:2560,height:1440},deviceScaleFactor:2,colorScheme:theme});
         const errors=[];
         page.on('pageerror',e=>errors.push(e.message));

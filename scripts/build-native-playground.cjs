@@ -4,6 +4,7 @@ const path = require('node:path');
 const os = require('node:os');
 const { execFileSync, spawn } = require('node:child_process');
 const { chromium } = require('playwright');
+const {prepareEditors}=require('./prepare-playground-editors.cjs');
 const pin = require('./open-artifact-pin.json');
 const upstreamCommit = pin.commit;
 const root = process.cwd();
@@ -284,7 +285,7 @@ async function verify(out) {
       '        </span>',
     ].join('\n'));
     run('npm',['ci'],upstream);
-    run('npm',['run','build'],upstream);
+    prepareEditors({upstream,root,run,pin,types:[...new Set(['whiteboard',...sourceStudies.map(s=>s.type)])].sort()});
     run('npm',['ci'],pg);
     run('npm',['run','build'],pg);
     const out=path.join(pg,'dist');

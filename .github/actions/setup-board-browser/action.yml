@@ -1,0 +1,19 @@
+name: Setup board browser
+description: Install Playwright and reuse its version-specific Chromium binaries
+runs:
+  using: composite
+  steps:
+    - name: Install Playwright
+      id: playwright
+      shell: bash
+      run: |
+        npm install --prefix /tmp/board-browser playwright
+        echo "version=$(node -p "require('/tmp/board-browser/node_modules/playwright/package.json').version")" >> "$GITHUB_OUTPUT"
+    - name: Cache exact Chromium revision
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/ms-playwright
+        key: board-chromium-${{ runner.os }}-${{ runner.arch }}-${{ steps.playwright.outputs.version }}
+    - name: Ensure Chromium installation
+      shell: bash
+      run: /tmp/board-browser/node_modules/.bin/playwright install chromium
