@@ -21,6 +21,10 @@ jobs:
           node-version: '22'
       - name: Check board integrity
         run: node scripts/check-boards.mjs
+      - name: Test High-Fidelity structural QA
+        run: node --test scripts/high-fidelity-qa.test.mjs
+      - name: Check provisional identity contrast and token parity
+        run: node scripts/check-identity-contrast.mjs
       - name: Test release projections
         run: node --test scripts/sync-release-state.test.mjs
       - name: Test runtime resolver

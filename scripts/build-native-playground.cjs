@@ -28,6 +28,17 @@ const releaseBoards = release.stages.flatMap((stage,index)=>{
 });
 const orderedBoards=[...projectBoards,...releaseBoards];
 if(orderedBoards.length!==seeds.length||new Set(orderedBoards.map(b=>b.id)).size!==seeds.length)throw Error('Library order does not cover the board manifest');
+// Explicit publication inventory: native board previews plus source-only public studies.
+// Unknown design directories fail closed until classified and reviewed.
+const studyDefinitions={
+  'exam-app-identity': {title:'Exam App identity',type:'Design system'},
+  'exam-app-workspace-mockup': {title:'Workspace visual study',type:'Design'},
+  'exam-app-workspace-motion': {title:'Workspace motion study',type:'Motion'}
+};
+const studyDirs=execFileSync('git',['ls-tree','-d','--name-only',manifest.commit+':designs'],{cwd:root,encoding:'utf8'}).trim().split('\n').filter(Boolean);
+if(studyDirs.length!==Object.keys(studyDefinitions).length||studyDirs.some(id=>!Object.hasOwn(studyDefinitions,id)))throw Error('Unclassified or missing design study: '+studyDirs.join(', '));
+const sourceStudies=studyDirs.map(id=>({id,...studyDefinitions[id],path:'designs/'+id,status:'provisional',publication:'source-only',href:'https://github.com/ianmaciel7/exams-app/tree/'+manifest.commit+'/designs/'+id}));
+const publicationInventory={commit:manifest.commit,boards:orderedBoards.map(b=>({id:b.id,path:b.dir,type:'whiteboard',publication:'native-preview',href:'demo.html?type='+b.seed})),studies:sourceStudies,exclusions:['Private/local comments and history','Unstarted stages','Native previews for non-whiteboard studies pending validation']};
 const currentBoard=releaseBoards.find(b=>b.current);
 if(!currentBoard)throw Error('Current stage has no published board');
 async function verify(out) {
@@ -63,6 +74,15 @@ async function verify(out) {
         await link.locator('img').scrollIntoViewIfNeeded();
         await link.locator('img').evaluate(async img=>{await img.decode();if(!img.naturalWidth)throw Error('Thumbnail missing');});
       }
+      const checkStudyLinks=async()=>{
+        const links=page.locator('a[data-study-id]');
+        if(await links.count()!==sourceStudies.length)throw Error('Source-only study inventory mismatch');
+        for(const study of sourceStudies){
+          const link=page.locator('a[data-study-id="'+study.id+'"]');
+          if(await link.count()!==1||await link.getAttribute('href')!==study.href||!await link.isVisible())throw Error('Missing or incorrect study source link: '+study.id);
+        }
+      };
+      await checkStudyLinks();
       if(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth))throw Error('Native library horizontal overflow at '+width);
       if(await page.locator('a.artifact[data-current="true"]').count()!==1)throw Error('Current stage highlight missing');
       if(await page.locator('.current-link').getAttribute('href')!=='demo.html?type='+currentBoard.seed)throw Error('Current stage link mismatch');
@@ -70,6 +90,7 @@ async function verify(out) {
       if(stageNumbers.join(',')!==releaseBoards.map(b=>String(b.stageNumber).padStart(2,'0')).join(','))throw Error('Stage sequence mismatch');
       await page.getByRole('button',{name:'List',exact:true}).click();
       if(await page.locator('body').getAttribute('data-view')!=='list')throw Error('List view failed');
+      await checkStudyLinks();
       if(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth))throw Error('List view horizontal overflow at '+width);
       await page.reload({waitUntil:'domcontentloaded'});
       if(await page.locator('body').getAttribute('data-view')!=='list')throw Error('List view preference not restored');
@@ -174,10 +195,12 @@ async function verify(out) {
     const icon='<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.52 8.25A5 5 0 1 0 8.25 11.52"/><rect x="8.25" y="8.25" width="10" height="10" rx="2.25"/></svg>';
     const card=b=>'<a class="artifact" data-current="'+Boolean(b.current)+'" href="demo.html?type='+escape(b.seed)+'"><picture class="thumbnail"><source media="(prefers-color-scheme: dark)" srcset="../'+escape(b.images.dark)+'"><img src="../'+escape(b.images.light)+'" alt="" loading="lazy" decoding="async"></picture><div class="details"><div class="name-row">'+(b.stageNumber?'<span class="stage-number">'+String(b.stageNumber).padStart(2,'0')+'</span>':'')+'<span class="name">'+escape(b.label)+'</span></div>'+(b.stageStatus?'<div class="stage-status">'+escape(b.stageStatus)+'</div>':'')+'<div class="metadata"><span class="type">'+icon+'Whiteboard</span>'+(b.current?'<span class="current-marker">Current stage</span>':'<span>'+b.elementCount+' elements</span>')+'</div></div></a>';
     const section=(name,boards)=>boards.length?'<section><div class="section-heading"><h2>'+escape(name)+'</h2><span class="count">'+boards.length+'</span></div><div class="grid">'+boards.map(card).join('')+'</div></section>':'';
-    const sections=section('Project boards',projectBoards)+section(release.release+' / Product and structure',releaseBoards.filter(b=>b.stageNumber<=4))+section(release.release+' / Interface design',releaseBoards.filter(b=>b.stageNumber>4));
+    const studySection='<section><div class="section-heading"><h2>Exploratory design studies</h2><span class="count">'+sourceStudies.length+'</span></div><p class="stage-status">Provisional, not approved. Native previews for these types are not yet validated; open the exact committed source.</p><div class="grid">'+sourceStudies.map(s=>'<a class="artifact-source" data-study-id="'+escape(s.id)+'" href="'+escape(s.href)+'"><div class="details"><span class="name">'+escape(s.title)+'</span><span class="stage-status">'+escape(s.type)+' · Source only</span><span>View on GitHub</span></div></a>').join('')+'</div></section>';
+    const sections=section('Project boards',projectBoards)+section(release.release+' / Product and structure',releaseBoards.filter(b=>b.stageNumber<=4))+section(release.release+' / Interface design',releaseBoards.filter(b=>b.stageNumber>4))+studySection;
     const current='<a class="current-link" href="demo.html?type='+escape(currentBoard.seed)+'"><span class="current-label">Current stage · '+escape(release.release)+'</span><span class="current-name">'+escape(currentBoard.label)+'</span></a>';
     const home=read(path.join(root,'docs/portal/playground-home.html')).replace('/* THEME_TOKENS */',tokens).replace('<!-- BOARD_SECTIONS -->',sections).replace('<!-- CURRENT_STAGE -->',current).replace('COMMIT_FULL',escape(manifest.commit)).replace('COMMIT_SHORT',escape(manifest.commit.slice(0,7)));
     write(path.join(out,'index.html'),home);
+    write(path.join(out,'publication-inventory.json'),JSON.stringify(publicationInventory,null,2));
     await verify(out);
     // Publish only after every board passes; preserve screenshot assets, not the old public viewer.
     const destination=path.join(site,'playground');
