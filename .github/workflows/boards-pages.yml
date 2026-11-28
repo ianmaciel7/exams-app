@@ -22,7 +22,7 @@ jobs:
       - name: Check board integrity
         run: node scripts/check-boards.mjs
       - name: Test High-Fidelity structural QA
-        run: node --test scripts/high-fidelity-qa.test.mjs
+        run: node --test scripts/high-fidelity-qa.test.mjs scripts/fixed-paper-contrast.test.mjs
       - name: Check provisional identity contrast and token parity
         run: node scripts/check-identity-contrast.mjs
       - name: Test release projections
@@ -74,3 +74,20 @@ jobs:
       - uses: actions/configure-pages@v5
       - id: deployment
         uses: actions/deploy-pages@v4
+
+  verify-public:
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify actual published revision and 14 artifact routes
+        run: |
+          npm install --prefix /tmp/board-browser playwright
+          /tmp/board-browser/node_modules/.bin/playwright install chromium
+          NODE_PATH=/tmp/board-browser/node_modules node scripts/verify-public-playground.cjs

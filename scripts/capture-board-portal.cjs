@@ -61,6 +61,11 @@ async function captureSettled(page,path,mobileRect){
   throw Error('Mobile capture has missing paper tiles after retries: '+path);
 }
 
+async function checkFixedPaper(page){
+  await page.waitForFunction(()=>{const el=document.querySelector('[data-wb-id="desktop_q_stem"]');if(!el)return false;const value=getComputedStyle(el).getPropertyValue('--wb-ink').trim();return /^#[0-9a-f]{6}$/i.test(value)&&parseInt(value.slice(1,3),16)<100;},{},{timeout:15000});
+  const ink=await page.locator('[data-wb-id="desktop_q_stem"]').evaluate(el=>getComputedStyle(el).getPropertyValue('--wb-ink').trim());
+  console.log('High-Fidelity fixed-paper ink',ink);
+}
 async function captureSketchStates(page,theme,board){
   const high=board.id==='highfidelity';
   const states=high?highFidelity.groups.map(g=>g.id):board.id==='midfidelity'?midFidelity.states:board.id==='lowfidelity'?[...sketchStates,'narrow']:sketchStates;
@@ -162,6 +167,7 @@ async function captureSketchStates(page,theme,board){
           await page.evaluate(()=>document.fonts.ready);
           const status=await page.evaluate(()=>({title:document.title,theme:document.documentElement.dataset.theme,count:new Set([...document.querySelectorAll('.wb-elements [data-wb-id]')].map(el=>el.getAttribute('data-wb-id'))).size}));
           if(status.theme!==theme||status.count!==expected||errors.length) throw Error(id+' '+theme+': '+JSON.stringify({status,errors}));
+          if(id==='highfidelity')await checkFixedPaper(page);
           const path='boards/'+id+'-'+theme+'.png';
           await page.screenshot({path:'_site/'+path});
           board.images[theme]=path;

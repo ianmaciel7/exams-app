@@ -243,6 +243,10 @@ async function verify(out) {
     run('npm',['ci'],pg);
     run('npm',['run','build'],pg);
     const out=path.join(pg,'dist');
+    // Apply the same project-local native-view compatibility pass as the board launcher.
+    const wb=path.join(out,'editors/whiteboard');
+    fs.copyFileSync(path.join(root,'scripts/fixed-paper-contrast.mjs'),path.join(wb,'exam-fixed-paper-contrast.mjs'));
+    replace(path.join(wb,'index.html'),'</head>','<script type="module" src="./exam-fixed-paper-contrast.mjs"></script></head>');
     // Match the upstream native artifact library: responsive cards with real thumbnails and native color tokens.
     const nativeCss=read(path.join(upstream,'packages/ui/src/styles.css'));
     const tokenStart=nativeCss.indexOf('/* Light theme (default). */');
