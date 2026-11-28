@@ -51,6 +51,7 @@
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr)); gap: 12px; }
     .artifact { display: flex; flex-direction: column; min-width: 0; overflow: hidden; background: var(--open-artifact-surface); border: 1px solid var(--open-artifact-line); border-radius: 12px; transition: border-color .15s, box-shadow .15s; }
     .artifact-source { display:flex; min-width:0; background:var(--open-artifact-surface); border:1px solid var(--open-artifact-line); border-radius:8px; }
+    .artifact-source a:not(.name) { color:var(--open-artifact-fg-muted); text-decoration:underline; text-underline-offset:2px; }
     .artifact-source:hover .name { color:var(--open-artifact-accent); }
     .artifact:hover { border-color: var(--open-artifact-line-strong); box-shadow: 0 3px 12px rgb(0 0 0 / .08); }
     .artifact:hover .name { color: var(--open-artifact-accent); }

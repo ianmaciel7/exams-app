@@ -31,14 +31,14 @@ if(orderedBoards.length!==seeds.length||new Set(orderedBoards.map(b=>b.id)).size
 // Explicit publication inventory: native board previews plus source-only public studies.
 // Unknown design directories fail closed until classified and reviewed.
 const studyDefinitions={
-  'exam-app-identity': {title:'Exam App identity',type:'Design system'},
-  'exam-app-workspace-mockup': {title:'Workspace visual study',type:'Design'},
-  'exam-app-workspace-motion': {title:'Workspace motion study',type:'Motion'}
+  'exam-app-identity': {title:'Exam App identity',type:'design-system',typeTitle:'Design system',visibleText:['ground','brand']},
+  'exam-app-workspace-mockup': {title:'Workspace visual study',type:'design',typeTitle:'Design',visibleText:['Desktop Expanded','Mobile Drawer']},
+  'exam-app-workspace-motion': {title:'Workspace motion study',type:'motion',typeTitle:'Motion',visibleText:['Sidebar collapse','Answer feedback']}
 };
 const studyDirs=execFileSync('git',['ls-tree','-d','--name-only',manifest.commit+':designs'],{cwd:root,encoding:'utf8'}).trim().split('\n').filter(Boolean);
 if(studyDirs.length!==Object.keys(studyDefinitions).length||studyDirs.some(id=>!Object.hasOwn(studyDefinitions,id)))throw Error('Unclassified or missing design study: '+studyDirs.join(', '));
-const sourceStudies=studyDirs.map(id=>({id,...studyDefinitions[id],path:'designs/'+id,status:'provisional',publication:'source-only',href:'https://github.com/ianmaciel7/exams-app/tree/'+manifest.commit+'/designs/'+id}));
-const publicationInventory={commit:manifest.commit,boards:orderedBoards.map(b=>({id:b.id,path:b.dir,type:'whiteboard',publication:'native-preview',href:'demo.html?type='+b.seed})),studies:sourceStudies,exclusions:['Private/local comments and history','Unstarted stages','Native previews for non-whiteboard studies pending validation']};
+const sourceStudies=studyDirs.map(id=>({id,...studyDefinitions[id],path:'designs/'+id,status:'provisional',publication:'native-preview',seed:'study-'+id,href:'demo.html?type=study-'+id,sourceHref:'https://github.com/ianmaciel7/exams-app/tree/'+manifest.commit+'/designs/'+id}));
+const publicationInventory={commit:manifest.commit,boards:orderedBoards.map(b=>({id:b.id,path:b.dir,type:'whiteboard',publication:'native-preview',href:'demo.html?type='+b.seed})),studies:sourceStudies,exclusions:['Private/local comments and history','Unstarted stages','Uncommitted machine state and non-artifact files']};
 const currentBoard=releaseBoards.find(b=>b.current);
 if(!currentBoard)throw Error('Current stage has no published board');
 async function verify(out) {
@@ -79,7 +79,9 @@ async function verify(out) {
         if(await links.count()!==sourceStudies.length)throw Error('Source-only study inventory mismatch');
         for(const study of sourceStudies){
           const link=page.locator('a[data-study-id="'+study.id+'"]');
-          if(await link.count()!==1||await link.getAttribute('href')!==study.href||!await link.isVisible())throw Error('Missing or incorrect study source link: '+study.id);
+          if(await link.count()!==1||await link.getAttribute('href')!==study.href||!await link.isVisible())throw Error('Missing or incorrect study preview: '+study.id);
+          const source=page.locator('a[data-study-source="'+study.id+'"]');
+          if(await source.count()!==1||await source.getAttribute('href')!==study.sourceHref)throw Error('Missing source fallback: '+study.id);
         }
       };
       await checkStudyLinks();
@@ -136,6 +138,37 @@ async function verify(out) {
         console.log('Native Playground verified:',b.id,expected.length,'elements');
       } finally {page.off('pageerror',onError);}
     }
+    // Verify the real non-whiteboard editors, source file coverage, and representative rendered content.
+    for(const study of sourceStudies){
+      await page.setViewportSize({width:1600,height:1000});
+      const errors=[]; const onError=e=>errors.push(e.message); page.on('pageerror',onError);
+      try {
+        const response=await page.goto('http://127.0.0.1:18765/exams-app/playground/'+study.href,{waitUntil:'domcontentloaded'});
+        if(!response?.ok())throw Error('Study route failed: '+study.id);
+        const generated=JSON.parse(read(path.join(pg,'src/seeds/generated',study.seed+'.json')));
+        const expected=Object.keys(generated.files).filter(p=>!p.startsWith('_blobs/')).sort();
+        const committed=study.filePaths.filter(p=>!p.startsWith('_blobs/')).sort();
+        if(JSON.stringify(expected)!==JSON.stringify(committed))throw Error('Study seed path coverage mismatch: '+study.id);
+        await page.waitForFunction(({id,type,expected})=>{
+          const frame=document.querySelector('iframe[name="open-artifact-shell"]');
+          const store=window.__PLAYGROUND__?.store;
+          return !!frame&&frame.src.includes('/editors/'+type+'/')&&store?.id==='demo-'+id&&!document.querySelector('[data-shell-loading]')&&expected.every(p=>store.entries.has(p));
+        },{id:study.seed,type:study.type,expected},{timeout:45000});
+        for(const fragment of study.visibleText){
+          const deadline=Date.now()+20000;let found=false;
+          while(Date.now()<deadline&&!found){
+            for(const frame of page.frames().filter(f=>f!==page.mainFrame())){
+              try{found=await frame.evaluate(t=>document.body?.innerText?.toLowerCase().includes(t.toLowerCase()),fragment);if(found)break;}catch{}
+            }
+            if(!found)await new Promise(r=>setTimeout(r,200));
+          }
+          if(!found)throw Error('Missing rendered study text: '+study.id+' / '+fragment);
+        }
+        if(!await page.getByRole('link',{name:'Back to artifacts',exact:true}).isVisible())throw Error('Study return link missing: '+study.id);
+        if(errors.length)throw Error(study.id+': '+errors.join('; '));
+        console.log('Native design study verified:',study.id,expected.length,'source entries and representative visible text');
+      }finally{page.off('pageerror',onError);}
+    }
     await page.close();
   } finally {try{await browser?.close();}finally{server.kill();}}
 }
@@ -160,6 +193,21 @@ async function verify(out) {
     const demos=path.join(pg,'demos');
     for(const f of fs.readdirSync(demos))if(f.endsWith('.demo.json'))fs.unlinkSync(path.join(demos,f));
     for(const b of seeds)write(path.join(demos,b.seed+'.demo.json'),JSON.stringify({id:b.seed,type:'whiteboard',typeTitle:'Whiteboard',title:b.label,source:'exam-boards/'+b.id,agent:{name:'Unavailable',thinkMs:0,responses:[]}}));
+    for(const study of sourceStudies){
+      const target=path.join(upstream,'exam-studies',study.id);
+      fs.mkdirSync(target,{recursive:true});
+      const files=execFileSync('git',['ls-tree','-r','--name-only','-z',manifest.commit,'--',study.path],{cwd:root,encoding:'utf8'}).split('\0').filter(Boolean);
+      study.filePaths=[];
+      for(const file of files){
+        const rel=file.slice(study.path.length+1);
+        if(!/^(db\/|_blobs\/|project\/)/.test(rel)||rel.endsWith('.gitkeep'))continue;
+        const dest=path.join(target,rel);fs.mkdirSync(path.dirname(dest),{recursive:true});
+        write(dest,execFileSync('git',['show',manifest.commit+':'+file],{cwd:root,maxBuffer:32*1024*1024}));
+        study.filePaths.push(rel);
+      }
+      if(!study.filePaths.length)throw Error('No eligible files: '+study.id);
+      write(path.join(demos,study.seed+'.demo.json'),JSON.stringify({id:study.seed,type:study.type,typeTitle:study.typeTitle,title:study.title+' (Provisional)',source:'exam-studies/'+study.id,agent:{name:'Unavailable',thinkMs:0,responses:[]}}));
+    }
     // No scripted agent responses, even if a visitor attempts to send a request.
     const provider=path.join(pg,'src/provider/demo-provider.ts');
     replace(provider,'status: async () => agent.status(),','status: async () => ({ available: false, busy: false }),');
@@ -195,7 +243,7 @@ async function verify(out) {
     const icon='<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.52 8.25A5 5 0 1 0 8.25 11.52"/><rect x="8.25" y="8.25" width="10" height="10" rx="2.25"/></svg>';
     const card=b=>'<a class="artifact" data-current="'+Boolean(b.current)+'" href="demo.html?type='+escape(b.seed)+'"><picture class="thumbnail"><source media="(prefers-color-scheme: dark)" srcset="../'+escape(b.images.dark)+'"><img src="../'+escape(b.images.light)+'" alt="" loading="lazy" decoding="async"></picture><div class="details"><div class="name-row">'+(b.stageNumber?'<span class="stage-number">'+String(b.stageNumber).padStart(2,'0')+'</span>':'')+'<span class="name">'+escape(b.label)+'</span></div>'+(b.stageStatus?'<div class="stage-status">'+escape(b.stageStatus)+'</div>':'')+'<div class="metadata"><span class="type">'+icon+'Whiteboard</span>'+(b.current?'<span class="current-marker">Current stage</span>':'<span>'+b.elementCount+' elements</span>')+'</div></div></a>';
     const section=(name,boards)=>boards.length?'<section><div class="section-heading"><h2>'+escape(name)+'</h2><span class="count">'+boards.length+'</span></div><div class="grid">'+boards.map(card).join('')+'</div></section>':'';
-    const studySection='<section><div class="section-heading"><h2>Exploratory design studies</h2><span class="count">'+sourceStudies.length+'</span></div><p class="stage-status">Provisional, not approved. Native previews for these types are not yet validated; open the exact committed source.</p><div class="grid">'+sourceStudies.map(s=>'<a class="artifact-source" data-study-id="'+escape(s.id)+'" href="'+escape(s.href)+'"><div class="details"><span class="name">'+escape(s.title)+'</span><span class="stage-status">'+escape(s.type)+' · Source only</span><span>View on GitHub</span></div></a>').join('')+'</div></section>';
+    const studySection='<section><div class="section-heading"><h2>Exploratory design studies</h2><span class="count">'+sourceStudies.length+'</span></div><p class="stage-status">Provisional, not approved. Open a native study or its exact committed source.</p><div class="grid">'+sourceStudies.map(s=>'<div class="artifact-source"><div class="details"><a data-study-id="'+escape(s.id)+'" href="'+escape(s.href)+'" class="name">'+escape(s.title)+'</a><span class="stage-status">'+escape(s.typeTitle)+' · Provisional</span><a data-study-source="'+escape(s.id)+'" href="'+escape(s.sourceHref)+'">View source on GitHub</a></div></div>').join('')+'</div></section>';
     const sections=section('Project boards',projectBoards)+section(release.release+' / Product and structure',releaseBoards.filter(b=>b.stageNumber<=4))+section(release.release+' / Interface design',releaseBoards.filter(b=>b.stageNumber>4))+studySection;
     const current='<a class="current-link" href="demo.html?type='+escape(currentBoard.seed)+'"><span class="current-label">Current stage · '+escape(release.release)+'</span><span class="current-name">'+escape(currentBoard.label)+'</span></a>';
     const home=read(path.join(root,'docs/portal/playground-home.html')).replace('/* THEME_TOKENS */',tokens).replace('<!-- BOARD_SECTIONS -->',sections).replace('<!-- CURRENT_STAGE -->',current).replace('COMMIT_FULL',escape(manifest.commit)).replace('COMMIT_SHORT',escape(manifest.commit.slice(0,7)));
