@@ -65,5 +65,3 @@ Start prototype testing at 1024 CSS px. Determine the final breakpoint by testin
 ## Initial competition selection
 
 On entry, select the first competition in the order presented by the available list. The release does not require sorting by date or name. The list source and its underlying order remain pending technical design.
-
-The owner positively reviewed the [Amber Craft exploration](../../../prototypes/amber-craft-study/README.md) and authorized retaining it in version control. The study is independent of the active wireframes and does not start Mockup or approve final tokens. See #23 and #24.

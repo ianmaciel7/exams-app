@@ -69,3 +69,7 @@ Follow-up on [run 46092143973](https://github.com/ianmaciel7/exams-app/actions/r
 ### Amber Craft follow-up
 
 The [separate amber/neutral workspace study](../../../prototypes/amber-craft-study/README.md) received positive owner feedback and was retained for issue #23. It does not replace this native design-system candidate, its comparison evidence, or approved grayscale structures. Final identity and runtime acceptance remain #23/#24.
+
+### Current study and distinct-system comparison
+
+[Current](../../../prototypes/current-study/README.md) is retained at the owner's request as an independent rounded-action/cobalt direction. Its comparative audit documents the repeated layout of prior studies and the required divergence for complete design-system alternatives. Do not treat a color-only overlay as a full system. No canonical native tokens, active release stage, or approved wireframes are changed. See #23/#24.
